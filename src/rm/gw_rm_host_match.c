@@ -1,0 +1,138 @@
+/* -------------------------------------------------------------------------- */
+/* Copyright 2002-2006 GridWay Team, Distributed Systems Architecture         */
+/* Group, Universidad Complutense de Madrid                                   */
+/*                                                                            */
+/* Licensed under the Apache License, Version 2.0 (the "License"); you may    */
+/* not use this file except in compliance with the License. You may obtain    */
+/* a copy of the License at                                                   */
+/*                                                                            */
+/* http://www.apache.org/licenses/LICENSE-2.0                                 */
+/*                                                                            */
+/* Unless required by applicable law or agreed to in writing, software        */
+/* distributed under the License is distributed on an "AS IS" BASIS,          */
+/* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.   */
+/* See the License for the specific language governing permissions and        */
+/* limitations under the License.                                             */
+/* -------------------------------------------------------------------------- */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
+#include <errno.h>
+#include <string.h>
+#include <sys/types.h> 
+#include <sys/socket.h>
+
+#include "gw_rm.h"
+#include "gw_rm_msg.h"
+#include "gw_log.h"
+#include "gw_host_pool.h"
+#include "gw_job_pool.h"
+      
+/* ------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------- */
+
+void gw_rm_job_match(int client_socket, int job_id)
+{
+    int            i,j,rc;
+    int            number_of_queues;
+    gw_host_t *    host;
+    gw_job_t *     job;
+    gw_msg_match_t msg;
+    gw_boolean_t   match;
+    int            length;
+    int            gwfreenc;
+    
+    msg.msg_type = GW_MSG_JOB_MATCH;
+    length       = sizeof(gw_msg_match_t);
+    
+    job = gw_job_pool_get(job_id, GW_TRUE);
+      
+    if ( job == NULL )
+    {
+        msg.msg_type = GW_MSG_END_JOB;
+        msg.rc       = GW_RC_FAILED_BAD_JOB_ID;
+        msg.job_id   = job_id;
+        rc           = send(client_socket,(void *) &msg,length,0);
+        return;
+    }
+    
+    for (i=0;i<gw_conf.number_of_hosts;i++)
+    {
+        host = gw_host_pool_get_host (i, GW_TRUE);
+        
+        if ( host != NULL )
+        {
+			number_of_queues = 0;
+			msg.rc           = GW_RC_SUCCESS;
+			msg.matched      = GW_FALSE;
+			msg.host_id      = i;
+			msg.job_id       = job_id;
+			msg.running_jobs = host->running_jobs;
+			
+			gw_rm_copy_str_short(host->hostname, msg.hostname);
+              
+            for (j=0;j<GW_HOST_MAX_QUEUES;j++)
+            {
+                if (host->queue_name[j]!=NULL)
+                {
+                    gw_rm_copy_str_short(host->queue_name[j],
+                        msg.queue_name[number_of_queues]);
+                        
+                    match = gw_host_check_reqs(host, j, job->template.requirements);
+                    
+                    if (match == GW_TRUE)
+                    {
+                        msg.matched = GW_TRUE;
+                        msg.match[number_of_queues] = 1;
+                        msg.rank [number_of_queues] = gw_host_compute_rank(host,j,job->template.rank);
+
+                        gwfreenc = host->queue_nodecount[j] - host->used_slots;
+            
+                        if ( host->queue_freenodecount[j] < gwfreenc )
+                            msg.slots[number_of_queues] = host->queue_freenodecount[j];
+                        else if ( gwfreenc > 0)
+                            msg.slots[number_of_queues] = gwfreenc;
+                        else
+                            msg.slots[number_of_queues] = 0;
+                    }
+                    else
+                    {
+                        msg.match[number_of_queues] = 0;
+                        msg.rank [number_of_queues] = 0;    
+                        msg.slots[number_of_queues] = 0;                        
+                    }
+                    
+                    number_of_queues++;
+                }
+            }
+            
+            msg.number_of_queues = number_of_queues;
+            
+            pthread_mutex_unlock(&(host->mutex));    
+            
+            if (msg.matched == GW_TRUE)
+            {
+            	rc = send(client_socket,(void *) &msg,length,0);
+    
+            	if ( rc == -1 )
+                	gw_log_print("RM",'E',"Error sending message %s\n",strerror(errno));
+            }
+        }        
+    }
+    
+    pthread_mutex_unlock(&(job->mutex));
+    
+    msg.msg_type = GW_MSG_END_JOB;
+    msg.rc       = GW_RC_SUCCESS;
+    
+    rc = send(client_socket,(void *) &msg,length,0);
+    
+    if ( rc == -1 )
+        gw_log_print("RM",'E',"Error sending message %s\n",strerror(errno));        
+}
+
+/* ------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------- */
