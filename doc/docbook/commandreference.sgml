@@ -1,0 +1,566 @@
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V4.1//EN">
+<book lang="en">
+	<bookinfo>
+		<title>
+            GridWay 5 Documentation: Command Reference Guide
+        </title>
+
+		<pubdate>
+            May, 2006
+        </pubdate>
+
+        <copyright>
+			<year>
+                2002-2006
+            </year>
+
+            <holder>
+                GridWay Team, Distributed Systems Architecture
+				Group, Universidad Complutense de Madrid.
+            </holder>
+		</copyright>
+
+		<legalnotice>
+			<para>
+				Licensed under the Apache License, Version 2.0 (the "License");
+                you may not use this file except in compliance with the License.
+                You may obtain a copy of the License at
+			</para>
+			<para>
+				<ulink url="http://www.apache.org/licenses/LICENSE-2.0">
+                    http://www.apache.org/licenses/LICENSE-2.0
+                </ulink>
+			</para>
+			<para>
+				Unless required by applicable law or agreed to in writing,
+                software distributed under the License is distributed on an
+                "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+                either express or implied. See the License for the specific
+                language governing permissions and limitations under
+                the License.
+			</para>
+			<para>
+				Any academic report, publication, or other academic disclosure
+                of results obtained with this Software will acknowledge this
+                Software's use by an appropriate citation.
+			</para>
+      <para>
+        GridWay is an effort undergoing incubation at Globus. Incubation is
+        required of all newly accepted projects until a further review indicates
+        that the infrastructure, communications, and decision making process
+        have stabilized in a manner consistent with other successful Globus
+        projects. While incubation status is not necessarily a reflection of
+        the completeness or stability of the code, it does indicate that the
+        project has yet to be fully endorsed by Globus.
+      </para>
+		</legalnotice>
+	</bookinfo>
+
+<chapter>
+<title> Job and Array Job submission Command</title>
+  <sect1>
+  <title>gwsubmit</title>
+  <sect2>
+  <title>NAME</title>
+  <para>
+    gwsubmit - job submission utility for the GridWay system
+  </para>
+  </sect2>
+
+  <sect2>
+  <title>SYNOPSIS</title>
+  <para>
+   gwsubmit <-t template> [-n tasks] [-h] [-v] [-o] [-d "id1 id2 ..."]
+  </para>
+  </sect2>
+
+  <sect2>
+    <title>DESCRIPTION</title>
+    <para>
+    Submit a job or an array job (if the number of tasks is defined) to gwd
+    </para>
+  </sect2>
+
+  <sect2>
+  <title>OPTIONS</title>
+  <simplesect>
+    <title>-h</title>
+    <para>
+    prints this help
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-t &lt;template></title>
+    <para>
+      the template file describing the job
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-n &lt;tasks></title>
+    <para>
+      submit an array job with the given number of tasks
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-d &lt;"id1 id2..."></title>
+    <para>
+		job dependencies. Submit the job on hold state, and
+        release it once jobs with id1,id2,.. have
+        successfully finished.
+    </para>
+  </simplesect>
+  </sect2>
+</sect1>
+</chapter>
+
+<chapter>
+  <title> Job Monitoring Commands</title>
+
+  <sect1>
+  <title>gwps</title>
+
+  <sect2>
+    <title>NAME</title>
+    <para>
+      gwps - report a snapshot of the current jobs
+    </para>
+  </sect2>
+
+  <sect2>
+    <title>SYNOPSIS</title>
+    <para>
+      gwps [-h] [-c delay] [-n] [job_id]
+    </para>
+  </sect2>
+
+    <sect2>
+      <title>DESCRIPTION</title>
+      <para>
+        Prints information about all the jobs in the GridWay system (default)
+      </para>
+    </sect2>
+    <sect2>
+      <title>OPTIONS</title>
+      <simplesect>
+        <title>-h</title>
+        <para>
+          prints this help
+        </para>
+      </simplesect>
+
+      <simplesect>
+        <title>-c &lt;delay></title>
+        <para>
+          this will cause gwps to print job information every &lt;delay>
+          seconds continuously (similar to top command).
+        </para>
+      </simplesect>
+
+      <simplesect>
+        <title>-n</title>
+        <para>
+          do not print the header
+        </para>
+      </simplesect>
+
+
+      <simplesect>
+        <title>job_id</title>
+        <para>
+          only monitor this job_id
+        </para>
+      </simplesect>
+
+    </sect2>
+    </sect1>
+    <sect1>
+      <title>gwhistory</title>
+
+      <sect2>
+        <title>NAME</title>
+        <para>
+          gwhistory - shows the history of a job
+        </para>
+      </sect2>
+
+      <sect2>
+        <title>SYNOPSIS</title>
+        <para>
+          gwhistory [-h] [-n] &lt;job_id>
+        </para>
+      </sect2>
+
+      <sect2>
+        <title>DESCRIPTION</title>
+        <para>
+          Prints information about the execution history of a job
+        </para>
+      </sect2>
+      <sect2>
+        <title>OPTIONS</title>
+        <simplesect>
+          <title>-h</title>
+          <para>
+            prints this help
+          </para>
+        </simplesect>
+
+        <simplesect>
+          <title>-n</title>
+          <para>
+            do not print the header lines.
+          </para>
+        </simplesect>
+
+        <simplesect>
+          <title>job_id</title>
+          <para>
+            job identification as provided by gwps.
+          </para>
+        </simplesect>
+
+      </sect2>
+    </sect1>
+    </chapter>
+
+<chapter>
+  <title> Host Monitoring Command</title>
+  <sect1>
+  <title>gwhost</title>
+  <sect2>
+  <title>NAME</title>
+  <para>
+    gwhost - shows hosts information
+  </para>
+  </sect2>
+
+  <sect2>
+  <title>SYNOPSIS</title>
+  <para>
+    gwhost [-h] [-c delay] [-n] [-m job_id] [host_id]
+
+  </para>
+  </sect2>
+
+  <sect2>
+    <title>DESCRIPTION</title>
+    <para>
+      Prints information about all the hosts in the GridWay system (default)
+    </para>
+  </sect2>
+
+  <sect2>
+  <title>OPTIONS</title>
+  <simplesect>
+    <title>-h</title>
+    <para>
+    prints this help
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-c &lt;delay></title>
+    <para>
+      this will cause gwhost to print job information every &lt;delay>
+      seconds continuously (similar to top command).
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-n</title>
+    <para>
+      do not print the header.
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>host_id</title>
+    <para>
+      only monitor this host_id, also prints queue information
+    </para>
+  </simplesect>
+
+  </sect2>
+</sect1>
+</chapter>
+
+<chapter>
+  <title> Job Control Command</title>
+  <sect1>
+  <title>gwkill</title>
+  <sect2>
+  <title>NAME</title>
+  <para>
+    gwkill - controls job execution
+  </para>
+  </sect2>
+
+  <sect2>
+  <title>SYNOPSIS</title>
+  <para>
+    gwkill [-h] [-a] [-k | -t | -o | -s | -r | -l | -9] &lt;job_id [job_id2 ...] | -A array_id>
+  </para>
+  </sect2>
+
+  <sect2>
+    <title>DESCRIPTION</title>
+    <para>
+      Sends a signal to a job or array job
+    </para>
+  </sect2>
+
+  <sect2>
+  <title>OPTIONS</title>
+  <simplesect>
+    <title>-h</title>
+    <para>
+    prints this help
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-a</title>
+    <para>
+      asynchronous signal, only relevant for KILL and STOP.
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-k</title>
+    <para>
+      kill (default, if no signal specified)
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-t</title>
+    <para>
+      stop job
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-r</title>
+    <para>
+      resume job
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-o</title>
+    <para>
+      hold job
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-l</title>
+    <para>
+      release job
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-s</title>
+    <para>
+      re-schedule job
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-9</title>
+    <para>
+      hard kill, removes the job from the system without synchronizing remote job execution or cleaning remote host.
+    </para>
+  </simplesect>
+
+
+  <simplesect>
+    <title>job_id [job_id2 ...] </title>
+    <para>
+      job identification as provided by gwps. You can specified a blank separated list of job ids.
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-A &lt;array_id></title>
+    <para>
+      array identification as provided by gwps.
+    </para>
+  </simplesect>
+
+  </sect2>
+</sect1>
+</chapter>
+
+<chapter>
+  <title> Job Synchronization Command</title>
+  <sect1>
+    <title>gwwait</title>
+    <sect2>
+      <title>NAME</title>
+      <para>
+        gwwait - synchronize a job
+      </para>
+    </sect2>
+
+    <sect2>
+      <title>SYNOPSIS</title>
+      <para>
+        gwwait [-h] [-a] [-v] &lt;job_id ...| -A array_id>
+      </para>
+    </sect2>
+
+    <sect2>
+      <title>DESCRIPTION</title>
+      <para>
+        Waits for a job or array job
+      </para>
+    </sect2>
+
+    <sect2>
+      <title>OPTIONS</title>
+      <simplesect>
+        <title>-h</title>
+        <para>
+          prints this help
+        </para>
+      </simplesect>
+
+      <simplesect>
+        <title>-a</title>
+        <para>
+          any, returns when the first job of the list or array finishes
+        </para>
+      </simplesect>
+
+      <simplesect>
+        <title>-v</title>
+        <para>
+          prints job exit code
+        </para>
+      </simplesect>
+
+      <simplesect>
+        <title>-A &lt;array_id></title>
+        <para>
+          array identification as provided by gwps.
+        </para>
+      </simplesect>
+
+      <simplesect>
+        <title>job_id ...</title>
+        <para>
+          job ids list
+        </para>
+      </simplesect>
+
+    </sect2>
+  </sect1>
+</chapter>
+
+<chapter>
+  <title> User Monitoring Command</title>
+  <sect1>
+  <title>gwuser</title>
+  <sect2>
+  <title>NAME</title>
+  <para>
+    gwuser - monitors users in GridWay
+  </para>
+  </sect2>
+
+  <sect2>
+  <title>SYNOPSIS</title>
+  <para>
+    gwuser [-h] [-n]
+  </para>
+  </sect2>
+
+  <sect2>
+    <title>DESCRIPTION</title>
+    <para>
+        Prints information about users in the GridWay system
+    </para>
+  </sect2>
+
+  <sect2>
+  <title>OPTIONS</title>
+  <simplesect>
+    <title>-h</title>
+    <para>
+    prints this help
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-n</title>
+    <para>
+      do not print the header.
+    </para>
+  </simplesect>
+  </sect2>
+</sect1>
+
+<sect1>
+  <title>gwacct</title>
+  <sect2>
+  <title>NAME</title>
+  <para>
+    gwacct - prints accounting information
+  </para>
+  </sect2>
+
+  <sect2>
+  <title>SYNOPSIS</title>
+  <para>
+    gwacct [-h] [-n] <-u user|-r host>
+  </para>
+  </sect2>
+
+  <sect2>
+    <title>DESCRIPTION</title>
+    <para>
+        Prints usage statistics per user or resource. Note: accounting statistics are update once a job is killed.
+    </para>
+  </sect2>
+
+  <sect2>
+  <title>OPTIONS</title>
+  <simplesect>
+    <title>-h</title>
+    <para>
+    prints this help
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-n</title>
+    <para>
+      do not print the header.
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-u user</title>
+    <para>
+      print usage statistics for user.
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-r hostname</title>
+    <para>
+      print usage statistics for host.
+    </para>
+  </simplesect>
+
+  </sect2>
+</sect1>
+
+</chapter>
+
+</book>
