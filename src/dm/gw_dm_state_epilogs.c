@@ -685,9 +685,15 @@ void gw_dm_epilog_failed_cb ( void *_job_id )
 
     switch (job->job_state)
     {
-    	case GW_JOB_STATE_EPILOG:
-	    	gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_FAILED", _job_id);
-	    	break;
+    	
+    	case GW_JOB_STATE_EPILOG:			
+		case GW_JOB_STATE_EPILOG_FAIL:		
+			if (job->template.reschedule_on_failure == GW_TRUE)
+				gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_PENDING", _job_id);
+		    else
+				gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_FAILED", _job_id);
+			break;
+
     	case GW_JOB_STATE_KILL_EPILOG:    	    		
     		gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_ZOMBIE", _job_id);
 			break;
@@ -706,13 +712,6 @@ void gw_dm_epilog_failed_cb ( void *_job_id )
 			gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_STOPPED", _job_id);
     		break;
     				
-		case GW_JOB_STATE_EPILOG_FAIL:		
-			if (job->template.reschedule_on_failure == GW_TRUE)
-				gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_PENDING", _job_id);
-		    else
-				gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_FAILED", _job_id);
-			break;
-			
  		case GW_JOB_STATE_EPILOG_RESTART:
  			switch (job->history->reason)
  			{
