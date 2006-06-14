@@ -56,13 +56,15 @@ gw_return_code_t gw_client_wait(int job_id, int *exit_code, signed long timeout)
 		if ( rc != GW_RC_SUCCESS )
 			return rc;
 			
-		if ((job_status.job_state == GW_JOB_STATE_ZOMBIE) &&
+		if ((job_status.job_state == GW_JOB_STATE_ZOMBIE) ||
 		    (job_status.job_state == GW_JOB_STATE_FAILED))
 		{
 			*exit_code = job_status.exit_code;
+			
+			return GW_RC_SUCCESS;
 		}
-		
-		return GW_RC_SUCCESS;		
+		else
+			return GW_RC_FAILED_TIMEOUT;	
 	}
 	
     /* ----------------------------------------------------------------- */
