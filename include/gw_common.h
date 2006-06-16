@@ -22,7 +22,7 @@
 
 #define GWNSTR(str) ((str)?(str):"")
 
-#define GW_VERSION  "GridWay 4.9.1"
+#define GW_VERSION  "GridWay 5.0.0"
 
 /*----------------------------------------------------------------------------*/
 /* General Types                                                              */
