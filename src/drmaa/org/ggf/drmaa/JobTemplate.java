@@ -19,6 +19,7 @@
 package org.ggf.drmaa;
 import java.util.*;
 
+
 /** DRMAA application uses the JobTemplate  class, in order to define the attributes associated with a job. 
  * JobTemplates are created via the active {@link Session} implementation. A DRMAA application
  * gets a JobTemplate from the active {@link Session}, specifies in the JobTemplate any required job
@@ -246,11 +247,10 @@ public abstract class JobTemplate
 			while (e.hasMoreElements())
 			{
 				String name  = (String) e.nextElement();
-				System.out.println(name);
 				String value = env.getProperty(name);
 				
-				if (value.charAt(0) != '\"')
-					value = "\"" + value +  "\"";
+			/*	if (value.charAt(0) != '\"')
+					value = "\"" + value +  "\"";*/
 				
 				this.drmma_v_env.setProperty(name, value);
 			}

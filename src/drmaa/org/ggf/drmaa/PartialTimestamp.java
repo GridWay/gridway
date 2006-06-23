@@ -18,19 +18,47 @@
 package org.ggf.drmaa;
 /**  Not relevant for the current GridWay implementation, will be ignored.
  */
-public abstract class PartialTimestamp extends java.util.Calendar
+public class PartialTimestamp extends java.util.Calendar
 {
 
-	/*public static final int CENTURY;
-	public static final int UNSET;
-	
-	public int getModifier()
+	public static final int CENTURY=21;
+	public static final int UNSET = 0;
+
+	public int getModifier(int field)
+	{
+		return this.get(field);
+	}
+
+	public void setModifier(int field, int value)
+	{
+		this.set(field,value);
+	}
+
+	public  void add(int field, int amount){}
+
+	protected  void computeFields(){}
+
+	protected  void computeTime(){}
+
+	public  int getGreatestMinimum(int field)
 	{
 		return 0;
 	}
-	
-	public void setModifier(int field, int value)
+
+	public int getLeastMaximum(int field)
 	{
-	
-	}*/
+		return 0;
+	}
+
+ 	public int getMaximum(int field)
+	{
+		return 0;
+	}
+
+	public int getMinimum(int field)
+	{
+		return 0;
+	}
+
+	public void roll(int field, boolean up){}
 }

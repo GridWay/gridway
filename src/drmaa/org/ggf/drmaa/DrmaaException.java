@@ -34,4 +34,14 @@ public class DrmaaException extends java.lang.Exception
 		super(message);
 	}
 
+	public DrmaaException(Throwable throwable)
+	{
+		super(throwable);
+	}
+
+	public DrmaaException(String message, Throwable throwable)
+	{
+		super(message, throwable);
+	}
+
 }
