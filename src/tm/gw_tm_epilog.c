@@ -169,7 +169,7 @@ void gw_tm_epilog_stage_out(gw_job_t * job)
             if ((job->job_state == GW_JOB_STATE_EPILOG) ||
                 (job->job_state == GW_JOB_STATE_EPILOG_STD))
             {
-            	gw_job_print(job,"TM",'W',"Some output files were not copied, will NOT remove remore directory.\n");
+            	gw_job_print(job,"TM",'W',"Some output files were not copied, will NOT remove remote directory.\n");
 
                 gw_tm_mad_end(job->history->tm_mad, job->id);
             }
@@ -310,7 +310,7 @@ void gw_tm_epilog_cp_cb(gw_job_t * job, int cp_xfr_id, gw_boolean_t failure)
             if ((job->job_state == GW_JOB_STATE_EPILOG) ||
                 (job->job_state == GW_JOB_STATE_EPILOG_STD))
             {
-            	gw_job_print(job,"TM",'W',"Some output files were not copied, will NOT remove remore directory.\n");
+            	gw_job_print(job,"TM",'W',"Some output files were not copied, will NOT remove remote directory.\n");
 
                 gw_tm_mad_end(job->history->tm_mad, job->id);
             }
