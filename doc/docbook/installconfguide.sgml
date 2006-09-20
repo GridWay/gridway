@@ -1537,10 +1537,8 @@ Could not connect to gwd</screen>
       <listitem>
       <para>
       <command>path_to_mad</command>: It is the name of the Execution Driver
-      executable. Use an absolute path
-      or include the Execution Driver directory in the <envar>PATH</envar>
-      variable (such directory is <filename>$GW_LOCATION/bin</filename> by
-      default).
+      executable, which <emphasis>must</emphasis> be placed in the
+      <filename>$GW_LOCATION/bin</filename> directory.
       </para>
       </listitem>
 
@@ -1621,10 +1619,8 @@ Could not connect to gwd</screen>
       <listitem>
         <para>
           <command>path_to_mad</command>: It is the name of the File Transfer
-          Driver executable. Use an absolute path
-          or include the File Transfer Driver directory in the <envar>PATH</envar>
-          variable (such directory is <filename>$GW_LOCATION/bin</filename> by
-          default).
+          Driver executable, which <emphasis>must</emphasis> be placed in the
+          <filename>$GW_LOCATION/bin</filename> directory.
         </para>
       </listitem>
 
