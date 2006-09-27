@@ -71,9 +71,9 @@ monitor (){
             fi
             return
         fi
+    else
+        dynamic_monitor $1 $2
     fi
-    
-    dynamic_monitor $1 $2
 }
 
 while getopts hs:b:f:q:l: option $@ 

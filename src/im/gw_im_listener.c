@@ -42,14 +42,14 @@ void gw_im_listener(void *arg)
     char   str[GW_IM_MAX_STRING];    
     
     gw_host_t *   host;
-	gw_im_mad_t * im_mad;
-	
+    gw_im_mad_t * im_mad;
+    
     pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL); 
     pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
         
     while (1)
     {
-		greater = gw_im_set_pipes (&in_pipes);
+        greater = gw_im_set_pipes (&in_pipes);
         
         select(greater+1, &in_pipes, NULL, NULL, NULL);
 
@@ -57,11 +57,11 @@ void gw_im_listener(void *arg)
         {            
             if ( FD_ISSET(i, &in_pipes) )
             {         
-            	im_mad = gw_im_get_mad_by_fd(i);
-            	
-            	if ( im_mad == NULL )
-            		continue;
-            	
+                im_mad = gw_im_get_mad_by_fd(i);
+                
+                if ( im_mad == NULL )
+                    continue;
+                
                 j = 0;
 
                 do
@@ -74,12 +74,11 @@ void gw_im_listener(void *arg)
                 str[j] = '\0';
 
                 if (rc <= 0)
-					continue;
-					                
+                    continue;
+                                    
                 info[0] = '\0';
 
                 rc = sscanf(str,"%s %s %s %[^\n]", action, s_host_id, result, info);
-
         
 #ifdef GWIMDEBUG
                 gw_log_print("IM",'D',"MAD (%s) message %s %s %s %s (info length=%d).\n",
@@ -127,10 +126,10 @@ void gw_im_listener(void *arg)
                                     im_mad->name, info);
                                     
                             gw_host_pool_update(info, 
-                            		            im_mad->nice,
-                                                im_mad->em_mad_name,
-                                                im_mad->tm_mad_name,
-                                                im_mad->name);
+                                    im_mad->nice,
+                                    im_mad->em_mad_name,
+                                    im_mad->tm_mad_name,
+                                    im_mad->name);
                             
 #ifdef GWIMDEBUG
                             gw_host_pool_print(stdout);
@@ -141,14 +140,14 @@ void gw_im_listener(void *arg)
                             gw_log_print("IM",'I',"No hosts discovered by MAD (%s)\n",
                                     im_mad->name);
                         }
-
-                        im_mad->state = GW_IM_MAD_STATE_IDLE;
                     }
                     else
                     {
                         gw_log_print("IM",'E',"DISCOVER error in MAD (%s): %s\n",
                                 im_mad->name, info);
                     }
+
+                    im_mad->state = GW_IM_MAD_STATE_IDLE;
                 }
                 else if (strcmp(action, "MONITOR") == 0)
                 {

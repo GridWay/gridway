@@ -18,11 +18,11 @@
 # -------------------------------------------------------------------------- 
 
 dynamic_discover (){
-	echo "DISCOVER - SUCCESS $INFO"
+    echo "DISCOVER - SUCCESS $INFO"
 }
 
 dynamic_monitor (){
-	return
+    echo "MONITOR $1 FAILURE Dynamic monitoring is not available"
 }
 
 . gw_im_mad_common.sh
