@@ -31,10 +31,10 @@ dynamic_discover (){
         then
             HOSTNAMES=`grep Mds-Host-hn: $TMPFILE | awk '{print $2}'`
 
-            while read HOSTNAME
+            for HOSTNAME in $HOSTNAMES
             do
                 INFO="$INFO $HOSTNAME"
-            done < $HOSTNAMES
+            done
 
             echo "DISCOVER - SUCCESS $INFO"
         else
