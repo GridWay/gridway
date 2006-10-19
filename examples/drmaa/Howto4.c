@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
     rc = drmaa_run_bulk_jobs(&jobids, 
                              jt,
                              0,
-                             1,
+                             4,
                              1, 
                              error, 
                              DRMAA_ERROR_STRING_BUFFER-1);

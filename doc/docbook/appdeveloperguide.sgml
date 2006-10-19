@@ -1474,7 +1474,7 @@
 
   pi = 0.0;
 
-  for(i=0;i<end;i++)
+  for(i=0;i<=end;i++)
   {
     snprintf(attr_buffer,DRMAA_ATTR_BUFFER,"stdout.%s",i);
 

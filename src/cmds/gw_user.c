@@ -29,7 +29,7 @@
 /* ------------------------------------------------------------------------- */
 
 const char * usage =
-"\n gwusers [-h] [-n]\n\n"
+"\n gwuser [-h] [-n]\n\n"
 "SYNOPSIS\n"
 "  Prints information about users in the GridWay system\n\n"
 "OPTIONS\n"
@@ -46,7 +46,7 @@ const char * usage =
 "  PID   process identification of driver processes\n";
 
 const char * susage =
-"usage: gwusers [-h] [-n]\n";
+"usage: gwuser [-h] [-n]\n";
 
 extern char *optarg;
 extern int   optind, opterr, optopt;
