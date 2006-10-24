@@ -38,7 +38,7 @@ dynamic_discover (){
 
             echo "DISCOVER - SUCCESS $INFO"
         else
-	        INFO=`cat $ERRFILE`
+            INFO=`cat $ERRFILE`
             echo "DISCOVER - FAILURE $INFO"
         fi
         
@@ -50,12 +50,15 @@ dynamic_discover (){
 
 dynamic_monitor (){
     TMPFILE=".search.$$.$1.$RANDOM"
-	ERRFILE=".error.$$.$1.$RANDOM"
-	
+    ERRFILE=".error.$$.$1.$RANDOM"
+    
     grid-info-search -x -LLL -h $2 > $TMPFILE 2> $ERRFILE
             
     if [ $? -eq 0 ]
     then
+        CPU_MHZ=0; CPU_FREE=0; CPU_SMP=0; NODECOUNT=0; FREE_MEM_MB=0
+        SIZE_MEM_MB=0; FREE_DISK_MB=0; SIZE_DISK_MB=0
+        
         HOSTNAME=`grep GlueClusterUniqueID: $TMPFILE | awk -F": " '{print $2}' | head -1`
         OS_NAME=`grep GlueHostOperatingSystemName: $TMPFILE | awk -F": " '{print $2}' | head -1`
         OS_VERSION=`grep GlueHostOperatingSystemVersion: $TMPFILE | awk -F": " '{print $2}' | head -1`
@@ -73,6 +76,9 @@ dynamic_monitor (){
 
         if [ $? -eq 0 ]
         then
+            QUEUE_NODECOUNT=0; QUEUE_FREENODECOUNT=0; QUEUE_MAXTIME=0; QUEUE_MAXCPUTIME=0
+            QUEUE_MAXCOUNT=0; QUEUE_MAXRUNNINGJOBS=0; QUEUE_MAXJOBSINQUEUE=0
+
             QUEUE_NAME=(`grep GlueCEName: $TMPFILE | awk -F": " '{print $2}'`)
             QUEUE_NODECOUNT=(`grep GlueCEInfoTotalCPUs: $TMPFILE | awk -F": " '{print $2}' | tail +1`)
             QUEUE_FREENODECOUNT=(`grep GlueCEStateFreeCPUs: $TMPFILE | awk -F": " '{print $2}'`)
@@ -84,7 +90,6 @@ dynamic_monitor (){
             QUEUE_PRIORITY=(`grep GlueCEPolicyPriority: $TMPFILE | awk -F": " '{print $2}'`)
             QUEUE_JOBWAIT=(`grep GlueCEStateWaitingJobs: $TMPFILE | awk -F": " '{print $2}'`)
 
-        
             INFO=`echo "HOSTNAME=\"$HOSTNAME\" ARCH=\"i686\"" \
                 "OS_NAME=\"$OS_NAME\" OS_VERSION=\"$OS_VERSION\"" \
                 "CPU_MODEL=\"$CPU_MODEL\" CPU_MHZ=$CPU_MHZ CPU_FREE=0 CPU_SMP=$CPU_SMP" \
@@ -95,30 +100,23 @@ dynamic_monitor (){
                 "LRMS_NAME=\"$LRMS_NAME\" LRMS_TYPE=\"$LRMS_TYPE\"" \
                 "SE_HOSTNAME=\"$SE_HOSTNAME\""`
 
-    	    #if [ "$LRMS_TYPE" = "fork" ]
-	        #then
-	        #    i=0;
-	        #else
-	        #    i=1;
-	        #fi
-
-	        for ((j=0, i=0; i<${#QUEUE_NAME[@]}; i++,j++))
-	        do
-	            INFO=`echo "$INFO QUEUE_NAME[$j]=\"${QUEUE_NAME[$i]}\" QUEUE_NODECOUNT[$j]=${QUEUE_NODECOUNT[$i]}" \
+            for ((j=0, i=0; i<${#QUEUE_NAME[@]}; i++,j++))
+            do
+                INFO=`echo "$INFO QUEUE_NAME[$j]=\"${QUEUE_NAME[$i]}\" QUEUE_NODECOUNT[$j]=${QUEUE_NODECOUNT[$i]}" \
                     "QUEUE_FREENODECOUNT[$j]=${QUEUE_FREENODECOUNT[$i]} QUEUE_MAXTIME[$j]=${QUEUE_MAXTIME[$i]}" \
                     "QUEUE_MAXCPUTIME[$j]=${QUEUE_MAXCPUTIME[$i]} QUEUE_MAXCOUNT[$j]=0" \
                     "QUEUE_MAXRUNNINGJOBS[$j]=${QUEUE_MAXRUNNINGJOBS[$i]} QUEUE_MAXJOBSINQUEUE[$j]=${QUEUE_MAXJOBSINQUEUE[$i]}" \
                     "QUEUE_DISPATCHTYPE[$j]=\"batch\" QUEUE_PRIORITY[$j]=\"${QUEUE_PRIORITY[$i]}\"" \
                     "QUEUE_STATUS[$j]=\"${QUEUE_STATUS[$i]}\""`
-	        done
+            done
 
-    	    echo "MONITOR $1 SUCCESS $INFO"
-		else
-	    	INFO=`cat $ERRFILE`
-	        echo "MONITOR $1 FAILURE $INFO"			    	
-        fi    	    
+            echo "MONITOR $1 SUCCESS $INFO"
+        else
+            INFO=`cat $ERRFILE`
+            echo "MONITOR $1 FAILURE $INFO"                    
+        fi            
     else
-    	INFO=`cat $ERRFILE`    
+        INFO=`cat $ERRFILE`    
         echo "MONITOR $1 FAILURE $INFO"
     fi
     

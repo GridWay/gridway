@@ -38,7 +38,7 @@ dynamic_discover (){
 
             echo "DISCOVER - SUCCESS $INFO"
         else
-        	INFO=`cat $ERRFILE`
+            INFO=`cat $ERRFILE`
             echo "DISCOVER - FAILURE $INFO"
         fi
         
@@ -50,12 +50,15 @@ dynamic_discover (){
 
 dynamic_monitor (){
     TMPFILE=".search.$$.$1.$RANDOM"
-	ERRFILE=".error.$$.$1.$RANDOM"
-	
+    ERRFILE=".error.$$.$1.$RANDOM"
+    
     grid-info-search -x -LLL -h $2 > $TMPFILE 2> $ERRFILE
         
     if [ $? -eq 0 ]
     then
+        CPU_MHZ=0; CPU_FREE=0; CPU_SMP=0; NODECOUNT=0; FREE_MEM_MB=0
+        SIZE_MEM_MB=0; FREE_DISK_MB=0; SIZE_DISK_MB=0
+
         HOSTNAME=`grep Mds-Host-hn: $TMPFILE | awk -F": " '{print $2}' | head -1`
         ARCH=`grep Mds-Computer-isa: $TMPFILE | awk -F": " '{print $2}' | head -1`
         OS_NAME=`grep Mds-Os-name: $TMPFILE | awk -F": " '{print $2}' | head -1`
@@ -77,6 +80,9 @@ dynamic_monitor (){
     
         if [ $? -eq 0 ]
         then
+            QUEUE_NODECOUNT=0; QUEUE_FREENODECOUNT=0; QUEUE_MAXTIME=0; QUEUE_MAXCPUTIME=0
+            QUEUE_MAXCOUNT=0; QUEUE_MAXRUNNINGJOBS=0; QUEUE_MAXJOBSINQUEUE=0
+
             QUEUE_NAME=(`grep Mds-Job-Queue-name: $TMPFILE | awk -F": " '{print $2}' | awk -F"@" '{print $1}'`)
             QUEUE_NODECOUNT=(`grep Mds-Computer-Total-nodeCount: $TMPFILE | awk -F": " '{print $2}' | tail +1`)
             QUEUE_FREENODECOUNT=(`grep Mds-Computer-Total-Free-nodeCount: $TMPFILE | awk -F": " '{print $2}'`)
@@ -90,7 +96,7 @@ dynamic_monitor (){
             QUEUE_PRIORITY=(`grep Mds-Gram-Job-Queue-priority: $TMPFILE | awk -F": " '{print $2}'`)
             QUEUE_JOBWAIT=(`grep Mds-Gram-Job-Queue-jobwait: $TMPFILE | awk -F": " '{print $2}'`)
 
-	        INFO=`echo "HOSTNAME=\"$HOSTNAME\" ARCH=\"$ARCH\"" \
+            INFO=`echo "HOSTNAME=\"$HOSTNAME\" ARCH=\"$ARCH\"" \
                 "OS_NAME=\"$OS_NAME\" OS_VERSION=\"$OS_VERSION\"" \
                 "CPU_MODEL=\"$CPU_MODEL\" CPU_MHZ=$CPU_MHZ CPU_FREE=$CPU_FREE CPU_SMP=$CPU_SMP" \
                 "NODECOUNT=$NODECOUNT" \
@@ -99,30 +105,30 @@ dynamic_monitor (){
                 "FORK_NAME=\"$FORK_NAME\"" \
                 "LRMS_NAME=\"$LRMS_NAME\" LRMS_TYPE=\"$LRMS_TYPE\""`
 
-    	    if [ "$LRMS_TYPE" = "fork" ]
-	        then
-	            i=0;
-	        else
-	            i=1;
-	        fi
+            if [ "$LRMS_TYPE" = "fork" ]
+            then
+                i=0;
+            else
+                i=1;
+            fi
 
-	        for ((j=0; i<${#QUEUE_NAME[@]}; i++,j++))
-	        do
-	            INFO=`echo "$INFO QUEUE_NAME[$j]=\"${QUEUE_NAME[$i]}\" QUEUE_NODECOUNT[$j]=${QUEUE_NODECOUNT[$i]}" \
+            for ((j=0; i<${#QUEUE_NAME[@]}; i++,j++))
+            do
+                INFO=`echo "$INFO QUEUE_NAME[$j]=\"${QUEUE_NAME[$i]}\" QUEUE_NODECOUNT[$j]=${QUEUE_NODECOUNT[$i]}" \
                     "QUEUE_FREENODECOUNT[$j]=${QUEUE_FREENODECOUNT[$i]} QUEUE_MAXTIME[$j]=${QUEUE_MAXTIME[$i]}" \
                     "QUEUE_MAXCPUTIME[$j]=${QUEUE_MAXCPUTIME[$i]} QUEUE_MAXCOUNT[$j]=${QUEUE_MAXCOUNT[$i]}" \
                     "QUEUE_MAXRUNNINGJOBS[$j]=${QUEUE_MAXRUNNINGJOBS[$i]} QUEUE_MAXJOBSINQUEUE[$j]=${QUEUE_MAXJOBSINQUEUE[$i]}" \
                     "QUEUE_DISPATCHTYPE[$j]=\"${QUEUE_DISPATCHTYPE[$i]}\" QUEUE_PRIORITY[$j]=\"${QUEUE_PRIORITY[$i]}\"" \
                     "QUEUE_STATUS[$j]=\"${QUEUE_STATUS[$i]}\""`
-    	    done
+            done
 
-        	echo "MONITOR $1 SUCCESS $INFO"
-		else
-	    	INFO=`cat $ERRFILE`
-	        echo "MONITOR $1 FAILURE $INFO"	
-        fi		
+            echo "MONITOR $1 SUCCESS $INFO"
+        else
+            INFO=`cat $ERRFILE`
+            echo "MONITOR $1 FAILURE $INFO"    
+        fi        
     else
-    	INFO=`cat $ERRFILE`
+        INFO=`cat $ERRFILE`
         echo "MONITOR $1 FAILURE $INFO"
     fi
 
