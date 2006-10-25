@@ -255,10 +255,8 @@ void gw_dm_prolog_failed_cb ( void *_job_id )
 		if (job->history->next != NULL)
 		{
 	   		job->history->next->stats[EXIT_TIME] = time(NULL);
-	   		
-			pthread_mutex_lock(&(job->history->next->host->mutex));
-			job->history->next->host->running_jobs--;		
-			pthread_mutex_unlock(&(job->history->next->host->mutex));
+
+            gw_host_dec_rjobs(job->history->next->host);
 		}   		
    	}
    	
@@ -268,9 +266,8 @@ void gw_dm_prolog_failed_cb ( void *_job_id )
 	
 	if (job->history != NULL)
 	{
-		pthread_mutex_lock(&(job->history->host->mutex));
-		job->history->host->used_slots--;		
-		pthread_mutex_unlock(&(job->history->host->mutex));
+		job->history->reason = GW_REASON_EXECUTION_ERROR;
+        gw_host_dec_uslots(job->history->host);
 	}
 	
 	if (job->template.reschedule_on_failure == GW_TRUE)
@@ -356,7 +353,7 @@ void gw_dm_prolog_set_files(gw_job_t * job)
 	if ( job->template.stdin_file != NULL )
 	{
 		job->xfrs.xfrs[i].src_url = strdup(job->template.stdin_file);
-		job->xfrs.xfrs[i].dst_url = NULL;
+		job->xfrs.xfrs[i].dst_url = strdup("stdin.execution");
 		job->xfrs.xfrs[i].mode    = '-';
 		
 		job->xfrs.xfrs[i++].alt_src_url = NULL;

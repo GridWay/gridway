@@ -26,8 +26,10 @@
 
 void gw_dm_pending ( void *_job_id )
 {
-    gw_job_t * job;
-    int        job_id;
+    gw_job_t *            job;
+    int                   job_id;
+    gw_boolean_t          failed;
+    gw_migration_reason_t reason;
     
 	/* ----------------------------------------------------------- */  
     /* 0.- Get job pointer                                         */
@@ -57,24 +59,50 @@ void gw_dm_pending ( void *_job_id )
     gw_job_print(job,"DM",'I',"Rescheduling job.\n");
     gw_log_print("DM",'I',"Rescheduling job %d.\n", job->id);
 
-   	if (job->history != NULL)
-   		if (job->job_state != GW_JOB_STATE_EPILOG_RESTART )
-		    job->history->reason = GW_REASON_EXECUTION_ERROR;
-		    
-    job->reschedule = GW_TRUE;
     gw_job_set_state (job, GW_JOB_STATE_PENDING, GW_FALSE);
     
 	/* -------- Update Host & User running jobs -------- */
 			            
     gw_user_pool_dec_running_jobs(job->user_id);
+    
+    gw_host_dec_rjobs(job->history->host);
+    
+    /* ------------- Restart counter --------------- */
+    
+    job->restarted++;
 
-   	pthread_mutex_lock(&(job->history->host->mutex));
-	    	
-	job->history->host->running_jobs--;
-			
-	pthread_mutex_unlock(&(job->history->host->mutex));            
-            
-   /* ------------------------------------------------- */            
+    /* ------------- Notify the Scheduler --------------- */
+   
+	if (job->history != NULL)
+	{	
+		if (job->history->reason == GW_REASON_SELF_MIGRATION)
+		    reason = GW_REASON_SELF_MIGRATION;
+		else
+		    reason = GW_REASON_NONE;
+		    
+		failed =(job->history->reason == GW_REASON_EXECUTION_ERROR) ||
+                (job->history->reason == GW_REASON_PERFORMANCE);
+                                                     
+        if ((job->template.reschedule_on_failure == GW_TRUE) && failed)
+        {
+            gw_dm_mad_job_failed(&gw_dm.dm_mad[0],
+	                         job->history->host->host_id,
+	                         job->user_id,
+	                         job->history->reason);
+        }
+                              	                              
+        gw_dm_mad_job_schedule(&gw_dm.dm_mad[0],
+                           job_id,
+                           job->array_id,
+                           reason,
+                           job->nice,
+                           job->user_id);
+	}
+	else
+    	gw_log_print("DM",'E',"Rescheduling job %d, but no history records found.\n", 
+    	    job->id);
+                           
+   /* ------------------------------------------------- */
 				        
     free(_job_id);
 		    

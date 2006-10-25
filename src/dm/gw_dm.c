@@ -50,8 +50,7 @@ gw_dm_t * gw_dm_init()
     gw_dm.tm_am = NULL;    
     gw_dm.rm_am = NULL;
     
-    gw_dm.dispatched_jobs = 0;
-    gw_dm.scheduling      = GW_FALSE;
+    gw_dm.scheduling = GW_FALSE;
 
     /* ----------------------------------------------------- */
     /* 2.- Init Action Manager                               */

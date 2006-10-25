@@ -26,10 +26,11 @@
 
 void gw_dm_failed ( void *_job_id )
 {
-    gw_job_t * job;
-    int        job_id;
+    gw_job_t *   job;
+    int          job_id;
+    gw_boolean_t failed;
     
-	/* ----------------------------------------------------------- */  
+    /* ----------------------------------------------------------- */  
     /* 0.- Get job pointer                                         */
     /* ----------------------------------------------------------- */  
     
@@ -54,7 +55,7 @@ void gw_dm_failed ( void *_job_id )
     /* 1.- Set state                                               */
     /* ----------------------------------------------------------- */  
 
-   	gw_log_print("DM",'I',"Job %i failed.\n",job->id);
+    gw_log_print("DM",'I',"Job %i failed.\n",job->id);
    	                    
     gw_job_set_state(job, GW_JOB_STATE_FAILED, GW_FALSE);
     gw_job_print(job,"DM",'I',"Job failed, history:\n");
@@ -62,26 +63,31 @@ void gw_dm_failed ( void *_job_id )
     gw_job_print_history(job);
     
     job->exit_time = time(NULL);
-
-    if (job->history != NULL)
-	    job->history->reason = GW_REASON_EXECUTION_ERROR;
-
                     
     if ( job->client_waiting > 0 )
        	gw_am_trigger(gw_dm.rm_am,"GW_RM_WAIT_SUCCESS", _job_id);
     else
        	free(_job_id);
 
-	/* -------- Update Host & User running jobs -------- */       	
+    /* -------- Update Host & User running jobs -------- */       	
     
     gw_user_pool_dec_running_jobs(job->user_id);
 
-   	pthread_mutex_lock(&(job->history->host->mutex));
-
-	job->history->host->running_jobs--;
-
-	pthread_mutex_unlock(&(job->history->host->mutex));            
-       	    				    
+    gw_host_dec_rjobs(job->history->host);
+    	                     	
+    /* --------- Notify the Scheduler ---------- */
+	
+    failed = (job->history->reason == GW_REASON_EXECUTION_ERROR) ||
+             (job->history->reason == GW_REASON_PERFORMANCE);
+                                                     
+    if (failed)
+    {
+        gw_dm_mad_job_failed(&gw_dm.dm_mad[0],
+	                     job->history->host->host_id,
+	                     job->user_id,
+	                     job->history->reason);
+    }
+                              	                                     	    				    
     pthread_mutex_unlock(&(job->mutex));
 }
 

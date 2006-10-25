@@ -204,9 +204,9 @@ void gw_em_listener(void *arg)
                     } 
                     else 
                     {						
-						job->history->polls++;
+						job->history->failed_polls++;
 						
-						if (job->history->polls > 3 )
+						if (job->history->failed_polls == 3 )
 							assume_done = GW_TRUE;
 						else
 							assume_done = GW_FALSE;

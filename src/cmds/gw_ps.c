@@ -29,37 +29,53 @@
 /* ------------------------------------------------------------------------- */
 
 const char * usage =
-"\n gwps [-h] [-c delay] [-n] [job_id]\n\n"
+"\n gwps [-h] [-u user] [-r host] [-A AID] [-s job_state] [-o output_format] [-c delay] [-n] [job_id]\n\n"
 "SYNOPSIS\n"
 "  Prints information about all the jobs in the GridWay system (default)\n\n"
 "OPTIONS\n"
-"  -h         prints this help\n"
-"  -c <delay> this will cause gwps to print job information every <delay>\n"
-"             seconds continuously (similar to top command)\n"
-"  -n         do not print the header\n"
-"  job_id     only monitor this job_id\n\n"
+"  -h               prints this help\n"
+"  -u user          monitor only jobs owned by user\n"
+"  -r host          monitor only jobs executed in host\n"
+"  -A AID           monitor only jobs part of the array AID\n"
+"  -s job_state     monitor only jobs in state job_state (see JOB STATES)\n"
+"  -o output_format define output information (see FIELD INFORMATION)\n" 
+"  -c <delay>       this will cause gwps to print job information every <delay>\n"
+"                   seconds continuously (similar to top command)\n"
+"  -n               do not print the header\n"
+"  job_id           only monitor this job_id\n\n"
 "FIELD INFORMATION\n"
-"  USER       owner of this job\n"
-"  JID        job unique identification assigned by the Gridway system\n"
-"  AID        array unique identification, only relevant for array jobs\n"
-"  TID        task identification, ranges from 0 to TOTAL_TASKS -1, only relevant for array jobs\n"
-"  DM         dispatch Manager state, one of: pend, hold, prol, prew, wrap, epil, canl, stop, migr, done, fail\n"
-"  EM         execution Manager state (Globus state): pend, susp, actv, fail, done\n"
-"  RWS        flags: \n"
-"               - R: times this job has been restarted\n" 
-"               - W: number of processes waiting for this job\n"
-"               - S: re-schedule flag\n"
-"  START      the time the job entered the system\n"
-"  END        the time the job reached a final state (fail or done)\n"
-"  EXEC       total execution time, includes suspension time in the remote queue system\n"
-"  XFER       total file transfer time, includes stage-in and stage-out phases\n"
-"  EXIT       job exit code\n"
-"  TEMPLATE   filename of the job template used for this job\n"
-"  HOST       hostname where the job is being executed\n";
+"  USER     (u)  owner of this job\n"
+"  JID           job unique identification assigned by the Gridway system\n"
+"  AID      (i)  array unique identification, only relevant for array jobs\n"
+"  TID      (i)  task identification, ranges from 0 to TOTAL_TASKS -1, only relevant for array jobs\n"
+"  DM       (s)  dispatch Manager state, one of: pend, hold, prol, prew, wrap, epil, canl, stop, migr, done, fail\n"
+"  EM       (e)  execution Manager state (Globus state): pend, susp, actv, fail, done\n"
+"  RWS      (f)  flags: \n"
+"   	            - R: times this job has been restarted\n" 
+"       	            - W: number of processes waiting for this job\n"
+"           	    - S: re-schedule flag\n"
+"  START    (t|T)  the time the job entered the system\n"
+"  END      (t|T)  the time the job reached a final state (fail or done)\n"
+"  EXEC     (t|T)  total execution time, includes suspension time in the remote queue system\n"
+"  XFER     (t|T)  total file transfer time, includes stage-in and stage-out phases\n"
+"  EXIT     (x)    job exit code\n"
+"  TEMPLATE (j)    filename of the job template used for this job\n"
+"  HOST     (h)    hostname where the job is being executed\n\n"
+"JOB STATES\n"
+"  PENDING (i)\n"
+"  PROLOG  (p)\n"
+"  HOLD    (h)\n"
+"  WRAPPER (w)\n"
+"  EPILOG  (e)\n"
+"  STOP    (s)\n"
+"  KILL    (k)\n"
+"  MIGRATE (m)\n"
+"  ZOMBIE  (z)\n"
+"  FAILED  (f)\n";
 
 
 const char * susage =
-"usage: gwps [-h] [-c delay] [-n] [job_id]\n";
+"usage: gwps [-h] [-u user] [-r host] [-A AID] [-s job_state] [-o output_format] [-c delay] [-n] [job_id]\n";
 
 extern char *optarg;
 extern int   optind, opterr, optopt;
@@ -84,6 +100,14 @@ int main(int argc, char **argv)
 	gw_msg_job_t      job_status;
 	struct sigaction  act;
   	gw_return_code_t  rc;
+  	char *			  hostname     = NULL;
+  	char *			  username     = NULL;
+    char *			  outoption	   = NULL;    	
+  	char 			  jobstate	   = '&'; // If not set to other value all job states will be printed
+  										  // (see gw_check_state in gw_cmds_common.c)
+    int               i;
+    int  	          array_id     = -1;  										    										  
+										  
   	
 	/* ---------------------------------------------------------------- */
 	/* Parse arguments                                                  */
@@ -92,14 +116,87 @@ int main(int argc, char **argv)
     opterr = 0;
     optind = 1;
 	
-    while((opt = getopt(argc, argv, ":nhc:")) != -1)
+    while((opt = getopt(argc, argv, ":nhc:u:r:s:o:A:")) != -1)
         switch(opt)
         {
             case 'c': c  = 1;
                 delay = atoi(optarg);
                 break;
             case 'n': n = 1;
-                break;    
+                break;  
+            case 'u':                     	
+            	username = strdup(optarg);         
+                break;
+            case 'r':                     	
+            	hostname = strdup(optarg);        
+                break; 
+            case 's':                     	
+            	jobstate = strdup(optarg)[0];
+            	switch(jobstate)
+            	{
+            		case 'i':
+            		case 'p':
+            		case 'h':
+            		case 'w':
+            		case 'e':
+            		case 's':
+            		case 'k':
+            		case 'm':
+            		case 'z':
+            		case 'f':
+            			break;
+            		default:
+            			printf("ERROR: Job state must be one of {i,p,h,w,e,s,k,m,z,f}\n");
+		            	printf("%s", susage);
+		                return (-1);             		
+            			break;	
+            	}
+                break; 
+            case 'o':
+            	outoption = strdup(optarg);
+            	
+            	int seen_t=0;
+            	
+            	for(i=0;i<strlen(outoption);i++)
+            		switch(outoption[i])
+            		{
+						case 't':
+							if(seen_t)
+							{
+		            			printf("ERROR: options t and T are mutually exclusive\n");
+				            	printf("%s", susage);
+				                return (-1);
+							}
+				            seen_t++;								
+							break;
+						case 'T':
+							if(seen_t)
+							{
+		            			printf("ERROR: options t and T are mutually exclusive\n");
+				            	printf("%s", susage);
+				                return (-1);
+							}
+				            seen_t++;								
+							break;           			
+            			case 'e':
+            			case 's':
+            			case 'u':
+            			case 'j':
+						case 'h':
+						case 'x':
+						case 'i':  
+						case 'f':						
+            				break;
+	            		default:
+	            			printf("ERROR: Output format must be constructed with {e,s,u,j,t,h,x,i}\n");
+			            	printf("%s", susage);
+			                return (-1);             		
+	            			break;
+            		}        
+                break; 
+            case 'A':
+            	array_id = atoi(optarg);            	
+                break;            	            
             case 'h':
             	printf("%s", usage);
                 exit(0);
@@ -116,10 +213,11 @@ int main(int argc, char **argv)
                 exit(1);
                 break;
       	}
-      	
+                	
 	if ( optind < argc)
 		job_id = atoi(argv[optind]);
-    
+
+
 	/* ---------------------------------------------------------------- */
 	/* Connect to GWD                                                   */
 	/* ---------------------------------------------------------------- */
@@ -128,6 +226,13 @@ int main(int argc, char **argv)
 	
 	if ( gw_session == NULL )
 	{
+		if(username != NULL)
+			free(username);
+		if(hostname != NULL)
+			free(hostname);	
+		if(outoption != NULL)
+			free(outoption);					
+			
 		fprintf(stderr,"Could not connect to gwd\n");
 		return (-1);
 	}
@@ -159,15 +264,22 @@ int main(int argc, char **argv)
     	if (rc == GW_RC_SUCCESS)
         {
         	if (!n)
-        		gw_client_print_status_header();
+        		gw_client_print_status_header(outoption);
 
 		    if (job_id != -1)
-		    	gw_client_print_status(&job_status);
-			else	    		    
-		    	gw_client_print_pool_status();
+		    	gw_client_print_status(&job_status, outoption);
+			else	   	    
+		    	gw_client_print_pool_status(username, hostname, jobstate, outoption, array_id);
         }  
 	    else
 	    {
+			if(username != NULL)
+				free(username);
+			if(hostname != NULL)
+				free(hostname);	 
+		    if(outoption != NULL)
+			    free(outoption);					
+							   	
 	    	fprintf(stderr,"FAILED: %s\n",gw_ret_code_string(rc)); 
            	
 	        gw_client_finalize();
@@ -177,6 +289,13 @@ int main(int argc, char **argv)
 		sleep(delay);	    
 		
 	} while(c);
+	
+	if(username != NULL)
+		free(username);
+	if(hostname != NULL)
+		free(hostname);
+	if(outoption != NULL)
+		free(outoption);					
 	
 	return 0;
 }

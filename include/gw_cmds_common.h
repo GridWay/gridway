@@ -35,11 +35,15 @@ char *gw_print_time(time_t t, char *the_time);
 
 char *gw_print_time2(time_t t, char *the_time);
 
-void gw_client_print_status_header();
+char *gw_print_date_and_time(time_t t, char *the_time);
 
-void gw_client_print_status(gw_msg_job_t * msg);
+int gw_check_state(char jobstate_from_user, gw_job_state_t current_job_state);
 
-void gw_client_print_pool_status();
+void gw_client_print_status_header(char *outoption);
+
+void gw_client_print_status(gw_msg_job_t * msg, char *outoption);
+
+void gw_client_print_pool_status(char *username, char *hostname, char jobstate, char *outoption, int array_id);
 
 void gw_client_print_history_header();
 
@@ -63,8 +67,9 @@ void gw_client_print_user(gw_msg_user_t *msg_user);
 
 #ifdef HAVE_LIBDB
 
-void gw_client_print_user_accts_header(const char *user);
-void gw_client_print_host_accts_header(const char *host);
+void gw_client_print_user_accts_header(const char *user, time_t from_time);
+void gw_client_print_host_accts_header(const char *host, time_t from_time);
+void gw_client_print_host_and_user_accts_header(const char *host, const char *user, time_t from_time);
 void gw_client_print_accts(gw_acct_t **accts, int num);
 
 #endif

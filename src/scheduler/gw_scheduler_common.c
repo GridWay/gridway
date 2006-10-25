@@ -15,7 +15,6 @@
 /* limitations under the License.                                             */
 /* -------------------------------------------------------------------------- */
 
-
 #include "gw_client.h"
 #include "gw_scheduler.h"
 
@@ -25,40 +24,96 @@
 #include <unistd.h>
 #include <signal.h>
 #include <string.h>
+#include <errno.h>
 
-static int check_history_records(int hid, int rank, int jid);
+static void gw_scheduler_init (gw_scheduler_t * sched);
 
-static int resource_cmp(const void *r1, const void *r2);
-                                
-static int gw_scheduler_set_up(gw_sch_job_t **    sched_jobs,
-                               gw_sch_queue_t *** match_queue,
-  						       gw_sch_user_t **   users,
-  						       gw_sch_host_t **   hosts);
-                                
+static FILE *fd_log;
+
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
-
-
 
 void gw_scheduler_loop(gw_scheduler_function_t scheduler, void *user_arg)
 {
-	int     end = 0;
+	int     end   = 0;
+	int     error = 0;
+	
     fd_set  in_pipes;
     int     rc,j,i;
     char    c;
-    char    str[80];
+    
+    char    str[320];
+    
     char    action[10];
-	char    opt1[5];
-    char    opt2[5];
-    char    opt3[5];	
-
-	gw_sch_job_t *    sched_jobs;
-    gw_sch_queue_t ** match_queues;
-  	gw_sch_user_t *   users;
-  	gw_sch_host_t *   hosts;
+    
+	char    id1[7];
+    char    id2[7];
+    char    xfr[10];
+    char    sus[80];
+    char    exe[10];
+    char    tsk[10];
+    
+    int                   hid, uid, jid, aid;
+    int                   uslots, ajobs, nice;
+    int                   rjobs,tasks;
+    gw_migration_reason_t reason;
+    float                 txfr,texe,tsus;
+        
+    char *  GW_LOCATION;
+    char *  log;
+    char *  error_str;
+    int     length;
+        
+    gw_scheduler_t sched;  	
   	
-  	setbuf(stdout,NULL);	
+    /* ------------------------------- */
+    /*  Init environment ang log file  */
+    /* ------------------------------- */
+
+    GW_LOCATION = getenv("GW_LOCATION");
+    
+    if(GW_LOCATION == NULL)
+    {
+    	error = 1;
+    	error_str = strdup("GW_LOCATION environment variable is undefined.");
+    	
+    	gw_scheduler_print('E',"%s\n",error_str);
+    }
+    else
+    {
+        length = strlen(GW_LOCATION);
+	    log    = (char *) malloc (sizeof(char)*(length + 15));
+	    
+        sprintf(log, "%s/var/sched.log", GW_LOCATION);
+        
+    	rc = truncate(log, 0);
+	
+        fd_log = fopen(log,"a");
+            
+        if (fd_log == NULL)
+        {
+            error     = 1;
+            error_str = strdup(strerror(errno));	
+                
+     	    gw_scheduler_print('E',"Could not open file %s - %s\n",
+	                log,error_str);                
+        }
+        else
+            setbuf(fd_log,NULL);
+                
+        free(log);
+    }
+          	
+  	setbuf(stdout,NULL);  	
+  	
+  	gw_scheduler_init(&sched);
+
+    gw_scheduler_print('I',"Scheduler successfully started.\n");
+
+    /* ----------------------------------- */
+    /*  Scheduler Loop                     */
+    /* ----------------------------------- */
 	
     while (!end)
     {
@@ -67,7 +122,10 @@ void gw_scheduler_loop(gw_scheduler_function_t scheduler, void *user_arg)
 
         rc = select(1, &in_pipes, NULL, NULL, NULL);
         if (rc == -1)
+        {
             end = 1;
+            gw_scheduler_print('E',"Error in select() - %s\n",strerror(errno));
+        }
                                
         j = 0;
 
@@ -84,423 +142,226 @@ void gw_scheduler_loop(gw_scheduler_function_t scheduler, void *user_arg)
             end = 1;
         }
 
-        rc = sscanf(str,"%s %s %s %[^\n]",action,opt1,opt2,opt3);
-        
+        rc = sscanf(str,"%s %s %s %s %s %s %[^\n]",action,id1,id2,xfr,sus,exe,tsk);
+
+#ifdef GWSCHEDDEBUG
+        gw_scheduler_print('D',"Message received from gwd \"%s %s %s %s %s %s %s\"\n",
+            action,id1,id2,xfr,sus,exe,tsk);
+#endif        
         if (strcmp(action, "INIT") == 0 )
         {
-        	printf("INIT - SUCCESS -\n");
+        	if (error == 0)
+        	    printf("INIT - SUCCESS -\n");
+        	else
+        	{
+        		printf("INIT - FAILURE %s\n",error_str);
+        	    end = 1;	
+        	}
         }
         else if (strcmp(action, "FINALIZE") == 0 )
         {
         	printf("FINALIZE - SUCCESS -");
         	end = 1;
         }
+        else if (strcmp(action, "HOST_MONITOR") == 0 )
+        {
+        /* Add or update a given host format is:
+         * HOST_MONITOR HID USLOTS RJOBS NAME - 
+         */
+            hid    = atoi(id1);
+            uslots = atoi(id2);
+            rjobs  = atoi(xfr);
+            
+            gw_scheduler_add_host(&sched,hid,uslots,rjobs,sus);
+        }
+        else if (strcmp(action, "USER_ADD") == 0 )
+        {
+        /* Add a user:
+         * USER_ADD UID ASLOTS RSLOTS NAME - 
+         */        	
+        	uid   = atoi(id1);
+        	ajobs = atoi(id2);
+        	rjobs = atoi(xfr);
+        	
+        	gw_scheduler_add_user(&sched,uid,ajobs,rjobs,sus);
+        }
+        else if (strcmp(action, "USER_DEL") == 0 )
+        {
+        /* Remove an user
+         * USER_DEL UID - - - - 
+         */        	
+        	uid   = atoi(id1);
+        	        	
+        	gw_scheduler_del_user(&sched,uid);
+        }        
+        else if (strcmp(action, "JOB_DEL") == 0 )
+        {
+        /* Remove an job
+         * JOB_DEL JID - - - - 
+         */        	
+        	jid   = atoi(id1);
+        	
+        	gw_scheduler_job_del(&sched,jid);
+        }                
+        else if (strcmp(action, "TASK_DEL") == 0 )
+        {
+        /* Remove an job
+         * TASK_DEL AID - - - - 
+         */        	
+        	aid   = atoi(id1);
+        	
+        	gw_scheduler_array_del(&sched,aid,1);
+        }                     
+        else if (strcmp(action, "JOB_FAILED") == 0 )
+        {
+        /* A job has failed, update user host statistics
+         * JOB_FAILED HID UID REASON - -
+         */
+          	hid    = atoi(id1);
+          	uid    = atoi(id2);
+          	reason = (gw_migration_reason_t) atoi(xfr);
+          	
+          	gw_scheduler_job_failed(&sched,hid, uid,reason);
+        }                
+        else if (strcmp(action, "JOB_SUCCESS") == 0 )        
+        {
+        /* A job has been successfully executed, update user host statistics
+         * JOB_SUCCESS HID UID XFR SUS EXE 
+         */
+          	hid  = atoi(id1);
+          	uid  = atoi(id2);
+          	
+          	txfr = atof(xfr);
+          	tsus = atof(sus);
+          	texe = atof(exe);
+            
+            gw_scheduler_job_success(&sched,hid,uid,txfr,tsus,texe);
+
+        }
+        else if (strcmp(action, "JOB_SCHEDULE") == 0 )        
+        {
+        /* A job need schedule add it to the job list
+         * JOB_SCHEDULE JID AID REASON NICE UID
+         */
+          	jid    = atoi(id1);
+          	aid    = atoi(id2);          	
+          	reason = (gw_migration_reason_t) atoi(xfr);
+          	nice   = atoi(sus);
+          	uid    = atoi(exe);
+            
+            gw_scheduler_job_add(&sched,jid,aid,reason,nice,uid);
+        }
+        else if (strcmp(action, "ARRAY_SCHEDULE") == 0 )        
+        {
+        /* A job need schedule add it to the job list
+         * ARRAY_SCHEDULE JID AID REASON NICE UID TASKS
+         */
+          	jid    = atoi(id1);
+          	aid    = atoi(id2);          	
+          	reason = (gw_migration_reason_t) atoi(xfr);
+          	nice   = atoi(sus);
+          	uid    = atoi(exe);
+          	tasks  = atoi(tsk);
+            
+            gw_scheduler_array_add(&sched,jid,aid,reason,nice,uid,tasks);
+        }    
         else if (strcmp(action, "SCHEDULE") == 0 )
         {
-        	rc = gw_scheduler_set_up (&sched_jobs, &match_queues, &users, &hosts);
-        	
-        	if ( rc == 0)
+#ifdef GWSCHEDDEBUG
+           gw_scheduler_print('D',"JOBS:%i HOSTS:%i USERS:%i\n",
+               sched.num_jobs,sched.num_hosts,sched.num_users);
+#endif        	
+        	if (    (sched.num_hosts > 0) 
+        	     && (sched.num_users > 0) 
+        	     && (sched.num_jobs  > 0))
         	{
-        		scheduler(sched_jobs,match_queues,users,hosts,user_arg);
-        		
-        		printf("SCHEDULE_END - SUCCESS -\n");
-        		
-        		for (i=0; sched_jobs[i].jid != -1; i++)
-        			free(match_queues[i]);
-        		
-        		free(match_queues);
-        		free(sched_jobs);
-        		free(users);
-        		free(hosts);
-        	}
-        }                               
-    }	
-	
+        	    for (i=0;i<sched.num_hosts;i++)
+        	        sched.hosts[i].dispatched = 0;
+
+        	    for (i=0;i<sched.num_users;i++)
+        	        sched.users[i].dispatched = 0;        	
+        	
+        	    gw_scheduler_matching_arrays(&sched);
+        	
+       		    scheduler(&sched,user_arg);
+        	}	
+       		
+       		printf("SCHEDULE_END - SUCCESS -\n");
+        }
+    }
+    
+    if (error == 0)
+        fclose(fd_log);
 }
 
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
 
+static void gw_scheduler_init (gw_scheduler_t * sched)
+{  
+    sched->num_users = 0;
+    sched->users     = NULL;
+  
+    sched->num_hosts = 0;
+    sched->hosts     = NULL;
+
+    sched->num_jobs  = 0;
+    sched->jobs      = NULL;
+}
 
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
-static int gw_scheduler_set_up(gw_sch_job_t **    sched_jobs,
-                               gw_sch_queue_t *** match_queue,
-  						       gw_sch_user_t **   users,
-  						       gw_sch_host_t **   hosts)
+void gw_scheduler_print (const char mode, const char *str_format,...)
 {
-	gw_client_t *     gw_session;
-	gw_return_code_t  rc;
-	
-	gw_job_state_t    state;
-	int               array_id;
-	int               re_sched;
-	int               schedule;
-	int               notresched;
-	int               last_array;
-	int               i,j,k,l;
-	int               jid;
+    va_list ap;
+    time_t  the_time;
+    
+    char str[26];
 
-	gw_msg_match_t *  host;
-	int               queues;
-	int               add_queue;
-	
-	gw_msg_user_t *   user_status;
-	int               num_users;
+    va_start (ap, str_format);
 
-	gw_msg_match_t *  match_list = NULL;
-	int               num_records;
-		
-	/* ---------------------------------------------------------------- */
-	/* Connect to GWD                                                   */
-	/* ---------------------------------------------------------------- */
-
-	gw_session = gw_client_init();
-	
-	if ( gw_session == NULL )
-		return -1;
-	
-	rc = gw_client_job_status_all();
-
-	if ( rc != GW_RC_SUCCESS)
+    if (fd_log != NULL)
     {
-        gw_client_finalize();
+        the_time = time(NULL);
+
+#ifdef GWSOLARIS
+        ctime_r(&(the_time),str,sizeof(char)*26);
+#else
+        ctime_r(&(the_time),str);
+#endif
+
+        str[24]='\0';
+
+        fprintf(fd_log,"%s [%c]: ", str, mode);
+        vfprintf(fd_log,str_format,ap);
+    }
         
-		printf("SCHEDULE_END - FAILED gw_client_job_status_all()\n");
-        return -1;
-    }  
-    
-	rc = gw_client_host_status_all();
-
-	if ( rc != GW_RC_SUCCESS)
-    {
-        gw_client_finalize();
-        
-		printf("SCHEDULE_END - FAILED gw_client_host_status_all()\n");
-        return -1;
-    }      
-    
-	rc = gw_client_user_status(&user_status, &num_users);
-	
-	if ( rc != GW_RC_SUCCESS)
-	{
-        gw_client_finalize();
-        
-		printf("SCHEDULE_END - FAILED gw_client_user_status()\n");
-        return -1;		
-	}
-		
-    /* ---------------------------------------------------------------- */
-	/* Build the users array                                            */
-	/* ---------------------------------------------------------------- */	
-	
-	if ( num_users == 0 )
-	{
-		gw_client_finalize();
-	
-		printf("SCHEDULE_END - FAILED No users in the system\n");
-		return -1;
-	}
-	
-	(*users) = (gw_sch_user_t *) malloc(sizeof(gw_sch_user_t)*(num_users+1));
-	
-	for (i=0;i<num_users;i++)
-	{
-		(*users)[i].uid          = user_status[i].user_id;
-		(*users)[i].active_jobs  = user_status[i].active_jobs;
-		(*users)[i].running_jobs = user_status[i].running_jobs;
-		(*users)[i].dispatched   = 0;
-		
-		strncpy((*users)[i].name,user_status[i].name,GW_MSG_STRING_SHORT-1);
-	}
-
-	(*users)[num_users].uid = -1;
-	
-	free(user_status);
-
-    /* ---------------------------------------------------------------- */
-	/* Build the host array                                             */
-	/* ---------------------------------------------------------------- */
-	
-	(*hosts) = NULL;
-	j = 0;
-	
-	for (i=0;i<gw_session->number_of_hosts;i++)
-	{
-		if (gw_session->host_pool[i] != NULL)
-		{
-			(*hosts) = realloc((void *)(*hosts),(j+1)*sizeof(gw_sch_host_t));
-			
-			(*hosts)[j].hid          = gw_session->host_pool[i]->host_id;
-			(*hosts)[j].running_jobs = gw_session->host_pool[i]->running_jobs;
-			(*hosts)[j].used_slots   = gw_session->host_pool[i]->used_slots;
-			(*hosts)[j].dispatched   = 0;
-			
-			strncpy((*hosts)[j++].name,
-			        gw_session->host_pool[i]->hostname,
-			        GW_MSG_STRING_SHORT-1);			
-		}
-	}
-		
-	if ( j == 0 )
-	{
-		gw_client_finalize();
-		
-		free(*users);
-		
-		printf("SCHEDULE_END - FAILED No hosts discovered\n");
-		return -1;
-	}
-	
-	(*hosts) = realloc((void *)(*hosts),(j+1)*sizeof(gw_sch_host_t));	
-	(*hosts)[j].hid = -1;
-    
-    /* ---------------------------------------------------------------- */
-	/* Build the jobs array (those that need to be scheduled            */
-	/* ---------------------------------------------------------------- */
-	
-	*sched_jobs = NULL;
-	j = 0;
-	last_array  = -1;
-	
-	for (i=0; i<gw_session->number_of_jobs ; i++)
-	{
-		if (gw_session->job_pool[i] != NULL)
-		{			
-			array_id = gw_session->job_pool[i]->array_id;
-			state    = gw_session->job_pool[i]->job_state;
-			re_sched = gw_session->job_pool[i]->reschedule;
-			
-			schedule   = (state == GW_JOB_STATE_PENDING)||(re_sched == 1);
-			notresched = (state == GW_JOB_STATE_PENDING)&&(re_sched == 1);
-			
-			if (schedule)
-			{	
-				if ((array_id == -1) || (re_sched == 1))/* a job, or resched task/job */
-				{
-					(*sched_jobs) = realloc((void *)(*sched_jobs),(j+1)*sizeof(gw_sch_job_t));
-					
-					(*sched_jobs)[j].jid   = gw_session->job_pool[i]->id;
-					(*sched_jobs)[j].tasks =  1;	
-					(*sched_jobs)[j].aid   = -1;
-					(*sched_jobs)[j].uid   = gw_session->job_pool[i]->uid;
-
-					if (notresched) /*pending jobs will be scheduled*/
-						(*sched_jobs)[j++].resch = -1;
-					else
-						(*sched_jobs)[j++].resch = re_sched;
-				}
-				else
-				{					
-					if (array_id != last_array) /* a new array */
-					{
-						(*sched_jobs) = realloc((void *)(*sched_jobs),(j+1)*sizeof(gw_sch_job_t));
-						
-						(*sched_jobs)[j].jid     = gw_session->job_pool[i]->id;
-						(*sched_jobs)[j].tasks   = 1;	
-						(*sched_jobs)[j].uid     = gw_session->job_pool[i]->uid;				
-						(*sched_jobs)[j].aid     = array_id;
-						(*sched_jobs)[j++].resch = 0;	
-							
-						last_array = array_id;
-					}
-					else /* not a new entry */
-					{
-						for (k=j-1;((*sched_jobs)[k].aid != array_id) && (k>=0);k--)
-						{};
-						
-						if (k>=0)
-							(*sched_jobs)[k].tasks++;						
-					}
-				}
-			}
-		}
-	}
-
-	if ( j == 0 )
-	{
-		gw_client_finalize();
-		
-		free(*users);
-		free(*hosts);
-		
-		printf("SCHEDULE_END - FAILED No jobs to schedule\n");
-		return -1;
-	}
-
-	(*sched_jobs) = realloc((void *)(*sched_jobs),(j+1)*sizeof(gw_sch_job_t));
-	(*sched_jobs)[j].jid = -1; 
-	
-    /* ---------------------------------------------------------------- */
-	/* Build the matching matrix                                        */
-	/* ---------------------------------------------------------------- */	
-	
-	*match_queue = (gw_sch_queue_t **) malloc(sizeof(gw_sch_queue_t*)*(j));
-	
-	for (i=0; (*sched_jobs)[i].jid != -1; i++)
-	{		
-		k      = 0;
-		jid    = (*sched_jobs)[i].jid;
-		queues = 0;
-
-		(*match_queue)[i] = NULL;
-		
-		rc = gw_client_match_job(jid, &match_list, &num_records);
-				
-		if ((rc != GW_RC_SUCCESS)||(num_records==0))
-	    {	    	
-	    	continue;
-	    }  
-		
-		for (j=0; j< num_records;j++)
-		{
-			host = &(match_list[j]);
-			
-			for (l=0;l<host->number_of_queues;l++)
-			{
-				if (host->match[l] == GW_TRUE)
-				{
-					if 	((*sched_jobs)[i].resch != 0)
-						add_queue = check_history_records(host->host_id,
-						                                  host->rank[l],
-						                                  jid);
-					else
-						add_queue = 1;
-						
-					if (add_queue)
-					{
-						(*match_queue)[i] = realloc((*match_queue)[i],
-						 	                (queues+1)*sizeof(gw_sch_queue_t));
-						 	                
-						(*match_queue)[i][queues].hid   = host->host_id;
-						(*match_queue)[i][queues].slots = host->slots[l];				 
-						(*match_queue)[i][queues].rank  = host->rank[l];
-						
-						strncpy((*match_queue)[i][queues++].name,
-						        host->queue_name[l],
-						        GW_MSG_STRING_SHORT-1);
-					}
-				}	
-			}
-		}
-		
-		if ((*sched_jobs)[i].resch == -1)
-			(*sched_jobs)[i].resch = 0;
-				
-		(*match_queue)[i] = realloc((void *)(*match_queue)[i],(queues+1)*sizeof(gw_sch_queue_t));			
-		(*match_queue)[i][queues].hid   = -1;
-		
-		if (queues > 0)
-			qsort((*match_queue)[i], queues, sizeof(gw_sch_queue_t), resource_cmp);
-
-		if (match_list!= NULL)
-			free(match_list);
-				
-		match_list = NULL;			
-	}	
-	
-	gw_client_finalize();
-	
-	return 0;
+    return;
 }
 
-
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
-
-static inline int isinhistory(int hid, gw_msg_history_t * history_list, int records)
+                                
+inline void gw_scheduler_ctime(time_t the_time, char *str)
 {
-	int i;	
-	int found;
+	int i;
 	
-	found = 0;
+#ifdef GWSOLARIS
+        ctime_r(&(the_time),str,sizeof(char)*26);
+#else
+        ctime_r(&(the_time),str);
+#endif
+
+	for (i=0;i<8;i++)
+		str[i]=str[i+11];
 		
-	for (i=0;i<records;i++)	
-	{
-		if (history_list[i].host_id == hid)
-		{
-			found = 1;
-			break;			
-		}
-	}
-	
-	return found;
-}
-
-static int check_history_records(int hid, int rank, int jid)
-{
-	int                add_queue;
-	gw_return_code_t   grc;
-	gw_msg_history_t * history_list;
-	int                records;
-	
-    grc = gw_client_job_history(jid, &history_list, &records);
-						 
-    if (grc == GW_RC_SUCCESS)
-	{
-		switch (history_list[0].reason)
-		{
-			case GW_REASON_USER_REQUESTED:
-			case GW_REASON_SUSPENSION_TIME:					 		
-			case GW_REASON_SELF_MIGRATION:
-			case GW_REASON_PERFORMANCE:
-			case GW_REASON_EXECUTION_ERROR:
-				
-				if (isinhistory(hid, history_list,records))
-					add_queue = 0;
-				else
-					add_queue = 1;				
- 			break;
-						 			
-			case GW_REASON_RESCHEDULING_TIMEOUT: /*SCALE THIS!!*/
-
-				if (isinhistory(hid, history_list,records))
-					add_queue = 0;
-				else
-				{
-					if (rank > history_list[0].rank )
-						add_queue = 1;
-					else
-						add_queue = 0;
-				}
-									
-			break;
-						 			
-	 		case GW_REASON_STOP_RESUME:
-	 		case GW_REASON_KILL:
-	 			add_queue = 1;
- 			break;	
-						 		
-	 		default:
-				add_queue = 0;
-	 		break;
-		}
-	}
-	else
-		add_queue = 0;
-		
-	free(history_list);
-			
-	return add_queue;
+	str[8]='\0';
 }
 
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
-
-static int resource_cmp(const void *r1, const void *r2)
-{
-	gw_sch_queue_t * rr1;
-	gw_sch_queue_t * rr2;
-	
-	rr1 = (gw_sch_queue_t *) r1;
-	rr2 = (gw_sch_queue_t *) r2;
-	
-	if ( rr1->rank < rr2->rank)
-		return 1;
-	else if ( rr1->rank > rr2->rank)
-		return -1;
-	else
-		return 0;	
-}

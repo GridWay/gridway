@@ -92,8 +92,6 @@ void gw_user_pool_inc_running_jobs(int uid, int jobs);
 
 void gw_user_pool_dec_running_jobs(int uid);
 
-gw_boolean_t gw_user_pool_max_running_jobs (int uid);
-
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 

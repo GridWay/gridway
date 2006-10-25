@@ -115,10 +115,11 @@ int gw_job_history_add(gw_history_t **job_history,
         return -1;
     }
     
-    new_record->rank   = rank;
-    new_record->host   = host;
-    new_record->tries  = 0;
-    new_record->polls  = 0;
+    new_record->rank         = rank;
+    new_record->host         = host;
+    new_record->tries        = 0;
+    new_record->failed_polls = 0;
+	new_record->counter      = -1;
 	
 	se = gw_host_get_genvar_str("SE_HOSTNAME", 0, host);
 

@@ -39,8 +39,7 @@ int gw_dm_dispatch_job (int job_id, int host_id, char *queue_name, int rank)
     gw_job_t *  job;
     gw_host_t * host;
     int         rc;
-    int         not_dispatch;
-     
+   
     job  = gw_job_pool_get(job_id, GW_TRUE);
                         
     if (job == NULL)
@@ -58,31 +57,7 @@ int gw_dm_dispatch_job (int job_id, int host_id, char *queue_name, int rank)
         pthread_mutex_unlock(&(job->mutex));
         return -1;
     }
-    
-    /* ---- Check dispatch options ---- */
-    
-    pthread_mutex_lock(&(gw_dm.mutex));
-    
-    if ( gw_conf.jobs_per_sched <= 0 )
-    	not_dispatch = 0;
-    else
-    	not_dispatch = gw_dm.dispatched_jobs == gw_conf.jobs_per_sched;
-
-    pthread_mutex_unlock(&(gw_dm.mutex));
-        	
-    if ( host->running_jobs > 0 )
-    	not_dispatch = not_dispatch || (host->running_jobs == gw_conf.jobs_per_host);
-    	
-    if ( gw_conf.jobs_per_user > 0 )
-    	not_dispatch = not_dispatch || (gw_user_pool_max_running_jobs(job->user_id) == GW_TRUE);
-    
-    if ( not_dispatch )
-    {
-    	    pthread_mutex_unlock(&(host->mutex));
-	        pthread_mutex_unlock(&(job->mutex));
-    	    return 0;
-    }
-    
+        
     /* -------------------------------- */
     
     if (job->job_state == GW_JOB_STATE_PENDING)
@@ -111,27 +86,14 @@ int gw_dm_dispatch_job (int job_id, int host_id, char *queue_name, int rank)
 	        pthread_mutex_unlock(&(job->mutex));
 	        return -1;		
 		}
-		
-    	if (job->reschedule == GW_TRUE)
-    	{
-	    	job->restarted++;
-	    	job->reschedule = GW_FALSE;
-    	}
+		    	
+   	    /* ----- Update Host & User counters ----- */
     	
-    	/* ----- Update Host, User & DM job counters ----- */
+    	gw_host_inc_slots_nb(host);
     	
-        host->used_slots++;
-		host->running_jobs++;
-		
-	    pthread_mutex_lock(&(gw_dm.mutex));
-    	
-    	gw_dm.dispatched_jobs++;
-	    
-	    pthread_mutex_unlock(&(gw_dm.mutex));
-	    
 	    gw_user_pool_inc_running_jobs(job->user_id, 1);
-		
-		/* ----------------------------------------------- */		
+			    		
+	    /* --------------------------------------- */
         
         id  = (int *) malloc(sizeof(int));
         *id =  job->id;
@@ -171,18 +133,11 @@ int gw_dm_dispatch_job (int job_id, int host_id, char *queue_name, int rank)
         job->restarted++;
     	job->reschedule = GW_FALSE;
 
-    	/* ----- Update Host, User & DM job counters ----- */
-    					
-		host->used_slots++;
-		host->running_jobs++;
-
-	    pthread_mutex_lock(&(gw_dm.mutex));
-    	
-    	gw_dm.dispatched_jobs++;
-	    
-	    pthread_mutex_unlock(&(gw_dm.mutex));
-		
-		/* ----------------------------------------------- */
+    	/* ----- Update Host ----- */
+        
+        gw_host_inc_slots_nb(host);
+                                       		
+	    /* ----------------------- */
 
         id  = (int *) malloc(sizeof(int));
         *id =  job->id;
@@ -223,7 +178,7 @@ int gw_dm_dispatch_tasks (int    array_id,
 	gw_array_t * array;
 	gw_host_t *  host;
 	int          rc;
-    int          not_dispatch;
+	gw_boolean_t dispatch;
     
     array = gw_array_pool_get_array(array_id, GW_TRUE);
 
@@ -234,7 +189,6 @@ int gw_dm_dispatch_tasks (int    array_id,
     }
 	
     number_of_tasks   = array->number_of_tasks;
-
 
     for (task_id= 0;(task_id<number_of_tasks) && (ntasks>0); task_id++)
     {
@@ -259,37 +213,15 @@ int gw_dm_dispatch_tasks (int    array_id,
 		        return -1;
 			}        	
 			
-		    /* ---- Check dispatch options ---- */
-
-		    pthread_mutex_lock(&(gw_dm.mutex));
-	    
-		    if ( gw_conf.jobs_per_sched <= 0 )
-		    	not_dispatch = 0;
-		    else
-		    	not_dispatch = gw_dm.dispatched_jobs == gw_conf.jobs_per_sched;
-
-		    pthread_mutex_unlock(&(gw_dm.mutex));
-        	
-		    if ( host->running_jobs > 0 )
-		    	not_dispatch = not_dispatch || (host->running_jobs == gw_conf.jobs_per_host);
-    	
-		    if ( gw_conf.jobs_per_user > 0 )
-		    	not_dispatch = not_dispatch || (gw_user_pool_max_running_jobs(job->user_id) == GW_TRUE);
-    
-		    if ( not_dispatch )
-		    {
-			    pthread_mutex_unlock(&(host->mutex));		    	
-	            pthread_mutex_unlock(&(job->mutex));
-			    pthread_mutex_unlock(&(array->mutex));
-			    
-    	    	return 0;
-		    }
-
 			/* -------------------------------- */ 
-			  	
-            if (  (job->job_state  == GW_JOB_STATE_PENDING)
-               && (job->reschedule == GW_FALSE)
-               && (job->history    == NULL))
+			
+			if ( job->history != NULL )
+			    dispatch = (job->job_state==GW_JOB_STATE_PENDING) && 
+			        (job->history->reason != GW_REASON_NONE);
+			else
+    			dispatch = (job->job_state==GW_JOB_STATE_PENDING);
+			
+            if (dispatch == GW_TRUE)
             {
 			    gw_log_print("DM",'I',"Dispatching task (%i) of array %i to %s (%s).\n",
 				        task_id,array->array_id, host->hostname, queue_name);
@@ -317,21 +249,14 @@ int gw_dm_dispatch_tasks (int    array_id,
 				    
 			        return -1;
 				}
-				
-		    	/* ----- Update Host, User & DM job counters ----- */
-    					
-				host->used_slots++;
-				host->running_jobs++;
-
-	    		pthread_mutex_lock(&(gw_dm.mutex));
-    	
-    			gw_dm.dispatched_jobs++;
-	    
-	    		pthread_mutex_unlock(&(gw_dm.mutex));
-		
-			    gw_user_pool_inc_running_jobs(job->user_id, 1);
-			    
-				/* ----------------------------------------------- */
+												
+		    	/* ----- Update Host & User counters ----- */
+    			
+    			gw_host_inc_slots_nb(host);
+    			
+    			gw_user_pool_inc_running_jobs(job->user_id, 1);
+                                
+				/* --------------------------------------- */
 				
 		        id  = (int *) malloc(sizeof(int));
 		        *id =  job->id;

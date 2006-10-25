@@ -72,6 +72,12 @@ void gw_dm_stop (void *_job_id)
             
 			gw_job_set_state(job, GW_JOB_STATE_STOP_CANCEL, GW_FALSE);
 			
+			if ( job->reschedule == GW_TRUE )
+			{
+			    job->reschedule = GW_FALSE;
+			    gw_dm_mad_job_del(&gw_dm.dm_mad[0],job->id);				
+			}			
+						
 			gw_am_trigger(gw_dm.em_am, "GW_EM_CANCEL", _job_id);
 			break;
 			
@@ -124,7 +130,7 @@ void gw_dm_resume (void *_job_id)
     {
 		case GW_JOB_STATE_STOPPED:
 		
-            job->reschedule = GW_TRUE;
+            job->restarted++;
 
 	        gw_job_set_state(job, GW_JOB_STATE_PENDING, GW_FALSE);
 	        job->tm_state  = GW_TM_STATE_INIT;
@@ -133,6 +139,13 @@ void gw_dm_resume (void *_job_id)
             gw_log_print("DM",'I',"Job %i resumed.\n", job_id);        
             
             gw_am_trigger(gw_dm.rm_am,"GW_RM_RESUME_SUCCESS",  _job_id);
+                        
+            gw_dm_mad_job_schedule(&gw_dm.dm_mad[0],
+                                   job_id,
+                                   job->array_id,
+                                   GW_REASON_NONE,
+                                   job->nice,
+                                   job->user_id); 
             break;
 		
         default:

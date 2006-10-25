@@ -493,14 +493,14 @@ void gw_tm_ftp_transfer_rmdir_cb(
 	    	xfr = gw_tm_ftp_xfr_pool[xfr_id];
 	    else
 	    {
-	    	printf("RMDIR %d - FAILURE transfer does not exisit.\n", xfr_id);
+	    	/*printf("RMDIR %d - FAILURE transfer does not exisit.\n", xfr_id);*/
 	    	
 	    	free(user_arg);
 	    	return;
 	    }
 	else
 	{
-	    printf("RMDIR %d - FAILURE invalid transfer id in callback.\n", xfr_id);
+	    /*printf("RMDIR %d - FAILURE invalid transfer id in callback.\n", xfr_id);*/
 	    			
     	free(user_arg);
 		return;	
@@ -579,14 +579,14 @@ void gw_tm_ftp_transfer_exists_dir_cb(void *                         user_arg,
 	    	xfr = gw_tm_ftp_xfr_pool[xfr_id];
 	    else
 	    {
-	    	printf("EXISTS %d - FAILURE transfer does not exisit.\n", xfr_id);
+	    	/*printf("EXISTS %d - FAILURE transfer does not exisit.\n", xfr_id);*/
 	    	
 	    	free(user_arg);
 	    	return;
 	    }
 	else
 	{
-    	printf("EXISTS %d - FAILURE invalid transfer id in callback.\n", xfr_id);		
+    	/*printf("EXISTS %d - FAILURE invalid transfer id in callback.\n", xfr_id);*/		
     	
     	free(user_arg);
 		return;	
@@ -724,14 +724,14 @@ void gw_tm_ftp_transfer_mkdir_cb(void *                         user_arg,
 	    	xfr = gw_tm_ftp_xfr_pool[xfr_id];
 	    else
 	    {
-	    	printf("MKDIR %d - FAILURE transfer does not exisit.\n", xfr_id);
+	    	/*printf("MKDIR %d - FAILURE transfer does not exisit.\n", xfr_id);*/
 	    	
 	    	free(user_arg);
 	    	return;
 	    }
 	else
 	{
-    	printf("MKDIR %d - FAILURE invalid transfer id in callback.\n", xfr_id);		
+    	/*printf("MKDIR %d - FAILURE invalid transfer id in callback.\n", xfr_id);*/		
     	
     	free(user_arg);
 		return;	
@@ -853,14 +853,14 @@ void gw_tm_ftp_transfer_url_to_url_cb(	void *                      user_arg,
 	    	xfr = gw_tm_ftp_xfr_pool[xfr_id];
 	    else	    
 	    {
-	    	printf("CP %d - FAILURE transfer does not exisit.\n", xfr_id);
+	    	/*printf("CP %d - FAILURE transfer does not exisit.\n", xfr_id);*/
 	    	
 	    	free(user_arg);
 	    	return;
 	    }
 	else
 	{
-    	printf("CP %d - FAILURE invalid transfer id in callback.\n", xfr_id);
+    	/*printf("CP %d - FAILURE invalid transfer id in callback.\n", xfr_id);*/
     	
     	free(user_arg);
 		return;	
@@ -1001,14 +1001,14 @@ void gw_tm_ftp_transfer_chmod_cb( void *                         user_arg,
 	    	xfr = gw_tm_ftp_xfr_pool[xfr_id];
 	    else
 	    {
-	    	printf("CP %d - FAILURE transfer does not exisit (in chmod).\n", xfr_id);
+	    	/*printf("CP %d - FAILURE transfer does not exisit (in chmod).\n", xfr_id);*/
 	    	
 	    	free(user_arg);
 	    	return;
 	    }
 	else
 	{
-    	printf("CP %d - FAILURE invalid transfer id in callback (in chmod).\n", xfr_id);
+    	/*printf("CP %d - FAILURE invalid transfer id in callback (in chmod).\n", xfr_id);*/
     			
     	free(user_arg);
 		return;	

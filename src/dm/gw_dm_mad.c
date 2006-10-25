@@ -91,7 +91,7 @@ int gw_dm_mad_init(gw_dm_mad_t *dm_mad, const char *exe, const char *name,
             fcntl(dm_mad->dm_mad_pipe, F_SETFD, FD_CLOEXEC); /* Close pipes in other MADs*/
             fcntl(dm_mad->mad_dm_pipe, F_SETFD, FD_CLOEXEC);
 
-            strcpy(buf, "INIT - - -\n");
+            strcpy(buf, "INIT - - - - - -\n");
             write(dm_mad->dm_mad_pipe, buf, strlen(buf));
 
             i = 0;
@@ -132,12 +132,159 @@ void gw_dm_mad_schedule(gw_dm_mad_t *dm_mad)
 {
     char buf[GW_DM_MAX_STRING];
 
-    sprintf(buf, "SCHEDULE - - -\n");
+    sprintf(buf, "SCHEDULE - - - - - -\n");
     write(dm_mad->dm_mad_pipe, buf, strlen(buf));
     
     return;
 }
 
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+
+void gw_dm_mad_host_monitor(gw_dm_mad_t * dm_mad, 
+                            int           hid, 
+                            int           uslots, 
+                            int           rjobs, 
+                            char *        name)
+{
+    char buf[GW_DM_MAX_STRING];
+
+    sprintf(buf, "HOST_MONITOR %i %i %i %s - -\n",hid,uslots,rjobs,name);
+    write(dm_mad->dm_mad_pipe, buf, strlen(buf));
+    
+    return;
+}
+
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+
+void gw_dm_mad_user_add(gw_dm_mad_t * dm_mad, 
+                        int           uid, 
+                        int           aslots, 
+                        int           rslots, 
+                        char *        name)
+{
+    char buf[GW_DM_MAX_STRING];
+
+    sprintf(buf, "USER_ADD %i %i %i %s - -\n",uid,aslots,rslots,name);
+    write(dm_mad->dm_mad_pipe, buf, strlen(buf));
+    
+    return;
+}
+
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+
+void gw_dm_mad_user_del(gw_dm_mad_t * dm_mad, 
+                        int           uid)
+{
+    char buf[GW_DM_MAX_STRING];
+
+    sprintf(buf, "USER_DEL %i - - - - -\n",uid);
+    write(dm_mad->dm_mad_pipe, buf, strlen(buf));
+    
+    return;
+}
+
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+
+void gw_dm_mad_job_del(gw_dm_mad_t * dm_mad, 
+                       int           jid)
+{
+    char buf[GW_DM_MAX_STRING];
+
+    sprintf(buf, "JOB_DEL %i - - - - -\n",jid);
+    write(dm_mad->dm_mad_pipe, buf, strlen(buf));
+    
+    return;
+}
+
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+
+void gw_dm_mad_task_del(gw_dm_mad_t * dm_mad, 
+                        int           aid)
+{
+    char buf[GW_DM_MAX_STRING];
+
+    sprintf(buf, "TASK_DEL %i - - - - -\n",aid);
+    write(dm_mad->dm_mad_pipe, buf, strlen(buf));
+    
+    return;
+}
+			                       
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+
+void gw_dm_mad_job_failed(gw_dm_mad_t *         dm_mad, 
+                          int                   hid,
+                          int                   uid,
+                          gw_migration_reason_t reason)
+{
+    char buf[GW_DM_MAX_STRING];
+
+    sprintf(buf, "JOB_FAILED %i %i %i - - -\n",hid,uid,reason);
+    write(dm_mad->dm_mad_pipe, buf, strlen(buf));
+    
+    return;
+}
+
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+
+void gw_dm_mad_job_success(gw_dm_mad_t * dm_mad, 
+                           int           hid,
+                           int           uid,
+                           float         xfr,
+                           float         sus,
+                           float         exe)
+{
+    char buf[GW_DM_MAX_STRING];
+
+    sprintf(buf, "JOB_SUCCESS %i %i %f %f %f -\n",hid,uid,xfr,sus,exe);
+    write(dm_mad->dm_mad_pipe, buf, strlen(buf));
+    
+    return;
+}
+
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+
+void gw_dm_mad_job_schedule(gw_dm_mad_t *         dm_mad, 
+                            int                   jid,
+                            int                   aid,
+                            gw_migration_reason_t reason,
+                            int                   nice,
+                            int                   uid)
+{
+    char buf[GW_DM_MAX_STRING];
+
+    sprintf(buf, "JOB_SCHEDULE %i %i %i %i %i -\n",jid,aid,reason,nice,uid);
+    write(dm_mad->dm_mad_pipe, buf, strlen(buf));
+    
+    return;
+}
+
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+
+void gw_dm_mad_array_schedule(gw_dm_mad_t *         dm_mad, 
+                              int                   jid,
+                              int                   aid,
+                              gw_migration_reason_t reason,
+                              int                   nice,
+                              int                   uid,
+                              int                   tasks)
+{
+    char buf[GW_DM_MAX_STRING];
+
+    
+    sprintf(buf, "ARRAY_SCHEDULE %i %i %i %i %i %i\n",jid,aid,reason,nice,uid,tasks);
+    write(dm_mad->dm_mad_pipe, buf, strlen(buf));
+    
+    return;
+}
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
@@ -147,7 +294,7 @@ void gw_dm_mad_finalize (gw_dm_mad_t *dm_mad)
 	int  status;
 	pid_t pid;
 	
-    strcpy(buf, "FINALIZE - - -\n");
+    strcpy(buf, "FINALIZE - - - - - -\n");
     
     write(dm_mad->dm_mad_pipe, buf, strlen(buf));
 

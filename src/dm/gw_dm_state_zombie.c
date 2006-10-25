@@ -24,6 +24,10 @@
 #include "gw_user_pool.h"
 #include "gw_dm.h"
 
+/* ----------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------- */
+
 void gw_dm_zombie ( void *_job_id )
 {
     gw_job_t *   job;
@@ -33,6 +37,7 @@ void gw_dm_zombie ( void *_job_id )
     int          array_id;
     int          rt;
 	char   		 conf_filename[2048];	
+	time_t       prolog, epilog;
 	
     /* ----------------------------------------------------------- */  
     /* 0.- Get job pointer                                         */
@@ -82,12 +87,20 @@ void gw_dm_zombie ( void *_job_id )
             
             gw_user_pool_dec_running_jobs(job->user_id);
             
-	    	pthread_mutex_lock(&(job->history->host->mutex));
-			
-			job->history->host->running_jobs--;
-			
-			pthread_mutex_unlock(&(job->history->host->mutex));            
+            gw_host_dec_rjobs(job->history->host);
+            
+			/* --------       Notify the scheduler      -------- */
+			                                   
+            prolog = gw_job_history_get_prolog_time(job->history);
+            epilog = gw_job_history_get_epilog_time(job->history);
 
+			gw_dm_mad_job_success(&gw_dm.dm_mad[0],
+                                 job->history->host->host_id,
+                                 job->user_id,
+                                 (prolog + epilog),
+                                 job->history->stats[SUSPENSION_TIME],
+                                 job->history->stats[ACTIVE_TIME]);
+                           
 			pthread_mutex_unlock(&(job->mutex));
 			
 			/* -------- Update other jobs dependencies -------- */
@@ -118,12 +131,8 @@ void gw_dm_zombie ( void *_job_id )
 			            
             gw_user_pool_dec_running_jobs(job->user_id);
 
-	    	pthread_mutex_lock(&(job->history->host->mutex));
-	    	
-			job->history->host->running_jobs--;
-			
-			pthread_mutex_unlock(&(job->history->host->mutex));            
-
+            gw_host_dec_rjobs(job->history->host);
+            
 			sprintf(conf_filename, "%s/job.conf", job->directory);	
 			unlink(conf_filename);    
 

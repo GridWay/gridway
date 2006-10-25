@@ -247,11 +247,11 @@ void gw_tm_prolog_stage_in(gw_job_t * job)
 
 void gw_tm_prolog_cp_cb(gw_job_t * job, int cp_xfr_id, gw_boolean_t failure)
 {
-	char *       src_url;
-	char *       dst_url;
 	gw_boolean_t failed;	
 	int          pend_xfrs;
 	int          i;
+	char *       src_url;
+	char *       dst_url;
 	
 	if (job->history == NULL) 
     {
@@ -266,6 +266,7 @@ void gw_tm_prolog_cp_cb(gw_job_t * job, int cp_xfr_id, gw_boolean_t failure)
 				
     	job->xfrs.xfrs[cp_xfr_id].done    = GW_TRUE;
     	job->xfrs.xfrs[cp_xfr_id].success = GW_TRUE;
+    	job->xfrs.xfrs[cp_xfr_id].counter = -1;
     }
     else
     {
@@ -281,44 +282,45 @@ void gw_tm_prolog_cp_cb(gw_job_t * job, int cp_xfr_id, gw_boolean_t failure)
 					
 				free(job->xfrs.xfrs[cp_xfr_id].src_url);			
 				
-				job->xfrs.xfrs[cp_xfr_id].tries   = 
-					job->template.number_of_retries;
-				job->xfrs.xfrs[cp_xfr_id].src_url = 
-					job->xfrs.xfrs[cp_xfr_id].alt_src_url;
+				job->xfrs.xfrs[cp_xfr_id].tries       = job->template.number_of_retries;
+				job->xfrs.xfrs[cp_xfr_id].src_url     = job->xfrs.xfrs[cp_xfr_id].alt_src_url;
 				job->xfrs.xfrs[cp_xfr_id].alt_src_url = NULL;
+				job->xfrs.xfrs[cp_xfr_id].counter     =	-1;
+				
+                gw_tm_prolog_build_urls(job,
+		    		job->xfrs.xfrs[cp_xfr_id].src_url, 
+			        job->xfrs.xfrs[cp_xfr_id].dst_url, 
+			        &src_url,
+			        &dst_url);
+						
+                gw_tm_mad_cp(job->history->tm_mad, 
+			        job->id, 
+			        cp_xfr_id, 
+			        job->xfrs.xfrs[cp_xfr_id].mode,
+			        src_url,
+			        dst_url);
+
+			    free(src_url);
+			    free(dst_url);
 			}
 			else
 			{
 		    	job->xfrs.xfrs[cp_xfr_id].done    = GW_TRUE;
 		    	job->xfrs.xfrs[cp_xfr_id].success = GW_FALSE;
-		    	
+      	        job->xfrs.xfrs[cp_xfr_id].counter = -1;
+      	        
 				gw_job_print(job,"TM",'E',"\tCopy of file %s failed.\n",
 					job->xfrs.xfrs[cp_xfr_id].src_url);
 			}						
 		}
-		
-		if ( job->xfrs.xfrs[cp_xfr_id].tries > 0 )
+		else if (job->xfrs.xfrs[cp_xfr_id].tries > 0)
 		{
-			gw_tm_prolog_build_urls(job, 
-		    	job->xfrs.xfrs[cp_xfr_id].src_url, 
-		        job->xfrs.xfrs[cp_xfr_id].dst_url, 
-		        &src_url,
-		        &dst_url);
+			job->xfrs.xfrs[cp_xfr_id].counter = job->template.number_of_retries
+			    - job->xfrs.xfrs[cp_xfr_id].tries;
 
-			gw_job_print(job,"TM",'I',"\tRetrying copy of file %s.\n",
-				job->xfrs.xfrs[cp_xfr_id].src_url);
-						
-			gw_tm_mad_cp(job->history->tm_mad, 
-			             job->id, 
-			             cp_xfr_id, 
-			             job->xfrs.xfrs[cp_xfr_id].mode,
-			             src_url,
-			             dst_url);
-
-			free(src_url);
-			free(dst_url);
-			
-			return;
+			gw_job_print(job,"TM",'I',"\tRetrying copy of file %s in ~%i seconds.\n",
+				job->xfrs.xfrs[cp_xfr_id].src_url, 
+				job->xfrs.xfrs[cp_xfr_id].counter * GW_TM_TIMER_PERIOD);
 		}
     }
 
@@ -343,7 +345,7 @@ void gw_tm_prolog_cp_cb(gw_job_t * job, int cp_xfr_id, gw_boolean_t failure)
            	gw_job_print(job,"TM",'W',"\tTarget url: %s.\n",job->history->rdir);
            	
 			gw_tm_mad_rmdir(job->history->tm_mad, job->id, job->history->rdir);
-				
+
 			job->tm_state = GW_TM_STATE_PROLOG_FAILED;
 		}
 		else

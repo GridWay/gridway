@@ -68,13 +68,147 @@ char *gw_print_time2(time_t t, char *the_time)
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
 
-void gw_client_print_status_header()
+char *gw_print_date_and_time(time_t t, char *the_time)
+{
+    struct tm *tm_s;
+            
+    if(t<=0)
+        return "--/-- --:--:--";
+    else
+    {
+        tm_s = localtime(&t);
+        sprintf(the_time,"%02i/%02i %02i:%02i:%02i",tm_s->tm_mday,tm_s->tm_mon+1,tm_s->tm_hour,
+                tm_s->tm_min,tm_s->tm_sec);                
+        return(the_time);
+    }
+}
+
+/*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+
+int gw_check_state(char jobstate_from_user, gw_job_state_t current_job_state)
+{	
+	if(jobstate_from_user == '&')
+		return 1;
+	
+	switch(jobstate_from_user)
+	{
+		case 'i':
+			if( current_job_state == GW_JOB_STATE_PENDING )
+				return 1;
+			break;
+		case 'p':
+			if( current_job_state == GW_JOB_STATE_PROLOG )
+				return 1;
+			break;		
+		case 'h':
+			if( current_job_state == GW_JOB_STATE_HOLD )
+				return 1;
+			break;		
+		case 'w':
+			if( current_job_state == GW_JOB_STATE_WRAPPER )
+				return 1;
+			break;		
+		case 'e':
+			if( (current_job_state == GW_JOB_STATE_EPILOG)
+			 || (current_job_state == GW_JOB_STATE_EPILOG_STD)
+			 || (current_job_state == GW_JOB_STATE_EPILOG_RESTART)
+			 || (current_job_state == GW_JOB_STATE_EPILOG_FAIL))
+				return 1;
+			break;		
+		case 's':
+			if( (current_job_state == GW_JOB_STATE_STOP_CANCEL)
+			 || (current_job_state == GW_JOB_STATE_STOP_EPILOG)
+			 || (current_job_state == GW_JOB_STATE_STOPPED))
+				return 1;
+			break;			
+		case 'k':
+			if( (current_job_state == GW_JOB_STATE_KILL_CANCEL)
+			 || (current_job_state == GW_JOB_STATE_KILL_EPILOG))
+				return 1;
+			break;		
+		case 'm':
+			if( (current_job_state == GW_JOB_STATE_MIGR_CANCEL)
+			 || (current_job_state == GW_JOB_STATE_MIGR_PROLOG)
+			 || (current_job_state == GW_JOB_STATE_MIGR_EPILOG))
+				return 1;
+			break;			
+		case 'z':
+			if( current_job_state == GW_JOB_STATE_ZOMBIE )
+				return 1;
+			break;		
+		case 'f':	
+			if( current_job_state == GW_JOB_STATE_FAILED )
+				return 1;
+			break;		
+		default:
+			return 0;	
+	}
+	return 0;
+}
+
+
+/*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+
+
+void gw_client_print_status_header(char *outoption)
 {
     char head_string[200];
-
-    sprintf(head_string,"%-12s %-3s %-3s %-3s %-4s %-4s %-3s %-8s %-8s %-7s %-7s "
-            "%-4s %-15s %-10s", "USER", "JID","AID","TID","DM","EM","RWS","START",
-            "END","EXEC","XFER","EXIT","TEMPLATE","HOST"); 
+    char tmpstr[50];
+    
+    int i; 
+      	    
+    if(outoption != NULL)
+    {
+    	// Always show the JID
+    	sprintf(tmpstr,"%-3s ","JID");
+    	strncat(head_string,tmpstr,strlen(tmpstr));    	
+    	
+    	for(i=0;i<strlen(outoption);i++)
+    	{
+			switch(outoption[i])
+			{
+    			case 'e':
+    				sprintf(tmpstr,"%-4s ","EM");
+    				break;  
+    			case 's':
+    				sprintf(tmpstr,"%-4s ","DM");
+    				break;
+    			case 'u':
+    				sprintf(tmpstr,"%-12s ","USER");
+    				break;   			
+    			case 'j':
+    				sprintf(tmpstr,"%-15.15s ","TEMPLATE");
+    				break;					    			
+				case 't':
+    				sprintf(tmpstr,"%-8s %-8s %-7s %-7s ","START","END","EXEC","XFER");
+    				break;
+				case 'T':
+    				sprintf(tmpstr,"%-14s %-14s %-7s %-7s ","START","END","EXEC","XFER");
+    				break;	    									    							
+				case 'h':
+    				sprintf(tmpstr,"%-25s ","HOST");
+    				break;				
+				case 'x':
+    				sprintf(tmpstr,"%-4s ","EXIT");
+    				break;
+				case 'i':
+					sprintf(tmpstr,"%-3s %-3s ","AID","TID");
+    				break;
+				case 'f':
+					sprintf(tmpstr,"%-3s ","RWS");
+    				break; 				
+			}   		 		
+    		strncat(head_string,tmpstr,strlen(tmpstr));
+    	}
+    }    
+    else
+	    sprintf(head_string,"%-12s %-3s %-3s %-3s %-4s %-4s %-3s %-8s %-8s %-7s %-7s "
+	            "%-4s %-15s %-10s", "USER", "JID","AID","TID","DM","EM","RWS","START",
+	            "END","EXEC","XFER","EXIT","TEMPLATE","HOST"); 
     bold();
     underline(); 
     printf(head_string);
@@ -87,9 +221,10 @@ void gw_client_print_status_header()
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
 
-void gw_client_print_status(gw_msg_job_t * msg)
+void gw_client_print_status(gw_msg_job_t * msg,char *outoption)
 {
-    char the_time[9],*template;
+    char the_time[15],*template;
+    int  i;
 
     the_time[5]='\0';
 
@@ -103,40 +238,176 @@ void gw_client_print_status(gw_msg_job_t * msg)
     else
         template = msg->file;
         
-	printf("%-12s ",msg->owner);
-                
-    printf("%-3d ",msg->id);
-        
-    if(msg->array_id == -1)
-        printf("--  --  ");
+    if(outoption!=NULL)
+    {
+    	printf("%-3d ",msg->id);  // always show the job id
+    	
+    	for(i=0;i<strlen(outoption);i++)
+    	{
+			switch(outoption[i])
+			{
+    			case 'e':
+    				printf("%-4s ", gw_em_state_string (msg->em_state));	
+    				break;  
+    			case 's':
+				    printf("%-4s ", gw_job_state_string(msg->job_state));
+    				break;
+    			case 'u':
+    				printf("%-12s ",msg->owner);
+    				break;   			
+    			case 'j':
+    				printf("%-15.15s ", template);
+    				break;					    			
+				case 't':				
+				    printf("%-8s ",gw_print_time2(msg->start_time,the_time));
+				    printf("%-8s ",gw_print_time2(msg->exit_time ,the_time));
+				    printf("%-7s ",gw_print_time (msg->cpu_time  ,the_time)); 
+				    printf("%-7s ",gw_print_time (msg->xfr_time  ,the_time)); 
+    				break;	
+				case 'T':			
+				    printf("%-14s ",gw_print_date_and_time(msg->start_time,the_time));
+				    printf("%-14s ",gw_print_date_and_time(msg->exit_time ,the_time));
+				    printf("%-7s ",gw_print_time (msg->cpu_time  ,the_time)); 
+				    printf("%-7s ",gw_print_time (msg->xfr_time  ,the_time));
+    				break;    								    							
+				case 'h':				
+				    printf("%-25s ",msg->host);
+    				break;				
+				case 'x':
+				    if (msg->job_state == GW_JOB_STATE_ZOMBIE)
+				        printf("%-4d ",msg->exit_code);
+				    else
+				        printf("%-4s ", "--");
+    				break;
+				case 'i':
+					if(msg->array_id == -1)
+				        printf("--  --  ");
+				    else
+				        printf("%-3d %-3d ",msg->array_id,msg->task_id);
+    				break;
+				case 'f':
+					printf("%-1d%-1d%-1d ",msg->restarted,msg->client_waiting,msg->reschedule);
+    				break; 				
+			}   		 		
+    	}    
+    	printf("\n");	
+    }
     else
-        printf("%-3d %-3d ",msg->array_id,msg->task_id);  
-
-    printf("%-4s %-4s ", gw_job_state_string(msg->job_state),
-            gw_em_state_string (msg->em_state));
-    printf("%-1d%-1d%-1d",msg->restarted,msg->client_waiting,msg->reschedule);                    
-    printf(" %-8s",gw_print_time2(msg->start_time,the_time));
-    printf(" %-8s",gw_print_time2(msg->exit_time ,the_time));
-    printf(" %-7s",gw_print_time (msg->cpu_time  ,the_time)); 
-    printf(" %-7s",gw_print_time (msg->xfr_time  ,the_time)); 
-        
-    if (msg->job_state == GW_JOB_STATE_ZOMBIE)
-        printf(" %-4d %-15.15s %-20s\n",msg->exit_code, template, msg->host);
-    else
-        printf(" %-4s %-15.15s %-20s\n", "--", template, msg->host);        
+    {        
+		printf("%-12s ",msg->owner);
+	                
+	    printf("%-3d ",msg->id);
+	        
+	    if(msg->array_id == -1)
+	        printf("--  --  ");
+	    else
+	        printf("%-3d %-3d ",msg->array_id,msg->task_id);  
+	
+	    printf("%-4s %-4s ", gw_job_state_string(msg->job_state),
+	            gw_em_state_string (msg->em_state));
+	    printf("%-1d%-1d%-1d",msg->restarted,msg->client_waiting,msg->reschedule);                    
+	    printf(" %-8s",gw_print_time2(msg->start_time,the_time));
+	    printf(" %-8s",gw_print_time2(msg->exit_time ,the_time));
+	    printf(" %-7s",gw_print_time (msg->cpu_time  ,the_time)); 
+	    printf(" %-7s",gw_print_time (msg->xfr_time  ,the_time)); 
+	        
+	    if (msg->job_state == GW_JOB_STATE_ZOMBIE)
+	        printf(" %-4d %-15.15s %-20s\n",msg->exit_code, template, msg->host);
+	    else
+	        printf(" %-4s %-15.15s %-20s\n", "--", template, msg->host);
+    }        
 }
 
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
 
-void gw_client_print_pool_status()
+void gw_client_print_pool_status(char *username, char *hostname, char jobstate, char *outoption, int array_id)
 {
-    int i;
-    
-    for (i=0;i<gw_client.number_of_jobs;i++)
-        if (gw_client.job_pool[i] != NULL)
-                gw_client_print_status(gw_client.job_pool[i]);
+    int i;            
+           			 		           
+	if(username != NULL)
+	{
+		if(hostname != NULL)
+		{
+			/* -----   Show jobs for username @ hostname ----- */			
+		 	for (i=0;i<gw_client.number_of_jobs;i++)
+		 	{
+		 		if (gw_client.job_pool[i] != NULL)
+		 		{		 		
+		    		if ((strcmp(gw_client.job_pool[i]->owner, username) == 0)
+		    		&&  (strstr(gw_client.job_pool[i]->host,hostname))!=NULL) 
+		    		{
+		    			if(gw_check_state(jobstate,gw_client.job_pool[i]->job_state))
+		    			{
+		    				if(array_id == -1)			 			    		 	
+		    					gw_client_print_status(gw_client.job_pool[i],outoption);
+		    				else		 
+		    					if(gw_client.job_pool[i]->array_id==array_id) 
+		    						gw_client_print_status(gw_client.job_pool[i],outoption);
+		    			}  		
+		    		}			    			
+		    		
+		 		}	    		
+		 	}
+		}
+	    else 				
+	    {
+	    	/* -----   Show jobs for username ----- */
+		 	for (i=0;i<gw_client.number_of_jobs;i++)
+	    		if ((gw_client.job_pool[i] != NULL) 
+	    		&&   (strcmp(gw_client.job_pool[i]->owner, username) == 0))	
+		    			if(gw_check_state(jobstate,gw_client.job_pool[i]->job_state))
+		    			{			 			    		 	
+			    			if(array_id == -1)			 			    		 	
+			    				gw_client_print_status(gw_client.job_pool[i],outoption);
+			    			else		 
+			    				if(gw_client.job_pool[i]->array_id==array_id) 
+			    					gw_client_print_status(gw_client.job_pool[i],outoption);  		
+		    			}
+	    				    	
+	    }
+		
+	}
+	else
+	{ 
+		if(hostname != NULL)
+		{
+			
+			/* -----   Show jobs for hostname ----- */			
+		 	for (i=0;i<gw_client.number_of_jobs;i++)
+		 	{
+		 		if (gw_client.job_pool[i] != NULL)
+		 		{
+		    		if (strstr(gw_client.job_pool[i]->host,hostname)!=NULL)	    		 	
+		    			if(gw_check_state(jobstate,gw_client.job_pool[i]->job_state))
+		    			{			 			    		 	
+		    				if(array_id == -1)			 			    		 	
+		    					gw_client_print_status(gw_client.job_pool[i],outoption);
+		    				else		 
+		    					if(gw_client.job_pool[i]->array_id==array_id) 
+		    						gw_client_print_status(gw_client.job_pool[i],outoption);
+		    			}  		
+
+		 		}
+		 	}			
+		}
+ 		else
+ 		{
+			/* -----   Show all jobs ----- */ 			
+ 		 	for (i=0;i<gw_client.number_of_jobs;i++)
+        		if (gw_client.job_pool[i] != NULL) 	
+        			if(gw_check_state(jobstate,gw_client.job_pool[i]->job_state))
+        			{			 			    		 	
+		    			if(array_id == -1)			 			    		 	
+		    				gw_client_print_status(gw_client.job_pool[i],outoption);
+		    			else		 
+		    				if(gw_client.job_pool[i]->array_id==array_id) 
+		    					gw_client_print_status(gw_client.job_pool[i],outoption);
+        			}  		
+ 		}
+	}
+	
 }
 
 /*---------------------------------------------------------------------------*/
@@ -222,8 +493,8 @@ void gw_client_print_host_status_header()
 {
     char head_string[200];
     
-    sprintf(head_string,"%-3s %-15s %-5s %4s %4s %9s %13s %12s %-20s %-20s",
-    "HID","OS","ARCH","MHZ","%%CPU","MEM(F/T)","DISK(F/T)","N(U/F/T)","LRMS","HOSTNAME");
+    sprintf(head_string,"%-3s %-5s %-15s %-5s %4s %4s %9s %13s %12s %-20s %-20s",
+    "HID","NICE","OS","ARCH","MHZ","%%CPU","MEM(F/T)","DISK(F/T)","N(U/F/T)","LRMS","HOSTNAME");
     
     bold();
     underline(); 
@@ -245,6 +516,7 @@ void gw_client_print_host_status(gw_msg_host_t * msg)
     int i;
     
     printf("%-3i ",msg->host_id);
+    printf("%-5i ",msg->nice);    
     
     sprintf(buffer,"%s%s",msg->os_name, msg->os_version);
     printf("%-15.15s ",buffer);
@@ -349,8 +621,8 @@ void gw_client_print_host_match_header()
 {
     char head_string[200];
 
-    sprintf(head_string,"%-3s %-10s %-5s %-5s %-20s", 
-        "HID","QNAME","RANK","SLOTS","HOSTNAME"); 
+    sprintf(head_string,"%-3s %-10s %-5s %-5s %-5s %-20s", 
+        "HID","QNAME","RANK","NICE","SLOTS","HOSTNAME"); 
     bold();
     underline(); 
     printf(head_string);
@@ -370,6 +642,7 @@ void gw_client_print_host_match(gw_msg_match_t *match_list)
         	printf("%-3i " ,match_list->host_id);
             printf("%-10s ",match_list->queue_name[j]);
             printf("%-5i " ,match_list->rank[j]);
+            printf("%-5i " ,match_list->nice);
             printf("%-5i ",match_list->slots[j]);
             printf("%-20s\n",match_list->hostname);            
         }
@@ -444,11 +717,16 @@ void gw_client_print_user(gw_msg_user_t *msg_user)
 /*---------------------------------------------------------------------------*/
 #ifdef HAVE_LIBDB
 
-void gw_client_print_user_accts_header(const char *user)
+void gw_client_print_user_accts_header(const char *user, time_t from_time)
 {
     char head_string[200];
     
-	printf("\nAccounting statistics for user %s\n\n",user);
+	printf("\nAccounting statistics for user %s",user);
+	
+	if( from_time != (time_t)NULL )
+		printf(", counting from %s", ctime(&from_time));
+	
+	printf("\n\n");
 
     sprintf(head_string,"%-30s %-8s %-8s %-8s %-4s %-4s %-4s %-4s %-4s %-4s %-4s %-4s %-4s %-4s",
     "HOST","XFR","EXE","SUSP","TOTS","SUCC","ERR ","KILL","USER","SUSP","DISC","SELF","PERF","S/R ");
@@ -465,14 +743,45 @@ void gw_client_print_user_accts_header(const char *user)
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
 
-void gw_client_print_host_accts_header(const char *host)
+void gw_client_print_host_accts_header(const char *host, time_t from_time)
 {
     char head_string[200];
     
-	printf("\nAccounting statistics for host %s\n\n",host);
+	printf("\nAccounting statistics for host %s",host);
+	
+	if( from_time != (time_t)NULL )
+		printf(", counting from %s", ctime(&from_time));
+	
+	printf("\n\n");	
 
     sprintf(head_string,"%-30s %-8s %-8s %-8s %-4s %-4s %-4s %-4s %-4s %-4s %-4s %-4s %-4s %-4s",
     "USER","XFR","EXE","SUSP","TOTS","SUCC","ERR ","KILL","USER","SUSP","DISC","SELF","PERF","S/R ");
+    		
+    bold();
+    underline(); 
+    printf(head_string);
+    restore();
+    printf("\n");
+    fflush(stdout);
+}
+
+/*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+
+void gw_client_print_host_and_user_accts_header(const char *host, const char *user, time_t from_time)
+{
+    char head_string[200];
+    
+	printf("\nAccounting statistics for %s @ %s",user,host);
+	
+	if( from_time != (time_t)NULL )
+		printf(", counting from %s", ctime(&from_time));
+	
+	printf("\n\n");	
+
+    sprintf(head_string,"%-30s %-8s %-8s %-8s %-4s %-4s %-4s %-4s %-4s %-4s %-4s %-4s %-4s %-4s",
+    "USER @ HOST","XFR","EXE","SUSP","TOTS","SUCC","ERR ","KILL","USER","SUSP","DISC","SELF","PERF","S/R ");
     		
     bold();
     underline(); 

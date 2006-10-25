@@ -50,6 +50,16 @@ pthread_mutex_t jtp_var_mutex = PTHREAD_MUTEX_INITIALIZER;
 \$\{TASK_ID\}     { jtp_var_cat_int(job->task_id);}
 \$\{TOTAL_TASKS\} { jtp_var_cat_int(job->total_tasks);}
 \$\{ARCH\}        { jtp_var_cat_str(job->history->host->arch);}
+\$\{PARAM\}       { if (job->array_id != -1)
+                      jtp_var_cat_int((job->pstart + (job->pinc*job->task_id)));
+                    else
+                      jtp_var_cat_int(0);
+                  }
+\$\{MAX_PARAM\}   { if (job->array_id != -1)
+                      jtp_var_cat_int((job->pstart + (job->pinc*(job->total_tasks-1))));
+                    else
+                      jtp_var_cat_int(0);
+                  }
 \$\{[^\}]*\}      { 
                     length_tmp = yyleng;
 					tmp = yytext+2;

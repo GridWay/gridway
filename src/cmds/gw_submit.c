@@ -39,7 +39,11 @@ const char * usage =
 "  -v                print to stdout the job ids returned by gwd.\n" 
 "  -o                hold job on submission.\n" 
 "  -d \"id1 id2...\" job dependencies. Submit the job on hold state, and\n"
-"                    release it once jobs with id1,id2,.. have finished\n";
+"                    release it once jobs with id1,id2,.. have finished\n"
+"  -s <start>        Start value for custom param in array jobs. Default 0"
+"  -i <increment>    Increment value for custom param in array jobs. Each task has"
+"                    associated the value PARAM=<start> + <increment> * TASK_ID, and"
+"                    MAX_PARM = <start>+<increment>*(<tasks>-1). Default 1";
 
 const char * susage =
 "usage: gwsubmit <-t template> [-n tasks] [-h] [-v] [-o] [-d \"id1 id2...\"]\n";
@@ -57,6 +61,7 @@ int main(int argc, char **argv)
     int              array_id;
     int *            job_ids;
     int              tasks;
+    int              start, inc;
     char *           template;
     char *           deps_str;
     char *           num;
@@ -77,13 +82,16 @@ int main(int argc, char **argv)
     opterr = 0;
     optind = 1;
     
+    start  = 0;
+    inc    = 1;
+    
     if(argc < 2)
     {
         fprintf(stderr,"usage: %s\n", susage);
         exit(1);
     }
 
-    while((opt = getopt(argc, argv, ":vhot:n:d:")) != -1)
+    while((opt = getopt(argc, argv, ":vhot:n:d:s:i:")) != -1)
         switch(opt)
         {
             case 't': t  = 1;
@@ -98,7 +106,13 @@ int main(int argc, char **argv)
                 break;          
             case 'd': d = 1;
                 deps_str= strdup(optarg);
-                break;                         
+                break;
+            case 's':
+                start = atoi(optarg);
+                break;
+            case 'i':
+                inc   = atoi(optarg);
+                break;                
             case 'h':
                 printf("%s", usage);
                 exit(0);
@@ -193,7 +207,7 @@ int main(int argc, char **argv)
         }  
     }  
     
-    rc = gw_client_array_submit(rpath,tasks,init_state,&array_id,&job_ids,deps);
+    rc = gw_client_array_submit(rpath,tasks,init_state,&array_id,&job_ids,deps,start,inc);
     
     if (rc == GW_RC_SUCCESS)
     {

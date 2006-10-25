@@ -103,15 +103,24 @@ void gw_acct_write_job(gw_job_t *job);
 
 int gw_acct_join_search(const char *hostname, 
                         const char *username,
-                        gw_acct_t *accts);
+                        gw_acct_t *accts,
+                        time_t from_time);
                         
 int gw_acct_join_search_by_user(const char * username, 
                                 gw_acct_t *** accts,
-                                int *        nrecs);
+                                int *        nrecs,
+                                time_t from_time);
                                 
 int gw_acct_join_search_by_host(const char * hostname, 
                                 gw_acct_t *** accts,
-                                int *        nrecs);                                                        
+                                int *        nrecs,
+                                time_t from_time);  
+                                
+int gw_acct_join_search_by_host_and_user(const char * hostname, 
+										 const char * username,
+                               		     gw_acct_t *** accts,
+                                         int *        nrecs,
+                                         time_t from_time);                                                                                      
 
 #endif
 

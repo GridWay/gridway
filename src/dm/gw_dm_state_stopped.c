@@ -60,12 +60,8 @@ void gw_dm_stopped ( void *_job_id )
 			            
     gw_user_pool_dec_running_jobs(job->user_id);
 
-   	pthread_mutex_lock(&(job->history->host->mutex));
-	    	
-	job->history->host->running_jobs--;
-			
-	pthread_mutex_unlock(&(job->history->host->mutex));            
-            
+    gw_host_dec_rjobs(job->history->host);
+                
     /* ----------------------------------------------------------- */  
     /* 2.- Notify Request Manager                                  */
     /* ----------------------------------------------------------- */

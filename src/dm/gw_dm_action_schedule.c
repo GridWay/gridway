@@ -56,8 +56,7 @@ void gw_dm_schedule (void *_null)
    	
    	if ( gw_dm.scheduling == GW_FALSE )
    	{
-       	gw_dm.scheduling      = GW_TRUE;
-		gw_dm.dispatched_jobs = 0;
+       	gw_dm.scheduling = GW_TRUE;
 		
        	pthread_mutex_unlock(&(gw_dm.mutex));
    	}
@@ -146,6 +145,18 @@ void gw_dm_check_job_suspension ( gw_job_t *job )
 
             job->reschedule      = GW_TRUE;
             job->history->reason = GW_REASON_SUSPENSION_TIME;
+                        
+            gw_dm_mad_job_failed(&gw_dm.dm_mad[0],
+                                 job->history->host->host_id,
+                                 job->user_id,
+                                 GW_REASON_SUSPENSION_TIME);
+            
+            gw_dm_mad_job_schedule(&gw_dm.dm_mad[0],
+                                   job->id,
+                                   job->array_id,
+                                   GW_REASON_SUSPENSION_TIME,
+                                   job->nice,
+                                   job->user_id);
         }
     }
 }
@@ -184,6 +195,13 @@ void gw_dm_check_job_rescheduling ( gw_job_t *job )
             {
                 job->reschedule      = GW_TRUE;
                 job->history->reason = GW_REASON_RESCHEDULING_TIMEOUT;
+
+                gw_dm_mad_job_schedule(&gw_dm.dm_mad[0],
+                                       job->id,
+                                       job->array_id,
+                                       GW_REASON_RESCHEDULING_TIMEOUT,
+                                       job->nice,
+                                       job->user_id);
             }
             else
             {
@@ -213,6 +231,8 @@ void gw_dm_uncheck_job (int job_id)
 	    {
 	        job->reschedule      = GW_FALSE;
 	        job->history->reason = GW_REASON_NONE;
+	        
+	        gw_dm_mad_job_del(&gw_dm.dm_mad[0],job->id);
 	    }
 	    
 	    pthread_mutex_unlock(&(job->mutex));

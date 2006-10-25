@@ -23,6 +23,7 @@
 #include "gw_user_pool.h"
 #include "gw_log.h"
 #include "gw_conf.h"
+#include "gw_dm.h"
 
 /* -------------------------------------------------------------------------- */
 gw_user_pool_t gw_user_pool;
@@ -134,9 +135,15 @@ int gw_user_pool_user_allocate (const char *user, int *user_id)
 	{
 		*user_id = i;
 		gw_user_pool.pool[i]->active_jobs = 1;
-		
+				
 		write(gw_user_pool.um_em_pipe_w, &buf, sizeof(char));
 		write(gw_user_pool.um_tm_pipe_w, &buf, sizeof(char));
+		
+		gw_dm_mad_user_add(&gw_dm.dm_mad[0],
+		                   i,
+		                   gw_user_pool.pool[i]->active_jobs,
+		                   gw_user_pool.pool[i]->running_jobs,
+		                   gw_user_pool.pool[i]->name);		
 	}
 	else
 	{
@@ -343,6 +350,12 @@ void gw_user_pool_inc_jobs(int uid, int jobs)
     	{
     		gw_user_pool.pool[uid]->idle = 0;
     		gw_user_pool.pool[uid]->active_jobs += jobs;
+    		
+    		gw_dm_mad_user_add(&gw_dm.dm_mad[0],
+		                       uid,
+		                       gw_user_pool.pool[uid]->active_jobs,
+		                       gw_user_pool.pool[uid]->running_jobs,
+		                       gw_user_pool.pool[uid]->name);    		
     	}
     	
     pthread_mutex_unlock(&(gw_user_pool.mutex));	
@@ -361,6 +374,12 @@ void gw_user_pool_dec_jobs(int uid)
     	{
     		gw_user_pool.pool[uid]->idle = 0;
     		gw_user_pool.pool[uid]->active_jobs -= 1;
+    		
+    		gw_dm_mad_user_add(&gw_dm.dm_mad[0],
+		                       uid,
+		                       gw_user_pool.pool[uid]->active_jobs,
+		                       gw_user_pool.pool[uid]->running_jobs,
+		                       gw_user_pool.pool[uid]->name);    		
     	}
     	
     pthread_mutex_unlock(&(gw_user_pool.mutex));	
@@ -404,6 +423,8 @@ void gw_user_pool_check_users(time_t period)
 					gw_log_print("UM",'I',"User %s freed.\n",name);
 					
 					free(name);
+					
+					gw_dm_mad_user_del(&gw_dm.dm_mad[0],i);
 				}
     		}
         }	
@@ -423,6 +444,12 @@ void gw_user_pool_inc_running_jobs(int uid, int jobs)
     	if (gw_user_pool.pool[uid] != NULL)
     	{
     		gw_user_pool.pool[uid]->running_jobs += jobs;
+    		
+    		gw_dm_mad_user_add(&gw_dm.dm_mad[0],
+		                       uid,
+		                       gw_user_pool.pool[uid]->active_jobs,
+		                       gw_user_pool.pool[uid]->running_jobs,
+		                       gw_user_pool.pool[uid]->name);     		
     	}
     	
     pthread_mutex_unlock(&(gw_user_pool.mutex));	
@@ -440,29 +467,15 @@ void gw_user_pool_dec_running_jobs(int uid)
     	if (gw_user_pool.pool[uid] != NULL)
     	{
     		gw_user_pool.pool[uid]->running_jobs -= 1;
+    		
+    		gw_dm_mad_user_add(&gw_dm.dm_mad[0],
+		                       uid,
+		                       gw_user_pool.pool[uid]->active_jobs,
+		                       gw_user_pool.pool[uid]->running_jobs,
+		                       gw_user_pool.pool[uid]->name);     		
     	}
     	
     pthread_mutex_unlock(&(gw_user_pool.mutex));	
-}
-
-/* -------------------------------------------------------------------------- */
-/* -------------------------------------------------------------------------- */
-/* -------------------------------------------------------------------------- */
-
-gw_boolean_t gw_user_pool_max_running_jobs (int uid)
-{
-	gw_boolean_t max;
-	
-    pthread_mutex_lock(&(gw_user_pool.mutex));
-
-    if ( ( uid >= 0 ) && ( uid < gw_conf.number_of_users ) )
-		max = gw_user_pool.pool[uid]->running_jobs == gw_conf.jobs_per_user;
-	else
-		max = GW_TRUE;
-
-    pthread_mutex_unlock(&(gw_user_pool.mutex));
-
-    return max;
 }
 
 /* -------------------------------------------------------------------------- */

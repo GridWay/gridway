@@ -70,7 +70,7 @@ gw_tm_t* gw_tm_init()
     gw_am_register(GW_ACTION_FINALIZE, GW_ACTION_SEQUENTIAL, gw_tm_finalize,
             &(gw_tm.am));                
 
-    gw_am_register(GW_ACTION_TIMER, GW_ACTION_SEQUENTIAL, gw_tm_checkpoint,
+    gw_am_register(GW_ACTION_TIMER, GW_ACTION_SEQUENTIAL, gw_tm_timer,
             &(gw_tm.am));            
                   
     gw_am_register("GW_TM_PROLOG", GW_ACTION_SEQUENTIAL, gw_tm_prolog,
@@ -179,7 +179,7 @@ void gw_tm_start ( void *_null )
     
     gw_log_print ("TM",'I',"Transfer Manager started.\n");
         
-    gw_am_loop(&(gw_tm.am),5,NULL);
+    gw_am_loop(&(gw_tm.am),GW_TM_TIMER_PERIOD,NULL);
 }
 
 /*---------------------------------------------------------------------------*/

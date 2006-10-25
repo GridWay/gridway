@@ -23,7 +23,7 @@ dynamic_discover (){
         TMPFILE=".search.$$.$RANDOM"
         ERRFILE=".error.$$.$RANDOM"
 
-        grid-info-search -x -LLL -nowrap -h $SERVER -b $BASE \
+        nice -n $PRIORITY grid-info-search -x -LLL -nowrap -h $SERVER -b $BASE \
                 "(&(objectclass=MdsHost)$HOSTFILTER)" Mds-Host-hn \
                 > $TMPFILE 2>$ERRFILE
                 
@@ -51,8 +51,8 @@ dynamic_discover (){
 dynamic_monitor (){
     TMPFILE=".search.$$.$1.$RANDOM"
     ERRFILE=".error.$$.$1.$RANDOM"
-    
-    grid-info-search -x -LLL -h $2 > $TMPFILE 2> $ERRFILE
+	
+    nice -n $PRIORITY grid-info-search -x -LLL -h $2 > $TMPFILE 2> $ERRFILE
         
     if [ $? -eq 0 ]
     then
@@ -76,7 +76,7 @@ dynamic_monitor (){
         LRMS_NAME=`grep "Mds-Software-deployment: jobmanager" $TMPFILE | awk -F": " '{print $2}' | tail -1`
         LRMS_TYPE=`grep Mds-Service-Gram-schedulertype: $TMPFILE | awk -F": " '{print $2}' | tail -1`
 
-        grid-info-search -x -LLL -h $2 "(&(objectclass=MdsJobQueue)$QUEUEFILTER)"> $TMPFILE 2> $ERRFILE
+        nice -n $PRIORITY grid-info-search -x -LLL -h $2 "(&(objectclass=MdsJobQueue)$QUEUEFILTER)"> $TMPFILE 2> $ERRFILE
     
         if [ $? -eq 0 ]
         then

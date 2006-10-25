@@ -29,12 +29,16 @@
 /* ------------------------------------------------------------------------- */
 
 const char * usage =
-"\n gwacct [-h] [-n] <-u user|-r host>\n\n"
+"\n gwacct [-h] [-n] [<-d n | -w n | -m n | -t s>] <-u user|-r host>\n\n"
 "SYNOPSIS\n"
 "  Prints accounting information about users or hosts in the GridWay system\n\n"
 "OPTIONS\n"
 "  -h        prints this help\n"
 "  -n        do not print the header lines\n"
+"  -d n      print accounting information from n days ago  (ex: -d 1)\n"
+"  -w n	     print accounting information from n weeks ago (ex: -w 1)\n"
+"  -m n	     print accounting information from n months ago(ex: -m 1)\n"
+"  -t s      print accounting information from s seconds, where s is an epoch (ex: -t 1159809792)\n"
 "  -r host   print accounting information for host\n"
 "  -u user   print accounting information for user\n\n"
 "FIELD INFORMATION\n"
@@ -56,7 +60,7 @@ const char * usage =
 
 
 const char * susage =
-"usage: gwacct [-h] [-n] <-u user|-r host>\n";
+"usage: gwacct [-h] [-n] [<-d n | -w n | -m n | -t s>] <-u user|-r host>\n";
 
 extern char *optarg;
 extern int   optind, opterr, optopt;
@@ -76,8 +80,11 @@ void signal_handler (int sig)
 int main(int argc, char **argv)
 {
   	char               opt;
-  	int                n = 0, u = 0, r = 0;
-	char *             name = NULL;
+  	int                n = 0, u = 0, r = 0, t = 0;
+	char *             hostname = NULL;
+	char *             username = NULL;
+	char * 			   time_arg = NULL;
+	time_t			   from_time = (time_t)NULL;
 	
 #ifdef HAVE_LIBDB	
 	gw_acct_t          **accts;
@@ -95,7 +102,7 @@ int main(int argc, char **argv)
     opterr = 0;
     optind = 1;
 	
-    while((opt = getopt(argc,argv,":nhu:r:"))!= -1)
+    while((opt = getopt(argc,argv,":nhu:r:d:w:m:t:"))!= -1)
         switch(opt)
         {
             case 'n': n  = 1;
@@ -108,21 +115,49 @@ int main(int argc, char **argv)
                 
             case 'u':
             
-            	if ( name != NULL )
-            		free(name);
+            	if ( username != NULL )
+            		free(username);
             		
-            	name = strdup(optarg);
-                u = 1;
+            	username = strdup(optarg);
+                u = 1;               
                 break;
 
             case 'r':
             
-            	if ( name != NULL )
-            		free(name);
+            	if ( hostname != NULL )
+            		free(hostname);
             
-            	name = strdup(optarg);
+            	hostname = strdup(optarg);
                 r = 1;
                 break;
+                
+            case 't': // accounting information since argument (must be an epoch)                      
+           
+            	time_arg = strdup(optarg);
+            	from_time = (time_t)atoi(time_arg);
+            	t++;        
+                break;       
+                
+            case 'd': // accounting information since argument (number of days)                      
+           
+            	time_arg = strdup(optarg);
+            	from_time = time(NULL) - atoi(time_arg)*24*60*60;
+            	t++;            	
+                break;  
+                
+            case 'w': // accounting information since argument (number of weeks)                      
+           
+            	time_arg = strdup(optarg);
+            	from_time = time(NULL) - atoi(time_arg)*7*24*60*60;
+            	t++;            	
+                break; 
+                
+            case 'm': // accounting information since argument (number of 30 day months)                      
+           
+            	time_arg = strdup(optarg);
+            	from_time = time(NULL) - atoi(time_arg)*30*7*24*60*60;
+            	t++;           	
+                break; 
                                 
             case '?':
                 fprintf(stderr,"error: invalid option \'%c\'\n",optopt);
@@ -137,18 +172,21 @@ int main(int argc, char **argv)
                 exit(1);
                 break;                   
           	}
+          	        	
 
-	if (((u == 1) && (r == 1)) 
-	|| ((u==0) && (r == 0)))
+	if (  ((u + r) < 1 )  // User must define either host and/or user search 
+	||    (t       > 1))  // Just one time option   
 	{
-		if ( name != NULL )
-			free(name);
-			
+		if ( hostname != NULL )
+			free(hostname);
+		
+		if ( username != NULL )
+			free(username);	
+		
        	printf("%s", susage);
         exit(1);
 	}
 		
-
     act.sa_handler = signal_handler;
     act.sa_flags   = SA_RESTART;
     sigemptyset(&act.sa_mask);
@@ -160,27 +198,60 @@ int main(int argc, char **argv)
 	/* ---------------------------------------------------------------- */
 
 #ifdef HAVE_LIBDB
-	if ( u == 1 )
-		rc = gw_client_user_accts(name, &accts, &num);
+	if( (u + r) == 2 )
+		rc = gw_client_host_and_user_accts(hostname, username, &accts, &num, from_time);	
 	else
-		rc = gw_client_host_accts(name, &accts, &num);
+	{
+		if ( u == 1 )
+			rc = gw_client_user_accts(username, &accts, &num, from_time);
+		else
+			rc = gw_client_host_accts(hostname, &accts, &num, from_time);
+	}
 
    	if (rc == GW_RC_SUCCESS)
     {
     	if (num == 0)
     	{
-    		fprintf(stderr,"FAILED: No records found for %s.\n",name);
-    		
-    		free(name);
-    		return -1;    		
+    		if( (u + r) == 2 )
+    		{
+				fprintf(stderr,"FAILED: No records found for %s @ %s.\n",username, hostname);
+				
+				free(username);
+				free(hostname);
+				return -1;	    			
+    		}
+    		else
+    		{
+	       		if ( u == 1 )
+	       		{
+					fprintf(stderr,"FAILED: No records found for %s.\n",username);
+					
+					free(username);
+					return -1;	       			
+	       		}
+	       		else
+	      		{
+					fprintf(stderr,"FAILED: No records found for %s.\n",hostname);
+					
+					free(hostname);
+					return -1;	 	      			
+	      		}
+   			
+    			
+    		}    		
     	}
     	
        	if (!n)
        	{
-       		if ( u == 1 )
-	       		gw_client_print_user_accts_header(name);
+       		if( (u + r) == 2 )
+       			gw_client_print_host_and_user_accts_header(hostname, username, from_time);
        		else
-      			gw_client_print_host_accts_header(name);
+       		{
+	       		if ( u == 1 )
+		       		gw_client_print_user_accts_header(username, from_time);
+	       		else
+	      			gw_client_print_host_accts_header(hostname, from_time);
+	      	}
        	}
 
 		gw_client_print_accts(accts, num);
@@ -188,14 +259,34 @@ int main(int argc, char **argv)
     else
     {
     	fprintf(stderr,"FAILED: %s\n",gw_ret_code_string(rc)); 
+
+		if( (u + r) == 2 )
+		{	
+			free(username);
+			free(hostname);
+		}  	
+		else
+       		if ( u == 1 )
+				free(username);
+       		else
+				free(hostname);
     	
-   		free(name);
         return -1;
     }  
 #else
 	fprintf(stderr,"FAILED: Berkley Database support not compiled in GridWay\n");
 #endif
 
-	free(name);	
+	if( (u + r) == 2 )	
+	{	
+		free(username);
+		free(hostname);
+	}	
+	else
+   		if ( u == 1 )
+			free(username);
+   		else
+			free(hostname);
+			
 	return 0;
 }

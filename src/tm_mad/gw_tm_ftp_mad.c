@@ -204,6 +204,8 @@ int main (int argc, char **argv )
         	}
         }                       
     }
-
+    
+    printf("FINALIZE - - SUCCESS -\n");
+    
     return 0;
 }

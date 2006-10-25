@@ -446,10 +446,11 @@ static inline time_t gw_acct_total_time(time_t ini, time_t end, time_t aend)
 
 /* -------------------------------------------------------------------------- */
 
-int gw_acct_join_search(const char *hostname, 
-                        const char *username,
-                        gw_acct_t *accts)
-{
+int gw_acct_join_search(const char * hostname, 
+                        const char * username,
+                        gw_acct_t *  accts,
+                        time_t       from_time)
+{ 
 	DBT ukey;
 	DBT hkey;	
 	
@@ -539,10 +540,13 @@ int gw_acct_join_search(const char *hostname,
 	{	
 		s = gw_data.stats;
 		
-		/* ---- Agregate total execution time ---- */
-		par = gw_acct_total_time(s[WRAPPER_START_TIME], s[WRAPPER_EXIT_TIME], s[EXIT_TIME]);
+		/* Take into account jobs started after "from_time" */
+		if(gw_key.start_time<from_time) 
+		    continue;
 		
-		accts->execution += par;
+		/* ---- Agregate total active time ---- */
+		
+		accts->execution += s[ACTIVE_TIME];
 		
 		/* ---- Agregate total transfer time ---- */		
 		par = gw_acct_total_time(s[PROLOG_START_TIME], s[PROLOG_EXIT_TIME], s[EXIT_TIME]);
@@ -620,9 +624,10 @@ int gw_acct_join_search(const char *hostname,
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
-int gw_acct_join_search_by_user(const char * username, 
+int gw_acct_join_search_by_user(const char *  username, 
                                 gw_acct_t *** accts,
-                                int *        nrecs)
+                                int *         nrecs,
+                                time_t        from_time)
 {
 	char **hosts = NULL;
 	char hostname[GW_MSG_STRING_SHORT];
@@ -698,7 +703,7 @@ int gw_acct_join_search_by_user(const char * username,
 	for ( i=0;i<nhost;i++)
 	{
 		tmp = (gw_acct_t *) malloc(sizeof(gw_acct_t));
-		rc  = gw_acct_join_search(hosts[i], username, tmp);
+		rc  = gw_acct_join_search(hosts[i], username, tmp, from_time);
 		
 		if ( rc == 0 )
 		{
@@ -727,9 +732,10 @@ int gw_acct_join_search_by_user(const char * username,
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
-int gw_acct_join_search_by_host(const char * hostname, 
+int gw_acct_join_search_by_host(const char *  hostname, 
                                 gw_acct_t *** accts,
-                                int *        nrecs)
+                                int *         nrecs,
+                                time_t        from_time)
 {
 	char **users = NULL;
 	char username[GW_MSG_STRING_SHORT];
@@ -805,7 +811,7 @@ int gw_acct_join_search_by_host(const char * hostname,
 	for ( i=0;i<nuser;i++)
 	{
 		tmp = (gw_acct_t *) malloc(sizeof(gw_acct_t));
-		rc  = gw_acct_join_search(hostname, users[i], tmp);
+		rc  = gw_acct_join_search(hostname, users[i], tmp, from_time);
 		
 		if ( rc == 0 )
 		{
@@ -827,6 +833,46 @@ int gw_acct_join_search_by_host(const char * hostname,
 		free(users);
 	}
 	
+	return 0;
+}
+
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+
+
+int gw_acct_join_search_by_host_and_user(const char * hostname, 
+										 const char * username,
+                               		     gw_acct_t ***accts,
+                                         int *        nrecs,
+                                         time_t       from_time)
+{	
+	gw_acct_t * tmp;
+	
+	int rc;
+	
+	*nrecs = 0;
+    *accts = NULL;	
+    
+    char * user_at_host;		
+
+	tmp = (gw_acct_t *) malloc(sizeof(gw_acct_t));
+	rc  = gw_acct_join_search(hostname, username, tmp, from_time);
+	
+	if ( rc == 0 )
+	{	
+		sprintf(user_at_host,"%s @ %s",username,hostname);
+		gw_rm_copy_str_short(user_at_host,tmp->name);		
+			
+		 /* This always is going to be 1 (username @ hostname)*/
+		*nrecs = *nrecs + 1; 
+		*accts = realloc(*accts, *nrecs *sizeof(gw_acct_t *));	
+		(*accts)[*nrecs-1] = tmp;
+	}
+	else
+		free(tmp);
+	
+
 	return 0;
 }
 

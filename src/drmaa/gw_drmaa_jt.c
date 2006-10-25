@@ -525,10 +525,10 @@ char * drmaa_gw_jt_parse(const char * value)
 		*token_start ='\0';
 		token_end    = token_start + strlen(DRMAA_PLACEHOLDER_INCR);
 		
-		len = strlen(value_cp)+strlen(token_end)+strlen(DRMAA_GW_TASK_ID)+1;
+		len = strlen(value_cp)+strlen(token_end)+strlen(DRMAA_GW_PARAM)+1;
 		tmp = (char *) malloc(sizeof(char)*len);
 		
-		sprintf(tmp,"%s%s%s",value_cp,DRMAA_GW_TASK_ID,token_end);
+		sprintf(tmp,"%s%s%s",value_cp,DRMAA_GW_PARAM,token_end);
 		
 		free (value_cp);
 		value_cp = tmp;

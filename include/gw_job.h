@@ -95,14 +95,19 @@ typedef struct gw_job_s
     char * env_file;
 
     int user_id;
-	
+    	
     gw_job_template_t template;
     
     int id;
     int array_id;
     int task_id;
     int total_tasks;
-
+    
+    int pstart;
+    int pinc;
+    
+    int nice;
+    
     gw_em_state_t  em_state;
     gw_tm_state_t  tm_state;
     gw_job_state_t job_state;

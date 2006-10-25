@@ -83,7 +83,7 @@ gw_em_t* gw_em_init()
                    
     gw_am_register(GW_ACTION_TIMER, 
                    GW_ACTION_SEQUENTIAL, 
-                   gw_em_poll,
+                   gw_em_timer,
                    &(gw_em.am));
                    
     gw_am_register("GW_EM_SUBMIT", 
@@ -230,7 +230,7 @@ void gw_em_start ( void *_null )
     
     gw_log_print ("EM",'I',"Execution Manager started.\n");
         
-    gw_am_loop(&(gw_em.am),gw_conf.poll_interval,NULL);
+    gw_am_loop(&(gw_em.am), GW_EM_TIMER_PERIOD, NULL);
 }
 
 /*---------------------------------------------------------------------------*/

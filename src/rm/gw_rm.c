@@ -746,7 +746,11 @@ void gw_rm_connection(void *_msg)
 
 	  	case GW_MSG_JOB_MATCH:
 	  	
-			gw_rm_job_match(msg->client_socket, msg->job_id);
+	  	    if (msg->array_id == -1)
+			    gw_rm_job_match(msg->client_socket, msg->job_id);
+			else
+			    gw_rm_array_match(msg->client_socket, msg->array_id);
+			    
 			free(msg);
 		  	break;
 

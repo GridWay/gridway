@@ -35,6 +35,8 @@ setup(){
          exit 1
     fi
 
+    export LD_LIBRARY_PATH=$GLOBUS_LOCATION/lib:$LD_LIBRARY_PATH
+
     printf "`date`: Checking remote job home... "
 
     RMT_JOB_HOME=${HOME}/.gw_${GW_USER}_${GW_JOB_ID}
@@ -60,13 +62,9 @@ setup(){
 
         echo "done."
         
-        printf "`date`:Staging job environment file... "
+        printf "`date`: Staging-in job environment file... "
 
-		if [ -z "${GW_SE_HOSTNAME}" ]; then
-	        SRC_URL="gsiftp://${GW_HOSTNAME}/~/.gw_${GW_USER}_${GW_JOB_ID}/job.env"
-        else
-	        SRC_URL="gsiftp://${GW_SE_HOSTNAME}/~/.gw_${GW_USER}_${GW_JOB_ID}/job.env"
-        fi
+        SRC_URL="$JOB_ENV_URL"
 	        
         DST_URL="file:${RMT_JOB_HOME}/job.env"
  
@@ -91,7 +89,7 @@ setup(){
     # Warning! Check it well!
     cd ${RMT_JOB_HOME}
     
-	source ./job.env
+    source ./job.env
 	
     if [ -z "${GW_RESTARTED}" -o -z "${GW_EXECUTABLE}" ]; then
          echo "failed."
@@ -104,7 +102,7 @@ setup(){
 
 execution(){
 
-    STG_FILES="$GW_EXECUTABLE,$GW_INPUT_FILES,$GW_STDIN_FILE"
+    STG_FILES="$GW_EXECUTABLE,$GW_INPUT_FILES"
 
     SAVED_IFS=$IFS
     IFS=","
@@ -165,18 +163,18 @@ execution(){
 
     export PATH=.:$PATH
 
-    # Warning! Do it in prolog?
-    chmod u+x $GW_EXECUTABLE
-
     # Warning! Increment nice only if jobmanager is fork
     #/usr/bin/nice -20
 
-   if [ -z "${GW_STDIN_FILE}" ]; then
-	GW_STDIN_FILE=/dev/null
-   fi
+    if [ -f stdin.execution ]; then
+       STDIN_FILE=stdin.execution
+    else
+       STDIN_FILE=/dev/null
+    fi
+    
+    chmod +x ${GW_EXECUTABLE}
 
- 
-    ${GW_EXECUTABLE} ${GW_ARGUMENTS} < ${GW_STDIN_FILE} >> stdout.execution 2>> stderr.execution &
+    ${GW_EXECUTABLE} ${GW_ARGUMENTS} < ${STDIN_FILE} >> stdout.execution 2>> stderr.execution &
     
     JOB_PID=$!
 
@@ -277,7 +275,7 @@ execution(){
 
 transfer_input_files(){
 
-    STG_FILES="$GW_EXECUTABLE,$GW_INPUT_FILES,$GW_STDIN_FILE,.monitor"
+    STG_FILES="$GW_EXECUTABLE,$GW_STDIN stdin.execution,$GW_INPUT_FILES"
 
     SAVED_IFS=$IFS
     IFS=","
@@ -301,15 +299,34 @@ transfer_input_files(){
                 DST_FILE=$FILE_NAME
             fi
 	
- 			if [ -z "${GW_SE_HOSTNAME}" ]; then
-	            SRC_URL="gsiftp://${GW_HOSTNAME}/~/.gw_${GW_USER}_${GW_JOB_ID}/${DST_FILE}"
-	        else
-	            SRC_URL="gsiftp://${GW_SE_HOSTNAME}/~/.gw_${GW_USER}_${GW_JOB_ID}/${DST_FILE}"	        
-	        fi
-	        
+            SRC_URL="${SRC_FILE}"
+
             DST_URL="file:${RMT_JOB_HOME}/${DST_FILE}"
 
-            printf "`date`: Staging remote input file \"${SRC_FILE}\" as \"${DST_FILE}\"... "
+            printf "`date`: Staging-in remote file \"${SRC_FILE}\" as \"${DST_FILE}\"... "
+             
+            ${GLOBUS_CP} ${SRC_URL} ${DST_URL}
+
+            if [ $? -ne 0 ]; then
+                echo "failed."
+            else
+                echo "done."
+            fi
+            ;;
+            
+        file:/*)
+            FILE_NAME=`echo $SRC_FILE | awk -F/ '{print $NF}'`
+            FILE_PATH=`echo $SRC_FILE | awk -F: '{print $2}'`
+            
+            if [ -z "$DST_FILE" ]; then
+                DST_FILE=$FILE_NAME
+            fi
+	
+            SRC_URL="${GW_STAGING_URL}${FILE_PATH}"
+
+            DST_URL="file:${RMT_JOB_HOME}/${DST_FILE}"
+
+            printf "`date`: Staging-in absolute local file \"${SRC_FILE}\" as \"${DST_FILE}\"... "
              
             ${GLOBUS_CP} ${SRC_URL} ${DST_URL}
 
@@ -321,7 +338,7 @@ transfer_input_files(){
             ;;
         
         /*)
-            printf "`date`: Skipping staging of absolute file \"$SRC_FILE\"... "
+            printf "`date`: Skipping staging-in of absolute remote file \"$SRC_FILE\"... "
             echo "done."
             ;;
         
@@ -330,15 +347,11 @@ transfer_input_files(){
                 DST_FILE=$SRC_FILE
             fi
 
-  			if [ -z "${GW_SE_HOSTNAME}" ]; then
-	            SRC_URL="gsiftp://${GW_HOSTNAME}/~/.gw_${GW_USER}_${GW_JOB_ID}/${DST_FILE}"
-	        else
-	            SRC_URL="gsiftp://${GW_SE_HOSTNAME}/~/.gw_${GW_USER}_${GW_JOB_ID}/${DST_FILE}"	        
-	        fi
+            SRC_URL="${GW_STAGING_URL}/${GW_JOB_HOME}/${DST_FILE}"	        
             
             DST_URL="file:${RMT_JOB_HOME}/${DST_FILE}"
 
-            printf "`date`: Staging local input file \"${SRC_FILE}\" as \"${DST_FILE}\"... "
+            printf "`date`: Staging-in local file \"${SRC_FILE}\" as \"${DST_FILE}\"... "
              
             ${GLOBUS_CP} ${SRC_URL} ${DST_URL}
 
@@ -357,7 +370,9 @@ transfer_input_files(){
 
 transfer_output_files(){
 
-    STG_FILES="$GW_OUTPUT_FILES,$GW_STDOUT_FILE,$GW_STDERR_FILE,stdout.execution,stderr.execution"
+    # TODO: An output file destination could be a GridFTP URL!!!
+
+    STG_FILES="$GW_OUTPUT_FILES,stdout.execution $GW_STDOUT,stderr.execution $GW_STDERR"
     
     if [ -f .monitor ]
     then
@@ -381,14 +396,10 @@ transfer_output_files(){
         
         SRC_URL="file:${RMT_JOB_HOME}/${SRC_FILE}"
         
-		if [ -z "${GW_SE_HOSTNAME}" ]; then
-		    DST_URL="gsiftp://${GW_HOSTNAME}/~/.gw_${GW_USER}_${GW_JOB_ID}/${SRC_FILE}"
-	    else
-		    DST_URL="gsiftp://${GW_SE_HOSTNAME}/~/.gw_${GW_USER}_${GW_JOB_ID}/${SRC_FILE}"
-	    fi        
+        DST_URL="${GW_STAGING_URL}/${GW_JOB_HOME}/${DST_FILE}"
             
         if [ -f ${RMT_JOB_HOME}/${SRC_FILE} ]; then
-            printf "`date`: Staging output file \"${SRC_FILE}\"... "
+            printf "`date`: Staging-out file \"${SRC_FILE}\" as \"${DST_FILE}\"... "
    
             ${GLOBUS_CP} ${SRC_URL} ${DST_URL}
 
@@ -398,7 +409,7 @@ transfer_output_files(){
                 echo "done."
             fi
         else
-            printf "`date`: Skipping staging of non-existent output file \"${SRC_FILE}\"... "
+            printf "`date`: Skipping staging-out of non-existent output file \"${SRC_FILE}\"... "
             echo "done."
         fi
     done
@@ -411,6 +422,8 @@ transfer_output_files(){
 #-------------------------------------------------------------------------------
 
 SECONDS=0
+
+JOB_ENV_URL=$1
 
 setup
 

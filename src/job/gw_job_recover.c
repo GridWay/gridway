@@ -44,6 +44,7 @@ int gw_job_recover(gw_job_t *job)
 
     int    user_id;
     int    rc;
+    int    pinc, pstart;
         
     char   job_state_name[2048];
     char   user_name[2048];
@@ -100,9 +101,9 @@ int gw_job_recover(gw_job_t *job)
         return -1;
     }
 
-    rc = fscanf(file, "%ld %s %s", &timestamp, user_name, job_home);
+    rc = fscanf(file, "%ld %s %s %i %i", &timestamp, user_name, job_home,&pstart,&pinc);
     
-    if (rc != 3)
+    if (rc != 5)
     {
         gw_log_print("DM",'E',"Bad filed number (%d) in job %d configuration file.\n",
                      rc,
@@ -139,6 +140,8 @@ int gw_job_recover(gw_job_t *job)
     job->start_time = timestamp;
     job->owner      = strdup(user_name);
     job->user_id    = user_id;
+    job->pstart     = pstart;
+    job->pinc       = pinc;
     
     pw_ent = getpwnam(user_name);
     if (pw_ent != NULL)
@@ -397,6 +400,12 @@ int gw_job_recover_last_state_transition(gw_job_t *job,
     switch(job_state)
     {
     case GW_JOB_STATE_PENDING:
+        gw_dm_mad_job_schedule(&gw_dm.dm_mad[0],
+                               *id,
+                               -1,
+                               GW_REASON_NONE,
+                               0,
+                               job->user_id);
     case GW_JOB_STATE_HOLD:
     case GW_JOB_STATE_STOPPED:
     case GW_JOB_STATE_ZOMBIE:
@@ -406,26 +415,20 @@ int gw_job_recover_last_state_transition(gw_job_t *job,
         break;
 
     case GW_JOB_STATE_PROLOG:
-    	/* --- Update user & host counters --- */
-    	
+   	
     	gw_user_pool_inc_running_jobs(job->user_id, 1);
-        
-        job->history->host->used_slots++;
-        
-        job->history->host->running_jobs++;
-        
+    	
+    	gw_host_inc_slots_nb(job->history->host);
+       
         gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_PROLOG", (void *)id);
         break;
 
     case GW_JOB_STATE_WRAPPER:
-    	/* --- Update user & host counters --- */
     	
     	gw_user_pool_inc_running_jobs(job->user_id, 1);
         
-        job->history->host->used_slots++;
+       	gw_host_inc_slots_nb(job->history->host);
         
-        job->history->host->running_jobs++;
-		
         gw_job_set_state(job, GW_JOB_STATE_WRAPPER, GW_TRUE);
 
         gw_log_print("DM",'I',"Recovering GRAM contact for job %d.\n", job->id); 
@@ -443,41 +446,37 @@ int gw_job_recover_last_state_transition(gw_job_t *job,
         break;
 
     case GW_JOB_STATE_EPILOG:
-    	/* --- Update user & host counters --- */
     	
     	gw_user_pool_inc_running_jobs(job->user_id, 1);
-               
-        job->history->host->running_jobs++;
-
+    	
+        gw_host_inc_rjobs_nb(job->history->host);
+                
         gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_EPILOG", (void *)id);
         break;
 
     case GW_JOB_STATE_EPILOG_FAIL:
-    	/* --- Update user & host counters --- */
-    	
+
     	gw_user_pool_inc_running_jobs(job->user_id, 1);
                
-        job->history->host->running_jobs++;
+        gw_host_inc_rjobs_nb(job->history->host);
         
         gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_EPILOG_FAIL", (void *)id);
         break;
 
     case GW_JOB_STATE_EPILOG_RESTART:
-    	/* --- Update user & host counters --- */
     	
     	gw_user_pool_inc_running_jobs(job->user_id, 1);
                
-        job->history->host->running_jobs++;
+        gw_host_inc_rjobs_nb(job->history->host);        
 
         gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_EPILOG_RESTART", (void *)id);
         break;
 
     case GW_JOB_STATE_EPILOG_STD:
-    	/* --- Update user & host counters --- */
-    	
+       	
     	gw_user_pool_inc_running_jobs(job->user_id, 1);
                
-        job->history->host->running_jobs++;
+        gw_host_inc_rjobs_nb(job->history->host);
 
         gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_EPILOG_STD", (void *)id);
         break;
@@ -486,11 +485,10 @@ int gw_job_recover_last_state_transition(gw_job_t *job,
         gw_job_set_state(job, job_state, GW_TRUE);
 
     case GW_JOB_STATE_KILL_EPILOG:                
-    	/* --- Update user & host counters --- */
     	
     	gw_user_pool_inc_running_jobs(job->user_id, 1);
-               
-        job->history->host->running_jobs++;
+
+        gw_host_inc_rjobs_nb(job->history->host);
         
         gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_KILL_EPILOG", (void *)id);
         break;
@@ -499,42 +497,33 @@ int gw_job_recover_last_state_transition(gw_job_t *job,
         gw_job_set_state(job, job_state, GW_TRUE);
             
     case GW_JOB_STATE_MIGR_PROLOG:    
-    	/* --- Update user & host counters --- */
     	
     	gw_user_pool_inc_running_jobs(job->user_id, 1);
+    	
+    	gw_host_inc_slots_nb(job->history->host);
         
-        job->history->host->used_slots++;
-        
-		job->history->host->running_jobs++;        
-		
-		job->history->next->host->running_jobs++;
-		
+    	gw_host_inc_rjobs_nb(job->history->next->host);
+        				
         gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_MIGR_PROLOG", (void *)id);
         break;
 
     case GW_JOB_STATE_MIGR_EPILOG:
-    	/* --- Update user & host counters --- */
-    	
+
     	gw_user_pool_inc_running_jobs(job->user_id, 1);
-        
-        job->history->host->used_slots++;
-        
-		job->history->host->running_jobs++;        
-		
-		job->history->next->host->running_jobs++;
+
+    	gw_host_inc_slots_nb(job->history->host);
+  
+    	gw_host_inc_rjobs_nb(job->history->next->host);
     
         gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_MIGR_EPILOG", (void *)id);
         break;
 
     case GW_JOB_STATE_PRE_WRAPPER:
-    	/* --- Update user & host counters --- */
-    	
+   	
     	gw_user_pool_inc_running_jobs(job->user_id, 1);
-        
-        job->history->host->used_slots++;
-        
-		job->history->host->running_jobs++;        
-    
+
+    	gw_host_inc_slots_nb(job->history->host);
+    	            
         gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_PRE_WRAPPER", (void *)id);
         break;
 
@@ -542,12 +531,11 @@ int gw_job_recover_last_state_transition(gw_job_t *job,
         gw_job_set_state(job, job_state, GW_TRUE);
         
     case GW_JOB_STATE_STOP_EPILOG:
-    	/* --- Update user & host counters --- */
-    	
+
     	gw_user_pool_inc_running_jobs(job->user_id, 1);
-                
-		job->history->host->running_jobs++;        
-            
+
+    	gw_host_inc_rjobs_nb(job->history->host);
+
         gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_STOP_EPILOG", (void *)id);
         break;
 

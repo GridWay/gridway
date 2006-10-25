@@ -65,21 +65,36 @@ void gw_dm_reschedule (void *_job_id)
             	        
             gw_log_print("DM",'I',"Job %i will be re-scheduled.\n", job_id);        
             
-            gw_am_trigger(gw_dm.rm_am,"GW_RM_RESCHEDULE_SUCCESS",_job_id);			
+            gw_am_trigger(gw_dm.rm_am,"GW_RM_RESCHEDULE_SUCCESS",_job_id);
+            
+            gw_dm_mad_job_schedule(&gw_dm.dm_mad[0],
+                                   job_id,
+                                   job->array_id,
+                                   GW_REASON_USER_REQUESTED,
+                                   job->nice,
+                                   job->user_id);
             break;
 		
 		case GW_JOB_STATE_FAILED:
 		
             gw_job_set_state(job, GW_JOB_STATE_PENDING, GW_FALSE);
-            job->tm_state  = GW_TM_STATE_INIT;
-            job->em_state  = GW_EM_STATE_INIT;
             
-            job->reschedule      = GW_TRUE;
+            job->tm_state = GW_TM_STATE_INIT;
+            job->em_state = GW_EM_STATE_INIT;
+            
             job->history->reason = GW_REASON_USER_REQUESTED;
+            job->restarted++;
 
             gw_log_print("DM",'I',"Job %i will be re-scheduled.\n", job_id);
             
-            gw_am_trigger(gw_dm.rm_am,"GW_RM_RESCHEDULE_SUCCESS",  _job_id);            
+            gw_am_trigger(gw_dm.rm_am,"GW_RM_RESCHEDULE_SUCCESS",  _job_id);
+            
+            gw_dm_mad_job_schedule(&gw_dm.dm_mad[0],
+                                   job_id,
+                                   job->array_id,
+                                   GW_REASON_NONE,
+                                   job->nice,
+                                   job->user_id);            
 			break;
 			
         default:

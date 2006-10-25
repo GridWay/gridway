@@ -22,6 +22,7 @@
 #include <unistd.h>
 #include "gw_common.h"
 #include "gw_conf.h"
+#include "gw_history.h"
 
 /* ---------------------------------------------------------------------------*/
 /* ---------------------------------------------------------------------------*/
@@ -44,14 +45,77 @@ typedef struct gw_dm_mad_s
 } gw_dm_mad_t;
 
 /* ---------------------------------------------------------------------------*/
+/* ---------------------------------------------------------------------------*/
+/* ---------------------------------------------------------------------------*/
     
 int gw_dm_mad_init(gw_dm_mad_t *dm_mad, const char *exe, const char *name,
 		const char *args);
+		
+/* ---------------------------------------------------------------------------*/
                         
 void gw_dm_mad_schedule(gw_dm_mad_t *dm_mad);
 
+/* ---------------------------------------------------------------------------*/
+
+void gw_dm_mad_host_monitor(gw_dm_mad_t * dm_mad, 
+                            int           hid, 
+                            int           uslots, 
+                            int           rjobs, 
+                            char *        name);
+                            
+/* ---------------------------------------------------------------------------*/
+                            
+void gw_dm_mad_user_add(gw_dm_mad_t * dm_mad, 
+                        int           uid, 
+                        int           aslots, 
+                        int           rslots, 
+                        char *        name);
+                        
+void gw_dm_mad_user_del(gw_dm_mad_t * dm_mad, 
+                        int           uid);
+
+/* ---------------------------------------------------------------------------*/
+                        
+void gw_dm_mad_job_failed(gw_dm_mad_t *         dm_mad, 
+                          int                   hid,
+                          int                   uid,
+                          gw_migration_reason_t reason);
+                          
+                          
+void gw_dm_mad_job_del(gw_dm_mad_t *  dm_mad, 
+                       int            jid);
+
+void gw_dm_mad_task_del(gw_dm_mad_t * dm_mad, 
+                        int           aid);
+                          
+void gw_dm_mad_job_success(gw_dm_mad_t * dm_mad, 
+                           int           hid,
+                           int           uid,
+                           float         xfr,
+                           float         sus,
+                           float         exe);
+                           
+void gw_dm_mad_job_schedule(gw_dm_mad_t *         dm_mad, 
+                            int                   jid,
+                            int                   aid,
+                            gw_migration_reason_t reason,
+                            int                   nice,
+                            int                   uid);
+                            
+void gw_dm_mad_array_schedule(gw_dm_mad_t *         dm_mad, 
+                              int                   jid,
+                              int                   aid,
+                              gw_migration_reason_t reason,
+                              int                   nice,
+                              int                   uid,
+                              int                   tasks);                            
+
+/* ---------------------------------------------------------------------------*/
+
 void gw_dm_mad_finalize(gw_dm_mad_t *dm_mad);
 
+/* ---------------------------------------------------------------------------*/
+/* ---------------------------------------------------------------------------*/
 /* ---------------------------------------------------------------------------*/
 
 #endif

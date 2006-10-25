@@ -94,6 +94,9 @@ do
     esac
 done
 
+PRIORITY=19
+MADDEBUG=
+
 while read COMMAND HID HOST ARGS
 do
     case $COMMAND in

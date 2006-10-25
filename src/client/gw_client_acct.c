@@ -32,7 +32,7 @@ extern gw_client_t gw_client;
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
 
-gw_return_code_t gw_client_user_accts(const char *user, gw_acct_t ***user_accts, int *num_users)
+gw_return_code_t gw_client_user_accts(const char *user, gw_acct_t ***user_accts, int *num_users, time_t from_time)
 {
 	int rc;
 	
@@ -47,7 +47,7 @@ gw_return_code_t gw_client_user_accts(const char *user, gw_acct_t ***user_accts,
 	}
 	
 	
-	rc = gw_acct_join_search_by_user(user, user_accts, num_users);
+	rc = gw_acct_join_search_by_user(user, user_accts, num_users, from_time);
 	
  	gw_acct_db_close();
 	
@@ -61,7 +61,7 @@ gw_return_code_t gw_client_user_accts(const char *user, gw_acct_t ***user_accts,
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
 
-gw_return_code_t gw_client_host_accts(const char *host, gw_acct_t ***host_accts,  int *num_hosts)
+gw_return_code_t gw_client_host_accts(const char *host, gw_acct_t ***host_accts,  int *num_hosts, time_t from_time)
 {
 	int rc;
 	
@@ -75,7 +75,7 @@ gw_return_code_t gw_client_host_accts(const char *host, gw_acct_t ***host_accts,
 		return GW_RC_FAILED;
 	}
 
-	rc = gw_acct_join_search_by_host(host, host_accts, num_hosts);
+	rc = gw_acct_join_search_by_host(host, host_accts, num_hosts, from_time);
 	
  	gw_acct_db_close();
 	
@@ -88,6 +88,36 @@ gw_return_code_t gw_client_host_accts(const char *host, gw_acct_t ***host_accts,
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
+
+gw_return_code_t gw_client_host_and_user_accts(const char *host, const char *user, gw_acct_t ***accts, int *num_records, time_t from_time)
+{
+	int rc;
+	
+	rc = gw_acct_db_open(GW_FALSE);
+	
+	if ( rc != 0 )
+	{
+		*accts = NULL;
+		*num_records  = 0;
+		
+		return GW_RC_FAILED;
+	}
+	
+	
+	rc = gw_acct_join_search_by_host_and_user(host, user, accts, num_records, from_time);
+	
+ 	gw_acct_db_close();
+	
+	if ( rc == 0 )
+		return GW_RC_SUCCESS;	
+	else 
+		return GW_RC_FAILED;
+}
+
+/*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+
 
 #endif
 

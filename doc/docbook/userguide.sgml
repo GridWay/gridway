@@ -844,6 +844,40 @@ OUTPUT_FILES = outfile Out/file.${JOB_ID} #Directory Out must exist in the exper
       </para>
   </sect2>
 
+  <sect2>
+      <title> Defining Standard Streams </title>
+      <para>
+        Standard streams includes the standard input for your executable
+        (<parameter>STDIN_FILE</parameter>) and its standard output and error
+        (<parameter>STDOUT_FILE</parameter> and <parameter>STDERR_FILE</parameter>).
+      </para>
+      <para>
+        The STDIN_FILE can be defined using any of the methods described above
+        for the input files. However you <emphasis> can not </emphasis> specifed
+        a destination name for the standard input stream, as is internally handled
+        by the system. Note also that <emphasis> only one</emphasis> standard input
+        file can be specified.
+      </para>
+      <para>
+        Example:
+        <screen>
+STDIN_FILE = In/input.${JOB_ID} #Will use input from directory In</screen>
+      </para>
+      <para>
+        The STDOUT_FILE and STDERR_FILE parameters can be defined
+        using any of the methods described above
+        for the output files. However you <emphasis> can not </emphasis> specifed
+        a source name (only destination).
+        Note also that <emphasis> only one</emphasis> standard output and error
+        files can be specified.
+      </para>
+      <para>
+        Example:
+        <screen>
+          STDOUT_FILE = Out/ofile #Will place stdout in Out directory with name ofile</screen>
+      </para>
+    </sect2>
+
     <sect2>
     <title> Defining Restart Files </title>
 

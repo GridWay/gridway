@@ -168,7 +168,7 @@ void gw_dm_wrapper_done_cb ( void *_job_id )
 		    active     = job->history->stats[ACTIVE_TIME];
     		suspension = job->history->stats[SUSPENSION_TIME];
 
-		    gw_job_print(job,"DM",'I',"Pre-Wrapper done:\n");
+		    gw_job_print(job,"DM",'I',"Pre-Wrapper DONE:\n");
 		    gw_job_print(job,"DM",'I',"\tActive time     : %i\n", active);
 		    gw_job_print(job,"DM",'I',"\tSuspension time : %i\n", suspension);
 		    gw_job_print(job,"DM",'I',"\tTotal time      : %i\n", total);
@@ -188,19 +188,23 @@ void gw_dm_wrapper_done_cb ( void *_job_id )
 		    active     = job->history->stats[ACTIVE_TIME];
     		suspension = job->history->stats[SUSPENSION_TIME];
 
-		    gw_job_print(job,"DM",'I',"Wrapper done:\n");
+		    gw_job_print(job,"DM",'I',"Wrapper DONE:\n");
 		    gw_job_print(job,"DM",'I',"\tActive time     : %i\n", active);
 		    gw_job_print(job,"DM",'I',"\tSuspension time : %i\n", suspension);
 		    gw_job_print(job,"DM",'I',"\tTotal time      : %i\n", total);
 
     		/* -------------- Free used slot from this host -------------- */
+
+            gw_host_dec_uslots(job->history->host);
+            
+    		/* ---------- We do not need to re-schedule this job --------- */
     				    
-	    	pthread_mutex_lock(&(job->history->host->mutex));
-			
-			job->history->host->used_slots--;
-			
-			pthread_mutex_unlock(&(job->history->host->mutex));
-		    
+			if ( job->reschedule == GW_TRUE )
+			{
+			    job->reschedule = GW_FALSE;
+			    gw_dm_mad_job_del(&gw_dm.dm_mad[0],job->id);				
+			}
+			            		                
     		/* -------------- Transition to Epilog state ------------------ */
     				    
 			gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_EPILOG_STD", _job_id);			
@@ -216,19 +220,15 @@ void gw_dm_wrapper_done_cb ( void *_job_id )
 		    active     = job->history->stats[ACTIVE_TIME];
     		suspension = job->history->stats[SUSPENSION_TIME];
 
-		    gw_job_print(job,"DM",'I',"Wrapper CANCELED\n");
+		    gw_job_print(job,"DM",'I',"Wrapper CANCELED:\n");
 		    gw_job_print(job,"DM",'I',"\tActive time     : %i\n", active);
 		    gw_job_print(job,"DM",'I',"\tSuspension time : %i\n", suspension);
 		    gw_job_print(job,"DM",'I',"\tTotal time      : %i\n", total);
 
     		/* -------------- Free used slot from this host -------------- */
-    				    
-	    	pthread_mutex_lock(&(job->history->host->mutex));
-			
-			job->history->host->used_slots--;
-			
-			pthread_mutex_unlock(&(job->history->host->mutex));
-
+    		
+    		gw_host_dec_uslots(job->history->host);
+			    		
     		/* ------------ Transition to Stop Epilog state --------------- */
     		
 			gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_STOP_EPILOG", _job_id);		    
@@ -244,19 +244,15 @@ void gw_dm_wrapper_done_cb ( void *_job_id )
 		    active     = job->history->stats[ACTIVE_TIME];
     		suspension = job->history->stats[SUSPENSION_TIME];
 
-		    gw_job_print(job,"DM",'I',"Wrapper CANCELED\n");
+		    gw_job_print(job,"DM",'I',"Wrapper CANCELED:\n");
 		    gw_job_print(job,"DM",'I',"\tActive time     : %i\n", active);
 		    gw_job_print(job,"DM",'I',"\tSuspension time : %i\n", suspension);
 		    gw_job_print(job,"DM",'I',"\tTotal time      : %i\n", total);    	
 
     		/* -------------- Free used slot from this host -------------- */
-    				    
-	    	pthread_mutex_lock(&(job->history->host->mutex));
-			
-			job->history->host->used_slots--;
-			
-			pthread_mutex_unlock(&(job->history->host->mutex));
 
+            gw_host_dec_uslots(job->history->host);
+			            
     		/* ------------ Transition to Kill Epilog state ---------------- */
     		
 			gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_KILL_EPILOG", _job_id);		    
@@ -271,18 +267,14 @@ void gw_dm_wrapper_done_cb ( void *_job_id )
             active     = job->history->next->stats[ACTIVE_TIME];
             suspension = job->history->next->stats[SUSPENSION_TIME];
 
-		    gw_job_print(job,"DM",'I',"Wrapper CANCELED.\n");
+		    gw_job_print(job,"DM",'I',"Wrapper CANCELED:\n");
 		    gw_job_print(job,"DM",'I',"\tActive time     : %i\n", active);
 		    gw_job_print(job,"DM",'I',"\tSuspension time : %i\n", suspension);
 
     		/* -------------- Free used slot from previous host ------------ */
-    				    
-	    	pthread_mutex_lock(&(job->history->next->host->mutex));
-			
-			job->history->next->host->used_slots--;
-			
-			pthread_mutex_unlock(&(job->history->next->host->mutex));
-		    
+    		
+            gw_host_dec_uslots(job->history->next->host);
+	    			    
     		/* ---------- Transition to Migration Prolog state ------------ */
     		
 			gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_MIGR_PROLOG", _job_id);		    
@@ -345,7 +337,7 @@ void gw_dm_wrapper_failed_cb ( void *_job_id )
 		    job->history->stats[PRE_WRAPPER_EXIT_TIME] = time(NULL);
 		    total = gw_job_history_get_pre_wrapper_time(job->history);
 
-		    gw_job_print(job,"DM",'E',"Pre-Wrapper execution failed:\n");
+		    gw_job_print(job,"DM",'E',"Pre-Wrapper failed:\n");
 		    gw_job_print(job,"DM",'E',"\tTotal time      : %i\n", total);
     		break;
     		
@@ -358,6 +350,15 @@ void gw_dm_wrapper_failed_cb ( void *_job_id )
 
 		    gw_job_print(job,"DM",'E',"Wrapper failed:\n");
 		    gw_job_print(job,"DM",'E',"\tTotal time      : %i\n", total);		    
+		    
+    		/* ---------- We do not need to re-schedule this job --------- */
+    				    
+			if ( job->reschedule == GW_TRUE )
+			{
+			    job->reschedule = GW_FALSE;
+			    gw_dm_mad_job_del(&gw_dm.dm_mad[0],job->id);				
+			}
+					    		   
     		break;
   	
     	default:
@@ -371,14 +372,14 @@ void gw_dm_wrapper_failed_cb ( void *_job_id )
     /* ----------------------------------------------------------- */  
     
 	/* -------------- Free used slot from this host -------------- */
-    				    
-   	pthread_mutex_lock(&(job->history->host->mutex));
-
-	job->history->host->used_slots--;
-
-	pthread_mutex_unlock(&(job->history->host->mutex));
-
-	/* ----------------------------------------------------------- */
+	
+	if (job->history != NULL)
+	{
+		job->history->reason = GW_REASON_EXECUTION_ERROR;
+        gw_host_dec_uslots(job->history->host);
+	}		
+   	
+   	/* ----------------------------------------------------------- */
 
 	gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_EPILOG_FAIL", _job_id);
 

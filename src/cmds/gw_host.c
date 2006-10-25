@@ -156,7 +156,7 @@ int main(int argc, char **argv)
 
 	if (m)
 	{
-		rc = gw_client_match_job(job_id, &match_list, &num_records);
+		rc = gw_client_match_job(job_id, -1, &match_list, &num_records);
 		
     	if (rc == GW_RC_SUCCESS)
         {

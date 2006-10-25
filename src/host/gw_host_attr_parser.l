@@ -152,12 +152,9 @@ int gw_host_compute_rank(gw_host_t *host, int queue, char *rank)
 	int             rc;
 	int             pos;
 	
-	if ( host == NULL)
+	if (( host == NULL) || ( rank == NULL))
 		return 0;
 		
-    if ( rank == NULL) /*If not defined, all host will be ranked with nice*/
-    	return host->nice;
-
 	pthread_mutex_lock(&host_attr_mutex);
 	    			
 	str_buffer = yy_scan_string(rank);
@@ -181,10 +178,8 @@ int gw_host_compute_rank(gw_host_t *host, int queue, char *rank)
         	         host->host_id,
         	         rank);
         result = 0;
-    } 
-    else
-    	result += host->nice;
-    
+    }
+        
 	yy_delete_buffer(str_buffer);
 	
 	pthread_mutex_unlock(&host_attr_mutex);

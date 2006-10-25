@@ -31,6 +31,8 @@ typedef struct gw_tm_mad_s
     char *name;
     char *executable;
     char *argument;
+    
+    char *url;
 
     int  mad_tm_pipe;
     int  tm_mad_pipe;
@@ -41,11 +43,11 @@ typedef struct gw_tm_mad_s
 
 /* ---------------------------------------------------------------------------*/
     
-int gw_tm_mad_init(gw_tm_mad_t * tm_mad, 
-                   const char *  exe, 
-                   const char *  name,
-		           const char *  args,
-		           const char *  owner);
+int gw_tm_mad_init(gw_tm_mad_t *tm_mad,
+                   const char *exe,
+                   const char *name,
+		           const char *args,
+		           const char *owner);
 
 void gw_tm_mad_mkdir    (gw_tm_mad_t *mad, int xfr_id, const char *dir);
 

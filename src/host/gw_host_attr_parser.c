@@ -1263,7 +1263,7 @@ static int yy_get_next_buffer (void)
 
 		/* Read in more data. */
 		YY_INPUT( (&YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[number_to_move]),
-			(yy_n_chars), num_to_read );
+			(yy_n_chars), (size_t) num_to_read );
 
 		YY_CURRENT_BUFFER_LVALUE->yy_n_chars = (yy_n_chars);
 		}
@@ -2055,12 +2055,9 @@ int gw_host_compute_rank(gw_host_t *host, int queue, char *rank)
 	int             rc;
 	int             pos;
 	
-	if ( host == NULL)
+	if (( host == NULL) || ( rank == NULL))
 		return 0;
 		
-    if ( rank == NULL) /*If not defined, all host will be ranked with nice*/
-    	return host->nice;
-
 	pthread_mutex_lock(&host_attr_mutex);
 	    			
 	str_buffer = host_attr__scan_string(rank);
@@ -2084,10 +2081,8 @@ int gw_host_compute_rank(gw_host_t *host, int queue, char *rank)
         	         host->host_id,
         	         rank);
         result = 0;
-    } 
-    else
-    	result += host->nice;
-    
+    }
+        
 	host_attr__delete_buffer(str_buffer);
 	
 	pthread_mutex_unlock(&host_attr_mutex);

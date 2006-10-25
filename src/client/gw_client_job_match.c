@@ -34,7 +34,8 @@ void gw_client_disconnect(int socket);
 /* ------------------------------------------------------------------------- */
 /* ------------------------------------------------------------------------- */
 
-gw_return_code_t gw_client_match_job(int                 job_id, 
+gw_return_code_t gw_client_match_job(int                 job_id,
+                                     int                 array_id,
                                      gw_msg_match_t **   match_list, 
                                      int *               num_records)
 {   
@@ -51,8 +52,9 @@ gw_return_code_t gw_client_match_job(int                 job_id,
     /* 1.- Format msg     	      	      	      	      	      	     */
     /* ----------------------------------------------------------------- */
 
-	msg.msg_type   = GW_MSG_JOB_MATCH;
-	msg.job_id     = job_id;
+	msg.msg_type = GW_MSG_JOB_MATCH;
+	msg.job_id   = job_id;
+	msg.array_id = array_id;
 
 	pthread_mutex_lock(&(gw_client.mutex));
 	

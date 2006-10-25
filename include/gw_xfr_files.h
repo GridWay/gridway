@@ -36,6 +36,8 @@ typedef struct gw_xfr_s {
 	
 	gw_boolean_t done;
 	gw_boolean_t success;
+	
+	int          counter;
 
 } gw_xfr_t;
 

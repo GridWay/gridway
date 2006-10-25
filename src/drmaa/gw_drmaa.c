@@ -1128,14 +1128,18 @@ int drmaa_run_bulk_jobs(drmaa_job_ids_t **     jobids,
 	                                 GW_JOB_STATE_HOLD, 
 	                                 &array_id,
 	                                 &job_ids,
-	                                 NULL);
+	                                 NULL,
+	                                 start,
+	                                 incr);
 	else
 	    grc = gw_client_array_submit(jt_parse,
 	                                 total_jobs,
 	                                 GW_JOB_STATE_PENDING, 
 	                                 &array_id,
 	                                 &job_ids,
-	                                 NULL);
+	                                 NULL,
+	                                 start,
+	                                 incr);
 	                                 
 	pthread_mutex_unlock(&(jt->mutex));
 	                                     	    

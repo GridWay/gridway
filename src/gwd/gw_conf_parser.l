@@ -25,6 +25,7 @@
 
 void gcp_set_val_int(gw_conf_var_t var, int val);
 void init_mad_parser(int mad_index);
+void process_escaped_chars(char *str);
 
 char ***gcp_mads;
 
@@ -64,9 +65,6 @@ NUMBER_OF_ARRAYS        { gcp_var = NUMBER_OF_ARRAYS;      BEGIN var_int;}
 NUMBER_OF_JOBS          { gcp_var = NUMBER_OF_JOBS;        BEGIN var_int;}
 NUMBER_OF_HOSTS         { gcp_var = NUMBER_OF_HOSTS;       BEGIN var_int;}
 NUMBER_OF_USERS         { gcp_var = NUMBER_OF_USERS;       BEGIN var_int;}
-JOBS_PER_SCHED          { gcp_var = JOBS_PER_SCHED;        BEGIN var_int;}
-JOBS_PER_HOST 			{ gcp_var = JOBS_PER_HOST;         BEGIN var_int;}
-JOBS_PER_USER 			{ gcp_var = JOBS_PER_USER;         BEGIN var_int;}
 SCHEDULING_INTERVAL     { gcp_var = SCHEDULING_INTERVAL;   BEGIN var_int;}
 DISCOVERY_INTERVAL      { gcp_var = DISCOVERY_INTERVAL;    BEGIN var_int;}
 MONITORING_INTERVAL     { gcp_var = MONITORING_INTERVAL;   BEGIN var_int;}
@@ -92,15 +90,32 @@ DM_SCHED                { gcp_var = DM_SCHED; gcp_j = 0;   BEGIN var_sch;}
 <val_int>[0-9]+         { gcp_set_val_int(gcp_var, atoi(yytext));}
 
 <val_mad>[ \t]*(#.*)?\n { BEGIN INITIAL;}
-<val_mad>:              { gcp_j++;
-                          if (gcp_j >= gcp_max)
+<val_mad>[^:\n]*:       { if ( yytext[yyleng-2] == '\\' )
                           {
-                              gw_log_print("GW",'E',"gwd.conf: Parse error in MAD at line %i\n", yylineno);
-                              return -1;
+                            yymore();
+                          }
+                          else
+                          {
+                            if ( gcp_mads != NULL )
+                            {
+                                yytext[yyleng-1] = '\0';
+                                process_escaped_chars(yytext);
+                                gcp_mads[gcp_num][gcp_j] = strdup(yytext);
+                            }
+                            gcp_j++;
+                            if (gcp_j >= gcp_max)
+                            {
+                                gw_log_print("GW",'E',"gwd.conf: Parse error in MAD at line %i\n", yylineno);
+                                return -1;
+                            }
                           }
                         }
 <val_mad>[^:\n]*        { if ( gcp_mads != NULL )
-                            gcp_mads[gcp_num][gcp_j] = strdup(yytext);}
+                          {
+                            process_escaped_chars(yytext);
+                            gcp_mads[gcp_num][gcp_j] = strdup(yytext);
+                          }
+                        }
 
 <val_sch>[ \t]*(#.*)?\n { BEGIN INITIAL;}
 <val_sch>:              { gcp_j++;
@@ -137,41 +152,29 @@ void gcp_set_val_int(gw_conf_var_t var, int val)
             break;
 
         case MONITORING_INTERVAL:
-			gw_conf.monitoring_interval = val;
+            gw_conf.monitoring_interval = val;
             break;        
 
         case MAX_NUMBER_OF_CLIENTS:
             gw_conf.max_number_of_clients = val;
             break;        
         
-		case NUMBER_OF_ARRAYS:
-			gw_conf.number_of_arrays = val;
+        case NUMBER_OF_ARRAYS:
+            gw_conf.number_of_arrays = val;
             break;
 
         case NUMBER_OF_JOBS:
-			gw_conf.number_of_jobs = val;
+            gw_conf.number_of_jobs = val;
             break;
 
         case NUMBER_OF_HOSTS:
-			gw_conf.number_of_hosts = val;
+            gw_conf.number_of_hosts = val;
             break;
 
         case NUMBER_OF_USERS:
-			gw_conf.number_of_users = val;
+            gw_conf.number_of_users = val;
             break;
-            
-		case JOBS_PER_SCHED:
-			gw_conf.jobs_per_sched = val;
-            break;
-		
-		case JOBS_PER_HOST:
-			gw_conf.jobs_per_host = val;
-            break;
-
-		case JOBS_PER_USER:
-			gw_conf.jobs_per_user = val;
-            break;
-		
+            		
 		case POLL_INTERVAL:
 			gw_conf.poll_interval = val;
 			break;
@@ -224,6 +227,19 @@ void init_mad_parser(int mad_index)
         }
     }
     
+}
+
+void process_escaped_chars(char *str)
+{
+    int i, j;
+    
+    for (i = 0, j = 0; str[i] != '\0'; i++)
+    {
+        if ( str[i] != '\\' )
+            str[j++] = str[i];
+    }
+    
+    str[j] = '\0';
 }
 
 int gcp_wrap(void)

@@ -58,7 +58,7 @@ void gw_dm_migr_cancel ( void *_job_id )
 	{
 		job->history->stats[MIGRATION_START_TIME] = time(NULL);
         gw_job_set_state(job, GW_JOB_STATE_MIGR_CANCEL, GW_FALSE);
-
+        
         gw_am_trigger(gw_dm.em_am, "GW_EM_CANCEL", _job_id);
 	}
 	else

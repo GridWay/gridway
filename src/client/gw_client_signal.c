@@ -24,6 +24,7 @@
 #include "gw_rm_msg.h"
 #include "gw_rm.h"
 #include "gw_file_parser.h"
+#include "gw_job.h"
 
 extern gw_client_t gw_client;
 
@@ -168,37 +169,94 @@ gw_return_code_t gw_client_array_signal (int                array_id,
                                          gw_boolean_t       blocking)
 {
 	int i;
-	int error = 0;
+	int array_exists = 0;
 	gw_return_code_t rc;
 	gw_return_code_t frc;
 	
-	rc = gw_client_job_status_all( );
+	frc = GW_RC_SUCCESS;
+	rc  = gw_client_job_status_all( );
 
    	if (rc == GW_RC_SUCCESS)
     {
     	pthread_mutex_lock(&(gw_client.mutex));
     	
+    	/* First make a FAST kill */
 		for (i=0;i<gw_client.number_of_jobs;i++)
 			if (gw_client.job_pool[i] != NULL )
-				if (gw_client.job_pool[i]->array_id ==  array_id)
+				if (gw_client.job_pool[i]->array_id  ==  array_id)
 				{
-					pthread_mutex_unlock(&(gw_client.mutex));
+					switch(gw_client.job_pool[i]->job_state)
+					{
+                        case GW_JOB_STATE_INIT:						
+                        case GW_JOB_STATE_PENDING:
+                        case GW_JOB_STATE_HOLD:
+                        case GW_JOB_STATE_STOPPED:
+                        case GW_JOB_STATE_ZOMBIE:
+                        case GW_JOB_STATE_FAILED:
+						
+           					pthread_mutex_unlock(&(gw_client.mutex));
 					
-					rc = gw_client_job_signal (i, signal, blocking);
+				         	rc = gw_client_job_signal (i, signal, blocking);
 					
-					pthread_mutex_lock(&(gw_client.mutex));
+					        pthread_mutex_lock(&(gw_client.mutex));
 					
-					if ( rc != GW_RC_SUCCESS)
-		                frc = -1;
+         					if ( rc != GW_RC_SUCCESS)
+		                        frc = GW_RC_FAILED;
 		                
-		            error = 1;	
+		                    array_exists = 1;
+		                                       
+                            break;
+                            
+                         default:
+                            break;
+     				  }
 				}
 				
-		pthread_mutex_unlock(&(gw_client.mutex));
+    	/* kill the rest of the array */
+		for (i=0;i<gw_client.number_of_jobs;i++)
+			if (gw_client.job_pool[i] != NULL )
+				if (gw_client.job_pool[i]->array_id == array_id)
+				{
+					switch(gw_client.job_pool[i]->job_state)
+					{
+                        case GW_JOB_STATE_PROLOG:
+                        case GW_JOB_STATE_PRE_WRAPPER:
+                        case GW_JOB_STATE_WRAPPER:
+                        case GW_JOB_STATE_EPILOG:
+                        case GW_JOB_STATE_EPILOG_STD:
+                        case GW_JOB_STATE_EPILOG_RESTART:
+                        case GW_JOB_STATE_EPILOG_FAIL:
+                        case GW_JOB_STATE_STOP_CANCEL:
+                        case GW_JOB_STATE_STOP_EPILOG:
+                        case GW_JOB_STATE_KILL_CANCEL:
+                        case GW_JOB_STATE_KILL_EPILOG:
+                        case GW_JOB_STATE_MIGR_CANCEL:
+                        case GW_JOB_STATE_MIGR_PROLOG:
+                        case GW_JOB_STATE_MIGR_EPILOG:
+						
+           					pthread_mutex_unlock(&(gw_client.mutex));
+					
+				         	rc = gw_client_job_signal (i, signal, blocking);
+					
+					        pthread_mutex_lock(&(gw_client.mutex));
+					
+         					if ( rc != GW_RC_SUCCESS)
+		                        frc = GW_RC_FAILED;
+		                
+		                    array_exists = 1;		                                                
+                            
+                            break;
+                            
+                         default:
+                            break;
+     				  }
+				}
+				
+        pthread_mutex_unlock(&(gw_client.mutex));				
     }  
 	
-	if (error == 0)
-		rc = GW_RC_FAILED_BAD_ARRAY_ID;
+	if (array_exists == 0)
+		frc = GW_RC_FAILED_BAD_ARRAY_ID;
 		
 	return frc;
 }                                         

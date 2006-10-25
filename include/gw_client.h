@@ -166,7 +166,9 @@ gw_return_code_t gw_client_array_submit(char *         template,
                                         gw_job_state_t init_state,                                        
                                         int *          array_id, 
                                         int **         job_ids,
-                                        int *          deps);
+                                        int *          deps,
+                                        int            pstart,
+                                        int            pinc);
 
 /* -------------------------------------------------------------------------- */
 /* 2.- JOB STATUS ROUTINES                                                    */
@@ -417,7 +419,8 @@ gw_return_code_t gw_client_host_status_all( );
  *      - GW_RC_FAILED_BAD_JOB_ID job does not exist.
  */
 
-gw_return_code_t gw_client_match_job(int                 job_id, 
+gw_return_code_t gw_client_match_job(int                 job_id,
+                                     int                 array_id,
                                      gw_msg_match_t **   match_list, 
                                      int *               num_records);
 
@@ -432,9 +435,11 @@ gw_return_code_t gw_client_user_status(gw_msg_user_t **user_status, int *num_use
 /* 8.- ACCOUNTING ROUTINES                                                    */
 /* -------------------------------------------------------------------------- */
 #ifdef HAVE_LIBDB
-gw_return_code_t gw_client_user_accts(const char *user, gw_acct_t ***user_accts, int *num_users);
+gw_return_code_t gw_client_user_accts(const char *user, gw_acct_t ***user_accts, int *num_users, time_t from_time);
 
-gw_return_code_t gw_client_host_accts(const char *host, gw_acct_t ***host_accts, int *num_hosts);
+gw_return_code_t gw_client_host_accts(const char *host, gw_acct_t ***host_accts, int *num_hosts, time_t from_time);
+
+gw_return_code_t gw_client_host_and_user_accts(const char *host, const char *user, gw_acct_t ***host_accts, int *num_hosts, time_t from_time);
 #endif
 
 #endif

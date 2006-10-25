@@ -125,6 +125,7 @@ void gw_tm_epilog(void *_job_id)
 	    	}
 			else
 			{
+				gw_job_print(job,"TM",'W',"Cancelling copy of checkpoint files.\n");
 			  	gw_tm_mad_end(job->history->tm_mad, job->id);			  				
   				job->tm_state = GW_TM_STATE_CHECKPOINT_CANCEL;
 			}
@@ -137,6 +138,8 @@ void gw_tm_epilog(void *_job_id)
 				job->tm_state = GW_TM_STATE_EPILOG;	
 			  	gw_tm_mad_start(job->history->tm_mad, job->id);
 			}
+			else
+				gw_job_print(job,"TM",'I',"Copy of checkpoint files in progress. Starting epilog once it finish.\n");
 			break;
 		
 		default:
@@ -151,15 +154,25 @@ void gw_tm_epilog(void *_job_id)
 /* --------------------------------------------------------------- */
 /* --------------------------------------------------------------- */
 
-void gw_tm_checkpoint(void *_null)
+void gw_tm_timer(void *_null)
 {
-    int           i;
+    int           i,j;
     gw_job_t      *job;
     time_t        poll;
     time_t        poll_timeout;    
     static int    mark = 0;
-
-    mark = mark + 5;
+	char *        src_url;
+	char *        dst_url;
+	char          mode;
+	gw_xfrs_t *   xfrs;
+	
+	int           (*build_urls) (gw_job_t *   job, 
+                                 char *       src, 
+                                 char *       dst, 
+                                 char **      src_url,
+                                 char **      dst_url);
+	
+    mark = mark + GW_TM_TIMER_PERIOD;
     if ( mark >= 300 )
     {
         gw_log_print ("TM",'I',"-- MARK --\n");
@@ -199,7 +212,71 @@ void gw_tm_checkpoint(void *_null)
                 job->tm_state = GW_TM_STATE_CHECKPOINT;
             }
         }
-            
+        else if (job->tm_state  == GW_TM_STATE_PROLOG
+                   || job->tm_state == GW_TM_STATE_EPILOG 
+                   || job->tm_state == GW_TM_STATE_CHECKPOINT )
+        {
+        	
+        	switch (job->tm_state)
+        	{
+        		case GW_TM_STATE_PROLOG:
+        		    xfrs       = &(job->xfrs);
+        		    build_urls = &gw_tm_prolog_build_urls;
+        		    break;
+        		    
+        		case GW_TM_STATE_EPILOG:        		    
+        		    xfrs       = &(job->xfrs);
+        		    build_urls = &gw_tm_epilog_build_urls;
+        		    break;
+        		    
+        		case GW_TM_STATE_CHECKPOINT:        		    
+        		    xfrs       = &(job->chk_xfrs);
+        		    build_urls = &gw_tm_epilog_build_urls;
+        		    break;
+        		    
+        		 default:
+        		    break;
+        	}
+        		
+       	    for (j = 0; j< xfrs->number_of_xfrs ; j++)
+       	    {
+       	        if ( xfrs->xfrs[j].counter != -1 )
+       	        {
+                    xfrs->xfrs[j].counter--;
+                    
+                    if ( xfrs->xfrs[j].counter == 0 )
+                    {
+                        xfrs->xfrs[j].counter = -1;
+                        
+                        if (job->tm_state == GW_TM_STATE_PROLOG)
+                        {
+                        	mode = xfrs->xfrs[j].mode;
+                        }
+                        else
+                        {
+                        	mode = '-';
+                        }                        	
+                        	
+                        build_urls(job,
+                                xfrs->xfrs[j].src_url, 
+		                        xfrs->xfrs[j].dst_url, 
+		                        &src_url,
+		                        &dst_url);                        	
+                   
+			            gw_tm_mad_cp(job->history->tm_mad, 
+			                job->id, 
+			                j, 
+			                mode,
+			                src_url,
+			                dst_url);
+
+      			        free(src_url);
+			            free(dst_url);                        
+                    }
+       	        }
+       	    }
+        }
+        
         pthread_mutex_unlock(&(job->mutex));
     }
 }

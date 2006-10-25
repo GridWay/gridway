@@ -20,6 +20,7 @@
 #include "gw_log.h"
 #include "gw_conf.h"
 #include "gw_user_pool.h"
+#include "gw_dm.h"
 
 #ifdef HAVE_LIBDB
 #include "gw_acct.h"
@@ -433,8 +434,9 @@ int gw_job_pool_allocate_by_id (int job_id)
 
 void gw_job_pool_free (int job_id)
 {
-	gw_job_t *job;
-	
+	gw_job_t *            job;
+    gw_migration_reason_t reason;
+    
 	if ( ( job_id >= 0 ) && ( job_id < gw_conf.number_of_jobs ) )
     {
     	pthread_mutex_lock(&(gw_job_pool.mutex));
@@ -444,6 +446,24 @@ void gw_job_pool_free (int job_id)
         if ( job != NULL )
         {
         	pthread_mutex_lock(&(job->mutex));
+        	
+        	if ( job->history == NULL )
+        	    reason = GW_REASON_NONE;
+        	else
+        	    reason = job->history->reason;
+
+        	if (job->job_state  == GW_JOB_STATE_PENDING)
+        	{
+        		if ((reason ==GW_REASON_SELF_MIGRATION)||(job->array_id ==-1))
+            		gw_dm_mad_job_del(&gw_dm.dm_mad[0],job->id);
+        		else
+            		gw_dm_mad_task_del(&gw_dm.dm_mad[0],job->array_id);
+        	}
+        	else if ((job->job_state  == GW_JOB_STATE_WRAPPER)&&
+        	         (job->reschedule == GW_TRUE))
+            {
+        		gw_dm_mad_job_del(&gw_dm.dm_mad[0],job->id);
+            }       	
 
 			if ( job->exit_time == 0 )
 			{
@@ -460,7 +480,6 @@ void gw_job_pool_free (int job_id)
 #ifdef HAVE_LIBDB			
 			gw_acct_write_job(job);
 #endif
-			
             gw_user_pool_dec_jobs(job->user_id);        	         
 
 	        gw_job_pool.number_of_jobs--;

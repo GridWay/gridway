@@ -76,10 +76,6 @@ int  gw_conf_init (gw_boolean_t multiuser)
     gw_conf.discovery_interval  = GW_DISCOVERY_INTERVAL_DEFAULT;
     gw_conf.monitoring_interval = GW_MONITORING_INTERVAL_DEFAULT;
     gw_conf.poll_interval       = GW_POLL_INTERVAL_DEFAULT;
-
-    gw_conf.jobs_per_sched = GW_MAX_JOBS_PER_SCHED;
-    gw_conf.jobs_per_host  = GW_MAX_JOBS_PER_HOST;
-    gw_conf.jobs_per_user  = GW_MAX_JOBS_PER_USER;
 	
     gw_conf.gwd_port = GW_GWD_PORT_DEFAULT;
     gw_conf.max_number_of_clients = GW_MAX_NUMBER_OF_CLIENTS_DEFAULT;
@@ -150,9 +146,6 @@ int gw_loadconf ()
     gw_log_print("GW",'I',"  NUMBER_OF_JOBS                   : %i\n",gw_conf.number_of_jobs);
     gw_log_print("GW",'I',"  NUMBER_OF_HOSTS                  : %i\n",gw_conf.number_of_hosts);
     gw_log_print("GW",'I',"  NUMBER_OF_USERS                  : %i\n",gw_conf.number_of_users);
-    gw_log_print("GW",'I',"  JOBS_PER_SCHED                   : %i\n",gw_conf.jobs_per_sched);
-    gw_log_print("GW",'I',"  JOBS_PER_HOST                    : %i\n",gw_conf.jobs_per_host);
-    gw_log_print("GW",'I',"  JOBS_PER_USER                    : %i\n",gw_conf.jobs_per_user);
     gw_log_print("GW",'I',"  SCHEDULING_INTERVAL              : %i\n",gw_conf.scheduling_interval);
     gw_log_print("GW",'I',"  DISCOVERY_INTERVAL               : %i\n",gw_conf.discovery_interval);
     gw_log_print("GW",'I',"  MONITORING_INTERVAL              : %i\n",gw_conf.monitoring_interval);

@@ -136,8 +136,6 @@ void gw_tm_checkpoint_cp(gw_job_t * job)
 
 void gw_tm_checkpoint_cp_cb(gw_job_t * job, int cp_xfr_id, gw_boolean_t failure)
 {
-	char *       src_url;
-	char *       dst_url;
 	int          pend_xfrs;
 		
 	if (job->history == NULL) 
@@ -154,6 +152,7 @@ void gw_tm_checkpoint_cp_cb(gw_job_t * job, int cp_xfr_id, gw_boolean_t failure)
 				 
     	job->chk_xfrs.xfrs[cp_xfr_id].done    = GW_TRUE;
     	job->chk_xfrs.xfrs[cp_xfr_id].success = GW_TRUE;
+    	job->chk_xfrs.xfrs[cp_xfr_id].counter = -1;
     }
 	else
 	{
@@ -166,28 +165,17 @@ void gw_tm_checkpoint_cp_cb(gw_job_t * job, int cp_xfr_id, gw_boolean_t failure)
 			
     		job->chk_xfrs.xfrs[cp_xfr_id].done    = GW_TRUE;
 	    	job->chk_xfrs.xfrs[cp_xfr_id].success = GW_FALSE;
+	    	job->chk_xfrs.xfrs[cp_xfr_id].counter = -1;	    	
 		}
 	    else
 	    {
-			gw_tm_epilog_build_urls(job, 
-		         job->chk_xfrs.xfrs[cp_xfr_id].src_url, 
-		         job->chk_xfrs.xfrs[cp_xfr_id].dst_url, 
-		         &src_url,
-		         &dst_url);  
-    
-			gw_job_print(job,"TM",'I',"\tRetrying copy of file %s.\n",
-				job->chk_xfrs.xfrs[cp_xfr_id].src_url);
-		
-			gw_tm_mad_cp(job->history->tm_mad, 
-		             job->id, 
-		             cp_xfr_id,
-		             '-', 
-		             src_url, 
-		             dst_url);    	
-		
-			free(src_url);
-			free(dst_url);
-			
+			job->chk_xfrs.xfrs[cp_xfr_id].counter = job->template.number_of_retries 
+			    - job->chk_xfrs.xfrs[cp_xfr_id].tries;
+
+			gw_job_print(job,"TM",'I',"\tRetrying copy of restart file %s in ~%i seconds.\n",
+				job->chk_xfrs.xfrs[cp_xfr_id].src_url, 
+				job->chk_xfrs.xfrs[cp_xfr_id].counter * GW_TM_TIMER_PERIOD);
+				
 			return;
 		}
 	}	

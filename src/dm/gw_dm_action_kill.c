@@ -113,6 +113,12 @@ void gw_dm_kill (void *_job_id)
             gw_log_print("DM",'I',"Killing job %i.\n", job_id);
             
 			gw_job_set_state(job, GW_JOB_STATE_KILL_CANCEL, GW_FALSE);
+			    				    
+			if ( job->reschedule == GW_TRUE )
+			{
+			    job->reschedule = GW_FALSE;
+			    gw_dm_mad_job_del(&gw_dm.dm_mad[0],job->id);				
+			}			
 			
 			gw_am_trigger(gw_dm.em_am, "GW_EM_CANCEL", _job_id);
 			
@@ -173,20 +179,16 @@ void gw_dm_kill_hard (void *_job_id)
     {
     	
 		case GW_JOB_STATE_MIGR_PROLOG:
-		case GW_JOB_STATE_MIGR_EPILOG:		
-
-			pthread_mutex_lock(&(job->history->next->host->mutex));		
-			job->history->next->host->running_jobs--;    		
-			pthread_mutex_unlock(&(job->history->next->host->mutex));
-			
+		case GW_JOB_STATE_MIGR_EPILOG:				
+                        
+            gw_host_dec_rjobs(job->history->next->host);
+                        			
 			job->history->next->stats[EXIT_TIME] = time(NULL);
 						    	
     	case GW_JOB_STATE_PROLOG:
-			
-			pthread_mutex_lock(&(job->history->host->mutex));    	
-    		job->history->host->used_slots--;    		    			
-			pthread_mutex_unlock(&(job->history->host->mutex));
-			      
+            
+            gw_host_dec_uslots(job->history->host);
+            			      
 		case GW_JOB_STATE_EPILOG:
 		case GW_JOB_STATE_EPILOG_STD:
 		case GW_JOB_STATE_EPILOG_RESTART:
@@ -195,12 +197,10 @@ void gw_dm_kill_hard (void *_job_id)
 			job->history->reason = GW_REASON_KILL;
 			
 		case GW_JOB_STATE_STOP_EPILOG:
-		case GW_JOB_STATE_KILL_EPILOG:
-			
-			pthread_mutex_lock(&(job->history->host->mutex));    	
-			job->history->host->running_jobs--;									
-			pthread_mutex_unlock(&(job->history->host->mutex));
-						
+		case GW_JOB_STATE_KILL_EPILOG:		
+            
+            gw_host_dec_rjobs(job->history->host);
+                        						
 			job->exit_time = time(NULL);
 			job->history->stats[EXIT_TIME] = time(NULL);
 						
@@ -219,11 +219,8 @@ void gw_dm_kill_hard (void *_job_id)
 
 			job->history->reason = GW_REASON_KILL;
 			
-			pthread_mutex_lock(&(job->history->host->mutex));
-			job->history->host->used_slots--;
-			job->history->host->running_jobs--;
-			pthread_mutex_unlock(&(job->history->host->mutex));
-						
+			gw_host_dec_slots(job->history->host);
+			            
 			job->exit_time = time(NULL);		
 			job->history->stats[EXIT_TIME] = time(NULL);
 						
@@ -239,23 +236,17 @@ void gw_dm_kill_hard (void *_job_id)
 
 		case GW_JOB_STATE_MIGR_CANCEL:
 		
-			pthread_mutex_lock(&(job->history->next->host->mutex));		
-			job->history->next->host->used_slots--;
-			job->history->next->host->running_jobs--;
-			pthread_mutex_unlock(&(job->history->next->host->mutex));		
-
+     		gw_host_dec_slots(job->history->next->host);
+            
 			job->history->next->stats[EXIT_TIME] = time(NULL);
 			
 			job->history->reason = GW_REASON_KILL;
 			
    		case GW_JOB_STATE_STOP_CANCEL:
 		case GW_JOB_STATE_KILL_CANCEL:
-						
-			pthread_mutex_lock(&(job->history->host->mutex));
-			job->history->host->used_slots--;
-			job->history->host->running_jobs--;
-			pthread_mutex_unlock(&(job->history->host->mutex));
 		
+    		gw_host_dec_slots(job->history->host);
+		            
 			job->exit_time = time(NULL);		
 			job->history->stats[EXIT_TIME] = time(NULL);
 						

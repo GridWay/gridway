@@ -26,6 +26,7 @@
 #include "gw_conf.h"
 #include "gw_log.h"
 #include "gw_host_pool.h"
+#include "gw_dm.h"
 
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
@@ -190,6 +191,14 @@ void gw_host_update(int host_id, char *attrs)
     }
 
     host->state = GW_HOST_STATE_MONITORED;
+    
+    /* Notify the scheduler */
+    
+    gw_dm_mad_host_monitor(&gw_dm.dm_mad[0],
+                           host->host_id,
+                           host->used_slots,
+                           host->running_jobs,
+                           host->hostname);
 
     pthread_mutex_unlock(&(host->mutex));
 }
@@ -230,6 +239,140 @@ void gw_host_clear_dynamic_info(int host_id)
 
 /*----------------------------------------------------------------------------*/
 
+inline void gw_host_dec_rjobs(gw_host_t *host)
+{
+    pthread_mutex_lock(&(host->mutex));			
+
+	host->running_jobs--;
+			
+    gw_dm_mad_host_monitor(&gw_dm.dm_mad[0],
+                           host->host_id,
+                           host->used_slots,
+                           host->running_jobs,
+                           host->hostname);
+                                   
+	pthread_mutex_unlock(&(host->mutex));
+}
+
+/*----------------------------------------------------------------------------*/
+
+inline void gw_host_dec_uslots(gw_host_t *host)
+{
+    pthread_mutex_lock(&(host->mutex));			
+
+	host->used_slots--;
+			
+    gw_dm_mad_host_monitor(&gw_dm.dm_mad[0],
+                           host->host_id,
+                           host->used_slots,
+                           host->running_jobs,
+                           host->hostname);
+                                   
+	pthread_mutex_unlock(&(host->mutex));
+}
+
+/*----------------------------------------------------------------------------*/
+
+inline void gw_host_dec_slots(gw_host_t *host)
+{
+    pthread_mutex_lock(&(host->mutex));			
+
+	host->used_slots--;
+	
+	host->running_jobs--;
+				
+    gw_dm_mad_host_monitor(&gw_dm.dm_mad[0],
+                           host->host_id,
+                           host->used_slots,
+                           host->running_jobs,
+                           host->hostname);
+                                   
+	pthread_mutex_unlock(&(host->mutex));
+}
+
+/*----------------------------------------------------------------------------*/
+
+inline void gw_host_inc_rjobs(gw_host_t *host)
+{
+    pthread_mutex_lock(&(host->mutex));			
+
+	host->running_jobs++;			
+			
+    gw_dm_mad_host_monitor(&gw_dm.dm_mad[0],
+                           host->host_id,
+                           host->used_slots,
+                           host->running_jobs,
+                           host->hostname);
+                                   
+	pthread_mutex_unlock(&(host->mutex));
+}
+
+/*----------------------------------------------------------------------------*/
+
+
+inline void gw_host_inc_uslots(gw_host_t *host)
+{
+    pthread_mutex_lock(&(host->mutex));			
+
+	host->used_slots++;
+			
+    gw_dm_mad_host_monitor(&gw_dm.dm_mad[0],
+                           host->host_id,
+                           host->used_slots,
+                           host->running_jobs,
+                           host->hostname);
+                                   
+	pthread_mutex_unlock(&(host->mutex));
+}
+
+/*----------------------------------------------------------------------------*/
+
+inline void gw_host_inc_slots(gw_host_t *host)
+{
+    pthread_mutex_lock(&(host->mutex));			
+
+	host->used_slots++;
+	
+	host->running_jobs++;
+				
+    gw_dm_mad_host_monitor(&gw_dm.dm_mad[0],
+                           host->host_id,
+                           host->used_slots,
+                           host->running_jobs,
+                           host->hostname);
+                                   
+	pthread_mutex_unlock(&(host->mutex));
+}
+
+/*----------------------------------------------------------------------------*/
+
+inline void gw_host_inc_slots_nb(gw_host_t *host)
+{
+	host->used_slots++;
+	
+	host->running_jobs++;
+				
+    gw_dm_mad_host_monitor(&gw_dm.dm_mad[0],
+                           host->host_id,
+                           host->used_slots,
+                           host->running_jobs,
+                           host->hostname);
+}
+
+/*----------------------------------------------------------------------------*/
+
+inline void gw_host_inc_rjobs_nb(gw_host_t *host)
+{
+	host->running_jobs++;
+				
+    gw_dm_mad_host_monitor(&gw_dm.dm_mad[0],
+                           host->host_id,
+                           host->used_slots,
+                           host->running_jobs,
+                           host->hostname);
+}
+
+/*----------------------------------------------------------------------------*/
 void gw_host_print(FILE *fd, gw_host_t *host)
 {
     int i;

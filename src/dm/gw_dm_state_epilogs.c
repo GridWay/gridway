@@ -554,14 +554,10 @@ void gw_dm_epilog_done_cb ( void *_job_id )
     		gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_ZOMBIE", _job_id);
 			break;
     		
-    	case GW_JOB_STATE_MIGR_EPILOG:   	    				    
+    	case GW_JOB_STATE_MIGR_EPILOG:		    
 			gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_WRAPPER", _job_id);
 
-		    /* ----- Update running jobs on previous host ---- */
-	    	pthread_mutex_lock(&(job->history->next->host->mutex));			
-			job->history->next->host->running_jobs--;			
-			pthread_mutex_unlock(&(job->history->next->host->mutex));
-		    /* ----------------------------------------------- */
+		    gw_host_dec_rjobs(job->history->next->host);		    
     		break;
     	
     	case GW_JOB_STATE_STOP_EPILOG: 			
@@ -685,14 +681,15 @@ void gw_dm_epilog_failed_cb ( void *_job_id )
 
     switch (job->job_state)
     {
-    	
     	case GW_JOB_STATE_EPILOG:			
-		case GW_JOB_STATE_EPILOG_FAIL:		
-			if (job->template.reschedule_on_failure == GW_TRUE)
-				gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_PENDING", _job_id);
-		    else
-				gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_FAILED", _job_id);
-			break;
+	case GW_JOB_STATE_EPILOG_FAIL:		
+            job->history->reason = GW_REASON_EXECUTION_ERROR;
+
+            if (job->template.reschedule_on_failure == GW_TRUE)
+		gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_PENDING", _job_id);
+	    else
+		gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_FAILED", _job_id);
+            break;
 
     	case GW_JOB_STATE_KILL_EPILOG:    	    		
     		gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_ZOMBIE", _job_id);
@@ -701,11 +698,7 @@ void gw_dm_epilog_failed_cb ( void *_job_id )
     	case GW_JOB_STATE_MIGR_EPILOG:   	    				    
 			gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_WRAPPER", _job_id);
 
-		    /* ----- Update running jobs on previous host ---- */
-	    	pthread_mutex_lock(&(job->history->next->host->mutex));			
-			job->history->next->host->running_jobs--;			
-			pthread_mutex_unlock(&(job->history->next->host->mutex));
-		    /* ----------------------------------------------- */
+		    gw_host_dec_rjobs(job->history->next->host);		    
     		break;
     	
     	case GW_JOB_STATE_STOP_EPILOG: 			
@@ -902,8 +895,7 @@ int gw_dm_epilog_parse_wrapper_std(gw_job_t *job)
 
     snprintf(stdout_wrapper,sizeof(char)*512,"%s/stdout.wrapper.%i",
                         job->directory, job->restarted);
-                        
-                       
+
     rc = gw_parse_file(stdout_wrapper, EXIT_STATUS, &exit_code);
 
     if ( ( rc != -1) && ( exit_code != NULL ) )
@@ -934,7 +926,7 @@ int gw_dm_epilog_parse_wrapper_std(gw_job_t *job)
 		            {
 		            	gw_job_print(job,"DM",'E',"Could not find new rank.\n");
 		            	free(new_reqs);
-		            }
+		            }		            
 				}
 		        else
 	            	gw_job_print(job, "DM",'E',"Could not find new requirements.\n");
@@ -949,6 +941,7 @@ int gw_dm_epilog_parse_wrapper_std(gw_job_t *job)
                         
                 job->history->reason = GW_REASON_PERFORMANCE;
                 rt = 1;
+
                 break;
                     
 			default:
@@ -959,7 +952,7 @@ int gw_dm_epilog_parse_wrapper_std(gw_job_t *job)
                 
         free (exit_code);
 	}
-	else 
+	else
     {
     	if ( rc == -1 )
         	gw_job_print(job,"DM",'E',"Unable to open wrapper stdout %s.\n",strerror(errno));

@@ -106,13 +106,16 @@ typedef struct gw_msg_s
 	
     char owner[GW_MSG_STRING_SHORT];
 
-	int	init_state;	
+	int	      init_state;	
     gw_template_t jt;
 
 	int job_id;
     int array_id;	
     int number_of_tasks;
     int exit_code;
+    
+    int pstart;
+    int pinc;
     
 } gw_msg_t;   
 
@@ -260,6 +263,7 @@ typedef struct gw_msg_match_s
 	
 	int              host_id;
 	int              job_id;
+	int              nice;
 
 	gw_boolean_t     matched;
 

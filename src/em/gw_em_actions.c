@@ -79,6 +79,7 @@ void gw_em_submit(void *_job_id)
     /* ----------------------------------------------------------- */  
 
     job->em_state = GW_EM_STATE_INIT;
+    job->history->counter = -1;    
 
 	if ( job->job_state == GW_JOB_STATE_PRE_WRAPPER )
 	{
@@ -136,7 +137,6 @@ void gw_em_submit(void *_job_id)
     job->history->stats[ACTIVE_TIME]          = 0;
 
     job->history->tries++;
-    job->history->polls++;
         
     /* -------------------------------------------------------------------- */
     
@@ -220,16 +220,17 @@ void gw_em_cancel(void *_job_id)
 /* -------------------------------------------------------------------------- */
 
 
-void gw_em_poll()
+void gw_em_timer()
 {
     int i;
     gw_job_t      *job;
     time_t        poll, poll_interval;
 	static int mark = 0;
+	int *_job_id;
 
     poll_interval = gw_conf.poll_interval;
     	
-	mark = mark + poll_interval;
+	mark = mark + GW_EM_TIMER_PERIOD;
 	if ( mark >= 300 )
 	{
 	    gw_log_print("EM",'I',"-- MARK --\n");
@@ -241,36 +242,53 @@ void gw_em_poll()
         job = gw_job_pool_get(i, GW_TRUE);
         
         if ( job != NULL )
-        {                  
-            if (((job->job_state == GW_JOB_STATE_PRE_WRAPPER )||
-                 (job->job_state == GW_JOB_STATE_WRAPPER)       ) &&
-                 (issubmitted(job->em_state)))
+        {   
+			if ( job->history == NULL )
+        	{
+	        	pthread_mutex_unlock(&(job->mutex));
+	        	continue;
+        	}
+        		        	               
+        	if ( (job->job_state == GW_JOB_STATE_PRE_WRAPPER) 
+                 || (job->job_state == GW_JOB_STATE_WRAPPER))
             {
-        		if ( job->history == NULL )
-        		{
-                	gw_log_print("EM",'E',"History of job %i no longer exists\n",
-                        i);
-	        		pthread_mutex_unlock(&(job->mutex));
-	        		continue;
-        		}
-        	                  	                
-                poll = time(NULL) - job->last_poll_time;
+            	if (issubmitted(job->em_state))
+            	{
+                    poll = time(NULL) - job->last_poll_time;
                 
-                if ( poll >= poll_interval )
-                {
-                    gw_log_print ("EM",'I',"Poll timeout of job %i expired. Checking execution state.\n",
-                            i);
+                    if ( poll >= poll_interval )
+                    {
+                        gw_log_print ("EM",'I',"Poll timeout of job %i expired."
+                            " Checking execution state.\n", i);
                                                      
-                    gw_em_mad_poll(job->history->em_mad, i);
+                        gw_em_mad_poll(job->history->em_mad, i);
                     
-                    job->last_poll_time = time(NULL);
-                }
+                        job->last_poll_time = time(NULL);
+                    }            		
+            	}
+            	else if ((job->em_state == GW_EM_STATE_FAILED)
+               	             && (job->history->counter != -1))
+            	{
+            		job->history->counter--;
+            		
+            		if (job->history->counter == 0)
+            		{
+            			job->history->counter = -1;
+            			
+            		    _job_id    = (int *) malloc (sizeof(int));
+            		    *(_job_id) = i;
+            		    
+            		    
+            		    gw_am_trigger(&(gw_em.am),"GW_EM_SUBMIT", _job_id);
+            		}
+            	}            	            	            	
             }
             
-            pthread_mutex_unlock(&(job->mutex));
-        }                
+            pthread_mutex_unlock(&(job->mutex));            
+        }
     }
 }
+
 /* ------------------------------------------------------------------------- */
 /* ------------------------------------------------------------------------- */
 /* ------------------------------------------------------------------------- */

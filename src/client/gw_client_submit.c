@@ -66,7 +66,9 @@ gw_return_code_t gw_client_job_submit(char *         template,
     
     msg.init_state = init_state;	     
   	msg.msg_type   = GW_MSG_SUBMIT;  	
-
+  	msg.pinc       = 0;
+  	msg.pstart     = 0;
+  	
 	rc = gw_template_init(&(msg.jt), template);
 	if ( rc != 0 )
 		return GW_RC_FAILED_JT;
@@ -161,7 +163,9 @@ gw_return_code_t gw_client_array_submit(char *         template,
                                         gw_job_state_t init_state,                                        
                                         int *          array_id, 
                                         int **         job_ids,
-                                        int *          deps)
+                                        int *          deps,
+                                        int            pstart,
+                                        int            pinc)
 {
     gw_msg_t  msg;          
     int       i;
@@ -202,6 +206,8 @@ gw_return_code_t gw_client_array_submit(char *         template,
   	msg.msg_type        = GW_MSG_SUBMIT_ARRAY;
   	msg.init_state      = init_state;
   	msg.number_of_tasks = tasks;
+  	msg.pinc            = pinc;
+  	msg.pstart          = pstart;
 
 	rc = gw_template_init(&(msg.jt), template);
 	if ( rc != 0 )

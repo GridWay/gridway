@@ -49,14 +49,16 @@ LDOPTIONS = -shared
 #------------------------------------------------------------------------------
 # DB4_LD_PATH      = 
 # DB4_INCLUDE_PATH =
-# DB4_LIB          = -ldb
-# DB4_FLAGS        = -DHAVE_LIBDB
+DB4_LIB          = -ldb
+DB4_FLAGS        = -DHAVE_LIBDB
+
 
 # Compilation Options
+# DEBUG_FLAGS  = -DGWIMDEBUG -DGWJOBDEBUG -DGWHOSTDEBUG -DGWEMDEBUG -DGWDMDEBUG  -DGWTMDEBUG -DGWUSERDEBUG -DGWSCHEDDEBUG 
 LD_FLAGS       =  $(DB4_LD_PATH)
 LIBS           = -lpthread $(LIBS_SUNOS) $(DB4_LIB)
 LIBS_CMD       = -lpthread $(LIBS_SUNOS)
-CFLAGS         = -Wall -g $(CFLAGS_SUNOS) $(DB4_FLAGS)
+CFLAGS         = -Wall -g $(CFLAGS_SUNOS) $(DB4_FLAGS) $(DEBUG_FLAGS)
 INCLUDE_FLAGS  = -I$(INCLUDE_DIR) -I${JAVA_HOME}/include -I${JAVA_HOME}/include/$(SYSYTEM) $(DB4_INCLUDE_PATH)
 
 # Globus related variables
@@ -228,6 +230,11 @@ UM_OBJ = $(UM)/gw_um.o \
         $(UM)/gw_user.o \
         $(UM)/gw_user_pool.o
 
+SCHED_OBJ = $(SCHED)/gw_scheduler_common.o \
+          $(SCHED)/gw_scheduler_hosts.o \
+          $(SCHED)/gw_scheduler_jobs.o \
+          $(SCHED)/gw_scheduler_users.o
+          
 DB_OBJ = $(DB)/gw_acct.o
 
 GWD_LEX = $(GWD)/gw_conf_parser.c
@@ -245,6 +252,8 @@ TM_MAD_OBJ = $(TM_MAD)/gw_tm_ftp_mad.o \
         $(TM_MAD)/gw_tm_ftp_transfer.o \
         $(TM_MAD)/gw_tm_ftp_xfr_pool.o
 
+TM_MAD_DUMMY_OBJ = $(TM_MAD)/gw_tm_dummy_mad.o
+        
 IM_MAD_MDS4_OBJ = $(IM_MAD)/Host.class \
         $(IM_MAD)/Mds4QueryParser.class \
         $(IM_MAD)/Queue.class
@@ -309,7 +318,7 @@ mads: scheds em_mads tm_mads im_mads
 
 scheds: bin/gw_flood_scheduler
 em_mads: bin/gw_em_mad_ws bin/gw_em_mad_prews
-tm_mads: bin/gw_tm_mad_ftp bin/gw_tm_mad_rft
+tm_mads: bin/gw_tm_mad_ftp bin/gw_tm_mad_rft bin/gw_tm_mad_dummy
 im_mads: bin/gw_im_mad_static bin/gw_im_mad_mds2 bin/gw_im_mad_mds2_glue bin/gw_im_mad_mds4
 
 #------- DRMAA LIB -------
@@ -379,9 +388,9 @@ bin/gwacct: $(HEADERS) $(CMDS)/gw_acct.o $(CMDS)/gw_cmds_common.o \
 # ------ SCHEDULER RULE
 
 bin/gw_flood_scheduler: $(SCHED)/gw_flood_scheduler.o $(CLIENT_OBJ) \
-	 $(COMMON)/gw_common.o $(COMMON)/gw_file_parser.o $(SCHED)/gw_scheduler_common.o
+	 $(COMMON)/gw_common.o $(COMMON)/gw_file_parser.o $(SCHED_OBJ) $(CLIENT_ACCT_OBJ) 
 	gcc	$(CFLAGS) -o bin/gw_flood_scheduler $(SCHED)/gw_flood_scheduler.o \
-        $(COMMON_OBJ) $(CLIENT_OBJ) $(LIBS_CMD) $(SCHED)/gw_scheduler_common.o
+        $(COMMON_OBJ) $(CLIENT_OBJ) $(LIBS_CMD) $(SCHED_OBJ) $(DB_OBJ) -lm $(LD_FLAGS) $(LIBS)
 	chmod 755 bin/gw_flood_scheduler
 
 # ------ PRE-WS MAD RULES
@@ -397,6 +406,12 @@ bin/gw_tm_mad_ftp: $(TM_MAD_OBJ)
         $(TM_MAD_OBJ) $(GLD_FLAGS) $(GLIBS)
 	cp -f $(TM_MAD)/gw_tm_mad_ftp.sh bin/gw_tm_mad_ftp
 	chmod 755 bin/gw_tm_mad_ftp bin/gw_tm_mad_ftp.bin
+
+bin/gw_tm_mad_dummy: $(TM_MAD_DUMMY_OBJ)
+	$(GlCC) $(GCFLAGS) $(GINCLUDE_FLAGS) -o bin/gw_tm_mad_dummy.bin \
+        $(GLD_FLAGS) $(GLIBS) $(TM_MAD_DUMMY_OBJ)
+	cp -f $(TM_MAD)/gw_tm_mad_dummy.sh bin/gw_tm_mad_dummy
+	chmod 755 bin/gw_tm_mad_dummy bin/gw_tm_mad_dummy.bin
 
 # ------ WS MAD RULES
         
@@ -465,10 +480,11 @@ clean:
 	@rm -f $(COBJS) $(CLIENT_OBJ) $(CLIENT_ACCT_OBJ) $(CMDS_OBJ) $(GWD_OBJ) \
 	$(EM_MAD_PREWS_OBJ) $(TM_MAD_OBJ) $(IM_MAD_MDS4_OBJ) $(TM_MAD_RFT_OBJ) \
 	$(DRMAA_OBJS) $(DRMAAJNI_OBJS) $(EM_MAD)/*.class $(SCHED)/*.o $(DRMAA_JAVA)/*.class \
-	bin/*.class bin/core* var/core* bin/gw* lib/drmaa.jar lib/libdrmaa.so lib/libDrmaaJNI.so
+	bin/*.class bin/core* var/core* bin/gw* lib/drmaa.jar lib/libdrmaa.so lib/libDrmaaJNI.so \
+	$(IM_MAD)/Mds4QueryParser*.class $(TM_MAD_DUMMY_OBJ) $(SCHED_OBJ)
 
 clean_all: clean
-	@rm -fr var/[0-9]* var/.search* var/.lock var/gwd.* var/globus-gw.log
+	@rm -fr var/[0-9]* var/.search* var/.lock var/gwd.* var/globus-gw.log var/sched.log
 		
 clean_parsers:
 	@rm -f $(HOST)/gw_host_reqs_syntax.h $(HOST)/gw_host_update_syntax.h $(HOST)/gw_host_rank_syntax.h \

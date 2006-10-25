@@ -21,4 +21,4 @@ fi
 
 . $GLOBUS_LOCATION/etc/globus-user-env.sh
 
-nice -n $PRIORITY $GW_LOCATION/bin/gw_em_mad_prews.bin $*
+nice -n $PRIORITY $GW_LOCATION/bin/gw_tm_mad_dummy.bin $*

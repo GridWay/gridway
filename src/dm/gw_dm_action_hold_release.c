@@ -27,9 +27,10 @@
 
 void gw_dm_hold (void *_job_id)
 {
-    gw_job_t *   job;
-    int          job_id;
-    
+    gw_job_t *            job;
+    int                   job_id;
+    gw_migration_reason_t reason;
+        
 	/* ----------------------------------------------------------- */  
     /* 0.- Get job pointer                                         */
     /* ----------------------------------------------------------- */  
@@ -57,7 +58,6 @@ void gw_dm_hold (void *_job_id)
 
     switch (job->job_state)
     {
-		case GW_JOB_STATE_INIT:
 		case GW_JOB_STATE_PENDING:
 	        
 	        gw_job_set_state(job, GW_JOB_STATE_HOLD, GW_FALSE);
@@ -65,6 +65,17 @@ void gw_dm_hold (void *_job_id)
             gw_log_print("DM",'I',"Job %i held.\n", job_id);        
             
             gw_am_trigger(gw_dm.rm_am,"GW_RM_HOLD_SUCCESS", _job_id);
+            
+            if ( job->history == NULL )
+        	    reason = GW_REASON_NONE;
+        	else
+        	    reason = job->history->reason;
+
+       		if ((reason ==GW_REASON_SELF_MIGRATION)||(job->array_id ==-1))
+           		gw_dm_mad_job_del(&gw_dm.dm_mad[0],job->id);
+       		else
+           		gw_dm_mad_task_del(&gw_dm.dm_mad[0],job->array_id);
+            
             break;
 		
         default:
@@ -122,6 +133,13 @@ void gw_dm_release (void *_job_id)
             gw_log_print("DM",'I',"Job %i released.\n", job_id);        
             
             gw_am_trigger(gw_dm.rm_am,"GW_RM_RELEASE_SUCCESS",  _job_id);
+            
+            gw_dm_mad_job_schedule(&gw_dm.dm_mad[0],
+                                   job_id,
+                                   job->array_id,
+                                   GW_REASON_NONE,
+                                   job->nice,
+                                   job->user_id);            
             break;
 		
         default:

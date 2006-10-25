@@ -1335,38 +1335,38 @@ case 42:
 YY_RULE_SETUP
 #line 134 "src/common/gw_template_parser.l"
 { switch (file)
-                        	  {
+                              {
                                   case 0:
-                                  	switch(find)
-                                  	{
+                                      switch(find)
+                                      {
                                       case 0:
                                         jt->num_input_files++;
-                                  		strncpy(jt->input_files[jt->num_input_files-1][0],jtp_text,GW_JT_STR);
-                                  		break;
-                                  	  case 1:
-                                  	  	jt->num_output_files++;
-                                  		strncpy(jt->output_files[jt->num_output_files-1][0],jtp_text,GW_JT_STR);
-                                  		break;
-                                  	  case 2:
-                                  		jt->num_restart_files++;
-                                  		strncpy(jt->restart_files[jt->num_restart_files-1],jtp_text,GW_JT_STR);
-                                  		break;
-                                  	}                                      
+                                          strncpy(jt->input_files[jt->num_input_files-1][0],jtp_text,GW_JT_STR);
+                                          break;
+                                        case 1:
+                                            jt->num_output_files++;
+                                          strncpy(jt->output_files[jt->num_output_files-1][0],jtp_text,GW_JT_STR);
+                                          break;
+                                        case 2:
+                                          jt->num_restart_files++;
+                                          strncpy(jt->restart_files[jt->num_restart_files-1],jtp_text,GW_JT_STR);
+                                          break;
+                                      }                                      
                                     break;
                             
                                   case 1:
-                                  	switch(find)
-                                  	{
+                                      switch(find)
+                                      {
                                       case 0:
-                                  		strncpy(jt->input_files[jt->num_input_files-1][1],jtp_text,GW_JT_STR);
-                                  		break;
-                                  	  case 1:
-                                  		strncpy(jt->output_files[jt->num_output_files-1][1],jtp_text,GW_JT_STR);
-                                  		break;
-                                  	  case 2:
-                                  		fprintf(stderr,"Parse error at line %i\n", jtp_lineno);
-                                     	return -1;
-                                  	}                                  
+                                          strncpy(jt->input_files[jt->num_input_files-1][1],jtp_text,GW_JT_STR);
+                                          break;
+                                        case 1:
+                                          strncpy(jt->output_files[jt->num_output_files-1][1],jtp_text,GW_JT_STR);
+                                          break;
+                                        case 2:
+                                          fprintf(stderr,"Parse error at line %i\n", jtp_lineno);
+                                         return -1;
+                                      }                                  
                                     break;
                                       
                                   default:
@@ -1390,8 +1390,8 @@ case 45:
 YY_RULE_SETUP
 #line 178 "src/common/gw_template_parser.l"
 { jt->num_env++;
-						  strncpy(jt->environment[jt->num_env-1][0],jtp_text,GW_JT_STR);
-						}
+                          strncpy(jt->environment[jt->num_env-1][0],jtp_text,GW_JT_STR);
+                        }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
@@ -2442,10 +2442,10 @@ void gw_template_set_value_str (gw_template_t *jt,
         gw_template_var_t var, 
         const char *val)
 {
-	char *tmp;
-	char *num;
-	int  i;
-	
+    char *tmp;
+    char *num;
+    int  i;
+    
     if ( val==NULL )
     {
         fprintf(stderr,"Warning!, Variable value not defined at line %i\n", jtp_lineno);
@@ -2455,76 +2455,76 @@ void gw_template_set_value_str (gw_template_t *jt,
     switch (var)
     {
         case EXECUTABLE:
-			strncpy(jt->executable,val,GW_JT_STR);
+            strncpy(jt->executable,val,GW_JT_STR);
             break;
         
         case ARGUMENTS:
-	        strncpy(jt->arguments,val,GW_JT_STR);
+            strncpy(jt->arguments,val,GW_JT_STR);
             break;
         
         case PRE_WRAPPER:
-	        strncpy(jt->pre_wrapper,val,GW_JT_STR);
+            strncpy(jt->pre_wrapper,val,GW_JT_STR);
             break;
         
         case PRE_WRAPPER_ARGUMENTS:
-	        strncpy(jt->pre_wrapper_arguments,val,GW_JT_STR);
+            strncpy(jt->pre_wrapper_arguments,val,GW_JT_STR);
             break;
         
         case RANK:
-	        strncpy(jt->rank,val,GW_JT_STR);
+            strncpy(jt->rank,val,GW_JT_STR);
             break;
         
         case REQUIREMENTS:
-	        strncpy(jt->requirements,val,GW_JT_STR);
+            strncpy(jt->requirements,val,GW_JT_STR);
             break;
         
         case STDERR_FILE:
-	        strncpy(jt->stderr_file,val,GW_JT_STR);
+            strncpy(jt->stderr_file,val,GW_JT_STR);
             break;
         
         case STDIN_FILE:
-	        strncpy(jt->stdin_file,val,GW_JT_STR);
+            strncpy(jt->stdin_file,val,GW_JT_STR);
             break;
         
         case STDOUT_FILE:
-	        strncpy(jt->stdout_file,val,GW_JT_STR);
+            strncpy(jt->stdout_file,val,GW_JT_STR);
             break;
         
         case CHECKPOINT_URL:
-	        strncpy(jt->checkpoint_url,val,GW_JT_STR);
+            strncpy(jt->checkpoint_url,val,GW_JT_STR);
             break;
         
         case WRAPPER:
-        	if (val[0] != '/')
-        		snprintf(jt->wrapper,GW_JT_STR,"%s/%s", GW_LOCATION, val);
-        	else
-	        	strncpy(jt->wrapper,val,GW_JT_STR);
+            if (val[0] != '/')
+                snprintf(jt->wrapper,GW_JT_STR,"%s/%s", GW_LOCATION, val);
+            else
+                strncpy(jt->wrapper,val,GW_JT_STR);
             break;
             
         case MONITOR:
-        	if (val[0] != '/')
-        		snprintf(jt->monitor,GW_JT_STR,"%s/%s", GW_LOCATION, val);
-        	else
-	        	strncpy(jt->monitor,val,GW_JT_STR);
+            if (val[0] != '/')
+                snprintf(jt->monitor,GW_JT_STR,"%s/%s", GW_LOCATION, val);
+            else
+                strncpy(jt->monitor,val,GW_JT_STR);
             break;
             
         case JOB_DEPENDENCIES:
-    		tmp = strdup(val);
-    		i = 0;
-    		jt->job_deps[0] = -1;
-    		
-    		num = strtok (tmp," ");
-			
-			while ( (num != NULL) && (i<(GW_JT_DEPS -1)) )
-			{
-				jt->job_deps[i++] = atoi(num);
-	    		num = strtok (NULL," ");
-			}
-			
-			jt->job_deps[i] = -1;
-			free(tmp);
-        	break;
-        	
+            tmp = strdup(val);
+            i = 0;
+            jt->job_deps[0] = -1;
+            
+            num = strtok (tmp," ");
+            
+            while ( (num != NULL) && (i<(GW_JT_DEPS -1)) )
+            {
+                jt->job_deps[i++] = atoi(num);
+                num = strtok (NULL," ");
+            }
+            
+            jt->job_deps[i] = -1;
+            free(tmp);
+            break;
+            
         default:
             fprintf(stderr,"Unexpected error setting str variable, line %i\n",jtp_lineno);
             break;
@@ -2569,7 +2569,7 @@ void gw_template_set_value_int (gw_template_t *jt,
             break;
         
         default:
-			fprintf(stderr,"Unexpected error setting int variable, line %i\n",jtp_lineno);
+            fprintf(stderr,"Unexpected error setting int variable, line %i\n",jtp_lineno);
             break;
     }
 }
@@ -2580,15 +2580,15 @@ int gw_template_parser (gw_template_t *jt)
 {
     int rc;
     char template_file[1024];
-	
-	pthread_mutex_lock(&jtp_mutex);
+    
+    pthread_mutex_lock(&jtp_mutex);
 
     GW_LOCATION = getenv("GW_LOCATION");   
     
     if (GW_LOCATION == NULL )
     {
-    	fprintf(stderr,"GW_LOCATION is not defined\n");
-		pthread_mutex_unlock(&jtp_mutex);    	
+        fprintf(stderr,"GW_LOCATION is not defined\n");
+        pthread_mutex_unlock(&jtp_mutex);        
         return -1;
     }
 
@@ -2600,21 +2600,21 @@ int gw_template_parser (gw_template_t *jt)
 
     if (jtp_in == NULL)
     {
-    	fprintf(stderr,"Error opening default template file (%s)\n",template_file);
+        fprintf(stderr,"Error opening default template file (%s)\n",template_file);
     }
     else
     {    
-	    jtp_lineno = 0;
-	    rc = yylex_jt(jt);
+        jtp_lineno = 0;
+        rc = yylex_jt(jt);
     
-	    fclose(jtp_in);
+        fclose(jtp_in);
 
-	    if ( rc != 0 )
-	    {
-			pthread_mutex_unlock(&jtp_mutex);	    
-	        return rc;
-	    }
-	}
+        if ( rc != 0 )
+        {
+            pthread_mutex_unlock(&jtp_mutex);        
+            return rc;
+        }
+    }
 
     /* Job template parsing */         
 
@@ -2624,8 +2624,8 @@ int gw_template_parser (gw_template_t *jt)
 
     if (jtp_in == NULL)
     {
-    	fprintf(stderr,"Error opening job template file (%s)\n",template_file);
-		pthread_mutex_unlock(&jtp_mutex);    	
+        fprintf(stderr,"Error opening job template file (%s)\n",template_file);
+        pthread_mutex_unlock(&jtp_mutex);        
         return -1;
     }
     
@@ -2634,7 +2634,7 @@ int gw_template_parser (gw_template_t *jt)
 
     fclose(jtp_in);
     
-	pthread_mutex_unlock(&jtp_mutex);    
+    pthread_mutex_unlock(&jtp_mutex);    
     return rc;
 }
 

@@ -85,11 +85,7 @@ typedef struct gw_conf_s
     int number_of_jobs;
     int number_of_hosts;
     int number_of_users;
-    
-    int jobs_per_sched;
-    int jobs_per_user;
-    int jobs_per_host;
-        
+            
     time_t scheduling_interval;
     time_t poll_interval;
     time_t discovery_interval;

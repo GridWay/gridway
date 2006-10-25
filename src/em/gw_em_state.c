@@ -322,21 +322,28 @@ void gw_em_failed(void *_job_id)
     /* -------------------------------------------------------------------- */        
     
     if ( tries >= num_retries )
-    {
+    {   
+        job->history->counter = -1;
+            	             
         gw_job_print(job,"EM",'E',"Job failed, no retries left.\n");
         gw_log_print("EM",'E',"Job %i failed, no retries left.\n", job_id);
-        
+                
  		gw_am_trigger(gw_em.dm_am, "GW_DM_WRAPPER_FAILED", _job_id);
     }
     else
-    {        
-        gw_job_print (job,"EM",'W',"Retrying execution, %i retries left.\n", num_retries 
-                - tries);
+    {       
+    	job->history->counter = tries;
+    					    	
+        gw_job_print (job,"EM",'W',"Retrying execution in ~%i seconds, (%i retries left).\n", 
+            tries * GW_EM_TIMER_PERIOD,
+            num_retries - tries);
                       
-        gw_log_print ("EM",'W',"Job %i failed, retrying execution, %i retries left.\n",
-                job_id, num_retries - tries);        
-                              
-        gw_am_trigger(&(gw_em.am),"GW_EM_SUBMIT", _job_id);
+        gw_log_print ("EM",'W',"Job %i failed, retrying execution in ~%i seconds, (%i retries left).\n", 
+            job_id,
+            tries * GW_EM_TIMER_PERIOD,
+            num_retries - tries);
+            
+        free(_job_id);
     }
     
     pthread_mutex_unlock(&(job->mutex));

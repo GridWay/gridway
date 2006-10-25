@@ -46,21 +46,21 @@ int gw_em_mad_init(gw_em_mad_t * em_mad,
     char action[GW_EM_MAX_ACTION];
     int em_mad_pipe[2], mad_em_pipe[2];
     int i, rc;
-	int length;
+    int length;
 	
-	if ((name == NULL) || (exe == NULL) || (owner == NULL))
-		return -1;
+    if ((name == NULL) || (exe == NULL) || (owner == NULL))
+        return -1;
 	
 	
-	length = strlen(gw_conf.gw_location) + strlen(exe) + 6;
+    length = strlen(gw_conf.gw_location) + strlen(exe) + 6;
 
-	em_mad->executable      = (char *) malloc(sizeof(char)*length);
+    em_mad->executable      = (char *) malloc(sizeof(char)*length);
     em_mad->name            = strdup(name);
     em_mad->wrapper_rsl     = NULL;
     em_mad->pre_wrapper_rsl = NULL;    
     em_mad->mode            = NULL;
 
-	sprintf(em_mad->executable, "%s/bin/%s", gw_conf.gw_location, exe);    
+    sprintf(em_mad->executable, "%s/bin/%s", gw_conf.gw_location, exe);    
     
     if (pipe(em_mad_pipe) == -1 || pipe(mad_em_pipe) == -1)
     {
@@ -92,10 +92,10 @@ int gw_em_mad_init(gw_em_mad_t * em_mad,
             close(em_mad_pipe[0]);
             close(mad_em_pipe[1]);
 		    
-			if (gw_conf.multiuser == GW_TRUE)
-	            execlp("sudo", "sudo", "-u", owner, em_mad->executable, NULL);
-	        else
-	        	execlp(em_mad->executable, em_mad->executable, NULL);
+            if (gw_conf.multiuser == GW_TRUE)
+                execlp("sudo", "sudo", "-u", owner, em_mad->executable, NULL);
+            else
+        	execlp(em_mad->executable, em_mad->executable, NULL);
 
             gw_log_print("EM",'E',"Could not execute MAD %s (exec/sudo).\n",
                         	em_mad->executable);

@@ -326,6 +326,9 @@ void gw_tm_cp_action_cb(gw_job_t *job, int cp_xfr_id, char * result)
 			gw_tm_checkpoint_cp_cb(job, cp_xfr_id, failure);
 			break;		
 			
+		case GW_TM_STATE_CHECKPOINT_CANCEL:
+			break;
+			
 		default:
 			gw_job_print(job,"TM",'E',"Unexpected transfer MAD callback in CP command.\n");
 			break;		
@@ -366,6 +369,8 @@ void gw_tm_end_action_cb( gw_job_t *job, gw_tm_mad_t *tm_mad, int *job_id, char 
 			break;
 			
 		case GW_TM_STATE_CHECKPOINT_CANCEL:
+			gw_job_print(job,"TM",'W',"Copy of checkpoint files cancelled.\n");
+			
 		  	gw_tm_mad_start(job->history->tm_mad, job->id);
 		  	
 		  	if ((job->job_state == GW_JOB_STATE_PROLOG) ||

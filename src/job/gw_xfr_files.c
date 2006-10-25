@@ -38,14 +38,15 @@ void gw_xfr_init (gw_xfrs_t *xfrs, int number_of_xfrs, int tries)
 	{
 		xfrs->xfrs[i].src_url       = NULL;
 		xfrs->xfrs[i].dst_url       = NULL;
-		xfrs->xfrs[i].alt_src_url   = NULL;		
-		xfrs->xfrs[i].tries         = tries;	
+		xfrs->xfrs[i].alt_src_url   = NULL;
+		xfrs->xfrs[i].tries         = tries;
 		xfrs->xfrs[i].done          = GW_FALSE;
-		xfrs->xfrs[i].success       = GW_FALSE;		
+		xfrs->xfrs[i].success       = GW_FALSE;
+		xfrs->xfrs[i].counter       = -1;
 	}
 }
 
-/*----------------------------------------------------------------------------*/
+/* -------------------------------------------------------------------------- */
 
 void gw_xfr_destroy (gw_xfrs_t *xfrs)
 {
@@ -73,7 +74,7 @@ void gw_xfr_destroy (gw_xfrs_t *xfrs)
 	xfrs->failure_limit  = 0;
 }
 
-/*----------------------------------------------------------------------------*/
+/* -------------------------------------------------------------------------- */
 
 int  gw_xfr_pending (gw_xfrs_t *xfrs)
 {
@@ -96,6 +97,6 @@ int  gw_xfr_pending (gw_xfrs_t *xfrs)
 }
 
 /* -------------------------------------------------------------------------- */
-/* ---------------------------------------------------------------------------*/
+/* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 

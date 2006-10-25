@@ -94,7 +94,7 @@ void gw_rm_host_status(int client_socket, int host_id);
 void gw_rm_host_pool_status(int client_socket);
 
 void gw_rm_job_match(int client_socket, int job_id);
-
+void gw_rm_array_match(int client_socket, int array_id);
 
 void gw_rm_job_history(int client_socket, int job_id);
 

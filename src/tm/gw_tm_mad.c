@@ -143,7 +143,14 @@ int gw_tm_mad_init(gw_tm_mad_t * tm_mad,
             
             if (strcmp(action, "INIT") == 0)
             {
-                if (strcmp(result, "FAILURE") == 0)
+                if (strcmp(result, "SUCCESS") == 0)
+                {
+                    if (strcmp(info, "-") == 0)
+                        tm_mad->url = NULL;
+                    else
+                        tm_mad->url = strdup(info);
+                }
+                else
                 {
 	                gw_log_print("TM",'E',"\tInitialization failure of MAD %s.\n", tm_mad->name);
                 	gw_tm_mad_finalize (tm_mad);

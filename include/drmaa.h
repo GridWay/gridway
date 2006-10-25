@@ -488,6 +488,18 @@ typedef struct drmaa_job_ids_s      	drmaa_job_ids_t;
  */
 #define DRMAA_GW_TASK_ID         "${TASK_ID}"
 
+/** Pre-defined string to refer to a custom parameter in bulk jobs. This value
+ *  is equal to <start> + <task_id> * <increment>, where <start> and <increment> are 
+ *  drmaa_run_bulk_job() arguments. DRMAA_PLACEHOLDER_INCR should be used for 
+ *  portability reasons
+ */
+#define DRMAA_GW_PARAM       "${PARAM}"
+
+/** Pre-defined string to refer to the max value of the custom parameter in bulk jobs. 
+ *  This value  is equal to <start> + <total_tasks> * <increment>.
+ */
+#define DRMAA_GW_MAX_PARAM    "${MAX_PARAM}"
+
 /** Pre-defined string to refer to the remote host architecture as returned by
  *  the resource selector module. DRMAA_GW_ARCH will be available during job 
  *  execution and can be used to generate architecture-dependent REMOTE 
@@ -1038,9 +1050,9 @@ int drmaa_run_job(char *job_id, size_t job_id_len,
 /** Submits a set of parametric jobs tha can be run concurrently. 
  *  For each parametric job the same template is used, and so must be properly 
  *  set. Each job is identical except of it's index:
- *      - DRMAA_PLACEHOLDER_INCR ranges form 0 to TOTAL_TASKS in increments of
- *        size "1", where TOTAL_TASKS is ((end - start)/incr)+1
- *      - DRMAA_GW_TASKID same as DRMAA_PLACEHOLDER_INCR
+ *      - DRMAA_PLACEHOLDER_INCR ranges form start to start+(incr*TOTAL_TASKS) in 
+ *        increments of size "incr", where TOTAL_TASKS is ((end - start)/incr)+1
+ *      - DRMAA_GW_TASKID ranges form 0 to TOTAL_TASKS in increments of size "1"
  *      - DRMAA_GW_JOBID  the job unique identifier assigned by GridWay
  *  These values can be used as arguments for each task and to generate input/output
  *  filenames.
@@ -1060,13 +1072,13 @@ int drmaa_run_job(char *job_id, size_t job_id_len,
  *  function calls.
  *
  *  @param start  index associated to the first job, i.e. for this job 
- *  DRMAA_PLACEHOLDER_INCR will be 0. The smallest start value is 0
+ *  DRMAA_PLACEHOLDER_INCR will be start.
  *
  *  @param end index associated to the last job, i.e. for this job 
- *  DRMAA_PLACEHOLDER_INCR will be ((end - start)/incr)+1.
+ *  DRMAA_PLACEHOLDER_INCR will be start+(incr*TOTAL_TASKS).
  * 
- *  @param incr increment used to obtain the total number of job. GridWay
- *  will internally used incr=1
+ *  @param incr increment used to obtain the total number of job. This value could be 
+ *  negative
  *
  *  @param error_diagnosis string of characters with error related
  *  diagnosis information. The error diagnosis buffer will be filled in case of

@@ -115,8 +115,8 @@ int gw_job_fill(gw_job_t *job, const gw_msg_t *msg)
         return -1;
     }
 
-    fprintf(file, "%ld %s %s\n", job->start_time, job->owner,
-            job->template.job_home);
+    fprintf(file, "%ld %s %s %i %i\n", job->start_time, job->owner,
+            job->template.job_home, msg->pstart, msg->pinc);
     
     fclose(file);
     
@@ -160,11 +160,15 @@ int gw_job_init(gw_job_t *job, int job_id)
     job->user_id  = -1;
 
 /* -------------------------------------------------------------------------- */
+    job->nice         = 0;
     
     job->id           = job_id;
     job->array_id     = -1;
     job->task_id      = 0;
     job->total_tasks  = 0;
+    
+    job->pinc         = 0;
+    job->pstart       = 0;
 
 /* -------------------------------------------------------------------------- */
 

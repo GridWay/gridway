@@ -26,14 +26,14 @@ dynamic_discover (){
         XPATH='/*/*/*[local-name()="MemberServiceEPR"]/*[local-name()="Address" and substring-after(text(),"/wsrf/services/")="DefaultIndexService"]'
 
         echo "<root>" > $TMPFILE
-        wsrf-query -a -z none -s "$INDEX" "$XPATH" >> $TMPFILE
+        nice -n $PRIORITY wsrf-query -a -z none -s "$INDEX" "$XPATH" >> $TMPFILE
         STATUS=$?
         echo "</root>" >> $TMPFILE
 
 
         if [ $STATUS -eq 0 ]
         then
-            HOSTNAMES=`java -classpath $CLASSPATH:$GW_LOCATION/bin Mds4QueryParser -l $TMPFILE`
+            HOSTNAMES=`nice -n $PRIORITY java -classpath $CLASSPATH:$GW_LOCATION/bin Mds4QueryParser -l $TMPFILE`
 
             for HOSTNAME in $HOSTNAMES
             do
@@ -59,13 +59,13 @@ dynamic_monitor (){
     XPATH='/*/*/*[local-name()="MemberServiceEPR"]/*[local-name()="Address" and substring-after(text(),"/wsrf/services/")="ManagedJobFactoryService"]/../..'
 
     echo "<root>" > $TMPFILE
-    wsrf-query -a -z none -s "$INDEX" "$XPATH" >> $TMPFILE
+    nice -n $PRIORITY wsrf-query -a -z none -s "$INDEX" "$XPATH" >> $TMPFILE
     STATUS=$?
     echo "</root>" >> $TMPFILE
 
     if [ $STATUS -eq 0 ]
     then
-        INFO=`java -classpath $CLASSPATH:$GW_LOCATION/bin Mds4QueryParser -i $2 $TMPFILE`
+        INFO=`nice -n $PRIORITY java -classpath $CLASSPATH:$GW_LOCATION/bin Mds4QueryParser -i $2 $TMPFILE`
         echo "MONITOR $1 SUCCESS $INFO"
     else
         echo "MONITOR $1 FAILURE Can't access $2"

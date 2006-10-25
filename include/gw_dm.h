@@ -49,8 +49,6 @@ typedef struct gw_dm_s
     gw_dm_mad_t dm_mad[GW_MAX_MADS];
     
     gw_boolean_t scheduling;
-    int          dispatched_jobs;
-
 } gw_dm_t;
 
 /* -------------------------------------------------------------------------- */
