@@ -57,7 +57,7 @@ int gw_job_pool_allocate_by_id (int job_id);
 
 void gw_job_pool_free (int job_id);
 
-gw_job_t* gw_job_pool_get (int job_id, int lock);
+inline gw_job_t* gw_job_pool_get (int job_id, int lock);
 
 int gw_job_pool_get_num_jobs();
 

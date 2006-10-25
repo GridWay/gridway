@@ -509,7 +509,7 @@ void gw_job_pool_free (int job_id)
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
-gw_job_t* gw_job_pool_get (int job_id, int lock)
+inline gw_job_t* gw_job_pool_get (int job_id, int lock)
 {
     gw_job_t *job;
 
