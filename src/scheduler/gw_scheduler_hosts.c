@@ -126,25 +126,25 @@ void gw_scheduler_add_host(gw_scheduler_t * sched,
             
     	if (rc == 0)
     	{
-    		sched->users[i].hosts[j].avrg_execution  = (float) acct.execution / (float) acct.tot;
-    		sched->users[i].hosts[j].avrg_suspension = (float) acct.suspension/ (float) acct.tot;
-    		sched->users[i].hosts[j].avrg_transfer   = (float) acct.transfer  / (float) acct.tot;
-    	    sched->users[i].hosts[j].migration_ratio = (1 - (float)acct.succ/(float)acct.tot);    		
+    		sched->users[j].hosts[i].avrg_execution  = (float) acct.execution / (float) acct.tot;
+    		sched->users[j].hosts[i].avrg_suspension = (float) acct.suspension/ (float) acct.tot;
+    		sched->users[j].hosts[i].avrg_transfer   = (float) acct.transfer  / (float) acct.tot;
+    	    sched->users[j].hosts[i].migration_ratio = (1 - (float)acct.succ/(float)acct.tot);    		
     	}
     	else
     	{
-    	    sched->users[i].hosts[j].avrg_execution  = 0;
-    	    sched->users[i].hosts[j].avrg_suspension = 0;
-    	    sched->users[i].hosts[j].avrg_transfer   = 0;
+    	    sched->users[j].hosts[i].avrg_execution  = 0;
+    	    sched->users[j].hosts[i].avrg_suspension = 0;
+    	    sched->users[j].hosts[i].avrg_transfer   = 0;
 
-    	    sched->users[i].hosts[j].migration_ratio = 0;
+    	    sched->users[j].hosts[i].migration_ratio = 0;
     	}
 #else
-    	sched->users[i].hosts[j].avrg_execution  = 0;
-    	sched->users[i].hosts[j].avrg_suspension = 0;
-    	sched->users[i].hosts[j].avrg_transfer   = 0;
+    	sched->users[j].hosts[i].avrg_execution  = 0;
+    	sched->users[j].hosts[i].avrg_suspension = 0;
+    	sched->users[j].hosts[i].avrg_transfer   = 0;
 
-    	sched->users[i].hosts[j].migration_ratio = 0;
+    	sched->users[j].hosts[i].migration_ratio = 0;
 #endif
     	    	
 #ifdef GWSCHEDDEBUG
