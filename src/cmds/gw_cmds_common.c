@@ -160,12 +160,14 @@ void gw_client_print_status_header(char *outoption)
     char tmpstr[50];
     
     int i; 
-      	    
+    
+    head_string[0]='\0';
+    
     if(outoption != NULL)
     {
     	// Always show the JID
     	sprintf(tmpstr,"%-3s ","JID");
-    	strncat(head_string,tmpstr,strlen(tmpstr));    	
+    	strncat(head_string,tmpstr,strlen(tmpstr));
     	
     	for(i=0;i<strlen(outoption);i++)
     	{
