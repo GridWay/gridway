@@ -404,7 +404,7 @@ int gw_job_recover_last_state_transition(gw_job_t *job,
                                *id,
                                -1,
                                GW_REASON_NONE,
-                               0,
+                               job->nice,
                                job->user_id);
     case GW_JOB_STATE_HOLD:
     case GW_JOB_STATE_STOPPED:

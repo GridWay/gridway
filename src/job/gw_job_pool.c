@@ -183,8 +183,16 @@ void gw_job_pool_dep_check(int job_id)
 					{
 						gw_log_print("DM",'I',"Dependencies of job %i satisfied, releasing job.\n",i);
 						
-						gw_job_set_state(job, GW_JOB_STATE_PENDING, GW_FALSE);						
+						gw_job_set_state(job, GW_JOB_STATE_PENDING, GW_FALSE);
+						
+                        gw_dm_mad_job_schedule(&gw_dm.dm_mad[0],
+                                               job->id,
+                                               job->array_id,
+                                               GW_REASON_NONE,
+                                               job->nice,
+                                               job->user_id);
 					}
+					
 					pthread_mutex_unlock(&(job->mutex));
 				}
     		}
@@ -260,6 +268,13 @@ void gw_job_pool_dep_consistency()
 						gw_log_print("DM",'I',"Dependencies of job %i satisfied, releasing job.\n",i);
 						
 						gw_job_set_state(job, GW_JOB_STATE_PENDING, GW_FALSE);
+						
+                        gw_dm_mad_job_schedule(&gw_dm.dm_mad[0],
+                                               job->id,
+                                               job->array_id, /* -1 */
+                                               GW_REASON_NONE,
+                                               job->nice,     /* 0 */
+                                               job->user_id);
 					}
 
 					pthread_mutex_unlock(&(job->mutex));					

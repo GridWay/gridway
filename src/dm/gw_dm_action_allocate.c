@@ -137,7 +137,7 @@ void gw_dm_jalloc     (void *_msg)
                                jid,
                                -1,
                                GW_REASON_NONE,
-                               0,
+                               job->nice,
                                uid);
 
     gw_log_print("DM",'I',"New job %i allocated and initialized.\n", jid);
@@ -225,8 +225,8 @@ void gw_dm_aalloc     (void *_msg)
 		else
 		    gw_job_set_state(job, GW_JOB_STATE_HOLD, GW_FALSE);
 	    
-	job->tm_state = GW_TM_STATE_INIT;
-	job->em_state = GW_EM_STATE_INIT;        
+  	    job->tm_state = GW_TM_STATE_INIT;
+	    job->em_state = GW_EM_STATE_INIT;        
         job->user_id  = uid;
 
         job->pstart   = msg->pstart;
