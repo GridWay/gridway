@@ -373,12 +373,12 @@ transfer_output_files(){
     # TODO: An output file destination could be a GridFTP URL!!!
 
     STG_FILES="$GW_OUTPUT_FILES,stdout.execution $GW_STDOUT,stderr.execution $GW_STDERR"
-    
+
     if [ -f .monitor ]
     then
         STG_FILES="$STG_FILES,stdout.monitor,stderr.monitor"
     fi
-        
+
     SAVED_IFS=$IFS
     IFS=","
 
@@ -390,30 +390,60 @@ transfer_output_files(){
         SRC_FILE=`echo $FILES | awk '{print $1}'`
         DST_FILE=`echo $FILES | awk '{print $2}'`
 
+        if [ ! -f ${RMT_JOB_HOME}/${SRC_FILE} ]; then
+            printf "`date`: Skipping staging-out of non-existent output file \"${SRC_FILE}\"... "
+            echo "done."
+            continue
+        fi
+
         if [ -z "$DST_FILE" ]; then
             DST_FILE=$SRC_FILE
         fi
-        
-        SRC_URL="file:${RMT_JOB_HOME}/${SRC_FILE}"
-        
-        DST_URL="${GW_STAGING_URL}/${GW_JOB_HOME}/${DST_FILE}"
-            
-        if [ -f ${RMT_JOB_HOME}/${SRC_FILE} ]; then
-            printf "`date`: Staging-out file \"${SRC_FILE}\" as \"${DST_FILE}\"... "
-   
-            ${GLOBUS_CP} ${SRC_URL} ${DST_URL}
 
-            if [ $? -ne 0 ]; then
-                echo "failed."
-            else
-                echo "done."
+        case ${DST_FILE} in
+        gsiftp://*)
+            if [ -z "$SRC_FILE" ]; then
+                SRC_FILE=$DST_FILE
             fi
+
+            SRC_URL="file:${RMT_JOB_HOME}/${SRC_FILE}"
+            DST_URL="${DST_FILE}"
+            ;;
+
+        file:/*)
+            FILE_PATH=`echo $DST_FILE | awk -F: '{print $2}'`
+            FILE_NAME=`echo $DST_FILE | awk -F/ '{print $NF}'`
+
+            if [ -z "$SRC_FILE" ]; then
+                SRC_FILE=$FILE_NAME
+            fi
+
+            SRC_URL="file:${RMT_JOB_HOME}/${SRC_FILE}"
+            DST_URL="${GW_STAGING_URL}/${FILE_PATH}"
+            ;;
+
+        *)
+            if [ -z "$SRC_FILE" ]; then
+                SRC_FILE=$DST_FILE
+            fi
+
+            SRC_URL="file:${RMT_JOB_HOME}/${SRC_FILE}"
+            DST_URL="${GW_STAGING_URL}/${GW_JOB_HOME}/${DST_FILE}"
+            ;;
+        esac
+
+
+        printf "`date`: Staging-out file \"${SRC_FILE}\" as \"${DST_FILE}\"... "
+
+        ${GLOBUS_CP} ${SRC_URL} ${DST_URL}
+
+        if [ $? -ne 0 ]; then
+            echo "failed."
         else
-            printf "`date`: Skipping staging-out of non-existent output file \"${SRC_FILE}\"... "
             echo "done."
         fi
     done
-        
+
     IFS=$SAVED_IFS
 }
 
