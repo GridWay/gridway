@@ -275,7 +275,7 @@ execution(){
 
 transfer_input_files(){
 
-    STG_FILES="$GW_EXECUTABLE,$GW_STDIN stdin.execution,$GW_INPUT_FILES"
+    STG_FILES="$GW_EXECUTABLE,$GW_STDIN_FILE stdin.execution,$GW_INPUT_FILES"
 
     SAVED_IFS=$IFS
     IFS=","
