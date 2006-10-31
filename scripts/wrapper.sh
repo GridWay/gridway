@@ -347,7 +347,7 @@ transfer_input_files(){
                 DST_FILE=$SRC_FILE
             fi
 
-            SRC_URL="${GW_STAGING_URL}/${GW_JOB_HOME}/${DST_FILE}"	        
+            SRC_URL="${GW_STAGING_URL}/${GW_JOB_HOME}/${SRC_FILE}"	        
             
             DST_URL="file:${RMT_JOB_HOME}/${DST_FILE}"
 
