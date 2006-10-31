@@ -673,7 +673,7 @@ class Mds4QueryParser{
                     return true;
                 }
                 else if (!job.toUpperCase().equals("MULTI")){
-                    host.setLrmsName(job.toUpperCase());
+                    host.setLrmsName(job);
                     host.setLrmsType(job.toLowerCase());
                     host.removeQueues();
                     return true;
