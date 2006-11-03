@@ -20,6 +20,8 @@
 #include <sys/select.h>
 #include <unistd.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 extern char *optarg;
 extern int   optind, opterr, optopt;
@@ -35,6 +37,7 @@ int main (int argc, char **argv )
     int    cp_xfr_id;
     char   src_url[1024];
     char   dst_url[1024];
+    char * dst_url_tmp;
     char   modex;
     int    end = 0;
 
@@ -241,9 +244,19 @@ int main (int argc, char **argv )
             else if (strcmp(action, "CP") == 0 )
             {
                 cp_xfr_id = atoi(cp_xfr_id_s);
+                                    
+                if ( g == 1 ) /* Using a gass server */
+                {                	                	                	
+                    if ((strstr(src_url, "stdout.wrapper") != NULL) ||
+                       (strstr(src_url, "stderr.wrapper") != NULL))
+                    {
+                    	dst_url_tmp = dst_url + 7; /*skip file:// */
+                    	chmod(dst_url_tmp, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH );
+                    }
+                }
                 
                 printf("CP %d %d SUCCESS (%s->%s)\n", xfr_id,cp_xfr_id,
-                    src_url,dst_url);
+                    src_url,dst_url);                
             }                
             else if (strcmp(action, "FINALIZE") == 0 )
             {
