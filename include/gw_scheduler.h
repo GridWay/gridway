@@ -55,8 +55,6 @@ typedef struct gw_sch_user_host_s
     float  avrg_transfer;
     float  avrg_execution;
     float  avrg_suspension;
-  
-    float  migration_ratio;
 
 } gw_sch_user_host_t;
 
@@ -72,7 +70,6 @@ typedef struct gw_sch_user_s
 	int  active_jobs;
 
 	int  dispatched;
-	int  priority;
 	int  share;
 	
 	gw_sch_user_host_t * hosts;
