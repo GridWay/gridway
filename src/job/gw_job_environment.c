@@ -184,16 +184,15 @@ char * gw_job_rsl2_extensions(gw_job_t *job)
 
 int gw_job_environment(gw_job_t *job)
 {
-      FILE * fd;
+    FILE * fd;
     char * file_str;
     char * var;
-    char * se;
     int    i;
     
-      fd = fopen(job->env_file,"w");
+    fd = fopen(job->env_file,"w");
   
-      if (fd == NULL)
-      {
+    if (fd == NULL)
+    {
           gw_log_print("DM",'E',"Could not create job.env file of job %i: %s",
                   job->id,
                 strerror(errno));
@@ -290,16 +289,7 @@ int gw_job_environment(gw_job_t *job)
     }
     else
     {
-        se = gw_host_get_genvar_str("SE_HOSTNAME", 0, job->history->host);
-        
-        if ((se != NULL) && (se[0] != '\0'))
-        {
-            fprintf(fd,"export GW_STAGING_URL=\"%s\"\n",se);
-        }
-        else
-        {
-            fprintf(fd,"export GW_STAGING_URL=\"%s\"\n",job->history->host->hostname);
-        }
+        fprintf(fd,"export GW_STAGING_URL=\"%s\"\n",job->history->host->hostname);
     }
     
     fprintf(fd,"export GW_JOB_HOME=\"%s\"\n",job->template.job_home);
@@ -387,8 +377,7 @@ char *gw_job_rsl_environment(gw_job_t *job)
 {
     char rsl_buffer[512];
     char *rsl_env; 
-    int  rc;
-    char *se;
+    int  rc;    
     
     if (job->history == NULL)
     {
@@ -399,32 +388,8 @@ char *gw_job_rsl_environment(gw_job_t *job)
     {
         return NULL;
     }
-    
-    se = gw_host_get_genvar_str("SE_HOSTNAME", 0, job->history->host);
-        
-    if ((se != NULL) && (se[0] != '\0'))
-    {
-        rc = snprintf(rsl_buffer, 512,
-                "(GW_HOSTNAME \"%s\")"
-                "(GW_SE_HOSTNAME \"%s\")"
-                "(GW_USER \"%s\")"
-                "(GW_JOB_ID %i)"
-                "(GW_TASK_ID %i)"
-                "(GW_ARRAY_ID %i)"
-                "(GW_TOTAL_TASKS %i)"
-                "(GW_RESTARTED %i)",
-                job->history->host->hostname,
-                se,
-                job->owner,
-                job->id,
-                job->task_id,
-                job->array_id,
-                job->total_tasks,
-                job->restarted);
-    }
-    else
-    {    
-        rc = snprintf(rsl_buffer, 512,
+            
+    rc = snprintf(rsl_buffer, 512,
                 "(GW_HOSTNAME \"%s\")"    
                 "(GW_USER \"%s\")"
                 "(GW_JOB_ID %i)"
@@ -439,7 +404,6 @@ char *gw_job_rsl_environment(gw_job_t *job)
                 job->array_id,
                 job->total_tasks,
                 job->restarted);
-    }
         
     if ((rc >= 512 ) || ( rc < 0 ) )
         return NULL;
@@ -458,50 +422,8 @@ char *gw_job_rsl2_environment(gw_job_t *job)
     char rsl_buffer[640];
     char *rsl_env; 
     int  rc;
-    char *se;
     
-
-    se = gw_host_get_genvar_str("SE_HOSTNAME", 0, job->history->host);
-
-    if ((se != NULL) && (se[0] != '\0'))
-    {
-        rc = snprintf(rsl_buffer, 640,
-            "<environment>"
-            " <name>GW_HOSTNAME</name> <value>%s</value>"
-            "</environment>"
-            "<environment>"
-            " <name>GW_SE_HOSTNAME</name> <value>%s</value>"
-            "</environment>"            
-            "<environment>"
-            " <name>GW_USER</name> <value>%s</value>"
-            "</environment>"
-            "<environment>"
-            " <name>GW_JOB_ID</name> <value>%i</value>"
-            "</environment>"
-            "<environment>"
-            " <name>GW_TASK_ID</name> <value>%i</value>"
-            "</environment>"
-            "<environment>"
-            " <name>GW_ARRAY_ID</name> <value>%i</value>"
-            "</environment>"
-            "<environment>"
-            " <name>GW_TOTAL_TASKS</name> <value>%i</value>"
-            "</environment>"
-            "<environment>"
-            " <name>GW_RESTARTED</name> <value>%i</value>"
-            "</environment>",
-            job->history->host->hostname,
-            se,
-            job->owner,
-            job->id,
-            job->task_id,
-            job->array_id,
-            job->total_tasks,
-            job->restarted);
-    }
-    else
-    {    
-        rc = snprintf(rsl_buffer, 640,
+    rc = snprintf(rsl_buffer, 640,
             "<environment>"
             " <name>GW_HOSTNAME</name> <value>%s</value>"
             "</environment>"
@@ -530,9 +452,6 @@ char *gw_job_rsl2_environment(gw_job_t *job)
             job->array_id,
             job->total_tasks,
             job->restarted);
-
-    }
-    
 
     if ((rc >= 640 ) || ( rc < 0 ) )
         return NULL;

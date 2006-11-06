@@ -70,7 +70,6 @@ dynamic_monitor (){
         SIZE_MEM_MB=`grep GlueHostMainMemoryRAMSize: $TMPFILE | awk -F": " '{print $2}' | head -1`
         LRMS_NAME=`grep GlueCEUniqueID: $TMPFILE | awk -F"/" '{print $2}' | awk -F- '{ORS=""; print $1; for (i=2;i<NF;i++) print "-" $i; print "\n"}' | tail -1`
         LRMS_TYPE=`grep GlueCEInfoLRMSType: $TMPFILE | awk -F": " '{print $2}' | tail -1`
-        #SE_HOSTNAME=(`grep GlueCEInfoDefaultSE: $TMPFILE | awk -F": " '{print $2}'`)
 
         nice -n $PRIORITY grid-info-search -x -LLL -h $2 "(&(objectclass=GlueCE)$QUEUEFILTER)" > $TMPFILE 2> $ERRFILE
 
@@ -98,7 +97,6 @@ dynamic_monitor (){
                 "SIZE_DISK_MB=0 FREE_DISK_MB=0" \
                 "FORK_NAME=\"jobmanager-fork\"" \
                 "LRMS_NAME=\"$LRMS_NAME\" LRMS_TYPE=\"$LRMS_TYPE\""`
-                #"SE_HOSTNAME=\"$SE_HOSTNAME\""`
 
             for ((j=0, i=0; i<${#QUEUE_NAME[@]}; i++,j++))
             do

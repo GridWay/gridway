@@ -88,7 +88,6 @@ int gw_job_history_add(gw_history_t **job_history,
     char           tmp[256];
     char           history_file[2048];
     FILE           *file;
-    char           *se;
     
     new_record = (gw_history_t *)malloc(sizeof(gw_history_t));
 
@@ -121,18 +120,8 @@ int gw_job_history_add(gw_history_t **job_history,
     new_record->failed_polls = 0;
 	new_record->counter      = -1;
 	
-	se = gw_host_get_genvar_str("SE_HOSTNAME", 0, host);
-
-	if ((se == NULL) || (se[0] == '\0'))
-	{
-	    sprintf(tmp,"gsiftp://%s/~/.gw_%s_%i/", host->hostname, owner, jid);
-	    new_record->rdir = strdup(tmp);
-	}
-	else
-	{
-	    sprintf(tmp,"gsiftp://%s/~/.gw_%s_%i/", se, owner, jid);
-	    new_record->rdir = strdup(tmp);			
-	}
+    sprintf(tmp,"gsiftp://%s/~/.gw_%s_%i/", host->hostname, owner, jid);
+    new_record->rdir = strdup(tmp);
     
 	if (lrms != NULL)
 	{

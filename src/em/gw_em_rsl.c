@@ -100,7 +100,6 @@ char* gw_generate_wrapper_rsl_nsh (gw_job_t *job)
     char rsl_buffer[GW_RSL_LENGTH];
     int print_queue = 0;
     int rc;
-    char *se;
     char *staging_url;
     char wrapper[100], stdout_wrapper[100], stderr_wrapper[100];
 
@@ -111,37 +110,32 @@ char* gw_generate_wrapper_rsl_nsh (gw_job_t *job)
     if (job->history->tm_mad->url != NULL)
     {
         /* Perform staging with the URL provided by the TM MAD */
+        
         staging_url = job->history->tm_mad->url;
+        
         sprintf(wrapper, "%s", job->template.wrapper);
+        
         sprintf(stdout_wrapper, "%s/var/%d/stdout.wrapper.%d",
                 gw_conf.gw_location, job->id, job->restarted);
+                
         sprintf(stderr_wrapper, "%s/var/%d/stderr.wrapper.%d",
                 gw_conf.gw_location, job->id, job->restarted);
     }
     else
     {
-        /* TODO: DEPRECATE IT??? */
-        se = gw_host_get_genvar_str("SE_HOSTNAME", 0, job->history->host);
-        
-        if ((se != NULL) && (se[0] != '\0'))
-        {
-            /* Perform staging with the SE */
-            staging_url = se;
-        }
-        else
-        {
-            /* Perform staging with the CE */
-            staging_url = job->history->host->hostname;
-        }
-        
-        sprintf(wrapper, "~/.gw_%s_%i/.wrapper", job->owner, job->id);
-        sprintf(stdout_wrapper, "~/.gw_%s_%i/stdout.wrapper",
-                job->owner, job->id);
-        sprintf(stderr_wrapper, "~/.gw_%s_%i/stderr.wrapper",
-                job->owner, job->id);
-        
+    	/* Use the cluster front-end if no URL was provided */
         /* TODO: Executable staging always through CE */
         /* TODO: Wrapper must gather dst URLs without renaming instead of src URLs */
+    	    	
+        staging_url = job->history->host->hostname;
+        
+        sprintf(wrapper, "~/.gw_%s_%i/.wrapper", job->owner, job->id);
+        
+        sprintf(stdout_wrapper, "~/.gw_%s_%i/stdout.wrapper",
+                job->owner, job->id);
+                
+        sprintf(stderr_wrapper, "~/.gw_%s_%i/stderr.wrapper",
+                job->owner, job->id);        
     }
     
     /* ---------------------------------------------------------------------- */
