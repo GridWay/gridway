@@ -39,6 +39,7 @@ void gw_scheduler_job_failed(gw_scheduler_t *      sched,
     int                  i;
     gw_sch_user_host_t * hosts;
     gw_sch_user_host_t * th;
+    char *               uname;
     
     time_t               the_time;	
 	double               t;
@@ -65,6 +66,8 @@ void gw_scheduler_job_failed(gw_scheduler_t *      sched,
        if (sched->users[i].uid == uid )
        {
           hosts = sched->users[i].hosts;
+          uname = sched->users[i].name;
+          
           break;
        }	
 	
@@ -113,12 +116,9 @@ void gw_scheduler_job_failed(gw_scheduler_t *      sched,
     
         gw_scheduler_ctime(th->banned,str);
     
-        gw_scheduler_print('W',"Host %i will not be used until %s\n",hid,str);
-    }
-    
-    /* ------------------------------------ */
-    /* What to do with the migration ratio? */
-    /* ------------------------------------ */    
+        gw_scheduler_print('W',"Host %i will not be used for user %s until %s\n",
+            hid,uname,str);
+    }    
 }
 
 /* -------------------------------------------------------------------------- */
@@ -135,6 +135,7 @@ void gw_scheduler_job_success(gw_scheduler_t * sched,
     int                  i;
     gw_sch_user_host_t * hosts;
     gw_sch_user_host_t * th;
+    char *               uname;    
         
     hosts = NULL;
     th    = NULL;
@@ -143,6 +144,8 @@ void gw_scheduler_job_success(gw_scheduler_t * sched,
        if (sched->users[i].uid == uid )
        {
           hosts = sched->users[i].hosts;
+          uname = sched->users[i].name;
+                    
           break;
        }	
 	
@@ -167,7 +170,7 @@ void gw_scheduler_job_success(gw_scheduler_t * sched,
 
 	if (th->banned != 0)
     {
-        gw_scheduler_print('I',"Clearing host %i\n",th->hid);    		
+        gw_scheduler_print('I',"Clearing host %i for user %s\n",th->hid,uname);    		
     }
     	 
     th->last_banned = 0;
@@ -180,7 +183,6 @@ void gw_scheduler_job_success(gw_scheduler_t * sched,
     th->avrg_transfer  = (0.9 * txfr) + (0.1 * th->avrg_transfer);    
     th->avrg_suspension= (0.9 * tsus) + (0.1 * th->avrg_suspension);    
     
-    /* What to do with the migration ratio?*/
 }
 
 /* -------------------------------------------------------------------------- */
@@ -273,9 +275,10 @@ static int gw_scheduler_filter_select_queues(gw_scheduler_t * sched,
         
         if ( found == GW_FALSE )
         {
-            gw_scheduler_print('W',"Host %i is not ready for the scheduler, will not use it\n",
+#ifdef GWSCHEDDEBUG        	
+            gw_scheduler_print('W',"Host %i is not ready for the scheduler.\n",
                 hid, jid);
-                
+#endif                             
             hosts[i] = -1;                
         }
         else if ( addhost == GW_FALSE )
@@ -302,7 +305,7 @@ static int gw_scheduler_filter_select_queues(gw_scheduler_t * sched,
     	    {
     	    	hosts[i] = -1;
 #ifdef GWSCHEDDEBUG
-                gw_scheduler_print('D',"Host %i will not be used for job %i/%i (HISTORY)\n",
+                gw_scheduler_print('D',"Host %i will not be used for job %i/%i (HISTORY_USER/SUSP)\n",
                     hid, jid,aid);
 #endif
     	    }        	
@@ -323,7 +326,7 @@ static int gw_scheduler_filter_select_queues(gw_scheduler_t * sched,
     	    {
     	    	hosts[i] = -1;
 #ifdef GWSCHEDDEBUG
-                gw_scheduler_print('D',"Host %i will not be used for job %i/%i (HISTORY)\n",
+                gw_scheduler_print('D',"Host %i will not be used for job %i/%i (HISTORY_RESCHED)\n",
                     hid, jid,aid);
 #endif    	    	
     	    }   	    	
@@ -457,8 +460,13 @@ void gw_scheduler_matching_arrays(gw_scheduler_t * sched)
 
 	    if ((rc != GW_RC_SUCCESS)||(num == 0))
 	    {	    	
-   	        gw_scheduler_print('W',"No matching hosts found for job/array"
-   	            " %i/%i - %s\n",jid,aid,gw_ret_code_string(rc));
+   	        if (aid == -1)
+   	            gw_scheduler_print('W',"No matching hosts found for job"
+   	                " %i - %s\n",jid,gw_ret_code_string(rc));
+   	        else
+   	            gw_scheduler_print('W',"No matching hosts found for array"
+   	                " %i - %s\n",aid,gw_ret_code_string(rc));
+   	        
 	    	continue;
 	    }
     	    
@@ -474,10 +482,12 @@ void gw_scheduler_matching_arrays(gw_scheduler_t * sched)
                                                match,
                                                num,
                                                hosts);
-                                               
-#ifdef GWSCHEDDEBUG
-        gw_scheduler_print('D',"%i hosts found for job/array %i/%i\n",tqs,jid,aid);
-#endif                                                      
+
+        if (aid == -1)
+            gw_scheduler_print('I',"%i hosts match job %i:\n",tqs,jid);
+        else
+            gw_scheduler_print('I',"%i hosts match array %i:\n",tqs,aid);
+        
         /* ------------------------------- */
         /* Build the Matching Hosts Array  */
 	    /* ------------------------------- */
@@ -507,16 +517,14 @@ void gw_scheduler_matching_arrays(gw_scheduler_t * sched)
 						            GW_MSG_STRING_SHORT-1);
 						                            	        
                 	        sched->jobs[i].mhosts[k].rank = match[j].rank[idx];
-                	        sched->jobs[i].mhosts[k].slots= match[j].slots[idx];                	    	
-#ifdef GWSCHEDDEBUG
-                            gw_scheduler_print('D',"Adding Host[%i] %s(%i) (queue %s) to matching list of job/array %i/%i\n",
-                                uhosts[l].ha_id,
+                	        sched->jobs[i].mhosts[k].slots= match[j].slots[idx];
+                	        
+                            gw_scheduler_print('I',"\t %-30s: rank = %-5i, slots = %-5i queue = %-15s\n",
                                 sched->hosts[uhosts[l].ha_id].name, 
-                                sched->hosts[sched->jobs[i].mhosts[k].ha_id].hid,
-                                match[j].queue_name[idx],
-                                jid,
-                                aid);
-#endif                	    
+                                match[j].rank[idx],
+                                match[j].slots[idx],
+                                match[j].queue_name[idx]);
+
                 	    	k++;
                 	    	break;
                 	    }	
@@ -531,8 +539,8 @@ void gw_scheduler_matching_arrays(gw_scheduler_t * sched)
 	    }
 	    else if ((tqs == 0)&&(sched->jobs[i].reason != GW_REASON_NONE))
 	    {
-            gw_scheduler_print('W',"No hosts found to re-schedule job %i\n", 
-                    sched->jobs[i].jid);
+            gw_scheduler_print('W',"No hosts found to re-schedule job %i\n",
+                sched->jobs[i].jid);
                     
             printf("SCHEDULE_JOB %i FAILED reschedule\n",sched->jobs[i].jid);	    	
 	    }

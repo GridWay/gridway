@@ -52,9 +52,10 @@ void gw_scheduler_add_host(gw_scheduler_t * sched,
 	for (i=0;i<sched->num_hosts;i++)
 	    if (sched->hosts[i].hid == hid)
 	    {
-	    	gw_scheduler_print('I',"Updating Host %i USLOTS:%i, RJOBS:%i\n",
+#ifdef GWSCHEDDEBUG
+	    	gw_scheduler_print('D',"Updating Host %i USLOTS:%i, RJOBS:%i\n",
 	    	    hid,uslots,rjobs);
-
+#endif
 	    	sched->hosts[i].used_slots   = uslots;
 	    	sched->hosts[i].running_jobs = rjobs;
 	    	
@@ -80,7 +81,7 @@ void gw_scheduler_add_host(gw_scheduler_t * sched,
 
     strncpy(sched->hosts[i].name, hostname, GW_MSG_STRING_SHORT-1);
 
-   	gw_scheduler_print('I',"Host %s (%i) added, USLOTS:%i, RJOBS:%i\n",
+   	gw_scheduler_print('I',"Host %s (%i) added, updating user information:\n",
 	    	    hostname,hid,uslots,rjobs);
     
     /* --------------------------------------- */
@@ -129,33 +130,23 @@ void gw_scheduler_add_host(gw_scheduler_t * sched,
     		sched->users[j].hosts[i].avrg_execution  = (float) acct.execution / (float) acct.tot;
     		sched->users[j].hosts[i].avrg_suspension = (float) acct.suspension/ (float) acct.tot;
     		sched->users[j].hosts[i].avrg_transfer   = (float) acct.transfer  / (float) acct.tot;
-    	    sched->users[j].hosts[i].migration_ratio = (1 - (float)acct.succ/(float)acct.tot);    		
     	}
     	else
     	{
     	    sched->users[j].hosts[i].avrg_execution  = 0;
     	    sched->users[j].hosts[i].avrg_suspension = 0;
     	    sched->users[j].hosts[i].avrg_transfer   = 0;
-
-    	    sched->users[j].hosts[i].migration_ratio = 0;
     	}
 #else
     	sched->users[j].hosts[i].avrg_execution  = 0;
     	sched->users[j].hosts[i].avrg_suspension = 0;
     	sched->users[j].hosts[i].avrg_transfer   = 0;
-
-    	sched->users[j].hosts[i].migration_ratio = 0;
-#endif
-    	    	
-#ifdef GWSCHEDDEBUG
-        gw_scheduler_print('D',"Host %s added for user %s "
-                           "(X:%.2f, S:%.2f, E:%.2f, M:%.2f)\n",
+#endif    	    	
+        gw_scheduler_print('I',"\t%-15s: avg_xfr = %8.2f  avg_que = %8.2f  avg_exe = %8.2f\n",
 	    	               hostname,sched->users[j].name,
                            sched->users[j].hosts[i].avrg_transfer,
                            sched->users[j].hosts[i].avrg_suspension,
-                           sched->users[j].hosts[i].avrg_execution,
-                           sched->users[j].hosts[i].migration_ratio);
-#endif
+                           sched->users[j].hosts[i].avrg_execution);
     }
 }
 

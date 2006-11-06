@@ -263,7 +263,12 @@ static int schedule_user (gw_scheduler_t * sched,
 							sched->hosts[h_id].hid,
 							sched->jobs[i].mhosts[j].qname,
 							sched->jobs[i].mhosts[j].rank);
-							
+
+                        gw_scheduler_print('I',"Job %i scheduled, host: %-30s queue: %-15s\n",
+							sched->jobs[i].jid,
+							sched->hosts[h_id].name,
+							sched->jobs[i].mhosts[j].qname);
+                                       							
                         gw_scheduler_job_del(sched,sched->jobs[i].jid);
                         
                         i = i - 1; /* Next job will be i, not i+1 */
@@ -338,6 +343,12 @@ static int schedule_user (gw_scheduler_t * sched,
 							sched->jobs[i].mhosts[j].qname,
 							sched->jobs[i].mhosts[j].rank,
 							tasks);
+
+                        gw_scheduler_print('I',"%i tasks of array %i scheduled, host: %-30s queue: %-15s\n",
+                            tasks,
+							sched->jobs[i].aid,
+							sched->hosts[h_id].name,
+							sched->jobs[i].mhosts[j].qname);
 
     					gw_scheduler_array_del(sched,sched->jobs[i].aid,tasks);
 						
@@ -441,6 +452,11 @@ static int reschedule_user (gw_scheduler_t * sched,
 							sched->hosts[h_id].hid,
 							sched->jobs[i].mhosts[j].qname,
 							sched->jobs[i].mhosts[j].rank);
+
+                        gw_scheduler_print('I',"Job %i re-scheduled host: %-30s queue: %-15s\n",
+							sched->jobs[i].jid,
+							sched->hosts[h_id].name,
+							sched->jobs[i].mhosts[j].qname);
 
                         gw_scheduler_job_del(sched,sched->jobs[i].jid);
                         

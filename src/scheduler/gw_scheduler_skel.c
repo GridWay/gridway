@@ -67,11 +67,8 @@ int main(int argc, char **argv)
 /* ------------------------------------------------------------------------- */
 /* ------------------------------------------------------------------------- */
 
-static void scheduler (gw_sch_job_t *    jobs,
-					   gw_sch_queue_t ** match_queues,
-					   gw_sch_user_t *   users,
-					   gw_sch_host_t *   hosts,
-					   void *            user_arg)
+static void scheduler (gw_scheduler_t * sched,
+    				   void *           user_arg)
 {
 	
 /* You issue schedules with the following strings 

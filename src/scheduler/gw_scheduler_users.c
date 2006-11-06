@@ -56,9 +56,10 @@ void gw_scheduler_add_user(gw_scheduler_t * sched,
 	for (i=0;i<sched->num_users;i++)
 	    if ( sched->users[i].uid == uid )
 	    {
-	    	gw_scheduler_print('I',"Updating user %i AJOBS:%i, RJOBS:%i\n",
+#ifdef GWSCHEDDEBUG	    	
+	    	gw_scheduler_print('D',"Updating user %i AJOBS:%i, RJOBS:%i\n",
 	    	    uid,ajobs,rjobs);
-	    	    
+#endif	    	    	    	    
 	        sched->users[i].active_jobs  = ajobs;
 	        sched->users[i].running_jobs = rjobs;
 	        
@@ -89,16 +90,10 @@ void gw_scheduler_add_user(gw_scheduler_t * sched,
     /*  From the scheduler configuration  */
     /* ---------------------------------- */
     
-    sched->users[i].priority   = 0;
     sched->users[i].share      = 0;
 
-#ifdef GWSCHEDDEBUG
-        gw_scheduler_print('D',"User %s (%i) added "
-                           "(A:%i, R:%i, P:%i, S:%i)\n",
-	    	               name,uid,ajobs,rjobs,
-                           sched->users[i].priority,
-                           sched->users[i].share);
-#endif
+    gw_scheduler_print('I',"User (%i) %s added, building host list...\n"
+        ,uid,name);
     
     /* --------------------------------------- */
     /*  Add the list of hosts for this user    */
@@ -148,34 +143,24 @@ void gw_scheduler_add_user(gw_scheduler_t * sched,
     		sched->users[i].hosts[j].avrg_execution  = (float) acct.execution / (float) acct.tot;
     		sched->users[i].hosts[j].avrg_suspension = (float) acct.suspension/ (float) acct.tot;
     		sched->users[i].hosts[j].avrg_transfer   = (float) acct.transfer  / (float) acct.tot;
-    	    sched->users[i].hosts[j].migration_ratio = (1 - (float)acct.succ/(float)acct.tot);    		
     	}
     	else
     	{
     	    sched->users[i].hosts[j].avrg_execution  = 0;
     	    sched->users[i].hosts[j].avrg_suspension = 0;
     	    sched->users[i].hosts[j].avrg_transfer   = 0;
-
-    	    sched->users[i].hosts[j].migration_ratio = 0;
     	}
 #else
     	sched->users[i].hosts[j].avrg_execution  = 0;
     	sched->users[i].hosts[j].avrg_suspension = 0;
     	sched->users[i].hosts[j].avrg_transfer   = 0;
-
-    	sched->users[i].hosts[j].migration_ratio = 0;
 #endif
 
-#ifdef GWSCHEDDEBUG
-        gw_scheduler_print('D',"Host %s added for user %s "
-                           "(X:%.2f, S:%.2f, E:%.2f, M:%.2f)\n",
+        gw_scheduler_print('I',"\t%-30s: avg_xfr = %8.2f  avg_que = %8.2f  avg_exe = %8.2f\n",
 	    	               sched->hosts[j].name,
-	    	               sched->users[i].name,
                            sched->users[i].hosts[j].avrg_transfer,
                            sched->users[i].hosts[j].avrg_suspension,
-                           sched->users[i].hosts[j].avrg_execution,
-                           sched->users[i].hosts[j].migration_ratio);
-#endif
+                           sched->users[i].hosts[j].avrg_execution);
     }
     
 #ifdef HAVE_LIBDB
@@ -193,12 +178,12 @@ void gw_scheduler_del_user(gw_scheduler_t * sched, int uid)
     int                  i;
     gw_boolean_t         found;
 
-#ifdef GWSCHEDDEBUG
-    gw_scheduler_print('D',"Removing user %i\n",uid);
-#endif
+    
     
     if ( sched->num_users == 1 )
-    {
+    {    	
+        gw_scheduler_print('I',"Removing user %s.\n",sched->users[0].name);
+        
     	if (sched->users[0].hosts != NULL)
    	        free(sched->users[0].hosts);
    	        
@@ -219,6 +204,8 @@ void gw_scheduler_del_user(gw_scheduler_t * sched, int uid)
     	else if ( sched->users[i].uid == uid )
     	{
     	    found = GW_TRUE;
+    	    
+            gw_scheduler_print('I',"Removing user %s.\n",sched->users[i].name);
     	    
     	    if (sched->users[i].hosts != NULL)
     	        free(sched->users[i].hosts);
