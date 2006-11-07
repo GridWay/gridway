@@ -730,7 +730,7 @@ $GW_LOCATION/
     Create a Globus makefile header:
     <screen>
 $ globus-makefile-header -flavor gcc32dbg globus_gram_client \
- globus_ftp_client globus_gass_copy > makefile_header</screen>
+ globus_ftp_client globus_gass_copy > makefile-header</screen>
     </para>
     <para>
     You can change gcc32dbg to the flavor used when Globus was installed.
