@@ -452,8 +452,8 @@ static const yytype_int8 yyrhs[] =
 static const yytype_uint8 yyrline[] =
 {
        0,    57,    57,    58,    59,    60,    62,    63,    64,    65,
-      66,    71,    77,    78,    79,    80,    81,    88,    96,    97,
-      98,    99
+      66,    73,    81,    82,    83,    84,    85,    92,   100,   101,
+     102,   103
 };
 #endif
 
@@ -1463,7 +1463,9 @@ yyreduce:
 
   case 10:
 #line 66 "src/host/gw_host_reqs_syntax.y"
-    { if ( fnmatch((yyvsp[(3) - (3)].val_str), gw_host_get_var_str((yyvsp[(1) - (3)].val_int),queue,host), 0) == 0)
+    { value_str = gw_host_get_var_str((yyvsp[(1) - (3)].val_int),queue,host);
+	                              if ( value_str != NULL
+				            && fnmatch((yyvsp[(3) - (3)].val_str), value_str, 0) == 0)
                                         (yyval.val_int) = 1;
                                       else
                                         (yyval.val_int) = 0;
@@ -1471,8 +1473,10 @@ yyreduce:
     break;
 
   case 11:
-#line 71 "src/host/gw_host_reqs_syntax.y"
-    { if ( fnmatch((yyvsp[(4) - (4)].val_str), gw_host_get_var_str((yyvsp[(1) - (4)].val_int),queue,host), 0) != 0)
+#line 73 "src/host/gw_host_reqs_syntax.y"
+    { value_str = gw_host_get_var_str((yyvsp[(1) - (4)].val_int),queue,host);
+	                             if ( value_str != NULL
+				          && fnmatch((yyvsp[(4) - (4)].val_str), value_str, 0) != 0)
                                         (yyval.val_int) = 1;
                                       else
                                         (yyval.val_int) = 0;
@@ -1480,27 +1484,27 @@ yyreduce:
     break;
 
   case 12:
-#line 77 "src/host/gw_host_reqs_syntax.y"
+#line 81 "src/host/gw_host_reqs_syntax.y"
     { (yyval.val_int) = gw_host_get_genvar_int((yyvsp[(1) - (3)].val_str),queue,host) == (yyvsp[(3) - (3)].val_int); ;}
     break;
 
   case 13:
-#line 78 "src/host/gw_host_reqs_syntax.y"
+#line 82 "src/host/gw_host_reqs_syntax.y"
     { (yyval.val_int) = gw_host_get_genvar_int((yyvsp[(1) - (4)].val_str),queue,host) != (yyvsp[(4) - (4)].val_int); ;}
     break;
 
   case 14:
-#line 79 "src/host/gw_host_reqs_syntax.y"
+#line 83 "src/host/gw_host_reqs_syntax.y"
     { (yyval.val_int) = gw_host_get_genvar_int((yyvsp[(1) - (3)].val_str),queue,host) > (yyvsp[(3) - (3)].val_int) ; ;}
     break;
 
   case 15:
-#line 80 "src/host/gw_host_reqs_syntax.y"
+#line 84 "src/host/gw_host_reqs_syntax.y"
     { (yyval.val_int) = gw_host_get_genvar_int((yyvsp[(1) - (3)].val_str),queue,host) < (yyvsp[(3) - (3)].val_int) ; ;}
     break;
 
   case 16:
-#line 81 "src/host/gw_host_reqs_syntax.y"
+#line 85 "src/host/gw_host_reqs_syntax.y"
     { value_str = gw_host_get_genvar_str((yyvsp[(1) - (3)].val_str),queue,host);
                                       if ( value_str != NULL
                                           && fnmatch((yyvsp[(3) - (3)].val_str), value_str, 0) == 0)
@@ -1511,7 +1515,7 @@ yyreduce:
     break;
 
   case 17:
-#line 88 "src/host/gw_host_reqs_syntax.y"
+#line 92 "src/host/gw_host_reqs_syntax.y"
     { value_str = gw_host_get_genvar_str((yyvsp[(1) - (4)].val_str),queue,host);
                                       if ( value_str != NULL
                                           && fnmatch((yyvsp[(4) - (4)].val_str), value_str, 0) != 0)
@@ -1522,28 +1526,28 @@ yyreduce:
     break;
 
   case 18:
-#line 96 "src/host/gw_host_reqs_syntax.y"
+#line 100 "src/host/gw_host_reqs_syntax.y"
     { (yyval.val_int) = (yyvsp[(1) - (3)].val_int) && (yyvsp[(3) - (3)].val_int); ;}
     break;
 
   case 19:
-#line 97 "src/host/gw_host_reqs_syntax.y"
+#line 101 "src/host/gw_host_reqs_syntax.y"
     { (yyval.val_int) = (yyvsp[(1) - (3)].val_int) || (yyvsp[(3) - (3)].val_int); ;}
     break;
 
   case 20:
-#line 98 "src/host/gw_host_reqs_syntax.y"
+#line 102 "src/host/gw_host_reqs_syntax.y"
     { (yyval.val_int) = ! (yyvsp[(2) - (2)].val_int); ;}
     break;
 
   case 21:
-#line 99 "src/host/gw_host_reqs_syntax.y"
+#line 103 "src/host/gw_host_reqs_syntax.y"
     { (yyval.val_int) =   (yyvsp[(2) - (3)].val_int); ;}
     break;
 
 
 /* Line 1267 of yacc.c.  */
-#line 1547 "src/host/gw_host_reqs_syntax.c"
+#line 1551 "src/host/gw_host_reqs_syntax.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1763,7 +1767,7 @@ yyreturn:
 }
 
 
-#line 103 "src/host/gw_host_reqs_syntax.y"
+#line 107 "src/host/gw_host_reqs_syntax.y"
 
 void host_reqs_error(YYLTYPE *llocp, gw_host_t *host, int queue, gw_boolean_t *result, int *pos, const char *str)
 {

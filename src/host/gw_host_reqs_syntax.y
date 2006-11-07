@@ -63,12 +63,16 @@ expr:   VARIABLE '=' INTEGER        { $$ = gw_host_get_var_int($1,queue,host) ==
 		| VARIABLE '!' '=' INTEGER  { $$ = gw_host_get_var_int($1,queue,host) != $4; }
         | VARIABLE '>' INTEGER      { $$ = gw_host_get_var_int($1,queue,host) > $3 ; }
         | VARIABLE '<' INTEGER      { $$ = gw_host_get_var_int($1,queue,host) < $3 ; }
-        | VARIABLE '=' STRING       { if ( fnmatch($3, gw_host_get_var_str($1,queue,host), 0) == 0)
+        | VARIABLE '=' STRING       { value_str = gw_host_get_var_str($1,queue,host);
+	                              if ( value_str != NULL
+				            && fnmatch($3, value_str, 0) == 0)
                                         $$ = 1;
                                       else
                                         $$ = 0;
                                       free($3); }                                      
-        | VARIABLE '!''=' STRING    { if ( fnmatch($4, gw_host_get_var_str($1,queue,host), 0) != 0)
+        | VARIABLE '!''=' STRING    { value_str = gw_host_get_var_str($1,queue,host);
+	                             if ( value_str != NULL
+				          && fnmatch($4, value_str, 0) != 0)
                                         $$ = 1;
                                       else
                                         $$ = 0;
