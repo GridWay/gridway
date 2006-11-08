@@ -1,6 +1,6 @@
 #!/bin/sh
 
-AID=`gwsubmit -v -t pi.job -n 4 | head -1 | awk '{print $3}'`
+AID=`gwsubmit -v -t pi.jt -n 4 | head -1 | awk '{print $3}'`
 
 if [ $? -ne 0 ]
 then
