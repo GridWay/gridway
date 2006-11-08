@@ -639,12 +639,15 @@ $ setenv PATH $PATH:$GW_LOCATION/bin</screen>
 
         <row>
         <entry>RESCHEDULE_ON_FAILURE</entry>
-        <entry>Behavior in case of failure. Possible values are 'yes' or 'no'</entry>
+        <entry>Behavior in case of failure. Possible values are 'yes' or
+        'no'</entry>
         </row>
 
         <row>
         <entry>NUMBER_OF_RETRIES</entry>
-        <entry>Number of retries in case of failure</entry>
+        <entry>Number of retries in case of failure</entry>. GridWay follows a
+        linear backoff strategy for re-trying file transfers and job
+        submissions.
         </row>
 
 			<row>
@@ -950,6 +953,17 @@ RESTART_FILES = tmp_file</screen>
       <row>
 			<entry>${ARCH}</entry>
 			<entry>The architecture of the selected execution host</entry>
+			</row>
+       <row>
+			<entry>${PARAM}</entry>
+			<entry>Allows the assignment of arbitrary start and increment values for array jobs
+(start + increment*GW_TASK_ID). Useful to generate file naming patterns or task processing. The values for start and increment
+will  be specified with options -s (for start, with 0 by default) and -i (for
+increment, with 1 by default) of the gwsubmit command.</entry>
+			</row>
+       <row>
+			<entry>${MAX_PARAM}</entry>
+			<entry>Upper bound of the ${PARAM} variable.</entry>
 			</row>
 	  </tbody>
     </tgroup>

@@ -471,7 +471,7 @@ $ wsrf-query -x -s https://localhost:8443/wsrf/services/DefaultIndexService</scr
 
     <listitem>
     <para>
-    J2SE 1.5.0+ SDK
+    J2SE versions 1.4.2_12 or 1.5.0+
     </para>
     </listitem>
 
@@ -1050,35 +1050,6 @@ HID HOSTNAME      OS        ARCH   MHZ %CPU  MEM(F/T)     DISK(F/T)  N(U/T) LRMS
           </row>
 
          <row>
-         <entry namest="c1" nameend="c3">Dispatch Options</entry>
-         </row>
-
-          <row>
-          <entry>JOBS_PER_SCHED</entry>
-          <entry>The maximum number of jobs that will be dispatched each
-          scheduling action. Set it to 0 to dispatch as many jobs as possible.
-          </entry>
-          <entry>10</entry>
-          </row>
-
-          <row>
-          <entry>JOBS_PER_HOST</entry>
-          <entry>The maximum number of jobs that will dispatched to the same
-          resource. Set it to 0 to dispatch to the same host as many jobs as
-          possible
-          </entry>
-          <entry>10</entry>
-          </row>
-
-          <row>
-          <entry>JOBS_PER_USER</entry>
-          <entry>The maximum number of simultaneous RUNNING jobs per user
-          Set it to 0 to dispatch as many jobs from the same user as possible
-          </entry>
-          <entry>30</entry>
-          </row>
-
-         <row>
          <entry namest="c1" nameend="c3">Intervals</entry>
          </row>
 
@@ -1547,8 +1518,7 @@ Could not connect to gwd</screen>
         <command>rsl|rsl_nsh|rsl2</command>: Selects the language that GWD will
         use to describe job requests. It can be
         <emphasis>rsl</emphasis> (intended to be used with pre-WS drivers),
-        <emphasis>rsl_nsh</emphasis> (intended to be used with pre-WS drivers over
-        resources with non-shared home directories, like in LCG) and
+        <emphasis>rsl_nsh</emphasis> (intended to be used with pre-WS drivers over resources with non-shared home directories, like in LCG) and
         <emphasis>rsl2</emphasis> (intended to be used with WS drivers).
         </para>
       </listitem>
@@ -1590,6 +1560,9 @@ Could not connect to gwd</screen>
     <listitem>
     <para>
     GridFTP server (version 1.1.2 and above)
+    </para>
+    <para>
+    Dummy Transfer driver (to be used with clusters without shared home)
     </para>
     </listitem>
   </itemizedlist>
@@ -1634,10 +1607,107 @@ Could not connect to gwd</screen>
   </para>
 
   <para>
-  To configure the GridFTP Driver add the following line to
+  To configure Transfer Driver add a line to
+  <filename>$GW_LOATION/etc/gwd.conf</filename>, with the following format:
+  <screen>TM_MAD = &lt;mad_name>:&lt;path_to_mad>:[arguments]></screen>
+  </para>
+
+  <sect2>
+  <title>Configuring the GridFTP Transfer Driver</title>
+  <para>
+  The GridFTP driver does not require any command line arguments. So to
+  configure the driver add the following line to
   <filename>$GW_LOCATION/etc/gwd.conf</filename>:
   <screen>TM_MAD = gridftp:gw_tm_mad_ftp:</screen>
   </para>
+  <para>
+  The name of the driver will be later used to specify the transfer mechanisms
+  with Grid resource.
+  </para>
+  </sect2>
+
+  <sect2>
+  <title>Configuring the Dummy Transfer Driver</title>
+  <para>
+  The Dummy driver should be used with those resources (clusters) which do not
+  have   a shared home. In this case transfer and execution are performed as
+  follows:
+  <itemizedlist>
+    <listitem>
+    <para>
+    The Dummy Transfer MAD performs data movements from the cluster worker node
+    and the client using a reverse server model.
+   </para>
+    </listitem>
+
+    <listitem>
+    <para>
+     The <emphasis>rsl_nsh</emphasis> RSL generation function is used, which
+     transfers the wrapper, along with its stdout and stderr streams.
+    </para>
+    </listitem>
+
+    <listitem>
+    <para>
+    The wrapper executing in the worker node automatically
+    transfers job.env and input/output files from the client.
+    </para>
+    </listitem>
+
+  <itemizedlist>
+
+  <para>
+  The following servers can be configured to access files on the client machine:
+  </para>
+
+  <para>
+  <itemizedlist>
+    <listitem>
+    <para>
+    <emphasis>GASS Server</emphasis>, started for each user.
+    </para>
+    <para>
+    <emphasis>GridFTP</emphasis>, specified by its url an running on the
+    GridWay server.
+    </para>
+    </listitem>
+  <itemizedlist>
+  </para>
+
+  <para>
+   The Dummy driver behavior is specified with the following command line
+   arguments:
+  </para>
+  <para>
+    <itemizedlist>
+      <listitem>
+        <para>
+          <command>-u &lt;URL></command>:URL of the GridFTP server.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <command>-g</command>: Use a user GASS server to transfer files.
+        </para>
+      </listitem>
+    </para>
+
+  <para>Sample configuration to use a GridFTP server:
+  <screen>TM_MAD = dummy:gw_tm_mad_dummy:-u gsiftp\://hostname</screen>
+  </para>
+  <important>
+  <para>
+   You MUST escape the colon character in gsiftp URL.
+   Also hostname should be the host running the GridWay instance.
+  </para>
+  </important>
+
+  <para>Sample configuration to use GASS servers:
+  <screen>TM_MAD = dummy:gw_tm_mad_dummy:-g</screen>
+  </para>
+
+  </sect2>
+
   </sect1>
 
   <sect1 id='InfDrivConf'>
@@ -1978,11 +2048,13 @@ draco.dacya.ucm.es</screen>
     <itemizedlist>
       <listitem>
       <para>
-      Round-Robin/Flooding: This is a very simple scheduling algorithm. It maximizes
+      Round-Robin/Flooding: This is a simple scheduling algorithm. It maximizes
       the number of jobs submitted to the Grid. Available resources, ordered by
       rank, are flooded with user jobs in a round-robin fashion.
       (the <emphasis>User Guide</emphasis> explains how to define the rank for
-      each job).
+      each job). The new version of this scheduler (from GridWay 5.1) also
+      considers past history of Grid resources: failed executions
+      are now considered when scheduling the jobs of each user.
       </para>
       </listitem>
     </itemizedlist>
@@ -2026,7 +2098,7 @@ draco.dacya.ucm.es</screen>
     <para>
     To configure the round-robin/flood scheduler add the following line to
     <filename>$GW_LOCATION/etc/gwd.conf</filename>:
-    <screen>flood:gw_flood_scheduler:-h 10 -u 30 -c 5</screen>
+    <screen>flood:gw_flood_scheduler:-h 10 -u 30 -c 5 -s 15</screen>
     </para>
     <para>
     where
@@ -2036,19 +2108,16 @@ draco.dacya.ucm.es</screen>
       <itemizedlist>
         <listitem>
           <para>
-            <command>-h</command>: The max number of jobs that the scheduler
-            submits to a given host. For optimal performance, this parameter
-            should be equal to <command>JOBS_PER_HOST</command> defined in
-            <filename>gwd.conf</filename>
+          <command>-h</command>:   The max number of jobs that the scheduler
+          submits to a given host. Default value is 10,
+          0 dispatch to each host as many jobs as possible.
           </para>
         </listitem>
 
         <listitem>
           <para>
-            <command>-u</command>: The max number of running jobs per user.
-            For optimal performance, this parameter should be equal to
-            <command>JOBS_PER_USER</command> defined
-            in <filename>gwd.conf</filename>
+            <command>-u</command>: The maximum number of simultaneous RUNNING
+            jobs per user. Default value is 30, 0 dispatch as many jobs as possible.
           </para>
         </listitem>
 
@@ -2057,6 +2126,14 @@ draco.dacya.ucm.es</screen>
             <command>-c</command>: Scheduling Chunk. Jobs of the same user are
             submitted in a round-robin fashion with the given chunk. This allows
             the administrator to establish a basic sharing policy.
+            Default value is 5
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <command>-s</command>: Dispatch Chunk. The maximum number of jobs
+            that will be dispatched each scheduling action. Default value is
+            15, 0 dispatch as many jobs as possible.
           </para>
         </listitem>
       </itemizedlist>
@@ -2072,6 +2149,4 @@ draco.dacya.ucm.es</screen>
   </sect1>
 </chapter>
 </book>
-
-
 
