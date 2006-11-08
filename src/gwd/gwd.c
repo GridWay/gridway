@@ -422,7 +422,6 @@ int main(int argc, char **argv)
     /* ---------------------------- */
     
     gw_log_init(log);
-    free(log);
     
     gw_conf_init(multiuser);
     
@@ -451,12 +450,16 @@ int main(int argc, char **argv)
         case -1: /* Error */
             fprintf(stderr,"Error! Unable to fork.\n"); 
             unlink(lock);
+            free(log);
             exit(-1);
             break;
 
         case 0: /* Child process */
             sprintf(log,"%s/var/",GW_LOCATION);
             rc = chdir(log);
+            
+            free(log);
+            
             if (rc != 0)
             {
                 perror("Error, can not change to dir.");
