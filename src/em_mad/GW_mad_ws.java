@@ -268,24 +268,6 @@ class GW_mad_ws extends Thread implements GramJobListener {
                 status = 0;
                 info = jobState_str;
             }
-
-            // If the job is done, remove it from the pool
-            if (jobState == StateEnumeration.Done
-                    || jobState == StateEnumeration.Failed)
-            {
-                job_pool.remove(jid);
-                jid_pool.remove(job);
-
-                try
-                {
-                    job.destroy();
-                }
-                catch (Exception e)
-                {
-                    status = 1;
-                    info = e.getMessage().replace('\n', ' ');
-                }
-            }
         }
 
         synchronized (System.out)
@@ -296,6 +278,24 @@ class GW_mad_ws extends Thread implements GramJobListener {
                 System.out.println("CALLBACK - FAILURE " + info);
             else
                 System.out.println("CALLBACK " + jid + " FAILURE " + info);
+        }
+        
+        // If the job is done, remove it from the pool
+        if (jobState == StateEnumeration.Done
+                || jobState == StateEnumeration.Failed)
+        {
+            job_pool.remove(jid);
+            jid_pool.remove(job);
+
+            try
+            {
+                job.destroy();
+            }
+            catch (Exception e)
+            {
+                //status = 1;
+                //info = e.getMessage().replace('\n', ' ');
+            }
         }
     }
 
@@ -446,7 +446,13 @@ class Service extends Thread {
             status = 1;
         }
 
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.WEEK_OF_YEAR , calendar.get(Calendar.WEEK_OF_YEAR) + 1);
+        
+        job.setTerminationTime(calendar.getTime()); // One week
+
         // Submit the job
+        
         try
         {
             job.submit(factoryEndpoint, false, false, null);
