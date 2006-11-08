@@ -137,16 +137,35 @@ JOB_DEPENDENCIES        { jtp_var = JOB_DEPENDENCIES;       BEGIN var_str;}
                                       switch(find)
                                       {
                                       case 0:
-                                        jt->num_input_files++;
-                                          strncpy(jt->input_files[jt->num_input_files-1][0],yytext,GW_JT_STR);
+                                          jt->num_input_files++;
+                                          
+                                          if (jt->num_input_files==GW_JT_FILES)
+                                          {
+                                              fprintf(stderr,"Max number of input files reached at line %i\n",yylineno);
+                                              return -1;
+                                          }
+                                          else
+                                              strncpy(jt->input_files[jt->num_input_files-1][0],yytext,GW_JT_STR);
                                           break;
                                         case 1:
-                                            jt->num_output_files++;
-                                          strncpy(jt->output_files[jt->num_output_files-1][0],yytext,GW_JT_STR);
+                                          jt->num_output_files++;
+                                          if (jt->num_output_files==GW_JT_FILES)
+                                          {
+                                              fprintf(stderr,"Max number of output files reached at line %i\n",yylineno);
+                                              return -1;
+                                          }                                          
+                                          else                                          
+                                              strncpy(jt->output_files[jt->num_output_files-1][0],yytext,GW_JT_STR);
                                           break;
                                         case 2:
                                           jt->num_restart_files++;
-                                          strncpy(jt->restart_files[jt->num_restart_files-1],yytext,GW_JT_STR);
+                                          if (jt->num_restart_files==GW_JT_FILES)
+                                          {
+                                              fprintf(stderr,"Max number of restart files reached at line %i\n",yylineno);
+                                              return -1;
+                                          }                                              
+                                          else                                          
+                                              strncpy(jt->restart_files[jt->num_restart_files-1],yytext,GW_JT_STR);
                                           break;
                                       }                                      
                                     break;
