@@ -38,12 +38,12 @@ const char * usage =
 "                    all the jobs in the array will use the same template\n"
 "  -v                print to stdout the job ids returned by gwd.\n" 
 "  -o                hold job on submission.\n" 
-"  -d \"id1 id2...\" job dependencies. Submit the job on hold state, and\n"
+"  -d \"id1 id2...\"   job dependencies. Submit the job on hold state, and\n"
 "                    release it once jobs with id1,id2,.. have finished\n"
-"  -s <start>        Start value for custom param in array jobs. Default 0"
-"  -i <increment>    Increment value for custom param in array jobs. Each task has"
-"                    associated the value PARAM=<start> + <increment> * TASK_ID, and"
-"                    MAX_PARM = <start>+<increment>*(<tasks>-1). Default 1";
+"  -s <start>        Start value for custom param in array jobs. Default 0\n"
+"  -i <increment>    Increment value for custom param in array jobs. Each task has\n"
+"                    associated the value PARAM=<start> + <increment> * TASK_ID, and\n"
+"                    MAX_PARM = <start>+<increment>*(<tasks>-1). Default 1\n\n";
 
 const char * susage =
 "usage: gwsubmit <-t template> [-n tasks] [-h] [-v] [-o] [-d \"id1 id2...\"]\n";
