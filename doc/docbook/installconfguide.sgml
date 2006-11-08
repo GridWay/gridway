@@ -386,7 +386,7 @@
         <para>
         File transfer test:
         <screen>
-$ globus-url-copy file://etc/hosts gsiftp://localhost/tmp/hosts1</screen>
+$ globus-url-copy file:///etc/hosts gsiftp://localhost/tmp/hosts1</screen>
         <screen>
 $ globus-url-copy gsiftp://localhost/tmp/hosts1 file:///tmp/hosts2</screen>
         The contents of files /etc/hosts, /tmp/hosts1 and /tmp/hosts2 should be identical.
