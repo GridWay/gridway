@@ -70,7 +70,7 @@
   <sect2>
   <title>SYNOPSIS</title>
   <para>
-   gwsubmit <-t template> [-n tasks] [-h] [-v] [-o] [-d "id1 id2 ..."]
+   gwsubmit <-t template> [-n tasks] [-h] [-v] [-o] [-s start] [-i increment]  [-d "id1 id2 ..."]
   </para>
   </sect2>
 
@@ -101,6 +101,19 @@
     <title>-n &lt;tasks></title>
     <para>
       submit an array job with the given number of tasks
+    </para>
+  </simplesect>
+  <simplesect>
+    <title>-s &lt;start></title>
+    <para>
+    Start value for custom param in array jobs. Default 0
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-i &lt;increment></title>
+    <para>
+    Increment value for custom param in array jobs. Each task has associated the value PARAM=start + increment * TASK_ID, and MAX_PARM = start+increment*(tasks-1). Default 1
     </para>
   </simplesect>
 

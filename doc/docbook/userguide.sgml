@@ -645,9 +645,9 @@ $ setenv PATH $PATH:$GW_LOCATION/bin</screen>
 
         <row>
         <entry>NUMBER_OF_RETRIES</entry>
-        <entry>Number of retries in case of failure</entry>. GridWay follows a
+        <entry>Number of retries in case of failure. GridWay follows a
         linear backoff strategy for re-trying file transfers and job
-        submissions.
+        submissions.</entry>
         </row>
 
 			<row>

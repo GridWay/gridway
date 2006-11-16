@@ -1654,7 +1654,7 @@ Could not connect to gwd</screen>
     </para>
     </listitem>
 
-  <itemizedlist>
+  </itemizedlist>
 
   <para>
   The following servers can be configured to access files on the client machine:
@@ -1671,7 +1671,7 @@ Could not connect to gwd</screen>
     GridWay server.
     </para>
     </listitem>
-  <itemizedlist>
+  </itemizedlist>
   </para>
 
   <para>
@@ -1690,6 +1690,7 @@ Could not connect to gwd</screen>
           <command>-g</command>: Use a user GASS server to transfer files.
         </para>
       </listitem>
+    </itemizedlist>
     </para>
 
   <para>Sample configuration to use a GridFTP server:
