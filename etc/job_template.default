@@ -68,9 +68,9 @@ OUTPUT_FILES =
 #   STDERR_FILE = stderr_file.${JOB_ID}
 #-------------------------------------------------------------------------------
 
-#STDIN_FILE  = /dev/null
-#STDOUT_FILE = stdout_file.${JOB_ID}
-#STDERR_FILE = stderr_file.${JOB_ID}
+STDIN_FILE  = /dev/null
+STDOUT_FILE = stdout.${JOB_ID}
+STDERR_FILE = stderr.${JOB_ID}
 
 #-------------------------------------------------------------------------------
 # Checkpointing parameters
@@ -81,7 +81,7 @@ OUTPUT_FILES =
 #   RESTART_FILES = checkpoint
 #
 # CHECKPOINT_INTERVAL: How often restart files are transferred from the execution
-# host to the checpointing server (Default is 300 seconds).
+# host to the checkpointing server (Default is 300 seconds).
 #
 # CHECKPOINT_URL: GridFTP URL to store/access checkpoint files
 # (Default is job directory in localhost, $GW_LOCATION/var/$JOB_ID). Example:
@@ -89,7 +89,7 @@ OUTPUT_FILES =
 #-------------------------------------------------------------------------------
 
 RESTART_FILES       =
-CHECKPOINT_INTERVAL = 600
+CHECKPOINT_INTERVAL = 0
 CHECKPOINT_URL      = 
 
 #-------------------------------------------------------------------------------
@@ -147,7 +147,7 @@ MONITOR            =
 # NUMBER_OF_RETRIES: Number of retries in case of failure
 #-------------------------------------------------------------------------------
 
-RESCHEDULE_ON_FAILURE = no
+RESCHEDULE_ON_FAILURE = yes
 NUMBER_OF_RETRIES     = 3
 
 #-------------------------------------------------------------------------------
