@@ -6,7 +6,7 @@
         </title>
 
 		<pubdate>
-            May, 2006
+            November, 2006
         </pubdate>
 
         <copyright>
@@ -150,42 +150,42 @@
           prints this help
         </para>
       </simplesect>
-      
+
       <simplesect>
         <title>-u user</title>
         <para>
           monitor only jobs owned by user
         </para>
-      </simplesect> 
-     
+      </simplesect>
+
       <simplesect>
         <title>-r host</title>
         <para>
           monitor only jobs executed in host
         </para>
-      </simplesect>  
-      
+      </simplesect>
+
       <simplesect>
         <title>-A AID</title>
         <para>
           monitor only jobs part of the array AID
         </para>
-      </simplesect>   
-      
+      </simplesect>
+
       <simplesect>
         <title>-s job_state</title>
         <para>
           monitor only jobs in states matching that of job_state
         </para>
-      </simplesect> 
-      
+      </simplesect>
+
       <simplesect>
         <title>-o output_format </title>
         <para>
            formats output information, allowing the selection of which
            fields to display
         </para>
-      </simplesect>                                               
+      </simplesect>
 
       <simplesect>
         <title>-c &lt;delay></title>
@@ -579,14 +579,14 @@
       do not print the header.
     </para>
   </simplesect>
-  
+
   <simplesect>
     <title>&lt;-d n | -w n | -m n | -t s&gt;</title>
     <para>
       take into account jobs submitted after certain date, specified in number
       of days (-d), weeks (-w), months (-m) or an epoch (-t)
     </para>
-  </simplesect>  
+  </simplesect>
 
   <simplesect>
     <title>-u user</title>

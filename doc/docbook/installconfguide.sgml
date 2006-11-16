@@ -3,7 +3,7 @@
     <bookinfo>
         <title>GridWay 5 Documentation: Installation and Configuration Guide</title>
 
-        <pubdate>May, 2006</pubdate>
+        <pubdate>November, 2006</pubdate>
         <copyright>
             <year>2002-2006</year>
             <holder>GridWay Team, Distributed Systems Architecture
@@ -453,7 +453,7 @@ $ wsrf-query -x -s https://localhost:8443/wsrf/services/DefaultIndexService</scr
   <itemizedlist>
     <listitem>
     <para>
-    C compiler: Tested versions gcc 3.4.2, 3.4.4 and 4.0.3
+    C compiler: Tested versions gcc 3.4.2, 3.4.4, 4.0.3, 4.0.3 and 4.1.2
     </para>
     </listitem>
 
@@ -471,7 +471,7 @@ $ wsrf-query -x -s https://localhost:8443/wsrf/services/DefaultIndexService</scr
 
     <listitem>
     <para>
-    J2SE versions 1.4.2_12 or 1.5.0+
+    J2SE versions 1.4.2_10+ (Builds higher than 10) or 1.5.0+
     </para>
     </listitem>
 
