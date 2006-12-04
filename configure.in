@@ -1,0 +1,213 @@
+# --------------------------------------------------------------------------
+# Copyright 2002-2006 GridWay Team, Distributed Systems Architecture
+# Group, Universidad Complutense de Madrid
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may
+# not use this file except in compliance with the License. You may obtain
+# a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# --------------------------------------------------------------------------
+
+AC_PREREQ(2.60a)
+AC_INIT([GridWay], [5.1], [gridway-user@globus.org])
+AC_CONFIG_AUX_DIR(config)
+AC_CANONICAL_SYSTEM
+
+# Checks availability of source code
+AC_CONFIG_SRCDIR([src/dm/gw_dm_action_dispatch.c])
+
+AC_CONFIG_HEADER([config.h])
+AC_PREFIX_DEFAULT("/usr/local/gw")
+AM_INIT_AUTOMAKE(subdir-objects,no-dependencies)
+AM_PROG_CC_C_O
+CFLAGS = -Wall
+AC_PROG_LIBTOOL
+
+#------------------------------------------------------------------
+# Build the makefile-header
+#-----------------------------------------------------------------
+
+echo -n "checking for Globus Toolkit..."
+if test -z "$GLOBUS_LOCATION" ; then
+    echo "GLOBUS_LOCATION is not defined..."
+    exit -1
+else
+   echo "ok"
+   if test -x $GLOBUS_LOCATION/bin/globus-makefile-header ; then
+
+       AC_ARG_WITH(flavor,  AC_HELP_STRING([--disable-drmaa],\
+       [Don't build drmaa support.  Default is enabled.]),\
+       [FLAVOR=$withval], [])
+
+       if test -z "$FLAVOR" ; then
+       if test -d $GLOBUS_LOCATION/include/gcc32 ; then
+            FLAVOR=gcc32
+      elif test -d $GLOBUS_LOCATION/include/gcc32dbg ; then
+            FLAVOR=gcc32dbg
+      elif test -d $GLOBUS_LOCATION/include/gcc64 ; then
+            FLAVOR=gcc64
+      elif test -d $GLOBUS_LOCATION/include/gcc64dbg ; then
+            FLAVOR=gcc32
+      elif test -d $GLOBUS_LOCATION/include/vendorcc32 ; then
+            FLAVOR=gcc32
+      elif test -d $GLOBUS_LOCATION/include/vendorcc32dbg ; then
+            FLAVOR=gcc32
+      elif test -d $GLOBUS_LOCATION/include/vendorcc64 ; then
+            FLAVOR=gcc32
+      elif test -d $GLOBUS_LOCATION/include/vendorcc64dbg ; then
+            FLAVOR=gcc32
+      else
+          echo "use --with-flavor"
+          exit -1
+      fi
+      fi
+
+      echo -n "creating makefile-header..."
+
+      globus-makefile-header -flavor $FLAVOR globus_gram_client \
+           globus_ftp_client globus_gass_copy > makefile-header
+
+      if test $? -ne 0 ; then
+           echo "failed"
+           cat makefile-header
+           rm makefile-header
+           exit -1
+      fi
+      echo "ok"
+   fi
+fi
+
+
+#-------------------------------------------------------
+# Argument check
+#-------------------------------------------------------
+
+# ---    Enables
+
+drmaa="drmaa"
+drmaa_java_howtos="drmaa_java_howtos"
+drmaa_c_howtos="drmaa_java_howtos"
+
+AC_ARG_ENABLE(drmaa,  AC_HELP_STRING([--disable-drmaa],\
+  [Don't build drmaa support.  Default is enabled.]),\
+  [if test $enableval = "no"; then drmaa=" "; drmaa_c_howtos=" "; drmaa_java_howtos=" "; fi], [])
+
+
+AC_SUBST(drmaa, $drmaa)
+AC_SUBST(drmaa_java_howtos, $drmaa_java_howtos)
+AC_SUBST(drmaa_c_howtos, $drmaa_c_howtos)
+AM_CONDITIONAL(DRMAA, test "x$drmaa" = "xdrmaa")
+
+prews="prews"
+AC_ARG_ENABLE(prews,  AC_HELP_STRING([--disable-prews],\
+  [Don't build pre-web-services support. Default is enabled.]),\
+  [if test $enableval = "no"; then prews=" "; fi], [])
+
+AC_SUBST(prews, $prews)
+AM_CONDITIONAL(PREWS, test "x$prews" = "xprews")
+
+ws="ws"
+AC_ARG_ENABLE(ws,  AC_HELP_STRING([--disable-ws],\
+  [Don't build web-services support. Default is enabled.]),\
+  [if test $enableval = "no"; then ws=" "; fi], [])
+
+AC_SUBST(ws, $ws)
+AM_CONDITIONAL(WS, test "x$ws" = "xws")
+
+# ------ Withs
+
+AC_ARG_WITH(db,  AC_HELP_STRING([--with-db],\
+       [Build db support for accounting.]),\
+       [if test $withval="yes"; then \
+                        LDFLAGS="${LDFLAGS} -L/usr/lib"; \
+                        DB4_INCLUDE_PATH=/usr/include; \
+        else if test $withval!="no"; then \
+                   LDFLAGS="${LDFLAGS} -L${withval}/lib"; \
+                   DB4_INCLUDE_PATH=${withval}/include; \
+             fi \
+        fi]  , [])
+
+AC_ARG_WITH(doc,  AC_HELP_STRING([--with-doc],\
+        [Build documentation]),\
+        [if test $withval = "yes"; then doc="yes"; else doc="no"; fi], [])
+
+AM_CONDITIONAL(DOC, test "x$doc" = "xyes")
+
+AC_ARG_WITH(examples,  AC_HELP_STRING([--with-examples],\
+        [Build examples]),\
+        [if test $withval = "yes"; then examples="yes"; else examples="no"; fi], [])
+
+AM_CONDITIONAL(EXAMPLES, test "x$examples" = "xyes")
+
+AC_ARG_WITH(tests,  AC_HELP_STRING([--with-tests],\
+        [Build examples]),\
+        [if test $withval = "yes"; then tests="yes"; else tests="no"; fi], [])
+
+AM_CONDITIONAL(TESTS, test "x$tests" = "xyes")
+
+
+
+# Checks for programs.
+AC_PROG_AWK
+AC_PROG_YACC
+AC_PROG_CC
+AM_PROG_LEX
+AC_PROG_LN_S
+
+# Checks for libraries.
+#AC_CHECK_LIB([drmaa], [drmaa_allocate_job_template])
+# FIXME: Replace `main' with a function in `-lm':
+#AC_CHECK_LIB([m], [main])
+# FIXME: Replace `main' with a function in `-lpthread':
+AC_CHECK_LIB([pthread], [pthread_cond_wait])
+
+
+
+AC_CHECK_LIB([db], [db_env_create])
+
+# Checks for header files.
+AC_FUNC_ALLOCA
+AC_HEADER_DIRENT
+AC_HEADER_STDC
+AC_HEADER_SYS_WAIT
+AC_CHECK_HEADERS([arpa/inet.h fcntl.h inttypes.h libintl.h limits.h malloc.h netdb.h netinet/in.h stddef.h stdlib.h string.h sys/socket.h unistd.h])
+
+# Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+AC_C_INLINE
+AC_TYPE_INT16_T
+AC_TYPE_INT32_T
+AC_TYPE_INT8_T
+AC_TYPE_MODE_T
+AC_TYPE_PID_T
+AC_TYPE_SIZE_T
+AC_TYPE_SSIZE_T
+AC_HEADER_TIME
+AC_STRUCT_TM
+AC_TYPE_UINT16_T
+AC_TYPE_UINT32_T
+AC_TYPE_UINT8_T
+
+# Checks for library functions.
+AC_REPLACE_FNMATCH
+AC_FUNC_FORK
+AC_FUNC_MALLOC
+AC_FUNC_REALLOC
+AC_FUNC_SELECT_ARGTYPES
+AC_FUNC_STAT
+AC_FUNC_VPRINTF
+AC_CHECK_FUNCS([dup2 getcwd gethostbyname gethostname gettimeofday memset realpath select socket strcasecmp strchr strdup strerror strrchr strstr])
+
+AC_CONFIG_FILES([Makefile
+                  src/Makefile
+                  doc/Makefile
+                  doc/docbook/Makefile])
+                  
+AC_OUTPUT
