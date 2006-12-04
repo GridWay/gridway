@@ -16,16 +16,28 @@
 # --------------------------------------------------------------------------
 
 %.html: %.sgml
-        db2html -d gwdoc.dsl#html $<
+	db2html -d gwdoc.dsl#html $<
 
 %.pdf: %.sgml
-        db2pdf -d gwdoc.dsl#print $<
+	db2pdf -d gwdoc.dsl#print $<
 
 images:
-        ln -s ../images ./images
+	ln -s ../images ./images
 
-all: htmls pdfs
+TARGETS=
+if DB2HTMLC
+if DB2PDFC
+TARGETS+=htmls pdfs
+else
+TARGETS+=htmls
+endif
+else 
+if DB2PDFC
+TARGETS+=pdfs
+endif
+endif
 
+all: $(TARGETS)
 
 pdfs: images appdeveloperguide.pdf  gwdeveloperguide.pdf \
         installconfguide.pdf  userguide.pdf \
@@ -37,4 +49,4 @@ htmls: images appdeveloperguide.html  \
         userguide.html commandreference.html
 
 clean:
-        rm -rf userguide appdeveloperguide commandreference gwdeveloperguide installconfguide *.junk *~ *.pdf images
+	rm -rf userguide appdeveloperguide commandreference gwdeveloperguide installconfguide *.junk *~ *.pdf images

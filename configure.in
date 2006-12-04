@@ -23,11 +23,9 @@ AC_CANONICAL_SYSTEM
 # Checks availability of source code
 AC_CONFIG_SRCDIR([src/dm/gw_dm_action_dispatch.c])
 
-AC_CONFIG_HEADER([config.h])
 AC_PREFIX_DEFAULT("/usr/local/gw")
 AM_INIT_AUTOMAKE(subdir-objects,no-dependencies)
 AM_PROG_CC_C_O
-CFLAGS = -Wall
 AC_PROG_LIBTOOL
 
 #------------------------------------------------------------------
@@ -42,48 +40,71 @@ else
    echo "ok"
    if test -x $GLOBUS_LOCATION/bin/globus-makefile-header ; then
 
-       AC_ARG_WITH(flavor,  AC_HELP_STRING([--disable-drmaa],\
-       [Don't build drmaa support.  Default is enabled.]),\
+       AC_ARG_WITH(flavor,  AC_HELP_STRING([--with-flavor],\
+       [Specify globus build flavor (eg. gcc32dbg)]),\
        [FLAVOR=$withval], [])
 
-       if test -z "$FLAVOR" ; then
+      if test -z "$FLAVOR" ; then
+       
        if test -d $GLOBUS_LOCATION/include/gcc32 ; then
             FLAVOR=gcc32
-      elif test -d $GLOBUS_LOCATION/include/gcc32dbg ; then
+       elif test -d $GLOBUS_LOCATION/include/gcc32dbg ; then
             FLAVOR=gcc32dbg
-      elif test -d $GLOBUS_LOCATION/include/gcc64 ; then
+       elif test -d $GLOBUS_LOCATION/include/gcc64 ; then
             FLAVOR=gcc64
-      elif test -d $GLOBUS_LOCATION/include/gcc64dbg ; then
-            FLAVOR=gcc32
-      elif test -d $GLOBUS_LOCATION/include/vendorcc32 ; then
-            FLAVOR=gcc32
-      elif test -d $GLOBUS_LOCATION/include/vendorcc32dbg ; then
-            FLAVOR=gcc32
-      elif test -d $GLOBUS_LOCATION/include/vendorcc64 ; then
-            FLAVOR=gcc32
-      elif test -d $GLOBUS_LOCATION/include/vendorcc64dbg ; then
-            FLAVOR=gcc32
-      else
+       elif test -d $GLOBUS_LOCATION/include/gcc64dbg ; then
+            FLAVOR=gcc64dbg
+       elif test -d $GLOBUS_LOCATION/include/vendorcc32 ; then
+            FLAVOR=vendorcc32
+       elif test -d $GLOBUS_LOCATION/include/vendorcc32dbg ; then
+            FLAVOR=vendorcc32dbg
+       elif test -d $GLOBUS_LOCATION/include/vendorcc64 ; then
+            FLAVOR=vendorcc64
+       elif test -d $GLOBUS_LOCATION/include/vendorcc64dbg ; then
+            FLAVOR=vendorcc64dbg
+       else
           echo "use --with-flavor"
           exit -1
-      fi
-      fi
+       fi
+      
+   else
+    
+    echo "Could not find globus-makefile-header..."
+    exit -1  
+   
+   fi
+ 
+   echo -n "creating makefile-header..."
 
-      echo -n "creating makefile-header..."
+   globus-makefile-header -flavor $FLAVOR globus_gram_client \
+       globus_ftp_client globus_gass_copy > makefile-header
 
-      globus-makefile-header -flavor $FLAVOR globus_gram_client \
-           globus_ftp_client globus_gass_copy > makefile-header
-
-      if test $? -ne 0 ; then
-           echo "failed"
-           cat makefile-header
-           rm makefile-header
-           exit -1
-      fi
+   if test $? -ne 0 ; then
+      echo "failed"
+      cat makefile-header
+      rm makefile-header
+      exit -1
+   fi
       echo "ok"
    fi
 fi
 
+#------------------------------------------------------------------
+# Check target system
+#-----------------------------------------------------------------
+
+AC_CANONICAL_BUILD
+
+case "$build_os" in
+   *linux*)
+      system=linux
+   ;;
+   *solaris*)
+      system=solaris
+   ;;
+esac
+
+AC_SUBST(system, $system)
 
 #-------------------------------------------------------
 # Argument check
@@ -138,7 +159,28 @@ AC_ARG_WITH(doc,  AC_HELP_STRING([--with-doc],\
         [Build documentation]),\
         [if test $withval = "yes"; then doc="yes"; else doc="no"; fi], [])
 
-AM_CONDITIONAL(DOC, test "x$doc" = "xyes")
+if test "x$doc" = "xyes" ; then
+     AC_PATH_PROG(DB2HTML, db2html)
+     AM_CONDITIONAL(DB2HTMLC, test -n "$DB2HTML")
+
+     AC_PATH_PROG(DB2PDF, db2pdf)
+     AM_CONDITIONAL(DB2PDFC, test -n "$DB2PDF")
+     
+     AC_PATH_PROG(JAVADOC, javadoc)
+     AM_CONDITIONAL(JAVADOCC, test -n "$JAVADOC")
+          
+     AC_PATH_PROG(DOXYGEN, doxygen)
+     AM_CONDITIONAL(DOXYGENC, test -n "$DOXYGEN")     
+     
+     AM_CONDITIONAL(DOC, true)
+else
+     AM_CONDITIONAL(DB2HTMLC, false)
+     AM_CONDITIONAL(DB2PDFC, false)
+     AM_CONDITIONAL(JAVADOCC, false)
+     AM_CONDITIONAL(DOXYGENC, false)          
+     AM_CONDITIONAL(DOC, false)
+fi
+     
 
 AC_ARG_WITH(examples,  AC_HELP_STRING([--with-examples],\
         [Build examples]),\

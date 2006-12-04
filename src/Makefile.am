@@ -199,7 +199,7 @@ TM_MAD_RFT_SRC = $(TM_MAD)/GWRftClient.java \
 
 DRMAA_SRC = $(COMMON)/gw_file_parser.c $(CLIENT_SRC) \
         $(DRMAA)/gw_drmaa.c $(DRMAA)/gw_drmaa_jt.c \
-        $(COMMON)/gw_template_parser.c \
+        $(COMMON)/gw_template_parser.l \
         $(COMMON)/gw_template.c $(COMMON)/gw_log.c
 
 DRMAAJNI_SRC  = $(DRMAA_PACK)/DrmaaJNI.c
@@ -210,7 +210,7 @@ DRMAAJNI_SRC  = $(DRMAA_PACK)/DrmaaJNI.c
 
 include $(top_srcdir)/makefile-header
 
-SYSTEM=${target_os}
+SYSTEM=@system@
 
 INCLUDES = -I$(top_srcdir)/include \
              $(GLOBUS_INCLUDES) \
@@ -364,12 +364,12 @@ jardir = $(prefix)/lib
 
 dist_jar_DATA = $(srcdir)/drmaa/drmaa.jar
 $(srcdir)/drmaa/drmaa.jar:
-        @rm -f lib/drmaa.jar
-        @mkdir -p $(DRMAA)/package
-        $(JAVAC) $(srcdir)/drmaa/org/ggf/drmaa/*.java -classpath $(DRMAA) \
+	@rm -f lib/drmaa.jar
+	@mkdir -p $(DRMAA)/package
+	$(JAVAC) $(srcdir)/drmaa/org/ggf/drmaa/*.java -classpath $(DRMAA) \
         -d $(DRMAA)/package
-        jar cf $(srcdir)/drmaa/drmaa.jar -C $(DRMAA)/package/ .
-        @rm -rf $(DRMAA)/package
+	jar cf $(srcdir)/drmaa/drmaa.jar -C $(DRMAA)/package/ .
+	@rm -rf $(DRMAA)/package
 endif
 
 # --------------------------------
@@ -457,7 +457,7 @@ dist_scripts_SCRIPTS = $(top_srcdir)/scripts/wrapper.sh \
 
 dist_sysconf_DATA = $(top_srcdir)/etc/gwd.conf $(top_srcdir)/etc/job_template.default \
         $(top_srcdir)/etc/im_examples/host.list $(top_srcdir)/etc/im_examples/host_glue.list \
-        $(top_srcdir)/etc/im_examples/machine1.attributes \ 
+        $(top_srcdir)/etc/im_examples/machine1.attributes \
         $(top_srcdir)/etc/im_examples/machine2.attributes
 
 # ----------------------------
@@ -480,5 +480,5 @@ endif
 # ----------------------------
 
 install-data-hook:
-        @rm -rf @prefix@/var
-        @mkdir -p @prefix@/var/acct
+	@rm -rf @prefix@/var
+	@mkdir -p @prefix@/var/acct

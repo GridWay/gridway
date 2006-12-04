@@ -46,6 +46,7 @@ int  gcp_max;
 %option prefix="gcp_"
 %option yylineno
 %option nounput
+%option outfile="lex.yy.c"
 
 %%
 

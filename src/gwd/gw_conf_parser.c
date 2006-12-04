@@ -1,6 +1,6 @@
-#line 2 "src/gwd/gw_conf_parser.c"
+#line 2 "gwd/gw_conf_parser.c"
 
-#line 4 "src/gwd/gw_conf_parser.c"
+#line 4 "gwd/gw_conf_parser.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -624,7 +624,7 @@ static int yy_more_len = 0;
 #define YY_MORE_ADJ (yy_more_len)
 #define YY_RESTORE_YY_MORE_OFFSET
 char *gcp_text;
-#line 1 "src/gwd/gw_conf_parser.l"
+#line 1 "gw_conf_parser.l"
 /* -------------------------------------------------------------------------- */
 /* Copyright 2002-2006 GridWay Team, Distributed Systems Architecture         */
 /* Group, Universidad Complutense de Madrid                                   */
@@ -641,7 +641,7 @@ char *gcp_text;
 /* See the License for the specific language governing permissions and        */
 /* limitations under the License.                                             */
 /* -------------------------------------------------------------------------- */
-#line 19 "src/gwd/gw_conf_parser.l"
+#line 19 "gw_conf_parser.l"
 #include <stdio.h>
 #include <string.h>
 #include "gw_conf.h"
@@ -667,7 +667,7 @@ int  gcp_max;
 
 
 
-#line 671 "src/gwd/gw_conf_parser.c"
+#line 671 "gwd/gw_conf_parser.c"
 
 #define INITIAL 0
 #define var_int 1
@@ -824,14 +824,14 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 50 "src/gwd/gw_conf_parser.l"
+#line 51 "gw_conf_parser.l"
 
 
     /* --------------------------------------------------------------------- */
     /*    Parse comments                                                     */
     /* --------------------------------------------------------------------- */
     
-#line 835 "src/gwd/gw_conf_parser.c"
+#line 835 "gwd/gw_conf_parser.c"
 
 	if ( !(yy_init) )
 		{
@@ -933,7 +933,7 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 56 "src/gwd/gw_conf_parser.l"
+#line 57 "gw_conf_parser.l"
 ;
 	YY_BREAK
 /* --------------------------------------------------------------------- */
@@ -941,72 +941,72 @@ YY_RULE_SETUP
 /* --------------------------------------------------------------------- */
 case 2:
 YY_RULE_SETUP
-#line 62 "src/gwd/gw_conf_parser.l"
+#line 63 "gw_conf_parser.l"
 { gcp_var = GWD_PORT;              BEGIN var_int;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 63 "src/gwd/gw_conf_parser.l"
+#line 64 "gw_conf_parser.l"
 { gcp_var = MAX_NUMBER_OF_CLIENTS; BEGIN var_int;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 64 "src/gwd/gw_conf_parser.l"
+#line 65 "gw_conf_parser.l"
 { gcp_var = NUMBER_OF_ARRAYS;      BEGIN var_int;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 65 "src/gwd/gw_conf_parser.l"
+#line 66 "gw_conf_parser.l"
 { gcp_var = NUMBER_OF_JOBS;        BEGIN var_int;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 66 "src/gwd/gw_conf_parser.l"
+#line 67 "gw_conf_parser.l"
 { gcp_var = NUMBER_OF_HOSTS;       BEGIN var_int;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 67 "src/gwd/gw_conf_parser.l"
+#line 68 "gw_conf_parser.l"
 { gcp_var = NUMBER_OF_USERS;       BEGIN var_int;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 68 "src/gwd/gw_conf_parser.l"
+#line 69 "gw_conf_parser.l"
 { gcp_var = SCHEDULING_INTERVAL;   BEGIN var_int;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 69 "src/gwd/gw_conf_parser.l"
+#line 70 "gw_conf_parser.l"
 { gcp_var = DISCOVERY_INTERVAL;    BEGIN var_int;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 70 "src/gwd/gw_conf_parser.l"
+#line 71 "gw_conf_parser.l"
 { gcp_var = MONITORING_INTERVAL;   BEGIN var_int;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 71 "src/gwd/gw_conf_parser.l"
+#line 72 "gw_conf_parser.l"
 { gcp_var = POLL_INTERVAL;         BEGIN var_int;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 72 "src/gwd/gw_conf_parser.l"
+#line 73 "gw_conf_parser.l"
 { gcp_var = IM_MAD; init_mad_parser(0); BEGIN var_mad;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 73 "src/gwd/gw_conf_parser.l"
+#line 74 "gw_conf_parser.l"
 { gcp_var = TM_MAD; init_mad_parser(1); BEGIN var_mad;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 74 "src/gwd/gw_conf_parser.l"
+#line 75 "gw_conf_parser.l"
 { gcp_var = EM_MAD; init_mad_parser(2); BEGIN var_mad;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 75 "src/gwd/gw_conf_parser.l"
+#line 76 "gw_conf_parser.l"
 { gcp_var = DM_SCHED; gcp_j = 0;   BEGIN var_sch;}
 	YY_BREAK
 /* --------------------------------------------------------------------- */
@@ -1014,17 +1014,17 @@ YY_RULE_SETUP
 /* --------------------------------------------------------------------- */
 case 16:
 YY_RULE_SETUP
-#line 81 "src/gwd/gw_conf_parser.l"
+#line 82 "gw_conf_parser.l"
 { BEGIN val_int;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 82 "src/gwd/gw_conf_parser.l"
+#line 83 "gw_conf_parser.l"
 { BEGIN val_mad;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 83 "src/gwd/gw_conf_parser.l"
+#line 84 "gw_conf_parser.l"
 { BEGIN val_sch;}
 	YY_BREAK
 /* --------------------------------------------------------------------- */
@@ -1033,23 +1033,23 @@ YY_RULE_SETUP
 case 19:
 /* rule 19 can match eol */
 YY_RULE_SETUP
-#line 89 "src/gwd/gw_conf_parser.l"
+#line 90 "gw_conf_parser.l"
 { BEGIN INITIAL;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 90 "src/gwd/gw_conf_parser.l"
+#line 91 "gw_conf_parser.l"
 { gcp_set_val_int(gcp_var, atoi(gcp_text));}
 	YY_BREAK
 case 21:
 /* rule 21 can match eol */
 YY_RULE_SETUP
-#line 92 "src/gwd/gw_conf_parser.l"
+#line 93 "gw_conf_parser.l"
 { BEGIN INITIAL;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 93 "src/gwd/gw_conf_parser.l"
+#line 94 "gw_conf_parser.l"
 { if ( gcp_text[gcp_leng-2] == '\\' )
                           {
                             yymore();
@@ -1073,7 +1073,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 113 "src/gwd/gw_conf_parser.l"
+#line 114 "gw_conf_parser.l"
 { if ( gcp_mads != NULL )
                           {
                             process_escaped_chars(gcp_text);
@@ -1084,12 +1084,12 @@ YY_RULE_SETUP
 case 24:
 /* rule 24 can match eol */
 YY_RULE_SETUP
-#line 120 "src/gwd/gw_conf_parser.l"
+#line 121 "gw_conf_parser.l"
 { BEGIN INITIAL;}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 121 "src/gwd/gw_conf_parser.l"
+#line 122 "gw_conf_parser.l"
 { gcp_j++;
                           if (gcp_j >= 3)
                           {
@@ -1100,7 +1100,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 128 "src/gwd/gw_conf_parser.l"
+#line 129 "gw_conf_parser.l"
 { gw_conf.dm_mad[gcp_j] = strdup(gcp_text);}
 	YY_BREAK
 /* --------------------------------------------------------------------- */
@@ -1109,27 +1109,27 @@ YY_RULE_SETUP
 case 27:
 /* rule 27 can match eol */
 YY_RULE_SETUP
-#line 134 "src/gwd/gw_conf_parser.l"
+#line 135 "gw_conf_parser.l"
 ;
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 135 "src/gwd/gw_conf_parser.l"
+#line 136 "gw_conf_parser.l"
 { gw_log_print("GW",'E',"Undefined variable (%s) at line %i\n",
                         gcp_text, gcp_lineno);}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 138 "src/gwd/gw_conf_parser.l"
+#line 139 "gw_conf_parser.l"
 { gw_log_print("GW",'E',"gwd.conf: Parse error at line %i\n",gcp_lineno);
                   return -1; }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 140 "src/gwd/gw_conf_parser.l"
+#line 141 "gw_conf_parser.l"
 ECHO;
 	YY_BREAK
-#line 1133 "src/gwd/gw_conf_parser.c"
+#line 1133 "gwd/gw_conf_parser.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(var_int):
 case YY_STATE_EOF(var_mad):
@@ -2092,7 +2092,7 @@ void gcp_free (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 140 "src/gwd/gw_conf_parser.l"
+#line 141 "gw_conf_parser.l"
 
 
 

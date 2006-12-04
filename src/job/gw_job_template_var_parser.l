@@ -42,6 +42,7 @@ pthread_mutex_t jtp_var_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 %option prefix="jtp_var_"
 %option nounput
+%option outfile="lex.yy.c"
 
 %%
 

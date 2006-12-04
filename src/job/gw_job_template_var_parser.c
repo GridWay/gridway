@@ -1,6 +1,6 @@
-#line 2 "src/job/gw_job_template_var_parser.c"
+#line 2 "job/gw_job_template_var_parser.c"
 
-#line 4 "src/job/gw_job_template_var_parser.c"
+#line 4 "job/gw_job_template_var_parser.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -497,7 +497,7 @@ int jtp_var__flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *jtp_var_text;
-#line 1 "src/job/gw_job_template_var_parser.l"
+#line 1 "gw_job_template_var_parser.l"
 /* -------------------------------------------------------------------------- */
 /* Copyright 2002-2006 GridWay Team, Distributed Systems Architecture         */
 /* Group, Universidad Complutense de Madrid                                   */
@@ -514,7 +514,7 @@ char *jtp_var_text;
 /* See the License for the specific language governing permissions and        */
 /* limitations under the License.                                             */
 /* -------------------------------------------------------------------------- */
-#line 19 "src/job/gw_job_template_var_parser.l"
+#line 19 "gw_job_template_var_parser.l"
 #include <stdio.h>
 #include <string.h>
 #include "gw_conf.h"
@@ -537,7 +537,7 @@ int    env_i;
 int    i, length_tmp;
 
 pthread_mutex_t jtp_var_mutex = PTHREAD_MUTEX_INITIALIZER;
-#line 541 "src/job/gw_job_template_var_parser.c"
+#line 541 "job/gw_job_template_var_parser.c"
 
 #define INITIAL 0
 
@@ -688,10 +688,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 46 "src/job/gw_job_template_var_parser.l"
+#line 47 "gw_job_template_var_parser.l"
 
 
-#line 695 "src/job/gw_job_template_var_parser.c"
+#line 695 "job/gw_job_template_var_parser.c"
 
 	if ( !(yy_init) )
 		{
@@ -776,32 +776,32 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 48 "src/job/gw_job_template_var_parser.l"
+#line 49 "gw_job_template_var_parser.l"
 { jtp_var_cat_int(job->array_id);}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 49 "src/job/gw_job_template_var_parser.l"
+#line 50 "gw_job_template_var_parser.l"
 { jtp_var_cat_int(job->id);}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 50 "src/job/gw_job_template_var_parser.l"
+#line 51 "gw_job_template_var_parser.l"
 { jtp_var_cat_int(job->task_id);}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 51 "src/job/gw_job_template_var_parser.l"
+#line 52 "gw_job_template_var_parser.l"
 { jtp_var_cat_int(job->total_tasks);}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 52 "src/job/gw_job_template_var_parser.l"
+#line 53 "gw_job_template_var_parser.l"
 { jtp_var_cat_str(job->history->host->arch);}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 53 "src/job/gw_job_template_var_parser.l"
+#line 54 "gw_job_template_var_parser.l"
 { if (job->array_id != -1)
                       jtp_var_cat_int((job->pstart + (job->pinc*job->task_id)));
                     else
@@ -810,7 +810,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 58 "src/job/gw_job_template_var_parser.l"
+#line 59 "gw_job_template_var_parser.l"
 { if (job->array_id != -1)
                       jtp_var_cat_int((job->pstart + (job->pinc*(job->total_tasks-1))));
                     else
@@ -820,7 +820,7 @@ YY_RULE_SETUP
 case 8:
 /* rule 8 can match eol */
 YY_RULE_SETUP
-#line 63 "src/job/gw_job_template_var_parser.l"
+#line 64 "gw_job_template_var_parser.l"
 { 
                     length_tmp = jtp_var_leng;
 					tmp = jtp_var_text+2;
@@ -841,15 +841,15 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 80 "src/job/gw_job_template_var_parser.l"
+#line 81 "gw_job_template_var_parser.l"
 { jtp_var_parsed_value[jtp_var_i++]=*jtp_var_text;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 82 "src/job/gw_job_template_var_parser.l"
+#line 83 "gw_job_template_var_parser.l"
 ECHO;
 	YY_BREAK
-#line 853 "src/job/gw_job_template_var_parser.c"
+#line 853 "job/gw_job_template_var_parser.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1798,7 +1798,7 @@ void jtp_var_free (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 82 "src/job/gw_job_template_var_parser.l"
+#line 83 "gw_job_template_var_parser.l"
 
 
 

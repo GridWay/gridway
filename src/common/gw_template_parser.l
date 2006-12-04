@@ -64,6 +64,7 @@ char *GW_LOCATION;
 %option prefix="jtp_"
 %option yylineno
 %option nounput
+%option outfile="lex.yy.c"
 
 %%
 

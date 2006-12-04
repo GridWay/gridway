@@ -42,6 +42,7 @@ pthread_mutex_t host_attr_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 %option nounput
 %option prefix="host_attr_"
+%option outfile="lex.yy.c"
 
 %%
 

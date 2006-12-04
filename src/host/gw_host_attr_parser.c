@@ -1,6 +1,6 @@
-#line 2 "src/host/gw_host_attr_parser.c"
+#line 2 "host/gw_host_attr_parser.c"
 
-#line 4 "src/host/gw_host_attr_parser.c"
+#line 4 "host/gw_host_attr_parser.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -582,7 +582,7 @@ int host_attr__flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *host_attr_text;
-#line 1 "src/host/gw_host_attr_parser.l"
+#line 1 "gw_host_attr_parser.l"
 /* -------------------------------------------------------------------------- */
 /* Copyright 2002-2006 GridWay Team, Distributed Systems Architecture         */
 /* Group, Universidad Complutense de Madrid                                   */
@@ -599,7 +599,7 @@ char *host_attr_text;
 /* See the License for the specific language governing permissions and        */
 /* limitations under the License.                                             */
 /* -------------------------------------------------------------------------- */
-#line 19 "src/host/gw_host_attr_parser.l"
+#line 19 "gw_host_attr_parser.l"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -622,7 +622,7 @@ int  host_reqs_parse (gw_host_t *host, int queue, gw_boolean_t *result, int *pos
 
 pthread_mutex_t host_attr_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-#line 626 "src/host/gw_host_attr_parser.c"
+#line 626 "host/gw_host_attr_parser.c"
 
 #define INITIAL 0
 
@@ -773,10 +773,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 46 "src/host/gw_host_attr_parser.l"
+#line 47 "gw_host_attr_parser.l"
 
 
-#line 780 "src/host/gw_host_attr_parser.c"
+#line 780 "host/gw_host_attr_parser.c"
 
 	if ( !(yy_init) )
 		{
@@ -861,178 +861,178 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 48 "src/host/gw_host_attr_parser.l"
+#line 49 "gw_host_attr_parser.l"
 { lvalp->val_int = HOSTNAME;            return VARIABLE;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 49 "src/host/gw_host_attr_parser.l"
+#line 50 "gw_host_attr_parser.l"
 { lvalp->val_int = ARCH;                return VARIABLE;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 50 "src/host/gw_host_attr_parser.l"
+#line 51 "gw_host_attr_parser.l"
 { lvalp->val_int = OS_NAME;             return VARIABLE;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 51 "src/host/gw_host_attr_parser.l"
+#line 52 "gw_host_attr_parser.l"
 { lvalp->val_int = OS_VERSION;          return VARIABLE;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 52 "src/host/gw_host_attr_parser.l"
+#line 53 "gw_host_attr_parser.l"
 { lvalp->val_int = CPU_MODEL;           return VARIABLE;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 53 "src/host/gw_host_attr_parser.l"
+#line 54 "gw_host_attr_parser.l"
 { lvalp->val_int = CPU_MHZ;             return VARIABLE;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 54 "src/host/gw_host_attr_parser.l"
+#line 55 "gw_host_attr_parser.l"
 { lvalp->val_int = CPU_FREE;            return VARIABLE;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 55 "src/host/gw_host_attr_parser.l"
+#line 56 "gw_host_attr_parser.l"
 { lvalp->val_int = CPU_SMP;             return VARIABLE;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 56 "src/host/gw_host_attr_parser.l"
+#line 57 "gw_host_attr_parser.l"
 { lvalp->val_int = NODECOUNT;           return VARIABLE;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 57 "src/host/gw_host_attr_parser.l"
+#line 58 "gw_host_attr_parser.l"
 { lvalp->val_int = SIZE_MEM_MB;         return VARIABLE;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 58 "src/host/gw_host_attr_parser.l"
+#line 59 "gw_host_attr_parser.l"
 { lvalp->val_int = FREE_MEM_MB;         return VARIABLE;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 59 "src/host/gw_host_attr_parser.l"
+#line 60 "gw_host_attr_parser.l"
 { lvalp->val_int = SIZE_DISK_MB;        return VARIABLE;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 60 "src/host/gw_host_attr_parser.l"
+#line 61 "gw_host_attr_parser.l"
 { lvalp->val_int = FREE_DISK_MB;        return VARIABLE;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 61 "src/host/gw_host_attr_parser.l"
+#line 62 "gw_host_attr_parser.l"
 { lvalp->val_int = FORK_NAME;           return VARIABLE;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 62 "src/host/gw_host_attr_parser.l"
+#line 63 "gw_host_attr_parser.l"
 { lvalp->val_int = LRMS_NAME;           return VARIABLE;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 63 "src/host/gw_host_attr_parser.l"
+#line 64 "gw_host_attr_parser.l"
 { lvalp->val_int = LRMS_TYPE;           return VARIABLE;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 64 "src/host/gw_host_attr_parser.l"
+#line 65 "gw_host_attr_parser.l"
 { lvalp->val_int = QUEUE_NAME;          return VARIABLE;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 65 "src/host/gw_host_attr_parser.l"
+#line 66 "gw_host_attr_parser.l"
 { lvalp->val_int = QUEUE_NODECOUNT;     return VARIABLE;}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 66 "src/host/gw_host_attr_parser.l"
+#line 67 "gw_host_attr_parser.l"
 { lvalp->val_int = QUEUE_FREENODECOUNT; return VARIABLE;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 67 "src/host/gw_host_attr_parser.l"
+#line 68 "gw_host_attr_parser.l"
 { lvalp->val_int = QUEUE_MAXTIME;       return VARIABLE;}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 68 "src/host/gw_host_attr_parser.l"
+#line 69 "gw_host_attr_parser.l"
 { lvalp->val_int = QUEUE_MAXCPUTIME;    return VARIABLE;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 69 "src/host/gw_host_attr_parser.l"
+#line 70 "gw_host_attr_parser.l"
 { lvalp->val_int = QUEUE_MAXCOUNT;      return VARIABLE;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 70 "src/host/gw_host_attr_parser.l"
+#line 71 "gw_host_attr_parser.l"
 { lvalp->val_int = QUEUE_MAXRUNNINGJOBS;return VARIABLE;}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 71 "src/host/gw_host_attr_parser.l"
+#line 72 "gw_host_attr_parser.l"
 { lvalp->val_int = QUEUE_MAXJOBSINQUEUE;return VARIABLE;}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 72 "src/host/gw_host_attr_parser.l"
+#line 73 "gw_host_attr_parser.l"
 { lvalp->val_int = QUEUE_STATUS;        return VARIABLE;}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 73 "src/host/gw_host_attr_parser.l"
+#line 74 "gw_host_attr_parser.l"
 { lvalp->val_int = QUEUE_DISPATCHTYPE;  return VARIABLE;}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 74 "src/host/gw_host_attr_parser.l"
+#line 75 "gw_host_attr_parser.l"
 { lvalp->val_int = QUEUE_PRIORITY;      return VARIABLE;}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 75 "src/host/gw_host_attr_parser.l"
+#line 76 "gw_host_attr_parser.l"
 { lvalp->val_str = strdup(host_attr_text);      return GENERICVAR;}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 76 "src/host/gw_host_attr_parser.l"
+#line 77 "gw_host_attr_parser.l"
 { lvalp->val_int = atoi(host_attr_text);        return INTEGER;}
 	YY_BREAK
 case 30:
 /* rule 30 can match eol */
 YY_RULE_SETUP
-#line 77 "src/host/gw_host_attr_parser.l"
+#line 78 "gw_host_attr_parser.l"
 { lvalp->val_str = strdup(host_attr_text+1);
                           lvalp->val_str[host_attr_leng-2] = '\0';
 				          return STRING;}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 80 "src/host/gw_host_attr_parser.l"
+#line 81 "gw_host_attr_parser.l"
 { return *host_attr_text;}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 81 "src/host/gw_host_attr_parser.l"
+#line 82 "gw_host_attr_parser.l"
 ;
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 82 "src/host/gw_host_attr_parser.l"
+#line 83 "gw_host_attr_parser.l"
 ;
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 83 "src/host/gw_host_attr_parser.l"
+#line 84 "gw_host_attr_parser.l"
 ECHO;
 	YY_BREAK
-#line 1036 "src/host/gw_host_attr_parser.c"
+#line 1036 "host/gw_host_attr_parser.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1981,7 +1981,7 @@ void host_attr_free (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 83 "src/host/gw_host_attr_parser.l"
+#line 84 "gw_host_attr_parser.l"
 
 
 

@@ -1,6 +1,6 @@
-#line 2 "src/common/gw_template_parser.c"
+#line 2 "common/gw_template_parser.c"
 
-#line 4 "src/common/gw_template_parser.c"
+#line 4 "common/gw_template_parser.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -787,7 +787,7 @@ int jtp__flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *jtp_text;
-#line 1 "src/common/gw_template_parser.l"
+#line 1 "gw_template_parser.l"
 /* -------------------------------------------------------------------------- */
 /* Copyright 2002-2006 GridWay Team, Distributed Systems Architecture         */
 /* Group, Universidad Complutense de Madrid                                   */
@@ -804,7 +804,7 @@ char *jtp_text;
 /* See the License for the specific language governing permissions and        */
 /* limitations under the License.                                             */
 /* -------------------------------------------------------------------------- */
-#line 19 "src/common/gw_template_parser.l"
+#line 19 "gw_template_parser.l"
 #include <stdio.h>
 #include <string.h>
 #include <pthread.h>
@@ -848,7 +848,7 @@ char *GW_LOCATION;
 
 
 
-#line 852 "src/common/gw_template_parser.c"
+#line 852 "common/gw_template_parser.c"
 
 #define INITIAL 0
 #define var_int 1
@@ -1010,14 +1010,14 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 68 "src/common/gw_template_parser.l"
+#line 69 "gw_template_parser.l"
 
 
     /* --------------------------------------------------------------------- */
     /*    Parse comments                                                     */
     /* --------------------------------------------------------------------- */
     
-#line 1021 "src/common/gw_template_parser.c"
+#line 1021 "common/gw_template_parser.c"
 
 	if ( !(yy_init) )
 		{
@@ -1113,7 +1113,7 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 74 "src/common/gw_template_parser.l"
+#line 75 "gw_template_parser.l"
 ;
 	YY_BREAK
 /* --------------------------------------------------------------------- */
@@ -1121,122 +1121,122 @@ YY_RULE_SETUP
 /* --------------------------------------------------------------------- */
 case 2:
 YY_RULE_SETUP
-#line 80 "src/common/gw_template_parser.l"
+#line 81 "gw_template_parser.l"
 { jtp_var = EXECUTABLE;             BEGIN var_str;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 81 "src/common/gw_template_parser.l"
+#line 82 "gw_template_parser.l"
 { jtp_var = ARGUMENTS;              BEGIN var_str;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 82 "src/common/gw_template_parser.l"
+#line 83 "gw_template_parser.l"
 { jtp_var = ENVIRONMENT;   jt->num_env=0; BEGIN var_env;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 83 "src/common/gw_template_parser.l"
+#line 84 "gw_template_parser.l"
 { jtp_var = INPUT_FILES;   file= 0; find = 0; BEGIN var_files;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 84 "src/common/gw_template_parser.l"
+#line 85 "gw_template_parser.l"
 { jtp_var = OUTPUT_FILES;  file= 0; find = 1; BEGIN var_files;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 85 "src/common/gw_template_parser.l"
+#line 86 "gw_template_parser.l"
 { jtp_var = RESTART_FILES; file= 0; find = 2; BEGIN var_files;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 86 "src/common/gw_template_parser.l"
+#line 87 "gw_template_parser.l"
 { jtp_var = STDERR_FILE;            BEGIN var_str;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 87 "src/common/gw_template_parser.l"
+#line 88 "gw_template_parser.l"
 { jtp_var = STDIN_FILE;             BEGIN var_str;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 88 "src/common/gw_template_parser.l"
+#line 89 "gw_template_parser.l"
 { jtp_var = STDOUT_FILE;            BEGIN var_str;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 89 "src/common/gw_template_parser.l"
+#line 90 "gw_template_parser.l"
 { jtp_var = PRE_WRAPPER;            BEGIN var_str;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 90 "src/common/gw_template_parser.l"
+#line 91 "gw_template_parser.l"
 { jtp_var = PRE_WRAPPER_ARGUMENTS;  BEGIN var_str;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 91 "src/common/gw_template_parser.l"
+#line 92 "gw_template_parser.l"
 { jtp_var = RANK;                   BEGIN var_str;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 92 "src/common/gw_template_parser.l"
+#line 93 "gw_template_parser.l"
 { jtp_var = REQUIREMENTS;           BEGIN var_str;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 93 "src/common/gw_template_parser.l"
+#line 94 "gw_template_parser.l"
 { jtp_var = WRAPPER;                BEGIN var_str;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 94 "src/common/gw_template_parser.l"
+#line 95 "gw_template_parser.l"
 { jtp_var = MONITOR;                BEGIN var_str;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 95 "src/common/gw_template_parser.l"
+#line 96 "gw_template_parser.l"
 { jtp_var = RESCHEDULE_ON_FAILURE;  BEGIN var_yn;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 96 "src/common/gw_template_parser.l"
+#line 97 "gw_template_parser.l"
 { jtp_var = CPULOAD_THRESHOLD;      BEGIN var_int;}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 97 "src/common/gw_template_parser.l"
+#line 98 "gw_template_parser.l"
 { jtp_var = NUMBER_OF_RETRIES;      BEGIN var_int;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 98 "src/common/gw_template_parser.l"
+#line 99 "gw_template_parser.l"
 { jtp_var = RESCHEDULING_INTERVAL;  BEGIN var_int;}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 99 "src/common/gw_template_parser.l"
+#line 100 "gw_template_parser.l"
 { jtp_var = RESCHEDULING_THRESHOLD; BEGIN var_int;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 100 "src/common/gw_template_parser.l"
+#line 101 "gw_template_parser.l"
 { jtp_var = SUSPENSION_TIMEOUT;     BEGIN var_int;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 101 "src/common/gw_template_parser.l"
+#line 102 "gw_template_parser.l"
 { jtp_var = CHECKPOINT_INTERVAL;    BEGIN var_int;}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 102 "src/common/gw_template_parser.l"
+#line 103 "gw_template_parser.l"
 { jtp_var = CHECKPOINT_URL;         BEGIN var_int;}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 103 "src/common/gw_template_parser.l"
+#line 104 "gw_template_parser.l"
 { jtp_var = JOB_DEPENDENCIES;       BEGIN var_str;}
 	YY_BREAK
 /* --------------------------------------------------------------------- */
@@ -1244,27 +1244,27 @@ YY_RULE_SETUP
 /* --------------------------------------------------------------------- */
 case 26:
 YY_RULE_SETUP
-#line 109 "src/common/gw_template_parser.l"
+#line 110 "gw_template_parser.l"
 { BEGIN val_int;}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 110 "src/common/gw_template_parser.l"
+#line 111 "gw_template_parser.l"
 { BEGIN val_yn;}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 111 "src/common/gw_template_parser.l"
+#line 112 "gw_template_parser.l"
 { BEGIN val_str;}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 112 "src/common/gw_template_parser.l"
+#line 113 "gw_template_parser.l"
 { BEGIN val_files;}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 113 "src/common/gw_template_parser.l"
+#line 114 "gw_template_parser.l"
 { BEGIN val_env;}
 	YY_BREAK
 /* --------------------------------------------------------------------- */
@@ -1273,83 +1273,102 @@ YY_RULE_SETUP
 case 31:
 /* rule 31 can match eol */
 YY_RULE_SETUP
-#line 119 "src/common/gw_template_parser.l"
+#line 120 "gw_template_parser.l"
 { BEGIN INITIAL;}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 120 "src/common/gw_template_parser.l"
+#line 121 "gw_template_parser.l"
 { gw_template_set_value_int(jt, jtp_var, atoi(jtp_text));}
 	YY_BREAK
 case 33:
 /* rule 33 can match eol */
 YY_RULE_SETUP
-#line 122 "src/common/gw_template_parser.l"
+#line 123 "gw_template_parser.l"
 { BEGIN INITIAL;}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 123 "src/common/gw_template_parser.l"
+#line 124 "gw_template_parser.l"
 { gw_template_set_value_int(jt, jtp_var, GW_TRUE);}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 124 "src/common/gw_template_parser.l"
+#line 125 "gw_template_parser.l"
 { gw_template_set_value_int(jt, jtp_var, GW_FALSE);}
 	YY_BREAK
 case 36:
 /* rule 36 can match eol */
 YY_RULE_SETUP
-#line 126 "src/common/gw_template_parser.l"
+#line 127 "gw_template_parser.l"
 { BEGIN INITIAL;} 
 	YY_BREAK
 case 37:
 /* rule 37 can match eol */
 YY_RULE_SETUP
-#line 127 "src/common/gw_template_parser.l"
+#line 128 "gw_template_parser.l"
 { jtp_text[strlen(jtp_text)-1]= '\0';
                           gw_template_set_value_str(jt, jtp_var, jtp_text+1);}
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 129 "src/common/gw_template_parser.l"
+#line 130 "gw_template_parser.l"
 { gw_template_set_value_str(jt, jtp_var, jtp_text);}
 	YY_BREAK
 case 39:
 /* rule 39 can match eol */
 YY_RULE_SETUP
-#line 131 "src/common/gw_template_parser.l"
+#line 132 "gw_template_parser.l"
 { BEGIN INITIAL;}
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 132 "src/common/gw_template_parser.l"
+#line 133 "gw_template_parser.l"
 { file = 0;}
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 133 "src/common/gw_template_parser.l"
+#line 134 "gw_template_parser.l"
 { file++;}
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 134 "src/common/gw_template_parser.l"
+#line 135 "gw_template_parser.l"
 { switch (file)
                               {
                                   case 0:
                                       switch(find)
                                       {
                                       case 0:
-                                        jt->num_input_files++;
-                                          strncpy(jt->input_files[jt->num_input_files-1][0],jtp_text,GW_JT_STR);
+                                          jt->num_input_files++;
+                                          
+                                          if (jt->num_input_files==GW_JT_FILES)
+                                          {
+                                              fprintf(stderr,"Max number of input files reached at line %i\n",jtp_lineno);
+                                              return -1;
+                                          }
+                                          else
+                                              strncpy(jt->input_files[jt->num_input_files-1][0],jtp_text,GW_JT_STR);
                                           break;
                                         case 1:
-                                            jt->num_output_files++;
-                                          strncpy(jt->output_files[jt->num_output_files-1][0],jtp_text,GW_JT_STR);
+                                          jt->num_output_files++;
+                                          if (jt->num_output_files==GW_JT_FILES)
+                                          {
+                                              fprintf(stderr,"Max number of output files reached at line %i\n",jtp_lineno);
+                                              return -1;
+                                          }                                          
+                                          else                                          
+                                              strncpy(jt->output_files[jt->num_output_files-1][0],jtp_text,GW_JT_STR);
                                           break;
                                         case 2:
                                           jt->num_restart_files++;
-                                          strncpy(jt->restart_files[jt->num_restart_files-1],jtp_text,GW_JT_STR);
+                                          if (jt->num_restart_files==GW_JT_FILES)
+                                          {
+                                              fprintf(stderr,"Max number of restart files reached at line %i\n",jtp_lineno);
+                                              return -1;
+                                          }                                              
+                                          else                                          
+                                              strncpy(jt->restart_files[jt->num_restart_files-1],jtp_text,GW_JT_STR);
                                           break;
                                       }                                      
                                     break;
@@ -1378,52 +1397,52 @@ YY_RULE_SETUP
 case 43:
 /* rule 43 can match eol */
 YY_RULE_SETUP
-#line 175 "src/common/gw_template_parser.l"
+#line 195 "gw_template_parser.l"
 { BEGIN INITIAL;}
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 177 "src/common/gw_template_parser.l"
+#line 197 "gw_template_parser.l"
 { BEGIN val_env_val;}
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 178 "src/common/gw_template_parser.l"
+#line 198 "gw_template_parser.l"
 { jt->num_env++;
                           strncpy(jt->environment[jt->num_env-1][0],jtp_text,GW_JT_STR);
                         }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 181 "src/common/gw_template_parser.l"
+#line 201 "gw_template_parser.l"
 {jtp_error(jt, "ENVIRONMENT attribute (var)"); return -1;}
 	YY_BREAK
 case 47:
 /* rule 47 can match eol */
 YY_RULE_SETUP
-#line 183 "src/common/gw_template_parser.l"
+#line 203 "gw_template_parser.l"
 { jtp_text[strlen(jtp_text)-1]= '\0';
                           strncpy(jt->environment[jt->num_env-1][1],jtp_text+1,GW_JT_STR);}
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 185 "src/common/gw_template_parser.l"
+#line 205 "gw_template_parser.l"
 { strncpy(jt->environment[jt->num_env-1][1],jtp_text,GW_JT_STR);}
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 186 "src/common/gw_template_parser.l"
+#line 206 "gw_template_parser.l"
 BEGIN val_env;
 	YY_BREAK
 case 50:
 /* rule 50 can match eol */
 YY_RULE_SETUP
-#line 187 "src/common/gw_template_parser.l"
+#line 207 "gw_template_parser.l"
 { BEGIN INITIAL;}
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 188 "src/common/gw_template_parser.l"
+#line 208 "gw_template_parser.l"
 {jtp_error(jt, "ENVIRONMENT attribute (value)"); return -1;}
 	YY_BREAK
 /* --------------------------------------------------------------------- */
@@ -1432,22 +1451,22 @@ YY_RULE_SETUP
 case 52:
 /* rule 52 can match eol */
 YY_RULE_SETUP
-#line 195 "src/common/gw_template_parser.l"
+#line 215 "gw_template_parser.l"
 ;
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 196 "src/common/gw_template_parser.l"
+#line 216 "gw_template_parser.l"
 { fprintf(stderr,"Undefined variable (%s) at line %i\n",
                         jtp_text, jtp_lineno);
                   return -1;}
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 199 "src/common/gw_template_parser.l"
+#line 219 "gw_template_parser.l"
 ECHO;
 	YY_BREAK
-#line 1451 "src/common/gw_template_parser.c"
+#line 1470 "common/gw_template_parser.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(var_int):
 case YY_STATE_EOF(var_yn):
@@ -2415,7 +2434,7 @@ void jtp_free (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 199 "src/common/gw_template_parser.l"
+#line 219 "gw_template_parser.l"
 
 
 
