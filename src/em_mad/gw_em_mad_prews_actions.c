@@ -84,7 +84,9 @@ int gw_em_mad_submit( int jid, char *rm_contact, char *rsl_file, char *info )
 	
 	if ((j ==-1)||(j==0))
 	{
-        strcpy(info, "Error reading RSL file");		
+        strcpy(info, "Error reading RSL file");
+        close(fd);
+        
 		return 1;	
 	}
 	else
@@ -101,9 +103,12 @@ int gw_em_mad_submit( int jid, char *rm_contact, char *rsl_file, char *info )
     {
         sprintf(info, "GRAM client job request failed: %s (error %d)",
                 globus_gram_client_error_string(rc), rc);
+        close(fd);
+        
         return 1;
     }
-
+    
+    close(fd);
     return 0;
 }
 

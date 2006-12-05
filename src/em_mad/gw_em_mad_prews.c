@@ -27,7 +27,7 @@ int main (int argc, char **argv )
     int  jid;
     char contact[500];
     char rsl_file[1024];
-    int  status;
+    int  status = -1;
     char info[500];
     int end = 0;
     fd_set in_pipes;

@@ -227,7 +227,8 @@ void gw_em_timer()
     time_t        poll, poll_interval;
 	static int mark = 0;
 	int *_job_id;
-
+    gw_em_mad_t   *mad;
+    
     poll_interval = gw_conf.poll_interval;
     	
 	mark = mark + GW_EM_TIMER_PERIOD;
@@ -250,7 +251,10 @@ void gw_em_timer()
         	}
         		        	               
         	if ( (job->job_state == GW_JOB_STATE_PRE_WRAPPER) 
-                 || (job->job_state == GW_JOB_STATE_WRAPPER))
+                 || (job->job_state == GW_JOB_STATE_WRAPPER)  
+                 || (job->job_state == GW_JOB_STATE_MIGR_CANCEL)
+                 || (job->job_state == GW_JOB_STATE_STOP_CANCEL)
+                 || (job->job_state == GW_JOB_STATE_KILL_CANCEL))                                  
             {
             	if (issubmitted(job->em_state))
             	{
@@ -260,8 +264,23 @@ void gw_em_timer()
                     {
                         gw_log_print ("EM",'I',"Poll timeout of job %i expired."
                             " Checking execution state.\n", i);
+                            
+                        mad = job->history->em_mad;
+
+                      /* Warning! When in Migration Cancel, the previous MAD should be used */
+                        if (job->job_state == GW_JOB_STATE_MIGR_CANCEL)
+                        {
+                            if (job->history->next == NULL) 
+                            {
+                                gw_log_print("EM",'E',"Previous history record of job %i no longer exists\n", i);
+                 				pthread_mutex_unlock(&(job->mutex));                        
+                                continue;
+                            } 
+                            else
+                                mad = job->history->next->em_mad;
+                        }                            
                                                      
-                        gw_em_mad_poll(job->history->em_mad, i);
+                        gw_em_mad_poll(mad, i);
                     
                         job->last_poll_time = time(NULL);
                     }            		
