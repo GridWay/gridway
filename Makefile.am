@@ -95,7 +95,7 @@ uninstall-hook:
 
 dist-hook:
 	@cp -r src/drmaa/org $(distdir)/src/drmaa
-	@rm -rf $(distdir)/drmaa/org/CVS $(distdir)/drmaa/org/ggf/CVS $(distdir)/drmaa/org/ggf/drmaa/CVS
+	@rm -r $(distdir)/src/drmaa/org/CVS $(distdir)/src/drmaa/org/ggf/CVS $(distdir)/src/drmaa/org/ggf/drmaa/CVS
 	@mkdir -p $(distdir)/doc/docbook
 	@cp -r doc/images $(distdir)/doc
 	@cp -r doc/drmaa_c $(distdir)/doc

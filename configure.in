@@ -24,7 +24,7 @@ AC_CANONICAL_SYSTEM
 AC_CONFIG_SRCDIR([src/dm/gw_dm_action_dispatch.c])
 
 AC_PREFIX_DEFAULT("/usr/local/gw")
-AM_INIT_AUTOMAKE(subdir-objects,no-dependencies)
+AM_INIT_AUTOMAKE(gw,5.1)
 AM_PROG_CC_C_O
 AC_PROG_LIBTOOL
 
@@ -101,6 +101,8 @@ case "$build_os" in
    ;;
    *solaris*)
       system=solaris
+      CFLAGS="$CFLAGS -DGWSOLARIS"
+      LDFLAGS="$LDFLAGS -lsocket -lns"
    ;;
 esac
 
