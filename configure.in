@@ -85,6 +85,7 @@ else
       rm makefile-header
       exit -1
    fi
+      AC_SUBST(incgtmk,"include $PWD/makefile-header")
       echo "ok"
    fi
 fi
@@ -102,7 +103,7 @@ case "$build_os" in
    *solaris*)
       system=solaris
       CFLAGS="$CFLAGS -DGWSOLARIS"
-      LDFLAGS="$LDFLAGS -lsocket -lns"
+      LDFLAGS="$LDFLAGS -lsocket -lnsl"
    ;;
 esac
 

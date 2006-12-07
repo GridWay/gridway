@@ -47,11 +47,11 @@ if EXAMPLES
 	@rm -rf @prefix@/examples
 	@cp -r examples @prefix@/examples
 endif
-if TESTS
-	@rm -rf @prefix@/test
-	@mkdir -p @prefix@/test
-	@cp -r src/test/gwtest src/test/jt @prefix@/test
-endif
+#if TESTS
+#	@rm -rf @prefix@/test
+#	@mkdir -p @prefix@/test
+#	@cp -r src/test/gwtest src/test/jt @prefix@/test
+#endif
 # ------------------
 # -- Script renaming - Commons
 # -------------------
@@ -104,5 +104,5 @@ dist-hook:
 	@cp -r doc/docbook/*.dsl $(distdir)/doc/docbook
 	@rm -rf $(distdir)/doc/images/CVS $(distdir)/doc/drmaa_c/CVS $(distdir)/doc/docbook/CVS
 	@cp -r examples $(distdir)
-	@cp -r src/test/jt $(distdir)/src/test
+#	@cp -r src/test/jt $(distdir)/src/test
 	@cp -r LICENSE $(distdir)

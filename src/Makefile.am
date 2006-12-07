@@ -208,7 +208,7 @@ DRMAAJNI_SRC  = $(DRMAA_PACK)/DrmaaJNI.c
 # -- Includes and Headers
 # -----------------------------
 
-include $(top_srcdir)/makefile-header
+@incgtmk@
 
 SYSTEM=@system@
 
@@ -464,16 +464,16 @@ dist_sysconf_DATA = $(top_srcdir)/etc/gwd.conf $(top_srcdir)/etc/job_template.de
 # TESTS
 # ----------------------------
 
-if TESTS
-testdir = @prefix@/test
-
-test_PROGRAMS = $(srcdir)/test/gwtest
-
-__srcdir__test_gwtest_SOURCES = test/gw_test.c \
-        $(CMDS)/gw_cmds_common.c \
-        $(CLIENT_SRC) \
-        $(COMMON_SRC)
-endif
+#if TESTS
+#testdir = @prefix@/test
+#
+#test_PROGRAMS = $(srcdir)/test/gwtest
+#
+#__srcdir__test_gwtest_SOURCES = test/gw_test.c \
+#        $(CMDS)/gw_cmds_common.c \
+#        $(CLIENT_SRC) \
+#        $(COMMON_SRC)
+#endif
 
 # ----------------------------
 # DIR LAYOUT

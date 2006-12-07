@@ -19,6 +19,7 @@
 
 
 if [ "x$1" = "xclean" ] ; then
+        make clean
 	find -name .dirstamp -delete
 	rm -rf `find -name .libs`
 	rm -rf config
@@ -28,15 +29,14 @@ if [ "x$1" = "xclean" ] ; then
 	rm doc/docbook/Makefile doc/docbook/Makefile.in	
 	rm src/Makefile src/Makefile.in
 	rm aclocal.m4 autoscan.log config.status configure libtool configure.scan
-    rm makefile-header config.log
-    rm src/drmaa/drmaa.jar
+        rm makefile-header config.log
+        rm src/drmaa/drmaa.jar
 	return 0
 fi
 
 if [ ! -d config ] ; then
     mkdir config
     autoscan
-    touch makefile-header
 fi    
 
 libtoolize --force 2>&1 \
