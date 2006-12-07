@@ -18,15 +18,76 @@
 AC_PREREQ(2.60a)
 AC_INIT([GridWay], [5.1], [gridway-user@globus.org])
 AC_CONFIG_AUX_DIR(config)
-AC_CANONICAL_SYSTEM
-
-# Checks availability of source code
 AC_CONFIG_SRCDIR([src/dm/gw_dm_action_dispatch.c])
 
 AC_PREFIX_DEFAULT("/usr/local/gw")
+
+#---------------------------------------
+# Automake Directives
+#--------------------------------------
+
 AM_INIT_AUTOMAKE(gw,5.1)
 AM_PROG_CC_C_O
+AM_PROG_LEX
+
+#-------------------------------------
+# Checks for programs.
+#-------------------------------------
+
+AC_PROG_AWK
+AC_PROG_YACC
+AC_PROG_CC
+AC_PROG_LN_S
 AC_PROG_LIBTOOL
+AC_PROG_MAKE_SET
+
+#-------------------------------------
+# Checks for libraries
+#-------------------------------------
+
+AC_CHECK_LIB([pthread], [pthread_cond_wait])
+AC_CHECK_LIB([db], [db_env_create])
+
+#-------------------------------------
+# Checks for header files.
+#-------------------------------------
+AC_FUNC_ALLOCA
+AC_HEADER_DIRENT
+AC_HEADER_STDC
+AC_HEADER_SYS_WAIT
+AC_CHECK_HEADERS([arpa/inet.h fcntl.h inttypes.h libintl.h limits.h malloc.h netdb.h netinet/in.h stddef.h stdlib.h string.h sys/socket.h unistd.h])
+
+#-------------------------------------
+# Checks for typedefs, structures, and compiler characteristics.
+#-------------------------------------
+AC_C_CONST
+AC_C_INLINE
+AC_TYPE_MODE_T
+AC_TYPE_PID_T
+AC_TYPE_SIZE_T
+AC_TYPE_SSIZE_T
+AC_HEADER_TIME
+AC_STRUCT_TM
+
+AC_TYPE_INT16_T
+AC_TYPE_INT32_T
+AC_TYPE_INT8_T
+AC_TYPE_UINT16_T
+AC_TYPE_UINT32_T
+AC_TYPE_UINT8_T
+
+#-------------------------------------
+# Checks for library functions.
+#-------------------------------------
+AC_REPLACE_FNMATCH
+AC_FUNC_FORK
+AC_FUNC_MALLOC
+AC_FUNC_REALLOC
+AC_FUNC_SELECT_ARGTYPES
+AC_FUNC_STAT
+AC_FUNC_VPRINTF
+AC_CHECK_FUNCS([dup2 getcwd gethostbyname gethostname gettimeofday memset realpath select socket strcasecmp strchr strdup strerror strrchr strstr])
+
 
 #------------------------------------------------------------------
 # Build the makefile-header
@@ -197,58 +258,9 @@ AC_ARG_WITH(tests,  AC_HELP_STRING([--with-tests],\
 
 AM_CONDITIONAL(TESTS, test "x$tests" = "xyes")
 
-
-
-# Checks for programs.
-AC_PROG_AWK
-AC_PROG_YACC
-AC_PROG_CC
-AM_PROG_LEX
-AC_PROG_LN_S
-
-# Checks for libraries.
-#AC_CHECK_LIB([drmaa], [drmaa_allocate_job_template])
-# FIXME: Replace `main' with a function in `-lm':
-#AC_CHECK_LIB([m], [main])
-# FIXME: Replace `main' with a function in `-lpthread':
-AC_CHECK_LIB([pthread], [pthread_cond_wait])
-
-
-
-AC_CHECK_LIB([db], [db_env_create])
-
-# Checks for header files.
-AC_FUNC_ALLOCA
-AC_HEADER_DIRENT
-AC_HEADER_STDC
-AC_HEADER_SYS_WAIT
-AC_CHECK_HEADERS([arpa/inet.h fcntl.h inttypes.h libintl.h limits.h malloc.h netdb.h netinet/in.h stddef.h stdlib.h string.h sys/socket.h unistd.h])
-
-# Checks for typedefs, structures, and compiler characteristics.
-AC_C_CONST
-AC_C_INLINE
-AC_TYPE_INT16_T
-AC_TYPE_INT32_T
-AC_TYPE_INT8_T
-AC_TYPE_MODE_T
-AC_TYPE_PID_T
-AC_TYPE_SIZE_T
-AC_TYPE_SSIZE_T
-AC_HEADER_TIME
-AC_STRUCT_TM
-AC_TYPE_UINT16_T
-AC_TYPE_UINT32_T
-AC_TYPE_UINT8_T
-
-# Checks for library functions.
-AC_REPLACE_FNMATCH
-AC_FUNC_FORK
-AC_FUNC_MALLOC
-AC_FUNC_REALLOC
-AC_FUNC_SELECT_ARGTYPES
-AC_FUNC_STAT
-AC_FUNC_VPRINTF
-AC_CHECK_FUNCS([dup2 getcwd gethostbyname gethostname gettimeofday memset realpath select socket strcasecmp strchr strdup strerror strrchr strstr])
+#-------------------------------------------------------
+# Config Files
+#-------------------------------------------------------
 
 AC_CONFIG_FILES([Makefile
                   src/Makefile
