@@ -27,7 +27,7 @@ endif
 FLAGS=$(DB4_INCLUDE_PATH)
 
 install-exec-hook:
-	@cp -r LICENSE @prefix@
+	@cp -r LICENSE NOTICE @prefix@
 if DOC
 	@rm -rf @prefix@/doc
 	@mkdir -p @prefix@/doc
@@ -43,10 +43,10 @@ if DRMAA
 	@cp -r doc/drmaa_java doc/drmaa_c @prefix@/doc
 endif
 endif
-if EXAMPLES
+
 	@rm -rf @prefix@/examples
 	@cp -r examples @prefix@/examples
-endif
+
 #if TESTS
 #	@rm -rf @prefix@/test
 #	@mkdir -p @prefix@/test
@@ -104,5 +104,6 @@ dist-hook:
 	@cp -r doc/docbook/*.dsl $(distdir)/doc/docbook
 	@rm -rf $(distdir)/doc/images/CVS $(distdir)/doc/drmaa_c/CVS $(distdir)/doc/docbook/CVS
 	@cp -r examples $(distdir)
+	@cp -r etc/im_examples $(distdir)/etc/
 #	@cp -r src/test/jt $(distdir)/src/test
-	@cp -r LICENSE $(distdir)
+	@cp -r LICENSE NOTICE $(distdir)

@@ -23,11 +23,11 @@
 # Directory definitions
 # -----------------------------
 
-INCLUDE_DIR  = ../include
+INCLUDE_DIR  = $(GW_LOCATION)/include
 EXAMPLES_DIR = ./
-LIB_DIR      = ../lib
+LIB_DIR      = $(GW_LOCATION)/lib
 
-DRMAA        = ../lib/drmaa.jar
+DRMAA        = $(GW_LOCATION)/lib/drmaa.jar
 
 
 #---------------------------------
@@ -36,14 +36,14 @@ DRMAA        = ../lib/drmaa.jar
 CC    = gcc
 JAVAC = javac
 
-SYSYTEM   = linux
-# Solaris configuration (uncomment)
-#SYSYTEM       = solaris
+#Solaris configuration (uncomment)
 #LIBS_SUNOS    = -lnsl -lsocket
-#CFLAGS_SUNOS  = -m64
 
-LIBS           =  -ldrmaa -lpthread $(LIBS_SUNOS)
-CFLAGS         = -Wall -g $(CFLAGS_SUNOS)
+#64 bits arch (uncomment)
+#CFLAGS64  = -m64
+
+LIBS           = -ldrmaa -lpthread $(LIBS_SUNOS)
+CFLAGS         = -Wall -g $(CFLAGS64)
 INCLUDE_FLAGS  = -I$(INCLUDE_DIR)
 LDOPTIONS      = -shared
 
@@ -51,7 +51,7 @@ LDOPTIONS      = -shared
 #  Objects and Programs for DRMAA Howtos
 #----------------------------------------------
 
-HOWTOS_COBJS := $(wildcard $(EXAMPLES_DIR)/drmaa/*.c)
+HOWTOS_COBJS := $(wildcard $(EXAMPLES_DIR)/drmaa_c/*.c)
 HOWTOS_COBJS := $(HOWTOS_COBJS:%.c=%.o)
 
 HOWTOS_JOBJS := $(wildcard $(EXAMPLES_DIR)/drmaa_java/*.java)
@@ -72,25 +72,18 @@ HOWTOS_JOBJS := $(HOWTOS_JOBJS:%.java=%.class)
 #  targets
 #--------------------
 
-all: pi drmaa_c_howtos drmaa_java_howtos
-
-pi: $(EXAMPLES_DIR)/pi/pi.o
-	$(CC) $(CFLAGS) -o $(EXAMPLES_DIR)/pi/pi $(EXAMPLES_DIR)/pi/pi.o
+all: drmaa_c_howtos drmaa_java_howtos
 
 drmaa_c_howtos: $(HOWTOS_COBJS)
-	$(CC) $(CFLAGS) $(EXAMPLES_DIR)/drmaa/Howto1.o -o $(EXAMPLES_DIR)/drmaa/Howto1 -L $(LIB_DIR) $(LIBS)
-	$(CC) $(CFLAGS) $(EXAMPLES_DIR)/drmaa/Howto2.o -o $(EXAMPLES_DIR)/drmaa/Howto2 -L $(LIB_DIR) $(LIBS)
-	$(CC) $(CFLAGS) $(EXAMPLES_DIR)/drmaa/Howto3.o -o $(EXAMPLES_DIR)/drmaa/Howto3 -L $(LIB_DIR) $(LIBS)
-	$(CC) $(CFLAGS) $(EXAMPLES_DIR)/drmaa/Howto4.o -o $(EXAMPLES_DIR)/drmaa/Howto4 -L $(LIB_DIR) $(LIBS)
+	$(CC) $(CFLAGS) $(EXAMPLES_DIR)/drmaa_c/Howto1.o -o $(EXAMPLES_DIR)/drmaa_c/Howto1 -L $(LIB_DIR) $(LIBS)
+	$(CC) $(CFLAGS) $(EXAMPLES_DIR)/drmaa_c/Howto2.o -o $(EXAMPLES_DIR)/drmaa_c/Howto2 -L $(LIB_DIR) $(LIBS)
+	$(CC) $(CFLAGS) $(EXAMPLES_DIR)/drmaa_c/Howto3.o -o $(EXAMPLES_DIR)/drmaa_c/Howto3 -L $(LIB_DIR) $(LIBS)
+	$(CC) $(CFLAGS) $(EXAMPLES_DIR)/drmaa_c/Howto4.o -o $(EXAMPLES_DIR)/drmaa_c/Howto4 -L $(LIB_DIR) $(LIBS)
 
 drmaa_java_howtos: $(HOWTOS_JOBJS)
 
 clean:
-	@rm -f $(EXAMPLES_DIR)/drmaa/core* $(EXAMPLES_DIR)/drmaa/ht[1-6] \
-	$(EXAMPLES_DIR)/drmaa/std* $(EXAMPLES_DIR)/drmaa_java/job_template* \
+	@rm -f $(EXAMPLES_DIR)/drmaa_c/core* $(EXAMPLES_DIR)/drmaa_c/ht[1-6] \
+	$(EXAMPLES_DIR)/drmaa_c/std* $(EXAMPLES_DIR)/drmaa_java/job_template* \
 	$(EXAMPLES_DIR)/drmaa_java/std* $(HOWTOS_COBJS)  $(HOWTOS_JOBJS) \
-	$(EXAMPLES_DIR)/drmaa/Howto[1-6] $(EXAMPLES_DIR)/pi/std* \
-	$(EXAMPLES_DIR)/ls/std* $(EXAMPLES_DIR)/sleep/oo* \
-	$(EXAMPLES_DIR)/sleep/ee* $(EXAMPLES_DIR)/sleep/outfile* \
-	$(EXAMPLES_DIR)/sleep/env.* $(EXAMPLES_DIR)/pi/pi \
-	$(EXAMPLES_DIR)/pi/pi.o
+	$(EXAMPLES_DIR)/drmaa/Howto[1-6]

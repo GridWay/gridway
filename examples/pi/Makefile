@@ -19,30 +19,30 @@
 # limitations under the License.                                             
 # -------------------------------------------------------------------------- 
 
-# -----------------------------
-# Directory definitions
-# -----------------------------
+#---------------------------------
+# Compilation Flags and Libraries
+#---------------------------------
+CC    = gcc
 
-DRMAA              = ../../lib/drmaa.jar
+CFLAGS         = -Wall -g 
+INCLUDE_FLAGS  = -I$(INCLUDE_DIR)
 
-TEST_SUITE_JAVA    = org/ggf/drmaa/testSuite
-TEST_SUITE_PACKAGE = package
-JAR_TARGET         = testDrmaa.jar
+#------------------------
+# Compilation Rules
+#------------------------
+.SUFFIXES: .c .o
+
+.c.o:
+	$(CC) $(CFLAGS) $(INCLUDE_FLAGS) -g -c -o $@ $<
+
 #--------------------
 #  targets
 #--------------------
 
-TestSuite: 
-	@mkdir -p $(TEST_SUITE_PACKAGE)
-	javac $(TEST_SUITE_JAVA)/*.java -classpath $(DRMAA) -d $(TEST_SUITE_PACKAGE)
-#	
-	echo "Class-path: $(DRMAA)" > testSuiteManifest
-	echo "Main-class: org.ggf.drmaa.testSuite.TestDrmaa" >> testSuiteManifest
-#	
-	jar cvfm $(JAR_TARGET) testSuiteManifest -C $(TEST_SUITE_PACKAGE)/ .
-#
-	@rm -rf $(TEST_SUITE_PACKAGE)
-	@rm -rf testSuiteManifest
+all: pi
+
+pi: pi.o
+	$(CC) $(CFLAGS) -o pi pi.o
 
 clean:
-	@rm -f $(JAR_TARGET)
+	@rm -f pi pi.o

@@ -214,6 +214,7 @@ SYSTEM=@system@
 
 INCLUDES = -I$(top_srcdir)/include \
              $(GLOBUS_INCLUDES) \
+             $(DB4_INCLUDE_PATH) \
            -I${JAVA_HOME}/include \
            -I${JAVA_HOME}/include/$(SYSTEM)
 
@@ -455,11 +456,14 @@ dist_scripts_SCRIPTS = $(top_srcdir)/scripts/wrapper.sh \
 # ETC
 # ----------------------------
 
-dist_sysconf_DATA = $(top_srcdir)/etc/gwd.conf $(top_srcdir)/etc/job_template.default \
-        $(top_srcdir)/etc/im_examples/host.list $(top_srcdir)/etc/im_examples/host_glue.list \
-        $(top_srcdir)/etc/im_examples/machine1.attributes \
-        $(top_srcdir)/etc/im_examples/machine2.attributes
+#dist_sysconf_DATA = $(top_srcdir)/etc/gwd.conf $(top_srcdir)/etc/job_template.default \
+#        $(top_srcdir)/etc/im_examples/host.list $(top_srcdir)/etc/im_examples/host_glue.list \
+#        $(top_srcdir)/etc/im_examples/machine1.attributes \
+#        $(top_srcdir)/etc/im_examples/machine2.attributes
 
+dist_sysconf_DATA = $(top_srcdir)/etc/gwd.conf $(top_srcdir)/etc/job_template.default
+        
+        
 # ----------------------------
 # TESTS
 # ----------------------------
@@ -482,3 +486,4 @@ dist_sysconf_DATA = $(top_srcdir)/etc/gwd.conf $(top_srcdir)/etc/job_template.de
 install-data-hook:
 	@rm -rf @prefix@/var
 	@mkdir -p @prefix@/var/acct
+	@cp -r $(top_srcdir)/etc/im_examples @prefix@/etc/

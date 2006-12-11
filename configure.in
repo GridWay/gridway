@@ -15,83 +15,16 @@
 # limitations under the License.
 # --------------------------------------------------------------------------
 
-AC_PREREQ(2.60a)
+AC_PREREQ(2.60)
 AC_INIT([GridWay], [5.1], [gridway-user@globus.org])
 AC_CONFIG_AUX_DIR(config)
 AC_CONFIG_SRCDIR([src/dm/gw_dm_action_dispatch.c])
 
 AC_PREFIX_DEFAULT("/usr/local/gw")
 
-#---------------------------------------
-# Automake Directives
-#--------------------------------------
-
-AM_INIT_AUTOMAKE(gw,5.1)
-AM_PROG_CC_C_O
-AM_PROG_LEX
-
-#-------------------------------------
-# Checks for programs.
-#-------------------------------------
-
-AC_PROG_AWK
-AC_PROG_YACC
-AC_PROG_CC
-AC_PROG_LN_S
-AC_PROG_LIBTOOL
-AC_PROG_MAKE_SET
-
-#-------------------------------------
-# Checks for libraries
-#-------------------------------------
-
-AC_CHECK_LIB([pthread], [pthread_cond_wait])
-AC_CHECK_LIB([db], [db_env_create])
-
-#-------------------------------------
-# Checks for header files.
-#-------------------------------------
-AC_FUNC_ALLOCA
-AC_HEADER_DIRENT
-AC_HEADER_STDC
-AC_HEADER_SYS_WAIT
-AC_CHECK_HEADERS([arpa/inet.h fcntl.h inttypes.h libintl.h limits.h malloc.h netdb.h netinet/in.h stddef.h stdlib.h string.h sys/socket.h unistd.h])
-
-#-------------------------------------
-# Checks for typedefs, structures, and compiler characteristics.
-#-------------------------------------
-AC_C_CONST
-AC_C_INLINE
-AC_TYPE_MODE_T
-AC_TYPE_PID_T
-AC_TYPE_SIZE_T
-AC_TYPE_SSIZE_T
-AC_HEADER_TIME
-AC_STRUCT_TM
-
-AC_TYPE_INT16_T
-AC_TYPE_INT32_T
-AC_TYPE_INT8_T
-AC_TYPE_UINT16_T
-AC_TYPE_UINT32_T
-AC_TYPE_UINT8_T
-
-#-------------------------------------
-# Checks for library functions.
-#-------------------------------------
-AC_REPLACE_FNMATCH
-AC_FUNC_FORK
-AC_FUNC_MALLOC
-AC_FUNC_REALLOC
-AC_FUNC_SELECT_ARGTYPES
-AC_FUNC_STAT
-AC_FUNC_VPRINTF
-AC_CHECK_FUNCS([dup2 getcwd gethostbyname gethostname gettimeofday memset realpath select socket strcasecmp strchr strdup strerror strrchr strstr])
-
-
-#------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # Build the makefile-header
-#-----------------------------------------------------------------
+#------------------------------------------------------------------------------
 
 echo -n "checking for Globus Toolkit..."
 if test -z "$GLOBUS_LOCATION" ; then
@@ -151,9 +84,9 @@ else
    fi
 fi
 
-#------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # Check target system
-#-----------------------------------------------------------------
+#------------------------------------------------------------------------------
 
 AC_CANONICAL_BUILD
 
@@ -170,56 +103,58 @@ esac
 
 AC_SUBST(system, $system)
 
-#-------------------------------------------------------
+#------------------------------------------------------------------------------
 # Argument check
-#-------------------------------------------------------
+#------------------------------------------------------------------------------
 
-# ---    Enables
+# --- Enable DRMAA library ---
 
 drmaa="drmaa"
-drmaa_java_howtos="drmaa_java_howtos"
-drmaa_c_howtos="drmaa_java_howtos"
 
 AC_ARG_ENABLE(drmaa,  AC_HELP_STRING([--disable-drmaa],\
   [Don't build drmaa support.  Default is enabled.]),\
   [if test $enableval = "no"; then drmaa=" "; drmaa_c_howtos=" "; drmaa_java_howtos=" "; fi], [])
 
-
-AC_SUBST(drmaa, $drmaa)
-AC_SUBST(drmaa_java_howtos, $drmaa_java_howtos)
-AC_SUBST(drmaa_c_howtos, $drmaa_c_howtos)
 AM_CONDITIONAL(DRMAA, test "x$drmaa" = "xdrmaa")
 
+# --- Enable preWS Drivers ---
+
 prews="prews"
+
 AC_ARG_ENABLE(prews,  AC_HELP_STRING([--disable-prews],\
   [Don't build pre-web-services support. Default is enabled.]),\
   [if test $enableval = "no"; then prews=" "; fi], [])
 
-AC_SUBST(prews, $prews)
 AM_CONDITIONAL(PREWS, test "x$prews" = "xprews")
 
+# --- Enable WS Drivers ---
+
 ws="ws"
+
 AC_ARG_ENABLE(ws,  AC_HELP_STRING([--disable-ws],\
   [Don't build web-services support. Default is enabled.]),\
   [if test $enableval = "no"; then ws=" "; fi], [])
 
-AC_SUBST(ws, $ws)
 AM_CONDITIONAL(WS, test "x$ws" = "xws")
 
-# ------ Withs
+# --- With DB ---
 
-AC_ARG_WITH(db,  AC_HELP_STRING([--with-db],\
+AC_ARG_WITH(db,  AC_HELP_STRING([--with-db=<yes|no|path_to_db>],\
        [Build db support for accounting.]),\
        [if test $withval="yes"; then \
                         LDFLAGS="${LDFLAGS} -L/usr/lib"; \
-                        DB4_INCLUDE_PATH=/usr/include; \
+                        DB4_INCLUDE_PATH="-I /usr/include"; \
         else if test $withval!="no"; then \
                    LDFLAGS="${LDFLAGS} -L${withval}/lib"; \
-                   DB4_INCLUDE_PATH=${withval}/include; \
+                   DB4_INCLUDE_PATH="-I ${withval}/include"; \
              fi \
         fi]  , [])
 
-AC_ARG_WITH(doc,  AC_HELP_STRING([--with-doc],\
+# --- With documents ---
+
+doc="no"
+
+AC_ARG_WITH(doc,  AC_HELP_STRING([--with-doc=<yes|no>],\
         [Build documentation]),\
         [if test $withval = "yes"; then doc="yes"; else doc="no"; fi], [])
 
@@ -244,23 +179,87 @@ else
      AM_CONDITIONAL(DOXYGENC, false)          
      AM_CONDITIONAL(DOC, false)
 fi
-     
 
-AC_ARG_WITH(examples,  AC_HELP_STRING([--with-examples],\
-        [Build examples]),\
-        [if test $withval = "yes"; then examples="yes"; else examples="no"; fi], [])
-
-AM_CONDITIONAL(EXAMPLES, test "x$examples" = "xyes")
+# --- With GridWay tests ---
 
 AC_ARG_WITH(tests,  AC_HELP_STRING([--with-tests],\
-        [Build examples]),\
+        [Build GridWay test suite]),\
         [if test $withval = "yes"; then tests="yes"; else tests="no"; fi], [])
 
 AM_CONDITIONAL(TESTS, test "x$tests" = "xyes")
 
-#-------------------------------------------------------
+#------------------------------------------------------------------------------
+# Checks for programs.
+#------------------------------------------------------------------------------
+
+AC_PROG_AWK
+AC_PROG_YACC
+AC_PROG_CC
+AC_PROG_LN_S
+AC_PROG_LIBTOOL
+AC_PROG_MAKE_SET
+
+#------------------------------------------------------------------------------
+# Automake Directives
+#------------------------------------------------------------------------------
+
+AM_INIT_AUTOMAKE(gw,5.1)
+AM_PROG_CC_C_O
+AM_PROG_LEX
+
+#------------------------------------------------------------------------------
+# Checks for libraries
+#------------------------------------------------------------------------------
+
+AC_CHECK_LIB([pthread], [pthread_cond_wait])
+AC_CHECK_LIB([db], [db_env_create])
+
+#------------------------------------------------------------------------------
+# Checks for header files.
+#------------------------------------------------------------------------------
+
+AC_FUNC_ALLOCA
+AC_HEADER_DIRENT
+AC_HEADER_STDC
+AC_HEADER_SYS_WAIT
+AC_CHECK_HEADERS([arpa/inet.h fcntl.h inttypes.h libintl.h limits.h malloc.h netdb.h netinet/in.h stddef.h stdlib.h string.h sys/socket.h unistd.h])
+
+#------------------------------------------------------------------------------
+# Checks for typedefs, structures, and compiler characteristics.
+#------------------------------------------------------------------------------
+
+AC_C_CONST
+AC_C_INLINE
+AC_TYPE_MODE_T
+AC_TYPE_PID_T
+AC_TYPE_SIZE_T
+AC_TYPE_SSIZE_T
+AC_HEADER_TIME
+AC_STRUCT_TM
+
+AC_TYPE_INT16_T
+AC_TYPE_INT32_T
+AC_TYPE_INT8_T
+AC_TYPE_UINT16_T
+AC_TYPE_UINT32_T
+AC_TYPE_UINT8_T
+
+#------------------------------------------------------------------------------
+# Checks for library functions.
+#------------------------------------------------------------------------------
+
+AC_REPLACE_FNMATCH
+AC_FUNC_FORK
+AC_FUNC_MALLOC
+AC_FUNC_REALLOC
+AC_FUNC_SELECT_ARGTYPES
+AC_FUNC_STAT
+AC_FUNC_VPRINTF
+AC_CHECK_FUNCS([dup2 getcwd gethostbyname gethostname gettimeofday memset realpath select socket strcasecmp strchr strdup strerror strrchr strstr])
+
+#------------------------------------------------------------------------------
 # Config Files
-#-------------------------------------------------------
+#------------------------------------------------------------------------------
 
 AC_CONFIG_FILES([Makefile
                   src/Makefile
