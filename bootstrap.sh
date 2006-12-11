@@ -22,14 +22,19 @@ if [ "x$1" = "xclean" ] ; then
     make clean > /dev/null 2>&1 
 	find -name .dirstamp -delete > /dev/null 2>&1 
 	rm -rf `find -name .libs` > /dev/null 2>&1 
-	rm -rf config > /dev/null 2>&1 
+#	rm -rf config > /dev/null 2>&1 
 	rm -rf autom4te.cache > /dev/null 2>&1 
-	rm Makefile Makefile.in > /dev/null 2>&1 
-	rm doc/Makefile doc/Makefile.in > /dev/null 2>&1 
-	rm doc/docbook/Makefile doc/docbook/Makefile.in	> /dev/null 2>&1 
-	rm src/Makefile src/Makefile.in > /dev/null 2>&1 
-	rm aclocal.m4 autoscan.log config.status configure libtool configure.scan > /dev/null 2>&1 
-    rm makefile-header config.log > /dev/null 2>&1 
+	rm Makefile > /dev/null 2>&1 
+#	rm Makefile.in > /dev/null 2>&1 	
+	rm doc/Makefile > /dev/null 2>&1 
+#	rm doc/Makefile.in > /dev/null 2>&1 	
+	rm doc/docbook/Makefile > /dev/null 2>&1 
+#	rm doc/docbook/Makefile.in	> /dev/null 2>&1 	
+	rm src/Makefile > /dev/null 2>&1 
+#	rm src/Makefile.in > /dev/null 2>&1 	
+	rm autoscan.log config.status libtool configure.scan config.log > /dev/null 2>&1 
+#	rm aclocal.m4 configure > /dev/null 2>&1 	
+    rm makefile-header > /dev/null 2>&1 
     rm src/drmaa/drmaa.jar > /dev/null 2>&1 
 	exit 0 
 fi
