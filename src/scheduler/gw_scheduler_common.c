@@ -45,7 +45,7 @@ void gw_scheduler_loop(gw_scheduler_function_t scheduler, void *user_arg)
     
     char    str[320];
     
-    char    action[10];
+    char    action[15];
     
 	char    id1[7];
     char    id2[7];
