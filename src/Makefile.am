@@ -435,9 +435,11 @@ JAVAROOT = .
 
 if WS
 wsdir   = @prefix@/bin
-dist_ws_JAVA = $(TM_MAD_RFT_SRC) $(EM_MAD)/GW_mad_ws.java $(IM_MAD_MDS4_SRC)
 
-dist_bin_SCRIPTS += $(TM_MAD)/gw_tm_mad_rft.sh
+#dist_ws_JAVA = $(TM_MAD_RFT_SRC) $(EM_MAD)/GW_mad_ws.java $(IM_MAD_MDS4_SRC)
+dist_ws_JAVA = $(EM_MAD)/GW_mad_ws.java $(IM_MAD_MDS4_SRC)
+
+#dist_bin_SCRIPTS += $(TM_MAD)/gw_tm_mad_rft.sh
 dist_bin_SCRIPTS += $(EM_MAD)/gw_em_mad_ws.sh
 dist_bin_SCRIPTS += $(IM_MAD)/gw_im_mad_mds4.sh
 
@@ -479,11 +481,3 @@ dist_sysconf_DATA = $(top_srcdir)/etc/gwd.conf $(top_srcdir)/etc/job_template.de
 #        $(COMMON_SRC)
 #endif
 
-# ----------------------------
-# DIR LAYOUT
-# ----------------------------
-
-install-data-hook:
-	@rm -rf @prefix@/var
-	@mkdir -p @prefix@/var/acct
-	@cp -r $(top_srcdir)/etc/im_examples @prefix@/etc/

@@ -866,6 +866,7 @@ FFLAGS
 ac_ct_F77
 LIBTOOL
 SET_MAKE
+JAVAC_PATH
 INSTALL_PROGRAM
 INSTALL_SCRIPT
 INSTALL_DATA
@@ -2021,6 +2022,9 @@ if test -z "$GLOBUS_LOCATION" ; then
     exit -1
 else
    echo "ok"
+
+   source $GLOBUS_LOCATION/etc/globus-user-env.sh  > /dev/null 2>&1
+
    if test -x $GLOBUS_LOCATION/bin/globus-makefile-header ; then
 
 
@@ -2031,34 +2035,32 @@ if test "${with_flavor+set}" = set; then
 fi
 
 
-      if test -z "$FLAVOR" ; then
+       if test -z "$FLAVOR" ; then
 
-       if test -d $GLOBUS_LOCATION/include/gcc32 ; then
-            FLAVOR=gcc32
-       elif test -d $GLOBUS_LOCATION/include/gcc32dbg ; then
-            FLAVOR=gcc32dbg
-       elif test -d $GLOBUS_LOCATION/include/gcc64 ; then
-            FLAVOR=gcc64
-       elif test -d $GLOBUS_LOCATION/include/gcc64dbg ; then
-            FLAVOR=gcc64dbg
-       elif test -d $GLOBUS_LOCATION/include/vendorcc32 ; then
-            FLAVOR=vendorcc32
-       elif test -d $GLOBUS_LOCATION/include/vendorcc32dbg ; then
-            FLAVOR=vendorcc32dbg
-       elif test -d $GLOBUS_LOCATION/include/vendorcc64 ; then
-            FLAVOR=vendorcc64
-       elif test -d $GLOBUS_LOCATION/include/vendorcc64dbg ; then
-            FLAVOR=vendorcc64dbg
-       else
-          echo "use --with-flavor"
-          exit -1
+           if test -d $GLOBUS_LOCATION/include/gcc32dbg ; then
+            	FLAVOR=gcc32dbg
+	       elif test -d $GLOBUS_LOCATION/include/gcc32 ; then
+	            FLAVOR=gcc32
+	       elif test -d $GLOBUS_LOCATION/include/gcc64dbg ; then
+	            FLAVOR=gcc64dbg
+	       elif test -d $GLOBUS_LOCATION/include/gcc64 ; then
+	            FLAVOR=gcc64
+	       elif test -d $GLOBUS_LOCATION/include/vendorcc32dbg ; then
+	            FLAVOR=vendorcc32dbg
+	       elif test -d $GLOBUS_LOCATION/include/vendorcc32 ; then
+	            FLAVOR=vendorcc32
+	       elif test -d $GLOBUS_LOCATION/include/vendorcc64dbg ; then
+	            FLAVOR=vendorcc64dbg
+	       elif test -d $GLOBUS_LOCATION/include/vendorcc64 ; then
+	            FLAVOR=vendorcc64
+	       else
+	          echo "use --with-flavor"
+	          exit -1
+	       fi
        fi
-
    else
-
-    echo "Could not find globus-makefile-header..."
-    exit -1
-
+	    echo "Could not find globus-makefile-header..."
+	    exit -1
    fi
 
    echo -n "creating makefile-header..."
@@ -2072,10 +2074,11 @@ fi
       rm makefile-header
       exit -1
    fi
-      incgtmk="include $PWD/makefile-header"
 
-      echo "ok"
-   fi
+   incgtmk="include $PWD/makefile-header"
+
+   echo "ok"
+
 fi
 
 #------------------------------------------------------------------------------
@@ -4289,7 +4292,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 4292 "configure"' > conftest.$ac_ext
+  echo '#line 4295 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -6912,11 +6915,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6915: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6918: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:6919: \$? = $ac_status" >&5
+   echo "$as_me:6922: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7180,11 +7183,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7183: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7186: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7187: \$? = $ac_status" >&5
+   echo "$as_me:7190: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7284,11 +7287,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7287: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7290: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:7291: \$? = $ac_status" >&5
+   echo "$as_me:7294: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -9581,7 +9584,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 9584 "configure"
+#line 9587 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -9681,7 +9684,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 9684 "configure"
+#line 9687 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -12017,11 +12020,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:12020: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:12023: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:12024: \$? = $ac_status" >&5
+   echo "$as_me:12027: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -12121,11 +12124,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:12124: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:12127: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:12128: \$? = $ac_status" >&5
+   echo "$as_me:12131: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -13682,11 +13685,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13685: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13688: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:13689: \$? = $ac_status" >&5
+   echo "$as_me:13692: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -13786,11 +13789,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13789: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13792: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:13793: \$? = $ac_status" >&5
+   echo "$as_me:13796: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -15973,11 +15976,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15976: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15979: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15980: \$? = $ac_status" >&5
+   echo "$as_me:15983: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16241,11 +16244,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16244: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16247: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16248: \$? = $ac_status" >&5
+   echo "$as_me:16251: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16345,11 +16348,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16348: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16351: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:16352: \$? = $ac_status" >&5
+   echo "$as_me:16355: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -19026,6 +19029,59 @@ echo "${ECHO_T}no" >&6; }
   SET_MAKE="MAKE=${MAKE-make}"
 fi
 
+
+if test "x$ws" = "xws" ; then
+	# Extract the first word of "javac", so it can be a program name with args.
+set dummy javac; ac_word=$2
+{ echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
+if test "${ac_cv_path_JAVAC_PATH+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $JAVAC_PATH in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_JAVAC_PATH="$JAVAC_PATH" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_path_JAVAC_PATH="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+IFS=$as_save_IFS
+
+  ;;
+esac
+fi
+JAVAC_PATH=$ac_cv_path_JAVAC_PATH
+if test -n "$JAVAC_PATH"; then
+  { echo "$as_me:$LINENO: result: $JAVAC_PATH" >&5
+echo "${ECHO_T}$JAVAC_PATH" >&6; }
+else
+  { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+fi
+
+
+
+	if test "x$JAVAC_PATH" = "x"; then
+    	{ echo "$as_me:$LINENO: WARNING: \"A Java compiler is needed for GridWay's WS Drivers!!!\"" >&5
+echo "$as_me: WARNING: \"A Java compiler is needed for GridWay's WS Drivers!!!\"" >&2;}
+    fi
+
+    if test "x$JAVA_HOME" = "x"; then
+    	{ echo "$as_me:$LINENO: WARNING: \"JAVA_HOME is not set" >&5
+echo "$as_me: WARNING: \"JAVA_HOME is not set" >&2;}
+    fi
+fi
 
 #------------------------------------------------------------------------------
 # Automake Directives
@@ -25273,7 +25329,7 @@ FFLAGS!$FFLAGS$ac_delim
 ac_ct_F77!$ac_ct_F77$ac_delim
 LIBTOOL!$LIBTOOL$ac_delim
 SET_MAKE!$SET_MAKE$ac_delim
-INSTALL_PROGRAM!$INSTALL_PROGRAM$ac_delim
+JAVAC_PATH!$JAVAC_PATH$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -25315,6 +25371,7 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+INSTALL_PROGRAM!$INSTALL_PROGRAM$ac_delim
 INSTALL_SCRIPT!$INSTALL_SCRIPT$ac_delim
 INSTALL_DATA!$INSTALL_DATA$ac_delim
 CYGPATH_W!$CYGPATH_W$ac_delim
@@ -25352,7 +25409,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 35; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 36; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5

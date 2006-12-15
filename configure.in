@@ -32,40 +32,41 @@ if test -z "$GLOBUS_LOCATION" ; then
     exit -1
 else
    echo "ok"
+   
+   source $GLOBUS_LOCATION/etc/globus-user-env.sh  > /dev/null 2>&1
+   
    if test -x $GLOBUS_LOCATION/bin/globus-makefile-header ; then
 
        AC_ARG_WITH(flavor,  AC_HELP_STRING([--with-flavor],\
        [Specify globus build flavor (eg. gcc32dbg)]),\
        [FLAVOR=$withval], [])
 
-      if test -z "$FLAVOR" ; then
+       if test -z "$FLAVOR" ; then
        
-       if test -d $GLOBUS_LOCATION/include/gcc32 ; then
-            FLAVOR=gcc32
-       elif test -d $GLOBUS_LOCATION/include/gcc32dbg ; then
-            FLAVOR=gcc32dbg
-       elif test -d $GLOBUS_LOCATION/include/gcc64 ; then
-            FLAVOR=gcc64
-       elif test -d $GLOBUS_LOCATION/include/gcc64dbg ; then
-            FLAVOR=gcc64dbg
-       elif test -d $GLOBUS_LOCATION/include/vendorcc32 ; then
-            FLAVOR=vendorcc32
-       elif test -d $GLOBUS_LOCATION/include/vendorcc32dbg ; then
-            FLAVOR=vendorcc32dbg
-       elif test -d $GLOBUS_LOCATION/include/vendorcc64 ; then
-            FLAVOR=vendorcc64
-       elif test -d $GLOBUS_LOCATION/include/vendorcc64dbg ; then
-            FLAVOR=vendorcc64dbg
-       else
-          echo "use --with-flavor"
-          exit -1
-       fi
-      
+           if test -d $GLOBUS_LOCATION/include/gcc32dbg ; then
+            	FLAVOR=gcc32dbg
+	       elif test -d $GLOBUS_LOCATION/include/gcc32 ; then
+	            FLAVOR=gcc32
+	       elif test -d $GLOBUS_LOCATION/include/gcc64dbg ; then
+	            FLAVOR=gcc64dbg
+	       elif test -d $GLOBUS_LOCATION/include/gcc64 ; then
+	            FLAVOR=gcc64
+	       elif test -d $GLOBUS_LOCATION/include/vendorcc32dbg ; then
+	            FLAVOR=vendorcc32dbg
+	       elif test -d $GLOBUS_LOCATION/include/vendorcc32 ; then
+	            FLAVOR=vendorcc32
+	       elif test -d $GLOBUS_LOCATION/include/vendorcc64dbg ; then
+	            FLAVOR=vendorcc64dbg
+	       elif test -d $GLOBUS_LOCATION/include/vendorcc64 ; then
+	            FLAVOR=vendorcc64
+	       else
+	          echo "use --with-flavor"
+	          exit -1
+	       fi
+       fi      
    else
-    
-    echo "Could not find globus-makefile-header..."
-    exit -1  
-   
+	    echo "Could not find globus-makefile-header..."
+	    exit -1  
    fi
  
    echo -n "creating makefile-header..."
@@ -79,9 +80,10 @@ else
       rm makefile-header
       exit -1
    fi
-      AC_SUBST(incgtmk,"include $PWD/makefile-header")
-      echo "ok"
-   fi
+   
+   AC_SUBST(incgtmk,"include $PWD/makefile-header")
+   echo "ok"
+
 fi
 
 #------------------------------------------------------------------------------
@@ -198,6 +200,18 @@ AC_PROG_CC
 AC_PROG_LN_S
 AC_PROG_LIBTOOL
 AC_PROG_MAKE_SET
+
+if test "x$ws" = "xws" ; then
+	AC_PATH_PROG(JAVAC_PATH, javac)
+	
+	if test "x$JAVAC_PATH" = "x"; then
+    	AC_MSG_WARN("A Java compiler is needed for GridWay's WS Drivers!!!")
+    fi
+    
+    if test "x$JAVA_HOME" = "x"; then
+    	AC_MSG_WARN("JAVA_HOME is not set, some Java versions will not work (eg. Mac OS X)")     
+    fi
+fi 
 
 #------------------------------------------------------------------------------
 # Automake Directives

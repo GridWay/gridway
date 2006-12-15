@@ -62,7 +62,7 @@ endif
 # -------------------
 if WS
 	@mv @prefix@/bin/gw_em_mad_ws.sh @prefix@/bin/gw_em_mad_ws
-	@mv @prefix@/bin/gw_tm_mad_rft.sh @prefix@/bin/gw_tm_mad_rft
+#	@mv @prefix@/bin/gw_tm_mad_rft.sh @prefix@/bin/gw_tm_mad_rft
 	@mv @prefix@/bin/gw_im_mad_mds4.sh @prefix@/bin/gw_im_mad_mds4
 endif
 # ------------------
@@ -77,6 +77,47 @@ if PREWS
 
 endif
 
+# ----------------------------
+# DIR LAYOUT
+# ----------------------------
+
+install-data-hook:
+	@rm -rf @prefix@/var
+	@mkdir -p @prefix@/var/acct
+	@cp -r $(top_srcdir)/etc/im_examples @prefix@/etc/
+
+#-----------
+#    remove CVS DIRS
+#   		@find @prefix@ -name CVS -exec rm -rf '{}' \;
+#---------
+	@rm -rf @prefix@/doc/drmaa_c/CVS \
+        @prefix@/doc/images/CVS \
+        @prefix@/etc/im_examples/CVS \
+        @prefix@/src/drmaa/org/CVS \
+        @prefix@/src/drmaa/org/ggf/CVS \
+        @prefix@/src/drmaa/org/ggf/drmaa/CVS \
+		@prefix@/etc/im_examples/CVS \
+		@prefix@/examples/im/CVS \
+		@prefix@/examples/ls/CVS \
+		@prefix@/examples/pi/CVS \
+		@prefix@/examples/CVS \
+		@prefix@/examples/drmaa_java/CVS \
+		@prefix@/examples/drmaa/CVS \
+		@prefix@/examples/drmaa/drmaa_java/CVS \
+		@prefix@/examples/drmaa/drmaa_c/CVS \
+		@prefix@/examples/drmaa/TestSuite/CVS \
+		@prefix@/examples/drmaa/TestSuite/org/CVS \
+		@prefix@/examples/drmaa/TestSuite/org/ggf/CVS \
+		@prefix@/examples/drmaa/TestSuite/org/ggf/drmaa/CVS \
+		@prefix@/examples/drmaa/TestSuite/org/ggf/drmaa/testSuite/CVS \
+		@prefix@/examples/sleep/CVS \
+		@prefix@/examples/drmaaTestSuite/CVS \
+		@prefix@/examples/drmaaTestSuite/org/CVS \
+		@prefix@/examples/drmaaTestSuite/org/ggf/CVS \
+		@prefix@/examples/drmaaTestSuite/org/ggf/drmaa/CVS \
+		@prefix@/examples/drmaaTestSuite/org/ggf/drmaa/testSuite/CVS \
+		@prefix@/examples/workflow/CVS
+        
 uninstall-hook:
 	@rm @prefix@/bin/gw_im_mad_mds2
 	@rm @prefix@/bin/gw_im_mad_mds4
@@ -95,15 +136,48 @@ uninstall-hook:
 
 dist-hook:
 	@cp -r src/drmaa/org $(distdir)/src/drmaa
-	@rm -r $(distdir)/src/drmaa/org/CVS $(distdir)/src/drmaa/org/ggf/CVS $(distdir)/src/drmaa/org/ggf/drmaa/CVS
 	@mkdir -p $(distdir)/doc/docbook
 	@cp -r doc/images $(distdir)/doc
 	@cp -r doc/drmaa_c $(distdir)/doc
 	@cp -r doc/docbook/*.sgml $(distdir)/doc/docbook
 	@cp -r doc/docbook/*.css $(distdir)/doc/docbook
 	@cp -r doc/docbook/*.dsl $(distdir)/doc/docbook
-	@rm -rf $(distdir)/doc/images/CVS $(distdir)/doc/drmaa_c/CVS $(distdir)/doc/docbook/CVS
 	@cp -r examples $(distdir)
 	@cp -r etc/im_examples $(distdir)/etc/
 #	@cp -r src/test/jt $(distdir)/src/test
+#-----------
+#    remove CVS DIRS
+#   	@find $(distdir) -name CVS -exec rm -r '{}' \
+#---------
+	@rm -rf $(distdir)/doc/drmaa_c/CVS \
+	    $(distdir)/doc/images/CVS \
+        $(distdir)/etc/im_examples/CVS \
+        $(distdir)/src/drmaa/org/CVS \
+        $(distdir)/src/drmaa/org/ggf/CVS \
+        $(distdir)/src/drmaa/org/ggf/drmaa/CVS \
+		$(distdir)/doc/CVS \
+		$(distdir)/etc/im_examples/CVS \
+		$(distdir)/examples/im/CVS \
+		$(distdir)/examples/ls/CVS \
+		$(distdir)/examples/pi/CVS \
+		$(distdir)/examples/CVS \
+		$(distdir)/examples/drmaa_java/CVS \
+		$(distdir)/examples/drmaa/CVS \
+		$(distdir)/examples/drmaa/drmaa_java/CVS \
+		$(distdir)/examples/drmaa/drmaa_c/CVS \
+		$(distdir)/examples/drmaa/TestSuite/CVS \
+		$(distdir)/examples/drmaa/TestSuite/org/CVS \
+		$(distdir)/examples/drmaa/TestSuite/org/ggf/CVS \
+		$(distdir)/examples/drmaa/TestSuite/org/ggf/drmaa/CVS \
+		$(distdir)/examples/drmaa/TestSuite/org/ggf/drmaa/testSuite/CVS \
+		$(distdir)/examples/sleep/CVS \
+		$(distdir)/examples/drmaaTestSuite/CVS \
+		$(distdir)/examples/drmaaTestSuite/org/CVS \
+		$(distdir)/examples/drmaaTestSuite/org/ggf/CVS \
+		$(distdir)/examples/drmaaTestSuite/org/ggf/drmaa/CVS \
+		$(distdir)/examples/drmaaTestSuite/org/ggf/drmaa/testSuite/CVS \
+		$(distdir)/examples/workflow/CVS
+	
 	@cp -r LICENSE NOTICE $(distdir)
+		
+

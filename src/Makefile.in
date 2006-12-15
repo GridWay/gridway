@@ -81,8 +81,10 @@ bin_PROGRAMS = $(srcdir)/gwd/gwd$(EXEEXT) $(srcdir)/cmds/gwps$(EXEEXT) \
 @PREWS_TRUE@	$(TM_MAD)/gw_tm_mad_dummy.sh
 @PREWS_TRUE@am__append_4 = $(IM_MAD)/gw_im_mad_mds2.sh \
 @PREWS_TRUE@	$(IM_MAD)/gw_im_mad_mds2_glue.sh
-@WS_TRUE@am__append_5 = $(TM_MAD)/gw_tm_mad_rft.sh \
-@WS_TRUE@	$(EM_MAD)/gw_em_mad_ws.sh $(IM_MAD)/gw_im_mad_mds4.sh
+
+#dist_bin_SCRIPTS += $(TM_MAD)/gw_tm_mad_rft.sh
+@WS_TRUE@am__append_5 = $(EM_MAD)/gw_em_mad_ws.sh \
+@WS_TRUE@	$(IM_MAD)/gw_im_mad_mds4.sh
 subdir = src
 DIST_COMMON = $(COMMON)/gw_template_parser.c $(GWD)/gw_conf_parser.c \
 	$(HOST)/gw_host_attr_parser.c $(HOST)/gw_host_rank_syntax.c \
@@ -314,8 +316,7 @@ am__dist_bin_SCRIPTS_DIST = $(EM_MAD)/gw_em_mad_prews.sh \
 	$(TM_MAD)/gw_tm_mad_dummy.sh $(TM_MAD)/gw_tm_mad_ftp.sh \
 	$(IM_MAD)/gw_im_mad_common.sh $(IM_MAD)/gw_im_mad_static.sh \
 	$(IM_MAD)/gw_im_mad_mds2.sh $(IM_MAD)/gw_im_mad_mds2_glue.sh \
-	$(TM_MAD)/gw_tm_mad_rft.sh $(EM_MAD)/gw_em_mad_ws.sh \
-	$(IM_MAD)/gw_im_mad_mds4.sh
+	$(EM_MAD)/gw_em_mad_ws.sh $(IM_MAD)/gw_im_mad_mds4.sh
 dist_binSCRIPT_INSTALL = $(INSTALL_SCRIPT)
 dist_scriptsSCRIPT_INSTALL = $(INSTALL_SCRIPT)
 SCRIPTS = $(bin_SCRIPTS) $(dist_bin_SCRIPTS) $(dist_scripts_SCRIPTS)
@@ -366,11 +367,8 @@ DIST_SOURCES = $(__srcdir__drmaa_libDrmaaJNI_la_SOURCES) \
 	$(__srcdir__scheduler_gw_flood_scheduler_SOURCES) \
 	$(__srcdir__tm_mad_gw_tm_mad_dummy_bin_SOURCES) \
 	$(__srcdir__tm_mad_gw_tm_mad_ftp_bin_SOURCES)
-am__dist_ws_JAVA_DIST = $(TM_MAD)/GWRftClient.java \
-	$(TM_MAD)/GWRftProcessor.java $(TM_MAD)/GWRftResource.java \
-	$(TM_MAD)/GWRftUtil.java $(EM_MAD)/GW_mad_ws.java \
-	$(IM_MAD)/Host.java $(IM_MAD)/Mds4QueryParser.java \
-	$(IM_MAD)/Queue.java
+am__dist_ws_JAVA_DIST = $(EM_MAD)/GW_mad_ws.java $(IM_MAD)/Host.java \
+	$(IM_MAD)/Mds4QueryParser.java $(IM_MAD)/Queue.java
 JAVAC = javac
 CLASSPATH_ENV = CLASSPATH=$(JAVAROOT):$(srcdir)/$(JAVAROOT):$$CLASSPATH
 am__dist_jar_DATA_DIST = $(srcdir)/drmaa/drmaa.jar
@@ -430,6 +428,7 @@ INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
+JAVAC_PATH = @JAVAC_PATH@
 JAVADOC = @JAVADOC@
 JAVADOCC_FALSE = @JAVADOCC_FALSE@
 JAVADOCC_TRUE = @JAVADOCC_TRUE@
@@ -851,7 +850,9 @@ __srcdir__tm_mad_gw_tm_mad_dummy_bin_LDADD = $(GLOBUS_LIBS) \
 # --------------------------------
 JAVAROOT = .
 @WS_TRUE@wsdir = @prefix@/bin
-@WS_TRUE@dist_ws_JAVA = $(TM_MAD_RFT_SRC) $(EM_MAD)/GW_mad_ws.java $(IM_MAD_MDS4_SRC)
+
+#dist_ws_JAVA = $(TM_MAD_RFT_SRC) $(EM_MAD)/GW_mad_ws.java $(IM_MAD_MDS4_SRC)
+@WS_TRUE@dist_ws_JAVA = $(EM_MAD)/GW_mad_ws.java $(IM_MAD_MDS4_SRC)
 
 # ----------------------------
 # AUX SCRIPTS
@@ -1852,8 +1853,6 @@ info-am:
 
 install-data-am: install-dist_jarDATA install-dist_scriptsSCRIPTS \
 	install-dist_wsJAVA install-includeHEADERS
-	@$(NORMAL_INSTALL)
-	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
 
 install-exec-am: install-binPROGRAMS install-binSCRIPTS \
 	install-dist_binSCRIPTS install-dist_sysconfDATA \
@@ -1894,20 +1893,20 @@ uninstall-am: uninstall-binPROGRAMS uninstall-binSCRIPTS \
 	distclean-generic distclean-libtool distclean-tags distdir dvi \
 	dvi-am html html-am info info-am install install-am \
 	install-binPROGRAMS install-binSCRIPTS install-data \
-	install-data-am install-data-hook install-dist_binSCRIPTS \
-	install-dist_jarDATA install-dist_scriptsSCRIPTS \
-	install-dist_sysconfDATA install-dist_wsJAVA install-exec \
-	install-exec-am install-includeHEADERS install-info \
-	install-info-am install-libLTLIBRARIES install-man \
-	install-strip installcheck installcheck-am installdirs \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
-	pdf pdf-am ps ps-am tags uninstall uninstall-am \
-	uninstall-binPROGRAMS uninstall-binSCRIPTS \
-	uninstall-dist_binSCRIPTS uninstall-dist_jarDATA \
-	uninstall-dist_scriptsSCRIPTS uninstall-dist_sysconfDATA \
-	uninstall-dist_wsJAVA uninstall-includeHEADERS \
-	uninstall-info-am uninstall-libLTLIBRARIES
+	install-data-am install-dist_binSCRIPTS install-dist_jarDATA \
+	install-dist_scriptsSCRIPTS install-dist_sysconfDATA \
+	install-dist_wsJAVA install-exec install-exec-am \
+	install-includeHEADERS install-info install-info-am \
+	install-libLTLIBRARIES install-man install-strip installcheck \
+	installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-compile \
+	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+	tags uninstall uninstall-am uninstall-binPROGRAMS \
+	uninstall-binSCRIPTS uninstall-dist_binSCRIPTS \
+	uninstall-dist_jarDATA uninstall-dist_scriptsSCRIPTS \
+	uninstall-dist_sysconfDATA uninstall-dist_wsJAVA \
+	uninstall-includeHEADERS uninstall-info-am \
+	uninstall-libLTLIBRARIES
 
 
 # -----------------------------
@@ -1937,15 +1936,6 @@ uninstall-am: uninstall-binPROGRAMS uninstall-binSCRIPTS \
 #        $(CLIENT_SRC) \
 #        $(COMMON_SRC)
 #endif
-
-# ----------------------------
-# DIR LAYOUT
-# ----------------------------
-
-install-data-hook:
-	@rm -rf @prefix@/var
-	@mkdir -p @prefix@/var/acct
-	@cp -r $(top_srcdir)/etc/im_examples @prefix@/etc/
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

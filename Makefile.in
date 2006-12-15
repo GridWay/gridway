@@ -139,6 +139,7 @@ INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
+JAVAC_PATH = @JAVAC_PATH@
 JAVADOC = @JAVADOC@
 JAVADOCC_FALSE = @JAVADOCC_FALSE@
 JAVADOCC_TRUE = @JAVADOCC_TRUE@
@@ -598,6 +599,8 @@ info: info-recursive
 info-am:
 
 install-data-am:
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
 
 install-exec-am:
 	@$(NORMAL_INSTALL)
@@ -640,14 +643,14 @@ uninstall-info: uninstall-info-recursive
 	distclean-generic distclean-libtool distclean-recursive \
 	distclean-tags distcleancheck distdir distuninstallcheck dvi \
 	dvi-am html html-am info info-am install install-am \
-	install-data install-data-am install-exec install-exec-am \
-	install-exec-hook install-info install-info-am install-man \
-	install-strip installcheck installcheck-am installdirs \
-	installdirs-am maintainer-clean maintainer-clean-generic \
-	maintainer-clean-recursive mostlyclean mostlyclean-generic \
-	mostlyclean-libtool mostlyclean-recursive pdf pdf-am ps ps-am \
-	tags tags-recursive uninstall uninstall-am uninstall-hook \
-	uninstall-info-am
+	install-data install-data-am install-data-hook install-exec \
+	install-exec-am install-exec-hook install-info install-info-am \
+	install-man install-strip installcheck installcheck-am \
+	installdirs installdirs-am maintainer-clean \
+	maintainer-clean-generic maintainer-clean-recursive \
+	mostlyclean mostlyclean-generic mostlyclean-libtool \
+	mostlyclean-recursive pdf pdf-am ps ps-am tags tags-recursive \
+	uninstall uninstall-am uninstall-hook uninstall-info-am
 
 
 install-exec-hook:
@@ -681,7 +684,7 @@ install-exec-hook:
 # -- Script renaming - WS
 # -------------------
 @WS_TRUE@	@mv @prefix@/bin/gw_em_mad_ws.sh @prefix@/bin/gw_em_mad_ws
-@WS_TRUE@	@mv @prefix@/bin/gw_tm_mad_rft.sh @prefix@/bin/gw_tm_mad_rft
+#	@mv @prefix@/bin/gw_tm_mad_rft.sh @prefix@/bin/gw_tm_mad_rft
 @WS_TRUE@	@mv @prefix@/bin/gw_im_mad_mds4.sh @prefix@/bin/gw_im_mad_mds4
 # ------------------
 # -- Script renaming - PREWS
@@ -691,6 +694,47 @@ install-exec-hook:
 @PREWS_TRUE@	@mv @prefix@/bin/gw_tm_mad_dummy.sh @prefix@/bin/gw_tm_mad_dummy
 
 @PREWS_TRUE@	@mv @prefix@/bin/gw_em_mad_prews.sh @prefix@/bin/gw_em_mad_prews
+
+# ----------------------------
+# DIR LAYOUT
+# ----------------------------
+
+install-data-hook:
+	@rm -rf @prefix@/var
+	@mkdir -p @prefix@/var/acct
+	@cp -r $(top_srcdir)/etc/im_examples @prefix@/etc/
+
+#-----------
+#    remove CVS DIRS
+#   		@find @prefix@ -name CVS -exec rm -rf '{}' \;
+#---------
+	@rm -rf @prefix@/doc/drmaa_c/CVS \
+        @prefix@/doc/images/CVS \
+        @prefix@/etc/im_examples/CVS \
+        @prefix@/src/drmaa/org/CVS \
+        @prefix@/src/drmaa/org/ggf/CVS \
+        @prefix@/src/drmaa/org/ggf/drmaa/CVS \
+		@prefix@/etc/im_examples/CVS \
+		@prefix@/examples/im/CVS \
+		@prefix@/examples/ls/CVS \
+		@prefix@/examples/pi/CVS \
+		@prefix@/examples/CVS \
+		@prefix@/examples/drmaa_java/CVS \
+		@prefix@/examples/drmaa/CVS \
+		@prefix@/examples/drmaa/drmaa_java/CVS \
+		@prefix@/examples/drmaa/drmaa_c/CVS \
+		@prefix@/examples/drmaa/TestSuite/CVS \
+		@prefix@/examples/drmaa/TestSuite/org/CVS \
+		@prefix@/examples/drmaa/TestSuite/org/ggf/CVS \
+		@prefix@/examples/drmaa/TestSuite/org/ggf/drmaa/CVS \
+		@prefix@/examples/drmaa/TestSuite/org/ggf/drmaa/testSuite/CVS \
+		@prefix@/examples/sleep/CVS \
+		@prefix@/examples/drmaaTestSuite/CVS \
+		@prefix@/examples/drmaaTestSuite/org/CVS \
+		@prefix@/examples/drmaaTestSuite/org/ggf/CVS \
+		@prefix@/examples/drmaaTestSuite/org/ggf/drmaa/CVS \
+		@prefix@/examples/drmaaTestSuite/org/ggf/drmaa/testSuite/CVS \
+		@prefix@/examples/workflow/CVS
 
 uninstall-hook:
 	@rm @prefix@/bin/gw_im_mad_mds2
@@ -710,17 +754,48 @@ uninstall-hook:
 
 dist-hook:
 	@cp -r src/drmaa/org $(distdir)/src/drmaa
-	@rm -r $(distdir)/src/drmaa/org/CVS $(distdir)/src/drmaa/org/ggf/CVS $(distdir)/src/drmaa/org/ggf/drmaa/CVS
 	@mkdir -p $(distdir)/doc/docbook
 	@cp -r doc/images $(distdir)/doc
 	@cp -r doc/drmaa_c $(distdir)/doc
 	@cp -r doc/docbook/*.sgml $(distdir)/doc/docbook
 	@cp -r doc/docbook/*.css $(distdir)/doc/docbook
 	@cp -r doc/docbook/*.dsl $(distdir)/doc/docbook
-	@rm -rf $(distdir)/doc/images/CVS $(distdir)/doc/drmaa_c/CVS $(distdir)/doc/docbook/CVS
 	@cp -r examples $(distdir)
 	@cp -r etc/im_examples $(distdir)/etc/
 #	@cp -r src/test/jt $(distdir)/src/test
+#-----------
+#    remove CVS DIRS
+#   	@find $(distdir) -name CVS -exec rm -r '{}' \
+#---------
+	@rm -rf $(distdir)/doc/drmaa_c/CVS \
+	    $(distdir)/doc/images/CVS \
+        $(distdir)/etc/im_examples/CVS \
+        $(distdir)/src/drmaa/org/CVS \
+        $(distdir)/src/drmaa/org/ggf/CVS \
+        $(distdir)/src/drmaa/org/ggf/drmaa/CVS \
+		$(distdir)/doc/CVS \
+		$(distdir)/etc/im_examples/CVS \
+		$(distdir)/examples/im/CVS \
+		$(distdir)/examples/ls/CVS \
+		$(distdir)/examples/pi/CVS \
+		$(distdir)/examples/CVS \
+		$(distdir)/examples/drmaa_java/CVS \
+		$(distdir)/examples/drmaa/CVS \
+		$(distdir)/examples/drmaa/drmaa_java/CVS \
+		$(distdir)/examples/drmaa/drmaa_c/CVS \
+		$(distdir)/examples/drmaa/TestSuite/CVS \
+		$(distdir)/examples/drmaa/TestSuite/org/CVS \
+		$(distdir)/examples/drmaa/TestSuite/org/ggf/CVS \
+		$(distdir)/examples/drmaa/TestSuite/org/ggf/drmaa/CVS \
+		$(distdir)/examples/drmaa/TestSuite/org/ggf/drmaa/testSuite/CVS \
+		$(distdir)/examples/sleep/CVS \
+		$(distdir)/examples/drmaaTestSuite/CVS \
+		$(distdir)/examples/drmaaTestSuite/org/CVS \
+		$(distdir)/examples/drmaaTestSuite/org/ggf/CVS \
+		$(distdir)/examples/drmaaTestSuite/org/ggf/drmaa/CVS \
+		$(distdir)/examples/drmaaTestSuite/org/ggf/drmaa/testSuite/CVS \
+		$(distdir)/examples/workflow/CVS
+
 	@cp -r LICENSE NOTICE $(distdir)
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
