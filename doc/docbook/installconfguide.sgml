@@ -501,62 +501,13 @@ $ wsrf-query -x -s https://localhost:8443/wsrf/services/DefaultIndexService</scr
 
     <sect2>
     <title>Compilation Notes</title>
+    <para>Not known issues</para>
 
-    <para>
-    If you have installed the Berkeley Database library in a non-default
-    location (e.g. /usr/local), adjust the following lines in the Makefile:
-    </para>
-
-    <screen>
-DB4_LD_PATH      =
-DB4_INCLUDE_PATH =
-DB4_LIB          = -ldb
-DB4_FLAGS        = -DHAVE_LIBDB</screen>
-
-    <para>
-    Note, that you can comment these lines if the Berkeley DB library is not
-    available in your system. In this case, the accounting facilities of
-    GridWay will not be compiled.
-    </para>
-    </sect2>
-
-    <sect2>
-    <title>Debian Testing</title>
-
-    <para>
-    No known issues.
-    </para>
-    </sect2>
-
-    <sect2>
     <title>Fedora Core</title>
 
-    <para>
-    No known issues.
-    </para>
-    </sect2>
-
-    <sect2>
-    <title>Solaris 10</title>
-
-    <para>
-    No known issues, GridWay has been tested with the GNU development tools.
-    </para>
-
-    <para>
-    You have to uncomment the following lines in Makefile:
-    </para>
-
-    <screen>
-# Solaris configuration (uncomment)
-# NOTE: m64 is needed for gcc64dbg Globus flavors
-SYSYTEM         = solaris
-LIBS_SUNOS      = -lnsl -lsocket
-CFLAGS_SUNOS    = -m64 -DGWSOLARIS
-LDOPTIONS       = -G</screen>
-    <para>
-    Stable releases will be shipped with <command>autoconf</command> to avoid this step.
-    </para>
+      <para>
+!     There are issues with Fedora Core 4 and Sun's Java 1.4.2. Please upgrade to Java 1.5+ on these platforms.
+      </para>
 
     </sect2>
   </sect1>
@@ -599,18 +550,77 @@ LDOPTIONS       = -G</screen>
 
       <listitem>
       <para>
-      Create a Globus makefile header:
-      <screen>
-$ globus-makefile-header -flavor gcc32dbg globus_gram_client \
- globus_ftp_client globus_gass_copy > makefile-header</screen>
-      You can change gcc32dbg to the flavor used when Globus was installed.
+      Run configure to set up GridWay installation. Posible options
+      for configure are:
+      <table frame='all'>
+		<title>Configure Options.</title>
+    	<tgroup cols='2' align='left' colsep='1' rowsep='1'>
+    	<colspec colname='c1' colwidth='6cm'>
+    	<colspec colname='c2'>
+			<tbody>
+		  		<row>
+					<entry namest="c1">Option</entry>
+					<entry namest="c2">Description</entry>
+				</row>
+        		<row>
+        		   <entry>--prefix</entry>
+        		   <entry>Sets final GridWay installation dir. Defaults to /usr/local/gw.</entry>
+        		</row>
+            <row>
+               <entry>--with-flavor=flavor</entry>
+               <entry>The configure script will try to detect the flavor (eg. gcc32dbg) of the Globus toolkit installed in your system. However,
+               if the configure script is not able to detect it, specify it with this option.</entry>
+            </row>
+        		<row>
+        		   <entry>--disable-drmaa</entry>
+        		   <entry>Don't build drmaa support. Default is enabled.</entry>
+        		</row>
+        		<row>
+        		   <entry>--disable-prews</entry>
+        		   <entry>Don't build pre-web-services support. Default is enabled.
+        		</row>
+         		<row>
+        		   <entry>--disable-ws</entry>
+        		   <entry>Don't build web-services support. Default is enabled.</entry>
+        		</row>
+         		<row>
+        		   <entry>--with-db=path_to_db</entry>
+        		   <entry>Specify the Berkeley Database path to build accounting support.</entry>
+        		</row>
+         		<row>
+        		   <entry>--with-doc</entry>
+        		   <entry>Install GridWay documentation</entry>
+        		</row>
+          		<row>
+        		   <entry>--with-examples</entry>
+        		   <entry>Install examples</entry>
+        		</row>
+         		<row>
+        		   <entry>--with-tests</entry>
+        		   <entry>Install tests</entry>
+        		</row>
+           </tbody>
+		</tgroup>
+	   </table>
+	   </para>
+	   <para>
+	   The next line will configure GridWay to include documentation and accounting
+	   <screen>$ ./configure --with-doc --with-db=/usr/local/db</screen>
       </para>
       </listitem>
+
 
       <listitem>
       <para>
       Run make:
       <screen>$ make</screen>
+      </para>
+      </listitem>
+
+      <listitem>
+      <para>
+      Run make install:
+      <screen>$ make install</screen>
       </para>
       </listitem>
 
@@ -623,21 +633,22 @@ $GW_LOCATION/
     |
     +--- bin/       executables
     |
-    +--- doc/       documentation
+    +--- doc/       documentation [Optional]
     |
     +--- etc/       gwd.conf and job_template.default configuration files
     |
-    +--- include/   header files
+    +--- examples/  usage examples [Optional]
     |
-    +--- src/       source tree
+    +--- include/   header files
     |
     +--- lib/       compiled libraries
     |
     +--- scripts/   wrapper and monitor scripts
     |
-    +--- var/       lock, port and log files
+    +--- test/      test suite [Optional]
     |
-    +--- examples/  usage examples</screen>
+    +--- var/       lock, port and log files
+</screen>
       </para>
       </listitem>
     </orderedlist>
@@ -727,22 +738,25 @@ $GW_LOCATION/
 
     <listitem>
     <para>
-    Create a Globus makefile header:
-    <screen>
-$ globus-makefile-header -flavor gcc32dbg globus_gram_client \
- globus_ftp_client globus_gass_copy > makefile-header</screen>
-    </para>
-    <para>
-    You can change gcc32dbg to the flavor used when Globus was installed.
-    </para>
+    Run configure to set up GridWay installation. Check above for possible options or
+    just type <command>configure --help</command>.
+	  </para>
     </listitem>
 
-    <listitem>
-    <para>
-    Run make:
-    <screen># make</screen>
-    </para>
-    </listitem>
+
+      <listitem>
+      <para>
+      Run make:
+      <screen>$ make</screen>
+      </para>
+      </listitem>
+
+      <listitem>
+      <para>
+      Run make install:
+      <screen>$ make install</screen>
+      </para>
+      </listitem>
 
 		<listitem>
     <para>
@@ -752,21 +766,21 @@ $GW_LOCATION/
     |
     +--- bin/       executables
     |
-    +--- doc/       documentation
+    +--- doc/       documentation [Optional]
     |
     +--- etc/       gwd.conf and job_template.default configuration files
     |
-    +--- include/   header files
+    +--- examples/  usage examples [Optional]
     |
-    +--- src/       source tree
+    +--- include/   header files
     |
     +--- lib/       compiled libraries
     |
     +--- scripts/   wrapper and monitor scripts
     |
-    +--- var/       lock, port and log files
+    +--- test/      test suite [Optional]
     |
-    +--- examples/  usage examples</screen>
+    +--- var/       lock, port and log files</screen>
     </para>
     </listitem>
 
