@@ -286,7 +286,7 @@ void gw_host_set_genvar_int(char *var, int index, int value, gw_host_t *host)
         sprintf(name, "%s[%i]", var, index);
     }
     
-    gw_log_print("IM",'W',"Setting up generic integer variable for host %i, (%s = %i).\n",
+    gw_log_print("IM",'W',"Setting up generic integer variable for host %i (%s = %i).\n",
                  host->host_id, 
                  name, 
                  value);
@@ -301,7 +301,7 @@ void gw_host_set_genvar_int(char *var, int index, int value, gw_host_t *host)
     else
     {
         /* Not found */
-        host->genvar_int[p].name = name;
+        host->genvar_int[p].name = strdup(name);
         host->genvar_int[p].value = value;
     }
 }
@@ -330,7 +330,7 @@ void gw_host_set_genvar_str(char *var, int index, char *value, gw_host_t *host)
         sprintf(name, "%s[%i]", var, index);
     }
 
-    gw_log_print("IM",'W',"Setting up generic string variable for host %i, (%s = \"%s\").\n",
+    gw_log_print("IM",'W',"Setting up generic string variable for host %i (%s = \"%s\").\n",
                  host->host_id, 
                  name, 
                  value);
@@ -341,13 +341,13 @@ void gw_host_set_genvar_str(char *var, int index, char *value, gw_host_t *host)
     {
         /* Found */
         free(host->genvar_str[p].value);
-        host->genvar_str[p].value = value;
+        host->genvar_str[p].value = strdup(value);
     }
     else
     {
         /* Not found */
-        host->genvar_str[p].name = name;
-        host->genvar_str[p].value = value;
+        host->genvar_str[p].name = strdup(name);
+        host->genvar_str[p].value = strdup(value);
     }
 }
 
@@ -550,8 +550,8 @@ char *gw_host_get_genvar_str(char *var, int index, gw_host_t *host)
 
 #ifdef GWIMDEBUG
     gw_log_print("IM",'W',"Getting generic string variable (%s) for host %i.\n",
-                  name,
-                  host->host_id);                  
+                 name,
+                 host->host_id);                  
 #endif
 
     p = gw_host_search_genvar_str(name, host);
@@ -565,6 +565,12 @@ char *gw_host_get_genvar_str(char *var, int index, gw_host_t *host)
         /* Array variable */
         sprintf(name, "%s[%i]", var, index);
         
+#ifdef GWIMDEBUG
+        gw_log_print("IM",'W',"Getting generic string variable (%s) for host %i.\n",
+                     name,
+                     host->host_id);
+#endif
+
         p = gw_host_search_genvar_str(name, host);
 
         if (p < GW_HOST_MAX_GENVARS && host->genvar_str[p].name != NULL) /* Found */

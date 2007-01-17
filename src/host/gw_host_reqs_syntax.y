@@ -86,12 +86,18 @@ expr:   VARIABLE '=' INTEGER        { $$ = gw_host_get_var_int($1,queue,host) ==
                                       if ( value_str != NULL
                                           && fnmatch($3, value_str, 0) == 0)
                                         $$ = 1;
+                                      else if ( value_str == NULL
+                                          && strlen($3) == 0)
+                                        $$ = 1;
                                       else
                                         $$ = 0;
                                       free($3); }
         | GENERICVAR '!''=' STRING  { value_str = gw_host_get_genvar_str($1,queue,host);
                                       if ( value_str != NULL
                                           && fnmatch($4, value_str, 0) != 0)
+                                        $$ = 1;
+                                      else if ( value_str != NULL
+                                          && strlen($4) == 0)
                                         $$ = 1;
                                       else
                                         $$ = 0;

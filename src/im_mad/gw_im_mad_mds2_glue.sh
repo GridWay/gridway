@@ -52,7 +52,7 @@ dynamic_monitor (){
     TMPFILE=".search.$$.$1.$RANDOM"
     ERRFILE=".error.$$.$1.$RANDOM"
     
-    nice -n $PRIORITY grid-info-search -x -LLL -h $2 > $TMPFILE 2> $ERRFILE
+    nice -n $PRIORITY grid-info-search -x -LLL -nowrap -h $2 > $TMPFILE 2> $ERRFILE
             
     if [ $? -eq 0 ]
     then
@@ -73,6 +73,10 @@ dynamic_monitor (){
 
         nice -n $PRIORITY grid-info-search -x -LLL -h $2 "(&(objectclass=GlueCE)$QUEUEFILTER)" > $TMPFILE 2> $ERRFILE
 
+        saveIFS=$IFS
+        IFS="
+"
+
         if [ $? -eq 0 ]
         then
             QUEUE_NODECOUNT=0; QUEUE_FREENODECOUNT=0; QUEUE_MAXTIME=0; QUEUE_MAXCPUTIME=0
@@ -88,6 +92,7 @@ dynamic_monitor (){
             QUEUE_STATUS=(`grep GlueCEStateStatus: $TMPFILE | awk -F": " '{print $2}'`)
             QUEUE_PRIORITY=(`grep GlueCEPolicyPriority: $TMPFILE | awk -F": " '{print $2}'`)
             QUEUE_JOBWAIT=(`grep GlueCEStateWaitingJobs: $TMPFILE | awk -F": " '{print $2}'`)
+	    QUEUE_ACCESS=(`egrep -e ^GlueCEAccessControlBaseRule: -e ^GlueCEUniqueID: $TMPFILE | uniq -w 28 | awk '{if (NR % 2 == 0) print}' | awk -F": " '{print $2}'`)
 
             INFO=`echo "HOSTNAME=\"$HOSTNAME\" ARCH=\"i686\"" \
                 "OS_NAME=\"$OS_NAME\" OS_VERSION=\"$OS_VERSION\"" \
@@ -105,7 +110,7 @@ dynamic_monitor (){
                     "QUEUE_MAXCPUTIME[$j]=${QUEUE_MAXCPUTIME[$i]} QUEUE_MAXCOUNT[$j]=0" \
                     "QUEUE_MAXRUNNINGJOBS[$j]=${QUEUE_MAXRUNNINGJOBS[$i]} QUEUE_MAXJOBSINQUEUE[$j]=${QUEUE_MAXJOBSINQUEUE[$i]}" \
                     "QUEUE_DISPATCHTYPE[$j]=\"batch\" QUEUE_PRIORITY[$j]=\"${QUEUE_PRIORITY[$i]}\"" \
-                    "QUEUE_STATUS[$j]=\"${QUEUE_STATUS[$i]}\""`
+                    "QUEUE_STATUS[$j]=\"${QUEUE_STATUS[$i]}\" QUEUE_ACCESS[$j]=\"${QUEUE_ACCESS[$i]}\""`
             done
 
             echo "MONITOR $1 SUCCESS $INFO"
@@ -118,6 +123,8 @@ dynamic_monitor (){
         echo "MONITOR $1 FAILURE $INFO"
     fi
     
+    IFS=$saveIFS
+
     rm -f $TMPFILE $ERRFILE
 }
 
