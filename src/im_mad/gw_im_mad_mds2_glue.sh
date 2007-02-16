@@ -92,7 +92,8 @@ dynamic_monitor (){
             QUEUE_STATUS=(`grep GlueCEStateStatus: $TMPFILE | awk -F": " '{print $2}'`)
             QUEUE_PRIORITY=(`grep GlueCEPolicyPriority: $TMPFILE | awk -F": " '{print $2}'`)
             QUEUE_JOBWAIT=(`grep GlueCEStateWaitingJobs: $TMPFILE | awk -F": " '{print $2}'`)
-	    QUEUE_ACCESS=(`egrep -e ^GlueCEAccessControlBaseRule: -e ^GlueCEUniqueID: $TMPFILE | uniq -w 28 | awk '{if (NR % 2 == 0) print}' | awk -F": " '{print $2}'`)
+            #QUEUE_ACCESS=(`egrep -e ^GlueCEAccessControlBaseRule: -e ^GlueCEUniqueID: $TMPFILE | uniq -w 28 | awk '{if (NR % 2 == 0) print}' | awk -F": " '{print $2}'`)
+            QUEUE_ACCESS=(`egrep -e "^GlueCEAccessControlBaseRule: VO" -e "^GlueCEUniqueID" -e "GlueVOViewLocalID" $TMPFILE | awk -F: 'BEGIN {first=0} /^GlueCEUniqueID:/ {if (first!=0) printf " \n"; first=1} /^GlueCEAccessControlBaseRule/ {printf ":%s:",$3} /^GlueVOViewLocalID/ {exit} END {print ""}'`)
 
             INFO=`echo "HOSTNAME=\"$HOSTNAME\" ARCH=\"i686\"" \
                 "OS_NAME=\"$OS_NAME\" OS_VERSION=\"$OS_VERSION\"" \
