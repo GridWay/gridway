@@ -1,0 +1,15 @@
+EXECUTABLE = mpi
+ARGUMENTS  = 
+
+INPUT_FILES   = 
+OUTPUT_FILES  = 
+RESTART_FILES = 
+ENVIRONMENT   = 
+
+STDOUT_FILE =   stdout.${JOB_ID}
+STDERR_FILE =   stderr.${JOB_ID}
+
+RANK         = CPU_MHZ
+
+TYPE = "mpi"
+NP = 2
