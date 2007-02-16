@@ -203,8 +203,7 @@ int gw_job_init(gw_job_t *job, int job_id)
 	job->chk_xfrs.number_of_xfrs = 0;
 	job->chk_xfrs.failure_limit  = 0;
 	
-	job->template.file = NULL;
-	job->template.name = NULL;
+    memset((void *) &(job->template), 0 , sizeof(gw_job_template_t));
 
 /* -------------------------------------------------------------------------- */
 
