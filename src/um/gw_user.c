@@ -208,12 +208,18 @@ int gw_em_register_mad(gw_user_t *  user,
             }
             else if (strcmp(mode, "rsl2") == 0)
             {
+                mad->wrapper_rsl     = gw_generate_rsl2;
+                mad->pre_wrapper_rsl = gw_generate_pre_wrapper_rsl2;
+            }
+
+            else if (strcmp(mode, "rsl2_wrapper") == 0)
+            {
                 mad->wrapper_rsl     = gw_generate_wrapper_rsl2;
                 mad->pre_wrapper_rsl = gw_generate_pre_wrapper_rsl2;
             }
-            else if (strcmp(mode, "rsl2_gw") == 0)
+            else if (strcmp(mode, "rsl2_nowrapper") == 0)
             {
-                mad->wrapper_rsl     = gw_generate_wrapper_rsl2_gw;
+                mad->wrapper_rsl     = gw_generate_nowrapper_rsl2;
                 mad->pre_wrapper_rsl = gw_generate_pre_wrapper_rsl2;            	            	
             }
         }
