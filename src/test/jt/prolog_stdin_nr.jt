@@ -1,0 +1,6 @@
+EXECUTABLE = /bin/ls 
+
+STDIN_FILE = doesnt_exist.txt 
+RANK         = CPU_MHZ
+
+RESCHEDULE_ON_FAILURE = no

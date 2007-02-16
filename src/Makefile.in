@@ -68,32 +68,41 @@ bin_PROGRAMS = $(srcdir)/gwd/gwd$(EXEEXT) $(srcdir)/cmds/gwps$(EXEEXT) \
 	$(srcdir)/cmds/gwwait$(EXEEXT) $(srcdir)/cmds/gwuser$(EXEEXT) \
 	$(srcdir)/cmds/gwacct$(EXEEXT) \
 	$(srcdir)/scheduler/gw_flood_scheduler$(EXEEXT) \
-	$(am__EXEEXT_1) $(srcdir)/tm_mad/gw_tm_mad_ftp.bin$(EXEEXT)
-@DRMAA_TRUE@am__append_1 = $(srcdir)/drmaa/libdrmaa.la \
+	$(srcdir)/scheduler/gw_sched$(EXEEXT) $(am__EXEEXT_1) \
+	$(srcdir)/tm_mad/gw_tm_mad_ftp.bin$(EXEEXT)
+@JSDL_TRUE@am__append_1 = $(JSDL_SRC)
+@JSDL_TRUE@am__append_2 = $(CMDS)/jsdl2gw.sh
+@DRMAA_TRUE@am__append_3 = $(srcdir)/drmaa/libdrmaa.la \
 @DRMAA_TRUE@	$(srcdir)/drmaa/libDrmaaJNI.la
+
+# --------------------------------
+# Pre-WS Middleware Access Drivers
+# --------------------------------
 
 # ---------------------- EM MADS ------------------------
 
 # ---------------------- TM MADS ------------------------
-@PREWS_TRUE@am__append_2 = $(srcdir)/em_mad/gw_em_mad_prews.bin \
+@PREWS_TRUE@am__append_4 = $(srcdir)/em_mad/gw_em_mad_prews.bin \
 @PREWS_TRUE@	$(srcdir)/tm_mad/gw_tm_mad_dummy.bin
-@PREWS_TRUE@am__append_3 = $(EM_MAD)/gw_em_mad_prews.sh \
+@PREWS_TRUE@am__append_5 = $(EM_MAD)/gw_em_mad_prews.sh \
 @PREWS_TRUE@	$(TM_MAD)/gw_tm_mad_dummy.sh
-@PREWS_TRUE@am__append_4 = $(IM_MAD)/gw_im_mad_mds2.sh \
+@PREWS_TRUE@am__append_6 = $(IM_MAD)/gw_im_mad_mds2.sh \
 @PREWS_TRUE@	$(IM_MAD)/gw_im_mad_mds2_glue.sh
-
-#dist_bin_SCRIPTS += $(TM_MAD)/gw_tm_mad_rft.sh
-@WS_TRUE@am__append_5 = $(EM_MAD)/gw_em_mad_ws.sh \
+@WS_TRUE@am__append_7 = $(EM_MAD)/GW_mad_ws.java $(IM_MAD_MDS4_SRC)
+@WS_TRUE@am__append_8 = $(EM_MAD)/gw_em_mad_ws.sh \
 @WS_TRUE@	$(IM_MAD)/gw_im_mad_mds4.sh
+@TESTS_TRUE@test_PROGRAMS = $(srcdir)/test/gwtest$(EXEEXT)
 subdir = src
 DIST_COMMON = $(COMMON)/gw_template_parser.c $(GWD)/gw_conf_parser.c \
-	$(HOST)/gw_host_attr_parser.c $(HOST)/gw_host_rank_syntax.c \
-	$(HOST)/gw_host_rank_syntax.h $(HOST)/gw_host_reqs_syntax.c \
-	$(HOST)/gw_host_reqs_syntax.h $(HOST)/gw_host_update_syntax.c \
+	$(GWD)/gw_sch_conf_parser.c $(GWD)/gw_sch_conf_syntax.c \
+	$(GWD)/gw_sch_conf_syntax.h $(HOST)/gw_host_attr_parser.c \
+	$(HOST)/gw_host_rank_syntax.c $(HOST)/gw_host_rank_syntax.h \
+	$(HOST)/gw_host_reqs_syntax.c $(HOST)/gw_host_reqs_syntax.h \
+	$(HOST)/gw_host_update_syntax.c \
 	$(HOST)/gw_host_update_syntax.h \
 	$(JOB)/gw_job_template_var_parser.c \
 	$(am__dist_bin_SCRIPTS_DIST) $(am__dist_jar_DATA_DIST) \
-	$(am__dist_ws_JAVA_DIST) $(dist_scripts_SCRIPTS) \
+	$(am__dist_java_JAVA_DIST) $(dist_scripts_SCRIPTS) \
 	$(dist_sysconf_DATA) $(include_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -109,10 +118,10 @@ am__vpath_adj = case $$p in \
   esac;
 am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(bindir)" \
-	"$(DESTDIR)$(bindir)" "$(DESTDIR)$(bindir)" \
-	"$(DESTDIR)$(scriptsdir)" "$(DESTDIR)$(wsdir)" \
-	"$(DESTDIR)$(jardir)" "$(DESTDIR)$(sysconfdir)" \
-	"$(DESTDIR)$(includedir)"
+	"$(DESTDIR)$(testdir)" "$(DESTDIR)$(bindir)" \
+	"$(DESTDIR)$(bindir)" "$(DESTDIR)$(scriptsdir)" \
+	"$(DESTDIR)$(javadir)" "$(DESTDIR)$(jardir)" \
+	"$(DESTDIR)$(sysconfdir)" "$(DESTDIR)$(includedir)"
 libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
 __srcdir__drmaa_libDrmaaJNI_la_DEPENDENCIES =  \
@@ -154,7 +163,8 @@ __srcdir__drmaa_libdrmaa_la_OBJECTS =  \
 @PREWS_TRUE@	$(srcdir)/em_mad/gw_em_mad_prews.bin$(EXEEXT) \
 @PREWS_TRUE@	$(srcdir)/tm_mad/gw_tm_mad_dummy.bin$(EXEEXT)
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
-PROGRAMS = $(bin_PROGRAMS)
+testPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
+PROGRAMS = $(bin_PROGRAMS) $(test_PROGRAMS)
 am__objects_4 = $(DB)/gw_acct.$(OBJEXT)
 am__objects_5 = $(CLIENT)/gw_client_acct.$(OBJEXT)
 am__objects_6 = $(COMMON)/gw_action.$(OBJEXT) \
@@ -241,12 +251,12 @@ am__objects_12 = $(JOB)/gw_history.$(OBJEXT) $(JOB)/gw_job.$(OBJEXT) \
 	$(JOB)/gw_job_template.$(OBJEXT) \
 	$(JOB)/gw_job_template_var_parser.$(OBJEXT) \
 	$(JOB)/gw_xfr_files.$(OBJEXT)
-am__objects_13 = $(HOST)/gw_host_attr_parser.$(OBJEXT) \
-	$(HOST)/gw_host.$(OBJEXT) $(HOST)/gw_host_var.$(OBJEXT) \
-	$(HOST)/gw_host_pool.$(OBJEXT) \
+am__objects_13 = $(HOST)/gw_host.$(OBJEXT) \
+	$(HOST)/gw_host_var.$(OBJEXT) $(HOST)/gw_host_pool.$(OBJEXT) \
 	$(HOST)/gw_host_rank_syntax.$(OBJEXT) \
 	$(HOST)/gw_host_reqs_syntax.$(OBJEXT) \
-	$(HOST)/gw_host_update_syntax.$(OBJEXT)
+	$(HOST)/gw_host_update_syntax.$(OBJEXT) \
+	$(HOST)/gw_host_attr_parser.$(OBJEXT)
 am__objects_14 = $(ARRAY)/gw_array.$(OBJEXT) \
 	$(ARRAY)/gw_array_pool.$(OBJEXT)
 am__objects_15 = $(DM)/gw_dm_action_allocate.$(OBJEXT) \
@@ -277,7 +287,10 @@ am__objects_16 = $(RM)/gw_rm.$(OBJEXT) \
 	$(RM)/gw_rm_stop_resume.$(OBJEXT) $(RM)/gw_rm_submit.$(OBJEXT) \
 	$(RM)/gw_rm_user_status.$(OBJEXT) $(RM)/gw_rm_wait.$(OBJEXT)
 am__objects_17 = $(GWD)/gw_conf.$(OBJEXT) \
-	$(GWD)/gw_conf_parser.$(OBJEXT) $(GWD)/gwd.$(OBJEXT)
+	$(GWD)/gw_conf_parser.$(OBJEXT) $(GWD)/gwd.$(OBJEXT) \
+	$(GWD)/gw_sch_conf_syntax.$(OBJEXT) \
+	$(GWD)/gw_sch_conf_parser.$(OBJEXT) \
+	$(GWD)/gw_sch_conf.$(OBJEXT)
 am__objects_18 = $(UM)/gw_um.$(OBJEXT) $(UM)/gw_user.$(OBJEXT) \
 	$(UM)/gw_user_pool.$(OBJEXT)
 am___srcdir__gwd_gwd_OBJECTS = $(am__objects_9) $(am__objects_10) \
@@ -293,10 +306,39 @@ am__objects_19 = $(SCHED)/gw_scheduler_common.$(OBJEXT) \
 	$(SCHED)/gw_scheduler_users.$(OBJEXT)
 am___srcdir__scheduler_gw_flood_scheduler_OBJECTS =  \
 	$(SCHED)/gw_flood_scheduler.$(OBJEXT) $(am__objects_6) \
-	$(am__objects_7) $(am__objects_4) $(am__objects_19)
+	$(am__objects_7) $(am__objects_4) $(am__objects_19) \
+	$(GWD)/gw_sch_conf.$(OBJEXT) \
+	$(GWD)/gw_sch_conf_syntax.$(OBJEXT) \
+	$(GWD)/gw_sch_conf_parser.$(OBJEXT)
 __srcdir__scheduler_gw_flood_scheduler_OBJECTS =  \
 	$(am___srcdir__scheduler_gw_flood_scheduler_OBJECTS)
 __srcdir__scheduler_gw_flood_scheduler_LDADD = $(LDADD)
+am___srcdir__scheduler_gw_sched_OBJECTS =  \
+	$(SCHED)/gw_scheduler.$(OBJEXT) $(am__objects_6) \
+	$(am__objects_7) $(am__objects_4) $(am__objects_19) \
+	$(GWD)/gw_sch_conf.$(OBJEXT) \
+	$(GWD)/gw_sch_conf_syntax.$(OBJEXT) \
+	$(GWD)/gw_sch_conf_parser.$(OBJEXT)
+__srcdir__scheduler_gw_sched_OBJECTS =  \
+	$(am___srcdir__scheduler_gw_sched_OBJECTS)
+__srcdir__scheduler_gw_sched_LDADD = $(LDADD)
+am____srcdir__test_gwtest_SOURCES_DIST = test/gw_test.c \
+	$(CMDS)/gw_cmds_common.c $(CLIENT)/gw_client_job_match.c \
+	$(CLIENT)/gw_client_submit.c $(CLIENT)/gw_client_host_status.c \
+	$(CLIENT)/gw_client_job_status.c \
+	$(CLIENT)/gw_client_user_status.c $(CLIENT)/gw_client_init.c \
+	$(CLIENT)/gw_client_signal.c $(CLIENT)/gw_client_wait.c \
+	$(HOST)/gw_host_rank_syntax.c $(HOST)/gw_host_reqs_syntax.c \
+	$(HOST)/gw_host_attr_parser.c $(HOST)/gw_host_update_syntax.c \
+	$(HOST)/gw_host_var.c $(COMMON)/gw_action.c \
+	$(COMMON)/gw_common.c $(COMMON)/gw_file_parser.c \
+	$(COMMON)/gw_log.c $(COMMON)/gw_template.c \
+	$(COMMON)/gw_template_parser.l
+@TESTS_TRUE@am___srcdir__test_gwtest_OBJECTS = test/gw_test.$(OBJEXT) \
+@TESTS_TRUE@	$(CMDS)/gw_cmds_common.$(OBJEXT) $(am__objects_7) \
+@TESTS_TRUE@	$(am__objects_6)
+__srcdir__test_gwtest_OBJECTS = $(am___srcdir__test_gwtest_OBJECTS)
+__srcdir__test_gwtest_LDADD = $(LDADD)
 am__objects_20 = $(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_dummy_bin-gw_tm_dummy_mad.$(OBJEXT)
 am___srcdir__tm_mad_gw_tm_mad_dummy_bin_OBJECTS = $(am__objects_20)
 __srcdir__tm_mad_gw_tm_mad_dummy_bin_OBJECTS =  \
@@ -312,11 +354,12 @@ __srcdir__tm_mad_gw_tm_mad_ftp_bin_OBJECTS =  \
 	$(am___srcdir__tm_mad_gw_tm_mad_ftp_bin_OBJECTS)
 __srcdir__tm_mad_gw_tm_mad_ftp_bin_DEPENDENCIES =
 binSCRIPT_INSTALL = $(INSTALL_SCRIPT)
-am__dist_bin_SCRIPTS_DIST = $(EM_MAD)/gw_em_mad_prews.sh \
-	$(TM_MAD)/gw_tm_mad_dummy.sh $(TM_MAD)/gw_tm_mad_ftp.sh \
-	$(IM_MAD)/gw_im_mad_common.sh $(IM_MAD)/gw_im_mad_static.sh \
-	$(IM_MAD)/gw_im_mad_mds2.sh $(IM_MAD)/gw_im_mad_mds2_glue.sh \
-	$(EM_MAD)/gw_em_mad_ws.sh $(IM_MAD)/gw_im_mad_mds4.sh
+am__dist_bin_SCRIPTS_DIST = $(CMDS)/jsdl2gw.sh \
+	$(EM_MAD)/gw_em_mad_prews.sh $(TM_MAD)/gw_tm_mad_dummy.sh \
+	$(TM_MAD)/gw_tm_mad_ftp.sh $(IM_MAD)/gw_im_mad_common.sh \
+	$(IM_MAD)/gw_im_mad_static.sh $(IM_MAD)/gw_im_mad_mds2.sh \
+	$(IM_MAD)/gw_im_mad_mds2_glue.sh $(EM_MAD)/gw_em_mad_ws.sh \
+	$(IM_MAD)/gw_im_mad_mds4.sh
 dist_binSCRIPT_INSTALL = $(INSTALL_SCRIPT)
 dist_scriptsSCRIPT_INSTALL = $(INSTALL_SCRIPT)
 SCRIPTS = $(bin_SCRIPTS) $(dist_bin_SCRIPTS) $(dist_scripts_SCRIPTS)
@@ -350,6 +393,8 @@ SOURCES = $(__srcdir__drmaa_libDrmaaJNI_la_SOURCES) \
 	$(__srcdir__em_mad_gw_em_mad_prews_bin_SOURCES) \
 	$(__srcdir__gwd_gwd_SOURCES) \
 	$(__srcdir__scheduler_gw_flood_scheduler_SOURCES) \
+	$(__srcdir__scheduler_gw_sched_SOURCES) \
+	$(__srcdir__test_gwtest_SOURCES) \
 	$(__srcdir__tm_mad_gw_tm_mad_dummy_bin_SOURCES) \
 	$(__srcdir__tm_mad_gw_tm_mad_ftp_bin_SOURCES)
 DIST_SOURCES = $(__srcdir__drmaa_libDrmaaJNI_la_SOURCES) \
@@ -365,9 +410,15 @@ DIST_SOURCES = $(__srcdir__drmaa_libDrmaaJNI_la_SOURCES) \
 	$(__srcdir__em_mad_gw_em_mad_prews_bin_SOURCES) \
 	$(__srcdir__gwd_gwd_SOURCES) \
 	$(__srcdir__scheduler_gw_flood_scheduler_SOURCES) \
+	$(__srcdir__scheduler_gw_sched_SOURCES) \
+	$(am____srcdir__test_gwtest_SOURCES_DIST) \
 	$(__srcdir__tm_mad_gw_tm_mad_dummy_bin_SOURCES) \
 	$(__srcdir__tm_mad_gw_tm_mad_ftp_bin_SOURCES)
-am__dist_ws_JAVA_DIST = $(EM_MAD)/GW_mad_ws.java $(IM_MAD)/Host.java \
+am__dist_java_JAVA_DIST = $(CMDS)/GWJTElement.java $(CMDS)/GWJT.java \
+	$(CMDS)/GWJTWriter.java $(CMDS)/JSDLElement.java \
+	$(CMDS)/JSDL.java $(CMDS)/JSDLReader.java \
+	$(CMDS)/JSDLParser.java $(CMDS)/JSDLTranslator.java \
+	$(EM_MAD)/GW_mad_ws.java $(IM_MAD)/Host.java \
 	$(IM_MAD)/Mds4QueryParser.java $(IM_MAD)/Queue.java
 JAVAC = javac
 CLASSPATH_ENV = CLASSPATH=$(JAVAROOT):$(srcdir)/$(JAVAROOT):$$CLASSPATH
@@ -406,6 +457,8 @@ DB2HTMLC_TRUE = @DB2HTMLC_TRUE@
 DB2PDF = @DB2PDF@
 DB2PDFC_FALSE = @DB2PDFC_FALSE@
 DB2PDFC_TRUE = @DB2PDFC_TRUE@
+DB_FALSE = @DB_FALSE@
+DB_TRUE = @DB_TRUE@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
 DOC_FALSE = @DOC_FALSE@
@@ -432,6 +485,8 @@ JAVAC_PATH = @JAVAC_PATH@
 JAVADOC = @JAVADOC@
 JAVADOCC_FALSE = @JAVADOCC_FALSE@
 JAVADOCC_TRUE = @JAVADOCC_TRUE@
+JSDL_FALSE = @JSDL_FALSE@
+JSDL_TRUE = @JSDL_TRUE@
 LDFLAGS = @LDFLAGS@
 LEX = @LEX@
 LEXLIB = @LEXLIB@
@@ -558,13 +613,13 @@ JOB_SRC = $(JOB)/gw_history.c \
         $(JOB)/gw_job_template_var_parser.l \
         $(JOB)/gw_xfr_files.c
 
-HOST_SRC = $(HOST)/gw_host_attr_parser.l \
-        $(HOST)/gw_host.c \
+HOST_SRC = $(HOST)/gw_host.c \
         $(HOST)/gw_host_var.c \
         $(HOST)/gw_host_pool.c \
         $(HOST)/gw_host_rank_syntax.y \
         $(HOST)/gw_host_reqs_syntax.y \
-        $(HOST)/gw_host_update_syntax.y
+        $(HOST)/gw_host_update_syntax.y \
+        $(HOST)/gw_host_attr_parser.l
 
 ARRAY_SRC = $(ARRAY)/gw_array.c \
         $(ARRAY)/gw_array_pool.c
@@ -593,6 +648,15 @@ CMDS_SRC = $(CMDS)/gw_acct.c \
         $(CMDS)/gw_host.c \
         $(CMDS)/gw_ps.c \
         $(CMDS)/gw_user.c
+
+JSDL_SRC = $(CMDS)/GWJTElement.java \
+        $(CMDS)/GWJT.java  \
+        $(CMDS)/GWJTWriter.java  \
+        $(CMDS)/JSDLElement.java  \
+        $(CMDS)/JSDL.java  \
+        $(CMDS)/JSDLReader.java  \
+        $(CMDS)/JSDLParser.java  \
+        $(CMDS)/JSDLTranslator.java
 
 EM_SRC = $(EM)/gw_em_actions.c \
         $(EM)/gw_em.c \
@@ -661,7 +725,10 @@ SCHED_SRC = $(SCHED)/gw_scheduler_common.c \
 DB_SRC = $(DB)/gw_acct.c
 GWD_SRC = $(GWD)/gw_conf.c \
         $(GWD)/gw_conf_parser.l \
-        $(GWD)/gwd.c
+        $(GWD)/gwd.c \
+        $(GWD)/gw_sch_conf_syntax.y \
+        $(GWD)/gw_sch_conf_parser.l \
+        $(GWD)/gw_sch_conf.c        
 
 EM_MAD_PREWS_SRC = $(EM_MAD)/gw_em_mad_prews_actions.c \
         $(EM_MAD)/gw_em_mad_prews.c \
@@ -733,7 +800,8 @@ include_HEADERS = $(top_srcdir)/include/drmaa.h \
                         $(top_srcdir)/include/gw_um.h \
                         $(top_srcdir)/include/gw_user.h \
                         $(top_srcdir)/include/gw_user_pool.h \
-                        $(top_srcdir)/include/gw_xfr_files.h
+                        $(top_srcdir)/include/gw_xfr_files.h \
+                        $(top_srcdir)/include/gw_sch_conf.h
 
 __srcdir__gwd_gwd_SOURCES = $(EM_SRC) \
         $(TM_SRC) \
@@ -791,35 +859,51 @@ __srcdir__cmds_gwacct_SOURCES = $(CMDS)/gw_acct.c \
         $(CLIENT_ACCT_SRC) \
         $(COMMON_SRC)
 
+
+# ----------------------------
+# JSDL Support
+# ----------------------------
+bin_SCRIPTS = 
+
+# ---------------------- IM MADS ------------------------
+dist_bin_SCRIPTS = $(am__append_2) $(am__append_5) \
+	$(TM_MAD)/gw_tm_mad_ftp.sh $(IM_MAD)/gw_im_mad_common.sh \
+	$(IM_MAD)/gw_im_mad_static.sh $(am__append_6) $(am__append_8)
+javadir = @prefix@/bin
+dist_java_JAVA = $(am__append_1) $(am__append_7)
 __srcdir__scheduler_gw_flood_scheduler_SOURCES = \
         $(SCHED)/gw_flood_scheduler.c \
         $(COMMON_SRC) \
         $(CLIENT_SRC) \
         $(DB_SRC) \
-        $(SCHED_SRC)
+        $(SCHED_SRC) \
+        $(GWD)/gw_sch_conf.c \
+        $(GWD)/gw_sch_conf_syntax.y \
+        $(GWD)/gw_sch_conf_parser.l
 
 __srcdir__scheduler_gw_flood_scheduler_LDFLAGS = -lm
+__srcdir__scheduler_gw_sched_SOURCES = \
+        $(SCHED)/gw_scheduler.c \
+        $(COMMON_SRC) \
+        $(CLIENT_SRC) \
+        $(DB_SRC) \
+        $(SCHED_SRC) \
+        $(GWD)/gw_sch_conf.c \
+        $(GWD)/gw_sch_conf_syntax.y \
+        $(GWD)/gw_sch_conf_parser.l
+
+__srcdir__scheduler_gw_sched_LDFLAGS = -lm
 
 # ----------------------------
 # DRMAA
 # ----------------------------
-lib_LTLIBRARIES = $(am__append_1)
+lib_LTLIBRARIES = $(am__append_3)
 __srcdir__drmaa_libdrmaa_la_SOURCES = $(DRMAA_SRC)
 __srcdir__drmaa_libDrmaaJNI_la_SOURCES = $(DRMAAJNI_SRC)
 __srcdir__drmaa_libDrmaaJNI_la_LIBADD = $(srcdir)/drmaa/libdrmaa.la
 __srcdir__drmaa_libdrmaa_la_CFLAGS = $(AM_CFLAGS)
 @DRMAA_TRUE@jardir = $(prefix)/lib
 @DRMAA_TRUE@dist_jar_DATA = $(srcdir)/drmaa/drmaa.jar
-
-# --------------------------------
-# Pre-WS Middleware Access Drivers
-# --------------------------------
-bin_SCRIPTS = 
-
-# ---------------------- IM MADS ------------------------
-dist_bin_SCRIPTS = $(am__append_3) $(TM_MAD)/gw_tm_mad_ftp.sh \
-	$(IM_MAD)/gw_im_mad_common.sh $(IM_MAD)/gw_im_mad_static.sh \
-	$(am__append_4) $(am__append_5)
 __srcdir__em_mad_gw_em_mad_prews_bin_SOURCES = $(EM_MAD_PREWS_SRC)
 __srcdir__em_mad_gw_em_mad_prews_bin_LDFLAGS = $(GLOBUS_LDFLAGS)
 __srcdir__em_mad_gw_em_mad_prews_bin_CFLAGS = $(GLOBUS_INCLUDES) \
@@ -849,10 +933,6 @@ __srcdir__tm_mad_gw_tm_mad_dummy_bin_LDADD = $(GLOBUS_LIBS) \
 # WS Middleware Access Drivers
 # --------------------------------
 JAVAROOT = .
-@WS_TRUE@wsdir = @prefix@/bin
-
-#dist_ws_JAVA = $(TM_MAD_RFT_SRC) $(EM_MAD)/GW_mad_ws.java $(IM_MAD_MDS4_SRC)
-@WS_TRUE@dist_ws_JAVA = $(EM_MAD)/GW_mad_ws.java $(IM_MAD_MDS4_SRC)
 
 # ----------------------------
 # AUX SCRIPTS
@@ -870,7 +950,19 @@ dist_scripts_SCRIPTS = $(top_srcdir)/scripts/wrapper.sh \
 #        $(top_srcdir)/etc/im_examples/host.list $(top_srcdir)/etc/im_examples/host_glue.list \
 #        $(top_srcdir)/etc/im_examples/machine1.attributes \
 #        $(top_srcdir)/etc/im_examples/machine2.attributes
-dist_sysconf_DATA = $(top_srcdir)/etc/gwd.conf $(top_srcdir)/etc/job_template.default
+dist_sysconf_DATA = $(top_srcdir)/etc/gwd.conf $(top_srcdir)/etc/job_template.default \
+                    $(top_srcdir)/etc/sched.conf
+
+
+# ----------------------------
+# TESTS
+# ----------------------------
+@TESTS_TRUE@testdir = @prefix@/test
+@TESTS_TRUE@__srcdir__test_gwtest_SOURCES = test/gw_test.c \
+@TESTS_TRUE@        $(CMDS)/gw_cmds_common.c \
+@TESTS_TRUE@        $(CLIENT_SRC) \
+@TESTS_TRUE@        $(COMMON_SRC)
+
 all: all-am
 
 .SUFFIXES:
@@ -1016,6 +1108,34 @@ uninstall-binPROGRAMS:
 
 clean-binPROGRAMS:
 	@list='$(bin_PROGRAMS)'; for p in $$list; do \
+	  f=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
+	  echo " rm -f $$p $$f"; \
+	  rm -f $$p $$f ; \
+	done
+install-testPROGRAMS: $(test_PROGRAMS)
+	@$(NORMAL_INSTALL)
+	test -z "$(testdir)" || $(mkdir_p) "$(DESTDIR)$(testdir)"
+	@list='$(test_PROGRAMS)'; for p in $$list; do \
+	  p1=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
+	  if test -f $$p \
+	     || test -f $$p1 \
+	  ; then \
+	    f=`echo "$$p1" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`; \
+	   echo " $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(testPROGRAMS_INSTALL) '$$p' '$(DESTDIR)$(testdir)/$$f'"; \
+	   $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(testPROGRAMS_INSTALL) "$$p" "$(DESTDIR)$(testdir)/$$f" || exit 1; \
+	  else :; fi; \
+	done
+
+uninstall-testPROGRAMS:
+	@$(NORMAL_UNINSTALL)
+	@list='$(test_PROGRAMS)'; for p in $$list; do \
+	  f=`echo "$$p" | sed 's,^.*/,,;s/$(EXEEXT)$$//;$(transform);s/$$/$(EXEEXT)/'`; \
+	  echo " rm -f '$(DESTDIR)$(testdir)/$$f'"; \
+	  rm -f "$(DESTDIR)$(testdir)/$$f"; \
+	done
+
+clean-testPROGRAMS:
+	@list='$(test_PROGRAMS)'; for p in $$list; do \
 	  f=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
@@ -1202,6 +1322,14 @@ $(GWD)/$(am__dirstamp):
 $(GWD)/gw_conf.$(OBJEXT): $(GWD)/$(am__dirstamp)
 $(GWD)/gw_conf_parser.$(OBJEXT): $(GWD)/$(am__dirstamp)
 $(GWD)/gwd.$(OBJEXT): $(GWD)/$(am__dirstamp)
+$(GWD)/gw_sch_conf_syntax.h: $(GWD)/gw_sch_conf_syntax.c
+	@if test ! -f $@; then \
+	  rm -f $(GWD)/gw_sch_conf_syntax.c; \
+	  $(MAKE) $(GWD)/gw_sch_conf_syntax.c; \
+	else :; fi
+$(GWD)/gw_sch_conf_syntax.$(OBJEXT): $(GWD)/$(am__dirstamp)
+$(GWD)/gw_sch_conf_parser.$(OBJEXT): $(GWD)/$(am__dirstamp)
+$(GWD)/gw_sch_conf.$(OBJEXT): $(GWD)/$(am__dirstamp)
 $(UM)/$(am__dirstamp):
 	@$(mkdir_p) $(UM)
 	@: > $(UM)/$(am__dirstamp)
@@ -1228,6 +1356,20 @@ $(srcdir)/scheduler/$(am__dirstamp):
 $(srcdir)/scheduler/gw_flood_scheduler$(EXEEXT): $(__srcdir__scheduler_gw_flood_scheduler_OBJECTS) $(__srcdir__scheduler_gw_flood_scheduler_DEPENDENCIES) $(srcdir)/scheduler/$(am__dirstamp)
 	@rm -f $(srcdir)/scheduler/gw_flood_scheduler$(EXEEXT)
 	$(LINK) $(__srcdir__scheduler_gw_flood_scheduler_LDFLAGS) $(__srcdir__scheduler_gw_flood_scheduler_OBJECTS) $(__srcdir__scheduler_gw_flood_scheduler_LDADD) $(LIBS)
+$(SCHED)/gw_scheduler.$(OBJEXT): $(SCHED)/$(am__dirstamp)
+$(srcdir)/scheduler/gw_sched$(EXEEXT): $(__srcdir__scheduler_gw_sched_OBJECTS) $(__srcdir__scheduler_gw_sched_DEPENDENCIES) $(srcdir)/scheduler/$(am__dirstamp)
+	@rm -f $(srcdir)/scheduler/gw_sched$(EXEEXT)
+	$(LINK) $(__srcdir__scheduler_gw_sched_LDFLAGS) $(__srcdir__scheduler_gw_sched_OBJECTS) $(__srcdir__scheduler_gw_sched_LDADD) $(LIBS)
+test/$(am__dirstamp):
+	@$(mkdir_p) test
+	@: > test/$(am__dirstamp)
+test/gw_test.$(OBJEXT): test/$(am__dirstamp)
+$(srcdir)/test/$(am__dirstamp):
+	@$(mkdir_p) $(srcdir)/test
+	@: > $(srcdir)/test/$(am__dirstamp)
+$(srcdir)/test/gwtest$(EXEEXT): $(__srcdir__test_gwtest_OBJECTS) $(__srcdir__test_gwtest_DEPENDENCIES) $(srcdir)/test/$(am__dirstamp)
+	@rm -f $(srcdir)/test/gwtest$(EXEEXT)
+	$(LINK) $(__srcdir__test_gwtest_LDFLAGS) $(__srcdir__test_gwtest_OBJECTS) $(__srcdir__test_gwtest_LDADD) $(LIBS)
 $(TM_MAD)/$(am__dirstamp):
 	@$(mkdir_p) $(TM_MAD)
 	@: > $(TM_MAD)/$(am__dirstamp)
@@ -1400,6 +1542,9 @@ mostlyclean-compile:
 	-rm -f $(EM_MAD)/__srcdir__em_mad_gw_em_mad_prews_bin-gw_em_mad_prews_pool.$(OBJEXT)
 	-rm -f $(GWD)/gw_conf.$(OBJEXT)
 	-rm -f $(GWD)/gw_conf_parser.$(OBJEXT)
+	-rm -f $(GWD)/gw_sch_conf.$(OBJEXT)
+	-rm -f $(GWD)/gw_sch_conf_parser.$(OBJEXT)
+	-rm -f $(GWD)/gw_sch_conf_syntax.$(OBJEXT)
 	-rm -f $(GWD)/gwd.$(OBJEXT)
 	-rm -f $(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_attr_parser.$(OBJEXT)
 	-rm -f $(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_attr_parser.lo
@@ -1444,6 +1589,7 @@ mostlyclean-compile:
 	-rm -f $(RM)/gw_rm_user_status.$(OBJEXT)
 	-rm -f $(RM)/gw_rm_wait.$(OBJEXT)
 	-rm -f $(SCHED)/gw_flood_scheduler.$(OBJEXT)
+	-rm -f $(SCHED)/gw_scheduler.$(OBJEXT)
 	-rm -f $(SCHED)/gw_scheduler_common.$(OBJEXT)
 	-rm -f $(SCHED)/gw_scheduler_hosts.$(OBJEXT)
 	-rm -f $(SCHED)/gw_scheduler_jobs.$(OBJEXT)
@@ -1464,6 +1610,7 @@ mostlyclean-compile:
 	-rm -f $(UM)/gw_um.$(OBJEXT)
 	-rm -f $(UM)/gw_user.$(OBJEXT)
 	-rm -f $(UM)/gw_user_pool.$(OBJEXT)
+	-rm -f test/gw_test.$(OBJEXT)
 
 distclean-compile:
 	-rm -f *.tab.c
@@ -1610,30 +1757,30 @@ distclean-libtool:
 	-rm -f libtool
 uninstall-info-am:
 
-classdist_ws.stamp: $(dist_ws_JAVA)
+classdist_java.stamp: $(dist_java_JAVA)
 	@if test -n "$?"; then \
 	  echo '$(CLASSPATH_ENV) $(JAVAC) -d $(JAVAROOT) $(AM_JAVACFLAGS) $(JAVACFLAGS) $?' ; \
 	  $(CLASSPATH_ENV) $(JAVAC) -d $(JAVAROOT) \
 	    $(AM_JAVACFLAGS) $(JAVACFLAGS) $?; \
 	else :; fi
-	echo timestamp > classdist_ws.stamp
-install-dist_wsJAVA: classdist_ws.stamp
+	echo timestamp > classdist_java.stamp
+install-dist_javaJAVA: classdist_java.stamp
 	@$(NORMAL_INSTALL)
-	test -z "$(wsdir)" || $(mkdir_p) "$(DESTDIR)$(wsdir)"
-	@test -z "$(dist_ws_JAVA)" || for p in *.class; do \
-	  echo " $(INSTALL_DATA) '$$p' '$(DESTDIR)$(wsdir)/$$p'"; \
-	  $(INSTALL_DATA) "$$p" "$(DESTDIR)$(wsdir)/$$p"; \
+	test -z "$(javadir)" || $(mkdir_p) "$(DESTDIR)$(javadir)"
+	@test -z "$(dist_java_JAVA)" || for p in *.class; do \
+	  echo " $(INSTALL_DATA) '$$p' '$(DESTDIR)$(javadir)/$$p'"; \
+	  $(INSTALL_DATA) "$$p" "$(DESTDIR)$(javadir)/$$p"; \
 	done
 
-uninstall-dist_wsJAVA:
+uninstall-dist_javaJAVA:
 	@$(NORMAL_UNINSTALL)
-	@test -z "$(dist_ws_JAVA)" || for p in *.class; do \
-	  echo " rm -f '$(DESTDIR)$(wsdir)/$$p'"; \
-	  rm -f "$(DESTDIR)$(wsdir)/$$p"; \
+	@test -z "$(dist_java_JAVA)" || for p in *.class; do \
+	  echo " rm -f '$(DESTDIR)$(javadir)/$$p'"; \
+	  rm -f "$(DESTDIR)$(javadir)/$$p"; \
 	done
 
-clean-dist_wsJAVA:
-	-rm -f *.class classdist_ws.stamp
+clean-dist_javaJAVA:
+	-rm -f *.class classdist_java.stamp
 install-dist_jarDATA: $(dist_jar_DATA)
 	@$(NORMAL_INSTALL)
 	test -z "$(jardir)" || $(mkdir_p) "$(DESTDIR)$(jardir)"
@@ -1735,7 +1882,7 @@ distclean-tags:
 	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
 
 distdir: $(DISTFILES)
-	$(mkdir_p) $(distdir)/$(COMMON) $(distdir)/$(EM_MAD) $(distdir)/$(GWD) $(distdir)/$(HOST) $(distdir)/$(IM_MAD) $(distdir)/$(JOB) $(distdir)/$(TM_MAD) $(distdir)/../etc $(distdir)/../include $(distdir)/../scripts $(distdir)/drmaa
+	$(mkdir_p) $(distdir)/$(CMDS) $(distdir)/$(COMMON) $(distdir)/$(EM_MAD) $(distdir)/$(GWD) $(distdir)/$(HOST) $(distdir)/$(IM_MAD) $(distdir)/$(JOB) $(distdir)/$(TM_MAD) $(distdir)/../etc $(distdir)/../include $(distdir)/../scripts $(distdir)/drmaa
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
@@ -1765,11 +1912,11 @@ distdir: $(DISTFILES)
 check-am: all-am
 check: check-am
 all-am: Makefile $(LTLIBRARIES) $(PROGRAMS) $(SCRIPTS) \
-		classdist_ws.stamp $(DATA) $(HEADERS)
+		classdist_java.stamp $(DATA) $(HEADERS)
 install-binPROGRAMS: install-libLTLIBRARIES
 
 installdirs:
-	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(scriptsdir)" "$(DESTDIR)$(wsdir)" "$(DESTDIR)$(jardir)" "$(DESTDIR)$(sysconfdir)" "$(DESTDIR)$(includedir)"; do \
+	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(testdir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(scriptsdir)" "$(DESTDIR)$(javadir)" "$(DESTDIR)$(jardir)" "$(DESTDIR)$(sysconfdir)" "$(DESTDIR)$(includedir)"; do \
 	  test -z "$$dir" || $(mkdir_p) "$$dir"; \
 	done
 install: install-am
@@ -1792,6 +1939,7 @@ clean-generic:
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
+	-rm -f test/$(am__dirstamp)
 	-test -z "$(ARRAY)/$(am__dirstamp)" || rm -f $(ARRAY)/$(am__dirstamp)
 	-test -z "$(CLIENT)/$(am__dirstamp)" || rm -f $(CLIENT)/$(am__dirstamp)
 	-test -z "$(CMDS)/$(am__dirstamp)" || rm -f $(CMDS)/$(am__dirstamp)
@@ -1816,6 +1964,7 @@ distclean-generic:
 	-test -z "$(srcdir)/em_mad/$(am__dirstamp)" || rm -f $(srcdir)/em_mad/$(am__dirstamp)
 	-test -z "$(srcdir)/gwd/$(am__dirstamp)" || rm -f $(srcdir)/gwd/$(am__dirstamp)
 	-test -z "$(srcdir)/scheduler/$(am__dirstamp)" || rm -f $(srcdir)/scheduler/$(am__dirstamp)
+	-test -z "$(srcdir)/test/$(am__dirstamp)" || rm -f $(srcdir)/test/$(am__dirstamp)
 	-test -z "$(srcdir)/tm_mad/$(am__dirstamp)" || rm -f $(srcdir)/tm_mad/$(am__dirstamp)
 
 maintainer-clean-generic:
@@ -1823,6 +1972,9 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 	-rm -f $(COMMON)/gw_template_parser.c
 	-rm -f $(GWD)/gw_conf_parser.c
+	-rm -f $(GWD)/gw_sch_conf_parser.c
+	-rm -f $(GWD)/gw_sch_conf_syntax.c
+	-rm -f $(GWD)/gw_sch_conf_syntax.h
 	-rm -f $(HOST)/gw_host_attr_parser.c
 	-rm -f $(HOST)/gw_host_rank_syntax.c
 	-rm -f $(HOST)/gw_host_rank_syntax.h
@@ -1833,8 +1985,9 @@ maintainer-clean-generic:
 	-rm -f $(JOB)/gw_job_template_var_parser.c
 clean: clean-am
 
-clean-am: clean-binPROGRAMS clean-dist_wsJAVA clean-generic \
-	clean-libLTLIBRARIES clean-libtool mostlyclean-am
+clean-am: clean-binPROGRAMS clean-dist_javaJAVA clean-generic \
+	clean-libLTLIBRARIES clean-libtool clean-testPROGRAMS \
+	mostlyclean-am
 
 distclean: distclean-am
 	-rm -f Makefile
@@ -1851,8 +2004,9 @@ info: info-am
 
 info-am:
 
-install-data-am: install-dist_jarDATA install-dist_scriptsSCRIPTS \
-	install-dist_wsJAVA install-includeHEADERS
+install-data-am: install-dist_jarDATA install-dist_javaJAVA \
+	install-dist_scriptsSCRIPTS install-includeHEADERS \
+	install-testPROGRAMS
 
 install-exec-am: install-binPROGRAMS install-binSCRIPTS \
 	install-dist_binSCRIPTS install-dist_sysconfDATA \
@@ -1883,30 +2037,32 @@ ps-am:
 
 uninstall-am: uninstall-binPROGRAMS uninstall-binSCRIPTS \
 	uninstall-dist_binSCRIPTS uninstall-dist_jarDATA \
-	uninstall-dist_scriptsSCRIPTS uninstall-dist_sysconfDATA \
-	uninstall-dist_wsJAVA uninstall-includeHEADERS \
-	uninstall-info-am uninstall-libLTLIBRARIES
+	uninstall-dist_javaJAVA uninstall-dist_scriptsSCRIPTS \
+	uninstall-dist_sysconfDATA uninstall-includeHEADERS \
+	uninstall-info-am uninstall-libLTLIBRARIES \
+	uninstall-testPROGRAMS
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean clean-binPROGRAMS \
-	clean-dist_wsJAVA clean-generic clean-libLTLIBRARIES \
-	clean-libtool ctags distclean distclean-compile \
-	distclean-generic distclean-libtool distclean-tags distdir dvi \
-	dvi-am html html-am info info-am install install-am \
-	install-binPROGRAMS install-binSCRIPTS install-data \
-	install-data-am install-dist_binSCRIPTS install-dist_jarDATA \
+	clean-dist_javaJAVA clean-generic clean-libLTLIBRARIES \
+	clean-libtool clean-testPROGRAMS ctags distclean \
+	distclean-compile distclean-generic distclean-libtool \
+	distclean-tags distdir dvi dvi-am html html-am info info-am \
+	install install-am install-binPROGRAMS install-binSCRIPTS \
+	install-data install-data-am install-dist_binSCRIPTS \
+	install-dist_jarDATA install-dist_javaJAVA \
 	install-dist_scriptsSCRIPTS install-dist_sysconfDATA \
-	install-dist_wsJAVA install-exec install-exec-am \
-	install-includeHEADERS install-info install-info-am \
-	install-libLTLIBRARIES install-man install-strip installcheck \
+	install-exec install-exec-am install-includeHEADERS \
+	install-info install-info-am install-libLTLIBRARIES \
+	install-man install-strip install-testPROGRAMS installcheck \
 	installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
 	tags uninstall uninstall-am uninstall-binPROGRAMS \
 	uninstall-binSCRIPTS uninstall-dist_binSCRIPTS \
-	uninstall-dist_jarDATA uninstall-dist_scriptsSCRIPTS \
-	uninstall-dist_sysconfDATA uninstall-dist_wsJAVA \
+	uninstall-dist_jarDATA uninstall-dist_javaJAVA \
+	uninstall-dist_scriptsSCRIPTS uninstall-dist_sysconfDATA \
 	uninstall-includeHEADERS uninstall-info-am \
-	uninstall-libLTLIBRARIES
+	uninstall-libLTLIBRARIES uninstall-testPROGRAMS
 
 
 # -----------------------------
@@ -1921,21 +2077,6 @@ uninstall-am: uninstall-binPROGRAMS uninstall-binSCRIPTS \
 @DRMAA_TRUE@        -d $(DRMAA)/package
 @DRMAA_TRUE@	jar cf $(srcdir)/drmaa/drmaa.jar -C $(DRMAA)/package/ .
 @DRMAA_TRUE@	@rm -rf $(DRMAA)/package
-
-# ----------------------------
-# TESTS
-# ----------------------------
-
-#if TESTS
-#testdir = @prefix@/test
-#
-#test_PROGRAMS = $(srcdir)/test/gwtest
-#
-#__srcdir__test_gwtest_SOURCES = test/gw_test.c \
-#        $(CMDS)/gw_cmds_common.c \
-#        $(CLIENT_SRC) \
-#        $(COMMON_SRC)
-#endif
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

@@ -69,13 +69,13 @@ JOB_SRC  =  $(JOB)/gw_history.c \
         $(JOB)/gw_job_template_var_parser.l \
         $(JOB)/gw_xfr_files.c
 
-HOST_SRC  = $(HOST)/gw_host_attr_parser.l \
-        $(HOST)/gw_host.c \
+HOST_SRC  = $(HOST)/gw_host.c \
         $(HOST)/gw_host_var.c \
         $(HOST)/gw_host_pool.c \
         $(HOST)/gw_host_rank_syntax.y \
         $(HOST)/gw_host_reqs_syntax.y \
-        $(HOST)/gw_host_update_syntax.y
+        $(HOST)/gw_host_update_syntax.y \
+        $(HOST)/gw_host_attr_parser.l
 
 ARRAY_SRC = $(ARRAY)/gw_array.c \
         $(ARRAY)/gw_array_pool.c
@@ -105,6 +105,15 @@ CMDS_SRC = $(CMDS)/gw_acct.c \
         $(CMDS)/gw_host.c \
         $(CMDS)/gw_ps.c \
         $(CMDS)/gw_user.c
+        
+JSDL_SRC = $(CMDS)/GWJTElement.java \
+        $(CMDS)/GWJT.java  \
+        $(CMDS)/GWJTWriter.java  \
+        $(CMDS)/JSDLElement.java  \
+        $(CMDS)/JSDL.java  \
+        $(CMDS)/JSDLReader.java  \
+        $(CMDS)/JSDLParser.java  \
+        $(CMDS)/JSDLTranslator.java
 
 EM_SRC = $(EM)/gw_em_actions.c \
         $(EM)/gw_em.c \
@@ -174,7 +183,10 @@ DB_SRC = $(DB)/gw_acct.c
 
 GWD_SRC = $(GWD)/gw_conf.c \
         $(GWD)/gw_conf_parser.l \
-        $(GWD)/gwd.c
+        $(GWD)/gwd.c \
+        $(GWD)/gw_sch_conf_syntax.y \
+        $(GWD)/gw_sch_conf_parser.l \
+        $(GWD)/gw_sch_conf.c        
 
 EM_MAD_PREWS_SRC = $(EM_MAD)/gw_em_mad_prews_actions.c \
         $(EM_MAD)/gw_em_mad_prews.c \
@@ -255,7 +267,8 @@ include_HEADERS = $(top_srcdir)/include/drmaa.h \
                         $(top_srcdir)/include/gw_um.h \
                         $(top_srcdir)/include/gw_user.h \
                         $(top_srcdir)/include/gw_user_pool.h \
-                        $(top_srcdir)/include/gw_xfr_files.h
+                        $(top_srcdir)/include/gw_xfr_files.h \
+                        $(top_srcdir)/include/gw_sch_conf.h
 
 #-----------------------------------
 # GWD
@@ -329,6 +342,24 @@ __srcdir__cmds_gwacct_SOURCES = $(CMDS)/gw_acct.c \
         $(DB_SRC) \
         $(CLIENT_ACCT_SRC) \
         $(COMMON_SRC)
+        
+        
+# ----------------------------
+# JSDL Support
+# ----------------------------
+
+bin_SCRIPTS   =
+dist_bin_SCRIPTS =
+
+javadir = @prefix@/bin
+dist_java_JAVA =
+
+if JSDL
+dist_java_JAVA += $(JSDL_SRC)
+dist_bin_SCRIPTS += $(CMDS)/jsdl2gw.sh
+endif
+
+
 
 # ----------------------------
 # Schedulers
@@ -340,8 +371,25 @@ __srcdir__scheduler_gw_flood_scheduler_SOURCES = \
         $(COMMON_SRC) \
         $(CLIENT_SRC) \
         $(DB_SRC) \
-        $(SCHED_SRC)
+        $(SCHED_SRC) \
+        $(GWD)/gw_sch_conf.c \
+        $(GWD)/gw_sch_conf_syntax.y \
+        $(GWD)/gw_sch_conf_parser.l
+        
 __srcdir__scheduler_gw_flood_scheduler_LDFLAGS = -lm
+
+bin_PROGRAMS += $(srcdir)/scheduler/gw_sched
+__srcdir__scheduler_gw_sched_SOURCES = \
+        $(SCHED)/gw_scheduler.c \
+        $(COMMON_SRC) \
+        $(CLIENT_SRC) \
+        $(DB_SRC) \
+        $(SCHED_SRC) \
+        $(GWD)/gw_sch_conf.c \
+        $(GWD)/gw_sch_conf_syntax.y \
+        $(GWD)/gw_sch_conf_parser.l
+
+__srcdir__scheduler_gw_sched_LDFLAGS = -lm
 
 # ----------------------------
 # DRMAA
@@ -376,9 +424,6 @@ endif
 # --------------------------------
 # Pre-WS Middleware Access Drivers
 # --------------------------------
-
-bin_SCRIPTS   =
-dist_bin_SCRIPTS =
 
 # ---------------------- EM MADS ------------------------
 
@@ -434,12 +479,9 @@ endif
 JAVAROOT = .
 
 if WS
-wsdir   = @prefix@/bin
 
-#dist_ws_JAVA = $(TM_MAD_RFT_SRC) $(EM_MAD)/GW_mad_ws.java $(IM_MAD_MDS4_SRC)
-dist_ws_JAVA = $(EM_MAD)/GW_mad_ws.java $(IM_MAD_MDS4_SRC)
+dist_java_JAVA += $(EM_MAD)/GW_mad_ws.java $(IM_MAD_MDS4_SRC)
 
-#dist_bin_SCRIPTS += $(TM_MAD)/gw_tm_mad_rft.sh
 dist_bin_SCRIPTS += $(EM_MAD)/gw_em_mad_ws.sh
 dist_bin_SCRIPTS += $(IM_MAD)/gw_im_mad_mds4.sh
 
@@ -463,21 +505,21 @@ dist_scripts_SCRIPTS = $(top_srcdir)/scripts/wrapper.sh \
 #        $(top_srcdir)/etc/im_examples/machine1.attributes \
 #        $(top_srcdir)/etc/im_examples/machine2.attributes
 
-dist_sysconf_DATA = $(top_srcdir)/etc/gwd.conf $(top_srcdir)/etc/job_template.default
-        
-        
+dist_sysconf_DATA = $(top_srcdir)/etc/gwd.conf $(top_srcdir)/etc/job_template.default \
+                    $(top_srcdir)/etc/sched.conf
+
 # ----------------------------
 # TESTS
 # ----------------------------
 
-#if TESTS
-#testdir = @prefix@/test
-#
-#test_PROGRAMS = $(srcdir)/test/gwtest
-#
-#__srcdir__test_gwtest_SOURCES = test/gw_test.c \
-#        $(CMDS)/gw_cmds_common.c \
-#        $(CLIENT_SRC) \
-#        $(COMMON_SRC)
-#endif
+if TESTS
+testdir = @prefix@/test
+
+test_PROGRAMS = $(srcdir)/test/gwtest
+
+__srcdir__test_gwtest_SOURCES = test/gw_test.c \
+        $(CMDS)/gw_cmds_common.c \
+        $(CLIENT_SRC) \
+        $(COMMON_SRC)
+endif
 

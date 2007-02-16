@@ -1,0 +1,6 @@
+EXECUTABLE = /bin/ls 
+
+OUTPUT_FILES = doesnt_exist.txt 
+RANK         = CPU_MHZ
+
+RESCHEDULE_ON_FAILURE = no

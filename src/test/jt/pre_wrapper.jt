@@ -1,0 +1,10 @@
+# Prewrapper.jt - Job template for GW tests
+EXECUTABLE = pre_wrapper_script.sh
+
+INPUT_FILES = wrappertoken
+
+ENVIRONMENT   = VAL1 ="example", VAL2="other"   ,VAL4=234
+
+RANK         = CPU_MHZ
+
+PRE_WRAPPER = pre_wrapper.sh

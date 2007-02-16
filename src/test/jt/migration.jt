@@ -1,0 +1,8 @@
+# Sleep.jt - Job template for GW tests
+EXECUTABLE = /bin/sleep
+ARGUMENTS = 60
+
+INPUT_FILES   = 
+ENVIRONMENT   = VAL1 ="example", VAL2="other"   ,VAL4=234
+
+RANK         = CPU_MHZ
