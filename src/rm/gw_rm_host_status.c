@@ -49,8 +49,8 @@ void gw_rm_host_to_msg (gw_host_t *host, gw_msg_host_t *msg)
 	msg->used_slots   = host->used_slots;
 	msg->running_jobs = host->running_jobs;
 	
-	msg->host_id = host->host_id;
-	msg->nice    = host->nice;
+	msg->host_id        = host->host_id;
+	msg->fixed_priority = host->fixed_priority;
 	
 	gw_rm_copy_str_short(host->hostname,msg->hostname);
 	gw_rm_copy_str_short(host->arch,msg->arch);

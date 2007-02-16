@@ -21,6 +21,7 @@
 #include "gw_host_pool.h"
 #include "gw_log.h"
 #include "gw_conf.h"
+#include "gw_sch_conf.h"
 #include "gw_im.h"
 
 /* -------------------------------------------------------------------------- */
@@ -100,7 +101,7 @@ void gw_host_pool_finalize()
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
-int gw_host_pool_host_allocate (char* hostname, int nice,
+int gw_host_pool_host_allocate (char* hostname, int fixed_priority,
         char *em_mad, char *tm_mad, char *im_mad)
 {
     int found,tries;
@@ -139,7 +140,7 @@ int gw_host_pool_host_allocate (char* hostname, int nice,
     gw_host_init(gw_host_pool.pool[host_id], 
                  hostname, 
                  host_id, 
-                 nice,
+                 fixed_priority,
                  em_mad, 
                  tm_mad, 
                  im_mad);
@@ -237,13 +238,13 @@ gw_host_t* gw_host_pool_search (char *hostname, gw_boolean_t lock)
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
-void gw_host_pool_update (char *hostnames, int nice, char *em_mad,
-        char *tm_mad, char *im_mad)
+void gw_host_pool_update (char *hostnames, char *em_mad, char *tm_mad, char *im_mad)
 {
     char      *hostname;
     char      *lasts;
     gw_host_t *host;
     int       *host_id;
+    int       priority;
 
     hostname = strtok_r(hostnames, " ", &lasts);
 
@@ -253,9 +254,12 @@ void gw_host_pool_update (char *hostnames, int nice, char *em_mad,
 
         if (host == NULL) 
         {
+        	priority = gw_sch_get_host_priority(&(gw_conf.sch_conf), 
+        	                                    hostname,
+                                                im_mad);
             host_id  = malloc(sizeof(int));
             *host_id = gw_host_pool_host_allocate(hostname, 
-                                                  nice, 
+                                                  priority, 
                                                   em_mad,
                                                   tm_mad, 
                                                   im_mad);

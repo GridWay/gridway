@@ -88,11 +88,13 @@ inline void gw_job_template_sarray_destroy (char *** array, int num_files)
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 	
-int gw_job_template_init (gw_job_template_t *jt, const gw_template_t *ct)
+void gw_job_template_init (gw_job_template_t *jt, const gw_template_t *ct)
 {
 	int i;
 	
 	gw_job_template_set_str(&(jt->file), ct->file);
+    gw_job_template_set_str(&(jt->name), ct->name);
+    
 	gw_job_template_set_str(&(jt->job_home), ct->job_home);	
 	gw_job_template_set_str(&(jt->user_home), ct->user_home);    
 
@@ -185,11 +187,13 @@ int gw_job_template_init (gw_job_template_t *jt, const gw_template_t *ct)
 
     gw_job_template_set_str(&(jt->wrapper), ct->wrapper);
     gw_job_template_set_str(&(jt->monitor), ct->monitor);
-    
-    
+
     gw_job_pool_dep_cp (ct->job_deps, &(jt->job_deps));
-    			
-    return 0;
+
+    jt->type = ct->type;
+    jt->np = ct->np;
+
+    jt->deadline = ct->deadline;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -198,10 +202,18 @@ int gw_job_template_init (gw_job_template_t *jt, const gw_template_t *ct)
 
 void gw_job_template_destroy ( gw_job_template_t *job_template )
 {
-	free(job_template->file);
-    free(job_template->job_home);
-	free(job_template->user_home);
+    if (job_template->file != NULL )
+        free(job_template->file);
 
+    if ( job_template->name != NULL )
+        free(job_template->name);
+       
+    if ( job_template->job_home != NULL )
+        free(job_template->job_home);
+    
+    if ( job_template->user_home != NULL )
+        free(job_template->user_home);
+    
     if ( job_template->executable != NULL )
 		free(job_template->executable);
 		
@@ -240,7 +252,10 @@ void gw_job_template_destroy ( gw_job_template_t *job_template )
 		
     if ( job_template->rank != NULL )		
 		free(job_template->rank);
-
+        
+    if ( job_template->checkpoint_url != NULL )
+        free(job_template->checkpoint_url);
+        
     if ( job_template->wrapper != NULL )		
 		free(job_template->wrapper);
 
@@ -249,7 +264,6 @@ void gw_job_template_destroy ( gw_job_template_t *job_template )
 		
     if ( job_template->job_deps != NULL )		
 		free(job_template->job_deps);
-		
 }
 
 /* -------------------------------------------------------------------------- */
@@ -299,7 +313,7 @@ void gw_job_template_print (FILE *fd, gw_job_template_t *template)
 	gw_print(fd,"DM",'I',"\t%-23s: %i\n","RESCHEDULING_THRESHOLD",template->rescheduling_threshold);
 	gw_print(fd,"DM",'I',"\t%-23s: %i\n","SUSPENSION_TIMEOUT",template->suspension_timeout);
 	gw_print(fd,"DM",'I',"\t%-23s: %i\n","CPULOAD_THRESHOLD",template->cpuload_threshold);
-	gw_print(fd,"DM",'I',"\t%-23s: %i\n","RESCHEDULE_ON_FAILURE",template->reschedule_on_failure);
+    gw_print(fd,"DM",'I',"\t%-23s: %s\n","RESCHEDULE_ON_FAILURE",template->reschedule_on_failure?"yes":"no");
 	gw_print(fd,"DM",'I',"\t%-23s: %i\n","NUMBER_OF_RETRIES",template->number_of_retries);
 	gw_print(fd,"DM",'I',"\t%-23s: %i\n","CHECKPOINT_INTERVAL",template->checkpoint_interval);
 	gw_print(fd,"DM",'I',"\t%-23s: %s\n","CHECKPOINT_URL",GWNSTR(template->checkpoint_url));
@@ -319,6 +333,11 @@ void gw_job_template_print (FILE *fd, gw_job_template_t *template)
 			i++;
 		}
 	}
+
+    gw_print(fd,"DM",'I',"\t%-23s: %s\n","TYPE",gw_template_jobtype_string(template->type));
+    gw_print(fd,"DM",'I',"\t%-23s: %i\n","NP",template->np);
+
+    gw_print(fd,"DM",'I',"\t%-23s: %s %d\n","DEADLINE",gw_template_deadline_string(template->deadline), template->deadline);
 				
     gw_print(fd,"DM",'I',"----------------------------------------------------------\n");
 }
@@ -330,6 +349,8 @@ void gw_job_template_print (FILE *fd, gw_job_template_t *template)
 void gw_job_template_to_file(FILE *fd, gw_job_template_t *template)
 {
 	int i;
+
+	fprintf(fd, "NAME=%s\n", GWNSTR(template->name));
 
 	fprintf(fd, "EXECUTABLE=%s\n", GWNSTR(template->executable));
   	fprintf(fd, "ARGUMENTS=%s\n", GWNSTR(template->arguments));
@@ -388,7 +409,7 @@ void gw_job_template_to_file(FILE *fd, gw_job_template_t *template)
 	fprintf(fd, "RESCHEDULING_THRESHOLD=%ld\n", template->rescheduling_threshold);
 	fprintf(fd, "SUSPENSION_TIMEOUT=%ld\n", template->suspension_timeout);
 	fprintf(fd, "CPULOAD_THRESHOLD=%d\n", template->cpuload_threshold);
-	fprintf(fd, "RESCHEDULE_ON_FAILURE=%d\n", template->reschedule_on_failure);
+    fprintf(fd, "RESCHEDULE_ON_FAILURE=%s\n",template->reschedule_on_failure?"yes":"no");
 	fprintf(fd, "NUMBER_OF_RETRIES=%d\n", template->number_of_retries);
 	fprintf(fd, "CHECKPOINT_INTERVAL=%ld\n", template->checkpoint_interval);
 	fprintf(fd, "CHECKPOINT_URL=%s\n", GWNSTR(template->checkpoint_url));
@@ -409,4 +430,9 @@ void gw_job_template_to_file(FILE *fd, gw_job_template_t *template)
 		}
 		fprintf(fd, "\n");
 	}   	
+
+	fprintf(fd, "TYPE=%s\n", gw_template_jobtype_string(template->type));
+	fprintf(fd, "NP=%d\n", template->np);
+
+	fprintf(fd, "DEADLINE=%s\n", gw_template_deadline_string(template->deadline));
 }

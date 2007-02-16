@@ -55,8 +55,8 @@ void host_rank_error(YYLTYPE *llocp, gw_host_t *host, int queue, int *result, in
 
 stmt:   expr                { *result=$1;}
 		| expr';'           { *result=$1;}
-        |                   { *result=host->nice;} /* TRUE BY DEFAULT, ON EMPTY STRINGS */		
-        | ';'               { *result=host->nice;} /* TRUE BY DEFAULT, ON EMPTY STRINGS */
+        |                   { *result=host->fixed_priority;} /* TRUE BY DEFAULT, ON EMPTY STRINGS */		
+        | ';'               { *result=host->fixed_priority;} /* TRUE BY DEFAULT, ON EMPTY STRINGS */
         ;
 expr:   VARIABLE		    { $$ = gw_host_get_var_int($1,queue,host);}
         | GENERICVAR        { $$ = gw_host_get_genvar_int($1,queue,host);}

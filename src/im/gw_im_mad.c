@@ -33,7 +33,7 @@
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 int gw_im_mad_init(gw_im_mad_t *im_mad, const char *exe, const char *name, 
-        const char *args, char *em_mad_name, char *tm_mad_name, int nice)
+        const char *args, char *em_mad_name, char *tm_mad_name)
 {
     char buf[50];
     char str[GW_IM_MAX_STRING], c;
@@ -55,7 +55,6 @@ int gw_im_mad_init(gw_im_mad_t *im_mad, const char *exe, const char *name,
     im_mad->executable  = strdup(exe);
     im_mad->em_mad_name = strdup(em_mad_name);
     im_mad->tm_mad_name = strdup(tm_mad_name);
-    im_mad->nice        = nice;
     im_mad->state       = GW_IM_MAD_STATE_IDLE;
 
     

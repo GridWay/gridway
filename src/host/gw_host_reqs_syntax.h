@@ -56,13 +56,13 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 39 "src/host/gw_host_reqs_syntax.y"
+#line 39 "gw_host_reqs_syntax.y"
 {
     int val_int;
     char *val_str;
 }
-/* Line 1529 of yacc.c.  */
-#line 66 "src/host/gw_host_reqs_syntax.h"
+/* Line 1489 of yacc.c.  */
+#line 66 "host/gw_host_reqs_syntax.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

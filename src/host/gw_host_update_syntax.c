@@ -90,7 +90,7 @@
 
 
 /* Copy the first part of user declarations.  */
-#line 18 "src/host/gw_host_update_syntax.y"
+#line 18 "gw_host_update_syntax.y"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -124,13 +124,13 @@ void host_update_error(YYLTYPE *llocp, gw_host_t *host, int *pos, const char *st
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 34 "src/host/gw_host_update_syntax.y"
+#line 34 "gw_host_update_syntax.y"
 {
     int val_int;
     char *val_str;
 }
-/* Line 193 of yacc.c.  */
-#line 134 "src/host/gw_host_update_syntax.c"
+/* Line 187 of yacc.c.  */
+#line 134 "host/gw_host_update_syntax.c"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -155,7 +155,7 @@ typedef struct YYLTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 159 "src/host/gw_host_update_syntax.c"
+#line 159 "host/gw_host_update_syntax.c"
 
 #ifdef short
 # undef short
@@ -1392,58 +1392,58 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 53 "src/host/gw_host_update_syntax.y"
-    { ;}
+#line 53 "gw_host_update_syntax.y"
+    { }
     break;
 
   case 3:
-#line 54 "src/host/gw_host_update_syntax.y"
-    { ;}
+#line 54 "gw_host_update_syntax.y"
+    { }
     break;
 
   case 4:
-#line 57 "src/host/gw_host_update_syntax.y"
-    { gw_host_set_var_int((yyvsp[(1) - (3)].val_int),-1,(yyvsp[(3) - (3)].val_int),host);;}
+#line 57 "gw_host_update_syntax.y"
+    { gw_host_set_var_int((yyvsp[(1) - (3)].val_int),-1,(yyvsp[(3) - (3)].val_int),host);}
     break;
 
   case 5:
-#line 58 "src/host/gw_host_update_syntax.y"
-    { gw_host_set_var_str((yyvsp[(1) - (3)].val_int),-1,(yyvsp[(3) - (3)].val_str),host);;}
+#line 58 "gw_host_update_syntax.y"
+    { gw_host_set_var_str((yyvsp[(1) - (3)].val_int),-1,(yyvsp[(3) - (3)].val_str),host);}
     break;
 
   case 6:
-#line 59 "src/host/gw_host_update_syntax.y"
-    { gw_host_set_var_int((yyvsp[(1) - (6)].val_int),(yyvsp[(3) - (6)].val_int),(yyvsp[(6) - (6)].val_int),host);;}
+#line 59 "gw_host_update_syntax.y"
+    { gw_host_set_var_int((yyvsp[(1) - (6)].val_int),(yyvsp[(3) - (6)].val_int),(yyvsp[(6) - (6)].val_int),host);}
     break;
 
   case 7:
-#line 60 "src/host/gw_host_update_syntax.y"
-    { gw_host_set_var_str((yyvsp[(1) - (6)].val_int),(yyvsp[(3) - (6)].val_int),(yyvsp[(6) - (6)].val_str),host);;}
+#line 60 "gw_host_update_syntax.y"
+    { gw_host_set_var_str((yyvsp[(1) - (6)].val_int),(yyvsp[(3) - (6)].val_int),(yyvsp[(6) - (6)].val_str),host);}
     break;
 
   case 8:
-#line 61 "src/host/gw_host_update_syntax.y"
-    { gw_host_set_genvar_int((yyvsp[(1) - (3)].val_str),-1,(yyvsp[(3) - (3)].val_int),host);;}
+#line 61 "gw_host_update_syntax.y"
+    { gw_host_set_genvar_int((yyvsp[(1) - (3)].val_str),-1,(yyvsp[(3) - (3)].val_int),host);}
     break;
 
   case 9:
-#line 62 "src/host/gw_host_update_syntax.y"
-    { gw_host_set_genvar_str((yyvsp[(1) - (3)].val_str),-1,(yyvsp[(3) - (3)].val_str),host);;}
+#line 62 "gw_host_update_syntax.y"
+    { gw_host_set_genvar_str((yyvsp[(1) - (3)].val_str),-1,(yyvsp[(3) - (3)].val_str),host);}
     break;
 
   case 10:
-#line 63 "src/host/gw_host_update_syntax.y"
-    { gw_host_set_genvar_int((yyvsp[(1) - (6)].val_str),(yyvsp[(3) - (6)].val_int),(yyvsp[(6) - (6)].val_int),host);;}
+#line 63 "gw_host_update_syntax.y"
+    { gw_host_set_genvar_int((yyvsp[(1) - (6)].val_str),(yyvsp[(3) - (6)].val_int),(yyvsp[(6) - (6)].val_int),host);}
     break;
 
   case 11:
-#line 64 "src/host/gw_host_update_syntax.y"
-    { gw_host_set_genvar_str((yyvsp[(1) - (6)].val_str),(yyvsp[(3) - (6)].val_int),(yyvsp[(6) - (6)].val_str),host);;}
+#line 64 "gw_host_update_syntax.y"
+    { gw_host_set_genvar_str((yyvsp[(1) - (6)].val_str),(yyvsp[(3) - (6)].val_int),(yyvsp[(6) - (6)].val_str),host);}
     break;
 
 
 /* Line 1267 of yacc.c.  */
-#line 1447 "src/host/gw_host_update_syntax.c"
+#line 1447 "host/gw_host_update_syntax.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1663,7 +1663,7 @@ yyreturn:
 }
 
 
-#line 66 "src/host/gw_host_update_syntax.y"
+#line 66 "gw_host_update_syntax.y"
 
 
 void host_update_error(YYLTYPE *llocp, gw_host_t *host, int *pos, const char *str)

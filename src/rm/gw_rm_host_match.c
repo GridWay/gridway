@@ -65,13 +65,13 @@ void gw_rm_job_match(int client_socket, int job_id)
         
         if ( host != NULL )
         {
-			number_of_queues = 0;
-			msg.rc           = GW_RC_SUCCESS;
-			msg.matched      = GW_FALSE;
-			msg.host_id      = i;
-			msg.job_id       = job_id;
-			msg.nice         = host->nice;
-			msg.running_jobs = host->running_jobs;
+			number_of_queues   = 0;
+			msg.rc             = GW_RC_SUCCESS;
+			msg.matched        = GW_FALSE;
+			msg.host_id        = i;
+			msg.job_id         = job_id;
+			msg.fixed_priority = host->fixed_priority;
+			msg.running_jobs   = host->running_jobs;
 			
 			gw_rm_copy_str_short(host->hostname, msg.hostname);
               

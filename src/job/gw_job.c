@@ -73,10 +73,7 @@ int gw_job_fill(gw_job_t *job, const gw_msg_t *msg)
 
 /* -------------------------------------------------------------------------- */
     
-    rc = gw_job_template_init( &(job->template), &(msg->jt) );
-
-    if ( rc != 0 )
-        return -1;
+    gw_job_template_init( &(job->template), &(msg->jt) );
         
 /* -------------------------------------------------------------------------- */
     
@@ -160,7 +157,7 @@ int gw_job_init(gw_job_t *job, int job_id)
     job->user_id  = -1;
 
 /* -------------------------------------------------------------------------- */
-    job->nice         = 0;
+    job->fixed_priority = GW_JOB_MIN_PRIORITY;
     
     job->id           = job_id;
     job->array_id     = -1;
@@ -207,6 +204,7 @@ int gw_job_init(gw_job_t *job, int job_id)
 	job->chk_xfrs.failure_limit  = 0;
 	
 	job->template.file = NULL;
+	job->template.name = NULL;
 
 /* -------------------------------------------------------------------------- */
 
@@ -233,8 +231,7 @@ void gw_job_destroy(gw_job_t *job)
 	if (job->env_file != NULL)
 		free(job->env_file);        
 
-	if (job->template.file != NULL)
-	    gw_job_template_destroy(&(job->template));
+    gw_job_template_destroy(&(job->template));
 	    
     gw_job_history_destroy(&(job->history));
     

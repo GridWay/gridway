@@ -139,4 +139,4 @@ BASE="mds-vo-name=local,o=grid"
 HOSTFILTER=""
 QUEUEFILTER=""
 
-. gw_im_mad_common.sh
+. $GW_LOCATION/bin/gw_im_mad_common.sh

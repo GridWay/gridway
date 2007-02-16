@@ -90,7 +90,7 @@
 
 
 /* Copy the first part of user declarations.  */
-#line 18 "src/host/gw_host_rank_syntax.y"
+#line 18 "gw_host_rank_syntax.y"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -124,13 +124,13 @@ void host_rank_error(YYLTYPE *llocp, gw_host_t *host, int queue, int *result, in
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 36 "src/host/gw_host_rank_syntax.y"
+#line 36 "gw_host_rank_syntax.y"
 {
     int val_int;
     char *val_str;
 }
-/* Line 193 of yacc.c.  */
-#line 134 "src/host/gw_host_rank_syntax.c"
+/* Line 187 of yacc.c.  */
+#line 134 "host/gw_host_rank_syntax.c"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -155,7 +155,7 @@ typedef struct YYLTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 159 "src/host/gw_host_rank_syntax.c"
+#line 159 "host/gw_host_rank_syntax.c"
 
 #ifdef short
 # undef short
@@ -1406,73 +1406,73 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 56 "src/host/gw_host_rank_syntax.y"
-    { *result=(yyvsp[(1) - (1)].val_int);;}
+#line 56 "gw_host_rank_syntax.y"
+    { *result=(yyvsp[(1) - (1)].val_int);}
     break;
 
   case 3:
-#line 57 "src/host/gw_host_rank_syntax.y"
-    { *result=(yyvsp[(1) - (2)].val_int);;}
+#line 57 "gw_host_rank_syntax.y"
+    { *result=(yyvsp[(1) - (2)].val_int);}
     break;
 
   case 4:
-#line 58 "src/host/gw_host_rank_syntax.y"
-    { *result=host->nice;;}
+#line 58 "gw_host_rank_syntax.y"
+    { *result=host->fixed_priority;}
     break;
 
   case 5:
-#line 59 "src/host/gw_host_rank_syntax.y"
-    { *result=host->nice;;}
+#line 59 "gw_host_rank_syntax.y"
+    { *result=host->fixed_priority;}
     break;
 
   case 6:
-#line 61 "src/host/gw_host_rank_syntax.y"
-    { (yyval.val_int) = gw_host_get_var_int((yyvsp[(1) - (1)].val_int),queue,host);;}
+#line 61 "gw_host_rank_syntax.y"
+    { (yyval.val_int) = gw_host_get_var_int((yyvsp[(1) - (1)].val_int),queue,host);}
     break;
 
   case 7:
-#line 62 "src/host/gw_host_rank_syntax.y"
-    { (yyval.val_int) = gw_host_get_genvar_int((yyvsp[(1) - (1)].val_str),queue,host);;}
+#line 62 "gw_host_rank_syntax.y"
+    { (yyval.val_int) = gw_host_get_genvar_int((yyvsp[(1) - (1)].val_str),queue,host);}
     break;
 
   case 8:
-#line 63 "src/host/gw_host_rank_syntax.y"
-    { (yyval.val_int) = (yyvsp[(1) - (1)].val_int);;}
+#line 63 "gw_host_rank_syntax.y"
+    { (yyval.val_int) = (yyvsp[(1) - (1)].val_int);}
     break;
 
   case 9:
-#line 64 "src/host/gw_host_rank_syntax.y"
-    { (yyval.val_int) = (yyvsp[(1) - (3)].val_int) + (yyvsp[(3) - (3)].val_int);;}
+#line 64 "gw_host_rank_syntax.y"
+    { (yyval.val_int) = (yyvsp[(1) - (3)].val_int) + (yyvsp[(3) - (3)].val_int);}
     break;
 
   case 10:
-#line 65 "src/host/gw_host_rank_syntax.y"
-    { (yyval.val_int) = (yyvsp[(1) - (3)].val_int) - (yyvsp[(3) - (3)].val_int);;}
+#line 65 "gw_host_rank_syntax.y"
+    { (yyval.val_int) = (yyvsp[(1) - (3)].val_int) - (yyvsp[(3) - (3)].val_int);}
     break;
 
   case 11:
-#line 66 "src/host/gw_host_rank_syntax.y"
-    { (yyval.val_int) = (yyvsp[(1) - (3)].val_int) * (yyvsp[(3) - (3)].val_int);;}
+#line 66 "gw_host_rank_syntax.y"
+    { (yyval.val_int) = (yyvsp[(1) - (3)].val_int) * (yyvsp[(3) - (3)].val_int);}
     break;
 
   case 12:
-#line 67 "src/host/gw_host_rank_syntax.y"
-    { (yyval.val_int) = (yyvsp[(1) - (3)].val_int) / (yyvsp[(3) - (3)].val_int);;}
+#line 67 "gw_host_rank_syntax.y"
+    { (yyval.val_int) = (yyvsp[(1) - (3)].val_int) / (yyvsp[(3) - (3)].val_int);}
     break;
 
   case 13:
-#line 68 "src/host/gw_host_rank_syntax.y"
-    { (yyval.val_int) = - (yyvsp[(2) - (2)].val_int);;}
+#line 68 "gw_host_rank_syntax.y"
+    { (yyval.val_int) = - (yyvsp[(2) - (2)].val_int);}
     break;
 
   case 14:
-#line 69 "src/host/gw_host_rank_syntax.y"
-    { (yyval.val_int) = (yyvsp[(2) - (3)].val_int);;}
+#line 69 "gw_host_rank_syntax.y"
+    { (yyval.val_int) = (yyvsp[(2) - (3)].val_int);}
     break;
 
 
 /* Line 1267 of yacc.c.  */
-#line 1476 "src/host/gw_host_rank_syntax.c"
+#line 1476 "host/gw_host_rank_syntax.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1692,7 +1692,7 @@ yyreturn:
 }
 
 
-#line 72 "src/host/gw_host_rank_syntax.y"
+#line 72 "gw_host_rank_syntax.y"
 
 
 void host_rank_error(YYLTYPE *llocp, gw_host_t *host, int queue, int *result, int *pos, const char *str)

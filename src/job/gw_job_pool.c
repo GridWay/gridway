@@ -188,9 +188,8 @@ void gw_job_pool_dep_check(int job_id)
                         gw_dm_mad_job_schedule(&gw_dm.dm_mad[0],
                                                job->id,
                                                job->array_id,
-                                               GW_REASON_NONE,
-                                               job->nice,
-                                               job->user_id);
+                                               job->user_id,
+                                               GW_REASON_NONE);
 					}
 					
 					pthread_mutex_unlock(&(job->mutex));
@@ -271,10 +270,9 @@ void gw_job_pool_dep_consistency()
 						
                         gw_dm_mad_job_schedule(&gw_dm.dm_mad[0],
                                                job->id,
-                                               job->array_id, /* -1 */
-                                               GW_REASON_NONE,
-                                               job->nice,     /* 0 */
-                                               job->user_id);
+                                               job->array_id,
+                                               job->user_id,
+                                               GW_REASON_NONE);
 					}
 
 					pthread_mutex_unlock(&(job->mutex));					
@@ -466,19 +464,13 @@ void gw_job_pool_free (int job_id)
         	    reason = GW_REASON_NONE;
         	else
         	    reason = job->history->reason;
-
-        	if (job->job_state  == GW_JOB_STATE_PENDING)
+           
+        	if (( job->job_state  == GW_JOB_STATE_PENDING) ||
+        	    ((job->job_state  == GW_JOB_STATE_WRAPPER)&&
+        	     (job->reschedule == GW_TRUE)))
         	{
-        		if ((reason ==GW_REASON_SELF_MIGRATION)||(job->array_id ==-1))
             		gw_dm_mad_job_del(&gw_dm.dm_mad[0],job->id);
-        		else
-            		gw_dm_mad_task_del(&gw_dm.dm_mad[0],job->array_id);
         	}
-        	else if ((job->job_state  == GW_JOB_STATE_WRAPPER)&&
-        	         (job->reschedule == GW_TRUE))
-            {
-        		gw_dm_mad_job_del(&gw_dm.dm_mad[0],job->id);
-            }       	
 
 			if ( job->exit_time == 0 )
 			{

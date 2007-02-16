@@ -25,4 +25,4 @@ dynamic_monitor (){
     echo "MONITOR $1 FAILURE Dynamic monitoring is not available"
 }
 
-. gw_im_mad_common.sh
+. $GW_LOCATION/bin/gw_im_mad_common.sh

@@ -438,7 +438,7 @@ void gw_rm_listener(void *_null)
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
 
-static gw_boolean_t gw_rm_auth_user(int job_id, const char * owner)
+static inline gw_boolean_t gw_rm_auth_user(int job_id, const char * owner)
 {
 	gw_job_t *   job;
 	int          user_id;
@@ -449,14 +449,16 @@ static gw_boolean_t gw_rm_auth_user(int job_id, const char * owner)
 	
 	user_exists	= gw_user_pool_exists (owner, &user_id);
 	
-	if ( user_exists)
+	if (user_exists == GW_TRUE)
 	{
 		job =  gw_job_pool_get(job_id, GW_FALSE);
 		
 		if ( job == NULL )
+			return GW_FALSE;
+		else if (job->user_id == user_id)
 			return GW_TRUE;
-			
-		return (job->user_id == user_id);
+		else
+			return GW_FALSE;
 	}
 	else
 	{
@@ -468,7 +470,19 @@ static gw_boolean_t gw_rm_auth_user(int job_id, const char * owner)
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
 
-static void gw_rm_permission_denied(gw_msg_t *msg)
+static inline gw_boolean_t gw_rm_is_gwadmin(const char * owner)
+{
+	if (strncmp(owner, gw_conf.gwadmin,GW_MSG_STRING_SHORT) == 0)
+		return GW_TRUE;
+	else
+		return GW_FALSE;	
+}
+
+/*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+
+static inline void gw_rm_permission_denied(gw_msg_t *msg)
 {
     int      length;
     int      rc;
@@ -489,32 +503,78 @@ static void gw_rm_permission_denied(gw_msg_t *msg)
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
 
+static inline gw_boolean_t gw_rm_check_priority(gw_msg_t *msg)
+{
+	int          priority;
+	gw_boolean_t granted   = GW_TRUE;
+	
+	priority  = gw_sch_get_user_priority(&(gw_conf.sch_conf), 
+                                         msg->owner, 
+                                         msg->group);
+                                         
+    if (msg->fixed_priority == GW_JOB_DEFAULT_PRIORITY)
+    {
+        msg->fixed_priority = priority;
+    }
+    else if (msg->fixed_priority == GW_JOB_MAX_PRIORITY)
+	{
+		if ( gw_rm_is_gwadmin(msg->owner) == GW_FALSE )
+		{
+  			gw_log_print("RM",'W',"Only gwadmin can submit urgent jobs.\n");		
+			granted = GW_FALSE;
+		}
+		else
+			granted = GW_TRUE;		
+	}
+	else if ((msg->fixed_priority < GW_JOB_MIN_PRIORITY) || 
+			 (msg->fixed_priority > GW_JOB_MAX_PRIORITY) ||
+			 (msg->fixed_priority > priority))
+	{
+	  	gw_log_print("RM",'W',"Priority range exceeded (user %s).\n",msg->owner);
+		granted = GW_FALSE;
+	}
+	
+	return granted;	
+} 
+
+/*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+
 void gw_rm_connection(void *_msg)
 {
     int *        job_id;
 	gw_msg_t *   msg;
 	gw_boolean_t in_list;
-	gw_boolean_t auth;	
-	    
+
     msg = (gw_msg_t *) _msg;
 
     switch(msg->msg_type)
     {
 		case GW_MSG_SUBMIT:
 		
-			gw_am_trigger(gw_rm.dm_am, "GW_DM_ALLOCATE_JOB", (void *) msg);
+			if ( gw_rm_check_priority(msg) == GW_FALSE )
+			{
+                gw_rm_permission_denied(msg);
+		  		free (msg);
+			}
+			else
+				gw_am_trigger(gw_rm.dm_am, "GW_DM_ALLOCATE_JOB", (void *) msg);
 	  		break;
 	  		
 	  	case GW_MSG_SUBMIT_ARRAY:
-	  
-			gw_am_trigger(gw_rm.dm_am, "GW_DM_ALLOCATE_ARRAY", (void *) msg);	  
+			if ( gw_rm_check_priority(msg) == GW_FALSE )
+			{
+                gw_rm_permission_denied(msg);
+		  		free (msg);
+			}
+			else
+				gw_am_trigger(gw_rm.dm_am, "GW_DM_ALLOCATE_ARRAY", (void *) msg);
 		  	break;		  	
 		  	
 	  	case GW_MSG_WAIT:
 
-		  	auth = gw_rm_auth_user(msg->job_id, msg->owner);
-		  	
-		  	if (!auth)
+		  	if (gw_rm_auth_user(msg->job_id, msg->owner) == GW_FALSE)
 		  	{
 		  		gw_rm_permission_denied(msg);
 		  		gw_log_print("RM",'W',"Permission denied, user %s can not wait job %i\n",msg->owner,msg->job_id);
@@ -557,10 +617,8 @@ void gw_rm_connection(void *_msg)
 	  	case GW_MSG_KILL:
 	  	case GW_MSG_KILL_ASYNC:
 	  	case GW_MSG_KILL_HARD:
-	  		  	
-	  		auth = gw_rm_auth_user(msg->job_id, msg->owner);
-		  	
-		  	if (!auth)
+
+		  	if (gw_rm_auth_user(msg->job_id, msg->owner) == GW_FALSE)
 		  	{
 		  		gw_rm_permission_denied(msg);
 		  		gw_log_print("RM",'W',"Permission denied, user %s can not kill job %i\n",msg->owner,msg->job_id);		  		
@@ -588,10 +646,8 @@ void gw_rm_connection(void *_msg)
 
 	  	case GW_MSG_STOP:
 	  	case GW_MSG_STOP_ASYNC:
-	  		  	
-	  		auth = gw_rm_auth_user(msg->job_id, msg->owner);
-		  	
-		  	if (!auth)
+
+		  	if (gw_rm_auth_user(msg->job_id, msg->owner) == GW_FALSE)
 		  	{
 		  		gw_rm_permission_denied(msg);
 		  		gw_log_print("RM",'W',"Permission denied, user %s can not stop job %i\n",msg->owner,msg->job_id);		  				  		
@@ -615,9 +671,8 @@ void gw_rm_connection(void *_msg)
 		  	break;
 		  		  
 	  	case GW_MSG_RESUME:
-	  		auth = gw_rm_auth_user(msg->job_id, msg->owner);
-		  	
-		  	if (!auth)
+
+		  	if (gw_rm_auth_user(msg->job_id, msg->owner) == GW_FALSE)
 		  	{
 		  		gw_rm_permission_denied(msg);
 		  		gw_log_print("RM",'W',"Permission denied, user %s can not resume job %i\n",msg->owner,msg->job_id);
@@ -640,9 +695,8 @@ void gw_rm_connection(void *_msg)
 		  	break;
 
 	  	case GW_MSG_HOLD:
-	  		auth = gw_rm_auth_user(msg->job_id, msg->owner);
-		  	
-		  	if (!auth)
+
+		  	if (gw_rm_auth_user(msg->job_id, msg->owner) == GW_FALSE)
 		  	{
 		  		gw_rm_permission_denied(msg);
 		  		gw_log_print("RM",'W',"Permission denied, user %s can not hold job %i\n",msg->owner,msg->job_id);
@@ -665,9 +719,8 @@ void gw_rm_connection(void *_msg)
 		  	break;
 
 	  	case GW_MSG_RELEASE:
-	  		auth = gw_rm_auth_user(msg->job_id, msg->owner);
-		  	
-		  	if (!auth)
+
+		  	if (gw_rm_auth_user(msg->job_id, msg->owner) == GW_FALSE)
 		  	{
 		  		gw_rm_permission_denied(msg);
 		  		gw_log_print("RM",'W',"Permission denied, user %s can not release job %i\n",msg->owner,msg->job_id);
@@ -690,9 +743,8 @@ void gw_rm_connection(void *_msg)
 		  	break;
 
 	  	case GW_MSG_RESCHEDULE:
-	  		auth = gw_rm_auth_user(msg->job_id, msg->owner);
-		  	
-		  	if (!auth)
+
+		  	if (gw_rm_auth_user(msg->job_id, msg->owner) == GW_FALSE)
 		  	{
 		  		gw_rm_permission_denied(msg);
 		  		gw_log_print("RM",'W',"Permission denied, user %s can not reschedule job %i\n",msg->owner,msg->job_id);		  		

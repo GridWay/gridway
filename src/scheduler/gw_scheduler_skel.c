@@ -31,11 +31,8 @@
 
 static void setup_args(char **argv, char ***av, int *ac);
 
-static void scheduler (gw_sch_job_t *    jobs,
-			    	   gw_sch_queue_t ** match_queues,
-					   gw_sch_user_t *   users,
-					   gw_sch_host_t *   hosts,
-					   void *            user_arg);
+static void scheduler (gw_scheduler_t * sched,
+                       void *           user_arg);
 							 
 int main(int argc, char **argv)
 {
@@ -82,17 +79,8 @@ static void scheduler (gw_scheduler_t * sched,
  *     2.- the host_id (%i)
  *     3.- queue name (%s)
  *     4.- rank (%i)
- *
- * You can also schedule arrays with:
- * 
- * "SCHEDULE_TASKS %i SUCCESS %i:%s:%i:%i\n"
- * The arguments are (in order):
- *     1.- the array_id (%i)
- *     2.- the host_id (%i)
- *     3.- queue name (%s)
- *     4.- rank (%i)
- *     5.- number of tasks of the array to schedule (%i)
  */
+
  
 	return 0;	
 }

@@ -79,8 +79,8 @@ QUEUE_PRIORITY          { lvalp->val_int = QUEUE_PRIORITY;      return VARIABLE;
                           lvalp->val_str[yyleng-2] = '\0';
 				          return STRING;}
 [!&|=><();\[\]\*\+/\^-] { return *yytext;}
-[ \t]+                  ;
-.                       ;
+[ \t]+                  
+.                       
 %%
 
 int host_attr_wrap()

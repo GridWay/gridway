@@ -150,7 +150,6 @@ int gw_im_register_mad(const char * executable,
                        const char * arg)
 {
     int           rc;
-    int           nice;
     int           i;
     gw_im_mad_t * mad;
     
@@ -183,18 +182,12 @@ int gw_im_register_mad(const char * executable,
     
     mad = &(gw_im.im_mad[gw_im.registered_mads]);
     
-    if (gw_conf.im_mads[gw_im.registered_mads][GW_MAD_NICE_INDEX] == NULL)
-        nice = 0;
-    else
-        nice = atoi(gw_conf.im_mads[gw_im.registered_mads][GW_MAD_NICE_INDEX]);
-    
     rc = gw_im_mad_init(mad, 
                         executable, 
                         name, 
                         arg,
                         gw_conf.im_mads[gw_im.registered_mads][GW_MAD_EM_INDEX],
-                        gw_conf.im_mads[gw_im.registered_mads][GW_MAD_TM_INDEX],
-                        nice);
+                        gw_conf.im_mads[gw_im.registered_mads][GW_MAD_TM_INDEX]);
     
     if ( rc == 0 )
     {

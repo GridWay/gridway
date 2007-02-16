@@ -1020,12 +1020,12 @@ YY_RULE_SETUP
 case 32:
 YY_RULE_SETUP
 #line 82 "gw_host_attr_parser.l"
-;
+
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
 #line 83 "gw_host_attr_parser.l"
-;
+
 	YY_BREAK
 case 34:
 YY_RULE_SETUP

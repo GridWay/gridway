@@ -125,8 +125,7 @@ void gw_im_listener(void *arg)
                             gw_log_print("IM",'I',"Hosts discovered by MAD (%s): %s\n",
                                     im_mad->name, info);
                                     
-                            gw_host_pool_update(info, 
-                                    im_mad->nice,
+                            gw_host_pool_update(info,
                                     im_mad->em_mad_name,
                                     im_mad->tm_mad_name,
                                     im_mad->name);

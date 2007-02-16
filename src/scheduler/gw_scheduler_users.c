@@ -40,8 +40,8 @@ void gw_scheduler_add_user(gw_scheduler_t * sched,
                            int              rjobs, 
                            char *           name)
 {
-	int i,j;
-
+	int i,j,depth;
+	
 #ifdef HAVE_LIBDB
 	gw_acct_t    acct;	
 	int          rc;
@@ -49,6 +49,8 @@ void gw_scheduler_add_user(gw_scheduler_t * sched,
 	gw_boolean_t usedb;
 #endif
 
+	depth = sched->sch_conf.window_depth;
+	
 	/* -------------------------------- */
 	/*  Look for this user in the list  */
 	/* -------------------------------- */	
@@ -57,8 +59,8 @@ void gw_scheduler_add_user(gw_scheduler_t * sched,
 	    if ( sched->users[i].uid == uid )
 	    {
 #ifdef GWSCHEDDEBUG	    	
-	    	gw_scheduler_print('D',"Updating user %i AJOBS:%i, RJOBS:%i\n",
-	    	    uid,ajobs,rjobs);
+	    	gw_scheduler_print('D',"Updating user %i AJOBS:%i, RJOBS:%i TJOBS:%i\n",
+	    	    uid,ajobs,rjobs,sched->users[i].total_jobs);
 #endif	    	    	    	    
 	        sched->users[i].active_jobs  = ajobs;
 	        sched->users[i].running_jobs = rjobs;
@@ -83,17 +85,26 @@ void gw_scheduler_add_user(gw_scheduler_t * sched,
 	
 	sched->users[i].active_jobs  = ajobs;
 	sched->users[i].running_jobs = rjobs;
+	sched->users[i].total_jobs   = 0;
 
     sched->users[i].dispatched = 0;
-    
-    /* ---------------------------------- */
-    /*  From the scheduler configuration  */
-    /* ---------------------------------- */
-    
-    sched->users[i].share      = 0;
-
-    gw_scheduler_print('I',"User (%i) %s added, building host list...\n"
+    sched->users[i].share      = 1;
+    sched->users[i].next_ujid  = 0;
+	
+	if ( depth > 0 )
+	{
+		sched->users[i].sub_windows = (int *) malloc (sizeof(int)*depth);
+	
+    	for (j=0; j<depth; j++)    
+	    	sched->users[i].sub_windows[j] = 0;
+	}
+	else
+		sched->users[i].sub_windows = NULL;
+		
+#ifdef GWSCHEDDEBUG	  	    
+    gw_scheduler_print('D',"User (%i) %s added, building host list...\n"
         ,uid,name);
+#endif        
     
     /* --------------------------------------- */
     /*  Add the list of hosts for this user    */
@@ -115,9 +126,10 @@ void gw_scheduler_add_user(gw_scheduler_t * sched,
 	    usedb = GW_FALSE;
 	else
 	    usedb = GW_TRUE;
+	    
+    from_time = time(NULL) - 86400*sched->sch_conf.ug_window;	    
 #endif
-	            
-            
+
     for (j=0; j<sched->num_hosts; j++)
     {
     	sched->users[i].hosts[j].ha_id       = j;
@@ -129,16 +141,15 @@ void gw_scheduler_add_user(gw_scheduler_t * sched,
 #ifdef HAVE_LIBDB
         if (usedb == GW_TRUE)
         {
-            from_time = time(NULL) - 24*60*60*GW_SCHED_DMEM;
-    	    rc        = gw_acct_join_search(sched->hosts[j].name, 
-    	                                sched->users[i].name, 
-    	                                &acct, 
-    	                                from_time);
+    	    rc = gw_acct_join_search(sched->hosts[j].name, 
+    	                             sched->users[i].name, 
+    	                             &acct, 
+    	                             from_time);
         }
         else
             rc = -1;
             
-    	if (rc == 0)
+    	if ((rc == 0)&& (acct.tot >= 1))
     	{
     		sched->users[i].hosts[j].avrg_execution  = (float) acct.execution / (float) acct.tot;
     		sched->users[i].hosts[j].avrg_suspension = (float) acct.suspension/ (float) acct.tot;
@@ -155,14 +166,19 @@ void gw_scheduler_add_user(gw_scheduler_t * sched,
     	sched->users[i].hosts[j].avrg_suspension = 0;
     	sched->users[i].hosts[j].avrg_transfer   = 0;
 #endif
+    	sched->users[i].hosts[j].last_execution  = 0;
+    	sched->users[i].hosts[j].last_suspension = 0;
+    	sched->users[i].hosts[j].last_transfer   = 0;
 
-        gw_scheduler_print('I',"\t%-30s: avg_xfr = %8.2f  avg_que = %8.2f  avg_exe = %8.2f\n",
+#ifdef GWSCHEDDEBUG	  
+        gw_scheduler_print('D',"\t%-30s: avg_xfr = %8.2f  avg_que = %8.2f  avg_exe = %8.2f\n",
 	    	               sched->hosts[j].name,
                            sched->users[i].hosts[j].avrg_transfer,
                            sched->users[i].hosts[j].avrg_suspension,
                            sched->users[i].hosts[j].avrg_execution);
+#endif
     }
-    
+
 #ifdef HAVE_LIBDB
     if (usedb == GW_TRUE)
         gw_acct_db_close();
@@ -182,8 +198,9 @@ void gw_scheduler_del_user(gw_scheduler_t * sched, int uid)
     
     if ( sched->num_users == 1 )
     {    	
-        gw_scheduler_print('I',"Removing user %s.\n",sched->users[0].name);
-        
+#ifdef GWSCHEDDEBUG	      	
+        gw_scheduler_print('D',"Removing user %s.\n",sched->users[0].name);
+#endif        
     	if (sched->users[0].hosts != NULL)
    	        free(sched->users[0].hosts);
    	        
@@ -204,9 +221,13 @@ void gw_scheduler_del_user(gw_scheduler_t * sched, int uid)
     	else if ( sched->users[i].uid == uid )
     	{
     	    found = GW_TRUE;
-    	    
-            gw_scheduler_print('I',"Removing user %s.\n",sched->users[i].name);
-    	    
+#ifdef GWSCHEDDEBUG	      	    
+            gw_scheduler_print('D',"Removing user %s.\n",sched->users[i].name);
+#endif            
+            
+    	    if (sched->users[i].sub_windows != NULL)            
+    	    	free(sched->users[i].sub_windows);
+    	    	
     	    if (sched->users[i].hosts != NULL)
     	        free(sched->users[i].hosts);
     	}
@@ -216,6 +237,28 @@ void gw_scheduler_del_user(gw_scheduler_t * sched, int uid)
     
     sched->users = realloc((void *)sched->users,
                            (sched->num_users) * sizeof(gw_sch_host_t));
+}
+
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+
+void gw_scheduler_user_update_windows(gw_scheduler_t * sched)
+{
+	int i,j,depth;
+	
+	depth = sched->sch_conf.window_depth;
+	
+	if (depth == 0)
+		return;
+		
+	for ( i=0; i<sched->num_users; i++ )
+	{
+		for (j=depth-1; j>0; j--)
+			sched->users[i].sub_windows[j] = sched->users[i].sub_windows[j-1];
+			
+		sched->users[i].sub_windows[0] = 0;
+	}
 }
 
 /* -------------------------------------------------------------------------- */

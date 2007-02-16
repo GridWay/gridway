@@ -30,6 +30,9 @@ static void gw_scheduler_init (gw_scheduler_t * sched);
 
 static FILE *fd_log;
 
+#define GW_SCHED_FIELD_WIDTH 80
+#define GW_SCHED_MSG_WIDTH   480
+
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
@@ -43,30 +46,36 @@ void gw_scheduler_loop(gw_scheduler_function_t scheduler, void *user_arg)
     int     rc,j,i;
     char    c;
     
-    char    str[320];
+    char    str[GW_SCHED_MSG_WIDTH];
     
-    char    action[15];
+    char    act[GW_SCHED_FIELD_WIDTH];    
+	char    id1[GW_SCHED_FIELD_WIDTH];
+    char    id2[GW_SCHED_FIELD_WIDTH];
+    char    at1[GW_SCHED_FIELD_WIDTH];
+    char    at2[GW_SCHED_FIELD_WIDTH];
+    char    at3[GW_SCHED_FIELD_WIDTH];  
     
-	char    id1[7];
-    char    id2[7];
-    char    xfr[10];
-    char    sus[80];
-    char    exe[10];
-    char    tsk[10];
-    
-    int                   hid, uid, jid, aid;
-    int                   uslots, ajobs, nice;
-    int                   rjobs,tasks;
-    gw_migration_reason_t reason;
-    float                 txfr,texe,tsus;
+    int     hid, uid, jid, aid, np;
+    int     uslots, ajobs, fixed_priority;
+    int     rjobs;
+    float   txfr,texe,tsus;
         
     char *  GW_LOCATION;
     char *  log;
+    char *  conf;
     char *  error_str;
+    char *  name;
+    
     int     length;
-        
-    gw_scheduler_t sched;  	
-  	
+    time_t  the_time, deadline;
+    
+    gw_scheduler_t sched;
+    
+    gw_client_t *         gw_session = NULL;
+    gw_return_code_t      gwrc;
+	gw_migration_reason_t reason;
+	gw_msg_job_t          job_status;
+
     /* ------------------------------- */
     /*  Init environment ang log file  */
     /* ------------------------------- */
@@ -84,8 +93,10 @@ void gw_scheduler_loop(gw_scheduler_function_t scheduler, void *user_arg)
     {
         length = strlen(GW_LOCATION);
 	    log    = (char *) malloc (sizeof(char)*(length + 15));
+	    conf   = (char *) malloc (sizeof(char)*(length + 16));
 	    
         sprintf(log, "%s/var/sched.log", GW_LOCATION);
+        sprintf(conf,"%s/etc/sched.conf",GW_LOCATION);
         
     	rc = truncate(log, 0);
 	
@@ -106,9 +117,31 @@ void gw_scheduler_loop(gw_scheduler_function_t scheduler, void *user_arg)
     }
           	
   	setbuf(stdout,NULL);  	
+
+    /* ----------------------------------- */
+    /*  Scheduler Initialization           */
+    /* ----------------------------------- */
   	
   	gw_scheduler_init(&sched);
+  	
+  	gw_sch_conf_init(&(sched.sch_conf));
 
+    rc = gw_sch_loadconf(&(sched.sch_conf), conf);
+    
+    if (rc != 0 )
+    {
+   	    gw_scheduler_print('E',"Parsing scheduler configuration file %s, using defaults.\n",conf);
+    }
+    
+    free(conf);
+    
+    the_time = time(NULL);
+    
+	sched.next_user_window = the_time + 
+                            (time_t) (sched.sch_conf.window_size * 86400);
+                            
+	sched.next_host_window = the_time + (time_t) 86400;
+                               
     gw_scheduler_print('I',"Scheduler successfully started.\n");
 
     /* ----------------------------------- */
@@ -121,6 +154,7 @@ void gw_scheduler_loop(gw_scheduler_function_t scheduler, void *user_arg)
         FD_SET (0,&in_pipes);                         
 
         rc = select(1, &in_pipes, NULL, NULL, NULL);
+
         if (rc == -1)
         {
             end = 1;
@@ -132,7 +166,8 @@ void gw_scheduler_loop(gw_scheduler_function_t scheduler, void *user_arg)
         do
         {
             rc = read(0, (void *) &c, sizeof(char));
-            str[j++] = c;    
+            str[j++] = c;
+            
         }while ( rc > 0 && c != '\n' );
 
         str[j] = '\0';    
@@ -142,14 +177,14 @@ void gw_scheduler_loop(gw_scheduler_function_t scheduler, void *user_arg)
             end = 1;
         }
 
-        rc = sscanf(str,"%s %s %s %s %s %s %[^\n]",action,id1,id2,xfr,sus,exe,tsk);
+        rc = sscanf(str,"%s %s %s %s %s %[^\n]",act,id1,id2,at1,at2,at3);
 
 #ifdef GWSCHEDDEBUG
-        gw_scheduler_print('D',"Message received from gwd \"%s %s %s %s %s %s %s\"\n",
-            action,id1,id2,xfr,sus,exe,tsk);
+        gw_scheduler_print('D',"Message received from gwd \"%s %s %s %s %s %s\"\n",
+            act,id1,id2,at1,at2,at3);
 #endif        
-        if (strcmp(action, "INIT") == 0 )
-        {
+        if (strcmp(act, "INIT") == 0 )
+        {        	
         	if (error == 0)
         	    printf("INIT - SUCCESS -\n");
         	else
@@ -158,34 +193,38 @@ void gw_scheduler_loop(gw_scheduler_function_t scheduler, void *user_arg)
         	    end = 1;	
         	}
         }
-        else if (strcmp(action, "FINALIZE") == 0 )
+        else if (strcmp(act, "FINALIZE") == 0 )
         {
+       		gw_client_finalize();
+       		
         	printf("FINALIZE - SUCCESS -");
         	end = 1;
         }
-        else if (strcmp(action, "HOST_MONITOR") == 0 )
+        else if (strcmp(act, "HOST_MONITOR") == 0 )
         {
-        /* Add or update a given host format is:
+        /* Add or update a given host:
          * HOST_MONITOR HID USLOTS RJOBS NAME - 
          */
             hid    = atoi(id1);
             uslots = atoi(id2);
-            rjobs  = atoi(xfr);
+            rjobs  = atoi(at1);
+            name   = at2;
             
-            gw_scheduler_add_host(&sched,hid,uslots,rjobs,sus);
+            gw_scheduler_add_host(&sched,hid,uslots,rjobs,name);
         }
-        else if (strcmp(action, "USER_ADD") == 0 )
+        else if (strcmp(act, "USER_ADD") == 0 )
         {
         /* Add a user:
          * USER_ADD UID ASLOTS RSLOTS NAME - 
          */        	
         	uid   = atoi(id1);
         	ajobs = atoi(id2);
-        	rjobs = atoi(xfr);
+        	rjobs = atoi(at1);
+        	name  = at2;
         	
-        	gw_scheduler_add_user(&sched,uid,ajobs,rjobs,sus);
+        	gw_scheduler_add_user(&sched,uid,ajobs,rjobs,name);
         }
-        else if (strcmp(action, "USER_DEL") == 0 )
+        else if (strcmp(act, "USER_DEL") == 0 )
         {
         /* Remove an user
          * USER_DEL UID - - - - 
@@ -194,36 +233,27 @@ void gw_scheduler_loop(gw_scheduler_function_t scheduler, void *user_arg)
         	        	
         	gw_scheduler_del_user(&sched,uid);
         }        
-        else if (strcmp(action, "JOB_DEL") == 0 )
+        else if (strcmp(act, "JOB_DEL") == 0 )
         {
         /* Remove an job
          * JOB_DEL JID - - - - 
          */        	
         	jid   = atoi(id1);
         	
-        	gw_scheduler_job_del(&sched,jid);
-        }                
-        else if (strcmp(action, "TASK_DEL") == 0 )
-        {
-        /* Remove an job
-         * TASK_DEL AID - - - - 
-         */        	
-        	aid   = atoi(id1);
-        	
-        	gw_scheduler_array_del(&sched,aid,1);
-        }                     
-        else if (strcmp(action, "JOB_FAILED") == 0 )
+        	gw_scheduler_job_del(&sched,jid,0);
+        }          
+        else if (strcmp(act, "JOB_FAILED") == 0 )
         {
         /* A job has failed, update user host statistics
          * JOB_FAILED HID UID REASON - -
          */
           	hid    = atoi(id1);
           	uid    = atoi(id2);
-          	reason = (gw_migration_reason_t) atoi(xfr);
+          	reason = (gw_migration_reason_t) atoi(at1);
           	
-          	gw_scheduler_job_failed(&sched,hid, uid,reason);
+          	gw_scheduler_job_failed(&sched,hid,uid,reason);
         }                
-        else if (strcmp(action, "JOB_SUCCESS") == 0 )        
+        else if (strcmp(act, "JOB_SUCCESS") == 0 )        
         {
         /* A job has been successfully executed, update user host statistics
          * JOB_SUCCESS HID UID XFR SUS EXE 
@@ -231,41 +261,53 @@ void gw_scheduler_loop(gw_scheduler_function_t scheduler, void *user_arg)
           	hid  = atoi(id1);
           	uid  = atoi(id2);
           	
-          	txfr = atof(xfr);
-          	tsus = atof(sus);
-          	texe = atof(exe);
+          	txfr = atof(at1);
+          	tsus = atof(at2);
+          	texe = atof(at3);
             
             gw_scheduler_job_success(&sched,hid,uid,txfr,tsus,texe);
+        }
+        else if (strcmp(act, "JOB_SCHEDULE") == 0 )        
+        {        	
+        /* A job need schedule add it to the job list
+         * JOB_SCHEDULE JID AID UID REASON -
+         */
+          	jid    = atoi(id1);
+          	aid    = atoi(id2);
+         	uid    = atoi(at1);
+          	reason = (gw_migration_reason_t) atoi(at2);
 
+
+        	if (gw_session == NULL)
+        	{
+        	    gw_session = gw_client_init();
+        	    
+				if (gw_session == NULL)
+				{
+					gw_scheduler_print('E',"Error creating a GW session.\n");
+				}
+        	}
+
+          	gwrc = gw_client_job_status(jid, &job_status);
+          	
+          	if ( gwrc == GW_RC_SUCCESS )
+          	{
+          		fixed_priority = job_status.fixed_priority;
+          		np             = job_status.np;
+                deadline       = job_status.deadline;
+          	}
+          	else
+          	{
+         		gw_scheduler_print('E',"Error getting job information, will use default values.\n");
+          		fixed_priority = 0;
+          		np             = 1;
+                deadline       = 0;
+          	}
+          	
+          	gw_scheduler_job_add(&sched,jid,aid,np,reason,
+                    fixed_priority,uid,deadline);	
         }
-        else if (strcmp(action, "JOB_SCHEDULE") == 0 )        
-        {
-        /* A job need schedule add it to the job list
-         * JOB_SCHEDULE JID AID REASON NICE UID
-         */
-          	jid    = atoi(id1);
-          	aid    = atoi(id2);          	
-          	reason = (gw_migration_reason_t) atoi(xfr);
-          	nice   = atoi(sus);
-          	uid    = atoi(exe);
-            
-            gw_scheduler_job_add(&sched,jid,aid,reason,nice,uid);
-        }
-        else if (strcmp(action, "ARRAY_SCHEDULE") == 0 )        
-        {
-        /* A job need schedule add it to the job list
-         * ARRAY_SCHEDULE JID AID REASON NICE UID TASKS
-         */
-          	jid    = atoi(id1);
-          	aid    = atoi(id2);          	
-          	reason = (gw_migration_reason_t) atoi(xfr);
-          	nice   = atoi(sus);
-          	uid    = atoi(exe);
-          	tasks  = atoi(tsk);
-            
-            gw_scheduler_array_add(&sched,jid,aid,reason,nice,uid,tasks);
-        }    
-        else if (strcmp(action, "SCHEDULE") == 0 )
+        else if (strcmp(act, "SCHEDULE") == 0 )
         {
 #ifdef GWSCHEDDEBUG
            gw_scheduler_print('D',"JOBS:%i HOSTS:%i USERS:%i\n",
@@ -282,11 +324,41 @@ void gw_scheduler_loop(gw_scheduler_function_t scheduler, void *user_arg)
         	        sched.users[i].dispatched = 0;        	
         	
         	    gw_scheduler_matching_arrays(&sched);
+        	    
+        	    if (sched.sch_conf.disable == 0)
+        	       gw_scheduler_job_policies (&sched);
         	
        		    scheduler(&sched,user_arg);
-        	}	
-       		
+        	}
+        	
+            the_time = time(NULL);
+            
+        	if ( the_time > sched.next_user_window)
+        	{
+#ifdef GWSCHEDDEBUG
+                gw_scheduler_print('D',"Updating window shares.\n");
+#endif
+        		sched.next_user_window = time(NULL) + 
+       		                     (time_t) (sched.sch_conf.window_size * 86400);
+       		                        
+        		gw_scheduler_user_update_windows(&sched);
+        	}
+#ifdef HAVE_LIBDB        	
+        	if ( the_time > sched.next_host_window)
+        	{
+#ifdef GWSCHEDDEBUG
+                gw_scheduler_print('D',"Updating host usage.\n");
+#endif	
+        		sched.next_host_window = time(NULL) + (time_t) 86400;
+       		                     
+				gw_scheduler_update_usage_host(&sched);
+        	}
+#endif       		
        		printf("SCHEDULE_END - SUCCESS -\n");
+        }
+        else
+        {
+            gw_scheduler_print('E',"Unknown action from core %s\n.",act);        	
         }
     }
     

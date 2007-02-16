@@ -62,14 +62,18 @@ void gw_rm_job_status(int client_socket, int job_id)
     msg.task_id     = job->task_id;
     msg.total_tasks = job->total_tasks;    
     msg.uid         = job->user_id;
-    
-    msg.client_waiting = job->client_waiting;
+
+    msg.fixed_priority = job->fixed_priority;
+    msg.deadline       = job->template.deadline;
+
+    msg.type = job->template.type;
+    msg.np   = job->template.np;
 
     msg.em_state  = job->em_state;
     msg.job_state = job->job_state;
     msg.exit_code = job->exit_code;
-    msg.restarted = job->restarted;
-    
+
+    msg.restarted      = job->restarted;
     msg.client_waiting = job->client_waiting;
     msg.reschedule     = job->reschedule;
     
@@ -94,9 +98,9 @@ void gw_rm_job_status(int client_socket, int job_id)
         }
     }
     
-    if ( job->template.file != NULL )
-        strncpy(msg.file,job->template.file,GW_MSG_STRING_SHORT);
-    
+    if ( job->template.name != NULL )
+        strncpy(msg.name,job->template.name,GW_MSG_STRING_SHORT);
+
     msg.host[0]='\0';
     if ( job->history != NULL )
         if (job->history->em_rc != NULL)

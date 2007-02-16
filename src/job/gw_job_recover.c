@@ -63,12 +63,13 @@ int gw_job_recover(gw_job_t *job)
     gw_job_state_t previous_job_state;
     
     struct passwd * pw_ent;
+    struct stat     dir_stat;
 
     /*------------------------------------------------------------------------*/
 
-    file = fopen(job->directory, "r");
+    rc=stat(job->directory, &dir_stat);
 
-    if (file == NULL)
+    if ( rc || (!S_ISDIR(dir_stat.st_mode)) )
         return 1;
 
     /*------------------------------------------------------------------------*/
@@ -101,7 +102,8 @@ int gw_job_recover(gw_job_t *job)
         return -1;
     }
 
-    rc = fscanf(file, "%ld %s %s %i %i", &timestamp, user_name, job_home,&pstart,&pinc);
+    rc = fscanf(file, "%ld %s %s %i %i", &timestamp, user_name, job_home,
+            &pstart, &pinc);
     
     if (rc != 5)
     {
@@ -355,10 +357,14 @@ int gw_job_recover_state_transition(gw_job_t *job,
         job->history->stats[EPILOG_START_TIME] = timestamp;
         break;
 
+    case GW_JOB_STATE_EPILOG:
+        if ( previous_job_state == GW_JOB_STATE_WRAPPER )
+            job->history->stats[EPILOG_START_TIME] = timestamp;
+        break;
+        
     case GW_JOB_STATE_PENDING:    	
     case GW_JOB_STATE_HOLD:
     case GW_JOB_STATE_PRE_WRAPPER:
-    case GW_JOB_STATE_EPILOG:
     case GW_JOB_STATE_STOP_CANCEL:
     case GW_JOB_STATE_KILL_CANCEL:
         break;
@@ -403,9 +409,8 @@ int gw_job_recover_last_state_transition(gw_job_t *job,
         gw_dm_mad_job_schedule(&gw_dm.dm_mad[0],
                                *id,
                                -1,
-                               GW_REASON_NONE,
-                               job->nice,
-                               job->user_id);
+                               job->user_id,
+                               GW_REASON_NONE);
     case GW_JOB_STATE_HOLD:
     case GW_JOB_STATE_STOPPED:
     case GW_JOB_STATE_ZOMBIE:
@@ -418,7 +423,7 @@ int gw_job_recover_last_state_transition(gw_job_t *job,
    	
     	gw_user_pool_inc_running_jobs(job->user_id, 1);
     	
-    	gw_host_inc_slots_nb(job->history->host);
+    	gw_host_inc_slots_nb(job->history->host, job->template.np);
        
         gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_PROLOG", (void *)id);
         break;
@@ -427,7 +432,7 @@ int gw_job_recover_last_state_transition(gw_job_t *job,
     	
     	gw_user_pool_inc_running_jobs(job->user_id, 1);
         
-       	gw_host_inc_slots_nb(job->history->host);
+       	gw_host_inc_slots_nb(job->history->host, job->template.np);
         
         gw_job_set_state(job, GW_JOB_STATE_WRAPPER, GW_TRUE);
 
@@ -483,6 +488,7 @@ int gw_job_recover_last_state_transition(gw_job_t *job,
 
     case GW_JOB_STATE_KILL_CANCEL:
         gw_job_set_state(job, job_state, GW_TRUE);
+        /* continues to KILL_EPILOG */
 
     case GW_JOB_STATE_KILL_EPILOG:                
     	
@@ -495,12 +501,13 @@ int gw_job_recover_last_state_transition(gw_job_t *job,
 
     case GW_JOB_STATE_MIGR_CANCEL:
         gw_job_set_state(job, job_state, GW_TRUE);
+        /* continues to MIGR_PROLOG */
             
     case GW_JOB_STATE_MIGR_PROLOG:    
     	
     	gw_user_pool_inc_running_jobs(job->user_id, 1);
     	
-    	gw_host_inc_slots_nb(job->history->host);
+    	gw_host_inc_slots_nb(job->history->host, job->template.np);
         
     	gw_host_inc_rjobs_nb(job->history->next->host);
         				
@@ -511,7 +518,7 @@ int gw_job_recover_last_state_transition(gw_job_t *job,
 
     	gw_user_pool_inc_running_jobs(job->user_id, 1);
 
-    	gw_host_inc_slots_nb(job->history->host);
+    	gw_host_inc_slots_nb(job->history->host, job->template.np);
   
     	gw_host_inc_rjobs_nb(job->history->next->host);
     
@@ -522,13 +529,14 @@ int gw_job_recover_last_state_transition(gw_job_t *job,
    	
     	gw_user_pool_inc_running_jobs(job->user_id, 1);
 
-    	gw_host_inc_slots_nb(job->history->host);
+    	gw_host_inc_slots_nb(job->history->host, job->template.np);
     	            
         gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_PRE_WRAPPER", (void *)id);
         break;
 
     case GW_JOB_STATE_STOP_CANCEL:
         gw_job_set_state(job, job_state, GW_TRUE);
+        /* continues to STOP_EPILOG */
         
     case GW_JOB_STATE_STOP_EPILOG:
 
@@ -554,8 +562,9 @@ int gw_job_recover_last_state_transition(gw_job_t *job,
 int gw_job_recover_history_record(FILE *history_file, gw_job_t *job)
 {
     int rc;
-    char hostname[2048], queue_name[2048], fork_name[2048], lrms_name[2048];
-    int rank, nice;
+    char hostname[2048], queue_name[2048];
+    char fork_name[2048], lrms_name[2048], lrms_type[2048];
+    int rank, priority;
     char em_mad_name[2048], tm_mad_name[2048], im_mad_name[2048];
     int host_id;
     gw_host_t *host;
@@ -563,15 +572,15 @@ int gw_job_recover_history_record(FILE *history_file, gw_job_t *job)
     if (history_file == NULL)
         return -1;
 
-    rc = fscanf(history_file, "%s %d %s %s %s %d %s %s %s", hostname,
-            &rank, queue_name, fork_name, lrms_name, &nice,
+    rc = fscanf(history_file, "%s %d %s %s %s %s %s %s %s", hostname,
+            &rank, queue_name, fork_name, lrms_name, lrms_type,
             em_mad_name, tm_mad_name, im_mad_name);
 
     if (rc != 9)
     {
         gw_log_print("DM",'E',"Wrond field number (%d) in history record of job %d.\n",
                      rc,
-                     job->id); 
+                     job->id);
         return -1;
     }
 
@@ -581,9 +590,14 @@ int gw_job_recover_history_record(FILE *history_file, gw_job_t *job)
     {
 #ifdef GWJOBDEBUG    	
         gw_log_print("DM",'D',"Registering host %s.\n", hostname);
-#endif            
+#endif
+        
+        priority = gw_sch_get_host_priority(&(gw_conf.sch_conf),
+                                            hostname,
+                                            im_mad_name);
+    
         host_id = gw_host_pool_host_allocate(hostname, 
-                                             nice,
+                                             priority,
                                              em_mad_name, 
                                              tm_mad_name, 
                                              im_mad_name);
@@ -596,22 +610,27 @@ int gw_job_recover_history_record(FILE *history_file, gw_job_t *job)
             host->host_id);
 #endif
 
+    /* Needed to generate the RSL */
+    host->lrms_type = strdup(lrms_type);
+    
     /*------------------------------------------------------------------------*/
 
 	if (job->history != NULL) /* Not the first record */
 		job->restarted++;
 		
     rc = gw_job_history_add(&(job->history),
-                            host, 
-                            rank, 
-                            queue_name, 
-                            fork_name, 
-                            lrms_name, 
+                            host,
+                            rank,
+                            queue_name,
+                            fork_name,
+                            lrms_name,
+                            lrms_type,
                             job->owner,
-                            job->template.user_home, 
-                            job->id, 
-                            job->user_id, 
+                            job->template.user_home,
+                            job->id,
+                            job->user_id,
                             GW_TRUE);
+
     if (rc == -1)
     {
         gw_log_print("DM",'E',"Could not add history record.\n");

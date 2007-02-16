@@ -15,6 +15,27 @@
 /* limitations under the License.                                             */
 /* -------------------------------------------------------------------------- */
 
+/*
+#------------------------------------------------------------------------------
+# The flood scheduler. This is a very simple scheduling algorithm. It maximizes
+# the number of jobs submitted to the Grid. It's behavior can be modified with
+# three parameters:
+#    -h   The max number of jobs that the scheduler submits to a given host.
+#         Default value is 10, 0 dispatch to each host as many jobs as possible.
+#
+#    -u   The maximum number of simultaneous RUNNING jobs per user
+#         Default value is 30, 0 dispatch as many jobs as possible.
+#
+#    -c   Scheduling Chunk. Jobs of the same user are submitted in a round-robin
+#         fashion with the given chunk. This allows the adiminstration to
+#         stablish a basic sharing policy.  Default value is 5
+#
+#    -s   Dispatch Chunk. The maximum number of jobs that will be dispatched each 
+#         scheduling action. 
+#         Default value is 15, 0 dispatch as many jobs as possible.
+#------------------------------------------------------------------------------
+*/
+
 #include "gw_scheduler.h"
 
 #include <stdio.h>
@@ -52,11 +73,8 @@ static void flood_scheduler (gw_scheduler_t * sched,
 							 
 static int schedule_user (gw_scheduler_t * sched,
 						  sched_param_t *  params,
-						  int              uid);							 
-
-static int reschedule_user (gw_scheduler_t * sched,
-						    sched_param_t *  params,
-						    int              uid);
+						  int              uid,
+						  gw_boolean_t     resched);
 
 int main(int argc, char **argv)
 {
@@ -121,7 +139,8 @@ static void flood_scheduler (gw_scheduler_t * sched,
 		{
 			scheds = schedule_user (sched,
 						  			params,
-						  			sched->users[i].uid);
+						  			sched->users[i].uid,
+						  			GW_FALSE);
 			if ( scheds > 0 )
 				end = 0;
 		}
@@ -135,9 +154,10 @@ static void flood_scheduler (gw_scheduler_t * sched,
 		
 		for ( i=0; i<sched->num_users; i++)
 		{
-			scheds = reschedule_user(sched,
-						  			 params,
-						  			sched->users[i].uid);
+			scheds = schedule_user(sched,
+						  		   params,
+						  		   sched->users[i].uid,
+						  		   GW_TRUE);
 			if ( scheds > 0 )
 				end = 0;
 		}
@@ -175,7 +195,8 @@ static inline int * user_get_dispatched(int              uid,
 
 static int schedule_user (gw_scheduler_t * sched,
 						  sched_param_t *  params,
-						  int              uid)
+						  int              uid,
+						  gw_boolean_t     reschedule)
 {
 	int *udsp;
 	int uusd;
@@ -184,15 +205,14 @@ static int schedule_user (gw_scheduler_t * sched,
 	int i,j;
 	int *hdsp;
 	int husd;
-	int tasks;
-	int ruslots;
-	int rtasks;
 	int fslots;
 	int dsp;
 	int u_id;
 	int h_id;
 	int remaining;
-	
+    int not_schedule;
+    gw_migration_reason_t reason;
+    	
 	udsp = user_get_dispatched(uid,sched,&uusd);
 	
 	if ( params->sched_max == 0 )
@@ -219,260 +239,77 @@ static int schedule_user (gw_scheduler_t * sched,
 			
 	for (i=0,dsp=0; i<sched->num_jobs && (dsp<rchunk) && (i>=0);i++)
 	{
-		u_id = sched->jobs[i].ua_id;
+		u_id   = sched->jobs[i].ua_id;
+		reason = sched->jobs[i].reason;
+		
+		not_schedule = ((reschedule == GW_FALSE) && (reason != GW_REASON_NONE)) ||
+                	   ((reschedule == GW_TRUE) && (reason == GW_REASON_NONE)) ||
+		               (sched->jobs[i].mhosts == NULL) ||
+        		       (sched->users[u_id].uid != uid);        		          
 			        
-		if ((sched->jobs[i].reason == GW_REASON_NONE) 
-			&& (sched->jobs[i].mhosts != NULL)
-			&& (sched->users[u_id].uid == uid))
-		{	
-			if ((sched->jobs[i].aid == -1) && (sched->jobs[i].tasks == 1))
+		if ( not_schedule )
+			continue;
+			
+#ifdef GWSCHEDDEBUG
+        gw_scheduler_print('D',"Scheduling job %i on %i suitable hosts\n",
+        	sched->jobs[i].jid,sched->jobs[i].num_mhosts);
+#endif  
+              								
+		for (j=0;j<sched->jobs[i].num_mhosts; j++)
+		{
+			h_id = sched->jobs[i].mhosts[j].ha_id;
+					
+			hdsp = &(sched->hosts[h_id].dispatched);
+			husd = sched->hosts[h_id].used_slots;
+					
+			if (params->host_max != 0 )
 			{
-#ifdef GWSCHEDDEBUG
-                gw_scheduler_print('D',"Scheduling job %i on %i suitable hosts\n",sched->jobs[i].jid,sched->jobs[i].num_mhosts);
-#endif                								
-				for (j=0;j<sched->jobs[i].num_mhosts; j++)
-				{
-					h_id = sched->jobs[i].mhosts[j].ha_id;
-					
-					hdsp = &(sched->hosts[h_id].dispatched);
-					husd = sched->hosts[h_id].used_slots;
-					
-					if (params->host_max != 0 )
-					{
-					    if ((husd + *hdsp) >= params->host_max)
-						    continue;
-					}
+			    if ((husd + *hdsp) >= params->host_max)
+				    continue;
+			}
 						
-					fslots = sched->jobs[i].mhosts[j].slots - *hdsp;
+			fslots = sched->jobs[i].mhosts[j].slots - *hdsp;
+				
 #ifdef GWSCHEDDEBUG
-                    gw_scheduler_print('D',"\tHost (%s-%s) FSLOTS: %i  DSP:%i  USD:%i\n",
-                                       sched->hosts[h_id].name,
-                                       sched->jobs[i].mhosts[j].qname,
-                                       fslots,
-                                       *hdsp,
-                                       husd);
+            gw_scheduler_print('D',"\tHost (%s-%s) FSLOTS: %i  DSP:%i  USD:%i\n",
+                                   sched->hosts[h_id].name,
+                                   sched->jobs[i].mhosts[j].qname,
+                                   fslots,
+                                   *hdsp,
+                                   husd);
 #endif										
-					if (fslots > 0)
-					{
-						*hdsp = *hdsp + 1;	
-						*udsp = *udsp + 1;
-						dsp   = dsp   + 1;
-												
-						printf("SCHEDULE_JOB %i SUCCESS %i:%s:%i\n",
+			if (fslots >= sched->jobs[i].np)
+			{
+				*hdsp = *hdsp + 1;	
+				*udsp = *udsp + 1;
+				dsp   = dsp   + 1;
+											
+				printf("SCHEDULE_JOB %i SUCCESS %i:%s:%i\n",
 							sched->jobs[i].jid,
 							sched->hosts[h_id].hid,
 							sched->jobs[i].mhosts[j].qname,
 							sched->jobs[i].mhosts[j].rank);
 
-                        gw_scheduler_print('I',"Job %i scheduled, host: %-30s queue: %-15s\n",
+                gw_scheduler_print('I',"Job %i scheduled, host: %-30s queue: %-15s\n",
 							sched->jobs[i].jid,
 							sched->hosts[h_id].name,
 							sched->jobs[i].mhosts[j].qname);
                                        							
-                        gw_scheduler_job_del(sched,sched->jobs[i].jid);
+                gw_scheduler_job_del(sched,sched->jobs[i].jid,1);
                         
-                        i = i - 1; /* Next job will be i, not i+1 */
+                i = i - 1; /* Next job will be i, not i+1 */
 																					
-						break;	
-					}
-				}
-			}
-			else if (sched->jobs[i].tasks > 0)
-			{
-#ifdef GWSCHEDDEBUG
-                gw_scheduler_print('D',"Scheduling array %i (%i tasks) on %i suitable hosts\n",
-                                   sched->jobs[i].aid,
-                                   sched->jobs[i].tasks,
-                                   sched->jobs[i].num_mhosts);
-#endif                								
-				for (j=0;j<sched->jobs[i].num_mhosts; j++)
-				{
-					h_id = sched->jobs[i].mhosts[j].ha_id;
-					
-					hdsp = &(sched->hosts[h_id].dispatched);
-					husd = sched->hosts[h_id].used_slots;
-					
-					if ( params->host_max != 0 )
-					{
-    					fslots  = params->host_max - husd - *hdsp;
-    					
-    					if (fslots > (sched->jobs[i].mhosts[j].slots - *hdsp))
-	    					fslots = sched->jobs[i].mhosts[j].slots - *hdsp;
-	    					
-    					if ((husd + *hdsp) >= params->host_max)
-						    continue;    					
-					}
-					else
-					{
-						fslots = sched->jobs[i].mhosts[j].slots - *hdsp;						
-					}
-                    		
-					if (fslots <= 0)
-					    continue;
-					    					
-					ruslots = rchunk - dsp;
-					
-					if ( fslots < ruslots )
-						tasks = fslots;
-					else
-						tasks = ruslots;
-					
-					if ( tasks > sched->jobs[i].tasks )
-							tasks = sched->jobs[i].tasks;
-
-#ifdef GWSCHEDDEBUG
-                gw_scheduler_print('D',"\tHost (%s-%s) FSLOTS: %i  DSP:%i  USD:%i TASKS:%i\n",
-                                   sched->hosts[h_id].name,
-                                   sched->jobs[i].mhosts[j].qname,
-                                   fslots,
-                                   *hdsp,
-                                   husd,
-                                   tasks);
-#endif					
-					if ( tasks > 0 )
-					{													
-						*hdsp = *hdsp + tasks;	
-						*udsp = *udsp + tasks;
-						dsp   = dsp   + tasks;
-						
-						rtasks = sched->jobs[i].tasks - tasks;
-						
-						printf("SCHEDULE_TASKS %i SUCCESS %i:%s:%i:%i\n",
-							sched->jobs[i].aid,
-							sched->hosts[h_id].hid,
-							sched->jobs[i].mhosts[j].qname,
-							sched->jobs[i].mhosts[j].rank,
-							tasks);
-
-                        gw_scheduler_print('I',"%i tasks of array %i scheduled, host: %-30s queue: %-15s\n",
-                            tasks,
-							sched->jobs[i].aid,
-							sched->hosts[h_id].name,
-							sched->jobs[i].mhosts[j].qname);
-
-    					gw_scheduler_array_del(sched,sched->jobs[i].aid,tasks);
-						
-						if (rtasks <= 0)
-						{
-							i = i - 1;					
-							break;	
-						}
-					}
-				}				
-			}
+				break;	
+			 }
 		}
 	}
-	
+
 	params->dispached += dsp;
 	
 	return dsp;
 
 }							 
-
-/* ------------------------------------------------------------------------- */
-/* ------------------------------------------------------------------------- */
-/* ------------------------------------------------------------------------- */
-
-static int reschedule_user (gw_scheduler_t * sched,
-						    sched_param_t *  params,
-						    int              uid)
-{
-	int *udsp;
-	int uusd;
-	int max_round;
-	int rchunk;
-	int i,j;
-	int *hdsp;
-	int husd;
-	int rslots;
-	int dsp;
-	int u_id;
-	int h_id;
-    int remaining;
-    
-	udsp = user_get_dispatched(uid,sched,&uusd);
-
-	if ( params->sched_max == 0 )
-	    remaining = sched->num_jobs;
-	else
-	    remaining = params->sched_max - params->dispached;
-
-	if (params->user_max == 0)
-	   max_round = sched->num_jobs;
-	else
-	   max_round = params->user_max  - (uusd+*udsp);	   
-		
-	if (max_round <= 0)
-		return 0;
-	else if ( remaining <= 0)
-	    return 0;		
-	else if	( max_round < params->user_chunk)
-		rchunk = max_round;
-	else
-		rchunk = params->user_chunk;
-
-	if (remaining < rchunk)
-	    rchunk = remaining;
-		
-	for (i=0,dsp=0; (i<sched->num_jobs) && (dsp<rchunk) &&(i>=0);i++)
-	{
-		u_id = sched->jobs[i].ua_id;
-		
-		if ((sched->jobs[i].reason != GW_REASON_NONE) 
-			&& (sched->jobs[i].mhosts != NULL)
-			&& (sched->users[u_id].uid == uid))
-		{
-			if ((sched->jobs[i].aid == -1) && (sched->jobs[i].tasks == 1))
-			{
-				for (j=0;j<sched->jobs[i].num_mhosts; j++)
-				{
-					h_id = sched->jobs[i].mhosts[j].ha_id;
-					
-					hdsp = &(sched->hosts[h_id].dispatched);
-					husd = sched->hosts[h_id].used_slots;
-					
-					if (params->host_max != 0)
-					{
-					    if ((husd + *hdsp) >= params->host_max)
-						    continue;
-					}
-						
-					rslots = sched->jobs[i].mhosts[j].slots - *hdsp;
-					
-					if (rslots > 0)
-					{
-						*hdsp = *hdsp + 1;	
-						*udsp = *udsp + 1;
-						dsp   = dsp   + 1;
-						
-						sched->jobs[i].tasks = 0;
-												
-						printf("SCHEDULE_JOB %i SUCCESS %i:%s:%i\n",
-							sched->jobs[i].jid,
-							sched->hosts[h_id].hid,
-							sched->jobs[i].mhosts[j].qname,
-							sched->jobs[i].mhosts[j].rank);
-
-                        gw_scheduler_print('I',"Job %i re-scheduled host: %-30s queue: %-15s\n",
-							sched->jobs[i].jid,
-							sched->hosts[h_id].name,
-							sched->jobs[i].mhosts[j].qname);
-
-                        gw_scheduler_job_del(sched,sched->jobs[i].jid);
-                        
-					    i = i - 1; /* Next job will be i, not i+1 */
-						break;	
-					}
-				}
-			}
-		}
-	}
-
-	params->dispached += dsp;
-	
-	return dsp;
-}					
-
+			
 /* ------------------------------------------------------------------------- */
 /* ------------------------------------------------------------------------- */
 /* ------------------------------------------------------------------------- */

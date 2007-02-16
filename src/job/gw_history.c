@@ -76,7 +76,8 @@ int gw_job_history_add(gw_history_t **job_history,
                        int          rank, 
                        char         *queue,
                        const char   *fork, 
-                       const char   *lrms, 
+                       const char   *lrms,
+                       const char   *lrms_type,
                        const char   *owner,
                        const char   *job_home, 
                        int          jid,
@@ -131,7 +132,6 @@ int gw_job_history_add(gw_history_t **job_history,
 	else/* Use the default Jobmanager!!!*/
     	new_record->em_rc = strdup(host->hostname);	
 
-    
     if ( fork != NULL )
     {
 	    sprintf(tmp,"%s/%s", host->hostname, fork);
@@ -166,8 +166,8 @@ int gw_job_history_add(gw_history_t **job_history,
             return -1;
         }
 
-        fprintf(file, "%s %d %s %s %s %d %s %s %s\n", host->hostname,
-                rank, queue, fork, lrms, host->nice,
+        fprintf(file, "%s %d %s %s %s %s %s %s %s\n", host->hostname,
+                rank, queue, fork, lrms, lrms_type,
                 host->em_mad, host->tm_mad, host->im_mad);
 
         fclose(file);

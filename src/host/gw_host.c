@@ -32,7 +32,7 @@
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 
-void gw_host_init(gw_host_t *host, char *hostname, int host_id, int nice,
+void gw_host_init(gw_host_t *host, char *hostname, int host_id, int fixed_priority,
         char *em_mad, char *tm_mad, char *im_mad)
 {
     int i;
@@ -41,9 +41,9 @@ void gw_host_init(gw_host_t *host, char *hostname, int host_id, int nice,
 
     pthread_mutex_lock(&(host->mutex));
 
-    host->hostname = strdup(hostname);
-    host->host_id  = host_id;
-    host->nice     = nice;
+    host->hostname       = strdup(hostname);
+    host->host_id        = host_id;
+    host->fixed_priority = fixed_priority;
 
     host->arch       = NULL;
     host->os_name    = NULL;
@@ -256,11 +256,11 @@ inline void gw_host_dec_rjobs(gw_host_t *host)
 
 /*----------------------------------------------------------------------------*/
 
-inline void gw_host_dec_uslots(gw_host_t *host)
+inline void gw_host_dec_uslots(gw_host_t *host, int slots)
 {
     pthread_mutex_lock(&(host->mutex));			
 
-	host->used_slots--;
+	host->used_slots-= slots;
 			
     gw_dm_mad_host_monitor(&gw_dm.dm_mad[0],
                            host->host_id,
@@ -273,11 +273,11 @@ inline void gw_host_dec_uslots(gw_host_t *host)
 
 /*----------------------------------------------------------------------------*/
 
-inline void gw_host_dec_slots(gw_host_t *host)
+inline void gw_host_dec_slots(gw_host_t *host, int slots)
 {
     pthread_mutex_lock(&(host->mutex));			
 
-	host->used_slots--;
+	host->used_slots-= slots;
 	
 	host->running_jobs--;
 				
@@ -310,11 +310,11 @@ inline void gw_host_inc_rjobs(gw_host_t *host)
 /*----------------------------------------------------------------------------*/
 
 
-inline void gw_host_inc_uslots(gw_host_t *host)
+inline void gw_host_inc_uslots(gw_host_t *host, int slots)
 {
     pthread_mutex_lock(&(host->mutex));			
 
-	host->used_slots++;
+	host->used_slots+= slots;
 			
     gw_dm_mad_host_monitor(&gw_dm.dm_mad[0],
                            host->host_id,
@@ -327,11 +327,11 @@ inline void gw_host_inc_uslots(gw_host_t *host)
 
 /*----------------------------------------------------------------------------*/
 
-inline void gw_host_inc_slots(gw_host_t *host)
+inline void gw_host_inc_slots(gw_host_t *host, int slots)
 {
     pthread_mutex_lock(&(host->mutex));			
 
-	host->used_slots++;
+	host->used_slots+= slots;
 	
 	host->running_jobs++;
 				
@@ -346,9 +346,9 @@ inline void gw_host_inc_slots(gw_host_t *host)
 
 /*----------------------------------------------------------------------------*/
 
-inline void gw_host_inc_slots_nb(gw_host_t *host)
+inline void gw_host_inc_slots_nb(gw_host_t *host, int slots)
 {
-	host->used_slots++;
+	host->used_slots+= slots;
 	
 	host->running_jobs++;
 				

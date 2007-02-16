@@ -74,4 +74,4 @@ dynamic_monitor (){
     rm -f $TMPFILE
 }
 
-. gw_im_mad_common.sh
+. $GW_LOCATION/bin/gw_im_mad_common.sh
