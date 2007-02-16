@@ -117,6 +117,8 @@ DB2HTMLC_TRUE = @DB2HTMLC_TRUE@
 DB2PDF = @DB2PDF@
 DB2PDFC_FALSE = @DB2PDFC_FALSE@
 DB2PDFC_TRUE = @DB2PDFC_TRUE@
+DB_FALSE = @DB_FALSE@
+DB_TRUE = @DB_TRUE@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
 DOC_FALSE = @DOC_FALSE@
@@ -143,6 +145,8 @@ JAVAC_PATH = @JAVAC_PATH@
 JAVADOC = @JAVADOC@
 JAVADOCC_FALSE = @JAVADOCC_FALSE@
 JAVADOCC_TRUE = @JAVADOCC_TRUE@
+JSDL_FALSE = @JSDL_FALSE@
+JSDL_TRUE = @JSDL_TRUE@
 LDFLAGS = @LDFLAGS@
 LEX = @LEX@
 LEXLIB = @LEXLIB@
@@ -657,43 +661,56 @@ install-exec-hook:
 	@cp -r LICENSE NOTICE @prefix@
 @DOC_TRUE@	@rm -rf @prefix@/doc
 @DOC_TRUE@	@mkdir -p @prefix@/doc
-@DOC_TRUE@	@cp -r doc/docbook/userguide \
-@DOC_TRUE@                   doc/docbook/appdeveloperguide \
-@DOC_TRUE@                   doc/docbook/commandreference \
-@DOC_TRUE@                   doc/docbook/gwdeveloperguide \
-@DOC_TRUE@                   doc/docbook/installconfguide \
-@DOC_TRUE@                   doc/images \
-@DOC_TRUE@                   doc/docbook/*.pdf \
-@DOC_TRUE@                   @prefix@/doc
-@DOC_TRUE@@DRMAA_TRUE@	@cp -r doc/drmaa_java doc/drmaa_c @prefix@/doc
+@DB2HTMLC_TRUE@@DOC_TRUE@	@cp -r doc/docbook/userguide \
+@DB2HTMLC_TRUE@@DOC_TRUE@           doc/docbook/appdeveloperguide \
+@DB2HTMLC_TRUE@@DOC_TRUE@           doc/docbook/commandreference \
+@DB2HTMLC_TRUE@@DOC_TRUE@           doc/docbook/gwdeveloperguide \
+@DB2HTMLC_TRUE@@DOC_TRUE@           doc/docbook/installconfguide \
+@DB2HTMLC_TRUE@@DOC_TRUE@           doc/images \
+@DB2HTMLC_TRUE@@DOC_TRUE@           @prefix@/doc
+@DB2PDFC_TRUE@@DOC_TRUE@	@cp -r doc/docbook/*.pdf \
+@DB2PDFC_TRUE@@DOC_TRUE@           @prefix@/doc
+
+@DOC_TRUE@@DOXYGENC_TRUE@@DRMAA_TRUE@	@cp -r doc/drmaa_c @prefix@/doc
+@DOC_TRUE@@DRMAA_TRUE@@JAVADOCC_TRUE@	@cp -r doc/drmaa_java @prefix@/doc
 
 	@rm -rf @prefix@/examples
 	@cp -r examples @prefix@/examples
 
-#if TESTS
-#	@rm -rf @prefix@/test
-#	@mkdir -p @prefix@/test
-#	@cp -r src/test/gwtest src/test/jt @prefix@/test
-#endif
+@TESTS_TRUE@	@rm -rf @prefix@/test
+@TESTS_TRUE@	@mkdir -p @prefix@/test
+@TESTS_TRUE@	@cp -r src/test/gwtest src/test/jt @prefix@/test
+
 # ------------------
 # -- Script renaming - Commons
 # -------------------
+
 	@mv @prefix@/bin/gw_im_mad_static.sh @prefix@/bin/gw_im_mad_static
 	@mv @prefix@/bin/gw_tm_mad_ftp.sh @prefix@/bin/gw_tm_mad_ftp
+
 # ------------------
 # -- Script renaming - WS
 # -------------------
+
 @WS_TRUE@	@mv @prefix@/bin/gw_em_mad_ws.sh @prefix@/bin/gw_em_mad_ws
 #	@mv @prefix@/bin/gw_tm_mad_rft.sh @prefix@/bin/gw_tm_mad_rft
 @WS_TRUE@	@mv @prefix@/bin/gw_im_mad_mds4.sh @prefix@/bin/gw_im_mad_mds4
+
 # ------------------
 # -- Script renaming - PREWS
 # -------------------
+
 @PREWS_TRUE@	@mv @prefix@/bin/gw_im_mad_mds2.sh @prefix@/bin/gw_im_mad_mds2
 @PREWS_TRUE@	@mv @prefix@/bin/gw_im_mad_mds2_glue.sh @prefix@/bin/gw_im_mad_mds2_glue
 @PREWS_TRUE@	@mv @prefix@/bin/gw_tm_mad_dummy.sh @prefix@/bin/gw_tm_mad_dummy
 
 @PREWS_TRUE@	@mv @prefix@/bin/gw_em_mad_prews.sh @prefix@/bin/gw_em_mad_prews
+
+# ------------------
+# -- Script renaming - PREWS
+# -------------------
+
+@JSDL_TRUE@	@mv @prefix@/bin/jsdl2gw.sh @prefix@/bin/jsdl2gw
 
 # ----------------------------
 # DIR LAYOUT
@@ -746,6 +763,7 @@ uninstall-hook:
 	@rm @prefix@/bin/gw_em_mad_prews
 	@rm @prefix@/bin/gw_im_mad_static
 	@rm @prefix@/bin/gw_tm_mad_dummy
+	@rm @prefix@/bin/jsdl2gw
 	@rm -rf @prefix@/var
 
 # ----------------------------
@@ -761,8 +779,8 @@ dist-hook:
 	@cp -r doc/docbook/*.css $(distdir)/doc/docbook
 	@cp -r doc/docbook/*.dsl $(distdir)/doc/docbook
 	@cp -r examples $(distdir)
-	@cp -r etc/im_examples $(distdir)/etc/
-#	@cp -r src/test/jt $(distdir)/src/test
+	@cp -r etc/im_examples $(distdir)/etc/	
+	@cp -r src/test/jt $(distdir)/src/test
 #-----------
 #    remove CVS DIRS
 #   	@find $(distdir) -name CVS -exec rm -r '{}' \

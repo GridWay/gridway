@@ -502,14 +502,15 @@ $ wsrf-query -x -s https://localhost:8443/wsrf/services/DefaultIndexService</scr
     <sect2>
     <title>Compilation Notes</title>
     <para>Not known issues</para>
+  </sect2>
 
+    <sect2>
     <title>Fedora Core</title>
-
       <para>
-!     There are issues with Fedora Core 4 and Sun's Java 1.4.2. Please upgrade to Java 1.5+ on these platforms.
+      There are issues with Fedora Core 4 and Sun's Java 1.4.2. Please upgrade to Java 1.5+ on these platforms.
       </para>
-
     </sect2>
+
   </sect1>
 
   <sect1>

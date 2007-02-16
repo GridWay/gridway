@@ -139,24 +139,52 @@ AC_ARG_ENABLE(ws,  AC_HELP_STRING([--disable-ws],\
 
 AM_CONDITIONAL(WS, test "x$ws" = "xws")
 
+# --- Disable JSDL  ---
+
+jsdl="jsdl"
+
+AC_ARG_ENABLE(jsdl,  AC_HELP_STRING([--disable-jsdl],\
+  [Don't build jsdl support. Default is enabled.]),\
+  [if test $enableval = "no"; then jsdl=" "; fi], [])
+
+AM_CONDITIONAL(JSDL, test "x$jsdl" = "xjsdl")
+
+# --- Enable Debug ---
+
+dbg=""
+
+AC_ARG_ENABLE(debug,  AC_HELP_STRING([--enable-debug],\
+  [Enable debug info in GW logs. Default is disabled.]),\
+  [CFLAGS="$CFLAGS -Wall -g -DGWIMDEBUG -DGWJOBDEBUG -DGWHOSTDEBUG -DGWEMDEBUG -DGWDMDEBUG  -DGWTMDEBUG -DGWUSERDEBUG -DGWSCHEDDEBUG";], [])
+
 # --- With DB ---
 
-AC_ARG_WITH(db,  AC_HELP_STRING([--with-db=<yes|no|path_to_db>],\
+db="db"
+
+LDFLAGS_SAVED=${LDFLAGS}
+LDFLAGS="${LDFLAGS} -L/usr/lib";
+DB4_INCLUDE_PATH="-I /usr/include"; 
+
+AC_ARG_WITH(db,  AC_HELP_STRING([--with-db=<no|path_to_db>],\
        [Build db support for accounting.]),\
-       [if test $withval="yes"; then \
-                        LDFLAGS="${LDFLAGS} -L/usr/lib"; \
-                        DB4_INCLUDE_PATH="-I /usr/include"; \
-        else if test $withval!="no"; then \
-                   LDFLAGS="${LDFLAGS} -L${withval}/lib"; \
-                   DB4_INCLUDE_PATH="-I ${withval}/include"; \
-             fi \
-        fi]  , [])
+       [if test $withval = "no"; then \
+           db=" "; \
+           LDFLAGS="${LDFLAGS_SAVED}"; \
+           DB4_INCLUDE_PATH=" "; \
+        else \
+		if test $withval != "yes" ; then \
+			LDFLAGS="${LDFLAGS_SAVED} -L${withval}/lib"; \
+            DB4_INCLUDE_PATH="-I ${withval}/include"; \
+		fi \
+ 		fi]  , [])
+        
+AM_CONDITIONAL(DB,test "x$db" = "xdb")
 
 # --- With documents ---
 
 doc="no"
 
-AC_ARG_WITH(doc,  AC_HELP_STRING([--with-doc=<yes|no>],\
+AC_ARG_WITH(doc,  AC_HELP_STRING([--with-doc],\
         [Build documentation]),\
         [if test $withval = "yes"; then doc="yes"; else doc="no"; fi], [])
 
@@ -226,7 +254,11 @@ AM_PROG_LEX
 #------------------------------------------------------------------------------
 
 AC_CHECK_LIB([pthread], [pthread_cond_wait])
+
+if test "x$db" = "xdb"; then
 AC_CHECK_LIB([db], [db_env_create])
+fi
+
 
 #------------------------------------------------------------------------------
 # Checks for header files.

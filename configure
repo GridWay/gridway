@@ -819,6 +819,10 @@ PREWS_TRUE
 PREWS_FALSE
 WS_TRUE
 WS_FALSE
+JSDL_TRUE
+JSDL_FALSE
+DB_TRUE
+DB_FALSE
 DB2HTML
 DB2HTMLC_TRUE
 DB2HTMLC_FALSE
@@ -1505,6 +1509,8 @@ Optional Features:
                           enabled.
   --disable-ws            Don't build web-services support. Default is
                           enabled.
+  --disable-jsdl          Don't build jsdl support. Default is enabled.
+  --enable-debug          Enable debug info in GW logs. Default is disabled.
   --enable-shared[=PKGS]  build shared libraries [default=yes]
   --enable-static[=PKGS]  build static libraries [default=yes]
   --enable-fast-install[=PKGS]
@@ -1517,9 +1523,9 @@ Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
   --with-flavor           Specify globus build flavor (eg. gcc32dbg)
-  --with-db=<yes|no|path_to_db>
+  --with-db=<no|path_to_db>
                           Build db support for accounting.
-  --with-doc=<yes|no>     Build documentation
+  --with-doc              Build documentation
   --with-tests            Build GridWay test suite
   --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
   --with-pic              try to use only PIC/non-PIC objects [default=use
@@ -2216,20 +2222,72 @@ else
 fi
 
 
+# --- Disable JSDL  ---
+
+jsdl="jsdl"
+
+# Check whether --enable-jsdl was given.
+if test "${enable_jsdl+set}" = set; then
+  enableval=$enable_jsdl; \
+  if test $enableval = "no"; then jsdl=" "; fi
+fi
+
+
+
+
+if test "x$jsdl" = "xjsdl"; then
+  JSDL_TRUE=
+  JSDL_FALSE='#'
+else
+  JSDL_TRUE='#'
+  JSDL_FALSE=
+fi
+
+
+# --- Enable Debug ---
+
+dbg=""
+
+# Check whether --enable-debug was given.
+if test "${enable_debug+set}" = set; then
+  enableval=$enable_debug; \
+  CFLAGS="$CFLAGS -Wall -g -DGWIMDEBUG -DGWJOBDEBUG -DGWHOSTDEBUG -DGWEMDEBUG -DGWDMDEBUG  -DGWTMDEBUG -DGWUSERDEBUG -DGWSCHEDDEBUG";
+fi
+
+
 # --- With DB ---
+
+db="db"
+
+LDFLAGS_SAVED=${LDFLAGS}
+LDFLAGS="${LDFLAGS} -L/usr/lib";
+DB4_INCLUDE_PATH="-I /usr/include";
 
 
 # Check whether --with-db was given.
 if test "${with_db+set}" = set; then
   withval=$with_db; \
-       if test $withval="yes"; then \
-                        LDFLAGS="${LDFLAGS} -L/usr/lib"; \
-                        DB4_INCLUDE_PATH="-I /usr/include"; \
-        else if test $withval!="no"; then \
-                   LDFLAGS="${LDFLAGS} -L${withval}/lib"; \
-                   DB4_INCLUDE_PATH="-I ${withval}/include"; \
-             fi \
-        fi
+       if test $withval = "no"; then \
+           db=" "; \
+           LDFLAGS="${LDFLAGS_SAVED}"; \
+           DB4_INCLUDE_PATH=" "; \
+        else \
+		if test $withval != "yes" ; then \
+			LDFLAGS="${LDFLAGS_SAVED} -L${withval}/lib"; \
+            DB4_INCLUDE_PATH="-I ${withval}/include"; \
+		fi \
+ 		fi
+fi
+
+
+
+
+if test "x$db" = "xdb"; then
+  DB_TRUE=
+  DB_FALSE='#'
+else
+  DB_TRUE='#'
+  DB_FALSE=
 fi
 
 
@@ -4292,7 +4350,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 4295 "configure"' > conftest.$ac_ext
+  echo '#line 4353 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -6890,6 +6948,10 @@ _lt_linker_boilerplate=`cat conftest.err`
 $rm conftest*
 
 
+## CAVEAT EMPTOR:
+## There is no encapsulation within the following macros, do not change
+## the running order or otherwise move them around unless you know exactly
+## what you are doing...
 
 lt_prog_compiler_no_builtin_flag=
 
@@ -6915,11 +6977,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6918: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6980: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:6922: \$? = $ac_status" >&5
+   echo "$as_me:6984: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7183,11 +7245,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7186: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7248: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7190: \$? = $ac_status" >&5
+   echo "$as_me:7252: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7287,11 +7349,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7290: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7352: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:7294: \$? = $ac_status" >&5
+   echo "$as_me:7356: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -9584,7 +9646,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 9587 "configure"
+#line 9649 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -9684,7 +9746,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 9687 "configure"
+#line 9749 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -11587,6 +11649,10 @@ test "$ld_shlibs_CXX" = no && can_build_shared=no
 GCC_CXX="$GXX"
 LD_CXX="$LD"
 
+## CAVEAT EMPTOR:
+## There is no encapsulation within the following macros, do not change
+## the running order or otherwise move them around unless you know exactly
+## what you are doing...
 
 cat > conftest.$ac_ext <<EOF
 class Foo
@@ -12020,11 +12086,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:12023: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:12089: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:12027: \$? = $ac_status" >&5
+   echo "$as_me:12093: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -12124,11 +12190,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:12127: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:12193: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:12131: \$? = $ac_status" >&5
+   echo "$as_me:12197: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -13685,11 +13751,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13688: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13754: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:13692: \$? = $ac_status" >&5
+   echo "$as_me:13758: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -13789,11 +13855,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13792: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13858: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:13796: \$? = $ac_status" >&5
+   echo "$as_me:13862: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -15951,6 +16017,10 @@ archive_cmds_need_lc_GCJ=no
 
 old_archive_cmds_GCJ=$old_archive_cmds
 
+## CAVEAT EMPTOR:
+## There is no encapsulation within the following macros, do not change
+## the running order or otherwise move them around unless you know exactly
+## what you are doing...
 
 lt_prog_compiler_no_builtin_flag_GCJ=
 
@@ -15976,11 +16046,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15979: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16049: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15983: \$? = $ac_status" >&5
+   echo "$as_me:16053: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16244,11 +16314,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16247: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16317: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16251: \$? = $ac_status" >&5
+   echo "$as_me:16321: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16348,11 +16418,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16351: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16421: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:16355: \$? = $ac_status" >&5
+   echo "$as_me:16425: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -20139,6 +20209,8 @@ _ACEOF
 fi
 
 
+if test "x$db" = "xdb"; then
+
 { echo "$as_me:$LINENO: checking for db_env_create in -ldb" >&5
 echo $ECHO_N "checking for db_env_create in -ldb... $ECHO_C" >&6; }
 if test "${ac_cv_lib_db_db_env_create+set}" = set; then
@@ -20206,6 +20278,8 @@ if test $ac_cv_lib_db_db_env_create = yes; then
 _ACEOF
 
   LIBS="-ldb $LIBS"
+
+fi
 
 fi
 
@@ -24612,6 +24686,20 @@ echo "$as_me: error: conditional \"WS\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
+if test -z "${JSDL_TRUE}" && test -z "${JSDL_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"JSDL\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"JSDL\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${DB_TRUE}" && test -z "${DB_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"DB\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"DB\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
 if test -z "${DB2HTMLC_TRUE}" && test -z "${DB2HTMLC_FALSE}"; then
   { { echo "$as_me:$LINENO: error: conditional \"DB2HTMLC\" was never defined.
 Usually this means the macro was only invoked conditionally." >&5
@@ -25282,6 +25370,10 @@ PREWS_TRUE!$PREWS_TRUE$ac_delim
 PREWS_FALSE!$PREWS_FALSE$ac_delim
 WS_TRUE!$WS_TRUE$ac_delim
 WS_FALSE!$WS_FALSE$ac_delim
+JSDL_TRUE!$JSDL_TRUE$ac_delim
+JSDL_FALSE!$JSDL_FALSE$ac_delim
+DB_TRUE!$DB_TRUE$ac_delim
+DB_FALSE!$DB_FALSE$ac_delim
 DB2HTML!$DB2HTML$ac_delim
 DB2HTMLC_TRUE!$DB2HTMLC_TRUE$ac_delim
 DB2HTMLC_FALSE!$DB2HTMLC_FALSE$ac_delim
@@ -25326,10 +25418,6 @@ ac_ct_CXX!$ac_ct_CXX$ac_delim
 CXXCPP!$CXXCPP$ac_delim
 F77!$F77$ac_delim
 FFLAGS!$FFLAGS$ac_delim
-ac_ct_F77!$ac_ct_F77$ac_delim
-LIBTOOL!$LIBTOOL$ac_delim
-SET_MAKE!$SET_MAKE$ac_delim
-JAVAC_PATH!$JAVAC_PATH$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -25371,6 +25459,10 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+ac_ct_F77!$ac_ct_F77$ac_delim
+LIBTOOL!$LIBTOOL$ac_delim
+SET_MAKE!$SET_MAKE$ac_delim
+JAVAC_PATH!$JAVAC_PATH$ac_delim
 INSTALL_PROGRAM!$INSTALL_PROGRAM$ac_delim
 INSTALL_SCRIPT!$INSTALL_SCRIPT$ac_delim
 INSTALL_DATA!$INSTALL_DATA$ac_delim
@@ -25409,7 +25501,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 36; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 40; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5

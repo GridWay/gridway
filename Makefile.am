@@ -31,43 +31,60 @@ install-exec-hook:
 if DOC
 	@rm -rf @prefix@/doc
 	@mkdir -p @prefix@/doc
+if DB2HTMLC
 	@cp -r doc/docbook/userguide \
-                   doc/docbook/appdeveloperguide \
-                   doc/docbook/commandreference \
-                   doc/docbook/gwdeveloperguide \
-                   doc/docbook/installconfguide \
-                   doc/images \
-                   doc/docbook/*.pdf \
-                   @prefix@/doc
+           doc/docbook/appdeveloperguide \
+           doc/docbook/commandreference \
+           doc/docbook/gwdeveloperguide \
+           doc/docbook/installconfguide \
+           doc/images \
+           @prefix@/doc
+endif
+if DB2PDFC         
+	@cp -r doc/docbook/*.pdf \
+           @prefix@/doc
+endif                              
+
 if DRMAA
-	@cp -r doc/drmaa_java doc/drmaa_c @prefix@/doc
+if DOXYGENC
+	@cp -r doc/drmaa_c @prefix@/doc
+endif
+if JAVADOCC
+	@cp -r doc/drmaa_java @prefix@/doc
+endif		
 endif
 endif
 
 	@rm -rf @prefix@/examples
 	@cp -r examples @prefix@/examples
 
-#if TESTS
-#	@rm -rf @prefix@/test
-#	@mkdir -p @prefix@/test
-#	@cp -r src/test/gwtest src/test/jt @prefix@/test
-#endif
+if TESTS
+	@rm -rf @prefix@/test
+	@mkdir -p @prefix@/test
+	@cp -r src/test/gwtest src/test/jt @prefix@/test
+endif
+
 # ------------------
 # -- Script renaming - Commons
 # -------------------
+
 	@mv @prefix@/bin/gw_im_mad_static.sh @prefix@/bin/gw_im_mad_static
 	@mv @prefix@/bin/gw_tm_mad_ftp.sh @prefix@/bin/gw_tm_mad_ftp
+
 # ------------------
 # -- Script renaming - WS
 # -------------------
+
 if WS
 	@mv @prefix@/bin/gw_em_mad_ws.sh @prefix@/bin/gw_em_mad_ws
 #	@mv @prefix@/bin/gw_tm_mad_rft.sh @prefix@/bin/gw_tm_mad_rft
 	@mv @prefix@/bin/gw_im_mad_mds4.sh @prefix@/bin/gw_im_mad_mds4
 endif
+
 # ------------------
 # -- Script renaming - PREWS
 # -------------------
+
 if PREWS
 	@mv @prefix@/bin/gw_im_mad_mds2.sh @prefix@/bin/gw_im_mad_mds2
 	@mv @prefix@/bin/gw_im_mad_mds2_glue.sh @prefix@/bin/gw_im_mad_mds2_glue
@@ -75,6 +92,14 @@ if PREWS
 
 	@mv @prefix@/bin/gw_em_mad_prews.sh @prefix@/bin/gw_em_mad_prews
 
+endif
+
+# ------------------
+# -- Script renaming - PREWS
+# -------------------
+
+if JSDL
+	@mv @prefix@/bin/jsdl2gw.sh @prefix@/bin/jsdl2gw
 endif
 
 # ----------------------------
@@ -128,6 +153,7 @@ uninstall-hook:
 	@rm @prefix@/bin/gw_em_mad_prews
 	@rm @prefix@/bin/gw_im_mad_static
 	@rm @prefix@/bin/gw_tm_mad_dummy
+	@rm @prefix@/bin/jsdl2gw
 	@rm -rf @prefix@/var
 
 # ----------------------------
@@ -143,8 +169,8 @@ dist-hook:
 	@cp -r doc/docbook/*.css $(distdir)/doc/docbook
 	@cp -r doc/docbook/*.dsl $(distdir)/doc/docbook
 	@cp -r examples $(distdir)
-	@cp -r etc/im_examples $(distdir)/etc/
-#	@cp -r src/test/jt $(distdir)/src/test
+	@cp -r etc/im_examples $(distdir)/etc/	
+	@cp -r src/test/jt $(distdir)/src/test
 #-----------
 #    remove CVS DIRS
 #   	@find $(distdir) -name CVS -exec rm -r '{}' \

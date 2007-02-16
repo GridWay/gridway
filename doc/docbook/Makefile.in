@@ -94,6 +94,8 @@ DB2HTMLC_TRUE = @DB2HTMLC_TRUE@
 DB2PDF = @DB2PDF@
 DB2PDFC_FALSE = @DB2PDFC_FALSE@
 DB2PDFC_TRUE = @DB2PDFC_TRUE@
+DB_FALSE = @DB_FALSE@
+DB_TRUE = @DB_TRUE@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
 DOC_FALSE = @DOC_FALSE@
@@ -120,6 +122,8 @@ JAVAC_PATH = @JAVAC_PATH@
 JAVADOC = @JAVADOC@
 JAVADOCC_FALSE = @JAVADOCC_FALSE@
 JAVADOCC_TRUE = @JAVADOCC_TRUE@
+JSDL_FALSE = @JSDL_FALSE@
+JSDL_TRUE = @JSDL_TRUE@
 LDFLAGS = @LDFLAGS@
 LEX = @LEX@
 LEXLIB = @LEXLIB@
@@ -371,17 +375,18 @@ images:
 
 all: $(TARGETS)
 
-pdfs: images appdeveloperguide.pdf  gwdeveloperguide.pdf \
+pdfs: images appdeveloperguide.pdf gwdeveloperguide.pdf \
         installconfguide.pdf  userguide.pdf \
-        commandreference.pdf
+        commandreference.pdf egeehowto.pdf
 
 htmls: images appdeveloperguide.html  \
         gwdeveloperguide.html  \
         installconfguide.html  \
-        userguide.html commandreference.html
+        userguide.html commandreference.html \
+        egeehowto.html
 
 clean:
-	rm -rf userguide appdeveloperguide commandreference gwdeveloperguide installconfguide *.junk *~ *.pdf images
+	rm -rf userguide appdeveloperguide commandreference gwdeveloperguide installconfguide egeehowto *.junk *~ *.pdf images
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

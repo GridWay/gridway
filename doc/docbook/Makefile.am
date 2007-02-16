@@ -39,14 +39,15 @@ endif
 
 all: $(TARGETS)
 
-pdfs: images appdeveloperguide.pdf  gwdeveloperguide.pdf \
+pdfs: images appdeveloperguide.pdf gwdeveloperguide.pdf \
         installconfguide.pdf  userguide.pdf \
-        commandreference.pdf
+        commandreference.pdf egeehowto.pdf
 
 htmls: images appdeveloperguide.html  \
         gwdeveloperguide.html  \
         installconfguide.html  \
-        userguide.html commandreference.html
+        userguide.html commandreference.html \
+        egeehowto.html
 
 clean:
-	rm -rf userguide appdeveloperguide commandreference gwdeveloperguide installconfguide *.junk *~ *.pdf images
+	rm -rf userguide appdeveloperguide commandreference gwdeveloperguide installconfguide egeehowto *.junk *~ *.pdf images
