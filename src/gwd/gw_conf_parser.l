@@ -251,9 +251,7 @@ int gcp_wrap(void)
 int gw_conf_lex_parser ()
 {
     int rc;
-	
-    gw_log_print("GW",'I',"gwd.conf: Loading configuration, file %s\n",gw_conf.conf_file);
-    
+	    
     gcp_lineno = 0;
     yyin = fopen (gw_conf.conf_file,"r");
 

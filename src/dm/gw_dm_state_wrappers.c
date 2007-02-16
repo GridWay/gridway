@@ -195,7 +195,7 @@ void gw_dm_wrapper_done_cb ( void *_job_id )
 
     		/* -------------- Free used slot from this host -------------- */
 
-            gw_host_dec_uslots(job->history->host);
+            gw_host_dec_uslots(job->history->host, job->template.np);
             
     		/* ---------- We do not need to re-schedule this job --------- */
     				    
@@ -205,10 +205,14 @@ void gw_dm_wrapper_done_cb ( void *_job_id )
 			    gw_dm_mad_job_del(&gw_dm.dm_mad[0],job->id);				
 			}
 			            		                
-    		/* -------------- Transition to Epilog state ------------------ */
-    				    
-			gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_EPILOG_STD", _job_id);			
-    		break;
+    	    /* -------------- Transition to Epilog state ------------------ */
+            if ( job->template.type != GW_JOB_TYPE_MPI
+                    && strcmp(job->history->host->lrms_type, "gw") != 0
+		    && job->template.wrapper != NULL )
+                gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_EPILOG_STD", _job_id);			
+            else
+                gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_EPILOG", _job_id);
+            break;
     	
     	case GW_JOB_STATE_STOP_CANCEL:
     	
@@ -227,7 +231,7 @@ void gw_dm_wrapper_done_cb ( void *_job_id )
 
     		/* -------------- Free used slot from this host -------------- */
     		
-    		gw_host_dec_uslots(job->history->host);
+    		gw_host_dec_uslots(job->history->host, job->template.np);
 			    		
     		/* ------------ Transition to Stop Epilog state --------------- */
     		
@@ -251,7 +255,7 @@ void gw_dm_wrapper_done_cb ( void *_job_id )
 
     		/* -------------- Free used slot from this host -------------- */
 
-            gw_host_dec_uslots(job->history->host);
+            gw_host_dec_uslots(job->history->host, job->template.np);
 			            
     		/* ------------ Transition to Kill Epilog state ---------------- */
     		
@@ -273,7 +277,7 @@ void gw_dm_wrapper_done_cb ( void *_job_id )
 
     		/* -------------- Free used slot from previous host ------------ */
     		
-            gw_host_dec_uslots(job->history->next->host);
+            gw_host_dec_uslots(job->history->next->host, job->template.np);
 	    			    
     		/* ---------- Transition to Migration Prolog state ------------ */
     		
@@ -376,7 +380,7 @@ void gw_dm_wrapper_failed_cb ( void *_job_id )
 	if (job->history != NULL)
 	{
 		job->history->reason = GW_REASON_EXECUTION_ERROR;
-        gw_host_dec_uslots(job->history->host);
+        gw_host_dec_uslots(job->history->host, job->template.np);
 	}		
    	
    	/* ----------------------------------------------------------- */

@@ -22,6 +22,8 @@
 #include "gw_conf.h"
 #include "gw_log.h"
 #include "gw_common.h"
+#include "gw_job.h"
+
 #include <unistd.h>
 #include <pwd.h>
 
@@ -50,6 +52,7 @@ int  gw_conf_init (gw_boolean_t multiuser)
     loc_length = strlen(gw_conf.gw_location);
     
     gw_conf.conf_file        = (char *) malloc (sizeof(char) * (loc_length + 14));
+    gw_conf.sch_conf_file    = (char *) malloc (sizeof(char) * (loc_length + 16));
     gw_conf.template_default = (char *) malloc (sizeof(char) * (loc_length + 26));
     gw_conf.gw_globus_seg    = (char *) malloc (sizeof(char) * (loc_length + 19));
     gw_conf.gw_acct          = (char *) malloc (sizeof(char) * (loc_length + 14));
@@ -62,7 +65,8 @@ int  gw_conf_init (gw_boolean_t multiuser)
            return -1;
     }
         
-    sprintf(gw_conf.conf_file,"%s/etc/gwd.conf",gw_conf.gw_location);    
+    sprintf(gw_conf.conf_file,"%s/etc/gwd.conf",gw_conf.gw_location);
+    sprintf(gw_conf.sch_conf_file,"%s/etc/sched.conf",gw_conf.gw_location);    
     sprintf(gw_conf.template_default,"%s/etc/job_template.default",gw_conf.gw_location);
     sprintf(gw_conf.gw_globus_seg,"%s/var/globus-gw.log", gw_conf.gw_location);
     sprintf(gw_conf.gw_acct,"%s/var/acct/", gw_conf.gw_location);
@@ -121,6 +125,10 @@ int  gw_conf_init (gw_boolean_t multiuser)
         gw_conf.dm_mad[j]  = NULL;                
     }    
 
+    /* Built-int scheduling policies */
+    
+    gw_sch_conf_init (&(gw_conf.sch_conf));
+    
     return 0;
 }
 
@@ -138,28 +146,29 @@ int gw_loadconf ()
     if ( rc != 0 )
         return rc;
 
-    gw_log_print("GW",'I',"gwd.conf: Configuration files successfully loaded\n");
-    gw_log_print("GW",'I'," ----------- gwd.conf values -----------\n");
-    gw_log_print("GW",'I',"  GWD_PORT                         : %i\n",gw_conf.gwd_port);
-    gw_log_print("GW",'I',"  MAX_NUMBER_OF_CLIENTS            : %i\n",gw_conf.max_number_of_clients);
-    gw_log_print("GW",'I',"  NUMBER_OF_ARRAYS                 : %i\n",gw_conf.number_of_arrays);
-    gw_log_print("GW",'I',"  NUMBER_OF_JOBS                   : %i\n",gw_conf.number_of_jobs);
-    gw_log_print("GW",'I',"  NUMBER_OF_HOSTS                  : %i\n",gw_conf.number_of_hosts);
-    gw_log_print("GW",'I',"  NUMBER_OF_USERS                  : %i\n",gw_conf.number_of_users);
-    gw_log_print("GW",'I',"  SCHEDULING_INTERVAL              : %i\n",gw_conf.scheduling_interval);
-    gw_log_print("GW",'I',"  DISCOVERY_INTERVAL               : %i\n",gw_conf.discovery_interval);
-    gw_log_print("GW",'I',"  MONITORING_INTERVAL              : %i\n",gw_conf.monitoring_interval);
-    gw_log_print("GW",'I',"  POLL_INTERVAL                    : %i\n",gw_conf.poll_interval);
+    gw_log_print("GW",'I'," ---------------------------------------------------\n");
+    gw_log_print("GW",'I',"                   gwd.conf values                  \n");
+    gw_log_print("GW",'I'," ---------------------------------------------------\n");
+    gw_log_print("GW",'I',"  Core configuration attributes                     \n");    
+    gw_log_print("GW",'I',"    GWD_PORT                 : %i\n",gw_conf.gwd_port);
+    gw_log_print("GW",'I',"    MAX_NUMBER_OF_CLIENTS    : %i\n",gw_conf.max_number_of_clients);
+    gw_log_print("GW",'I',"    NUMBER_OF_ARRAYS         : %i\n",gw_conf.number_of_arrays);
+    gw_log_print("GW",'I',"    NUMBER_OF_JOBS           : %i\n",gw_conf.number_of_jobs);
+    gw_log_print("GW",'I',"    NUMBER_OF_HOSTS          : %i\n",gw_conf.number_of_hosts);
+    gw_log_print("GW",'I',"    NUMBER_OF_USERS          : %i\n",gw_conf.number_of_users);
+    gw_log_print("GW",'I',"    SCHEDULING_INTERVAL      : %i\n",gw_conf.scheduling_interval);
+    gw_log_print("GW",'I',"    DISCOVERY_INTERVAL       : %i\n",gw_conf.discovery_interval);
+    gw_log_print("GW",'I',"    MONITORING_INTERVAL      : %i\n",gw_conf.monitoring_interval);
+    gw_log_print("GW",'I',"    POLL_INTERVAL            : %i\n",gw_conf.poll_interval);
 
     gw_log_print("GW",'I',"  Information Manager MADs\n");  
     while ( (gw_conf.im_mads[i][0] != NULL ) && ( i < GW_MAX_MADS ) )
     {
-        gw_log_print("GW",'I',"    MAD(%-1i)  name      : %s\n",i,GWNSTR(gw_conf.im_mads[i][GW_MAD_NAME_INDEX]));
-        gw_log_print("GW",'I',"            executable: %s\n",GWNSTR(gw_conf.im_mads[i][GW_MAD_PATH_INDEX]));
-        gw_log_print("GW",'I',"            argument  : %s\n",GWNSTR(gw_conf.im_mads[i][GW_MAD_ARGS_INDEX]));
-        gw_log_print("GW",'I',"            nice      : %s\n",GWNSTR(gw_conf.im_mads[i][GW_MAD_NICE_INDEX]));
-        gw_log_print("GW",'I',"            TM        : %s\n",GWNSTR(gw_conf.im_mads[i][GW_MAD_TM_INDEX]));
-        gw_log_print("GW",'I',"            EM        : %s\n",GWNSTR(gw_conf.im_mads[i][GW_MAD_EM_INDEX]));
+        gw_log_print("GW",'I',"    MAD(%-1i)  name  : %s\n",i,GWNSTR(gw_conf.im_mads[i][GW_MAD_NAME_INDEX]));
+        gw_log_print("GW",'I',"        executable: %s\n",GWNSTR(gw_conf.im_mads[i][GW_MAD_PATH_INDEX]));
+        gw_log_print("GW",'I',"        argument  : %s\n",GWNSTR(gw_conf.im_mads[i][GW_MAD_ARGS_INDEX]));
+        gw_log_print("GW",'I',"        TM        : %s\n",GWNSTR(gw_conf.im_mads[i][GW_MAD_TM_INDEX]));
+        gw_log_print("GW",'I',"        EM        : %s\n",GWNSTR(gw_conf.im_mads[i][GW_MAD_EM_INDEX]));
         i++;
     }
 
@@ -168,9 +177,9 @@ int gw_loadconf ()
   
     while ( (gw_conf.tm_mads[i][0] != NULL ) && ( i < GW_MAX_MADS ) )
     {
-        gw_log_print("GW",'I',"    MAD(%-1i)  name      : %s\n",i,GWNSTR(gw_conf.tm_mads[i][GW_MAD_NAME_INDEX]));
-        gw_log_print("GW",'I',"            executable: %s\n",GWNSTR(gw_conf.tm_mads[i][GW_MAD_PATH_INDEX]));
-        gw_log_print("GW",'I',"            argument  : %s\n",GWNSTR(gw_conf.tm_mads[i][GW_MAD_ARGS_INDEX]));
+        gw_log_print("GW",'I',"    MAD(%-1i)  name  : %s\n",i,GWNSTR(gw_conf.tm_mads[i][GW_MAD_NAME_INDEX]));
+        gw_log_print("GW",'I',"        executable: %s\n",GWNSTR(gw_conf.tm_mads[i][GW_MAD_PATH_INDEX]));
+        gw_log_print("GW",'I',"        argument  : %s\n",GWNSTR(gw_conf.tm_mads[i][GW_MAD_ARGS_INDEX]));
         i++;
     }
 
@@ -179,17 +188,93 @@ int gw_loadconf ()
   
     while ( (gw_conf.em_mads[i][0] != NULL ) && ( i < GW_MAX_MADS ) )
     {
-        gw_log_print("GW",'I',"    MAD(%-1i)  name      : %s\n",i,GWNSTR(gw_conf.em_mads[i][GW_MAD_NAME_INDEX]));
-        gw_log_print("GW",'I',"            executable: %s\n",GWNSTR(gw_conf.em_mads[i][GW_MAD_PATH_INDEX]));    
-        gw_log_print("GW",'I',"            argument  : %s\n",GWNSTR(gw_conf.em_mads[i][GW_MAD_ARGS_INDEX]));    
+        gw_log_print("GW",'I',"    MAD(%-1i)  name  : %s\n",i,GWNSTR(gw_conf.em_mads[i][GW_MAD_NAME_INDEX]));
+        gw_log_print("GW",'I',"        executable: %s\n",GWNSTR(gw_conf.em_mads[i][GW_MAD_PATH_INDEX]));    
+        gw_log_print("GW",'I',"        argument  : %s\n",GWNSTR(gw_conf.em_mads[i][GW_MAD_ARGS_INDEX]));    
         i++;
     }
   
     gw_log_print("GW",'I',"  Dispatch Manager Scheduler\n");
-    gw_log_print("GW",'I',"            name      : %s\n",GWNSTR(gw_conf.dm_mad[GW_MAD_NAME_INDEX]));
-    gw_log_print("GW",'I',"            executable: %s\n",GWNSTR(gw_conf.dm_mad[GW_MAD_PATH_INDEX]));    
-    gw_log_print("GW",'I',"            argument  : %s\n",GWNSTR(gw_conf.dm_mad[GW_MAD_ARGS_INDEX]));    
+    gw_log_print("GW",'I',"        name      : %s\n",GWNSTR(gw_conf.dm_mad[GW_MAD_NAME_INDEX]));
+    gw_log_print("GW",'I',"        executable: %s\n",GWNSTR(gw_conf.dm_mad[GW_MAD_PATH_INDEX]));    
+    gw_log_print("GW",'I',"        argument  : %s\n",GWNSTR(gw_conf.dm_mad[GW_MAD_ARGS_INDEX]));    
   
-    gw_log_print("GW",'I'," ---------------------------------------\n");
+    gw_log_print("GW",'I'," ---------------------------------------------------\n");
+    
+    
+    rc = gw_sch_loadconf(&(gw_conf.sch_conf), gw_conf.sch_conf_file);
+    
+    if (rc != 0 )
+    	return rc;
+    	
+	gw_log_print("GW",'I',"            sched.conf built-in policies\n");
+	gw_log_print("GW",'I'," ---------------------------------------------------\n");
+    gw_log_print("GW",'I',"  Scheduler configuration attributes                \n");    
+    gw_log_print("GW",'I',"    DISABLE                  : %s\n",gw_conf.sch_conf.disable?"yes":"no");
+    gw_log_print("GW",'I',"    DISPATCH_CHUNK           : %i\n",gw_conf.sch_conf.max_dispatch);
+    gw_log_print("GW",'I',"    MAX_RUNNING_USER         : %i\n",gw_conf.sch_conf.max_user);
+    gw_log_print("GW",'I',"    MAX_RUNNING_RESOURCE     : %i\n",gw_conf.sch_conf.max_resource);
+	
+	gw_log_print("GW",'I',"  Job Fixed Priority Policy\n");
+	gw_log_print("GW",'I',"    FP_WEIGHT                : %-8.2f\n",gw_conf.sch_conf.wfixed);	
+	gw_log_print("GW",'I',"    Fixed Priority Values (users)\n");
+	gw_log_print("GW",'I',"      DEFAULT                : %i\n",gw_conf.sch_conf.ufixed_default);	
+	for (i = 0 ; i < gw_conf.sch_conf.nufixed ; i++)
+		gw_log_print("GW",'I',"      %-16s       : %i\n",gw_conf.sch_conf.ufixed[i].name,gw_conf.sch_conf.ufixed[i].value);
+	
+	if ( gw_conf.sch_conf.ngfixed > 0 )
+	{
+	    gw_log_print("GW",'I',"    Fixed Priority Values (groups)\n");
+	    for (i = 0 ; i < gw_conf.sch_conf.ngfixed ; i++)
+		    gw_log_print("GW",'I',"      %-16s       : %i\n",gw_conf.sch_conf.gfixed[i].name,gw_conf.sch_conf.gfixed[i].value);
+	}
+
+	gw_log_print("GW",'I',"  Job Share Policy\n");
+	gw_log_print("GW",'I',"    SH_WEIGHT (share)        : %-8.2f\n",gw_conf.sch_conf.wshare);
+	gw_log_print("GW",'I',"    SH_WINDOW_SIZE           : %-8.2f\n",gw_conf.sch_conf.window_size);
+	gw_log_print("GW",'I',"    SH_WINDOW_DEPTH          : %i\n",gw_conf.sch_conf.window_depth);	
+	gw_log_print("GW",'I',"    User Shares\n");
+	gw_log_print("GW",'I',"      DEFAULT                : %i\n",gw_conf.sch_conf.ushare_default);	
+	for (i = 0 ; i < gw_conf.sch_conf.nushare ; i++)
+		gw_log_print("GW",'I',"      %-16s       : %i\n",gw_conf.sch_conf.ushare[i].name,gw_conf.sch_conf.ushare[i].value);
+
+	gw_log_print("GW",'I',"  Job Waiting time Policy\n");
+	gw_log_print("GW",'I',"    WT_WEIGHT                : %-8.2f\n",gw_conf.sch_conf.wwaiting);
+
+	gw_log_print("GW",'I',"  Job Deadline Policy\n");
+	gw_log_print("GW",'I',"    DL_WEIGHT (deadline)     : %-8.2f\n",gw_conf.sch_conf.wdeadline);
+	gw_log_print("GW",'I',"    DL_HALF                  : %i\n",gw_conf.sch_conf.dl_half);
+	
+
+	gw_log_print("GW",'I',"  Resource Fixed Priority Policy\n");
+	gw_log_print("GW",'I',"    RP_WEIGHT                : %-8.2f\n",gw_conf.sch_conf.wrfixed);
+	gw_log_print("GW",'I',"    Fixed Priority Values (information managers)\n");
+	gw_log_print("GW",'I',"      DEFAULT                : %i\n",gw_conf.sch_conf.rfixed_default);
+	for (i = 0 ; i < gw_conf.sch_conf.nifixed ; i++)
+		gw_log_print("GW",'I',"      %-23s: %i\n",gw_conf.sch_conf.ifixed[i].name,gw_conf.sch_conf.ifixed[i].value);
+	
+	if ( gw_conf.sch_conf.nhfixed > 0 )
+	{
+	    gw_log_print("GW",'I',"    Fixed Priority Values (hosts)\n");
+	    for (i = 0 ; i < gw_conf.sch_conf.nhfixed ; i++)
+		    gw_log_print("GW",'I',"      %-23s: %i\n",gw_conf.sch_conf.hfixed[i].name,gw_conf.sch_conf.hfixed[i].value);
+	}
+	
+	gw_log_print("GW",'I',"  Resource Failure Rate Policy\n");
+	gw_log_print("GW",'I',"    RA_WEIGHT                : %-8.2f\n",gw_conf.sch_conf.wrank);
+	
+		
+	gw_log_print("GW",'I',"  Resource Failure Rank Policy\n");	
+	gw_log_print("GW",'I',"    FR_MAX_BANNED            : %i\n",gw_conf.sch_conf.fr_max_banned);
+	gw_log_print("GW",'I',"    FR_BANNED_C              : %-8.2f\n",gw_conf.sch_conf.fr_banned_c);
+	
+	gw_log_print("GW",'I',"  Resource Usage Policy\n");	
+	gw_log_print("GW",'I',"    UG_WEIGHT                : %-8.2f\n",gw_conf.sch_conf.wusage);
+	gw_log_print("GW",'I',"    UG_HISTORY_WINDOW        : %-8.2f\n",gw_conf.sch_conf.ug_window);
+	gw_log_print("GW",'I',"    UG_HISTORY_RATIO         : %-8.2f\n",gw_conf.sch_conf.ug_ratio);	
+	
+    gw_log_print("GW",'I'," ---------------------------------------------------\n");
+        	
     return 0;
 }
+

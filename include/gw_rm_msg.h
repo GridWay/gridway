@@ -105,7 +105,8 @@ typedef struct gw_msg_s
 	gw_msg_wait_type_t wait_type;
 	
     char owner[GW_MSG_STRING_SHORT];
-
+	char group[GW_MSG_STRING_SHORT];
+	
 	int	      init_state;	
     gw_template_t jt;
 
@@ -116,6 +117,8 @@ typedef struct gw_msg_s
     
     int pstart;
     int pinc;
+    
+    int fixed_priority;
     
 } gw_msg_t;   
 
@@ -128,7 +131,7 @@ typedef struct gw_msg_job_s
 	gw_return_code_t rc;
 
 	char owner[GW_MSG_STRING_SHORT];
-	char file[GW_MSG_STRING_SHORT];
+	char name[GW_MSG_STRING_SHORT];
     char host[GW_MSG_STRING_SHORT];
     
     int id;
@@ -138,6 +141,12 @@ typedef struct gw_msg_job_s
     
     int uid;
 
+	int fixed_priority;
+    time_t deadline;
+
+    gw_jobtype_t type;
+    int np;
+	
     int em_state;
     int job_state;
     
@@ -210,7 +219,7 @@ typedef struct gw_msg_host_s
 	int running_jobs;
 	
     int host_id;
-    int nice;
+    int fixed_priority;
 
     char hostname[GW_MSG_STRING_SHORT];
     char arch[GW_MSG_STRING_SHORT];
@@ -218,10 +227,10 @@ typedef struct gw_msg_host_s
     char os_version[GW_MSG_STRING_SHORT];
 
     char cpu_model[GW_MSG_STRING_SHORT];
-    int cpu_mhz;
-    int cpu_free;
-    int cpu_smp;
-    int nodecount;
+    int  cpu_mhz;
+    int  cpu_free;
+    int  cpu_smp;
+    int  nodecount;
 
     int size_mem_mb;
     int free_mem_mb;
@@ -232,9 +241,9 @@ typedef struct gw_msg_host_s
     char lrms_name[GW_MSG_STRING_SHORT];
     char lrms_type[GW_MSG_STRING_SHORT];
 
-	int number_of_queues;
+	int  number_of_queues;
     char queue_name[GW_HOST_MAX_QUEUES][GW_MSG_STRING_SHORT];
-    int queue_nodecount[GW_HOST_MAX_QUEUES];
+    int  queue_nodecount[GW_HOST_MAX_QUEUES];
     int  queue_freenodecount[GW_HOST_MAX_QUEUES];
     int  queue_maxtime[GW_HOST_MAX_QUEUES];
     int  queue_maxcputime[GW_HOST_MAX_QUEUES];
@@ -249,9 +258,9 @@ typedef struct gw_msg_host_s
    	char gen_var_int_name[GW_HOST_MAX_GENVARS][GW_MSG_STRING_SHORT];
    	int  gen_var_int_value[GW_HOST_MAX_GENVARS];
 
-	int   number_of_str_vars;
-   	char  gen_var_str_name[GW_HOST_MAX_GENVARS][GW_MSG_STRING_SHORT];
-   	char  gen_var_str_value[GW_HOST_MAX_GENVARS][GW_MSG_STRING_SHORT];   	
+	int  number_of_str_vars;
+   	char gen_var_str_name[GW_HOST_MAX_GENVARS][GW_MSG_STRING_SHORT];
+   	char gen_var_str_value[GW_HOST_MAX_GENVARS][GW_MSG_STRING_SHORT];   	
     
 } gw_msg_host_t;
 
@@ -263,7 +272,7 @@ typedef struct gw_msg_match_s
 	
 	int              host_id;
 	int              job_id;
-	int              nice;
+	int              fixed_priority;
 
 	gw_boolean_t     matched;
 

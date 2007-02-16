@@ -37,8 +37,10 @@ const char * usage =
 "  -a             any, returns when the first job of the list or array finishes\n"
 "  -v             prints job exit code\n"
 "  -t             timeout no wait more then timeout seconds. A negative value\n"
-"                 means an undetermined amount of time (i.e. wait forever, default)\n"
-"  -k             keep jobs, they remain in fail or done  states in the GridWay system.\n"
+"                 means an undetermined amount of time (i.e. wait forever,\n"
+"                 default)\n"
+"  -k             keep jobs, they remain in fail or done  states in the\n"
+"                 GridWay system.\n"
 "                 By default, jobs are killed and their resources freed.\n"
 "  -A <array_id>  array identification as provided by gwps.\n"
 "  job_id ...     job ids list as provided by gwps.\n";

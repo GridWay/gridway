@@ -41,7 +41,8 @@ void gw_client_disconnect(int socket);
 gw_return_code_t gw_client_job_submit(char *         template,
                                       gw_job_state_t init_state,
                                       int *          job_id,
-                                      int *          deps)
+                                      int *          deps,
+                                      int            fixed_priority)
 {
     gw_msg_t  msg;
  	int       rc;
@@ -55,7 +56,13 @@ gw_return_code_t gw_client_job_submit(char *         template,
 	 	
  	if ( gw_client.initialize == GW_FALSE )
 		return GW_RC_FAILED_INIT;
-
+		
+		
+    if ((fixed_priority != GW_JOB_DEFAULT_PRIORITY) && (
+        (fixed_priority < GW_JOB_MIN_PRIORITY) ||
+        (fixed_priority > GW_JOB_MAX_PRIORITY)))
+		return GW_RC_FAILED_PERM;
+		
     /* ----------------------------------------------------------------- */
     /* 1.- Format msg     	      	      	      	      	      	     */
     /* ----------------------------------------------------------------- */
@@ -68,6 +75,8 @@ gw_return_code_t gw_client_job_submit(char *         template,
   	msg.msg_type   = GW_MSG_SUBMIT;  	
   	msg.pinc       = 0;
   	msg.pstart     = 0;
+  	
+  	msg.fixed_priority = fixed_priority;
   	
 	rc = gw_template_init(&(msg.jt), template);
 	if ( rc != 0 )
@@ -92,7 +101,8 @@ gw_return_code_t gw_client_job_submit(char *         template,
 	pthread_mutex_lock(&(gw_client.mutex));
 	
 	strncpy(msg.owner,gw_client.owner,GW_MSG_STRING_SHORT);
-
+	strncpy(msg.group,gw_client.group,GW_MSG_STRING_SHORT);
+	
 	pthread_mutex_unlock(&(gw_client.mutex));	
 	
 	length = sizeof(gw_msg_t);
@@ -165,7 +175,8 @@ gw_return_code_t gw_client_array_submit(char *         template,
                                         int **         job_ids,
                                         int *          deps,
                                         int            pstart,
-                                        int            pinc)
+                                        int            pinc,
+                                        int            fixed_priority)
 {
     gw_msg_t  msg;          
     int       i;
@@ -183,7 +194,17 @@ gw_return_code_t gw_client_array_submit(char *         template,
  		
 		return GW_RC_FAILED_INIT;
  	}
-   
+
+    if ((fixed_priority != GW_JOB_DEFAULT_PRIORITY) && (
+        (fixed_priority < GW_JOB_MIN_PRIORITY) ||
+        (fixed_priority > GW_JOB_MAX_PRIORITY)))
+	{
+ 		(*job_ids)  = NULL;
+ 		(*array_id) = -1;
+		
+		return GW_RC_FAILED_PERM;
+	}
+	
     (*job_ids) = (int *) malloc (sizeof(int) * tasks);
     
     if((*job_ids) == NULL)
@@ -208,7 +229,8 @@ gw_return_code_t gw_client_array_submit(char *         template,
   	msg.number_of_tasks = tasks;
   	msg.pinc            = pinc;
   	msg.pstart          = pstart;
-
+  	msg.fixed_priority  = fixed_priority;
+  	
 	rc = gw_template_init(&(msg.jt), template);
 	if ( rc != 0 )
 		return GW_RC_FAILED_JT;
@@ -232,7 +254,8 @@ gw_return_code_t gw_client_array_submit(char *         template,
 	pthread_mutex_lock(&(gw_client.mutex));
 	
 	strncpy(msg.owner,gw_client.owner,GW_MSG_STRING_SHORT);
-	
+	strncpy(msg.group,gw_client.group,GW_MSG_STRING_SHORT);
+		
 	pthread_mutex_unlock(&(gw_client.mutex));
 	
 	length = sizeof(gw_msg_t);

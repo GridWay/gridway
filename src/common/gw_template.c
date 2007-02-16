@@ -24,6 +24,7 @@
 #include <time.h>
 
 #include "gw_template.h"
+#include "gw_job_template.h"
 #include "gw_conf.h"
 #include "gw_common.h"
 
@@ -62,27 +63,36 @@ int gw_template_init(gw_template_t *jt, const char *jt_file)
     time_t          the_time;
     char *          GW_LOCATION;
 	int             rc;
+
+
+    if ( jt_file[strlen(jt_file)-1] == '/' )
+    {
+        strncpy(path,     jt_file, strlen(jt_file)-1);
+        strncpy(jt->file, "stdin", GW_JT_PATH);
+        strncpy(jt->name, "stdin", GW_JT_STR);
+        
+    }
+    else
+    {
+        if ( realpath (jt_file, path) == NULL )
+            return -1;
+
+        tmp = strrchr(path,'/') + 1;
+
+        strncpy(jt->file, tmp, GW_JT_PATH);
+        strncpy(jt->name, tmp, GW_JT_STR);
+
+        *(--tmp)='\0';
+    }
 	 
-	if ( jt_file == NULL )
-		return -1;
-		 
     pw_ent   = getpwuid(getuid());
     the_time = time(NULL);
-
-   	if ( realpath (jt_file, path) == NULL )
-       	return -1;
         
 	GW_LOCATION = getenv("GW_LOCATION");   
     
     if (GW_LOCATION == NULL )
         return -1;
  
-    tmp = strrchr(path,'/') + 1;
-    
-    strncpy(jt->file, tmp, GW_JT_PATH);
-
-    *(--tmp)='\0';
-
 	strncpy(jt->job_home,  path,           GW_JT_PATH);
 	strncpy(jt->user_home, pw_ent->pw_dir, GW_JT_PATH);
 
@@ -127,6 +137,11 @@ int gw_template_init(gw_template_t *jt, const char *jt_file)
 	jt->monitor[0] = '\0';
 	
 	jt->job_deps[0] = -1;
+
+	jt->type = GW_JOB_TYPE_SINGLE;
+    jt->np   = 1;
+
+    jt->deadline = 0;
 	
 	rc = gw_template_parser(jt);
 
@@ -142,6 +157,7 @@ void gw_template_print(gw_template_t *jt)
 	int i;
 	
 	fprintf(stderr," ----------- Job configuration file (%s) values -----------\n",jt->file);
+	fprintf(stderr,"  %-23s: %s\n","NAME",GWNSTR(jt->name));
 	fprintf(stderr,"  %-23s: %s\n","EXECUTABLE",GWNSTR(jt->executable));
 	fprintf(stderr,"  %-23s: %s\n","ARGUMENTS",GWNSTR(jt->arguments));
 
@@ -179,7 +195,7 @@ void gw_template_print(gw_template_t *jt)
 	fprintf(stderr,"  %-23s: %i\n","RESCHEDULING_THRESHOLD",(int)jt->rescheduling_threshold);
 	fprintf(stderr,"  %-23s: %i\n","SUSPENSION_TIMEOUT",(int)jt->suspension_timeout);
 	fprintf(stderr,"  %-23s: %i\n","CPULOAD_THRESHOLD",jt->cpuload_threshold);
-	fprintf(stderr,"  %-23s: %i\n","RESCHEDULE_ON_FAILURE",jt->reschedule_on_failure);
+    fprintf(stderr,"  %-23s: %s\n","RESCHEDULE_ON_FAILURE",jt->reschedule_on_failure?"yes":"no");
 	fprintf(stderr,"  %-23s: %i\n","NUMBER_OF_RETRIES",jt->number_of_retries);
 	fprintf(stderr,"  %-23s: %i\n","CHECKPOINT_INTERVAL",(int)jt->checkpoint_interval);
 	fprintf(stderr,"  %-23s: %s\n","CHECKPOINT_URL",jt->checkpoint_url);
@@ -199,8 +215,41 @@ void gw_template_print(gw_template_t *jt)
 			i++;
 		}
 	}
+
+    fprintf(stderr,"  %-23s: %s\n","TYPE",gw_template_jobtype_string(jt->type));
+    fprintf(stderr,"  %-23s: %d\n","NP",jt->np);
 		
+    fprintf(stderr,"  %-23s: %s\n","DEADLINE",gw_template_deadline_string(jt->deadline));
+
     fprintf(stderr," ----------------------------------------------------------\n");
+}
+
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+
+char *gw_template_jobtype_string(gw_jobtype_t type)
+{
+    switch (type)
+    {
+    case GW_JOB_TYPE_SINGLE:
+        return "single";
+    case GW_JOB_TYPE_MULTIPLE:
+        return "multiple";
+    case GW_JOB_TYPE_MPI:
+        return "mpi";
+    default:
+        return "unknown";
+    }
+}
+
+char *gw_template_deadline_string(time_t deadline)
+{
+    char buf[500];
+
+    sprintf(buf, "%ld:%02ld:%02ld", deadline/60/60/24, deadline/60/60%24, deadline/60%60);
+
+    return strdup(buf);
 }
 
 /* -------------------------------------------------------------------------- */

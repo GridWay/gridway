@@ -19,6 +19,7 @@
 #define _GW_CONF_H
 
 #include "gw_common.h"
+#include "gw_sch_conf.h"
 #include <time.h>
 
 /* gwd defaults */
@@ -63,17 +64,19 @@
 #define GW_MAD_NAME_INDEX 0
 #define GW_MAD_PATH_INDEX 1
 #define GW_MAD_ARGS_INDEX 2
-#define GW_MAD_NICE_INDEX 3
-#define GW_MAD_TM_INDEX   4
-#define GW_MAD_EM_INDEX   5
+#define GW_MAD_TM_INDEX   3
+#define GW_MAD_EM_INDEX   4
 
-/* ------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------- */
+/* -------------------------------------------------------------------- */
+/* -------------------------------------------------------------------- */
 
 typedef struct gw_conf_s
 {
     gw_boolean_t multiuser;
     
     char *conf_file;
+	char *sch_conf_file;    
     char *template_default;
     char *gw_location;
     char *gw_globus_seg;
@@ -98,6 +101,8 @@ typedef struct gw_conf_s
     char  ***tm_mads;
     char  ***em_mads;
     char  **dm_mad;
+    
+    gw_sch_conf_t sch_conf;
 } gw_conf_t;
 
 /* ------------------------------------------------------------------------- */
@@ -126,7 +131,9 @@ typedef enum {
     DM_SCHED,
 } gw_conf_var_t;
 
-/* ------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------- */
+/* -------------------------------------------------------------------- */
+/* -------------------------------------------------------------------- */
 
 int gw_conf_init (gw_boolean_t multiuser);
 

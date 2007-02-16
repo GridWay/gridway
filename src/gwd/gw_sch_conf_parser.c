@@ -1,6 +1,6 @@
-#line 2 "gwd/gw_conf_parser.c"
+#line 2 "gwd/gw_sch_conf_parser.c"
 
-#line 4 "gwd/gw_conf_parser.c"
+#line 4 "gwd/gw_sch_conf_parser.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -134,7 +134,7 @@ typedef unsigned int flex_uint32_t;
 #define YY_STATE_EOF(state) (YY_END_OF_BUFFER + state + 1)
 
 /* Special action meaning "start processing a new file". */
-#define YY_NEW_FILE gcp_restart(gcp_in  )
+#define YY_NEW_FILE gw_sched_restart(gw_sched_in  )
 
 #define YY_END_OF_BUFFER_CHAR 0
 
@@ -152,40 +152,27 @@ typedef unsigned int flex_uint32_t;
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
 #endif
 
-extern int gcp_leng;
+extern int gw_sched_leng;
 
-extern FILE *gcp_in, *gcp_out;
+extern FILE *gw_sched_in, *gw_sched_out;
 
 #define EOB_ACT_CONTINUE_SCAN 0
 #define EOB_ACT_END_OF_FILE 1
 #define EOB_ACT_LAST_MATCH 2
 
-    /* Note: We specifically omit the test for yy_rule_can_match_eol because it requires
-     *       access to the local variable yy_act. Since yyless() is a macro, it would break
-     *       existing scanners that call yyless() from OUTSIDE gcp_lex. 
-     *       One obvious solution it to make yy_act a global. I tried that, and saw
-     *       a 5% performance hit in a non-gcp_lineno scanner, because yy_act is
-     *       normally declared as a register variable-- so it is not worth it.
-     */
-    #define  YY_LESS_LINENO(n) \
-            do { \
-                int yyl;\
-                for ( yyl = n; yyl < gcp_leng; ++yyl )\
-                    if ( gcp_text[yyl] == '\n' )\
-                        --gcp_lineno;\
-            }while(0)
+    #define YY_LESS_LINENO(n)
     
 /* Return all but the first "n" matched characters back to the input stream. */
 #define yyless(n) \
 	do \
 		{ \
-		/* Undo effects of setting up gcp_text. */ \
+		/* Undo effects of setting up gw_sched_text. */ \
         int yyless_macro_arg = (n); \
         YY_LESS_LINENO(yyless_macro_arg);\
 		*yy_cp = (yy_hold_char); \
 		YY_RESTORE_YY_MORE_OFFSET \
 		(yy_c_buf_p) = yy_cp = yy_bp + yyless_macro_arg - YY_MORE_ADJ; \
-		YY_DO_BEFORE_ACTION; /* set up gcp_text again */ \
+		YY_DO_BEFORE_ACTION; /* set up gw_sched_text again */ \
 		} \
 	while ( 0 )
 
@@ -258,8 +245,8 @@ struct yy_buffer_state
 	 * possible backing-up.
 	 *
 	 * When we actually see the EOF, we change the status to "new"
-	 * (via gcp_restart()), so that the user can continue scanning by
-	 * just pointing gcp_in at a new input file.
+	 * (via gw_sched_restart()), so that the user can continue scanning by
+	 * just pointing gw_sched_in at a new input file.
 	 */
 #define YY_BUFFER_EOF_PENDING 2
 
@@ -286,51 +273,51 @@ static YY_BUFFER_STATE * yy_buffer_stack = 0; /**< Stack as an array. */
  */
 #define YY_CURRENT_BUFFER_LVALUE (yy_buffer_stack)[(yy_buffer_stack_top)]
 
-/* yy_hold_char holds the character lost when gcp_text is formed. */
+/* yy_hold_char holds the character lost when gw_sched_text is formed. */
 static char yy_hold_char;
 static int yy_n_chars;		/* number of characters read into yy_ch_buf */
-int gcp_leng;
+int gw_sched_leng;
 
 /* Points to current character in buffer. */
 static char *yy_c_buf_p = (char *) 0;
 static int yy_init = 0;		/* whether we need to initialize */
 static int yy_start = 0;	/* start state number */
 
-/* Flag which is used to allow gcp_wrap()'s to do buffer switches
- * instead of setting up a fresh gcp_in.  A bit of a hack ...
+/* Flag which is used to allow gw_sched_wrap()'s to do buffer switches
+ * instead of setting up a fresh gw_sched_in.  A bit of a hack ...
  */
 static int yy_did_buffer_switch_on_eof;
 
-void gcp_restart (FILE *input_file  );
-void gcp__switch_to_buffer (YY_BUFFER_STATE new_buffer  );
-YY_BUFFER_STATE gcp__create_buffer (FILE *file,int size  );
-void gcp__delete_buffer (YY_BUFFER_STATE b  );
-void gcp__flush_buffer (YY_BUFFER_STATE b  );
-void gcp_push_buffer_state (YY_BUFFER_STATE new_buffer  );
-void gcp_pop_buffer_state (void );
+void gw_sched_restart (FILE *input_file  );
+void gw_sched__switch_to_buffer (YY_BUFFER_STATE new_buffer  );
+YY_BUFFER_STATE gw_sched__create_buffer (FILE *file,int size  );
+void gw_sched__delete_buffer (YY_BUFFER_STATE b  );
+void gw_sched__flush_buffer (YY_BUFFER_STATE b  );
+void gw_sched_push_buffer_state (YY_BUFFER_STATE new_buffer  );
+void gw_sched_pop_buffer_state (void );
 
-static void gcp_ensure_buffer_stack (void );
-static void gcp__load_buffer_state (void );
-static void gcp__init_buffer (YY_BUFFER_STATE b,FILE *file  );
+static void gw_sched_ensure_buffer_stack (void );
+static void gw_sched__load_buffer_state (void );
+static void gw_sched__init_buffer (YY_BUFFER_STATE b,FILE *file  );
 
-#define YY_FLUSH_BUFFER gcp__flush_buffer(YY_CURRENT_BUFFER )
+#define YY_FLUSH_BUFFER gw_sched__flush_buffer(YY_CURRENT_BUFFER )
 
-YY_BUFFER_STATE gcp__scan_buffer (char *base,yy_size_t size  );
-YY_BUFFER_STATE gcp__scan_string (yyconst char *yy_str  );
-YY_BUFFER_STATE gcp__scan_bytes (yyconst char *bytes,int len  );
+YY_BUFFER_STATE gw_sched__scan_buffer (char *base,yy_size_t size  );
+YY_BUFFER_STATE gw_sched__scan_string (yyconst char *yy_str  );
+YY_BUFFER_STATE gw_sched__scan_bytes (yyconst char *bytes,int len  );
 
-void *gcp_alloc (yy_size_t  );
-void *gcp_realloc (void *,yy_size_t  );
-void gcp_free (void *  );
+void *gw_sched_alloc (yy_size_t  );
+void *gw_sched_realloc (void *,yy_size_t  );
+void gw_sched_free (void *  );
 
-#define yy_new_buffer gcp__create_buffer
+#define yy_new_buffer gw_sched__create_buffer
 
 #define yy_set_interactive(is_interactive) \
 	{ \
 	if ( ! YY_CURRENT_BUFFER ){ \
-        gcp_ensure_buffer_stack (); \
+        gw_sched_ensure_buffer_stack (); \
 		YY_CURRENT_BUFFER_LVALUE =    \
-            gcp__create_buffer(gcp_in,YY_BUF_SIZE ); \
+            gw_sched__create_buffer(gw_sched_in,YY_BUF_SIZE ); \
 	} \
 	YY_CURRENT_BUFFER_LVALUE->yy_is_interactive = is_interactive; \
 	}
@@ -338,9 +325,9 @@ void gcp_free (void *  );
 #define yy_set_bol(at_bol) \
 	{ \
 	if ( ! YY_CURRENT_BUFFER ){\
-        gcp_ensure_buffer_stack (); \
+        gw_sched_ensure_buffer_stack (); \
 		YY_CURRENT_BUFFER_LVALUE =    \
-            gcp__create_buffer(gcp_in,YY_BUF_SIZE ); \
+            gw_sched__create_buffer(gw_sched_in,YY_BUF_SIZE ); \
 	} \
 	YY_CURRENT_BUFFER_LVALUE->yy_at_bol = at_bol; \
 	}
@@ -351,16 +338,16 @@ void gcp_free (void *  );
 
 typedef unsigned char YY_CHAR;
 
-FILE *gcp_in = (FILE *) 0, *gcp_out = (FILE *) 0;
+FILE *gw_sched_in = (FILE *) 0, *gw_sched_out = (FILE *) 0;
 
 typedef int yy_state_type;
 
-extern int gcp_lineno;
+extern int gw_sched_lineno;
 
-int gcp_lineno = 1;
+int gw_sched_lineno = 1;
 
-extern char *gcp_text;
-#define yytext_ptr gcp_text
+extern char *gw_sched_text;
+#define yytext_ptr gw_sched_text
 
 static yy_state_type yy_get_previous_state (void );
 static yy_state_type yy_try_NUL_trans (yy_state_type current_state  );
@@ -368,18 +355,17 @@ static int yy_get_next_buffer (void );
 static void yy_fatal_error (yyconst char msg[]  );
 
 /* Done after the current pattern has been matched and before the
- * corresponding action - sets up gcp_text.
+ * corresponding action - sets up gw_sched_text.
  */
 #define YY_DO_BEFORE_ACTION \
 	(yytext_ptr) = yy_bp; \
-	(yytext_ptr) -= (yy_more_len); \
-	gcp_leng = (size_t) (yy_cp - (yytext_ptr)); \
+	gw_sched_leng = (size_t) (yy_cp - yy_bp); \
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
 
-#define YY_NUM_RULES 30
-#define YY_END_OF_BUFFER 31
+#define YY_NUM_RULES 33
+#define YY_END_OF_BUFFER 34
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -387,33 +373,31 @@ struct yy_trans_info
 	flex_int32_t yy_verify;
 	flex_int32_t yy_nxt;
 	};
-static yyconst flex_int16_t yy_accept[227] =
+static yyconst flex_int16_t yy_accept[209] =
     {   0,
-        0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-       23,   23,   26,   26,   31,   28,   27,   27,   29,   29,
-       28,   28,   28,   28,   28,   28,   28,   28,   28,   30,
-       30,   16,   30,   17,   30,   18,   30,   19,   30,   20,
-       23,   23,   21,   23,   22,   26,   26,   24,   26,   25,
-       28,   27,    0,    1,   28,   28,   28,   28,   28,   28,
-       28,   28,   28,   28,   28,    0,   16,   16,    0,   17,
-       17,    0,   18,   18,    0,   19,    0,    0,   20,   23,
-       22,   23,   21,   23,   23,   22,   26,   26,   24,   26,
-       26,    0,   28,   28,   28,   28,   28,   28,   28,   28,
+        0,    0,   34,   32,   31,   31,   32,   29,   28,   25,
+       30,   29,   29,   29,   29,   29,   29,   29,   29,   29,
+       29,   29,   29,   31,    0,    1,   29,   28,   25,   29,
+       29,   29,   29,   29,   27,   29,   29,   29,   29,   29,
+       29,   29,   29,   29,   29,   29,   29,   29,   29,   29,
+       29,   29,   29,   26,   29,   29,   29,   29,   29,   29,
+       29,   29,   29,   29,   29,   29,   29,   29,   29,   29,
+       29,   29,   29,   29,   29,   29,   29,   29,   29,   29,
+       29,   29,   29,   29,   29,   14,   29,   29,   29,   29,
+       29,   29,   29,   29,   29,   29,   29,   29,   29,   29,
 
-       28,   28,   28,    0,   28,   28,   28,   28,   28,   28,
-       28,   28,   28,   28,   28,   28,   28,   28,   28,   28,
-       28,   28,   28,   28,   28,   28,   28,   28,   14,   28,
-       12,   28,   28,   28,   28,   28,   13,   28,   28,   28,
-       28,   28,   28,   28,   28,   28,   15,    2,   28,   28,
-       28,   28,   28,   28,   28,   28,   28,   28,   28,   28,
-       28,   28,   28,   28,   28,   28,   28,   28,   28,   28,
-       28,   28,   28,   28,   28,   28,   28,   28,   28,   28,
-       28,   28,   28,   28,   28,   28,   28,   28,   28,   28,
-       11,   28,   28,   28,   28,   28,   28,    5,   28,   28,
+       29,   29,   29,   29,   29,   29,   29,   29,   29,   29,
+       29,   29,   21,   29,   11,   29,   29,    3,   29,   29,
+       29,   29,   29,   13,   29,    6,   29,   29,   29,   29,
+       29,   29,   29,    4,   29,   29,   29,   29,   29,   29,
+       29,   29,   29,   29,   29,   29,   10,    2,   29,   29,
+       29,   15,   12,    5,   29,   29,   18,    9,   29,   29,
+       29,   29,   29,   29,   29,   17,   29,   29,   29,   29,
+       29,   29,   29,   29,   29,   29,   29,   29,   29,   16,
+       29,   29,   29,   29,   29,   29,   22,   29,   29,   29,
+        8,   29,   29,   29,   29,    7,   29,   29,   29,   23,
 
-       28,   28,   28,   28,    6,    7,   28,   28,   28,   28,
-        4,   28,   28,   28,   28,   28,    9,   28,   28,   28,
-       28,   10,    8,   28,    3,    0
+       20,   29,   29,   19,   29,   29,   24,    0
     } ;
 
 static yyconst flex_int32_t yy_ec[256] =
@@ -422,16 +406,16 @@ static yyconst flex_int32_t yy_ec[256] =
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    2,    1,    1,    4,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    5,    5,    5,
-        5,    5,    5,    5,    5,    5,    5,    6,    1,    1,
-        7,    1,    1,    1,    8,    9,   10,   11,   12,   13,
-       14,   15,   16,   17,    1,   18,   19,   20,   21,   22,
-        1,   23,   24,   25,   26,   27,   28,   29,   30,    1,
-        1,    1,    1,    1,   31,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    5,    6,    1,    7,    7,    7,
+        7,    7,    7,    7,    7,    7,    7,    1,    1,    1,
+        8,    1,    1,    1,    9,   10,   11,   12,   13,   14,
+       15,   16,   17,   18,   19,   20,   21,   22,   23,   24,
+       18,   25,   26,   27,   28,   18,   29,   30,   31,   32,
+        8,    1,    8,    1,   33,    1,   18,   18,   18,   18,
 
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+       34,   18,   18,   18,   18,   18,   18,   18,   18,   35,
+       36,   18,   18,   18,   37,   18,   18,   18,   18,   18,
+       38,   18,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -448,183 +432,153 @@ static yyconst flex_int32_t yy_ec[256] =
         1,    1,    1,    1,    1
     } ;
 
-static yyconst flex_int32_t yy_meta[32] =
+static yyconst flex_int32_t yy_meta[39] =
     {   0,
-        1,    2,    3,    2,    1,    4,    2,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1
+        1,    1,    1,    1,    2,    2,    2,    1,    2,    2,
+        2,    2,    2,    2,    2,    2,    2,    2,    2,    2,
+        2,    2,    2,    2,    2,    2,    2,    2,    2,    2,
+        2,    2,    2,    2,    2,    2,    2,    2
     } ;
 
-static yyconst flex_int16_t yy_base[239] =
+static yyconst flex_int16_t yy_base[211] =
     {   0,
-        0,    0,   30,   31,   32,   33,   34,   40,   41,   46,
-       50,   55,   60,   65,  325,    0,   70,   72,  321,  326,
-       60,  304,  294,  302,   57,  294,  298,  308,  298,  326,
-       53,  314,   75,  313,   78,  312,   84,  326,  310,  307,
-      305,   87,  326,   78,  326,    0,   92,  326,   94,  326,
-        0,   96,  307,  326,  285,  277,  276,  295,  274,  275,
-      283,  283,  283,  285,  268,   99,  296,  295,  100,  294,
-      293,  101,  292,  291,  107,  326,  289,  288,  285,  283,
-      326,  110,  326,  112,  114,  285,    0,  119,  326,  121,
-      122,  284,  276,  261,  265,  252,  263,  250,  264,  270,
+        0,    0,  242,  243,   37,   39,  238,   37,   39,   41,
+      243,    0,   32,   26,  231,   30,   45,  223,  223,  210,
+       42,  200,  201,   54,  231,  243,    0,   52,   54,  207,
+      199,  198,  197,  199,    0,  195,  194,  193,  192,  191,
+      197,  185,  184,   53,   49,   52,   53,  187,  190,   54,
+       44,   59,  189,    0,  207,  207,  206,  201,  188,  186,
+      198,  201,  200,  183,  194,  183,  184,  191,  177,   51,
+      185,  188,  187,  179,  171,  177,  179,  172,  181,  176,
+      170,  161,  162,  172,  162,    0,  170,  173,  168,  162,
+      157,  165,  164,  167,  168,  164,  162,  148,  150,  159,
 
-      260,  265,  257,  272,  253,  263,  264,  249,  262,  249,
-      243,  255,  235,  254,  256,  236,  247,  250,  239,  248,
-      232,  236,  233,  239,  228,  242,  240,  239,    0,  227,
-        0,  230,  225,  216,  226,  227,    0,  221,  232,  217,
-      232,  224,  218,  213,  221,  206,    0,    0,  223,  214,
-      220,  220,  211,  199,  206,  214,  196,  203,  211,  208,
-      192,  191,  118,  194,  189,  199,  197,  201,  193,  194,
-      193,  189,  204,  195,  185,  196,  188,  184,  182,  196,
-      192,  185,  182,  189,  169,  174,  190,  172,  172,  172,
-        0,  169,  170,  182,  179,  141,  135,    0,  134,  131,
+      151,  139,  149,  155,  142,  153,  142,  151,  153,  137,
+      148,  147,    0,  145,    0,  144,  135,    0,  142,  144,
+      146,  133,  138,    0,  137,    0,  136,  128,  127,  133,
+      132,  114,  119,    0,  118,  132,  134,  125,  114,  113,
+      112,  109,  112,  109,  108,  123,    0,    0,  100,  110,
+      109,    0,    0,    0,   97,   98,    0,    0,  112,  116,
+      104,  110,   67,   91,   95,    0,  109,   88,  107,  102,
+       57,   96,  105,   59,   92,   83,  105,   96,   93,    0,
+       98,   84,   82,   95,   80,   84,    0,   79,   91,   87,
+        0,   85,   89,   77,   74,    0,   75,   74,   68,    0,
 
-      115,  123,  117,  115,    0,    0,  115,  129,  120,  107,
-        0,  105,  113,  118,  121,  111,    0,   85,   86,   74,
-       58,    0,    0,   46,    0,  326,  144,  148,  152,  156,
-      160,  164,  168,  172,  176,  178,  182,  186
+        0,   63,   66,    0,   79,   76,    0,  243,   93,   83
     } ;
 
-static yyconst flex_int16_t yy_def[239] =
+static yyconst flex_int16_t yy_def[211] =
     {   0,
-      226,    1,  227,  227,  227,  227,  227,  227,  227,  227,
-      228,  228,  229,  229,  226,  230,  226,  226,  231,  226,
-      230,  230,  230,  230,  230,  230,  230,  230,  230,  226,
-      226,  226,  226,  226,  226,  226,  226,  226,  232,  226,
-      233,  233,  226,  234,  226,  235,  235,  226,  236,  226,
-      230,  226,  231,  226,  230,  230,  230,  230,  230,  230,
-      230,  230,  230,  230,  230,  226,  226,  226,  226,  226,
-      226,  226,  226,  226,  226,  226,  232,  232,  226,  233,
-      226,  233,  226,  234,  234,  237,  235,  235,  226,  236,
-      236,  238,  230,  230,  230,  230,  230,  230,  230,  230,
+      208,    1,  208,  208,  208,  208,  209,  210,  210,  210,
+      208,  210,  210,  210,  210,  210,  210,  210,  210,  210,
+      210,  210,  210,  208,  209,  208,  210,  210,  210,  210,
+      210,  210,  210,  210,  210,  210,  210,  210,  210,  210,
+      210,  210,  210,  210,  210,  210,  210,  210,  210,  210,
+      210,  210,  210,  210,  210,  210,  210,  210,  210,  210,
+      210,  210,  210,  210,  210,  210,  210,  210,  210,  210,
+      210,  210,  210,  210,  210,  210,  210,  210,  210,  210,
+      210,  210,  210,  210,  210,  210,  210,  210,  210,  210,
+      210,  210,  210,  210,  210,  210,  210,  210,  210,  210,
 
-      230,  230,  230,  237,  230,  230,  230,  230,  230,  230,
-      230,  230,  230,  230,  230,  230,  230,  230,  230,  230,
-      230,  230,  230,  230,  230,  230,  230,  230,  230,  230,
-      230,  230,  230,  230,  230,  230,  230,  230,  230,  230,
-      230,  230,  230,  230,  230,  230,  230,  230,  230,  230,
-      230,  230,  230,  230,  230,  230,  230,  230,  230,  230,
-      230,  230,  230,  230,  230,  230,  230,  230,  230,  230,
-      230,  230,  230,  230,  230,  230,  230,  230,  230,  230,
-      230,  230,  230,  230,  230,  230,  230,  230,  230,  230,
-      230,  230,  230,  230,  230,  230,  230,  230,  230,  230,
+      210,  210,  210,  210,  210,  210,  210,  210,  210,  210,
+      210,  210,  210,  210,  210,  210,  210,  210,  210,  210,
+      210,  210,  210,  210,  210,  210,  210,  210,  210,  210,
+      210,  210,  210,  210,  210,  210,  210,  210,  210,  210,
+      210,  210,  210,  210,  210,  210,  210,  210,  210,  210,
+      210,  210,  210,  210,  210,  210,  210,  210,  210,  210,
+      210,  210,  210,  210,  210,  210,  210,  210,  210,  210,
+      210,  210,  210,  210,  210,  210,  210,  210,  210,  210,
+      210,  210,  210,  210,  210,  210,  210,  210,  210,  210,
+      210,  210,  210,  210,  210,  210,  210,  210,  210,  210,
 
-      230,  230,  230,  230,  230,  230,  230,  230,  230,  230,
-      230,  230,  230,  230,  230,  230,  230,  230,  230,  230,
-      230,  230,  230,  230,  230,    0,  226,  226,  226,  226,
-      226,  226,  226,  226,  226,  226,  226,  226
+      210,  210,  210,  210,  210,  210,  210,    0,  208,  208
     } ;
 
-static yyconst flex_int16_t yy_nxt[358] =
+static yyconst flex_int16_t yy_nxt[282] =
     {   0,
-       16,   17,   18,   19,   16,   16,   20,   16,   16,   16,
-       21,   22,   16,   23,   16,   24,   16,   16,   25,   26,
-       16,   27,   16,   28,   29,   16,   16,   16,   16,   16,
-       16,   31,   31,   33,   33,   35,   32,   32,   34,   34,
-       36,   35,   37,   38,   39,   40,   36,   37,   38,   39,
-       40,   42,   43,   44,   66,   45,   42,   43,   44,   67,
-       45,   47,   48,   49,   60,   50,   47,   48,   49,  225,
-       50,   52,   52,   52,   52,   55,   69,   61,   56,   72,
-       83,   70,  224,   86,   73,   75,   76,   77,   82,   83,
-       84,  223,   81,   88,   89,   90,   89,   52,   52,   92,
+        4,    5,    6,    7,    8,    9,   10,   11,   12,   12,
+       12,   13,   12,   14,   12,   12,   12,   12,   12,   12,
+       15,   16,   12,   12,   17,   18,   12,   19,   20,   12,
+       21,   12,   12,   12,   22,   12,   12,   23,   24,   24,
+       24,   24,   28,   29,   28,   28,   28,   29,   30,   32,
+       33,   31,   35,   36,   41,   24,   24,   28,   28,   28,
+       29,   55,   62,   89,   57,   35,   59,   90,   37,   66,
+       67,   69,   70,   63,   71,   42,   56,   58,  169,   60,
+       61,  177,   68,  181,   27,  178,  182,   72,  207,  206,
+      205,  204,  170,   25,   25,  203,  202,  201,  200,  199,
 
-       66,   69,   72,  222,  221,   67,   70,   73,   75,   76,
-       77,   82,   83,   84,   83,   81,   83,   86,  220,   86,
-       88,   89,   90,   89,   89,  169,   92,   92,  219,  218,
-      217,  216,  170,  215,  171,  214,  213,  212,  211,  210,
-      209,  208,  207,  172,   30,   30,   30,   30,   41,   41,
-       41,   41,   46,   46,   46,   46,   51,  206,  205,   51,
-       53,   53,   53,   53,   78,   78,   78,   78,   80,   80,
-      204,   80,   85,   85,   85,   85,   87,   87,   91,   91,
-       91,   91,  104,  104,  104,  104,   92,   92,   92,   92,
-      203,  202,  201,  200,  199,  198,  197,  196,  195,  194,
+      198,  197,  196,  195,  194,  193,  192,  191,  190,  189,
+      188,  187,  186,  185,  184,  183,  180,  179,  176,  175,
+      174,  173,  172,  171,  168,  167,  166,  165,  164,  163,
+      162,  161,  160,  159,  158,  157,  156,  155,  154,  153,
+      152,  151,  150,  149,  148,  147,  146,  145,  144,  143,
+      142,  141,  140,  139,  138,  137,  136,  135,  134,  133,
+      132,  131,  130,  129,  128,  127,  126,  125,  124,  123,
+      122,  121,  120,  119,  118,  117,  116,  115,  114,  113,
+      112,  111,  110,  109,  108,  107,  106,  105,  104,  103,
+      102,  101,  100,   99,   98,   97,   96,   95,   94,   93,
 
-      193,  192,  191,  190,  189,  188,  187,  186,  185,  184,
-      183,  182,  181,  180,  179,  178,  177,  176,  175,  174,
-      173,  168,  167,  166,  165,  164,  163,  162,  161,  160,
-      159,  158,  157,  156,  155,  154,  153,  152,  151,  150,
-      149,  148,  147,  146,  145,  144,  143,  142,  141,  140,
-      139,  138,  137,  136,  135,  134,  133,  132,  131,  130,
-      129,  128,  127,  126,  125,  124,  123,  122,  121,  120,
-      119,  118,  117,  116,   83,  115,  114,  113,  112,  111,
-      110,  109,  108,  107,  106,  105,   89,   83,   81,   79,
-       76,   76,   74,   74,   71,   71,   68,   68,  103,  102,
-
-      101,  100,   99,   98,   97,   96,   95,   94,   93,   54,
-       81,   79,   76,   74,   71,   68,   65,   64,   63,   62,
-       59,   58,   57,   54,  226,   15,  226,  226,  226,  226,
-      226,  226,  226,  226,  226,  226,  226,  226,  226,  226,
-      226,  226,  226,  226,  226,  226,  226,  226,  226,  226,
-      226,  226,  226,  226,  226,  226,  226
+       92,   91,   88,   87,   86,   85,   84,   83,   82,   81,
+       80,   79,   78,   77,   76,   75,   74,   73,   65,   64,
+       54,   54,   54,   53,   52,   51,   50,   49,   48,   47,
+       46,   45,   44,   26,   43,   35,   40,   39,   38,   34,
+       26,  208,    3,  208,  208,  208,  208,  208,  208,  208,
+      208,  208,  208,  208,  208,  208,  208,  208,  208,  208,
+      208,  208,  208,  208,  208,  208,  208,  208,  208,  208,
+      208,  208,  208,  208,  208,  208,  208,  208,  208,  208,
+      208
     } ;
 
-static yyconst flex_int16_t yy_chk[358] =
+static yyconst flex_int16_t yy_chk[282] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    3,    4,    5,    6,    7,    3,    4,    5,    6,
-        7,    8,    9,    9,    9,    9,    8,   10,   10,   10,
-       10,   11,   11,   11,   31,   11,   12,   12,   12,   31,
-       12,   13,   13,   13,   25,   13,   14,   14,   14,  224,
-       14,   17,   17,   18,   18,   21,   33,   25,   21,   35,
-       44,   33,  221,   44,   35,   37,   37,   37,   42,   42,
-       42,  220,   42,   47,   47,   47,   49,   52,   52,   49,
+        1,    1,    1,    1,    1,    1,    1,    1,    5,    5,
+        6,    6,    8,    8,    9,    9,   10,   10,   13,   14,
+       14,   13,   16,   17,   21,   24,   24,   28,   28,   29,
+       29,   44,   47,   70,   45,   16,   46,   70,   17,   50,
+       50,   51,   51,   47,   52,   21,   44,   45,  163,   46,
+       46,  171,   50,  174,  210,  171,  174,   52,  206,  205,
+      203,  202,  163,  209,  209,  199,  198,  197,  195,  194,
 
-       66,   69,   72,  219,  218,   66,   69,   72,   75,   75,
-       75,   82,   82,   82,   84,   82,   85,   84,  216,   85,
-       88,   88,   88,   90,   91,  163,   90,   91,  215,  214,
-      213,  212,  163,  210,  163,  209,  208,  207,  204,  203,
-      202,  201,  200,  163,  227,  227,  227,  227,  228,  228,
-      228,  228,  229,  229,  229,  229,  230,  199,  197,  230,
-      231,  231,  231,  231,  232,  232,  232,  232,  233,  233,
-      196,  233,  234,  234,  234,  234,  235,  235,  236,  236,
-      236,  236,  237,  237,  237,  237,  238,  238,  238,  238,
-      195,  194,  193,  192,  190,  189,  188,  187,  186,  185,
+      193,  192,  190,  189,  188,  186,  185,  184,  183,  182,
+      181,  179,  178,  177,  176,  175,  173,  172,  170,  169,
+      168,  167,  165,  164,  162,  161,  160,  159,  156,  155,
+      151,  150,  149,  146,  145,  144,  143,  142,  141,  140,
+      139,  138,  137,  136,  135,  133,  132,  131,  130,  129,
+      128,  127,  125,  123,  122,  121,  120,  119,  117,  116,
+      114,  112,  111,  110,  109,  108,  107,  106,  105,  104,
+      103,  102,  101,  100,   99,   98,   97,   96,   95,   94,
+       93,   92,   91,   90,   89,   88,   87,   85,   84,   83,
+       82,   81,   80,   79,   78,   77,   76,   75,   74,   73,
 
-      184,  183,  182,  181,  180,  179,  178,  177,  176,  175,
-      174,  173,  172,  171,  170,  169,  168,  167,  166,  165,
-      164,  162,  161,  160,  159,  158,  157,  156,  155,  154,
-      153,  152,  151,  150,  149,  146,  145,  144,  143,  142,
-      141,  140,  139,  138,  136,  135,  134,  133,  132,  130,
-      128,  127,  126,  125,  124,  123,  122,  121,  120,  119,
-      118,  117,  116,  115,  114,  113,  112,  111,  110,  109,
-      108,  107,  106,  105,  104,  103,  102,  101,  100,   99,
-       98,   97,   96,   95,   94,   93,   92,   86,   80,   79,
-       78,   77,   74,   73,   71,   70,   68,   67,   65,   64,
-
-       63,   62,   61,   60,   59,   58,   57,   56,   55,   53,
-       41,   40,   39,   36,   34,   32,   29,   28,   27,   26,
-       24,   23,   22,   19,   15,  226,  226,  226,  226,  226,
-      226,  226,  226,  226,  226,  226,  226,  226,  226,  226,
-      226,  226,  226,  226,  226,  226,  226,  226,  226,  226,
-      226,  226,  226,  226,  226,  226,  226
+       72,   71,   69,   68,   67,   66,   65,   64,   63,   62,
+       61,   60,   59,   58,   57,   56,   55,   53,   49,   48,
+       43,   42,   41,   40,   39,   38,   37,   36,   34,   33,
+       32,   31,   30,   25,   23,   22,   20,   19,   18,   15,
+        7,    3,  208,  208,  208,  208,  208,  208,  208,  208,
+      208,  208,  208,  208,  208,  208,  208,  208,  208,  208,
+      208,  208,  208,  208,  208,  208,  208,  208,  208,  208,
+      208,  208,  208,  208,  208,  208,  208,  208,  208,  208,
+      208
     } ;
-
-/* Table of booleans, true if rule could match eol. */
-static yyconst flex_int32_t yy_rule_can_match_eol[31] =
-    {   0,
-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 
-    0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0,     };
 
 static yy_state_type yy_last_accepting_state;
 static char *yy_last_accepting_cpos;
 
-extern int gcp__flex_debug;
-int gcp__flex_debug = 0;
+extern int gw_sched__flex_debug;
+int gw_sched__flex_debug = 0;
 
 /* The intent behind this definition is that it'll catch
  * any uses of REJECT which flex missed.
  */
 #define REJECT reject_used_but_not_detected
-static int yy_more_flag = 0;
-static int yy_more_len = 0;
-#define yymore() ((yy_more_flag) = 1)
-#define YY_MORE_ADJ (yy_more_len)
+#define yymore() yymore_used_but_not_detected
+#define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
-char *gcp_text;
-#line 1 "gw_conf_parser.l"
+char *gw_sched_text;
+#line 1 "gw_sch_conf_parser.l"
 /* -------------------------------------------------------------------------- */
 /* Copyright 2002-2006 GridWay Team, Distributed Systems Architecture         */
 /* Group, Universidad Complutense de Madrid                                   */
@@ -641,41 +595,21 @@ char *gcp_text;
 /* See the License for the specific language governing permissions and        */
 /* limitations under the License.                                             */
 /* -------------------------------------------------------------------------- */
-#line 19 "gw_conf_parser.l"
+#line 19 "gw_sch_conf_parser.l"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
-#include "gw_conf.h"
+#include <pthread.h>
+
+#include "gw_sch_conf_syntax.h"
+#include "gw_sch_conf.h"
 #include "gw_log.h"
-#define STR_SIZE 512
-#define YY_DECL static int yylex_gwd_conf()
 
-void gcp_set_val_int(gw_conf_var_t var, int val);
-void init_mad_parser(int mad_index);
-void process_escaped_chars(char *str);
-
-char ***gcp_mads;
-
-gw_conf_var_t gcp_var;
-
-int  gcp_i,gcp_j;
-int  gcp_num  = 0;
-int  gcp_max;
-
-
-
-
-
-
-
-#line 671 "gwd/gw_conf_parser.c"
+#define YY_DECL int  gw_sched_lex  (YYSTYPE *lvalp)
+int gw_sched_parse (gw_sch_conf_t *conf);
+#line 611 "gwd/gw_sch_conf_parser.c"
 
 #define INITIAL 0
-#define var_int 1
-#define var_mad 2
-#define var_sch 3
-#define val_int 4
-#define val_mad 5
-#define val_sch 6
 
 #ifndef YY_NO_UNISTD_H
 /* Special case for "unistd.h", since it is non-ANSI. We include it way
@@ -697,9 +631,9 @@ static int yy_init_globals (void );
 
 #ifndef YY_SKIP_YYWRAP
 #ifdef __cplusplus
-extern "C" int gcp_wrap (void );
+extern "C" int gw_sched_wrap (void );
 #else
-extern int gcp_wrap (void );
+extern int gw_sched_wrap (void );
 #endif
 #endif
 
@@ -731,7 +665,7 @@ static int input (void );
 /* This used to be an fputs(), but since the string might contain NUL's,
  * we now use fwrite().
  */
-#define ECHO (void) fwrite( gcp_text, gcp_leng, 1, gcp_out )
+#define ECHO (void) fwrite( gw_sched_text, gw_sched_leng, 1, gw_sched_out )
 #endif
 
 /* Gets input and stuffs it into "buf".  number of characters read, or YY_NULL,
@@ -744,18 +678,18 @@ static int input (void );
 		int c = '*'; \
 		size_t n; \
 		for ( n = 0; n < max_size && \
-			     (c = getc( gcp_in )) != EOF && c != '\n'; ++n ) \
+			     (c = getc( gw_sched_in )) != EOF && c != '\n'; ++n ) \
 			buf[n] = (char) c; \
 		if ( c == '\n' ) \
 			buf[n++] = (char) c; \
-		if ( c == EOF && ferror( gcp_in ) ) \
+		if ( c == EOF && ferror( gw_sched_in ) ) \
 			YY_FATAL_ERROR( "input in flex scanner failed" ); \
 		result = n; \
 		} \
 	else \
 		{ \
 		errno=0; \
-		while ( (result = fread(buf, 1, max_size, gcp_in))==0 && ferror(gcp_in)) \
+		while ( (result = fread(buf, 1, max_size, gw_sched_in))==0 && ferror(gw_sched_in)) \
 			{ \
 			if( errno != EINTR) \
 				{ \
@@ -763,7 +697,7 @@ static int input (void );
 				break; \
 				} \
 			errno=0; \
-			clearerr(gcp_in); \
+			clearerr(gw_sched_in); \
 			} \
 		}\
 \
@@ -796,12 +730,12 @@ static int input (void );
 #ifndef YY_DECL
 #define YY_DECL_IS_OURS 1
 
-extern int gcp_lex (void);
+extern int gw_sched_lex (void);
 
-#define YY_DECL int gcp_lex (void)
+#define YY_DECL int gw_sched_lex (void)
 #endif /* !YY_DECL */
 
-/* Code executed at the beginning of each rule, after gcp_text and gcp_leng
+/* Code executed at the beginning of each rule, after gw_sched_text and gw_sched_leng
  * have been set up.
  */
 #ifndef YY_USER_ACTION
@@ -824,14 +758,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 51 "gw_conf_parser.l"
+#line 36 "gw_sch_conf_parser.l"
 
 
-    /* --------------------------------------------------------------------- */
-    /*    Parse comments                                                     */
-    /* --------------------------------------------------------------------- */
-    
-#line 835 "gwd/gw_conf_parser.c"
+#line 765 "gwd/gw_sch_conf_parser.c"
 
 	if ( !(yy_init) )
 		{
@@ -844,32 +774,26 @@ YY_DECL
 		if ( ! (yy_start) )
 			(yy_start) = 1;	/* first start state */
 
-		if ( ! gcp_in )
-			gcp_in = stdin;
+		if ( ! gw_sched_in )
+			gw_sched_in = stdin;
 
-		if ( ! gcp_out )
-			gcp_out = stdout;
+		if ( ! gw_sched_out )
+			gw_sched_out = stdout;
 
 		if ( ! YY_CURRENT_BUFFER ) {
-			gcp_ensure_buffer_stack ();
+			gw_sched_ensure_buffer_stack ();
 			YY_CURRENT_BUFFER_LVALUE =
-				gcp__create_buffer(gcp_in,YY_BUF_SIZE );
+				gw_sched__create_buffer(gw_sched_in,YY_BUF_SIZE );
 		}
 
-		gcp__load_buffer_state( );
+		gw_sched__load_buffer_state( );
 		}
 
 	while ( 1 )		/* loops until end-of-file is reached */
 		{
-		(yy_more_len) = 0;
-		if ( (yy_more_flag) )
-			{
-			(yy_more_len) = (yy_c_buf_p) - (yytext_ptr);
-			(yy_more_flag) = 0;
-			}
 		yy_cp = (yy_c_buf_p);
 
-		/* Support of gcp_text. */
+		/* Support of gw_sched_text. */
 		*yy_cp = (yy_hold_char);
 
 		/* yy_bp points to the position in yy_ch_buf of the start of
@@ -890,13 +814,13 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 227 )
+				if ( yy_current_state >= 209 )
 					yy_c = yy_meta[(unsigned int) yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 326 );
+		while ( yy_base[yy_current_state] != 243 );
 
 yy_find_action:
 		yy_act = yy_accept[yy_current_state];
@@ -908,16 +832,6 @@ yy_find_action:
 			}
 
 		YY_DO_BEFORE_ACTION;
-
-		if ( yy_act != YY_END_OF_BUFFER && yy_rule_can_match_eol[yy_act] )
-			{
-			int yyl;
-			for ( yyl = (yy_more_len); yyl < gcp_leng; ++yyl )
-				if ( gcp_text[yyl] == '\n' )
-					   
-    gcp_lineno++;
-;
-			}
 
 do_action:	/* This label is used only to access EOF actions. */
 
@@ -933,210 +847,172 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 57 "gw_conf_parser.l"
-;
+#line 38 "gw_sch_conf_parser.l"
+
 	YY_BREAK
-/* --------------------------------------------------------------------- */
-/*    Variable Parsing                                                   */
-/* --------------------------------------------------------------------- */
 case 2:
 YY_RULE_SETUP
-#line 63 "gw_conf_parser.l"
-{ gcp_var = GWD_PORT;              BEGIN var_int;}
+#line 40 "gw_sch_conf_parser.l"
+{ lvalp->val_int = FP_WEIGHT;            return VARIABLE;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 64 "gw_conf_parser.l"
-{ gcp_var = MAX_NUMBER_OF_CLIENTS; BEGIN var_int;}
+#line 41 "gw_sch_conf_parser.l"
+{ lvalp->val_int = FP_USER;              return VARIABLE;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 65 "gw_conf_parser.l"
-{ gcp_var = NUMBER_OF_ARRAYS;      BEGIN var_int;}
+#line 42 "gw_sch_conf_parser.l"
+{ lvalp->val_int = FP_GROUP;             return VARIABLE;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 66 "gw_conf_parser.l"
-{ gcp_var = NUMBER_OF_JOBS;        BEGIN var_int;}
+#line 43 "gw_sch_conf_parser.l"
+{ lvalp->val_int = SH_WEIGHT;            return VARIABLE;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 67 "gw_conf_parser.l"
-{ gcp_var = NUMBER_OF_HOSTS;       BEGIN var_int;}
+#line 44 "gw_sch_conf_parser.l"
+{ lvalp->val_int = SH_USER;              return VARIABLE;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 68 "gw_conf_parser.l"
-{ gcp_var = NUMBER_OF_USERS;       BEGIN var_int;}
+#line 45 "gw_sch_conf_parser.l"
+{ lvalp->val_int = SH_WINDOW_DEPTH;      return VARIABLE;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 69 "gw_conf_parser.l"
-{ gcp_var = SCHEDULING_INTERVAL;   BEGIN var_int;}
+#line 46 "gw_sch_conf_parser.l"
+{ lvalp->val_int = SH_WINDOW_SIZE;       return VARIABLE;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 70 "gw_conf_parser.l"
-{ gcp_var = DISCOVERY_INTERVAL;    BEGIN var_int;}
+#line 47 "gw_sch_conf_parser.l"
+{ lvalp->val_int = WT_WEIGHT;            return VARIABLE;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 71 "gw_conf_parser.l"
-{ gcp_var = MONITORING_INTERVAL;   BEGIN var_int;}
+#line 48 "gw_sch_conf_parser.l"
+{ lvalp->val_int = DL_WEIGHT;            return VARIABLE;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 72 "gw_conf_parser.l"
-{ gcp_var = POLL_INTERVAL;         BEGIN var_int;}
+#line 49 "gw_sch_conf_parser.l"
+{ lvalp->val_int = DL_WEIGHT;            return VARIABLE;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 73 "gw_conf_parser.l"
-{ gcp_var = IM_MAD; init_mad_parser(0); BEGIN var_mad;}
+#line 50 "gw_sch_conf_parser.l"
+{ lvalp->val_int = RP_WEIGHT;            return VARIABLE;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 74 "gw_conf_parser.l"
-{ gcp_var = TM_MAD; init_mad_parser(1); BEGIN var_mad;}
+#line 51 "gw_sch_conf_parser.l"
+{ lvalp->val_int = RP_HOST;              return VARIABLE;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 75 "gw_conf_parser.l"
-{ gcp_var = EM_MAD; init_mad_parser(2); BEGIN var_mad;}
+#line 52 "gw_sch_conf_parser.l"
+{ lvalp->val_int = RP_IM;                return VARIABLE;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 76 "gw_conf_parser.l"
-{ gcp_var = DM_SCHED; gcp_j = 0;   BEGIN var_sch;}
+#line 53 "gw_sch_conf_parser.l"
+{ lvalp->val_int = RA_WEIGHT;            return VARIABLE;}
 	YY_BREAK
-/* --------------------------------------------------------------------- */
-/*    Assignment Parsing                                                 */
-/* --------------------------------------------------------------------- */
 case 16:
 YY_RULE_SETUP
-#line 82 "gw_conf_parser.l"
-{ BEGIN val_int;}
+#line 54 "gw_sch_conf_parser.l"
+{ lvalp->val_int = FR_MAX_BANNED;        return VARIABLE;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 83 "gw_conf_parser.l"
-{ BEGIN val_mad;}
+#line 55 "gw_sch_conf_parser.l"
+{ lvalp->val_int = FR_BANNED_C;          return VARIABLE;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 84 "gw_conf_parser.l"
-{ BEGIN val_sch;}
+#line 56 "gw_sch_conf_parser.l"
+{ lvalp->val_int = UG_WEIGHT;            return VARIABLE;}
 	YY_BREAK
-/* --------------------------------------------------------------------- */
-/*    Value Parsing                                                      */
-/* --------------------------------------------------------------------- */
 case 19:
-/* rule 19 can match eol */
 YY_RULE_SETUP
-#line 90 "gw_conf_parser.l"
-{ BEGIN INITIAL;}
+#line 57 "gw_sch_conf_parser.l"
+{ lvalp->val_int = UG_HISTORY_WINDOW;    return VARIABLE;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 91 "gw_conf_parser.l"
-{ gcp_set_val_int(gcp_var, atoi(gcp_text));}
+#line 58 "gw_sch_conf_parser.l"
+{ lvalp->val_int = UG_HISTORY_RATIO;     return VARIABLE;}
 	YY_BREAK
 case 21:
-/* rule 21 can match eol */
 YY_RULE_SETUP
-#line 93 "gw_conf_parser.l"
-{ BEGIN INITIAL;}
+#line 59 "gw_sch_conf_parser.l"
+{ lvalp->val_int = DISABLE;              return VARIABLE;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 94 "gw_conf_parser.l"
-{ if ( gcp_text[gcp_leng-2] == '\\' )
-                          {
-                            yymore();
-                          }
-                          else
-                          {
-                            if ( gcp_mads != NULL )
-                            {
-                                gcp_text[gcp_leng-1] = '\0';
-                                process_escaped_chars(gcp_text);
-                                gcp_mads[gcp_num][gcp_j] = strdup(gcp_text);
-                            }
-                            gcp_j++;
-                            if (gcp_j >= gcp_max)
-                            {
-                                gw_log_print("GW",'E',"gwd.conf: Parse error in MAD at line %i\n", gcp_lineno);
-                                return -1;
-                            }
-                          }
-                        }
+#line 60 "gw_sch_conf_parser.l"
+{ lvalp->val_int = DISPATCH_CHUNK;       return VARIABLE;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 114 "gw_conf_parser.l"
-{ if ( gcp_mads != NULL )
-                          {
-                            process_escaped_chars(gcp_text);
-                            gcp_mads[gcp_num][gcp_j] = strdup(gcp_text);
-                          }
-                        }
+#line 61 "gw_sch_conf_parser.l"
+{ lvalp->val_int = MAX_RUNNING_USER;     return VARIABLE;}
 	YY_BREAK
 case 24:
-/* rule 24 can match eol */
 YY_RULE_SETUP
-#line 121 "gw_conf_parser.l"
-{ BEGIN INITIAL;}
+#line 62 "gw_sch_conf_parser.l"
+{ lvalp->val_int = MAX_RUNNING_RESOURCE; return VARIABLE;}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 122 "gw_conf_parser.l"
-{ gcp_j++;
-                          if (gcp_j >= 3)
-                          {
-                              gw_log_print("GW",'E',"gwd.conf: Parse error in Sched at line %i\n", gcp_lineno);
-                              return -1;
-                          }
-                        }
+#line 64 "gw_sch_conf_parser.l"
+{ lvalp->val_int   = atoi(gw_sched_text);   return INTEGER;}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 129 "gw_conf_parser.l"
-{ gw_conf.dm_mad[gcp_j] = strdup(gcp_text);}
+#line 65 "gw_sch_conf_parser.l"
+{ lvalp->val_int   = 1;              return INTEGER;}
 	YY_BREAK
-/* --------------------------------------------------------------------- */
-/*    Default Parsing                                                    */
-/* --------------------------------------------------------------------- */
 case 27:
-/* rule 27 can match eol */
 YY_RULE_SETUP
-#line 135 "gw_conf_parser.l"
-;
+#line 66 "gw_sch_conf_parser.l"
+{ lvalp->val_int   = 0;              return INTEGER;}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 136 "gw_conf_parser.l"
-{ gw_log_print("GW",'E',"Undefined variable (%s) at line %i\n",
-                        gcp_text, gcp_lineno);}
+#line 67 "gw_sch_conf_parser.l"
+{ lvalp->val_float = atof(gw_sched_text);   return FLOAT;}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 139 "gw_conf_parser.l"
-{ gw_log_print("GW",'E',"gwd.conf: Parse error at line %i\n",gcp_lineno);
-                  return -1; }
+#line 68 "gw_sch_conf_parser.l"
+{ lvalp->val_str   = strdup(gw_sched_text); return STRING;}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 141 "gw_conf_parser.l"
+#line 70 "gw_sch_conf_parser.l"
+{ return *gw_sched_text;}
+	YY_BREAK
+case 31:
+/* rule 31 can match eol */
+YY_RULE_SETUP
+#line 72 "gw_sch_conf_parser.l"
+
+	YY_BREAK
+case 32:
+YY_RULE_SETUP
+#line 73 "gw_sch_conf_parser.l"
+
+	YY_BREAK
+case 33:
+YY_RULE_SETUP
+#line 75 "gw_sch_conf_parser.l"
 ECHO;
 	YY_BREAK
-#line 1133 "gwd/gw_conf_parser.c"
+#line 1015 "gwd/gw_sch_conf_parser.c"
 case YY_STATE_EOF(INITIAL):
-case YY_STATE_EOF(var_int):
-case YY_STATE_EOF(var_mad):
-case YY_STATE_EOF(var_sch):
-case YY_STATE_EOF(val_int):
-case YY_STATE_EOF(val_mad):
-case YY_STATE_EOF(val_sch):
 	yyterminate();
 
 	case YY_END_OF_BUFFER:
@@ -1152,15 +1028,15 @@ case YY_STATE_EOF(val_sch):
 			{
 			/* We're scanning a new file or input source.  It's
 			 * possible that this happened because the user
-			 * just pointed gcp_in at a new source and called
-			 * gcp_lex().  If so, then we have to assure
+			 * just pointed gw_sched_in at a new source and called
+			 * gw_sched_lex().  If so, then we have to assure
 			 * consistency between YY_CURRENT_BUFFER and our
 			 * globals.  Here is the right place to do so, because
 			 * this is the first action (other than possibly a
 			 * back-up) that will match for the new input source.
 			 */
 			(yy_n_chars) = YY_CURRENT_BUFFER_LVALUE->yy_n_chars;
-			YY_CURRENT_BUFFER_LVALUE->yy_input_file = gcp_in;
+			YY_CURRENT_BUFFER_LVALUE->yy_input_file = gw_sched_in;
 			YY_CURRENT_BUFFER_LVALUE->yy_buffer_status = YY_BUFFER_NORMAL;
 			}
 
@@ -1213,11 +1089,11 @@ case YY_STATE_EOF(val_sch):
 				{
 				(yy_did_buffer_switch_on_eof) = 0;
 
-				if ( gcp_wrap( ) )
+				if ( gw_sched_wrap( ) )
 					{
 					/* Note: because we've taken care in
 					 * yy_get_next_buffer() to have set up
-					 * gcp_text, we can now set up
+					 * gw_sched_text, we can now set up
 					 * yy_c_buf_p so that if some total
 					 * hoser (like flex itself) wants to
 					 * call the scanner after we return the
@@ -1266,7 +1142,7 @@ case YY_STATE_EOF(val_sch):
 			"fatal flex scanner internal error--no action found" );
 	} /* end of action switch */
 		} /* end of scanning one token */
-} /* end of gcp_lex */
+} /* end of gw_sched_lex */
 
 /* yy_get_next_buffer - try to read in a new buffer
  *
@@ -1344,7 +1220,7 @@ static int yy_get_next_buffer (void)
 
 				b->yy_ch_buf = (char *)
 					/* Include room in for 2 EOB chars. */
-					gcp_realloc((void *) b->yy_ch_buf,b->yy_buf_size + 2  );
+					gw_sched_realloc((void *) b->yy_ch_buf,b->yy_buf_size + 2  );
 				}
 			else
 				/* Can't grow it, we don't own it. */
@@ -1376,7 +1252,7 @@ static int yy_get_next_buffer (void)
 		if ( number_to_move == YY_MORE_ADJ )
 			{
 			ret_val = EOB_ACT_END_OF_FILE;
-			gcp_restart(gcp_in  );
+			gw_sched_restart(gw_sched_in  );
 			}
 
 		else
@@ -1419,7 +1295,7 @@ static int yy_get_next_buffer (void)
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 227 )
+			if ( yy_current_state >= 209 )
 				yy_c = yy_meta[(unsigned int) yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
@@ -1447,11 +1323,11 @@ static int yy_get_next_buffer (void)
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 227 )
+		if ( yy_current_state >= 209 )
 			yy_c = yy_meta[(unsigned int) yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
-	yy_is_jam = (yy_current_state == 226);
+	yy_is_jam = (yy_current_state == 208);
 
 	return yy_is_jam ? 0 : yy_current_state;
 }
@@ -1497,13 +1373,13 @@ static int yy_get_next_buffer (void)
 					 */
 
 					/* Reset buffer status. */
-					gcp_restart(gcp_in );
+					gw_sched_restart(gw_sched_in );
 
 					/*FALLTHROUGH*/
 
 				case EOB_ACT_END_OF_FILE:
 					{
-					if ( gcp_wrap( ) )
+					if ( gw_sched_wrap( ) )
 						return EOF;
 
 					if ( ! (yy_did_buffer_switch_on_eof) )
@@ -1523,13 +1399,8 @@ static int yy_get_next_buffer (void)
 		}
 
 	c = *(unsigned char *) (yy_c_buf_p);	/* cast for 8-bit char's */
-	*(yy_c_buf_p) = '\0';	/* preserve gcp_text */
+	*(yy_c_buf_p) = '\0';	/* preserve gw_sched_text */
 	(yy_hold_char) = *++(yy_c_buf_p);
-
-	if ( c == '\n' )
-		   
-    gcp_lineno++;
-;
 
 	return c;
 }
@@ -1540,32 +1411,32 @@ static int yy_get_next_buffer (void)
  * 
  * @note This function does not reset the start condition to @c INITIAL .
  */
-    void gcp_restart  (FILE * input_file )
+    void gw_sched_restart  (FILE * input_file )
 {
     
 	if ( ! YY_CURRENT_BUFFER ){
-        gcp_ensure_buffer_stack ();
+        gw_sched_ensure_buffer_stack ();
 		YY_CURRENT_BUFFER_LVALUE =
-            gcp__create_buffer(gcp_in,YY_BUF_SIZE );
+            gw_sched__create_buffer(gw_sched_in,YY_BUF_SIZE );
 	}
 
-	gcp__init_buffer(YY_CURRENT_BUFFER,input_file );
-	gcp__load_buffer_state( );
+	gw_sched__init_buffer(YY_CURRENT_BUFFER,input_file );
+	gw_sched__load_buffer_state( );
 }
 
 /** Switch to a different input buffer.
  * @param new_buffer The new input buffer.
  * 
  */
-    void gcp__switch_to_buffer  (YY_BUFFER_STATE  new_buffer )
+    void gw_sched__switch_to_buffer  (YY_BUFFER_STATE  new_buffer )
 {
     
 	/* TODO. We should be able to replace this entire function body
 	 * with
-	 *		gcp_pop_buffer_state();
-	 *		gcp_push_buffer_state(new_buffer);
+	 *		gw_sched_pop_buffer_state();
+	 *		gw_sched_push_buffer_state(new_buffer);
      */
-	gcp_ensure_buffer_stack ();
+	gw_sched_ensure_buffer_stack ();
 	if ( YY_CURRENT_BUFFER == new_buffer )
 		return;
 
@@ -1578,21 +1449,21 @@ static int yy_get_next_buffer (void)
 		}
 
 	YY_CURRENT_BUFFER_LVALUE = new_buffer;
-	gcp__load_buffer_state( );
+	gw_sched__load_buffer_state( );
 
 	/* We don't actually know whether we did this switch during
-	 * EOF (gcp_wrap()) processing, but the only time this flag
-	 * is looked at is after gcp_wrap() is called, so it's safe
+	 * EOF (gw_sched_wrap()) processing, but the only time this flag
+	 * is looked at is after gw_sched_wrap() is called, so it's safe
 	 * to go ahead and always set it.
 	 */
 	(yy_did_buffer_switch_on_eof) = 1;
 }
 
-static void gcp__load_buffer_state  (void)
+static void gw_sched__load_buffer_state  (void)
 {
     	(yy_n_chars) = YY_CURRENT_BUFFER_LVALUE->yy_n_chars;
 	(yytext_ptr) = (yy_c_buf_p) = YY_CURRENT_BUFFER_LVALUE->yy_buf_pos;
-	gcp_in = YY_CURRENT_BUFFER_LVALUE->yy_input_file;
+	gw_sched_in = YY_CURRENT_BUFFER_LVALUE->yy_input_file;
 	(yy_hold_char) = *(yy_c_buf_p);
 }
 
@@ -1602,35 +1473,35 @@ static void gcp__load_buffer_state  (void)
  * 
  * @return the allocated buffer state.
  */
-    YY_BUFFER_STATE gcp__create_buffer  (FILE * file, int  size )
+    YY_BUFFER_STATE gw_sched__create_buffer  (FILE * file, int  size )
 {
 	YY_BUFFER_STATE b;
     
-	b = (YY_BUFFER_STATE) gcp_alloc(sizeof( struct yy_buffer_state )  );
+	b = (YY_BUFFER_STATE) gw_sched_alloc(sizeof( struct yy_buffer_state )  );
 	if ( ! b )
-		YY_FATAL_ERROR( "out of dynamic memory in gcp__create_buffer()" );
+		YY_FATAL_ERROR( "out of dynamic memory in gw_sched__create_buffer()" );
 
 	b->yy_buf_size = size;
 
 	/* yy_ch_buf has to be 2 characters longer than the size given because
 	 * we need to put in 2 end-of-buffer characters.
 	 */
-	b->yy_ch_buf = (char *) gcp_alloc(b->yy_buf_size + 2  );
+	b->yy_ch_buf = (char *) gw_sched_alloc(b->yy_buf_size + 2  );
 	if ( ! b->yy_ch_buf )
-		YY_FATAL_ERROR( "out of dynamic memory in gcp__create_buffer()" );
+		YY_FATAL_ERROR( "out of dynamic memory in gw_sched__create_buffer()" );
 
 	b->yy_is_our_buffer = 1;
 
-	gcp__init_buffer(b,file );
+	gw_sched__init_buffer(b,file );
 
 	return b;
 }
 
 /** Destroy the buffer.
- * @param b a buffer created with gcp__create_buffer()
+ * @param b a buffer created with gw_sched__create_buffer()
  * 
  */
-    void gcp__delete_buffer (YY_BUFFER_STATE  b )
+    void gw_sched__delete_buffer (YY_BUFFER_STATE  b )
 {
     
 	if ( ! b )
@@ -1640,9 +1511,9 @@ static void gcp__load_buffer_state  (void)
 		YY_CURRENT_BUFFER_LVALUE = (YY_BUFFER_STATE) 0;
 
 	if ( b->yy_is_our_buffer )
-		gcp_free((void *) b->yy_ch_buf  );
+		gw_sched_free((void *) b->yy_ch_buf  );
 
-	gcp_free((void *) b  );
+	gw_sched_free((void *) b  );
 }
 
 #ifndef __cplusplus
@@ -1651,20 +1522,20 @@ extern int isatty (int );
     
 /* Initializes or reinitializes a buffer.
  * This function is sometimes called more than once on the same buffer,
- * such as during a gcp_restart() or at EOF.
+ * such as during a gw_sched_restart() or at EOF.
  */
-    static void gcp__init_buffer  (YY_BUFFER_STATE  b, FILE * file )
+    static void gw_sched__init_buffer  (YY_BUFFER_STATE  b, FILE * file )
 
 {
 	int oerrno = errno;
     
-	gcp__flush_buffer(b );
+	gw_sched__flush_buffer(b );
 
 	b->yy_input_file = file;
 	b->yy_fill_buffer = 1;
 
-    /* If b is the current buffer, then gcp__init_buffer was _probably_
-     * called from gcp_restart() or through yy_get_next_buffer.
+    /* If b is the current buffer, then gw_sched__init_buffer was _probably_
+     * called from gw_sched_restart() or through yy_get_next_buffer.
      * In that case, we don't want to reset the lineno or column.
      */
     if (b != YY_CURRENT_BUFFER){
@@ -1681,7 +1552,7 @@ extern int isatty (int );
  * @param b the buffer state to be flushed, usually @c YY_CURRENT_BUFFER.
  * 
  */
-    void gcp__flush_buffer (YY_BUFFER_STATE  b )
+    void gw_sched__flush_buffer (YY_BUFFER_STATE  b )
 {
     	if ( ! b )
 		return;
@@ -1701,7 +1572,7 @@ extern int isatty (int );
 	b->yy_buffer_status = YY_BUFFER_NEW;
 
 	if ( b == YY_CURRENT_BUFFER )
-		gcp__load_buffer_state( );
+		gw_sched__load_buffer_state( );
 }
 
 /** Pushes the new state onto the stack. The new state becomes
@@ -1710,14 +1581,14 @@ extern int isatty (int );
  *  @param new_buffer The new state.
  *  
  */
-void gcp_push_buffer_state (YY_BUFFER_STATE new_buffer )
+void gw_sched_push_buffer_state (YY_BUFFER_STATE new_buffer )
 {
     	if (new_buffer == NULL)
 		return;
 
-	gcp_ensure_buffer_stack();
+	gw_sched_ensure_buffer_stack();
 
-	/* This block is copied from gcp__switch_to_buffer. */
+	/* This block is copied from gw_sched__switch_to_buffer. */
 	if ( YY_CURRENT_BUFFER )
 		{
 		/* Flush out information for old buffer. */
@@ -1731,8 +1602,8 @@ void gcp_push_buffer_state (YY_BUFFER_STATE new_buffer )
 		(yy_buffer_stack_top)++;
 	YY_CURRENT_BUFFER_LVALUE = new_buffer;
 
-	/* copied from gcp__switch_to_buffer. */
-	gcp__load_buffer_state( );
+	/* copied from gw_sched__switch_to_buffer. */
+	gw_sched__load_buffer_state( );
 	(yy_did_buffer_switch_on_eof) = 1;
 }
 
@@ -1740,18 +1611,18 @@ void gcp_push_buffer_state (YY_BUFFER_STATE new_buffer )
  *  The next element becomes the new top.
  *  
  */
-void gcp_pop_buffer_state (void)
+void gw_sched_pop_buffer_state (void)
 {
     	if (!YY_CURRENT_BUFFER)
 		return;
 
-	gcp__delete_buffer(YY_CURRENT_BUFFER );
+	gw_sched__delete_buffer(YY_CURRENT_BUFFER );
 	YY_CURRENT_BUFFER_LVALUE = NULL;
 	if ((yy_buffer_stack_top) > 0)
 		--(yy_buffer_stack_top);
 
 	if (YY_CURRENT_BUFFER) {
-		gcp__load_buffer_state( );
+		gw_sched__load_buffer_state( );
 		(yy_did_buffer_switch_on_eof) = 1;
 	}
 }
@@ -1759,7 +1630,7 @@ void gcp_pop_buffer_state (void)
 /* Allocates the stack if it does not exist.
  *  Guarantees space for at least one push.
  */
-static void gcp_ensure_buffer_stack (void)
+static void gw_sched_ensure_buffer_stack (void)
 {
 	int num_to_alloc;
     
@@ -1770,7 +1641,7 @@ static void gcp_ensure_buffer_stack (void)
 		 * immediate realloc on the next call.
          */
 		num_to_alloc = 1;
-		(yy_buffer_stack) = (struct yy_buffer_state**)gcp_alloc
+		(yy_buffer_stack) = (struct yy_buffer_state**)gw_sched_alloc
 								(num_to_alloc * sizeof(struct yy_buffer_state*)
 								);
 		
@@ -1787,7 +1658,7 @@ static void gcp_ensure_buffer_stack (void)
 		int grow_size = 8 /* arbitrary grow size */;
 
 		num_to_alloc = (yy_buffer_stack_max) + grow_size;
-		(yy_buffer_stack) = (struct yy_buffer_state**)gcp_realloc
+		(yy_buffer_stack) = (struct yy_buffer_state**)gw_sched_realloc
 								((yy_buffer_stack),
 								num_to_alloc * sizeof(struct yy_buffer_state*)
 								);
@@ -1804,7 +1675,7 @@ static void gcp_ensure_buffer_stack (void)
  * 
  * @return the newly allocated buffer state object. 
  */
-YY_BUFFER_STATE gcp__scan_buffer  (char * base, yy_size_t  size )
+YY_BUFFER_STATE gw_sched__scan_buffer  (char * base, yy_size_t  size )
 {
 	YY_BUFFER_STATE b;
     
@@ -1814,9 +1685,9 @@ YY_BUFFER_STATE gcp__scan_buffer  (char * base, yy_size_t  size )
 		/* They forgot to leave room for the EOB's. */
 		return 0;
 
-	b = (YY_BUFFER_STATE) gcp_alloc(sizeof( struct yy_buffer_state )  );
+	b = (YY_BUFFER_STATE) gw_sched_alloc(sizeof( struct yy_buffer_state )  );
 	if ( ! b )
-		YY_FATAL_ERROR( "out of dynamic memory in gcp__scan_buffer()" );
+		YY_FATAL_ERROR( "out of dynamic memory in gw_sched__scan_buffer()" );
 
 	b->yy_buf_size = size - 2;	/* "- 2" to take care of EOB's */
 	b->yy_buf_pos = b->yy_ch_buf = base;
@@ -1828,33 +1699,33 @@ YY_BUFFER_STATE gcp__scan_buffer  (char * base, yy_size_t  size )
 	b->yy_fill_buffer = 0;
 	b->yy_buffer_status = YY_BUFFER_NEW;
 
-	gcp__switch_to_buffer(b  );
+	gw_sched__switch_to_buffer(b  );
 
 	return b;
 }
 
-/** Setup the input buffer state to scan a string. The next call to gcp_lex() will
+/** Setup the input buffer state to scan a string. The next call to gw_sched_lex() will
  * scan from a @e copy of @a str.
  * @param yystr a NUL-terminated string to scan
  * 
  * @return the newly allocated buffer state object.
  * @note If you want to scan bytes that may contain NUL values, then use
- *       gcp__scan_bytes() instead.
+ *       gw_sched__scan_bytes() instead.
  */
-YY_BUFFER_STATE gcp__scan_string (yyconst char * yystr )
+YY_BUFFER_STATE gw_sched__scan_string (yyconst char * yystr )
 {
     
-	return gcp__scan_bytes(yystr,strlen(yystr) );
+	return gw_sched__scan_bytes(yystr,strlen(yystr) );
 }
 
-/** Setup the input buffer state to scan the given bytes. The next call to gcp_lex() will
+/** Setup the input buffer state to scan the given bytes. The next call to gw_sched_lex() will
  * scan from a @e copy of @a bytes.
  * @param bytes the byte buffer to scan
  * @param len the number of bytes in the buffer pointed to by @a bytes.
  * 
  * @return the newly allocated buffer state object.
  */
-YY_BUFFER_STATE gcp__scan_bytes  (yyconst char * yybytes, int  _yybytes_len )
+YY_BUFFER_STATE gw_sched__scan_bytes  (yyconst char * yybytes, int  _yybytes_len )
 {
 	YY_BUFFER_STATE b;
 	char *buf;
@@ -1863,18 +1734,18 @@ YY_BUFFER_STATE gcp__scan_bytes  (yyconst char * yybytes, int  _yybytes_len )
     
 	/* Get memory for full buffer, including space for trailing EOB's. */
 	n = _yybytes_len + 2;
-	buf = (char *) gcp_alloc(n  );
+	buf = (char *) gw_sched_alloc(n  );
 	if ( ! buf )
-		YY_FATAL_ERROR( "out of dynamic memory in gcp__scan_bytes()" );
+		YY_FATAL_ERROR( "out of dynamic memory in gw_sched__scan_bytes()" );
 
 	for ( i = 0; i < _yybytes_len; ++i )
 		buf[i] = yybytes[i];
 
 	buf[_yybytes_len] = buf[_yybytes_len+1] = YY_END_OF_BUFFER_CHAR;
 
-	b = gcp__scan_buffer(buf,n );
+	b = gw_sched__scan_buffer(buf,n );
 	if ( ! b )
-		YY_FATAL_ERROR( "bad buffer in gcp__scan_bytes()" );
+		YY_FATAL_ERROR( "bad buffer in gw_sched__scan_bytes()" );
 
 	/* It's okay to grow etc. this buffer, and we should throw it
 	 * away when we're done.
@@ -1900,14 +1771,14 @@ static void yy_fatal_error (yyconst char* msg )
 #define yyless(n) \
 	do \
 		{ \
-		/* Undo effects of setting up gcp_text. */ \
+		/* Undo effects of setting up gw_sched_text. */ \
         int yyless_macro_arg = (n); \
         YY_LESS_LINENO(yyless_macro_arg);\
-		gcp_text[gcp_leng] = (yy_hold_char); \
-		(yy_c_buf_p) = gcp_text + yyless_macro_arg; \
+		gw_sched_text[gw_sched_leng] = (yy_hold_char); \
+		(yy_c_buf_p) = gw_sched_text + yyless_macro_arg; \
 		(yy_hold_char) = *(yy_c_buf_p); \
 		*(yy_c_buf_p) = '\0'; \
-		gcp_leng = yyless_macro_arg; \
+		gw_sched_leng = yyless_macro_arg; \
 		} \
 	while ( 0 )
 
@@ -1916,90 +1787,87 @@ static void yy_fatal_error (yyconst char* msg )
 /** Get the current line number.
  * 
  */
-int gcp_get_lineno  (void)
+int gw_sched_get_lineno  (void)
 {
         
-    return gcp_lineno;
+    return gw_sched_lineno;
 }
 
 /** Get the input stream.
  * 
  */
-FILE *gcp_get_in  (void)
+FILE *gw_sched_get_in  (void)
 {
-        return gcp_in;
+        return gw_sched_in;
 }
 
 /** Get the output stream.
  * 
  */
-FILE *gcp_get_out  (void)
+FILE *gw_sched_get_out  (void)
 {
-        return gcp_out;
+        return gw_sched_out;
 }
 
 /** Get the length of the current token.
  * 
  */
-int gcp_get_leng  (void)
+int gw_sched_get_leng  (void)
 {
-        return gcp_leng;
+        return gw_sched_leng;
 }
 
 /** Get the current token.
  * 
  */
 
-char *gcp_get_text  (void)
+char *gw_sched_get_text  (void)
 {
-        return gcp_text;
+        return gw_sched_text;
 }
 
 /** Set the current line number.
  * @param line_number
  * 
  */
-void gcp_set_lineno (int  line_number )
+void gw_sched_set_lineno (int  line_number )
 {
     
-    gcp_lineno = line_number;
+    gw_sched_lineno = line_number;
 }
 
 /** Set the input stream. This does not discard the current
  * input buffer.
  * @param in_str A readable stream.
  * 
- * @see gcp__switch_to_buffer
+ * @see gw_sched__switch_to_buffer
  */
-void gcp_set_in (FILE *  in_str )
+void gw_sched_set_in (FILE *  in_str )
 {
-        gcp_in = in_str ;
+        gw_sched_in = in_str ;
 }
 
-void gcp_set_out (FILE *  out_str )
+void gw_sched_set_out (FILE *  out_str )
 {
-        gcp_out = out_str ;
+        gw_sched_out = out_str ;
 }
 
-int gcp_get_debug  (void)
+int gw_sched_get_debug  (void)
 {
-        return gcp__flex_debug;
+        return gw_sched__flex_debug;
 }
 
-void gcp_set_debug (int  bdebug )
+void gw_sched_set_debug (int  bdebug )
 {
-        gcp__flex_debug = bdebug ;
+        gw_sched__flex_debug = bdebug ;
 }
 
 static int yy_init_globals (void)
 {
         /* Initialization is the same as for the non-reentrant scanner.
-     * This function is called from gcp_lex_destroy(), so don't allocate here.
+     * This function is called from gw_sched_lex_destroy(), so don't allocate here.
      */
 
-    /* We do not touch gcp_lineno unless the option is enabled. */
-    gcp_lineno =  1;
-    
     (yy_buffer_stack) = 0;
     (yy_buffer_stack_top) = 0;
     (yy_buffer_stack_max) = 0;
@@ -2009,36 +1877,36 @@ static int yy_init_globals (void)
 
 /* Defined in main.c */
 #ifdef YY_STDINIT
-    gcp_in = stdin;
-    gcp_out = stdout;
+    gw_sched_in = stdin;
+    gw_sched_out = stdout;
 #else
-    gcp_in = (FILE *) 0;
-    gcp_out = (FILE *) 0;
+    gw_sched_in = (FILE *) 0;
+    gw_sched_out = (FILE *) 0;
 #endif
 
     /* For future reference: Set errno on error, since we are called by
-     * gcp_lex_init()
+     * gw_sched_lex_init()
      */
     return 0;
 }
 
-/* gcp_lex_destroy is for both reentrant and non-reentrant scanners. */
-int gcp_lex_destroy  (void)
+/* gw_sched_lex_destroy is for both reentrant and non-reentrant scanners. */
+int gw_sched_lex_destroy  (void)
 {
     
     /* Pop the buffer stack, destroying each element. */
 	while(YY_CURRENT_BUFFER){
-		gcp__delete_buffer(YY_CURRENT_BUFFER  );
+		gw_sched__delete_buffer(YY_CURRENT_BUFFER  );
 		YY_CURRENT_BUFFER_LVALUE = NULL;
-		gcp_pop_buffer_state();
+		gw_sched_pop_buffer_state();
 	}
 
 	/* Destroy the stack itself. */
-	gcp_free((yy_buffer_stack) );
+	gw_sched_free((yy_buffer_stack) );
 	(yy_buffer_stack) = NULL;
 
     /* Reset the globals. This is important in a non-reentrant scanner so the next time
-     * gcp_lex() is called, initialization will occur. */
+     * gw_sched_lex() is called, initialization will occur. */
     yy_init_globals( );
 
     return 0;
@@ -2068,12 +1936,12 @@ static int yy_flex_strlen (yyconst char * s )
 }
 #endif
 
-void *gcp_alloc (yy_size_t  size )
+void *gw_sched_alloc (yy_size_t  size )
 {
 	return (void *) malloc( size );
 }
 
-void *gcp_realloc  (void * ptr, yy_size_t  size )
+void *gw_sched_realloc  (void * ptr, yy_size_t  size )
 {
 	/* The cast to (char *) in the following accommodates both
 	 * implementations that use char* generic pointers, and those
@@ -2085,143 +1953,40 @@ void *gcp_realloc  (void * ptr, yy_size_t  size )
 	return (void *) realloc( (char *) ptr, size );
 }
 
-void gcp_free (void * ptr )
+void gw_sched_free (void * ptr )
 {
-	free( (char *) ptr );	/* see gcp_realloc() for (char *) cast */
+	free( (char *) ptr );	/* see gw_sched_realloc() for (char *) cast */
 }
 
 #define YYTABLES_NAME "yytables"
 
-#line 141 "gw_conf_parser.l"
+#line 75 "gw_sch_conf_parser.l"
 
 
 
-void gcp_set_val_int(gw_conf_var_t var, int val)
-{
-    switch(var)
-    {
-        case DISCOVERY_INTERVAL:
-            gw_conf.discovery_interval = val;
-            break;
-            
-        case GWD_PORT:
-            gw_conf.gwd_port = val;
-            break;
-
-        case MONITORING_INTERVAL:
-            gw_conf.monitoring_interval = val;
-            break;        
-
-        case MAX_NUMBER_OF_CLIENTS:
-            gw_conf.max_number_of_clients = val;
-            break;        
-        
-        case NUMBER_OF_ARRAYS:
-            gw_conf.number_of_arrays = val;
-            break;
-
-        case NUMBER_OF_JOBS:
-            gw_conf.number_of_jobs = val;
-            break;
-
-        case NUMBER_OF_HOSTS:
-            gw_conf.number_of_hosts = val;
-            break;
-
-        case NUMBER_OF_USERS:
-            gw_conf.number_of_users = val;
-            break;
-            		
-		case POLL_INTERVAL:
-			gw_conf.poll_interval = val;
-			break;
-			
-		case SCHEDULING_INTERVAL:
-			gw_conf.scheduling_interval = val;
-			break;		
-
-		default:
-            gw_log_print("GW",'E',"Error! Unknown variable\n");
-			break;
-    }
-}
-
-void init_mad_parser(int mad_index)
-{
-	gcp_j = 0;
-	
-	switch (mad_index)
-	{
-		case 0:
-			gcp_mads = gw_conf.im_mads;
-            gcp_max  = 6;
-			break;
-			
-		case 1:
-			gcp_mads = gw_conf.tm_mads;
-            gcp_max  = 3;
-			break;
-            
-		case 2:
-			gcp_mads = gw_conf.em_mads;
-            gcp_max  = 3;
-			break;
-			
-		default:
-	        gw_log_print("GW",'E',"gwd.conf: Unexpected error parsing MAD, line %i\n",gcp_lineno);
-	        break;	
-	}
-	
-	gcp_num = 0;
-	
-	while ( gcp_mads[gcp_num][0] != NULL )
-	{
-	    gcp_num++;
-	    if ( gcp_num == GW_MAX_MADS )
-        {
-            gw_log_print("GW",'W',"gwd.conf: Max. number of MAD reached, ignoring MAD, line %i\n",gcp_lineno);
-            gcp_mads = NULL;
-        }
-    }
-    
-}
-
-void process_escaped_chars(char *str)
-{
-    int i, j;
-    
-    for (i = 0, j = 0; str[i] != '\0'; i++)
-    {
-        if ( str[i] != '\\' )
-            str[j++] = str[i];
-    }
-    
-    str[j] = '\0';
-}
-
-int gcp_wrap(void)
+int gw_sched_wrap()
 {
     return 1;
 }
 
-int gw_conf_lex_parser ()
-{
-    int rc;
-	    
-    gcp_lineno = 0;
-    gcp_in = fopen (gw_conf.conf_file,"r");
+int gw_sch_loadconf(gw_sch_conf_t *conf, char *file)
+{	
+	int rc;
 
-    if (gcp_in == NULL)
+    gw_sched_in = fopen (file,"r");
+
+    if (gw_sched_in == NULL)
     {
-        gw_log_print("GW",'E',"gwd.conf: Error opening file\n"); 
-        fprintf(stderr,"Error opening gwd.conf file (%s)\n",gw_conf.conf_file);
+        gw_log_print("GW",'E',"sched.conf: Error opening file\n"); 
+        fprintf(stderr,"Error opening sched.conf file (%s)\n",file);
         return -1;
     }
     
-    rc = yylex_gwd_conf();
-    
-    fclose(gcp_in);
+    rc = gw_sched_parse (conf);
+            
+    fclose(gw_sched_in);
     
     return rc;
 }
+
 

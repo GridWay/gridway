@@ -75,15 +75,12 @@ void gw_dm_pending ( void *_job_id )
    
 	if (job->history != NULL)
 	{	
-		if (job->history->reason == GW_REASON_SELF_MIGRATION)
-		    reason = GW_REASON_SELF_MIGRATION;
-		else
-		    reason = GW_REASON_NONE;
+        reason = GW_REASON_NONE;
 		    
 		failed =(job->history->reason == GW_REASON_EXECUTION_ERROR) ||
                 (job->history->reason == GW_REASON_PERFORMANCE);
                                                      
-        if ((job->template.reschedule_on_failure == GW_TRUE) && failed)
+        if (failed)
         {
             gw_dm_mad_job_failed(&gw_dm.dm_mad[0],
 	                         job->history->host->host_id,
@@ -94,9 +91,8 @@ void gw_dm_pending ( void *_job_id )
         gw_dm_mad_job_schedule(&gw_dm.dm_mad[0],
                            job_id,
                            job->array_id,
-                           reason,
-                           job->nice,
-                           job->user_id);
+                           job->user_id,
+                           reason);
 	}
 	else
     	gw_log_print("DM",'E',"Rescheduling job %d, but no history records found.\n", 

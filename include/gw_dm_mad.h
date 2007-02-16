@@ -35,7 +35,6 @@ typedef struct gw_dm_mad_s
 
     char *em_mad_name;
     char *tm_mad_name;
-    int nice;
 
     int  mad_dm_pipe;
     int  dm_mad_pipe;
@@ -98,17 +97,8 @@ void gw_dm_mad_job_success(gw_dm_mad_t * dm_mad,
 void gw_dm_mad_job_schedule(gw_dm_mad_t *         dm_mad, 
                             int                   jid,
                             int                   aid,
-                            gw_migration_reason_t reason,
-                            int                   nice,
-                            int                   uid);
-                            
-void gw_dm_mad_array_schedule(gw_dm_mad_t *         dm_mad, 
-                              int                   jid,
-                              int                   aid,
-                              gw_migration_reason_t reason,
-                              int                   nice,
-                              int                   uid,
-                              int                   tasks);                            
+                            int                   uid,
+                            gw_migration_reason_t reason);
 
 /* ---------------------------------------------------------------------------*/
 

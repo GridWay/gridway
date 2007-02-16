@@ -311,7 +311,7 @@ void gwd_main()
     pthread_mutex_lock(&mutex);
     pthread_cond_wait(&cond, &mutex);
     
-    gw_log_print("GWD",'I',"SIGTERM received, finalizing.\n");
+    gw_log_print("GW",'I',"SIGTERM received, finalizing.\n");
 
     gw_am_trigger(&(rm->am), GW_ACTION_FINALIZE, NULL);
     gw_am_trigger(&(dm->am), GW_ACTION_FINALIZE, NULL);
@@ -411,8 +411,19 @@ int main(int argc, char **argv)
 
     if( fd == -1)
     {
-        fprintf(stderr,"Error! Lock file %s exists.\n",lock);
-        exit(-1);
+		switch(errno)
+		{
+			case EEXIST:
+        		fprintf(stderr,"Error! Lock file %s exists.\n",lock);
+				break;
+			case EACCES:
+				fprintf(stderr, "Error! Can not access %s, "
+						"check permissions.\n", lock);
+				break;
+			default:
+				fprintf(stderr, "Error! Can not access %s\n", lock);
+		}
+		exit(-1);
     }
 
     close(fd);

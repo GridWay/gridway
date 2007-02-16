@@ -19,6 +19,8 @@
 #define _GW_JOB_H
 
 #include <stdio.h>
+#include <limits.h>
+
 #include "gw_history.h"
 #include "gw_host.h"
 #include "gw_job_template.h"
@@ -27,7 +29,12 @@
 #include "gw_rm_msg.h"
 #include "globus_gram_client.h"
 
+
 #define GW_RSL_ENVIRONMENT_LENGTH 16386
+
+#define GW_JOB_MAX_PRIORITY       20
+#define GW_JOB_MIN_PRIORITY       00
+#define GW_JOB_DEFAULT_PRIORITY   INT_MIN
 
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
@@ -106,7 +113,7 @@ typedef struct gw_job_s
     int pstart;
     int pinc;
     
-    int nice;
+    int fixed_priority;
     
     gw_em_state_t  em_state;
     gw_tm_state_t  tm_state;

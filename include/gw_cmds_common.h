@@ -22,6 +22,9 @@
 
 /* -------------------------------------------------------------------------- */
 
+// Default options to display with gwps
+#define GW_PS_DEFAULT_OPTIONS "uJipynseftxjh"
+
 #define bold()       printf("\33[1m");
 #define underline()  printf("\33[4m");
 #define cls()        printf("\33[2J\33[H");
@@ -45,6 +48,10 @@ void gw_client_print_status(gw_msg_job_t * msg, char *outoption);
 
 void gw_client_print_pool_status(char *username, char *hostname, char jobstate, char *outoption, int array_id);
 
+void gw_client_print_status_full(gw_msg_job_t * msg);
+
+void gw_client_print_pool_status_full(char *username, char *hostname, char jobstate, int array_id);
+
 void gw_client_print_history_header();
 
 void gw_client_print_history(gw_msg_history_t *msg_history);
@@ -55,7 +62,11 @@ void gw_client_print_host_status(gw_msg_host_t * msg);
 
 void gw_client_print_host_queues(gw_msg_host_t * msg, gw_boolean_t header);
 
+void gw_client_print_host_status_full(gw_msg_host_t * msg);
+
 void gw_client_print_host_pool_status();
+
+void gw_client_print_host_pool_status_full();
 
 void gw_client_print_host_match_header();
 

@@ -35,7 +35,7 @@
  * -------------------------------------------------------------------------- */
 
 typedef struct drmaa_job_template_s 	drmaa_job_template_t;
-typedef struct drmaa_attr_names_s  	    drmaa_attr_names_t;
+typedef struct drmaa_attr_names_s  	drmaa_attr_names_t;
 typedef struct drmaa_attr_values_s  	drmaa_attr_values_t;
 typedef struct drmaa_job_ids_s      	drmaa_job_ids_t;
 
@@ -322,6 +322,23 @@ typedef struct drmaa_job_ids_s      	drmaa_job_ids_t;
  */
 #define DRMAA_PLACEHOLDER_WD	    "$drmaa_wd_ph$" 
 
+/** Pre-defined string to represent a deadline for job execution. GridWay WILL 
+ *  NOT terminate a job after the deadline, neither guarantees that the job is
+ *  executed before the deadline. A deadline is specified relative to job 
+ *  submission time, in the form: 
+ *  [[DD:][HH:]]MM where,
+ *      DD is the number of days
+ *      HH is the number of hours
+ *      MM is the number of minutes
+ * 
+ *  Example:
+ *  01:22 The job should finished one hour and 22 minutes after submission.
+ * 
+ *  NOTE: The use of the DEADLINE_TIME as described here differs from the one
+ *  specified in the standard (v1.0).
+ */
+#define DRMAA_DEADLINE_TIME         "drmaa_deadline_time"
+
 
 /** Not relevant for the current GridWay implementation, will be ignored
  */
@@ -563,6 +580,25 @@ typedef struct drmaa_job_ids_s      	drmaa_job_ids_t;
  *  Example:"ARCH = "i686" & CPU_MHZ > 1000;" (NOTE: Must end with ';')
  */
 #define DRMAA_GW_REQUIREMENTS "REQUIREMENTS"
+
+/** Pre-defined string to refer to the job type: "single" or "mpi".  
+ *  Jobs of both types can be further combined in array or workflow structures.
+ *  MPI jobs spawn within a single resource and NOT across multiple resources. 
+ */
+#define DRMAA_GW_TYPE "TYPE"
+/** Pre-defined string to define single (one process) jobs. 
+ */
+#define DRMAA_GW_TYPE_SINGLE "single"
+
+/** Pre-defined string to define MPI (Message Passing Interface) jobs. 
+ */
+#define DRMAA_GW_TYPE_MPI    "mpi"
+
+/** Pre-defined string to refer to the number of process requested by a MPI job
+ */
+#define DRMAA_GW_NP "NP"
+
+
  /*@}*/
  
 /* ************************************************************************** *

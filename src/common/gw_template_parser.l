@@ -48,6 +48,9 @@ int file;
 int find;
 char *GW_LOCATION;
 
+int dl_comp;
+int dl[3];
+
 %}
 
 %x var_int
@@ -55,12 +58,14 @@ char *GW_LOCATION;
 %x var_str
 %x var_files
 %x var_env
+%x var_dl
 %x val_int
 %x val_yn
 %x val_str
 %x val_files
 %x val_env
 %x val_env_val
+%x val_dl
 %option prefix="jtp_"
 %option yylineno
 %option nounput
@@ -102,6 +107,10 @@ SUSPENSION_TIMEOUT      { jtp_var = SUSPENSION_TIMEOUT;     BEGIN var_int;}
 CHECKPOINT_INTERVAL     { jtp_var = CHECKPOINT_INTERVAL;    BEGIN var_int;}
 CHECKPOINT_URL          { jtp_var = CHECKPOINT_URL;         BEGIN var_int;}
 JOB_DEPENDENCIES        { jtp_var = JOB_DEPENDENCIES;       BEGIN var_str;}
+TYPE                    { jtp_var = TYPE;                   BEGIN var_str;}
+NP                      { jtp_var = NP;                     BEGIN var_int;}
+DEADLINE                { jtp_var = DEADLINE;               BEGIN var_dl;}
+NAME                    { jtp_var = NAME;                   BEGIN var_str;}
 
     /* --------------------------------------------------------------------- */
     /*    Assignment Parsing                                                 */
@@ -112,6 +121,7 @@ JOB_DEPENDENCIES        { jtp_var = JOB_DEPENDENCIES;       BEGIN var_str;}
 <var_str>[ \t]*=[ \t]*      { BEGIN val_str;}
 <var_files>[ \t]*=[ \t]*    { BEGIN val_files;}
 <var_env>[ \t]*=[ \t]*      { BEGIN val_env;}
+<var_dl>[ \t]*=[ \t]*       { BEGIN val_dl;}
 
     /* --------------------------------------------------------------------- */
     /*    Value Parsing                                                      */
@@ -123,6 +133,9 @@ JOB_DEPENDENCIES        { jtp_var = JOB_DEPENDENCIES;       BEGIN var_str;}
 <val_yn>[ \t]*(#.*)?\n  { BEGIN INITIAL;}
 <val_yn>yes|YES|Yes     { gw_template_set_value_int(jt, jtp_var, GW_TRUE);}
 <val_yn>no|NO|No        { gw_template_set_value_int(jt, jtp_var, GW_FALSE);}
+<val_yn>.               { fprintf(stderr,"Parse error at line %i: expected \"yes\" or \"no\"\n",
+                          yylineno);
+                          return -1;}
 
 <val_str>[ \t]*(#.*)?\n { BEGIN INITIAL;} 
 <val_str>\"[^\"]*\"     { yytext[strlen(yytext)-1]= '\0';
@@ -182,7 +195,7 @@ JOB_DEPENDENCIES        { jtp_var = JOB_DEPENDENCIES;       BEGIN var_str;}
                                           break;
                                         case 2:
                                           fprintf(stderr,"Parse error at line %i\n", yylineno);
-                                         return -1;
+                                          return -1;
                                       }                                  
                                     break;
                                       
@@ -207,6 +220,24 @@ JOB_DEPENDENCIES        { jtp_var = JOB_DEPENDENCIES;       BEGIN var_str;}
 <val_env_val>[ \t]*(#.*)?\n { BEGIN INITIAL;}
 <val_env_val>.              {jtp_error(jt, "ENVIRONMENT attribute (value)"); return -1;}
                       
+
+<val_dl>[ \t]*(#.*)?\n  { switch (dl_comp)
+                          {
+                              case 1:
+                                  jt->deadline = dl[0]*60;
+                                  break;
+                              case 2:
+                                  jt->deadline = dl[0]*60*60 + dl[1]*60;
+                                  break;
+                              case 3:
+                                  jt->deadline = dl[0]*24*60*60 + dl[1]*60*60 + dl[2]*60;
+                                  break;
+                              default:
+                                 jtp_error(jt, "Bad deadline format"); return -1;
+                          }
+                          BEGIN INITIAL;}
+<val_dl>:[0-9]+         { dl[dl_comp++] = atoi(yytext+1); }
+<val_dl>[0-9]+          { dl[0] = atoi(yytext); dl_comp = 1; }
 
     /* --------------------------------------------------------------------- */
     /*    Default Parsing                                                    */
@@ -323,7 +354,22 @@ void gw_template_set_value_str (gw_template_t *jt,
             jt->job_deps[i] = -1;
             free(tmp);
             break;
-            
+
+        case TYPE:
+            if (strcasecmp(val,"mpi") == 0)
+                jt->type = GW_JOB_TYPE_MPI;
+            else if (strcasecmp(val,"multiple") == 0)
+                jt->type = GW_JOB_TYPE_MULTIPLE;
+            else if (strcasecmp(val,"single") == 0)
+                jt->type = GW_JOB_TYPE_SINGLE;
+            else
+                fprintf(stderr,"Bad job type \"%s\", line %i\n",val,jtp_lineno);
+            break;
+
+        case NAME:
+            strncpy(jt->name,val,GW_JT_STR);
+            break;
+
         default:
             fprintf(stderr,"Unexpected error setting str variable, line %i\n",jtp_lineno);
             break;
@@ -367,6 +413,10 @@ void gw_template_set_value_int (gw_template_t *jt,
             jt->suspension_timeout = val;
             break;
         
+        case NP:
+            jt->np = val;
+            break;
+        
         default:
             fprintf(stderr,"Unexpected error setting int variable, line %i\n",jtp_lineno);
             break;
@@ -394,7 +444,7 @@ int gw_template_parser (gw_template_t *jt)
     /* Default job template parsing */         
 
     sprintf(template_file,"%s/etc/job_template.default",GW_LOCATION);
-        
+
     yyin = fopen (template_file, "r");
 
     if (yyin == NULL)
@@ -415,11 +465,17 @@ int gw_template_parser (gw_template_t *jt)
         }
     }
 
-    /* Job template parsing */         
+    /* Job template parsing */
+    
+    if(strcmp(jt->file,"stdin")==0)
+		yyin = stdin;
+	else
+	{
+	    sprintf(template_file,"%s/%s",jt->job_home,jt->file);            
+    	yyin = fopen (template_file, "r");
+	}
 
-    sprintf(template_file,"%s/%s",jt->job_home,jt->file);
-            
-    yyin = fopen (template_file, "r");
+
 
     if (yyin == NULL)
     {

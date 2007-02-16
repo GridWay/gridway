@@ -37,8 +37,8 @@ void gw_dm_listener(void *arg)
     char    result[GW_DM_MAX_RESULT];
     char    action[GW_DM_MAX_ACTION];
     char    str[GW_DM_MAX_STRING];
-    char    *s_host_id, *queue_name, *s_rank, *s_ntasks, *lasts;
-    int     job_id, array_id, host_id, rank, ntasks;
+    char    *s_host_id, *queue_name, *s_rank, *lasts;
+    int     job_id, host_id, rank;
     
     pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL); 
     pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
@@ -59,7 +59,7 @@ void gw_dm_listener(void *arg)
         
         select( greater+1, &in_pipes, NULL, NULL, NULL);
 
-        for (i= 0; i<gw_dm.registered_mads; i++)
+        for (i= 0; i<gw_dm.registered_mads; i++) 
         {
             fd = gw_dm.dm_mad[i].mad_dm_pipe;
             
@@ -118,44 +118,6 @@ void gw_dm_listener(void *arg)
 
                         job_id     = atoi(s_id);
                         gw_dm_uncheck_job(job_id);
-                    }
-                }                
-                else if (strcmp(action, "SCHEDULE_TASKS") == 0)
-                {
-                    if (strcmp(result, "SUCCESS") == 0)
-                    {
-                        /* Schedule array */
-                        array_id = atoi(s_id);
-                        
-                        s_host_id = strtok_r(info, ":", &lasts);
-                        
-                        while (s_host_id != NULL) 
-                        {
-                            queue_name = strtok_r(NULL, ":", &lasts);
-                            s_rank     = strtok_r(NULL, ":", &lasts);
-                            s_ntasks   = strtok_r(NULL, " \n", &lasts);;
-
-                            if (s_host_id == NULL || queue_name == NULL ||
-                                     s_id == NULL || s_ntasks   == NULL  )
-                            {
-	                            gw_log_print("DM",'E',"Bad resource specification (%s) from scheduler.\n",
-                                         info);
-                                continue;
-                            }
-
-                            host_id = atoi(s_host_id);
-                            rank    = atoi(s_rank);
-                            ntasks  = atoi(s_ntasks);
-
-							gw_dm_dispatch_tasks (array_id,ntasks,host_id,queue_name,rank);
-
-                            s_host_id = strtok_r(NULL, ":", &lasts);
-                        }
-                    }
-                    else
-                    {
-                        gw_log_print("DM",'E',"Can't schedule array %s: %s\n",
-                                s_id, info);
                     }
                 }
                 else if (strcmp(action, "SCHEDULE_END") == 0)

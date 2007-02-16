@@ -21,21 +21,36 @@
 
 #include "gw_em_rsl.h"
 #include "gw_job.h"
+#include "gw_template.h"
 
 
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
 
-char* gw_generate_wrapper_rsl2_gw (gw_job_t *job)
+char* gw_generate_rsl2 (gw_job_t *job)
+{
+    if ( job->template.type == GW_JOB_TYPE_MPI
+            || strcmp(job->history->host->lrms_type, "gw") == 0
+            || job->template.wrapper == NULL )
+        return gw_generate_nowrapper_rsl2(job);
+    else
+        return gw_generate_wrapper_rsl2(job);
+}
+
+/*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+
+char* gw_generate_nowrapper_rsl2 (gw_job_t *job)
 {
     char *rsl;
     char *job_environment; 
-    char *extensions;
-	char rsl_buffer[GW_RSL_LENGTH];
-	int print_queue = 0;
-	int rc;
-
+    char tmp_buffer[GW_RSL_LENGTH];
+    char rsl_buffer[GW_RSL_LENGTH];
+    int print_queue = 0;
+    int rc;
+	
     /* ---------------------------------------------------------------------- */
     /* 1.- Create dynamic job data environment                                */
     /* ---------------------------------------------------------------------- */
@@ -45,58 +60,50 @@ char* gw_generate_wrapper_rsl2_gw (gw_job_t *job)
     if ( job_environment == NULL )
         return NULL;
         
-    extensions = gw_job_rsl2_extensions(job);
-
-    if ( extensions == NULL )
-        return NULL;
-    
-
     /* ---------------------------------------------------------------------- */
     /* 2.- Build RSL String & Return it                                       */
     /* ---------------------------------------------------------------------- */
 
-	if ( job->history->queue != NULL )
-    	if ( strcmp(job->history->queue,"-") != 0 )
-	        print_queue = 1;
-        	
-	if ( print_queue )
-    	rc = snprintf(rsl_buffer, sizeof(char) * GW_RSL_LENGTH,
-				"<job>"
-                " <executable>.gw_%s_%i/.wrapper</executable>"
-                " %s"
-                " <stdout>.gw_%s_%i/stdout.execution</stdout>"
-                " <stderr>.gw_%s_%i/stderr.execution</stderr>"
-                " <queue>%s</queue>"
-                " %s"                
-                "</job>",
-                job->owner, job->id,
-                job_environment,
-                job->owner, job->id,
-                job->owner, job->id,
-                job->history->queue,
-                extensions);
-	else
-	
-		rc = snprintf(rsl_buffer, sizeof(char) * GW_RSL_LENGTH,
-				"<job>"
-                " <executable>.gw_%s_%i/.wrapper</executable>"
-                " %s"
-                " <stdout>.gw_%s_%i/stdout.execution</stdout>"
-                " <stderr>.gw_%s_%i/stderr.execution</stderr>"
-                " %s"
-                "</job>",
-                job->owner, job->id,
-                job_environment,
-                job->owner, job->id,
-                job->owner, job->id,
-                extensions);
-	
-	free(job_environment);
-	free(extensions);      
+    if ( job->history->queue != NULL )
+        if ( strcmp(job->history->queue,"-") != 0 )
+            print_queue = 1;
 
-	if ((rc >= (GW_RSL_LENGTH * sizeof(char))) || ( rc < 0 ) )          
-    	return NULL;
+    rc = snprintf(rsl_buffer, sizeof(char) * GW_RSL_LENGTH,
+            "<job>"
+            " <executable>%s</executable>"
+            " <argument>%s</argument>"
+            " <directory>.gw_%s_%i</directory>"
+            " <count>%d</count>"
+            " <jobType>%s</jobType>",
+            job->template.executable,         
+            job->template.arguments,
+            job->owner, job->id,
+            job->template.np,
+            gw_template_jobtype_string(job->template.type));
+
+    if ( job->template.stdin_file[0] == '/' )
+        sprintf(tmp_buffer," <stdin>%s</stdin>",job->template.stdin_file);
+    else
+        sprintf(tmp_buffer," <stdin>stdin.execution</stdin>");  
+	    
+    strcat(rsl_buffer,tmp_buffer);
     
+    strcat(rsl_buffer," <stdout>stdout.execution</stdout> <stderr>stderr.execution</stderr>");
+    
+    strcat(rsl_buffer,job_environment);
+    free(job_environment);
+    
+    if ( print_queue )
+    {
+        sprintf(tmp_buffer," <queue>%s</queue>",job->history->queue);
+        strcat(rsl_buffer,tmp_buffer);
+    }
+	
+    strcat(rsl_buffer,"</job>");
+
+    if ((rc >= (GW_RSL_LENGTH * sizeof(char))) || ( rc < 0 ) )
+    	return NULL;
+
     rsl = strdup(rsl_buffer);
     return rsl;
 }

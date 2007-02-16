@@ -48,6 +48,8 @@ void gw_em_listener(void *arg)
 
     gw_boolean_t  assume_done;
     gw_em_mad_t * em_mad;
+    
+    char *ptmp;
 
     pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL); 
     pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
@@ -97,7 +99,7 @@ void gw_em_listener(void *arg)
 #ifdef GWEMDEBUG
                 gw_log_print("EM",'D',"MAD message received:\"%s %s %s %s\".\n",
                              action, s_job_id, result, info);
-#endif                        
+#endif                      
                 if (s_job_id[0] == '-')
                     continue;
 
@@ -193,11 +195,17 @@ void gw_em_listener(void *arg)
                         else if (strcmp(info, "ACTIVE") == 0)
                             gw_am_trigger(&(gw_em.am),"GW_EM_STATE_ACTIVE",
                                     (void *) job_id);
-                                        
-                        else if (strcmp(info, "DONE") == 0)
-                            gw_am_trigger(&(gw_em.am), "GW_EM_STATE_DONE",
-                                    (void *) job_id);
-                                        
+                                
+                        else if (strstr(info, "DONE") != NULL)
+                        {
+                        	ptmp = strstr(info,"DONE:");
+                             	
+                            if ((ptmp != NULL) && (strlen(ptmp+5) > 0))/*No-wrapper mode*/
+	                           	job->exit_code=atoi(ptmp+5);
+
+                             gw_am_trigger(&(gw_em.am), "GW_EM_STATE_DONE",
+	                                    (void *) job_id);
+                        }                
                         else if (strcmp(info, "FAILED") == 0)
                             gw_am_trigger(&(gw_em.am), "GW_EM_STATE_FAILED",
                                     (void *) job_id);
@@ -243,10 +251,16 @@ void gw_em_listener(void *arg)
                             gw_am_trigger(&(gw_em.am),"GW_EM_STATE_ACTIVE",
                                     (void *) job_id);
                                         
-                        else if (strcmp(info, "DONE") == 0)
-                            gw_am_trigger(&(gw_em.am), "GW_EM_STATE_DONE",
-                                    (void *) job_id);
-                                        
+                        else if (strstr(info, "DONE") != NULL)
+                        {
+                        	ptmp = strstr(info,"DONE:");
+                             	
+                            if ((ptmp != NULL) && (strlen(ptmp+5) > 0))/*No-wrapper mode*/
+	                           	job->exit_code=atoi(ptmp+5);
+
+ 	                        gw_am_trigger(&(gw_em.am), "GW_EM_STATE_DONE",
+	                                (void *) job_id);
+                        }            
                         else if (strcmp(info, "FAILED") == 0)
                             gw_am_trigger(&(gw_em.am), "GW_EM_STATE_FAILED",
                                     (void *) job_id);
@@ -276,9 +290,16 @@ void gw_em_listener(void *arg)
                             gw_am_trigger(&(gw_em.am),"GW_EM_STATE_ACTIVE", 
                             	(void *) job_id);
                                     
-                        else if (strcmp(info, "DONE") == 0)
+                        else if (strstr(info, "DONE") != NULL)
+                        {
+                        	ptmp = strstr(info,"DONE:");
+                             	
+                            if ((ptmp != NULL) && (strlen(ptmp+5) > 0))/*No-wrapper mode*/
+	                           	job->exit_code=atoi(ptmp+5);
+
                             gw_am_trigger(&(gw_em.am), "GW_EM_STATE_DONE",
-                            	(void *) job_id);
+                                    (void *) job_id);
+                        }    
                                     
                         else if (strcmp(info, "FAILED") == 0)/* user cancelled */
                         {

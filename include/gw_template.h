@@ -24,10 +24,23 @@
 #define GW_JT_DEPS  50
 
 #include "gw_common.h"
+
 #include <time.h>
+
+/* -------------------------------------------------------------------------- */
+
+typedef enum {
+    GW_JOB_TYPE_SINGLE,
+    GW_JOB_TYPE_MULTIPLE,
+    GW_JOB_TYPE_MPI
+} gw_jobtype_t;
+
+/* -------------------------------------------------------------------------- */
 
 typedef struct gw_template_s
 {
+    char name[GW_JT_STR];
+
     char file[GW_JT_PATH];
     char job_home[GW_JT_PATH];
     char user_home[GW_JT_PATH];
@@ -73,7 +86,11 @@ typedef struct gw_template_s
 	char monitor[GW_JT_STR];
 	
 	int  job_deps[GW_JT_DEPS];
-	
+
+    int type;
+    int np;
+
+    time_t deadline;
 } gw_template_t;
 
 /* -------------------------------------------------------------------------- */
@@ -103,7 +120,11 @@ typedef enum {
     MONITOR,
     CHECKPOINT_INTERVAL,
     CHECKPOINT_URL,
-    JOB_DEPENDENCIES
+    JOB_DEPENDENCIES,
+    TYPE,
+    NP,
+    DEADLINE,
+    NAME
 } gw_template_var_t;
 	              
 /* -------------------------------------------------------------------------- */
@@ -114,6 +135,11 @@ int gw_template_init(gw_template_t *jt, const char *jt_file);
 int gw_template_parser(gw_template_t *jt);
 
 void gw_template_print(gw_template_t *jt);
+
+char *gw_template_jobtype_string(gw_jobtype_t type);
+
+char *gw_template_deadline_string(time_t deadline);
+
 
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */

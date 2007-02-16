@@ -20,11 +20,6 @@
 
 #include "gw_client.h"
 
-#define  GW_SCHED_TINF    3600
-#define  GW_SCHED_C       650
-#define  GW_SCHED_DELTA0  180
-#define  GW_SCHED_DMEM    3
-
 /* -------------------------------------------------------------------- */
 /* -------------------------------------------------------------------- */
 /* -------------------------------------------------------------------- */
@@ -55,6 +50,10 @@ typedef struct gw_sch_user_host_s
     float  avrg_transfer;
     float  avrg_execution;
     float  avrg_suspension;
+    
+    float last_transfer;
+    float last_execution;
+    float last_suspension;
 
 } gw_sch_user_host_t;
 
@@ -63,14 +62,18 @@ typedef struct gw_sch_user_host_s
 
 typedef struct gw_sch_user_s
 {
-	int  uid;
-	char name[GW_MSG_STRING_SHORT];
+	int   uid;
+	char  name[GW_MSG_STRING_SHORT];
 	
-	int  running_jobs;
-	int  active_jobs;
+	int   running_jobs;
+	int   active_jobs;
+	int   total_jobs;
 
-	int  dispatched;
-	int  share;
+	int   dispatched;
+	
+	int   share;
+	int   next_ujid;
+	int * sub_windows;
 	
 	gw_sch_user_host_t * hosts;
 	
@@ -86,8 +89,16 @@ typedef struct gw_sch_queue_s
 	char qname[GW_MSG_STRING_SHORT];
 	int  slots;
 
-	int  nice;	
-	int  rank;
+	int   fixed;
+	float nfixed;
+	
+	int   rank;
+	float nrank;
+	
+	float usage;
+	float nusage;
+	
+	float priority;
 	
 } gw_sch_queue_t;
 
@@ -99,15 +110,31 @@ typedef struct gw_sch_job_s
 		
 	int jid;
 	int aid;
+        
+    int np;
 	
-	int tasks;
     gw_migration_reason_t reason;
-	
-	int nice;
 	
 	int              num_mhosts;
     gw_sch_queue_t * mhosts;
-	
+    
+    time_t schedule_time;
+    time_t deadline_time;
+
+    float priority;
+        
+    int   fixed;
+    float nfixed;
+    
+    int   waiting;
+    float nwaiting;
+    
+    int   deadline;
+    float ndeadline;
+    
+    int   share;
+    float nshare;
+    
 } gw_sch_job_t;
 
 /* -------------------------------------------------------------------- */
@@ -122,6 +149,11 @@ typedef struct gw_scheduler_s
   
   int             num_jobs;
   gw_sch_job_t *  jobs;
+  
+  gw_sch_conf_t   sch_conf;
+  
+  time_t          next_user_window;
+  time_t          next_host_window;
   
 } gw_scheduler_t;
 
@@ -150,6 +182,13 @@ void gw_scheduler_add_host(gw_scheduler_t * sched,
                            int              rjobs,
                            char *           hostname);
                            
+void gw_scheduler_update_usage_host(gw_scheduler_t * sched);
+
+inline float gw_scheduler_host_estimated_time(gw_sch_user_host_t * th,
+                                              gw_scheduler_t *     sched);
+                                              
+inline void gw_scheduler_host_policies (gw_scheduler_t * sched, int jid);                                              
+                           
 /* -------------------------------------------------------------------- */
 
 void gw_scheduler_add_user(gw_scheduler_t * sched, 
@@ -159,6 +198,8 @@ void gw_scheduler_add_user(gw_scheduler_t * sched,
                            char *           name);
 
 void gw_scheduler_del_user(gw_scheduler_t * sched, int uid);
+
+void gw_scheduler_user_update_windows(gw_scheduler_t * sched);
                                
 /* -------------------------------------------------------------------- */
 
@@ -176,29 +217,21 @@ void gw_scheduler_job_success(gw_scheduler_t * sched,
 
 void gw_scheduler_job_add(gw_scheduler_t *      sched,
                           int                   jid, 
-                          int                   aid, 
+                          int                   aid,
+                          int                   np,
                           gw_migration_reason_t reason,
-                          int                   nice,
-                          int                   uid);
-                          
-void gw_scheduler_array_add(gw_scheduler_t *      sched,
-                            int                   jid, 
-                            int                   aid, 
-                            gw_migration_reason_t reason,
-                            int                   nice,
-                            int                   uid,
-                            int                   tasks);                          
-
+                          int                   fixed_priority,
+                          int                   uid,
+                          time_t                deadline);
+                     
 void gw_scheduler_job_del(gw_scheduler_t *      sched,
-                          int                   jid);
-                          
-void gw_scheduler_array_del(gw_scheduler_t *      sched,
-                            int                   aid,
-                            int                   tasks);
-                          
-                              
+                          int                   jid,
+                          int                   dispatched);
+
 void gw_scheduler_matching_arrays(gw_scheduler_t * sched);
 
 /* -------------------------------------------------------------------- */
+
+void gw_scheduler_job_policies (gw_scheduler_t * sched);
 
 #endif /*GW_DM_SCHEDULER_H_*/

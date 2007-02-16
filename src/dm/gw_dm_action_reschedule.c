@@ -70,9 +70,8 @@ void gw_dm_reschedule (void *_job_id)
             gw_dm_mad_job_schedule(&gw_dm.dm_mad[0],
                                    job_id,
                                    job->array_id,
-                                   GW_REASON_USER_REQUESTED,
-                                   job->nice,
-                                   job->user_id);
+                                   job->user_id,
+                                   GW_REASON_USER_REQUESTED);
             break;
 		
 		case GW_JOB_STATE_FAILED:
@@ -92,9 +91,8 @@ void gw_dm_reschedule (void *_job_id)
             gw_dm_mad_job_schedule(&gw_dm.dm_mad[0],
                                    job_id,
                                    job->array_id,
-                                   GW_REASON_NONE,
-                                   job->nice,
-                                   job->user_id);            
+                                   job->user_id,
+                                   GW_REASON_NONE);            
 			break;
 			
         default:

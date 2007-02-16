@@ -28,25 +28,27 @@
 /* ------------------------------------------------------------------------- */
 
 const char * usage =
-"\n gwsubmit <-t template> [-n tasks] [-h] [-v] [-o] [-d \"id1 id2 ...\"]\n\n"
+"\n gwsubmit <[-t] template> [-n tasks] [-h] [-v] [-o] [-d \"id1 id2 ...\"] [-p priotity]\n\n"
 "SYNOPSIS\n"
 "  Submit a job or an array job (if the number of tasks is defined) to gwd\n\n"
 "OPTIONS\n"
-"  -h                prints this help\n"
-"  -t <template>     the template file describing the job\n"
-"  -n <tasks>        submit an array job with the given number of tasks\n"
-"                    all the jobs in the array will use the same template\n"
-"  -v                print to stdout the job ids returned by gwd.\n" 
-"  -o                hold job on submission.\n" 
-"  -d \"id1 id2...\"   job dependencies. Submit the job on hold state, and\n"
-"                    release it once jobs with id1,id2,.. have finished\n"
-"  -s <start>        Start value for custom param in array jobs. Default 0\n"
-"  -i <increment>    Increment value for custom param in array jobs. Each task has\n"
-"                    associated the value PARAM=<start> + <increment> * TASK_ID, and\n"
-"                    MAX_PARM = <start>+<increment>*(<tasks>-1). Default 1\n\n";
+"  -h                  prints this help\n"
+"  [-t] <template>     the template file describing the job\n"
+"  -n   <tasks>        submit an array job with the given number of tasks\n"
+"                      all the jobs in the array will use the same template\n"
+"  -v                  print to stdout the job ids returned by gwd.\n" 
+"  -o                  hold job on submission.\n" 
+"  -d   \"id1 id2...\" job dependencies. Submit the job on hold state, and\n"
+"                      release it once jobs with id1,id2,.. have finished\n"
+"  -s   <start>        start value for custom param in array jobs. Default 0\n"
+"  -i   <increment>    increment value for custom param in array jobs.\n"
+"                      Each task has associated the value\n"
+"                      PARAM=<start> + <increment> * TASK_ID, and\n"
+"                      MAX_PARM = <start>+<increment>*(<tasks>-1). Default 1\n"
+"  -p   <priority>     initial priority for the job\n\n";
 
 const char * susage =
-"usage: gwsubmit <-t template> [-n tasks] [-h] [-v] [-o] [-d \"id1 id2...\"]\n";
+"usage: gwsubmit <[-t] template> [-n tasks] [-h] [-v] [-o] [-d \"id1 id2 ...\"] [-p priotity]\n";
 
 extern char *optarg;
 extern int   optind, opterr, optopt;
@@ -62,18 +64,20 @@ int main(int argc, char **argv)
     int *            job_ids;
     int              tasks;
     int              start, inc;
-    char *           template;
+    char *           template = NULL;
     char *           deps_str;
     char *           num;
     int              deps[GW_JT_DEPS];
     char             opt;
-    char             rpath[PATH_MAX];
-    int              t = 0, v = 0, n = 0, o = 0, d = 0;
+    char             rpath[PATH_MAX+1];
+    int              t = 0, v = 0, n = 0, o = 0, d = 0, fp=-1, fpset=0;
     int              i;
     gw_client_t *    gw_session;
     gw_job_state_t   init_state;
 
     gw_return_code_t rc;
+
+    char             error_msg[128];
 
     /* ---------------------------------------------------------------- */
     /* Parse arguments                                                  */
@@ -84,14 +88,8 @@ int main(int argc, char **argv)
     
     start  = 0;
     inc    = 1;
-    
-    if(argc < 2)
-    {
-        fprintf(stderr,"usage: %s\n", susage);
-        exit(1);
-    }
 
-    while((opt = getopt(argc, argv, ":vhot:n:d:s:i:")) != -1)
+    while((opt = getopt(argc, argv, ":vhot:n:d:s:i:p:")) != -1)
         switch(opt)
         {
             case 't': t  = 1;
@@ -112,6 +110,9 @@ int main(int argc, char **argv)
                 break;
             case 'i':
                 inc   = atoi(optarg);
+                break;
+            case 'p': fpset=1;
+                fp    = atoi(optarg);
                 break;                
             case 'h':
                 printf("%s", usage);
@@ -132,18 +133,34 @@ int main(int argc, char **argv)
 
     if ( !t )
     {
-        printf("%s", susage);
-        exit(1);
+    	if (optind < argc)
+        {
+    		template=argv[optind];
+        }
+        else
+        {
+              // We use stdin to get the template
+              if (getcwd(rpath, PATH_MAX) == NULL)
+              {
+                  printf("Couldn't find current path, exiting ...\n");
+                  exit(1);
+              }
+              else
+              {
+                  rpath[strlen(rpath)] = '/';
+              }
+        }
     }
         
     /* ---------------------------------------------------------------- */
     /* Get template                                                     */
     /* ---------------------------------------------------------------- */
 
-    if(realpath(template,rpath) == NULL)
+    if ((template != NULL) && (realpath(template,rpath) == NULL))
     {
-        perror("invalid template path");
-        return -1;
+        snprintf(error_msg, 127, "invalid template path (%s)", template);
+        perror(error_msg);
+        return -1;        
     }  
 
     if (o)
@@ -168,7 +185,16 @@ int main(int argc, char **argv)
     }
     else
     	deps[0] = -1;       
-           
+    
+    if ( fpset == 0 )
+    {
+    	fp = GW_JOB_DEFAULT_PRIORITY;
+    }
+    else if ( ( fp < 0 ) || ( fp > 20 ) )
+    {
+    	fprintf(stderr,"error: priority must be in range [0,20]\n");
+    	return -1;
+    }
 
     /* ---------------------------------------------------------------- */
     /* Connect to GWD                                                   */
@@ -188,7 +214,7 @@ int main(int argc, char **argv)
     
     if (!n) 
     {                
-        rc = gw_client_job_submit(rpath,init_state,&job_id,deps);
+        rc = gw_client_job_submit(rpath,init_state,&job_id,deps,fp);
         
         if (rc == GW_RC_SUCCESS)
         {
@@ -207,7 +233,15 @@ int main(int argc, char **argv)
         }  
     }  
     
-    rc = gw_client_array_submit(rpath,tasks,init_state,&array_id,&job_ids,deps,start,inc);
+    rc = gw_client_array_submit(rpath,
+                                tasks,
+                                init_state,
+                                &array_id,
+                                &job_ids,
+                                deps,
+                                start,
+                                inc,
+                                fp);
     
     if (rc == GW_RC_SUCCESS)
     {

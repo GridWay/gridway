@@ -21,6 +21,7 @@
 #include <time.h>
 #include <stdio.h>
 #include "gw_common.h"
+#include "gw_template.h"
 #include "gw_conf.h"
 #include "gw_rm_msg.h"
 
@@ -36,6 +37,8 @@
 
 typedef struct gw_job_template_s
 {
+    char * name;
+
     char * file;
     char * job_home;
     char * user_home;
@@ -80,18 +83,22 @@ typedef struct gw_job_template_s
 	char * wrapper;
 	char * monitor;
 	
-	int *  job_deps;
-	
+	int * job_deps;
+
+    int type;
+    int np;	
+
+    time_t deadline;
 } gw_job_template_t;
       
 /* -------------------------------------------------------------------------- */
 
-int  gw_job_template_init (gw_job_template_t *jt, const gw_template_t *ct);
+void gw_job_template_init (gw_job_template_t *jt, const gw_template_t *ct);
 
 void gw_job_template_destroy(gw_job_template_t *job_template );
 
 void gw_job_template_print(FILE *fd, gw_job_template_t *job_template);
 
 void gw_job_template_to_file(FILE *fd, gw_job_template_t *job_template);
-                                
+
 #endif

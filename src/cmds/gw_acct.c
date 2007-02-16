@@ -36,17 +36,18 @@ const char * usage =
 "  -h        prints this help\n"
 "  -n        do not print the header lines\n"
 "  -d n      print accounting information from n days ago  (ex: -d 1)\n"
-"  -w n	     print accounting information from n weeks ago (ex: -w 1)\n"
-"  -m n	     print accounting information from n months ago(ex: -m 1)\n"
-"  -t s      print accounting information from s seconds, where s is an epoch (ex: -t 1159809792)\n"
+"  -w n      print accounting information from n weeks ago (ex: -w 1)\n"
+"  -m n      print accounting information from n months ago(ex: -m 1)\n"
+"  -t s      print accounting information from s seconds, where s is an\n"
+"            epoch (ex: -t 1159809792)\n"
 "  -r host   print accounting information for host\n"
 "  -u user   print accounting information for user\n\n"
 "FIELD INFORMATION\n"
 "  HOST/USER host/user usage summary for this user/host\n"
 "  XFR       total transfer time on this host (for this user)\n"
-"  EXE       total execution time on this host (for this user), without suspension time\n"
+"  EXE       total execution time on this host (for this user), without\n"
+"            suspension time\n"
 "  SUSP      total suspension (queue) time on this host (for this user)\n"
-
 "  TOTS      total executions on this host (for this user). Termination reasons:\n"
 "    - SUCC  success\n"
 "    - ERR   error\n"
@@ -181,7 +182,10 @@ int main(int argc, char **argv)
 			free(hostname);
 		
 		if ( username != NULL )
-			free(username);	
+			free(username);
+
+        if( t>1 )
+            printf("You can only specify one time option (d, w, m or t)\n\n");
 		
        	printf("%s", susage);
         exit(1);

@@ -104,7 +104,7 @@ void gw_dm_jalloc     (void *_msg)
     /* --------- Set the initial state ---------- */
     
     init_state = msg->init_state;
-
+ 		 
     if ( init_state == GW_JOB_STATE_PENDING )
 	    gw_job_set_state(job, GW_JOB_STATE_PENDING, GW_FALSE);
 	else
@@ -114,13 +114,20 @@ void gw_dm_jalloc     (void *_msg)
     job->em_state  = GW_EM_STATE_INIT;
     job->user_id   = uid;
     
+	/* --------- Set the initial priority ---------- */
+	
+	job->fixed_priority = msg->fixed_priority;
+	
     pthread_mutex_unlock(&(job->mutex));
+
+    /* ------------- Set job dependencies ------------ */ 	   
+    
+    if ( msg->jt.job_deps[0] != -1 )
+    	gw_job_pool_dep_set(jid, msg->jt.job_deps); 	   
+
     
     if (!useradd)
  	   gw_user_pool_inc_jobs(uid,1);
- 	   
-    if ( msg->jt.job_deps[0] != -1 )
-    	gw_job_pool_dep_set(jid, msg->jt.job_deps); 	   
 	
 	/* ------------- Callback msg ------------ */
 	
@@ -136,9 +143,8 @@ void gw_dm_jalloc     (void *_msg)
         gw_dm_mad_job_schedule(&gw_dm.dm_mad[0],
                                jid,
                                -1,
-                               GW_REASON_NONE,
-                               job->nice,
-                               uid);
+                               uid,
+                               GW_REASON_NONE);
 
     gw_log_print("DM",'I',"New job %i allocated and initialized.\n", jid);
 }
@@ -155,6 +161,7 @@ void gw_dm_aalloc     (void *_msg)
     gw_job_t         *job;
     gw_boolean_t     useradd;
     gw_job_state_t   init_state;
+    int              fixed;
     int              tasks;
     
     int  rc;
@@ -205,9 +212,11 @@ void gw_dm_aalloc     (void *_msg)
     
     for (i=0; i<msg->number_of_tasks; i++)
     {
-        jid = array->job_ids[i];
-        job = gw_job_pool_get(jid, GW_TRUE);
+        jid   = array->job_ids[i];
+        job   = gw_job_pool_get(jid, GW_TRUE);
         
+       	fixed = msg->fixed_priority;
+       	
         gw_job_fill(job, msg);
         
         if ( job == NULL )
@@ -219,7 +228,9 @@ void gw_dm_aalloc     (void *_msg)
 		    
             return;
         }        
-
+    
+    	/* --------- Set the initial state ---------- */
+    
 	    if ( init_state == GW_JOB_STATE_PENDING )
 		    gw_job_set_state(job, GW_JOB_STATE_PENDING, GW_FALSE);
 		else
@@ -229,10 +240,27 @@ void gw_dm_aalloc     (void *_msg)
 	    job->em_state = GW_EM_STATE_INIT;        
         job->user_id  = uid;
 
+		/* --------- Set the parameter values ---------- */
+		
         job->pstart   = msg->pstart;
         job->pinc     = msg->pinc;
         
+		/* --------- Set the initial priority ---------- */
+        
+        job->fixed_priority = msg->fixed_priority;
+        
         pthread_mutex_unlock (&(job->mutex));    	
+        
+        /* ------------- Notify the scheduler ------------ */
+    
+        if ( init_state == GW_JOB_STATE_PENDING )
+            gw_dm_mad_job_schedule(&gw_dm.dm_mad[0],
+                                   jid,
+                                   array_id,
+                                   uid,
+                                   GW_REASON_NONE);
+                                   
+        /* ------------- Set job dependencies ------------ */
         
 	    if ( msg->jt.job_deps[0] != -1 )
 	    	gw_job_pool_dep_set(jid, msg->jt.job_deps);        
@@ -248,13 +276,4 @@ void gw_dm_aalloc     (void *_msg)
     gw_am_trigger(gw_dm.rm_am,"GW_RM_SUBMIT",_msg);
     
     gw_log_print("DM",'I',"New array %i allocated and initialized.\n",array_id);
-    
-    if ( init_state == GW_JOB_STATE_PENDING )
-        gw_dm_mad_array_schedule(&gw_dm.dm_mad[0], 
-                                 -1,
-                                 array_id,
-                                 GW_REASON_NONE,
-                                 0,
-                                 uid,
-                                 tasks);
 }

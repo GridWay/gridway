@@ -153,6 +153,7 @@ class GW_mad_ws extends Thread implements GramJobListener {
                         // Add job and jid to the pools
                         job_pool.put(jid, job);
                         jid_pool.put(job, jid);
+                        
                     }
                     catch (Exception e)
                     {
@@ -188,7 +189,7 @@ class GW_mad_ws extends Thread implements GramJobListener {
                     {
                         synchronized(System.out)
                         {
-                            System.out.println(action + " " + jid + " FAILURE Job does not exist");
+                            System.out.println(action + " " + jid + " FAILURE Job does not exist jid");
                         }
                     }
                     else
@@ -228,12 +229,14 @@ class GW_mad_ws extends Thread implements GramJobListener {
     // Method from interface GramJobListener
     public void stateChanged(GramJob job) {
         int status;
+        int exitCode;
         String info;
 
 
         // Get job state
         StateEnumeration jobState = job.getState();
         String jobState_str = jobState.getValue().toUpperCase();
+        
 
         // Get the JID from the job
         Integer jid = (Integer) jid_pool.get(job);
@@ -267,6 +270,12 @@ class GW_mad_ws extends Thread implements GramJobListener {
             {
                 status = 0;
                 info = jobState_str;
+                // Get job exit code                
+                exitCode = job.getExitCode();
+                
+                if(info.equals("DONE"))
+                	info = info + ":" + exitCode;              
+                
             }
         }
 

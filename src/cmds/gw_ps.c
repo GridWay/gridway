@@ -29,7 +29,7 @@
 /* ------------------------------------------------------------------------- */
 
 const char * usage =
-"\n gwps [-h] [-u user] [-r host] [-A AID] [-s job_state] [-o output_format] [-c delay] [-n] [job_id]\n\n"
+"\n gwps [-h] [-u user] [-r host] [-A AID] [-s job_state] [-o output_format] [-c delay] [-nf] [job_id]\n\n"
 "SYNOPSIS\n"
 "  Prints information about all the jobs in the GridWay system (default)\n\n"
 "OPTIONS\n"
@@ -42,25 +42,35 @@ const char * usage =
 "  -c <delay>       this will cause gwps to print job information every <delay>\n"
 "                   seconds continuously (similar to top command)\n"
 "  -n               do not print the header\n"
+"  -f               full format\n"
 "  job_id           only monitor this job_id\n\n"
 "FIELD INFORMATION\n"
 "  USER     (u)  owner of this job\n"
-"  JID           job unique identification assigned by the Gridway system\n"
+"  JID      (J)  job unique identification assigned by the Gridway system\n"
 "  AID      (i)  array unique identification, only relevant for array jobs\n"
-"  TID      (i)  task identification, ranges from 0 to TOTAL_TASKS -1, only relevant for array jobs\n"
-"  DM       (s)  dispatch Manager state, one of: pend, hold, prol, prew, wrap, epil, canl, stop, migr, done, fail\n"
-"  EM       (e)  execution Manager state (Globus state): pend, susp, actv, fail, done\n"
+"  TID      (i)  task identification, ranges from 0 to TOTAL_TASKS -1,\n"
+"                only relevant for array jobs\n"
+"  FP       (p)  fixed priority of the job\n"
+"  TYPE     (y)  type of job (simple, multiple or mpi)\n"
+"  NP       (n)  number of processors\n"
+"  DM       (s)  dispatch Manager state, one of: pend, hold, prol, prew,\n"
+"                wrap, epil, canl, stop, migr, done, fail\n"
+"  EM       (e)  execution Manager state (Globus state): pend, susp, actv,\n"
+"                fail, done\n"
 "  RWS      (f)  flags: \n"
-"   	            - R: times this job has been restarted\n" 
-"       	            - W: number of processes waiting for this job\n"
-"           	    - S: re-schedule flag\n"
+"                   - R: times this job has been restarted\n" 
+"                   - W: number of processes waiting for this job\n"
+"                   - S: re-schedule flag\n"
 "  START    (t|T)  the time the job entered the system\n"
 "  END      (t|T)  the time the job reached a final state (fail or done)\n"
-"  EXEC     (t|T)  total execution time, includes suspension time in the remote queue system\n"
-"  XFER     (t|T)  total file transfer time, includes stage-in and stage-out phases\n"
+"  EXEC     (t|T)  total execution time, includes suspension time in the\n"
+"                  remote queue system\n"
+"  XFER     (t|T)  total file transfer time, includes stage-in and stage-out\n"
+"                  phases\n"
 "  EXIT     (x)    job exit code\n"
 "  TEMPLATE (j)    filename of the job template used for this job\n"
 "  HOST     (h)    hostname where the job is being executed\n\n"
+"  Note: 't' option only prints time and 'T' also writes the date.\n\n"
 "JOB STATES\n"
 "  PENDING (i)\n"
 "  PROLOG  (p)\n"
@@ -75,7 +85,7 @@ const char * usage =
 
 
 const char * susage =
-"usage: gwps [-h] [-u user] [-r host] [-A AID] [-s job_state] [-o output_format] [-c delay] [-n] [job_id]\n";
+"usage: gwps [-h] [-u user] [-r host] [-A AID] [-s job_state] [-o output_format] [-c delay] [-nf] [job_id]\n";
 
 extern char *optarg;
 extern int   optind, opterr, optopt;
@@ -94,7 +104,7 @@ int main(int argc, char **argv)
 {
     int               job_id = -1;
   	char              opt;
-  	int               c = 0, n = 0;
+  	int               c = 0, n = 0, f = 0;
     int               delay = 0;
   	gw_client_t *     gw_session;
 	gw_msg_job_t      job_status;
@@ -116,13 +126,15 @@ int main(int argc, char **argv)
     opterr = 0;
     optind = 1;
 	
-    while((opt = getopt(argc, argv, ":nhc:u:r:s:o:A:")) != -1)
+    while((opt = getopt(argc, argv, ":nfhc:u:r:s:o:A:")) != -1)
         switch(opt)
         {
             case 'c': c  = 1;
                 delay = atoi(optarg);
                 break;
             case 'n': n = 1;
+                break;  
+            case 'f': f = 1;
                 break;  
             case 'u':                     	
             	username = strdup(optarg);         
@@ -185,10 +197,14 @@ int main(int argc, char **argv)
 						case 'h':
 						case 'x':
 						case 'i':  
-						case 'f':						
+						case 'f':
+						case 'p':
+                        case 'J':
+                        case 'y':
+                        case 'n':
             				break;
 	            		default:
-	            			printf("ERROR: Output format must be constructed with {e,s,u,j,t,h,x,i}\n");
+	            			printf("ERROR: Output format must be constructed with {e,s,u,j,t,h,x,i,p}\n");
 			            	printf("%s", susage);
 			                return (-1);             		
 	            			break;
@@ -263,13 +279,23 @@ int main(int argc, char **argv)
 
     	if (rc == GW_RC_SUCCESS)
         {
-        	if (!n)
-        		gw_client_print_status_header(outoption);
+        	if (f)
+            {
+		        if (job_id != -1)
+		        	gw_client_print_status_full(&job_status);
+    			else	   	    
+	    	    	gw_client_print_pool_status_full(username, hostname, jobstate, array_id);
+            }
+            else
+            {
+            	if (!n)
+            		gw_client_print_status_header(outoption);
 
-		    if (job_id != -1)
-		    	gw_client_print_status(&job_status, outoption);
-			else	   	    
-		    	gw_client_print_pool_status(username, hostname, jobstate, outoption, array_id);
+		        if (job_id != -1)
+		        	gw_client_print_status(&job_status, outoption);
+    			else	   	    
+	    	    	gw_client_print_pool_status(username, hostname, jobstate, outoption, array_id);
+            }
         }  
 	    else
 	    {

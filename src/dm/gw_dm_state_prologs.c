@@ -267,7 +267,7 @@ void gw_dm_prolog_failed_cb ( void *_job_id )
 	if (job->history != NULL)
 	{
 		job->history->reason = GW_REASON_EXECUTION_ERROR;
-        gw_host_dec_uslots(job->history->host);
+        gw_host_dec_uslots(job->history->host, job->template.np);
 	}
 	
 	if (job->template.reschedule_on_failure == GW_TRUE)
@@ -284,15 +284,31 @@ void gw_dm_prolog_failed_cb ( void *_job_id )
 
 void gw_dm_prolog_set_files(gw_job_t * job)
 {
-	int  num_xfrs;
-	int  i, j;
-	char url[512], alt_url[512];
-	
-	/* ----------------------------------------------------------- */  
-    /* 1.- Set xfr array                                           */
+    int  num_xfrs;
+    int  i, j;
+    char url[512], alt_url[512];
+    int  wbe; /* Wrapper-based execution */
+
+    wbe = job->template.type != GW_JOB_TYPE_MPI
+            && strcmp(job->history->host->lrms_type, "gw") != 0
+            && job->template.wrapper != NULL;
+
     /* ----------------------------------------------------------- */  
-	
-	num_xfrs = job->template.num_input_files + 6;
+    /* 1.- Set xfr array                                           */
+    /* ----------------------------------------------------------- */
+
+    if ( wbe )
+        num_xfrs = job->template.num_input_files + 1 /* job.env */
+                + ( job->template.executable != NULL )
+                + ( job->template.stdin_file != NULL )
+                + ( job->template.pre_wrapper != NULL )
+                + ( job->template.wrapper != NULL )
+                + ( job->template.monitor != NULL );
+    else
+        num_xfrs = job->template.num_input_files
+		+ ( job->template.executable != NULL )
+		+ ( job->template.stdin_file != NULL )
+		+ ( job->template.pre_wrapper != NULL );	
 	
 	if ( ( job->restarted != 0 ) && 
 	     ( job->template.num_restart_files > 0 ) )
@@ -321,19 +337,22 @@ void gw_dm_prolog_set_files(gw_job_t * job)
 		job->xfrs.xfrs[i].mode        = '-';
 	}
 	
-	/* ----------------------------------------------------------- */  
+    /* ----------------------------------------------------------- */  
     /* 3.- Environment                                             */
     /* ----------------------------------------------------------- */  		
 	
-	snprintf(url,sizeof(char)*512,"file://%s/job.env",job->directory);
+	if ( wbe )
+	{
+		snprintf(url,sizeof(char)*512,"file://%s/job.env",job->directory);
 	
-	job->xfrs.xfrs[i].src_url = strdup(url);
-	job->xfrs.xfrs[i].dst_url = NULL;
-	job->xfrs.xfrs[i].mode    = '-';
+		job->xfrs.xfrs[i].src_url = strdup(url);
+		job->xfrs.xfrs[i].dst_url = NULL;
+		job->xfrs.xfrs[i].mode    = '-';
 		
-	job->xfrs.xfrs[i++].alt_src_url = NULL;
+		job->xfrs.xfrs[i++].alt_src_url = NULL;
+	}
 	
-	/* ----------------------------------------------------------- */  
+    /* ----------------------------------------------------------- */  
     /* 3.- Executable file                                         */
     /* ----------------------------------------------------------- */  		
 	
@@ -376,7 +395,7 @@ void gw_dm_prolog_set_files(gw_job_t * job)
     /* 6.- Wrapper executable                                      */
     /* ----------------------------------------------------------- */  		
 	
-	if ( job->template.wrapper != NULL )
+	if ( wbe )
 	{
 	    snprintf(url,sizeof(char)*512,"file://%s",job->template.wrapper);
 	    
@@ -391,7 +410,7 @@ void gw_dm_prolog_set_files(gw_job_t * job)
     /* 7.- Monitor file                                            */
     /* ----------------------------------------------------------- */  		
 	
-	if ( job->template.monitor != NULL )
+	if ( wbe && job->template.monitor != NULL )
 	{
 	    snprintf(url,sizeof(char)*512,"file://%s", job->template.monitor);
 	    

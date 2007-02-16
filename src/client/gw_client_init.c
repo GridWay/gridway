@@ -20,6 +20,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <pwd.h>
+#include <grp.h>
 #include <unistd.h>
 #include <netdb.h>
 
@@ -28,7 +29,7 @@
 #include "gw_rm.h"
 #include "gw_file_parser.h"
 
-gw_client_t gw_client={PTHREAD_MUTEX_INITIALIZER,NULL,-1,"",GW_FALSE,0,NULL,0,NULL};
+gw_client_t gw_client={PTHREAD_MUTEX_INITIALIZER,NULL,NULL,-1,"",GW_FALSE,0,NULL,0,NULL};
 
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
@@ -44,6 +45,7 @@ gw_client_t* gw_client_init()
     int             i;
     FILE *          fd;
 	struct passwd * pw_ent;
+	struct group *  gr_ent;
 	
 	pthread_mutex_lock(&gw_client.mutex);
 
@@ -59,11 +61,14 @@ gw_client_t* gw_client_init()
 	
 	pw_ent = getpwuid(getuid());
 	
-	if (pw_ent != NULL)
+	if ((pw_ent != NULL) && (pw_ent->pw_name != NULL))
 	{
-		if (pw_ent->pw_name != NULL)
+		gr_ent = getgrgid(pw_ent->pw_gid);
+			
+		if ((gr_ent != NULL) && (gr_ent->gr_name !=NULL))
 		{
-		    gw_client.owner = strdup(pw_ent->pw_name);		    
+		    gw_client.owner = strdup(pw_ent->pw_name);
+		    gw_client.group = strdup(gr_ent->gr_name);
 		}
 		else
 		{
@@ -184,6 +189,12 @@ void gw_client_finalize()
     	pthread_mutex_unlock(&gw_client.mutex);
 		return;
 	}
+	
+	if ( gw_client.owner !=  NULL )
+		free(gw_client.owner);
+		
+	if ( gw_client.group !=  NULL )
+		free(gw_client.group);
 			
     for (i = 0 ; i < gw_client.number_of_jobs; i++)
     	if ( gw_client.job_pool[i] != NULL )

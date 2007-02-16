@@ -42,7 +42,7 @@ gw_host_pool_t* gw_host_pool_init();
 void gw_host_pool_finalize();
 
 int gw_host_pool_host_allocate (char * hostname, 
-                                int    nice,
+                                int    fixed_priority,
                                 char * em_mad, 
                                 char * tm_mad, 
                                 char * im_mad);
@@ -53,8 +53,7 @@ gw_host_t* gw_host_pool_get_host (int host_id, gw_boolean_t lock);
 
 gw_host_t* gw_host_pool_search (char *hostname, gw_boolean_t lock);
 
-void gw_host_pool_update (char * hostnames, 
-                          int    nice, 
+void gw_host_pool_update (char * hostnames,
                           char * em_mad,
                           char * tm_mad, 
                           char * im_mad);

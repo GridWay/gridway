@@ -15,20 +15,36 @@
 /* limitations under the License.                                             */
 /* -------------------------------------------------------------------------- */
 
-#ifndef _GW_EM_RSL_H
-#define _GW_EM_RSL_H
+/*
+ * 
+ * Main Class: Only creates a JSDLTranslator object and execute the doTranslation method. 
+ *
+ */
 
-#include "gw_job.h"
+public class JSDLParser 
+{
 
-#define GW_RSL_LENGTH 			  16384
+	public static void main(String[] args) 
+	{
+		JSDLTranslator jsdlTranslator;
+		try
+		{
+			if (args.length==0 || args.length > 2)
+				throw new Exception("USE: JSDLParser JsdlFileName [GwjtFileName]");
+			else if (args.length==1)
+				jsdlTranslator = new JSDLTranslator(args[0]);
+			else
+				jsdlTranslator = new JSDLTranslator(args[0], args[1]);
+			
+			
+			jsdlTranslator.doTranslation();
+						    
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.getMessage());	
+		}
+		    
+	}
 
-char* gw_generate_wrapper_rsl(gw_job_t *job);
-char* gw_generate_wrapper_rsl_nsh(gw_job_t *job); /* For resources with non-shared home (nsh) */
-char* gw_generate_rsl2(gw_job_t *job);
-char* gw_generate_wrapper_rsl2(gw_job_t *job);    /* For wrapper-based execution */
-char* gw_generate_nowrapper_rsl2(gw_job_t *job);  /* For non-wrapper-based execution */
-
-char* gw_generate_pre_wrapper_rsl(gw_job_t *job);
-char* gw_generate_pre_wrapper_rsl2(gw_job_t *job);
-
-#endif
+}

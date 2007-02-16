@@ -24,9 +24,12 @@
 #include "gw_common.h"
 
 
-#define GW_HOST_MAX_QUEUES     10
-#define GW_HOST_MAX_GENVARS    10
-#define GW_HOST_CPU_FREE_LIMIT 50
+#define GW_HOST_MAX_QUEUES       10
+#define GW_HOST_MAX_GENVARS      10
+#define GW_HOST_CPU_FREE_LIMIT   50
+
+#define GW_HOST_MAX_PRIORITY       99
+#define GW_HOST_MIN_PRIORITY       00
 
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
@@ -71,7 +74,7 @@ typedef struct gw_host_s
     int  running_jobs;
 
     int  host_id;
-    int  nice;
+    int  fixed_priority;
 
     char *hostname;
     char *arch;
@@ -152,7 +155,7 @@ typedef enum
 void gw_host_init(gw_host_t * host, 
                   char *      hostname, 
                   int         host_id, 
-                  int         nice,
+                  int         fixed_priority,
                   char *      em_mad, 
                   char *      tm_mad, 
                   char *      im_mad);
@@ -169,17 +172,17 @@ void gw_host_print(FILE *fd, gw_host_t *host);
 
 inline void gw_host_dec_rjobs(gw_host_t *host);
 
-inline void gw_host_dec_uslots(gw_host_t *host);
+inline void gw_host_dec_uslots(gw_host_t *host, int slots);
 
-inline void gw_host_dec_slots(gw_host_t *host);
+inline void gw_host_dec_slots(gw_host_t *host, int slots);
 
 inline void gw_host_inc_rjobs(gw_host_t *host);
 
-inline void gw_host_inc_uslots(gw_host_t *host);
+inline void gw_host_inc_uslots(gw_host_t *host, int slots);
 
-inline void gw_host_inc_slots(gw_host_t *host);
+inline void gw_host_inc_slots(gw_host_t *host, int slots);
 
-inline void gw_host_inc_slots_nb(gw_host_t *host);
+inline void gw_host_inc_slots_nb(gw_host_t *host, int slots);
 
 inline void gw_host_inc_rjobs_nb(gw_host_t *host);
 

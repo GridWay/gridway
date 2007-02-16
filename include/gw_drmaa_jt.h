@@ -68,11 +68,15 @@ struct drmaa_job_template_s
   	char * job_wd;
   	
   	char * js_state;
+    
+    char * deadline_time;
+    
+    char * type;
+    char * np;
   	
 /* Not relevant for the current GridWay implementation, will be ignored */
 	
 	char * block_email;
-	char * deadline_time;
 	char * hlimit;
 	char * slimit;
 	char * category;
@@ -107,6 +111,9 @@ typedef enum {
 	D_JOB_NAME,
 	D_JOB_WD,
 	D_JS_STATE,
+    D_DEADLINE,
+    D_TYPE,
+    D_NP,
     NONE
 } drmaa_gw_template_names_t;
 

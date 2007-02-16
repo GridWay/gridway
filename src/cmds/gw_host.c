@@ -29,7 +29,7 @@
 /* ------------------------------------------------------------------------- */
 
 const char * usage =
-"\n gwhost [-h] [-c delay] [-n] [-m job_id] [host_id]\n\n"
+"\n gwhost [-h] [-c delay] [-nf] [-m job_id] [host_id]\n\n"
 "SYNOPSIS\n"
 "  Prints information about all the hosts in the GridWay system (default)\n\n"
 "OPTIONS\n"
@@ -37,10 +37,12 @@ const char * usage =
 "  -c <delay>   this will cause gwhost to print job information every <delay>\n"
 "               seconds continuously (similar to top command)\n"
 "  -n           do not print the header\n"
+"  -f           full format\n"
 "  -m <job_id>  prints hosts matching the requirements of a given job\n"
 "  host_id      only monitor this host_id, also prints queue information\n\n"
 "FIELD INFORMATION\n"
 "  HID          host unique identification assigned by the Gridway system\n"
+"  PRIO         priority assigned to the host\n"
 "  OS           operating system\n"
 "  ARCH         architecture\n"
 "  MHZ          CPU speed in MHZ\n"
@@ -63,7 +65,7 @@ const char * usage =
 "  PRIORITY     queue priority\n";
        
 const char * susage =
-"usage: gwhost [-h] [-c delay] [-n] [-m job_id] [host_id]\n";
+"usage: gwhost [-h] [-c delay] [-nf] [-m job_id] [host_id]\n";
 
 extern char *optarg;
 extern int   optind, opterr, optopt;
@@ -83,7 +85,7 @@ int main(int argc, char **argv)
     int               host_id = -1;
     int               job_id  = -1;    
   	char              opt;
-  	int               c = 0, n = 0, m = 0;
+  	int               c = 0, n = 0, f = 0, m = 0;
     int               delay = 0;
   	gw_client_t *     gw_session;
 	gw_msg_host_t     host_status;
@@ -101,13 +103,15 @@ int main(int argc, char **argv)
     opterr = 0;
     optind = 1;
 	
-    while((opt = getopt(argc,argv,":nhc:m:"))!= -1)
+    while((opt = getopt(argc,argv,":nfhc:m:"))!= -1)
         switch(opt)
         {
             case 'c': c  = 1;
                 delay = atoi(optarg);
                 break;
             case 'n': n = 1;
+                break;    
+            case 'f': f = 1;
                 break;    
             case 'm': m = 1;
                 job_id = atoi(optarg);
@@ -195,16 +199,26 @@ int main(int argc, char **argv)
 
     	if (rc == GW_RC_SUCCESS)
         {
-        	if (!n)
-        		gw_client_print_host_status_header();
+            if (f)
+    		    if (host_id != -1)
+	    	    	gw_client_print_host_status_full(&host_status);
+                else
+    		    	gw_client_print_host_pool_status_full();
+            else
+            {
+               	if (!n)
+                	gw_client_print_host_status_header();
 
-		    if (host_id != -1)
-		    {
-		    	gw_client_print_host_status(&host_status);
-		    	gw_client_print_host_queues(&host_status,!n);
-		    }
-			else	    		    
-		    	gw_client_print_host_pool_status();
+    		    if (host_id != -1)
+                {
+    	    	    gw_client_print_host_status(&host_status);
+        		    gw_client_print_host_queues(&host_status,!n);
+                }
+                else
+                {
+    		    	gw_client_print_host_pool_status();
+                }
+            }
         }  
 	    else
 	    {

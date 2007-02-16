@@ -79,9 +79,9 @@ void gw_dm_epilog_std ( void *_job_id )
 	job->xfrs.failure_limit = -1;
 	
 	gw_dm_epilog_std_wrapper_files(job, &index);
-	
-    gw_am_trigger(gw_dm.tm_am, "GW_TM_EPILOG", _job_id);
-    
+
+	gw_am_trigger(gw_dm.tm_am, "GW_TM_EPILOG", _job_id);
+	       
     pthread_mutex_unlock(&(job->mutex));
 }
 
@@ -95,6 +95,7 @@ void gw_dm_migr_epilog ( void *_job_id )
     int        job_id;
     int        index;
 	int        num_xfrs;
+	
 	    
 	/* ----------------------------------------------------------- */  
     /* 0.- Get job pointer                                         */
@@ -262,14 +263,19 @@ void gw_dm_kill_epilog ( void *_job_id )
 
 	gw_xfr_destroy (&(job->xfrs));
 	
-	index    = 0;
-	num_xfrs = 2;
-
-	gw_xfr_init(&(job->xfrs), num_xfrs, job->template.number_of_retries);
-	
-	job->xfrs.failure_limit = -1;
+	if( job->template.type != GW_JOB_TYPE_MPI
+            && strcmp(job->history->host->lrms_type, "gw") != 0
+            && job->template.wrapper != NULL )
+	{
+		index    = 0;	
+		num_xfrs = 2;
 		
-	gw_dm_epilog_std_wrapper_files(job, &index);
+		gw_xfr_init(&(job->xfrs), num_xfrs, job->template.number_of_retries);
+		
+		job->xfrs.failure_limit = -1;
+			
+		gw_dm_epilog_std_wrapper_files(job, &index);		
+	}
         
     gw_am_trigger(gw_dm.tm_am, "GW_TM_EPILOG", _job_id);
     
@@ -321,19 +327,26 @@ void gw_dm_epilog_fail (void *_job_id)
 
 	gw_xfr_destroy (&(job->xfrs));
 	
-	index    = 0;
-	num_xfrs = 2;
-	
-	gw_xfr_init(&(job->xfrs), num_xfrs, job->template.number_of_retries);
-	
-	job->xfrs.failure_limit = -1;
-	
-	gw_dm_epilog_std_wrapper_files(job, &index);
+        if( job->template.type != GW_JOB_TYPE_MPI
+            && strcmp(job->history->host->lrms_type, "gw") != 0
+            && job->template.wrapper != NULL )
+	{
+		index    = 0;
+		num_xfrs = 2;
+		
+		gw_xfr_init(&(job->xfrs), num_xfrs, job->template.number_of_retries);
+		
+		job->xfrs.failure_limit = -1;
+			
+		gw_dm_epilog_std_wrapper_files(job, &index);		
+	}
 	        
     gw_am_trigger(gw_dm.tm_am, "GW_TM_EPILOG", _job_id);
     
     pthread_mutex_unlock(&(job->mutex));
 }
+
+
 
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
@@ -370,7 +383,10 @@ void gw_dm_epilog (void *_job_id)
     /* 1.- Set state                                               */
     /* ----------------------------------------------------------- */  
     
-	gw_job_set_state(job, GW_JOB_STATE_EPILOG, GW_FALSE);
+    if (job->job_state != GW_JOB_STATE_EPILOG_STD)
+        job->history->stats[EPILOG_START_TIME] = time(NULL);
+
+    gw_job_set_state(job, GW_JOB_STATE_EPILOG, GW_FALSE);
     
     /* ----------------------------------------------------------- */  
     /* 2.- Signal the Transfer Manager                             */
@@ -741,7 +757,7 @@ void gw_dm_epilog_failed_cb ( void *_job_id )
 
 
 void gw_dm_epilog_std_wrapper_files(gw_job_t * job, int * index)
-{
+{	
 	int  i;
     char url[512];
     
@@ -892,12 +908,12 @@ int gw_dm_epilog_parse_wrapper_std(gw_job_t *job)
     char *       exit_code;
     char *       new_reqs;
     char *       new_rank;
-
+    
     snprintf(stdout_wrapper,sizeof(char)*512,"%s/stdout.wrapper.%i",
                         job->directory, job->restarted);
-
+	
     rc = gw_parse_file(stdout_wrapper, EXIT_STATUS, &exit_code);
-
+	
     if ( ( rc != -1) && ( exit_code != NULL ) )
     {
     	switch ( exit_code[0] )
@@ -930,7 +946,7 @@ int gw_dm_epilog_parse_wrapper_std(gw_job_t *job)
 				}
 		        else
 	            	gw_job_print(job, "DM",'E',"Could not find new requirements.\n");
-
+	
                 job->history->reason = GW_REASON_SELF_MIGRATION;
                 
                 rt = 1;
@@ -943,7 +959,7 @@ int gw_dm_epilog_parse_wrapper_std(gw_job_t *job)
                 rt = 1;
 
                 break;
-                    
+	                    
 			default:
             	job->exit_code = atoi(exit_code);
             	rt = 0;
@@ -958,9 +974,9 @@ int gw_dm_epilog_parse_wrapper_std(gw_job_t *job)
         	gw_job_print(job,"DM",'E',"Unable to open wrapper stdout %s.\n",strerror(errno));
 		else
         	gw_job_print(job,"DM",'E',"Unable to find exit code, assuming that the job failed or was cancelled.\n");
-        	
+	        	
       	job->history->reason = GW_REASON_EXECUTION_ERROR;
-      	
+	      	
         rt = -1;
 	} 
 	

@@ -15,56 +15,52 @@
 /* limitations under the License.                                             */
 /* -------------------------------------------------------------------------- */
 
-#ifndef _GW_IM_MAD_H
-#define _GW_IM_MAD_H
-
-#include <sys/types.h>
-#include <unistd.h>
-#include "gw_common.h"
+%{
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "gw_conf.h"
+#include "gw_sch_conf_syntax.h"
+#include "gw_log.h"
 
-/* ---------------------------------------------------------------------------*/
-/* ---------------------------------------------------------------------------*/
+int  gw_sched_lex  (YYSTYPE *lvalp);
+void gw_sched_error(gw_sch_conf_t *conf, const char *str);
+%}
 
-typedef enum {
-   GW_IM_MAD_STATE_IDLE,
-   GW_IM_MAD_STATE_DISCOVERING,
-   GW_IM_MAD_STATE_LIMIT
-} gw_im_mad_state_t;
+%parse-param {gw_sch_conf_t *conf}
 
-/* -------------------------------------------------------------------------- */
-/* -------------------------------------------------------------------------- */
+%union {
+    int    val_int;
+    float  val_float;
+    char * val_str;
+};
 
+%defines
+%pure_parser
+%name-prefix="gw_sched_"
+%error-verbose
 
-typedef struct gw_im_mad_s
+%token <val_int>   VARIABLE
+%token <val_int>   INTEGER
+%token <val_float> FLOAT
+%token <val_str>   STRING
+
+%%
+
+stmt: stmt asig             { }
+      | /* NULL */          { }
+        ;
+
+asig:
+        VARIABLE '=' INTEGER                { gw_sch_set_var (conf,$1,(float) $3);}
+      | VARIABLE '=' FLOAT                  { gw_sch_set_var (conf,$1,$3);}        
+      | VARIABLE '[' STRING ']' '=' INTEGER { gw_sch_set_svar(conf,$1,$3,$6);}
+        ;
+
+%%
+
+void gw_sched_error(gw_sch_conf_t *conf, const char *str)
 {
-    char *name;
-    char *executable;
-    char *argument;
+    gw_log_print("GW",'E',"sched.conf: %s.\n",str);
+}
 
-    char *em_mad_name;
-    char *tm_mad_name;
-
-    int  mad_im_pipe;
-    int  im_mad_pipe;
-
-    pid_t pid;
-    
-    gw_im_mad_state_t state;
-} gw_im_mad_t;
-
-/* ---------------------------------------------------------------------------*/
-    
-int gw_im_mad_init(gw_im_mad_t *im_mad, const char *exe, const char *name, 
-		const char *args, char *em_mad_name, char *tm_mad_name);
-
-                        
-void gw_im_mad_discover(gw_im_mad_t *im_mad);
-
-void gw_im_mad_monitor(gw_im_mad_t *im_mad, int hid, char *hostname);
-
-void gw_im_mad_finalize(gw_im_mad_t *im_mad);
-
-/* ---------------------------------------------------------------------------*/
-
-#endif

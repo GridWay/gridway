@@ -71,6 +71,7 @@ int gw_dm_dispatch_job (int job_id, int host_id, char *queue_name, int rank)
                 queue_name,
                 host->fork_name,
                 host->lrms_name,
+                host->lrms_type,
                 job->owner,
                 job->template.job_home,
                 job->id,
@@ -89,7 +90,7 @@ int gw_dm_dispatch_job (int job_id, int host_id, char *queue_name, int rank)
 		    	
    	    /* ----- Update Host & User counters ----- */
     	
-    	gw_host_inc_slots_nb(host);
+    	gw_host_inc_slots_nb(host, job->template.np);
     	
 	    gw_user_pool_inc_running_jobs(job->user_id, 1);
 			    		
@@ -114,6 +115,7 @@ int gw_dm_dispatch_job (int job_id, int host_id, char *queue_name, int rank)
                 queue_name,
                 host->fork_name,
                 host->lrms_name,
+                host->lrms_type,
                 job->owner,
                 job->template.job_home,
                 job->id,
@@ -135,7 +137,7 @@ int gw_dm_dispatch_job (int job_id, int host_id, char *queue_name, int rank)
 
     	/* ----- Update Host ----- */
         
-        gw_host_inc_slots_nb(host);
+        gw_host_inc_slots_nb(host, job->template.np);
                                        		
 	    /* ----------------------- */
 
@@ -157,122 +159,6 @@ int gw_dm_dispatch_job (int job_id, int host_id, char *queue_name, int rank)
         return -1;
     }
 
-    return 0;
-}
-
-/* ------------------------------------------------------------------------- */
-/* ------------------------------------------------------------------------- */
-/* ------------------------------------------------------------------------- */
-
-int gw_dm_dispatch_tasks (int    array_id,
-                          int    ntasks, 
-                          int    host_id,
-                          char * queue_name, 
-                          int    rank)
-{
-    int          number_of_tasks;
-    int          job_id;
-    int          task_id;
-    int *        id;
-    gw_job_t *   job;
-	gw_array_t * array;
-	gw_host_t *  host;
-	int          rc;
-	gw_boolean_t dispatch;
-    
-    array = gw_array_pool_get_array(array_id, GW_TRUE);
-
-    if (array == NULL)
-    {
-        gw_log_print("DM",'E',"Array %i does not exist (DISPATCH).\n",array_id);
-		return -1;
-    }
-	
-    number_of_tasks   = array->number_of_tasks;
-
-    for (task_id= 0;(task_id<number_of_tasks) && (ntasks>0); task_id++)
-    {
-        job_id = array->job_ids[task_id];
-                       
-        job = gw_job_pool_get(job_id, GW_TRUE);
-        
-        if (job == NULL)
-            gw_log_print("DM",'E',"Can't dispatch tasks of array %i, job %i doesn't exist.\n",
-                array->array_id, job_id);
-        else
-        {
-			host = gw_host_pool_get_host(host_id, GW_TRUE);
-
-		    if (host == NULL)
-		    {
-		        gw_log_print("DM",'E',"Can't Dispatch array %i, host %i not found.\n",
-                     array_id, host_id);
-                     
-				pthread_mutex_unlock(&(job->mutex));                     
-                pthread_mutex_unlock(&(array->mutex));
-		        return -1;
-			}        	
-			
-			/* -------------------------------- */ 
-			
-			if ( job->history != NULL )
-			    dispatch = (job->job_state==GW_JOB_STATE_PENDING) && 
-			        (job->history->reason != GW_REASON_NONE);
-			else
-    			dispatch = (job->job_state==GW_JOB_STATE_PENDING);
-			
-            if (dispatch == GW_TRUE)
-            {
-			    gw_log_print("DM",'I',"Dispatching task (%i) of array %i to %s (%s).\n",
-				        task_id,array->array_id, host->hostname, queue_name);
-				        
-		        rc = gw_job_history_add(&(job->history), 
-				        host,
-					    rank,
-					    queue_name,
-					    host->fork_name,
-					    host->lrms_name,
-					    job->owner,
-					    job->template.job_home,
-					    job->id,
-					    job->user_id,
-                        GW_FALSE);
-					                
-				if ( rc == -1 )                
-			    {
-			    	gw_log_print("DM",'E',"Can't add history record for job %i.\n",
-                            job_id);
-			                     
-				    pthread_mutex_unlock(&(host->mutex));		    	
-		            pthread_mutex_unlock(&(job->mutex));
-				    pthread_mutex_unlock(&(array->mutex));				    
-				    
-			        return -1;
-				}
-												
-		    	/* ----- Update Host & User counters ----- */
-    			
-    			gw_host_inc_slots_nb(host);
-    			
-    			gw_user_pool_inc_running_jobs(job->user_id, 1);
-                                
-				/* --------------------------------------- */
-				
-		        id  = (int *) malloc(sizeof(int));
-		        *id =  job->id;
-
-		        gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_PROLOG", (void *) id);
-        
-	            ntasks--;   
-            }
-                
-            pthread_mutex_unlock(&(host->mutex));	
-            pthread_mutex_unlock(&(job->mutex));
-        }
-    }
-
-    pthread_mutex_unlock(&(array->mutex));
-        
     return 0;
 }
 

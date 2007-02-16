@@ -154,9 +154,8 @@ void gw_dm_check_job_suspension ( gw_job_t *job )
             gw_dm_mad_job_schedule(&gw_dm.dm_mad[0],
                                    job->id,
                                    job->array_id,
-                                   GW_REASON_SUSPENSION_TIME,
-                                   job->nice,
-                                   job->user_id);
+                                   job->user_id,
+                                   GW_REASON_SUSPENSION_TIME);
         }
     }
 }
@@ -199,9 +198,8 @@ void gw_dm_check_job_rescheduling ( gw_job_t *job )
                 gw_dm_mad_job_schedule(&gw_dm.dm_mad[0],
                                        job->id,
                                        job->array_id,
-                                       GW_REASON_RESCHEDULING_TIMEOUT,
-                                       job->nice,
-                                       job->user_id);
+                                       job->user_id,
+                                       GW_REASON_RESCHEDULING_TIMEOUT);
             }
             else
             {

@@ -70,11 +70,8 @@ void gw_dm_hold (void *_job_id)
         	    reason = GW_REASON_NONE;
         	else
         	    reason = job->history->reason;
-
-       		if ((reason ==GW_REASON_SELF_MIGRATION)||(job->array_id ==-1))
-           		gw_dm_mad_job_del(&gw_dm.dm_mad[0],job->id);
-       		else
-           		gw_dm_mad_task_del(&gw_dm.dm_mad[0],job->array_id);
+        	    
+       		gw_dm_mad_job_del(&gw_dm.dm_mad[0],job->id);
             
             break;
 		
@@ -137,9 +134,8 @@ void gw_dm_release (void *_job_id)
             gw_dm_mad_job_schedule(&gw_dm.dm_mad[0],
                                    job_id,
                                    job->array_id,
-                                   GW_REASON_NONE,
-                                   job->nice,
-                                   job->user_id);            
+                                   job->user_id,
+                                   GW_REASON_NONE);            
             break;
 		
         default:

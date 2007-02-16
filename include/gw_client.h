@@ -37,6 +37,8 @@ typedef struct gw_client_s
   pthread_mutex_t  mutex;
   
   char *           owner;
+  char *           group;
+  
   int              gwd_port;
   char             hostname[256];
   
@@ -106,6 +108,8 @@ void gw_client_finalize();
  *  @param deps job dependencies a '-1' terminated array of job_ids. Once all
  *  these jobs have finished, the job will be released by GridWay. The job is 
  *  submitted in hold state.
+ * 
+ *  @param fixed_priority initial priority for the job.
  *
  *  @return On success job_id will hold the job unique identification as 
  *  provided by the GridWay system
@@ -121,7 +125,8 @@ void gw_client_finalize();
 gw_return_code_t gw_client_job_submit(char *         template,
                                       gw_job_state_t init_state,
                                       int *          job_id,
-                                      int *          deps);
+                                      int *          deps,
+                                      int            fixed_priority);
 
 /** This function submits a set of parametric jobs that can be run concurrently. 
  *  For each parametric job the same template is used. Each job is identical except of it's task 
@@ -148,6 +153,8 @@ gw_return_code_t gw_client_job_submit(char *         template,
  *  these jobs have finished, the job will be released by GridWay. The job is 
  *  submitted in hold state.
  * 
+ *  @param fixed_priority initial priority for the job.
+ * 
  *  @return On success array_id will hold the array unique identification as 
  *  provided by the GridWay system, and job_ids the the ids of the jobs that conform the array.
  *  On error job_ids is equal to NULL, and array_id is -1.
@@ -168,7 +175,8 @@ gw_return_code_t gw_client_array_submit(char *         template,
                                         int **         job_ids,
                                         int *          deps,
                                         int            pstart,
-                                        int            pinc);
+                                        int            pinc,
+                                        int            fixed_priority);
 
 /* -------------------------------------------------------------------------- */
 /* 2.- JOB STATUS ROUTINES                                                    */

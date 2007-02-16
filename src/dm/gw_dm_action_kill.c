@@ -187,7 +187,7 @@ void gw_dm_kill_hard (void *_job_id)
 						    	
     	case GW_JOB_STATE_PROLOG:
             
-            gw_host_dec_uslots(job->history->host);
+            gw_host_dec_uslots(job->history->host, job->template.np);
             			      
 		case GW_JOB_STATE_EPILOG:
 		case GW_JOB_STATE_EPILOG_STD:
@@ -219,7 +219,7 @@ void gw_dm_kill_hard (void *_job_id)
 
 			job->history->reason = GW_REASON_KILL;
 			
-			gw_host_dec_slots(job->history->host);
+			gw_host_dec_slots(job->history->host, job->template.np);
 			            
 			job->exit_time = time(NULL);		
 			job->history->stats[EXIT_TIME] = time(NULL);
@@ -236,7 +236,7 @@ void gw_dm_kill_hard (void *_job_id)
 
 		case GW_JOB_STATE_MIGR_CANCEL:
 		
-     		gw_host_dec_slots(job->history->next->host);
+     		gw_host_dec_slots(job->history->next->host, job->template.np);
             
 			job->history->next->stats[EXIT_TIME] = time(NULL);
 			
@@ -245,7 +245,7 @@ void gw_dm_kill_hard (void *_job_id)
    		case GW_JOB_STATE_STOP_CANCEL:
 		case GW_JOB_STATE_KILL_CANCEL:
 		
-    		gw_host_dec_slots(job->history->host);
+    		gw_host_dec_slots(job->history->host, job->template.np);
 		            
 			job->exit_time = time(NULL);		
 			job->history->stats[EXIT_TIME] = time(NULL);
