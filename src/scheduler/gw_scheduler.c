@@ -120,7 +120,7 @@ static void gw_sched_dispatch (gw_scheduler_t * sched,
             
             free_slots = job->mhosts[j].slots - host->dispatched;
             
-            if ( free_slots > job->np )
+            if ( free_slots >= job->np )
             {
                 *dispatched = *dispatched + 1;
                 
@@ -142,16 +142,12 @@ static void gw_sched_dispatch (gw_scheduler_t * sched,
                         
                 i = i - 1; /* Next job will be i, not i+1 */
                                                                                     
-                break;                  
-                
-            }
-            
-        } 
-        
+                break;   
+            }  
+        }         
     }
 }
 
 /* ------------------------------------------------------------------------- */
 /* ------------------------------------------------------------------------- */
 /* ------------------------------------------------------------------------- */
-

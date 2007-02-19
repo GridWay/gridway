@@ -43,6 +43,10 @@ inline void gw_template_array_init( char array[GW_JT_FILES][2][GW_JT_STR] )
 	}
 }
 
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */    
+
 inline void gw_template_sarray_init( char array[GW_JT_FILES][GW_JT_STR] )
 {
 	int i;
@@ -90,7 +94,7 @@ int gw_template_init(gw_template_t *jt, const char *jt_file)
         
 	GW_LOCATION = getenv("GW_LOCATION");   
     
-    if (GW_LOCATION == NULL )
+    if ((GW_LOCATION == NULL) || (pw_ent == NULL))
         return -1;
  
 	strncpy(jt->job_home,  path,           GW_JT_PATH);
@@ -242,6 +246,10 @@ char *gw_template_jobtype_string(gw_jobtype_t type)
         return "unknown";
     }
 }
+
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
 
 char *gw_template_deadline_string(time_t deadline)
 {
