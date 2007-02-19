@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--*
+    * Basic schema of GridWay Job
+    * 
+    *-->
+
+<jsdl:JobDefinition xmlns="http://www.example.org/" 
+		xmlns:jsdl="http://schemas.ggf.org/jsdl/2005/11/jsdl" 
+		xmlns:jsdl-posix="http://schemas.ggf.org/jsdl/2005/11/jsdl-posix" 
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<jsdl:JobDescription>
+		<jsdl:JobIdentification>
+			<jsdl:JobName>Simple Application GW Template vs JSDL</jsdl:JobName>
+			<jsdl:Description> This is a simple example to describe the main
+					   differences between GW Template and the JSDL schema.
+			</jsdl:Description>
+		</jsdl:JobIdentification>
+		<jsdl:Application>
+			<jsdl:ApplicationName>ls</jsdl:ApplicationName>
+			<jsdl-posix:POSIXApplication>
+				<jsdl-posix:Executable>/bin/ls</jsdl-posix:Executable>
+				<jsdl-posix:Argument>-la file.txt</jsdl-posix:Argument>
+				<jsdl-posix:Environment name="LD_LIBRARY_PATH">/usr/local/lib</jsdl-posix:Environment>
+				<jsdl-posix:Input>/dev/null</jsdl-posix:Input>
+				<jsdl-posix:Output>stdout.${JOB_ID}</jsdl-posix:Output>
+				<jsdl-posix:Error>stderr.${JOB_ID}</jsdl-posix:Error>
+			</jsdl-posix:POSIXApplication>
+		</jsdl:Application>   
+		<jsdl:Resources>
+			<jsdl:CandidateHost>
+				<jsdl:HostName>*.dacya.ucm.es</jsdl:HostName>
+			</jsdl:CandidateHost>	
+			<jsdl:CPUArchitecture>
+				<jsdl:CPUArchitectureName>x86_32</jsdl:CPUArchitectureName>
+				<!--*
+			    	    * Incluir jsdl:CPUModel
+				    *-->
+			</jsdl:CPUArchitecture>
+		</jsdl:Resources>
+		<jsdl:DataStaging>
+			<jsdl:FileName>file.txt</jsdl:FileName>
+			<jsdl:CreationFlag>overwrite</jsdl:CreationFlag>
+			<jsdl:DeleteOnTermination>true</jsdl:DeleteOnTermination>
+			<jsdl:Source>
+				<jsdl:URI>gsiftp://hydrus.dacya.ucm.es/home/jose/file.txt</jsdl:URI>
+			</jsdl:Source>
+		</jsdl:DataStaging>
+		<jsdl:DataStaging>
+			<jsdl:FileName>stdout.${JOB_ID}</jsdl:FileName>
+			<jsdl:CreationFlag>overwrite</jsdl:CreationFlag>
+			<jsdl:DeleteOnTermination>true</jsdl:DeleteOnTermination>
+			<jsdl:Target>
+				<jsdl:URI>gsiftp://hydrus.dacya.ucm.es/home/jose/stdout.${JOB_ID}</jsdl:URI>
+			</jsdl:Target>
+		</jsdl:DataStaging>
+		<jsdl:DataStaging>
+			<jsdl:FileName>stderr.${JOB_ID}</jsdl:FileName>
+			<jsdl:CreationFlag>overwrite</jsdl:CreationFlag>
+			<jsdl:DeleteOnTermination>true</jsdl:DeleteOnTermination>
+			<jsdl:Target>
+				<jsdl:URI>gsiftp://hydrus.dacya.ucm.es/home/jose/stderr.${JOB_ID}</jsdl:URI>
+			</jsdl:Target>
+		</jsdl:DataStaging>
+	</jsdl:JobDescription>
+</jsdl:JobDefinition>
