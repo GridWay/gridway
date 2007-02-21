@@ -731,6 +731,7 @@ install-data-hook:
         @prefix@/src/drmaa/org/CVS \
         @prefix@/src/drmaa/org/ggf/CVS \
         @prefix@/src/drmaa/org/ggf/drmaa/CVS \
+        @prefix@/src/test/jt/CVS \
 		@prefix@/etc/im_examples/CVS \
 		@prefix@/examples/im/CVS \
 		@prefix@/examples/ls/CVS \
@@ -751,7 +752,9 @@ install-data-hook:
 		@prefix@/examples/drmaaTestSuite/org/ggf/CVS \
 		@prefix@/examples/drmaaTestSuite/org/ggf/drmaa/CVS \
 		@prefix@/examples/drmaaTestSuite/org/ggf/drmaa/testSuite/CVS \
-		@prefix@/examples/workflow/CVS
+		@prefix@/examples/workflow/CVS \
+		@prefix@/examples/mpi/CVS \
+		@prefix@/examples/jsdl/CVS
 
 uninstall-hook:
 	@rm @prefix@/bin/gw_im_mad_mds2
@@ -791,6 +794,7 @@ dist-hook:
         $(distdir)/src/drmaa/org/CVS \
         $(distdir)/src/drmaa/org/ggf/CVS \
         $(distdir)/src/drmaa/org/ggf/drmaa/CVS \
+        $(distdir)/src/test/jt/CVS \
 		$(distdir)/doc/CVS \
 		$(distdir)/etc/im_examples/CVS \
 		$(distdir)/examples/im/CVS \
@@ -812,7 +816,9 @@ dist-hook:
 		$(distdir)/examples/drmaaTestSuite/org/ggf/CVS \
 		$(distdir)/examples/drmaaTestSuite/org/ggf/drmaa/CVS \
 		$(distdir)/examples/drmaaTestSuite/org/ggf/drmaa/testSuite/CVS \
-		$(distdir)/examples/workflow/CVS
+		$(distdir)/examples/workflow/CVS \
+		$(distdir)/examples/mpi/CVS \
+		$(distdir)/examples/jsdl/CVS
 
 	@cp -r LICENSE NOTICE $(distdir)
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
