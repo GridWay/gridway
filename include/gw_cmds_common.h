@@ -23,7 +23,7 @@
 /* -------------------------------------------------------------------------- */
 
 // Default options to display with gwps
-#define GW_PS_DEFAULT_OPTIONS "uJipynseftxjh"
+#define GW_PS_DEFAULT_OPTIONS "uJsetxjh"
 
 #define bold()       printf("\33[1m");
 #define underline()  printf("\33[4m");
