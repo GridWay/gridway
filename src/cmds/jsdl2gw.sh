@@ -22,6 +22,19 @@ if [ -z "${GW_LOCATION}" ]; then
     exit -1
 fi
 
+if [ $1 = "-h" ]; then
+  echo "jsdl2gw [-h] input_jsdl [output_gwjt]"
+  echo
+  echo "SYNOPSIS"
+  echo "   Converts a jsdl document into a gridway job template"
+  echo "   If no output file is defined, it defaults to the standard output"
+  echo "   This enables the use of pipes with gwsubmit in the following fashion:"
+  echo
+  echo "          jsdl2gw jsdl-job.xml | gwsubmit"
+  echo
+  exit 0
+fi
+
 export CLASSPATH=$GW_LOCATION/bin:$CLASSPATH
 
 java JSDLParser $1 $2

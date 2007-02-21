@@ -204,7 +204,7 @@ int main(int argc, char **argv)
                         case 'n':
             				break;
 	            		default:
-	            			printf("ERROR: Output format must be constructed with {e,s,u,j,t,h,x,i,p}\n");
+	            			printf("ERROR: Output format must be constructed with {e,s,u,j,t,h,x,i,p,J,y,n}\n");
 			            	printf("%s", susage);
 			                return (-1);             		
 	            			break;

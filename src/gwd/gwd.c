@@ -490,6 +490,7 @@ int main(int argc, char **argv)
             break;
 
         default: /* Parent process */
+            free(log);
             break;               
     }
     
@@ -639,4 +640,5 @@ void gw_recover_state()
     gw_job_pool_dep_consistency();
     
     free(var_name);
+    closedir(dir);
 }

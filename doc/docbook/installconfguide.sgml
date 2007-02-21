@@ -1,35 +1,34 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V4.1//EN">
 <book lang="en">
     <bookinfo>
-        <title>GridWay 5 Documentation: Installation and Configuration Guide</title>
-
-        <pubdate>November, 2006</pubdate>
+        <title>GridWay 5.2 Documentation: Installation and Configuration Guide</title>
+        <pubdate>February, 2007</pubdate>
         <copyright>
-            <year>2002-2006</year>
+            <year>2002-2007</year>
             <holder>GridWay Team, Distributed Systems Architecture
                 Group, Universidad Complutense de Madrid.</holder>
         </copyright>
         <legalnotice>
             <para>
-                Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+                Licensed under the Apache License, Version 2.0 (the "License");
+                you may not use this file except in compliance with the License.
+                You may obtain a copy of the License at
             </para>
             <para>
-                <ulink url="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</ulink>
+                <ulink url="http://www.apache.org/licenses/LICENSE-2.0">
+                  http://www.apache.org/licenses/LICENSE-2.0</ulink>
             </para>
             <para>
-                Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+                Unless required by applicable law or agreed to in writing,
+                software distributed under the License is distributed on an
+                "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+                either express or implied. See the License for the specific
+                language governing permissions and limitations under the License.
             </para>
             <para>
-                Any academic report, publication, or other academic disclosure of results obtained with this Software will acknowledge this Software's use by an appropriate citation.
-            </para>
-            <para>
-              GridWay is an effort undergoing incubation at Globus. Incubation is
-              required of all newly accepted projects until a further review indicates
-              that the infrastructure, communications, and decision making process
-              have stabilized in a manner consistent with other successful Globus
-              projects. While incubation status is not necessarily a reflection of
-              the completeness or stability of the code, it does indicate that the
-              project has yet to be fully endorsed by Globus.
+                Any academic report, publication, or other academic disclosure
+                of results obtained with this Software will acknowledge this
+                Software's use by an appropriate citation.
             </para>
         </legalnotice>
     </bookinfo>
@@ -498,16 +497,44 @@ $ wsrf-query -x -s https://localhost:8443/wsrf/services/DefaultIndexService</scr
 
   <sect1>
   <title>Platform Notes</title>
-
-    <sect2>
-    <title>Compilation Notes</title>
-    <para>Not known issues</para>
-  </sect2>
+  <para>GridWay has been run on the following platforms:</para>
 
     <sect2>
     <title>Fedora Core</title>
       <para>
-      There are issues with Fedora Core 4 and Sun's Java 1.4.2. Please upgrade to Java 1.5+ on these platforms.
+      There are issues with Fedora Core 4 and Sun's Java 1.4.2. Please upgrade
+      to Java 1.5+ on these platforms. Also problems have been reported on Fedora
+      Core platforms when using 32 bit JSDK binaries on AMD64 architectures.
+      </para>
+    </sect2>
+
+    <sect2>
+    <title>Debian Testing</title>
+      <para>
+      No known issues.
+      </para>
+    </sect2>
+
+    <sect2>
+    <title>Mac OS X</title>
+      <para>
+      No known issues. Tested on Mac OS X 10.4 (Tiger).
+      </para>
+    </sect2>
+
+    <sect2>
+    <title>Solaris 10</title>
+      <para>
+      No known issues.
+      </para>
+    </sect2>
+
+    <sect2>
+    <title>Other Linux/UNIX flavors</title>
+      <para>
+      GridWay should run smoothly on any linux based distribution and it is also
+      likely to work on any unix based operating system, although it just have been
+      tested in the aforementioned platforms.
       </para>
     </sect2>
 
@@ -551,7 +578,7 @@ $ wsrf-query -x -s https://localhost:8443/wsrf/services/DefaultIndexService</scr
 
       <listitem>
       <para>
-      Run configure to set up GridWay installation. Posible options
+      Run configure to set up GridWay installation. Possible options
       for configure are:
       <table frame='all'>
 		<title>Configure Options.</title>
@@ -973,6 +1000,14 @@ HID HOSTNAME      OS        ARCH   MHZ %CPU  MEM(F/T)     DISK(F/T)  N(U/T) LRMS
 
     <listitem>
     <para>
+    <filename>$GW_LOCATION/etc/sched.conf</filename>: Configuration options
+    for the GridWay built-in scheduling policies (see <xref linkend='SchedDrivConf'>
+    for more information).
+    </para>
+    </listitem>
+
+    <listitem>
+    <para>
     <filename>$GW_LOCATION/etc/job_template.default</filename>: Default values
     for job's templates (i.e. job definition files).
     </para>
@@ -1282,7 +1317,7 @@ DM_SCHED = flood:gw_flood_scheduler:-h 10 -u 30 -c 5</screen>
   <para>
   Since GridWay 4.9, when you start the daemon, <command>gwd</command> tries
   to recover its previous state. This is, any submitted job is stored in a
-  presistent pool, and in case of a gwd (or client machine) crash these jobs are
+  persistent pool, and in case of a gwd (or client machine) crash these jobs are
   recovered. This includes, for jobs in wrapper state, contacting with the
   remote jobmanager.
   </para>
@@ -1317,6 +1352,14 @@ DM_SCHED = flood:gw_flood_scheduler:-h 10 -u 30 -c 5</screen>
       <filename>$GW_LOCATION/var/gwd.log</filename>: System level log. You can
       find log information of the activity of the middleware access drivers;
       and a coarse-grain log information about jobs.
+      </para>
+      </listitem>
+
+      <listitem>
+      <para>
+      <filename>$GW_LOCATION/var/sched.log</filename>: Scheduler log. You can
+      find log information to fit the scheduler policies to your organization
+      needs.
       </para>
       </listitem>
 
@@ -1413,6 +1456,1064 @@ Could not connect to gwd</screen>
   </sect1>
 </chapter>
 
+<chapter id='SchedConf'>
+<title>Scheduler Configuration Guide</title>
+
+
+  <sect1>
+  <title>Grid Scheduling Overview</title>
+
+  <para>
+  Grid scheduling consists in finding a suitable (in terms of a
+  given target) assignment between a computational workload (jobs) and
+  computational resources. The scheduling problem has been thoroughly studied in
+  the past and efficient algorithms have been devised for different computing
+  platforms. In spite of some of the experience gained in scheduling can be
+  applied to the Grid; it presents some characteristics that differ dramatically
+  from classical computing platforms (i.e. clusters or MPPs), namely: different
+  administration domains, limited control over resources, heterogeneity and
+  dynamism.
+  </para>
+
+  <para>
+  Grid scheduling is an active research area. The Grid scheduling problem is
+  better understood today, and several heuristics, performance models and
+  algorithms have been proposed. However, current working Grid schedulers
+  are only based on match-making, and barely consider multi-user environments.
+  </para>
+
+  <para>
+  In this section we describe the state-of-the-art scheduling policies
+  implemented in the GridWay system. The contents of this guide reflect the
+  experience obtained since GridWay version 4, and a strong feedback from
+  the GridWay user community.
+  </para>
+
+    <sect2>
+    <title> GridWay Scheduling Architecture </title>
+    <para>
+    The scheduler is responsible for assigning jobs to Grid resources. So,
+    it decides when and where to run a job. These decisions are made periodically in
+    an endless loop. The frequency of the scheduler interventions can be adjusted
+    with the <envar>SCHEDULER_INTERVAL</envar> configuration parameter (see
+    <xref linkend='GWDconf'>).
+    </para>
+
+    <para>
+    In order to make job to resource assignments the scheduler receives
+    information from the following sources (see <xref linkend='schedinfo'>):
+    </para>
+
+  <para>
+  <orderedlist>
+      <listitem>
+      <para>
+      <emphasis>List of jobs in the system</emphasis>, which includes pending
+      jobs as well as running jobs (those in wrapper state). Those jobs that
+      can not be started are filtered out from the list, i.e. jobs with unmet
+      dependencies, stopped or held.
+      </para>
+      </listitem>
+
+      <listitem>
+      <para>
+      <emphasis>Match-making results</emphasis> The Information Manager drivers
+      query the Grid information services to track the availability and status of Grid
+      resources. The discovery and monitoring processes can be both configured to be
+      static or dynamic, see <xref linkend='InfDrivConf'>.
+      </para>
+
+      <para>
+      This information is used by the GridWay core to build a list of suitable
+      resources for each job, i.e. resources meeting the job requirements, and to
+      compute their rank.
+      </para>
+      </listitem>
+
+      <listitem>
+      <para>
+      <emphasis>Current resource behavior</emphasis>. The scheduler considers the way a
+      resource is behaving to make its decisions. In particular the migration and
+      failure rates, and execution statistics (transfer, execution and queue wait
+      times) are evaluated.
+      </para>
+      </listitem>
+
+      <listitem>
+      <para>
+      <emphasis>Past Grid Usage</emphasis>The scheduler also considers the past history
+      (behavior) of Grid resources to issue schedules. Note that database
+      support needs to be compiled in GridWay for this feature.
+      </para>
+      </listitem>
+    </orderedlist>
+  </para>
+
+  <para> The information gathered from the previous sources is combined with a given
+  scheduling policy to prioritize jobs and resources. Then, the scheduler dispatch
+  the highest priority job to the best resource for it. The process continues
+  until all jobs are dispatched, and those that could not be assigned wait for the
+  next scheduling interval.
+  </para>
+
+  <figure id='schedinfo'>
+  <title>Job Scheduling in GridWay</title>
+  <graphic align="center" fileref="../images/gw_scheduler.jpg">
+  </figure>
+  </sect2>
+
+
+    <sect2>
+    <title> Scheduling Policies </title>
+    <para>
+    A scheduling policy is used to assign a <emphasis>dispatch priority
+    </emphasis> to each job and a <emphasis>suitability priority</emphasis> to
+    each resource. Therefore, a Grid scheduling policy comprises two components:
+    </para>
+
+    <para>
+    <itemizedlist>
+      <listitem>
+      <para>
+      <emphasis>Job prioritization policies</emphasis>. Pending jobs are
+      prioritize according four policies: fixed, share, deadline and
+      waiting-time. The job policies are used to sort the jobs of the users of
+      a given scheduling domain (GridWay instance). Note that these policies
+      are only enforced in the scheduling domain and not for the whole Grid
+      infrastructure as discussed above.
+      </para>
+      </listitem>
+
+      <listitem>
+      <para>
+      <emphasis>Resource prioritization policies</emphasis>.A given job can be
+      executed on those resources that match it requirements. The resource
+      policies are used to sort the matching resource list of each job. The
+      matching resources are prioritize according four policies: fixed, usage,
+      failure and rank. Note that these policies do not only depend on the
+      Grid resource but also on the job owner, as each Grid user (or VO member)
+      has its own access rights and usage history.
+      </para>
+      </listitem>
+    </itemizedlist>
+    </para>
+
+    <para>
+    These two top-level policies can be combined to implement a wide range of
+    scheduling schemes (see <xref linkend='listinfo'>)). The above
+    scheduling policies are described in the following sections.
+    </para>
+
+    <figure id='listinfo'>
+    <title>Job and resource prioritization policies in GridWay.</title>
+    <graphic align="center" fileref="../images/gw_list.jpg">
+    </figure>
+    </sect2>
+  </sect1>
+
+  <sect1>
+  <title>Job Prioritization Policies</title>
+
+  <para>
+  The job prioritization policy allows Grid administrators to influence the
+  dispatch order of the jobs, this is, decide which job is send to the Grid.
+  Traditionally, DRMs implement different policies based on the owner of the job,
+  the resources consumed by each user or the requirements of the job. Some of
+  these scheduling strategies can be directly applied in a Grid, while other must
+  be adapted because of its genuine characteristics: dynamism, heterogeneity, high
+  fault rate and site autonomy.
+  </para>
+
+  <sect2>
+  <title>Fixed Priority Policy (FP)</title>
+  <para>
+   This policy assigns a fixed priority to each job. The fixed priority ranges
+   from 00 (lowest priority) to 19 (highest priority), so jobs with a
+   higher priority will be dispatched first. The default priority values are
+   assigned, by the Grid administrator, using the following criteria:
+  </para>
+
+  <para>
+    <itemizedlist>
+      <listitem>
+      <para>
+      <emphasis>User</emphasis>. All jobs of a User are given a fixed priority.
+      </para>
+      </listitem>
+
+      <listitem>
+      <para>
+      <emphasis>Group</emphasis>. All jobs of a user belonging to a given Group
+      gets a fixed priority.
+      </para>
+      </listitem>
+    </itemizedlist>
+  </para>
+
+  <para>
+  The user priority prevails over the group one. Also there is an special
+  user (<envar>DEFAULT</envar>) to define the default priority value when
+  no criteria apply.
+  </para>
+
+  <para>
+  The users can set (<command>gwsubmit -p</command>) the priority of their own
+  jobs but without exceeding their limit, set by the administrator in the
+  scheduler configuration file.
+  </para>
+
+  <para>
+  Here is an example configuration for the fixed priority (see also <xref linkend='schedConfFile'>):
+  </para>
+
+  <screen>
+# Weight of the Fixed priority policy
+FP_WEIGHT = 1
+
+# Fixed priority values for David's and Alice's jobs
+FP_USER[david]  = 2
+FP_USER[alice]  = 12
+
+# Fixed priority for every body in the staff group
+FP_GROUP[staff] = 5
+
+# Anyone else gets a default priority 3
+FP_USER[DEFAULT] = 3</screen>
+  </sect2>
+
+  <sect2>
+  <title>Urgent Jobs Policy</title>
+  <para>
+  The Grid administrator can also set the fixed priority of a job to 20. When a
+  job gets a fixed priority 20, it becomes an <emphasis>urgent job</emphasis>.
+  Urgent jobs are dispatched as soon as possible, bypassing all
+  the scheduling policies.
+  </para>
+  </sect2>
+
+  <sect2>
+  <title>Share Policy (SH)</title>
+  <para>
+  The share policy allows to establish a dispatching ratio among the users of an
+  scheduling domain. For example, a share policy could establish that jobs
+  from David and Alice must be dispatched to the Grid in a 2:5 ratio. In this
+  case, the scheduler tracks the jobs submitted to the Grid by these two users
+  and dispatch the jobs so it targets a 2:5 ratio of job submissions.
+  </para>
+
+  <para>
+  This policy resembles the well-known fair-share of traditional LRMS. However,
+  note that what GridWay users share is the ability to submit a job to the Grid
+  and not resource usage. As, Grid resources may belong to other
+  organization, and they are shared with other users from other scheduling
+  domains, and with local users from the remote organization.
+  </para>
+
+  <para>
+  GridWay tracks the jobs submitted to the Grid by the users over the time.
+  Grid administrators can  specify a timeframe over which user submissions
+  are evaluated. The amount of time considered by GridWay is defined by a
+  number of time intervals  (<envar>SH_WINDOW_DEPTH</envar>) and the duration of each one
+  (<envar>SH_WINDOW_SIZE</envar>). The effective number of submissions in a
+  given window is exponentially damped, so present events become more relevant.
+  </para>
+
+  <para>
+  Here is an example configuration for the share policy (see also <xref linkend='schedConfFile'>):
+  </para>
+
+  <screen>
+# Weight of the Share policy
+SH_WEIGHT = 1
+
+# Shared values for David's and Alice's submissions
+SH_USER[david]  = 2
+SH_USER[alice]  = 5
+
+# Anyone else gets a default share value of 1
+SH_USER[DEFAULT] = 1
+
+# Consider submissions in the last 5 days
+SH_WINDOW_SIZE = 1
+SH_WINDOW_DEPTH= 5</screen>
+  </sect2>
+
+  <sect2>
+  <title>Waiting-time Policy (WT)</title>
+  <para>
+   The goal of this policy is to prevent low-priority jobs to starve. So jobs in
+   the pending state long enough will be eventually submitted to the Grid. This
+   policy can be found in most of the LRMS today. In GridWay, the priority of a
+   job is increased linearly with the waiting time.
+  </para>
+  </sect2>
+
+  <sect2>
+  <title>Deadline Policy (DL)</title>
+  <para>
+  GridWay includes support to specify deadlines at job submission. The
+  scheduler will increase the priority of a job as its deadline approaches. Note
+  that this policy does not guarantee that a job is completed before the deadline
+  Grid administrators should provide a way to qualify the remaining time to reach
+  the job deadline by defining when a job should get half of the maximum priority
+  assigned by this policy (<envar>DL_HALF</envar>).
+  </para>
+
+  <para>
+  Here is an example configuration for the deadline policy (see also <xref linkend='schedConfFile'>):
+  </para>
+
+  <screen>
+# Weight of the Deadline Policy
+DL_WEIGHT = 1
+
+# Assign half of the priority two days before the deadline
+DL_HALF = 2</screen>
+  </sect2>
+
+  <sect2>
+  <title>The Dispatch Priority of a Job</title>
+  <para>
+  The list of all pending jobs is sorted by the <emphasis>dispatch priority</emphasis>,
+  which is computed as a weighted sum of the contribution from the previous policies. In
+  this way, the Grid administrator can implement different scheduling schemes by
+  adjusting the policy weights.
+  </para>
+
+  <para>
+  The <emphasis>dispatch priority</emphasis> of a job is therefore computed with:
+  <figure id='jpeq'><title></title>
+  <graphic align="center" fileref="../images/jp_eq.jpg">
+  </figure>
+
+   <para>
+   where <emphasis>w<subscript>i</subscript></emphasis> is the weight for
+   each policy (integer value) and
+   <emphasis>p<subscript>i</subscript></emphasis> is the priority (normalized)
+   contribution from each policy.
+   </para>
+
+  </sect2>
+ </sect1>
+
+  <sect1>
+  <title>Resource Prioritization Policies</title>
+  <para>
+  The resource prioritization policies allows Grid administrators to influence
+  the usage of resources made by the users, this is, decide where to run a job.
+  Usually, in classical LRMS, this resource usage is administered by means of
+  the queue concept.
+  </para>
+
+  <para>
+  In GridWay, the scheduler builds a <emphasis>meta-queue</emphasis> (a queue
+  consisting on the local queues of the Grid resources) for each job based in
+  its requirements (e.g.  operating system or architecture). Note that this
+  <emphasis>meta-queue</emphasis> is not only build in terms of resource
+  properties but also based upon the owner of the job. As each Grid user may
+  belong to a different VO with its own access rights and usage privileges.
+  </para>
+
+  <para>
+  The <emphasis>meta-queue</emphasis> for a job consists on the queues of those
+  resources that meet the job requirements specified in the job template, and
+  have at least one free slot. By default, this queue is sorted in a
+  first-discovered first-used fashion. This order can be influenced by means of
+  the subsequent resource prioritization policies.
+  </para>
+
+  <sect2>
+  <title>Fixed Priority Policy</title>
+
+    <para>
+    Usually, GridWay is configured with several Information Managers (IM). Grid
+    administrators can prioritize resources based upon the IM that discovered
+    the resource. For example, a fixed priority policy can specify that
+    resources from the intranet (managed by a IM driver tagged
+    <command>intranet</command>) should always be used before resources from
+    other sites (managed by a IM driver tagged <command>grid</command>).
+    </para>
+
+    <para>
+    The priority of a resource ranges from 01 (lowest priority) to 99 (highest
+    priority), so resources with a higher priority will be used first. Grid
+    administrators can also prioritize individual resources based on business
+    decisions.
+    </para>
+
+    <para>
+    When a resource gets the priority value 00, it becomes a
+    <emphasis role="bold">banned resource</emphasis>, and will not be used for
+    any job. So Grid administrators can virtually <emphasis>unplugged</emphasis>
+    resources from their scheduling domain.
+    </para>
+
+    <para>
+    Example configuration for the resource Fixed Priority Policy:
+    </para>
+
+    <screen>
+# Weight of the Resource fixed priority policy
+RP_WEIGHT = 1
+
+# Fixed priority values for specific resources
+RP_HOST[my.cluster.com]    = 12
+RP_HOST[slow.machine.com]  = 02
+
+# Fixed priority for every resource in the intranet
+RP_IM[intranet] = 65
+
+# Fixed priority for every resource discovered by the grid IM
+RP_IM[grid] = 05
+
+# Anyone else gets a default priority 04 (i.e. other IM)
+RP_IM[DEFAULT] = 01</screen>
+
+  </sect2>
+
+  <sect2>
+  <title>Rank Policy</title>
+
+    <para>
+    The goal of this policy is to prioritize those resources more suitable for
+    the job, from its own point of view. For example, the rank policy for a job
+    can state that resources with faster CPUs should be used first.  This policy
+    is configured through the <envar>RANK</envar> attribute in the job
+    template, please refer to the GridWay user guide.
+    </para>
+
+    <para>
+    Example configuration for the Rank policy:
+
+    <screen>
+# Weight of the Rank policy
+RA_WEIGHT = 1</screen>
+    </para>
+
+  </sect2>
+
+  <sect2>
+  <title>Usage Policy</title>
+
+    <para>
+    This policy reflects the behavior of Grid resources based on job execution
+    statistics. So, crucial performance variables, like the average queue wait
+    time or network transfer times, are considered when scheduling a job. This
+    policy is derived from the sum of two contributions: history, and current.
+    </para>
+
+    <itemizedlist>
+      <listitem>
+        <para>
+        <emphasis>History contribution</emphasis>. Execution statistics on a
+        given period of time (for example, average values in the last 3 days).
+        This information is obtained from the accounting database, so GridWay
+        must be compiled with the Berkeley DB libraries.
+        </para>
+      </listitem>
+
+      <listitem>
+        <para>
+        <emphasis>Last job contribution</emphasis>. Execution statistics of
+        the last job on that resource.
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    <para>
+    These values are used to compute an estimated execution time of a job on a
+    given resource for a given user:
+
+    <figure id='ugeq'><title></title>
+    <graphic align="center" fileref="../images/ug_eq.jpg">
+    </figure>
+
+    where <emphasis>T<superscript>c</superscript></emphasis> are the execution
+    statistics of the last job (execution, transfer and queue wait-time),
+    <emphasis>T<superscript>h</superscript></emphasis> are the execution
+    statistics based on the history data; and <emphasis>w</emphasis> is the
+    history ratio. Those resources with a lower estimated time are used first
+    to execute a job.
+    </para>
+
+    <para>
+    The Usage policy can be configured with:
+
+    <itemizedlist>
+      <listitem>
+        <para>
+        <computeroutput>UG_HISTORY_WINDOW</computeroutput>. Number of days used
+        to compute the execution statistics form the History contribution.
+        </para>
+      </listitem>
+
+      <listitem>
+        <para>
+          <computeroutput>UG_HISTORY_RATIO</computeroutput>. The value of
+          <emphasis>w</emphasis> use <emphasis>0</emphasis> to use only data
+          from the accounting database, and <emphasis>1</emphasis> to use only
+          results from the last execution.
+        </para>
+      </listitem>
+    </itemizedlist>
+    </para>
+
+    <para>
+    Example configuration for Usage policy:
+
+    <screen>
+# Weight of the Usage policy
+UG_WEIGHT = 1
+
+# Number of days in the history window
+UG_HISTORY_WINDOW = 3
+
+# Accounting database to last execution ratio
+UG_HISTORY_RATIO = 0.25</screen>
+    </para>
+
+  </sect2>
+
+  <sect2>
+  <title>Failure Rate Policy</title>
+
+    <para>
+    When a resource fails, GridWay implements an exponential linear back-off
+    strategy at resource level (and per each user), henceforth resources with
+    persistent failures are discarded (for a given user).
+    </para>
+
+    <para>
+    In particular, when a failure occurs a resource is
+    <emphasis>banned</emphasis> for <emphasis>T</emphasis> seconds:
+    <figure id='freq'><title></title>
+    <graphic align="center" fileref="../images/fr_eq.jpg">
+    </figure>
+    </para>
+
+    <para>
+    where <emphasis>T<subscript>&infin;</subscript></emphasis> is the maximum time
+    that a resource can be <emphasis>banned</emphasis>,
+    <emphasis>Delta t</emphasis> is the time since last failure, and
+    <emphasis>C</emphasis> is a constant that determines how fast the
+    <emphasis>T<subscript>&infin;</subscript></emphasis> limit is reached.
+    </para>
+
+    <para>
+    The failure rate policy can be configured with the following parameters:
+
+    <itemizedlist>
+      <listitem>
+        <para>
+          <userinput>FR_MAX_BANNED_TIME</userinput>. The value of
+          <emphasis>T<subscript>&infin;</subscript></emphasis> use
+          <emphasis>0</emphasis> to disable this policy.
+        </para>
+      </listitem>
+
+      <listitem>
+        <para>
+          <userinput>FR_BANNED_C</userinput>. The value of the
+          <emphasis>C</emphasis> constant in the above equation.
+        </para>
+      </listitem>
+    </itemizedlist>
+    </para>
+
+    <para>
+    Example configuration for the Failure Rate policy:
+
+    <screen>
+# Maximum time that a resource will not be used, in seconds
+FR_MAX_BANNED_TIME = 3600
+# Exponential constant
+FR_BANNED_C        = 650</screen>
+    </para>
+
+  </sect2>
+
+  <sect2>
+  <title>The Suitability Priority of a Resource</title>
+
+    <para>
+    The list of all candidate resources is sorted by the <emphasis>suitability
+    priority</emphasis>, which is computed as a weighted sum of the
+    contribution from the previous policies. The <emphasis>suitability priority
+    </emphasis> resource is therefore computed with:
+    </para>
+    <figure id='rpeq'><title></title>
+    <graphic align="center" fileref="../images/rp_eq.jpg">
+    </figure>
+
+    <para>
+    where <emphasis>w<subscript>i</subscript></emphasis> is the weight for
+    each policy (integer value) and
+    <emphasis>p<subscript>i</subscript></emphasis> is the priority (normalized)
+    contribution from each policy.
+    </para>
+
+  </sect2>
+
+  </sect1>
+
+  <sect1>
+  <title>Re-scheduling Policies</title>
+
+    <para>
+    Also, the scheduler can migrate running jobs in the following situations:
+
+    <itemizedlist>
+      <listitem>
+        <para>
+        A better resource is discovered.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+        A job has been waiting in the remote queue system more than a given
+        threshold.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+        The application changes its requirements.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+        A performance degradation is detected.
+        </para>
+      </listitem>
+    </itemizedlist>
+
+    </para>
+
+    <para>
+    See <xref linkend='GWDconf'> and the GridWay user guide, for information on
+    configuring this policies.
+    </para>
+  </sect1>
+
+  <sect1 id='schedConfFile'>
+  <title>Built-in Scheduler Configuration File</title>
+
+  <para> The built-in scheduler configuration options are defined in
+  <filename>$GW_LOCATION/etc/sched.conf</filename>. The table below summarizes
+  the configuration file options, their description and default values.
+  Note that blank lines and any character after a '#' are ignored.
+  </para>
+
+  <table frame='all'>
+  <title>Built-in Scheduler Configuration File Options.</title>
+    <tgroup cols='3' align='left' colsep='1' rowsep='1'>
+      <colspec colname='c1'>
+      <colspec colname='c2'>
+      <colspec colname='c3'>
+        <tbody>
+         <row>
+         <entry>Option</entry>
+         <entry>Description</entry>
+         <entry>Default</entry>
+         </row>
+
+         <row>
+         <entry namest="c1" nameend="c3"><emphasis role='bold'>
+         Job Scheduling Policies.</emphasis> Pending jobs are
+         prioritize according to four policies:fixed (FP), share(SH),
+         deadline (DL) and waiting-time (WT). The dispatch priority
+         of a job is computed as a weighted sum of the contribution of each
+         policy (normalized to one).</entry>
+         </row>
+
+         <row>
+         <entry>DISPATCH_CHUNK</entry>
+         <entry>The maximum number of jobs that will be dispatched each
+         scheduling action
+         </entry>
+         <entry>15 (0 to dispatch as many jobs as possible)</entry>
+         </row>
+
+         <row>
+         <entry>MAX_RUNNING_USER</entry>
+         <entry>The maximum number of simultaneous running jobs per user.
+         </entry>
+         <entry>30 (0 to dispatch as many jobs as possible)</entry>
+         </row>
+
+         <row>
+         <entry namest="c1" nameend="c3"><emphasis>
+         Fixed Priority (FP) Policy</emphasis> Assigns a fixed priority
+         to each job</entry>
+         </row>
+
+         <row>
+         <entry>FP_WEIGHT</entry>
+         <entry>Weight for the policy (real numbers allowed).
+         </entry>
+         <entry>1</entry>
+         </row>
+
+         <row>
+         <entry>FP_USER[&lt;username>]</entry>
+         <entry>Priority for jobs owned by &lt;username>. Use the special
+          username DEFAULT to set default priorities. Priority range [0,19]
+         </entry>
+         <entry></entry>
+         </row>
+
+         <row>
+         <entry>FP_GROUP[&lt;groupname>]</entry>
+         <entry>Priority for jobs owned by users in group [&lt;groupname>.
+         Priority range [0,19]
+         </entry>
+         <entry></entry>
+         </row>
+
+         <row>
+         <entry namest="c1" nameend="c3"><emphasis>
+         Share (SH) Policy</emphasis> Allows to establish a dispatch ratio among
+         users.</entry>
+         </row>
+
+         <row>
+         <entry>SH_WEIGHT</entry>
+         <entry>Weight for the policy (real numbers allowed).
+         </entry>
+         <entry></entry>
+         </row>
+
+         <row>
+         <entry>SH_USER[&lt;username>]</entry>
+         <entry>Share for jobs owned by &lt;username>. Use the special
+          username DEFAULT to set default shares.
+         </entry>
+         <entry></entry>
+         </row>
+
+         <row>
+         <entry>SH_WINDOW_DEPTH</entry>
+         <entry>Number of intervals (windows) to "remember" each user
+         dispatching history. The submissions of each window are exponentially
+         "forgotten".
+         </entry>
+         <entry>5, the maximum value is 10.</entry>
+         </row>
+
+         <row>
+         <entry>SH_WINDOW_SIZE</entry>
+         <entry>The size of each interval in days (real numbers allowed).
+         </entry>
+         <entry>1.</entry>
+         </row>
+
+
+         <row>
+         <entry namest="c1" nameend="c3"><emphasis>
+         Waiting-time (WT) Policy.</emphasis> The priority of a job is
+         increased linearly with the waiting time to prevent job starvation
+         </entry>
+         </row>
+
+         <row>
+         <entry>WT_WEIGHT</entry>
+         <entry>Weight for the policy (real numbers allowed).
+         </entry>
+         <entry>0</entry>
+         </row>
+
+         <row>
+         <entry namest="c1" nameend="c3"><emphasis>
+         Deadline (DL) Policy.</emphasis> The priority of a job is increased
+         exponentially as its deadline approaches.</entry>
+         </row>
+
+         <row>
+         <entry>DL_WEIGHT</entry>
+         <entry>Weight for the policy (real numbers allowed).
+         </entry>
+         <entry>1</entry>
+         </row>
+
+         <row>
+         <entry>DL_HALF</entry>
+         <entry>Number of days before the deadline when the job should get
+         half of the maximum priority.
+         </entry>
+         <entry>1</entry>
+         </row>
+
+         <row>
+         <entry namest="c1" nameend="c3"><emphasis role='bold'>
+         Resource Scheduling Policies.</emphasis>The resource policies allows
+         grid administrators to influence the usage of resources made by the
+         users, according to: fixed (FP), rank (RA), failure rate (FR), usage (UG).
+         The suitability priority of a resource is computed as a weighted sum of the
+         contribution of each policy (normalized to one).</entry>
+         </row>
+
+         <row>
+         <entry>MAX_RUNNING_RESOURCE</entry>
+         <entry>The maximum number of jobs that the scheduler submits to a
+         given resource
+         </entry>
+         <entry>10</entry>
+         </row>
+
+         <row>
+         <entry namest="c1" nameend="c3"><emphasis>
+         Fixed Priority (RP) Policy.</emphasis> Assigns a fixed priority
+         (range [01,99]) to each resource</entry>
+         </row>
+
+         <row>
+         <entry>RP_WEIGHT</entry>
+         <entry>Weight for the policy (real numbers allowed).
+         </entry>
+         <entry>1 (real numbers allowed)</entry>
+         </row>
+
+         <row>
+         <entry>RP_HOST[&lt;FQDN>]</entry>
+         <entry>Priority for resource &lt;FQDN>. Those resources with
+         priority 00 WILL NOT be used to dispatch jobs.
+         </entry>
+         <entry></entry>
+         </row>
+
+         <row>
+         <entry>RP_IM[&lt;im_tag>]</entry>
+         <entry>Priority for ALL resources discovered by the IM &lt;im_tag> (as
+         set in gwd.conf, see <xref linkend='GWDconf'>). The special tag
+         DEFAULT to set default priorities for resources.
+         </entry>
+         <entry></entry>
+         </row>
+
+         <row>
+         <entry namest="c1" nameend="c3"><emphasis>
+         Usage (UG) Policy.</emphasis> Resources are prioritized based on the
+         estimated execution time of a job (on each resource). </entry>
+         </row>
+
+         <row>
+         <entry>UG_WEIGHT</entry>
+         <entry>Weight for the policy (real numbers allowed).
+         </entry>
+         <entry>1 (real numbers allowed)</entry>
+         </row>
+
+         <row>
+         <entry>UG_HISTORY_WINDOW</entry>
+         <entry>Number of days use to compute the history contribution.
+         </entry>
+         <entry>3 (real numbers allowed)</entry>
+         </row>
+
+         <row>
+         <entry>UG_HISTORY_RATIO</entry>
+         <entry>weight to compute the estimated execution time on a given
+         resource
+         </entry>
+         <entry>0.25</entry>
+         </row>
+
+         <row>
+         <entry namest="c1" nameend="c3"><emphasis>
+         Rank (RA) Policy.</emphasis> Prioritize resources based on their RANK
+         (as defined in the job template)</entry>
+         </row>
+
+         <row>
+         <entry>RA_WEIGHT</entry>
+         <entry>Weight for the policy.
+         </entry>
+         <entry>0 (real numbers allowed)</entry>
+         </row>
+
+         <row>
+         <entry namest="c1" nameend="c3"><emphasis>
+         Failure Rate (FR) Policy.</emphasis> Resources with persistent failures
+         are banned</entry>
+         </row>
+
+         <row>
+         <entry>FR_MAX_BANNED</entry>
+         <entry>The maximum time a resource is banned, in seconds.
+         Use 0 TO DISABLE this policy.
+         </entry>
+         <entry>3600</entry>
+         </row>
+
+         <row>
+         <entry>FR_BANNED_C</entry>
+         <entry>Exponential constant to compute banned time
+         </entry>
+         <entry>650</entry>
+         </row>
+
+       </tbody>
+    </tgroup>
+  </table>
+  </sect1>
+
+  <sect1 id='SchedDrivConf'>
+  <title>Scheduling Driver Configuration</title>
+
+  <para>
+  GridWay uses an external and selectable scheduler module, to schedule jobs.
+  The following schedulers are distributed with GridWay:
+  </para>
+
+  <para>
+  <itemizedlist>
+    <listitem>
+    <para>
+    Built-in Scheduler (default), which implements the above policies.
+    </para>
+    </listitem>
+
+    <listitem>
+    <para>
+    Round-robin/flood Scheduler. This is a simple scheduling algorithm. It maximizes
+    the number of jobs submitted to the Grid. Available resources are flooded
+    with user jobs in a round-robin fashion. <emphasis>The flood (user
+    round-robin) scheduler is included as an example, and should not be used
+    in production environments.</emphasis>
+    </para>
+    </listitem>
+  </itemizedlist>
+  </para>
+
+  <para>
+  The schedulers are configured with the <parameter>DM_SCHED</parameter>
+  option in the <filename>gwd.conf</filename> file, with the format:
+  <screen>DM_SCHED = &lt;sched_name>:&lt;path_to_sched>:[args]</screen>
+  </para>
+
+  <para>
+  where:
+  </para>
+
+  <para>
+    <itemizedlist>
+       <listitem>
+       <para>
+       <command>sched_name</command>:It is a tag to further refer to this
+       scheduler.
+       </para>
+       </listitem>
+
+       <listitem>
+       <para>
+       <command>path_to_mad</command>:It is the name of the  Scheduler
+       executable. Use an absolute path or include the Scheduler executable
+       directory in the PATH variable (such directory is
+       <filename>$GW_LOCATION/bin</filename> by default).
+       </para>
+       </listitem>
+
+        <listitem>
+        <para>
+        <command>arg</command>:Additional argument to be passed to the
+        Scheduler executable.
+        </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <sect2>
+    <title>Driver Configuration for the Built-in Scheduler</title>
+
+      <para>
+      By default, GridWay is configured to use the built-in policy engine
+      described in the previous sections. If for any reason, you need to
+      recover this configuration add the following line to
+      <filename>$GW_LOCATION/etc/gwd.conf</filename>:
+      <screen>DM_SCHED  = builtin:gw_sched:</screen>
+      </para>
+
+      <para>
+       Do not forget to adjust the scheduler policies to your needs by editing
+       the <filename>$GW_LOCATION/etc/sched.conf</filename> file.
+     </para>
+    </sect2>
+
+    <sect2>
+    <title>Driver Configuration for the Flood Scheduler</title>
+      <para>
+      To configure the round-robin/flood scheduler first disable the built-in
+      engine policy in the <filename>$GW_LOCATION/etc/sched.conf</filename>
+      configuration file. Just add the following line:
+      <screen>DISABLE = yes</screen>
+      </para>
+
+      <para>
+      Then add the following line to <filename>$GW_LOCATION/etc/gwd.conf
+      </filename>:
+      <screen>DM_SCHED = flood:gw_flood_scheduler:-h 10 -u 30 -c 5 -s 15</screen>
+      </para>
+      <para>
+      where:
+      </para>
+
+      <para>
+      <itemizedlist>
+        <listitem>
+          <para>
+          <command>-h</command>: The max number of jobs that the scheduler
+          submits to a given host. Default value is 10, 0 to dispatch to each
+          host as many jobs as possible.
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>
+            <command>-u</command>: The maximum number of simultaneous running
+            jobs per user. Default value is 30, 0 to dispatch as many jobs as
+            possible.
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>
+            <command>-c</command>: Scheduling Chunk. Jobs of the same user are
+            submitted in a round-robin fashion with the given chunk. Default
+            value is 5
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>
+            <command>-s</command>: Dispatch Chunk. The maximum number of jobs
+            that will be dispatched each scheduling action. Default value is
+            15, 0 to dispatch as many jobs as possible.
+          </para>
+        </listitem>
+
+      </itemizedlist>
+      </para>
+    </sect2>
+
+  </sect1>
+
+
+  <sect1>
+  <title>Developing your own Scheduler</title>
+  <para>
+  GridWay 5 includes a scheduler template to develop custom schedulers.
+  The previous simple flood (user round-robin) scheduler is included as example.
+  Please refer to the GridWay developer guide for more information. Also, when
+  using custom schedulers you may want to disable the built-in policies, in this
+  case just add to <filename>$GW_LOCATION/etc/sched.conf</filename>:
+  </para>
+  <screen>DISABLE = yes</screen>
+  </sect1>
+
+</chapter>
+
+
+
+
 <chapter>
 <title>Middleware Access Driver (MAD) Configuration Guide</title>
 
@@ -1441,21 +2542,6 @@ Could not connect to gwd</screen>
     <listitem>
     <para>
     Transfer Managers to interface GridFTP servers.
-    </para>
-    </listitem>
-  </itemizedlist>
-  </para>
-
-  <para>
-  Additionally GridWay uses an external and selectable scheduler module,
-  to schedule jobs. The following schedulers are distributed with GridWay:
-  </para>
-
-  <para>
-  <itemizedlist>
-    <listitem>
-    <para>
-    Round-robin/flood Scheduler.
     </para>
     </listitem>
   </itemizedlist>
@@ -2050,118 +3136,6 @@ draco.dacya.ucm.es</screen>
     </para>
     </note>
   </sect2>
-  </sect1>
-
-  <sect1 id='SchedDrivConf'>
-  <title>Scheduling Driver Configuration</title>
-
-    <para>
-    The Scheduler Driver is used to schedule jobs on the available Grid
-    resources. The following schedulers are included in GridWay:
-    </para>
-
-    <para>
-    <itemizedlist>
-      <listitem>
-      <para>
-      Round-Robin/Flooding: This is a simple scheduling algorithm. It maximizes
-      the number of jobs submitted to the Grid. Available resources, ordered by
-      rank, are flooded with user jobs in a round-robin fashion.
-      (the <emphasis>User Guide</emphasis> explains how to define the rank for
-      each job). The new version of this scheduler (from GridWay 5.1) also
-      considers past history of Grid resources: failed executions
-      are now considered when scheduling the jobs of each user.
-      </para>
-      </listitem>
-    </itemizedlist>
-    </para>
-
-    <para>
-    The schedulers are configured with the <parameter>DM_SCHED</parameter>
-    option in the <filename>gwd.conf</filename> file, with the format:
-    <screen>DM_SCHED = &lt;sched_name>:&lt;path_to_sched>:[args]</screen>
-    </para>
-    <para>
-    where:
-    </para>
-    <para>
-      <itemizedlist>
-        <listitem>
-          <para>
-            <command>sched_name</command>:It is a tag to further refer to this
-            scheduler.
-          </para>
-        </listitem>
-
-        <listitem>
-          <para>
-            <command>path_to_mad</command>:It is the name of the  Scheduler
-            executable. Use an absolute path or include the Scheduler executable
-            directory in the PATH variable (such directory is
-            <filename>$GW_LOCATION/bin</filename> by default).
-          </para>
-        </listitem>
-
-        <listitem>
-          <para>
-            <command>arg</command>:Additional argument to be passed to the
-            Scheduler executable.
-          </para>
-        </listitem>
-      </itemizedlist>
-    </para>
-
-    <para>
-    To configure the round-robin/flood scheduler add the following line to
-    <filename>$GW_LOCATION/etc/gwd.conf</filename>:
-    <screen>flood:gw_flood_scheduler:-h 10 -u 30 -c 5 -s 15</screen>
-    </para>
-    <para>
-    where
-    </para>
-
-    <para>
-      <itemizedlist>
-        <listitem>
-          <para>
-          <command>-h</command>:   The max number of jobs that the scheduler
-          submits to a given host. Default value is 10,
-          0 dispatch to each host as many jobs as possible.
-          </para>
-        </listitem>
-
-        <listitem>
-          <para>
-            <command>-u</command>: The maximum number of simultaneous RUNNING
-            jobs per user. Default value is 30, 0 dispatch as many jobs as possible.
-          </para>
-        </listitem>
-
-        <listitem>
-          <para>
-            <command>-c</command>: Scheduling Chunk. Jobs of the same user are
-            submitted in a round-robin fashion with the given chunk. This allows
-            the administrator to establish a basic sharing policy.
-            Default value is 5
-          </para>
-        </listitem>
-        <listitem>
-          <para>
-            <command>-s</command>: Dispatch Chunk. The maximum number of jobs
-            that will be dispatched each scheduling action. Default value is
-            15, 0 dispatch as many jobs as possible.
-          </para>
-        </listitem>
-      </itemizedlist>
-    </para>
-
-    <note>
-    <para>
-    GridWay 5 includes a scheduler template to develop custom schedulers.
-    The previous simple flood (user round-robin) scheduler is included as
-    example.
-    </para>
-    </note>
   </sect1>
 </chapter>
 </book>

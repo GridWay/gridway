@@ -60,7 +60,7 @@ DIV.ABSTRACT
 PRE.SCREEN
 {
     font-family: monospace;
-    font-size: 9px;
+    font-size: 12px;
     background-color: #CCCCFF;
     border: thin solid #333366;
     padding: 3pt;
@@ -71,7 +71,7 @@ PRE.SCREEN
 PRE.PROGRAMLISTING
 {
         font-family:monospace;
-        font-size: 9px;
+        font-size: 12px;
         background-color: #CCCCFF;
         border: thin solid #333366;
         padding: 1pt;
@@ -86,12 +86,19 @@ H1, H1.TITLE
         background-color: #FFFFFF;
         font-weight: bold;
         width: 100%;
-    	  font-size: 20px;
+    	font-size: 20px;
         border-left: solid #FFFFFF;
         border-right: solid #FFFFFF;
         border-top: solid #FFFFFF;
         border-bottom: thin solid #333366;
         padding: 5pt;
+}
+H2.SECT2
+{
+        color:#333366 ;
+        background-color: #FFFFFF;
+        font-weight: bold;
+        font-size: 18px;
 }
 H4.SIMPLESECT, H2
 {

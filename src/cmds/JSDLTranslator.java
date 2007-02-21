@@ -24,6 +24,9 @@ import java.util.*;
  * 
  * JSDL Elements translated:
  * 
+ *  JobIdentification:
+ *  	JobName
+ *  
  * 	Application:
  * 		PosixApplication:
  * 			Executable
@@ -97,7 +100,8 @@ public class JSDLTranslator
 		for (int i = 0; i < this.jsdlElements.size(); i++)
 		{
 			JSDLElement jsdlElement = (JSDLElement) this.jsdlElements.get(i);	
-			
+			if (jsdlElement.getName().equals(JSDL.jobIdentificationJD))
+				createGWJTJobIdentificationElements(jsdlElement);
 			if (jsdlElement.getName().equals(JSDL.applicationJD))
 				createGWJTApplicationElements(jsdlElement);
 			else if (jsdlElement.getName().equals(JSDL.resourcesJD))
@@ -124,6 +128,26 @@ public class JSDLTranslator
 		{
 			outputElement = new GWJTElement(GWJT.outputFiles, outputFiles.substring(0,outputFiles.length()-2));
 			this.gwjtElements.add(outputElement);
+		}
+	}
+	
+	
+	private void createGWJTJobIdentificationElements(JSDLElement jsdlElement)
+	{
+		Vector		children = jsdlElement.getChildren();
+		String		jobNameString = new String("");
+		
+		for (int i=0; i < children.size(); i++)		
+		{
+			JSDLElement	childElement = (JSDLElement) children.get(i);
+			GWJTElement	gwjtElement = new GWJTElement();
+			
+			if (childElement.getName().equals(JSDL.jobNameJIJD))
+			{
+				gwjtElement.setName(translationTAG(childElement.getName()));
+				gwjtElement.setValue(childElement.getText());
+				this.gwjtElements.add(gwjtElement);			
+			}
 		}
 	}
 	
@@ -316,6 +340,8 @@ public class JSDLTranslator
 		
 	private String translationTAG(String jsdlTAG)
 	{
+		if (jsdlTAG.equals(JSDL.jobNameJIJD))
+			return GWJT.name;
 		if (jsdlTAG.equals(JSDL.executablePAAJD))
 			return GWJT.executable;
 		else if (jsdlTAG.equals(JSDL.argumentPAAJD))

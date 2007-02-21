@@ -54,7 +54,7 @@ stmt: stmt asig             { }
 asig:
         VARIABLE '=' INTEGER                { gw_sch_set_var (conf,$1,(float) $3);}
       | VARIABLE '=' FLOAT                  { gw_sch_set_var (conf,$1,$3);}        
-      | VARIABLE '[' STRING ']' '=' INTEGER { gw_sch_set_svar(conf,$1,$3,$6);}
+      | VARIABLE '[' STRING ']' '=' INTEGER { gw_sch_set_svar(conf,$1,$3,$6); free($3);}
         ;
 
 %%

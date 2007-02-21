@@ -19,34 +19,36 @@ import java.util.Vector;
 
 public class GWJT 
 {
-	//	 Job Template Options 
-	public static String executable    		= "EXECUTABLE";
+	//	 Job Template Options
+	public static String name	    			    = "NAME";
 	
-	public static String arguments     		= "ARGUMENTS";
+	public static String executable    			= "EXECUTABLE";
 	
-	public static String environment   		= "ENVIRONMENT";
+	public static String arguments     			= "ARGUMENTS";
 	
-	public static String inputFiles    		= "INPUT_FILES";
+	public static String environment   			= "ENVIRONMENT";
 	
-	public static String outputFiles   		= "OUTPUT_FILES";
+	public static String inputFiles    			= "INPUT_FILES";
 	
-	public static String stdinFile     		= "STDIN_FILE";
+	public static String outputFiles   			= "OUTPUT_FILES";
 	
-	public static String stdoutFile    		= "STDOUT_FILE";
+	public static String stdinFile     			= "STDIN_FILE";
 	
-	public static String stderrFile    		= "STDERR_FILE";
+	public static String stdoutFile    			= "STDOUT_FILE";
 	
-	public static String restartFiles  		= "RESTART_FILES";
+	public static String stderrFile    			= "STDERR_FILE";
 	
-	public static String checkPointInterval	= "CHECKPOINT_INTERVAL";
+	public static String restartFiles  			= "RESTART_FILES";
 	
-	public static String checkPointURL 		= "CHECKPOINT_URL";
+	public static String checkPointInterval		= "CHECKPOINT_INTERVAL";
 	
-	public static String requirements  		= "REQUIREMENTS";
+	public static String checkPointURL 			= "CHECKPOINT_URL";
+	
+	public static String requirements  			= "REQUIREMENTS";
 	
 	public static String reschedulingInterval	= "RESCHEDULING_INTERVAL";
 	
-	public static String reschedulingThreshold  = "RESCHEDULING_THRESHOLD";
+	public static String reschedulingThreshold 	= "RESCHEDULING_THRESHOLD";
 	
 	public static String suspensionTimeout		= "SUSPENSION_TIMEOUT";
 	
@@ -60,7 +62,7 @@ public class GWJT
 	
 	public static String wrapper				= "WRAPPER";
 	
-	public static String preWrapper			= "PRE_WRAPPER";
+	public static String preWrapper				= "PRE_WRAPPER";
 	
 	public static String preWrapperArguments	= "PRE_WRAPPER_ARGUMENTS";
 	
@@ -78,9 +80,9 @@ public class GWJT
 	
 	public static String varCpuMhz				= "CPU_MHZ";
 	
-	public static String varCpuFree			= "CPU_FREE";
+	public static String varCpuFree				= "CPU_FREE";
 	
-	public static String varCpuSMP 			= "CPU_SMP";
+	public static String varCpuSMP 				= "CPU_SMP";
 	
 	public static String varNodeCount 			= "NODECOUNT";
 	
@@ -88,9 +90,9 @@ public class GWJT
 	
 	public static String varFreeMemMB 			= "FREE_MEM_MB";
 	
-	public static String varSizeDiskMB 		= "SIZE_DISK_MB";
+	public static String varSizeDiskMB 			= "SIZE_DISK_MB";
 	
-	public static String varFreeDiskMB 		= "FREE_DISK_MB";
+	public static String varFreeDiskMB 			= "FREE_DISK_MB";
 	
 	public static String varLrmsName 			= "LRMS_NAME";
 	
@@ -104,13 +106,13 @@ public class GWJT
 	
 	public static String varQueueMaxTime		= "QUEUE_MAXTIME";
 	
-	public static String varQueueMaxCpuTime	= "QUEUE_MAXCPUTIME";
+	public static String varQueueMaxCpuTime		= "QUEUE_MAXCPUTIME";
 	
 	public static String varQueueMaxCount		= "QUEUE_MAXCOUNT";
 	
-	public static String varQueueMaxRunningJobs = "QUEUE_MAXRUNNINGJOBS";
+	public static String varQueueMaxRunningJobs	= "QUEUE_MAXRUNNINGJOBS";
 	
-	public static String varQueueMaxJobsInQueue = "QUEUE_MAXJOBSINQUEUE";
+	public static String varQueueMaxJobsInQueue	= "QUEUE_MAXJOBSINQUEUE";
 	
 	public static String varQueueDispatchType	= "QUEUE_DISPATCHTYPE";
 	

@@ -377,6 +377,7 @@ void gw_host_print(FILE *fd, gw_host_t *host)
 {
     int i;
     char str[500];
+    char str2[500];
     
     if (host != NULL)
     {
@@ -407,11 +408,23 @@ void gw_host_print(FILE *fd, gw_host_t *host)
                         host->queue_maxrunningjobs[i],
                         host->queue_maxjobsinqueue[i]);
                 if (host->queue_status[i] != NULL)
-                    sprintf (str, "%s, %s status", str, GWNSTR(host->queue_status[i]));
+                {
+                    sprintf (str2, ", %s status", 
+                                GWNSTR(host->queue_status[i]));
+                    strncat (str, str2, sizeof(str));
+                }
                 if (host->queue_dispatchtype[i] != NULL)
-                    sprintf (str, "%s, %s type", str, GWNSTR(host->queue_dispatchtype[i]));
+                {
+                    sprintf (str2, ", %s type",
+                                GWNSTR(host->queue_dispatchtype[i]));
+                    strncat (str, str2, sizeof(str));
+                }
                 if (host->queue_priority[i] != NULL)
-                    sprintf (str, "%s, %s priority", str, GWNSTR(host->queue_priority[i]));
+                {
+                    sprintf (str2, ", %s priority",
+                                GWNSTR(host->queue_priority[i]));
+                    strncat (str, str2, sizeof(str));
+                }
                 gw_print (fd, "IM",'I',"\t%s\n", str);
             }
         }

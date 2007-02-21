@@ -1354,7 +1354,7 @@ yyreduce:
 
   case 6:
 #line 57 "gw_sch_conf_syntax.y"
-    { gw_sch_set_svar(conf,(yyvsp[(1) - (6)].val_int),(yyvsp[(3) - (6)].val_str),(yyvsp[(6) - (6)].val_int));}
+    { gw_sch_set_svar(conf,(yyvsp[(1) - (6)].val_int),(yyvsp[(3) - (6)].val_str),(yyvsp[(6) - (6)].val_int)); free((yyvsp[(3) - (6)].val_str));}
     break;
 
 

@@ -86,9 +86,11 @@ public class JSDLReader
 		for (int i=0; i < children.getLength(); i++)
 		{
 			actual = children.item(i);
-			if (!actual.getNodeName().equals("#text") && !actual.getNodeName().equals("#comment") && !actual.getNodeName().equals(JSDL.jobIdentificationJD)) 
+			if (!actual.getNodeName().equals("#text") && !actual.getNodeName().equals("#comment")) 
 			{
-				if (actual.getNodeName().equals(JSDL.applicationJD))
+				if (actual.getNodeName().equals(JSDL.jobIdentificationJD))
+					element = writeJobIdentificationElement(actual);
+				else if (actual.getNodeName().equals(JSDL.applicationJD))
 					element = writeApplicationElement(actual);					
 				else if (actual.getNodeName().equals(JSDL.resourcesJD))
 					element = writeResourcesElement(actual);
@@ -105,6 +107,39 @@ public class JSDLReader
 			jsdlElements.add(0,this.noInputOutputElement);
 			
 		return jsdlElements;
+	}
+
+	private JSDLElement writeJobIdentificationElement(Node root)
+	{
+		Node		actual;
+		NodeList	childrenNodes = root.getChildNodes();
+		JSDLElement	element = new JSDLElement();
+		
+		element.setName(root.getNodeName());
+		element.setHasAttributes(false);
+		element.setHasText(false);
+		element.setHasChildren(root.hasChildNodes());
+								
+		Vector			childrenElements = new Vector();
+		
+		for (int i=0; i<childrenNodes.getLength(); i++)
+		{
+			actual = childrenNodes.item(i);
+			
+			if (!actual.getNodeName().equals("#text") && !actual.getNodeName().equals("#comment") && actual.getNodeName().equals(JSDL.jobNameJIJD)) 
+			{
+				JSDLElement 	childElement = new JSDLElement();
+				
+				childElement.setName(actual.getNodeName());
+				childElement.setText(actual.getTextContent());
+				childElement.setHasText(true);
+				childElement.setHasChildren(false);				
+				childrenElements.add(childElement);
+			}
+		}
+		
+		element.setChildren(childrenElements);
+		return element;
 	}
 	
 	private JSDLElement writeApplicationElement(Node root)
