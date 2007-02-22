@@ -2031,52 +2031,69 @@ $ gwsubmit -t example/jt</screen>
   <command>gwhost</command>:
   </para>
 
-  <screen>
-HID HOSTNAME             OS              ARCH   MHZ %CPU  MEM(F/T)     DISK(F/T)  N(U/T) LRMS
-0   ce00.inta.es         Scientific Linu i686  2800    0   513/513           0/0     0/7 jobmanager-lcgpbs
-1   lcg2ce.ific.uv.es                SL3 i686  1200    0 1024/1024           0/0   0/126 jobmanager-pbs
-2   ramses.dsic.upv.es   Scientific Linu i686   866    0   513/513           0/0    0/26 jobmanager-pbs
-3   lcg-ce.usc.cesga.es  ScientificLinux i686  2500    0 1024/1024           0/0   0/100 jobmanager-lcgpbs
-4   ursa.dacya.ucm.es    Linux2.6.12-1.1 x86   3201   44     7/470   24184/79561     0/2 Fork
-5   hydrus.dacya.ucm.es  Linux2.6.10-1.7 i686  2539   97     4/503   12408/59399     0/4 PBS</screen>
+  <screen width='80'>
+HID PRIO  OS              ARCH   MHZ %CPU  MEM(F/T)     DISK(F/T)     N(U/F/T) LRMS    HOSTNAME
+0   1     Linux2.6.17-2-6 x86   3215  100  923/2027 105003/118812        0/1/2 Fork    cygnus.dacya.ucm.es
+1   1     Linux2.6.17-2-6 x86   3216  189  384/2027 105129/118812        0/2/2 Fork    draco.dacya.ucm.es
+2   1     Linux2.6.18-3-a x86_6 2211  100  749/1003   76616/77844        0/2/2 SGE     aquila.dacya.ucm.es
+3   1                              0    0       0/0           0/0        0/0/0         hydrus.dacya.ucm.es
+4   1     Linux2.6.18-3-a x86_6 2009   74   319/878 120173/160796        0/1/1 Fork    orion.dacya.ucm.es
+5   1     Linux2.6.16.13- x86   3200  100   224/256       114/312        0/6/6 SGE     ursa.dacya.ucm.es</screen>
 
   <para>
-  Note also that we have Web Services resources (ursa and hydrus) and Pre-Web
-  Services resources from EGEE. As we did not impose any requirements on the
-  execution hosts all of them can be used to submit our job. You can also check
-  the resources that match your requirements with <command>gwhost -m 0</command>.
+  Note that hydrus is down in this example, so no information is received at all and of course, this host won't be considered in future scheduling decisions. If you want to retrieve more information about a single resource, issue the <command>gwhost</command> command followed by the host identification (HID):
+  </para>		  
+
+<screen width='80'>
+$ gwhost 0
+HID PRIO  OS              ARCH   MHZ %CPU  MEM(F/T)     DISK(F/T)     N(U/F/T) LRMS     HOSTNAME
+5   1     Linux2.6.16.13- x86   3200  100   224/256       114/312        0/6/6 SGE      ursa.dacya.ucm.es
+
+QUEUENAME            SL(F/T) WALLT CPUT  COUNT MAXR  MAXQ  STATUS   DISPATCH   PRIORITY
+all.q                6/6     0     0     0     6     0     enabled  NULL       0</screen>
+  
+  <para>		  
+  You can also check the resources that match your requirements with <command>gwhost -m 0</command>.
   </para>
 
+  <screen>
+HID QNAME      RANK  PRIO  SLOTS HOSTNAME
+0   default    0     1     2     cygnus.dacya.ucm.es
+1   default    0     1     0     draco.dacya.ucm.es
+2   all.q      0     1     2     aquila.dacya.ucm.es
+4   default    0     1     1     orion.dacya.ucm.es
+5   all.q      0     1     6     ursa.dacya.ucm.es</screen>
+  
   <para>
   Now, you can check the evolution of the job with the <command>gwps</command>
   command.
   <screen width='80'>
-JID AID TID DM   EM   RWS START    END      EXEC    XFER    EXIT TEMPLATE   HOST
-0   --  --  pend ---- 000 17:08:51 --:--:-- 0:00:00 0:00:00 --   jt         --
+USER         JID DM   EM   RWS START    END      EXEC    XFER    EXIT NAME  HOST
+jlvazquez    0   pend ---- 000 10:42:09 --:--:-- 0:00:00 0:00:00 --   jt    --
 
-JID AID TID DM   EM   RWS START    END      EXEC    XFER    EXIT TEMPLATE   HOST
-0   --  --  prol ---- 000 17:08:51 --:--:-- 0:00:00 0:00:00 --   jt         hydrus.dacya.ucm.es/PBS
+USER         JID DM   EM   RWS START    END      EXEC    XFER    EXIT NAME  HOST
+jlvazquez    0   prol ---- 000 10:42:09 --:--:-- 0:00:00 0:00:01 --   jt    cygnus.dacya.ucm.es/Fork
 
-JID AID TID DM   EM   RWS START    END      EXEC    XFER    EXIT TEMPLATE   HOST
-0   --  --  wrap ---- 000 17:08:51 --:--:-- 0:00:01 0:00:00 --   jt         hydrus.dacya.ucm.es/PBS
+USER         JID DM   EM   RWS START    END      EXEC    XFER    EXIT NAME  HOST
+jlvazquez    0   wrap ---- 000 10:42:09 --:--:-- 0:00:27 0:00:04 --   jt    cygnus.dacya.ucm.es/Fork
 
-JID AID TID DM   EM   RWS START    END      EXEC    XFER    EXIT TEMPLATE   HOST
-0   --  --  wrap pend 000 17:08:51 --:--:-- 0:00:02 0:00:00 --   jt         hydrus.dacya.ucm.es/PBS
+USER         JID DM   EM   RWS START    END      EXEC    XFER    EXIT NAME  HOST
+jlvazquez    0   wrap pend 000 10:42:09 --:--:-- 0:00:27 0:00:04 --   jt    cygnus.dacya.ucm.es/Fork
 
-JID AID TID DM   EM   RWS START    END      EXEC    XFER    EXIT TEMPLATE   HOST
-0   --  --  wrap actv 000 17:08:51 --:--:-- 0:00:04 0:00:00 --   jt         hydrus.dacya.ucm.es/PBS
+USER         JID DM   EM   RWS START    END      EXEC    XFER    EXIT NAME  HOST
+jlvazquez    0   wrap actv 000 10:42:09 --:--:-- 0:00:27 0:00:04 --   jt    cygnus.dacya.ucm.es/Fork
 
-JID AID TID DM   EM   RWS START    END      EXEC    XFER    EXIT TEMPLATE   HOST
-0   --  --  epil ---- 000 17:08:51 --:--:-- 0:00:05 0:00:01 --   jt         hydrus.dacya.ucm.es/PBS
+USER         JID DM   EM   RWS START    END      EXEC    XFER    EXIT NAME  HOST
+jlvazquez    0   epil ---- 000 10:42:09 --:--:-- 0:00:31 0:00:05 --   jt    cygnus.dacya.ucm.es/Fork
 
-JID AID TID DM   EM   RWS START    END      EXEC    XFER    EXIT TEMPLATE   HOST
-0   --  --  zomb ---- 000 17:08:51 17:09:19 0:00:05 0:00:02 0    jt         hydrus.dacya.ucm.es/PBS</screen>
+USER         JID DM   EM   RWS START    END      EXEC    XFER    EXIT NAME  HOST
+jlvazquez    0   done ---- 000 10:42:09 10:43:01 0:00:31 0:00:08 0    jt    cygnus.dacya.ucm.es/Fork</screen>
   </para>
 
   <para>
   At the beginning, the job is in <emphasis>pending</emphasis> state and not
   allocated to any resource. Then, the job is allocated to
-  hydrus.dacya.ucm.es/PBS and begins the <emphasis>prolog</emphasis> stage.
+  cygnus.dacya.ucm.es/Fork and begins the <emphasis>prolog</emphasis> stage.
   </para>
 
   <note>
@@ -2091,7 +2108,7 @@ JID AID TID DM   EM   RWS START    END      EXEC    XFER    EXIT TEMPLATE   HOST
   <screen width='80'>
 $ gwhistory 0
 HID START    END      PROLOG  WRAPPER EPILOG  MIGR    REASON QUEUE    HOST
-0   17:09:12 17:09:19 0:00:00 0:00:05 0:00:02 0:00:00 ----   default  hydrus.dacya.ucm.es/PBS</screen>
+0   10:42:22 10:43:01 0:00:04 0:00:31 0:00:04 0:00:00 ----   default  cygnus.dacya.ucm.es/Fork</screen>
   </para>
 
   <para>
@@ -2100,13 +2117,16 @@ HID START    END      PROLOG  WRAPPER EPILOG  MIGR    REASON QUEUE    HOST
   file called sdtout_file.$JOB_ID.
   <screen>
 $ ls -lt example/
-total 48
--rw-r--r--  1 ehuedo staff    0 Feb 21 15:38 stderr_file.0
--rw-r--r--  1 ehuedo staff   34 Feb 21 15:38 stdout_file.0
--rw-r--r--  1 ehuedo staff   19 Feb 21 15:36 jt
-$ cat example/stdout_file.0
+total 8
+-rw-r--r-- 1 jlvazquez staff  0 2007-02-20 10:42 stderr.0
+-rw-r--r-- 1 jlvazquez staff 72 2007-02-20 10:42 stdout.0
+-rw-r--r-- 1 jlvazquez staff 19 2007-02-20 10:33 jt
+$ cat example/stdout.0
+job.env
 stderr.execution
-stdout.execution</screen>
+stderr.wrapper
+stdout.execution
+stdout.wrapper</screen>
   </para>
 
   <para>
@@ -2248,7 +2268,8 @@ int main (int argc, char** args)
 EXECUTABLE  = pi
 ARGUMENTS   = ${TASK_ID} ${TOTAL_TASKS} 100000
 STDOUT_FILE = stdout_file.${TASK_ID}
-STDERR_FILE = stderr_file.${TASK_ID}</screen>
+STDERR_FILE = stderr_file.${TASK_ID}
+RANK        = CPU_MHZ</screen>
   </para>
   </sect2>
 

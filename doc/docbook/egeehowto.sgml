@@ -15,7 +15,8 @@
     of the License at
     </para>
     <para>
-    <ulink url="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</ulink>
+    <ulink
+    url="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</ulink>
     </para>
     <para>
     Unless required by applicable law or agreed to in writing, software
@@ -30,9 +31,12 @@
     appropriate citation.
     </para>
     <para>
-    GridWay is a Globus project, adhering to <ulink url="http://dev.globus.org/wiki/Guidelines#Globus_Philosophy">Globus philosophy</ulink> and <ulink url="http://dev.globus.org/wiki/Guidelines">guidelines
-    for collaborative development</ulink> and so welcoming code and support
-    contributions from individuals and corporations around the world.
+    GridWay is a Globus project, adhering to <ulink
+    url="http://dev.globus.org/wiki/Guidelines#Globus_Philosophy">Globus
+    philosophy</ulink> and <ulink
+    url="http://dev.globus.org/wiki/Guidelines">guidelines for collaborative
+    development</ulink> and so welcoming code and support contributions from
+    individuals and corporations around the world.
     </para>
   </legalnotice>
 </bookinfo>
@@ -41,12 +45,12 @@
 <title>Integration of GridWay within the EGEE Infrastructure</title>
 
 	<para>
-	GridWay is an open-source component for meta-scheduling in the Grid
-    Ecosystem.
-	GridWay gives end users, application developers and managers
-	of Grid infrastructures a <ulink url="http://www.gridway.org/about/functionality.php">
-	scheduling functionality</ulink> similar to that found on local DRM 
-	(Distributed Resource Management) systems.
+    GridWay is an open-source component for meta-scheduling in the Grid
+    Ecosystem. GridWay gives end users, application developers and managers of
+    Grid infrastructures a <ulink
+    url="http://www.gridway.org/about/functionality.php"> scheduling
+    functionality</ulink> similar to that found on local DRM  (Distributed
+    Resource Management) systems.
 	</para>
 	<para>
     GridWay is completely functional on EGEE, being able to interface with the
@@ -96,8 +100,17 @@
 		</itemizedlist>
 		</para>
 
-		<graphic align="center" fileref="images/egee.png">
-
+    <figure>
+      <title>Integration of GridWay with the EGEE services.</title>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="../images/egee.png" format="PNG">
+        </imageobject>
+        <imageobject>
+          <imagedata fileref="../images/egee.jpg" format="JPG">
+        </imageobject>
+      </mediaobject>
+    </figure>
 	</sect1>
 
 	<sect1>
@@ -178,7 +191,8 @@
     This installation requires a previous <ulink
     url="https://www.scientificlinux.org/">Scientific Linux installation</ulink>
     and the<ulink
-    url="http://glite.web.cern.ch/glite/packages/R3.0/deployment/glite- UI/glite-UI.asp"> User Interface configuration</ulink>. GridWay 5.0.1
+    url="http://glite.web.cern.ch/glite/packages/R3.0/deployment/glite-
+    UI/glite-UI.asp"> User Interface configuration</ulink>. GridWay 5.0.1
     installation has been tested using:
 	</para>
 
@@ -199,7 +213,7 @@
 	</para>
 
 	<sect1>
-	<title>Before Unpacking the Distribution</title>
+	<title>Before unpacking the distribution</title>
 
 		<para>
 		<itemizedlist>
@@ -211,7 +225,8 @@
 				</para>
 
 				<screen>
-${GPT_LOCATION}/sbin/gpt-build -force -nosrc -builddir=/tmp/globus_core.$$ gcc32 gcc32pthr gcc32dbg gcc32dbgpthr</screen>
+# ${GPT_LOCATION}/sbin/gpt-build -force -nosrc -builddir=/tmp/globus_core.$$ \
+> gcc32 gcc32pthr gcc32dbg gcc32dbgpthr</screen>
 			</listitem>
 		</itemizedlist>
 		</para>
@@ -219,7 +234,7 @@ ${GPT_LOCATION}/sbin/gpt-build -force -nosrc -builddir=/tmp/globus_core.$$ gcc32
 	</sect1>
 
 	<sect1>
-	<title>After Unpacking the Distribution</title>
+	<title>After unpacking the distribution</title>
 
 		<para>
 		<itemizedlist>
@@ -230,10 +245,11 @@ ${GPT_LOCATION}/sbin/gpt-build -force -nosrc -builddir=/tmp/globus_core.$$ gcc32
 				</para>
 
 				<screen>
-em_mads: bin/gw_em_mad_prews
 #em_mads: bin/gw_em_mad_ws bin/gw_em_mad_prews
+em_mads: bin/gw_em_mad_prews
+#tm_mads: bin/gw_tm_mad_ftp bin/gw_tm_mad_rft bin/gw_tm_mad_dummys
 tm_mads: bin/gw_tm_mad_dummy
-#tm_mads: bin/gw_tm_mad_ftp bin/gw_tm_mad_rft bin/gw_tm_mad_dummys</screen>
+</screen>
 			</listitem>
 		</itemizedlist>
 		</para>
@@ -242,8 +258,8 @@ tm_mads: bin/gw_tm_mad_dummy
 
 	<sect1>
 	<title>
-		<command>NOTE</command> (For a multi-user installation): After Compiling
-        the Distribution
+		<command>NOTE</command> (For a multi-user installation): After compiling
+        the distribution
 	</title>
 
 	<para>
@@ -253,7 +269,7 @@ tm_mads: bin/gw_tm_mad_dummy
 			The sudoers file of the sudo command must include the following:
 			</para>
 
-			<screen>
+			<screen width='80'>
 # 
 # This file MUST be edited with the 'visudo' command as root.
 # 
@@ -282,67 +298,87 @@ Defaults>GW_USERS env_reset, env_keep="GW_LOCATION GLOBUS_LOCATION GLOBUS_TCP_PO
 </chapter>
 
 <chapter>
-<title>Configuration to access to EGEE Resources</title>
+<title>Configuration to access to EGEE resources</title>
 
 	<para>
     The <ulink url="http://www.gridway.org/documentation/guides.php">GridWay
     Installation and Configuration Guide</ulink> provides complete information
     about configuration of the meta-scheduler. Next steps describe the specific
     configuration of the access drivers for the EGEE infrastructure services
-    (LCG):
+    (LCG).
 	</para>
 	<para>
+    In file $GW_LOCATION/etc/gwd.conf:
+	<screen width='80'>
+IM_MAD = mds2_glue:gw_im_mad_mds2_glue:-l etc/im_examples/host_glue.list:dummy:prews_nsh
+EM_MAD = prews_nsh:gw_em_mad_prews:rsl_nsh
+TM_MAD = dummy:gw_tm_mad_dummy:-g
+</screen>
+    </para>
+
+	<para>
+	There are two options for the configuration of the TM MAD:
+	</para>
+
 	<itemizedlist>
 		<listitem>
 		<para>
-		In the file $GW_LOCATION/etc/gwd.conf
+		-g option: starts a GASS server.
 		</para>
-
-		<screen>
-IM_MAD = mds2_glue:gw_im_mad_mds2_glue:-l examples/im/host_list_mds2_glue 
--q (GlueCEAccessControlBaseRule=*fusion)::dummy:prews_nsh
-EM_MAD = prews_nsh:gw_em_mad_prews:rsl_nsh
-TM_MAD = dummy:gw_tm_mad_dummy:-g</screen>
-
-		<itemizedlist>
-			<listitem>
-			<para>
-			In TM_MAD driver:
-			</para>
-
-			<itemizedlist>
-				<listitem>
-				<para>
-				-g option: starts a GASS server.
-				</para>
-				</listitem>
-
-				<listitem>
-				<para>
-				-u option: this argument represents the GridFTP
-                server URL in the client, for example:
-				</para>
-
-				<screen>
-TM_MAD = dummy:gw_tm_mad_dummy:-u gsiftp\://cepheus.dacya.ucm.es</screen>
-				</listitem>
-			</itemizedlist>
-   		</listitem>
+		</listitem>
 
 		<listitem>
 		<para>
-        In the IM_MAD driver, it is necessary to change "fusion" with the VO
-        you belong to.
+        -u option: espcifies the URL of a GridFTP server running in the client.
+        For example:
+        <screen>
+TM_MAD = dummy:gw_tm_mad_dummy:-u gsiftp\://cepheus.dacya.ucm.es
+</screen>
+        </para>
+   		</listitem>
+	</itemizedlist>
+
+	<para>
+    For VO management there are two options:
+	<itemizedlist>
+        <listitem>
+        <para>
+        It is possible to configure a GridWay instance to only use those queues
+        authorized to your VO by filtering them. This is done with option -q of
+        the IM MAD. For example (in gwd.conf):
+        <screen width='100'>
+IM_MAD = mds2_glue:gw_im_mad_mds2_glue:-l etc/im_examples/host_glue.list -q (GlueCEAccessControlBaseRule=*fusion):dummy:prews_nsh
+</screen>
 		</para>
-		</listitem>
-		</itemizedlist>
-	</listitem>
+        <para>
+        Change "fusion" with the VO you belong to.
+		</para>
+    	</listitem>
+    	<listitem>
+        <para>
+        The other possibility is to use the parameter VO_ACCESS in the
+        requirement expression of a job. This parameter is set to the list of authorized VOs, each one between a colon:
+            <screen>
+            VO_ACCESS = ":fusion::dteam:"
+</screen>
+        For example (in the job template or
+        job_template.default):
+            <screen>
+            REQUIREMENTS = VO_ACCESS = "*:fusion:*"
+</screen>
+        to only use those queues authorized for "fusion" VO, or
+            <screen>
+            REQUIREMENTS = VO_ACCESS = "" | VO_ACCESS = "*:fusion:*"
+</screen>
+        if you also want to use those queue with no access restrictions.
+	    </para>
+    	</listitem>
 	</itemizedlist>
 	</para>
 </chapter>
 
 <chapter>
-<title>Using GridWay</title>
+    <title>Using GridWay</title>
 
 	<para>
     The functionality and interfaces provided by GridWay are independent from

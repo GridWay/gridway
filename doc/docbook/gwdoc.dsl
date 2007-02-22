@@ -18,11 +18,11 @@
 
 ; === Media objects ===
 (define preferred-mediaobject-extensions  ;; this magic allows to use different graphical
-   (list "eps"))      ;;   formats for printing and putting online
+   (list "eps" "jpg"))      ;;   formats for printing and putting online
 (define acceptable-mediaobject-extensions
    '())
 (define preferred-mediaobject-notations
-   (list "EPS"))
+   (list "EPS" "JPG"))
 (define acceptable-mediaobject-notations
    (list "linespecific"))
 
