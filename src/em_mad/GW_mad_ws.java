@@ -443,8 +443,11 @@ class Service extends Thread {
         //associated ManagedJobFactoryResource
         try
         {
-            URL factoryURL =
-                    ManagedJobFactoryClientHelper.getServiceURL(host).getURL();
+            // Due to Bug 4919: Error in job submission (GRAM-WS) 
+            //URL factoryURL =
+            //        ManagedJobFactoryClientHelper.getServiceURL(host).getURL();
+            URL factoryURL = new URL("https://" + host
+                    + ":8443/wsrf/services/ManagedJobFactoryService");
             factoryEndpoint =
                     ManagedJobFactoryClientHelper.getFactoryEndpoint(factoryURL,
                     factoryType);
