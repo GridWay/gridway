@@ -476,7 +476,7 @@ void gw_scheduler_matching_arrays(gw_scheduler_t * sched)
 			{	    	
 		        gw_scheduler_print('W',"No matching hosts found for job"
    	    		    " %i - %s\n",jid,gw_ret_code_string(rc));
-				break;
+				continue;
 		    }
 
 			hosts = (int *) malloc (sizeof(int) * num);
