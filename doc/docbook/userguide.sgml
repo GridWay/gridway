@@ -1337,6 +1337,7 @@ ENVIRONMENT = VAR = "`expr ${JOB_ID} + 3`" # will set VAR to JOB_ID + 3</screen>
   <title>JSDL Document Structure</title>
   <para>
     The JDSL document structure is as follows:
+  </para>
 <screen>
 &lt;JobDefinition>
 |-------&lt;JobDescription>
@@ -2042,7 +2043,7 @@ HID PRIO  OS              ARCH   MHZ %CPU  MEM(F/T)     DISK(F/T)     N(U/F/T) L
 
   <para>
   Note that hydrus is down in this example, so no information is received at all and of course, this host won't be considered in future scheduling decisions. If you want to retrieve more information about a single resource, issue the <command>gwhost</command> command followed by the host identification (HID):
-  </para>		  
+  </para>
 
 <screen width='80'>
 $ gwhost 0
@@ -2051,8 +2052,8 @@ HID PRIO  OS              ARCH   MHZ %CPU  MEM(F/T)     DISK(F/T)     N(U/F/T) L
 
 QUEUENAME            SL(F/T) WALLT CPUT  COUNT MAXR  MAXQ  STATUS   DISPATCH   PRIORITY
 all.q                6/6     0     0     0     6     0     enabled  NULL       0</screen>
-  
-  <para>		  
+
+  <para>
   You can also check the resources that match your requirements with <command>gwhost -m 0</command>.
   </para>
 
@@ -2063,7 +2064,7 @@ HID QNAME      RANK  PRIO  SLOTS HOSTNAME
 2   all.q      0     1     2     aquila.dacya.ucm.es
 4   default    0     1     1     orion.dacya.ucm.es
 5   all.q      0     1     6     ursa.dacya.ucm.es</screen>
-  
+
   <para>
   Now, you can check the evolution of the job with the <command>gwps</command>
   command.

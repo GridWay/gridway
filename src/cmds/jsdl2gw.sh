@@ -22,7 +22,7 @@ if [ -z "${GW_LOCATION}" ]; then
     exit -1
 fi
 
-if [ $1 = "-h" ]; then
+if [ "x$1" = "x-h" ]; then
   echo "jsdl2gw [-h] input_jsdl [output_gwjt]"
   echo
   echo "SYNOPSIS"

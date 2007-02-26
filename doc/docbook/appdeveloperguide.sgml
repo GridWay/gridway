@@ -177,6 +177,7 @@
  rc = drmaa_exit(err_diag);
    </screen>
    </sect2>
+   </sect1>
 </chapter>
 
 <chapter><title> DRMAA Program Structure and Compilation</title>
@@ -221,6 +222,7 @@
    <screen>
  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GW_LOCATION/lib
    </screen>
+  </sect1>
  </chapter>
 
 <chapter><title> DRMAA Programming Howto</title>
@@ -1500,4 +1502,5 @@
   </sect2>
 
   </sect1>
+</chapter>
 </book>

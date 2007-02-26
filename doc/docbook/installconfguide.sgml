@@ -605,7 +605,7 @@ $ wsrf-query -x -s https://localhost:8443/wsrf/services/DefaultIndexService</scr
         		</row>
         		<row>
         		   <entry>--disable-prews</entry>
-        		   <entry>Don't build pre-web-services support. Default is enabled.
+        		   <entry>Don't build pre-web-services support. Default is enabled.</entry>
         		</row>
          		<row>
         		   <entry>--disable-ws</entry>
@@ -757,7 +757,7 @@ $GW_LOCATION/
     Set up Globus development environment:
     <screen>$ source $GLOBUS_LOCATION/etc/globus-devel-env.sh</screen>
     </para>
-    <para>or
+    <para>or</para>
     <screen>$ . $GLOBUS_LOCATION/etc/globus-devel-env.csh</screen>
     <para>
     depending on the shell you are using.
@@ -1782,6 +1782,7 @@ DL_HALF = 2</screen>
 
   <para>
   The <emphasis>dispatch priority</emphasis> of a job is therefore computed with:
+  </para>
   <figure id='jpeq'><title></title>
   <graphic align="center" fileref="../images/jp_eq.jpg">
   </figure>
@@ -2754,8 +2755,8 @@ FR_BANNED_C        = 650</screen>
     transfers job.env and input/output files from the client.
     </para>
     </listitem>
-
   </itemizedlist>
+  </para>
 
   <para>
   The following servers can be configured to access files on the client machine:
