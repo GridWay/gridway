@@ -15,7 +15,8 @@
     of the License at
     </para>
     <para>
-    <ulink url="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</ulink>
+    <ulink
+    url="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</ulink>
     </para>
     <para>
     Unless required by applicable law or agreed to in writing, software
@@ -26,17 +27,17 @@
     </para>
     <para>
     Any academic report, publication, or other academic disclosure of results
-    obtained with this Software will acknowledge this Software's use by an
-    appropriate citation.
+    obtained with the GridWay Metascheduler will acknowledge GridWay's use by an
+    appropriate citation to relevant papers by GridWay team members.
     </para>
   </legalnotice>
 </bookinfo>
 
 <chapter>
-<title>Introduction to the GridWay Meta-Scheduler</title>
+<title>Introduction to the GridWay Metascheduler</title>
 
   <sect1>
-  <title>Benefits for the End User </title>
+  <title>Benefits for the end user </title>
 
   <para>
   GridWay, on top of Globus services, enables large-scale, secure and reliable
@@ -56,14 +57,14 @@
   <itemizedlist>
     <listitem>
     <para>
-    Reliable and Unattended Execution of Jobs: Transparently to the end user,
+    Reliable and unattended execution of jobs: Transparently to the end user,
     the scheduler is able to manage the different failure situations.
     </para>
     </listitem>
 
     <listitem>
     <para>
-    Efficient Execution of Jobs: Jobs are executed on the faster available
+    Efficient execution of jobs: Jobs are executed on the faster available
     resources.
     </para>
     </listitem>
@@ -81,9 +82,11 @@
 
     <listitem>
     <para>
-    DRM Command Line Interface: The GridWay command line interface is similar
-    to that found on Unix and resource management systems such as PBS or SGE.
-    It allows users to submit, kill, migrate, monitor and synchronize jobs.
+    DRM Command Line Interface: The GridWay command line interface is similar to
+    that found on Unix and resource management systems such as PBS or SGE. It
+    allows users to submit, kill, migrate, monitor and synchronize jobs.
+    Moreover, jobs can be specified in GridWay Job Template format or using the
+    JSDL (Job Submission Description Language) OGF standard.
     </para>
     </listitem>
 
@@ -99,7 +102,7 @@
   </sect1>
 
   <sect1>
-  <title>How GridWay Operates</title>
+  <title>How GridWay operates</title>
 
   <para>
   GridWay enables you to treat your jobs as if they were Unix processes. Each
@@ -142,7 +145,7 @@
   </sect1>
 
   <sect1>
-  <title>Job Life-Cycle in GridWay</title>
+  <title>Job life-cycle in GridWay</title>
 
   <para>
   A job can be in one of the following dispatch states (DM state):
@@ -209,7 +212,7 @@
     <listitem>
     <para>
     Stopped (<computeroutput>stop</computeroutput>): The job is stopped. If
-    restart files have been defined in the job template, they are transferred
+    restart files have been defined in the Job Template, they are transferred
     back to the client, and will be used when the job is resumed.
     </para>
     </listitem>
@@ -230,7 +233,7 @@
   </para>
 
   <figure>
-    <title>Simplified state machine of the GridWay Meta-scheduler.</title>
+    <title>Simplified state machine of the GridWay Metascheduler.</title>
     <graphic align="center" fileref="../images/gw_states.jpg">
   </figure>
 
@@ -306,7 +309,7 @@
   </sect1>
 
   <sect1>
-  <title>A Grid-Aware Application Model</title>
+  <title>A grid-aware application model</title>
 
   <para>
   In order to obtain a reasonable degree of both application performance and
@@ -326,7 +329,7 @@
     remote host architecture. GridWay provides a straightforward method to
     select the appropriate executable for each host. The variable
     <varname>GW_ARCH</varname>, as provided by the Information MAD, can be used
-    to define the executable in the job template (for example,
+    to define the executable in the Job Template (for example,
     EXECUTABLE=sim_code.${GW_ARCH})
     </para>
     </listitem>
@@ -382,7 +385,7 @@
 </chapter>
 
 <chapter id='UserEnvConf'>
-<title>User Environment Configuration</title>
+<title>User environment configuration</title>
 
   <important>
   <para>
@@ -457,13 +460,13 @@ $ setenv PATH $PATH:$GW_LOCATION/bin</screen>
 </chapter>
 
 <chapter>
-  <title>Job Definition</title>
+  <title>Job definition</title>
 
   <sect1>
-  <title>Job Description Overview</title>
+  <title>Job description overview</title>
 
   <para>
-  Job templates allow you to configure your job's requirements, in terms of
+  Job Templates allow you to configure your job's requirements, in terms of
   needed files, generated files, requirements and ranks of execution hosts, as
   well as other options.
   </para>
@@ -477,17 +480,17 @@ $ setenv PATH $PATH:$GW_LOCATION/bin</screen>
 
   <important>
   <para>
-    Default values for EVERY job template are read from
+    Default values for EVERY Job Template are read from
     <filename>$GW_LOCATION/etc/job_template.default</filename>.
   </para>
   </important>
   </sect1>
 
   <sect1>
-  <title>Job Template Options</title>
+  <title>Job Template options</title>
 
   <table frame='all'>
-	<title>Job Template Options.</title>
+	<title>Job Template options.</title>
     <tgroup cols='2' align='left' colsep='1' rowsep='1'>
     <colspec colname='c1' colwidth='6cm'>
     <colspec colname='c2'>
@@ -498,7 +501,7 @@ $ setenv PATH $PATH:$GW_LOCATION/bin</screen>
 
       <row>
       <entry>NAME</entry>
-      <entry>Name of the job (filename of the job template by default).</entry>
+      <entry>Name of the job (filename of the Job Template by default).</entry>
       </row>
       <row>
       <entry namest="c1" nameend="c2">Execution</entry>
@@ -600,7 +603,7 @@ $ setenv PATH $PATH:$GW_LOCATION/bin</screen>
       </row>
 
       <row>
-      <entry namest="c1" nameend="c2">Resource Selection
+      <entry namest="c1" nameend="c2">Resource selection
       (See <xref linkend="ResSelectExpr"> for more information)</entry>
       </row>
 
@@ -664,7 +667,7 @@ $ setenv PATH $PATH:$GW_LOCATION/bin</screen>
       </row>
 
       <row>
-      <entry namest="c1" nameend="c2">Fault Tolerance</entry>
+      <entry namest="c1" nameend="c2">Fault tolerance</entry>
       </row>
 
       <row>
@@ -681,7 +684,7 @@ $ setenv PATH $PATH:$GW_LOCATION/bin</screen>
       </row>
 
       <row>
-      <entry namest="c1" nameend="c2">Advanced Job Execution</entry>
+      <entry namest="c1" nameend="c2">Advanced job execution</entry>
       </row>
 
       <row>
@@ -713,7 +716,7 @@ $ setenv PATH $PATH:$GW_LOCATION/bin</screen>
   </sect1>
 
   <sect1>
-  <title>File Definition in Job Templates</title>
+  <title>File definition in Job Templates</title>
 
   <para>
   Input and output files are in general specified in a comma-separated,
@@ -726,7 +729,7 @@ $ setenv PATH $PATH:$GW_LOCATION/bin</screen>
   </para>
 
     <sect2>
-    <title> Defining Input Files </title>
+    <title> Defining input files </title>
 
     <para>
       Input files (if staged to the remote host) are always placed in the
@@ -749,7 +752,7 @@ $ setenv PATH $PATH:$GW_LOCATION/bin</screen>
     <itemizedlist>
       <listitem>
         <para>
-        <emphasis>Absolute Path</emphasis>: In this case no staging is
+        <emphasis>Absolute path</emphasis>: In this case no staging is
         performed. File is assumed to be in that location in the remote host.
         </para>
         <para>
@@ -781,7 +784,7 @@ INPUT_FILES  = gsiftp://machine/tmp/input_exp1 input</screen>
         </para>
         <para>
         Example:
-        <screen>
+        <screen width='80'>
 INPUT_FILES  = file:///etc/passwd #Will copy local /etc/passwd file to remote dir, with name passwd</screen>
         </para>
       </listitem>
@@ -789,7 +792,7 @@ INPUT_FILES  = file:///etc/passwd #Will copy local /etc/passwd file to remote di
       <listitem>
         <para>
         <emphasis>Name</emphasis>: Use simple names to stage files in
-        your local experiment directory (directory where the job template file
+        your local experiment directory (directory where the Job Template file
         is placed). If no destination is given the filename will be preserved.
         </para>
         <para>
@@ -803,13 +806,13 @@ INPUT_FILES  = test_case.bin</screen>
     <note>
     <para>
     The executable is treated as an input file, so the same remarks are
-    applicable for the <parameter>EXECUTABLE</parameter> job template parameter.
+    applicable for the <parameter>EXECUTABLE</parameter> Job Template parameter.
     </para>
     </note>
     </sect2>
 
     <sect2>
-      <title> Defining Output Files </title>
+      <title> Defining output files </title>
 
       <para>
         Output files are always copied FROM the remote experiment directory.
@@ -829,7 +832,7 @@ INPUT_FILES  = test_case.bin</screen>
         <itemizedlist>
           <listitem>
             <para>
-            <emphasis>Absolute Path</emphasis>: The remote file name will be
+            <emphasis>Absolute path</emphasis>: The remote file name will be
             copied to the absolute path in the local host. Note that you can
             also use <computeroutput>file:///</computeroutput> protocol.
             </para>
@@ -858,7 +861,7 @@ OUTPUT_FILES  = out gsiftp://storage_servere/~/output.${TASK_ID}</screen>
           <listitem>
             <para>
               <emphasis>Name</emphasis>: Use simple names to stage files to
-              your local experiment directory (directory where the job template file
+              your local experiment directory (directory where the Job Template file
               is placed). If no destination is given the filename will be preserved.
             </para>
             <para>
@@ -869,7 +872,7 @@ OUTPUT_FILES  = test_case.bin</screen>
             <para>
               Tip: You can organize your output files in directories in the
               experiment directory (They MUST exist!), using a relative path
-            <screen>
+            <screen width='80'>
 OUTPUT_FILES = outfile Out/file.${JOB_ID} #Directory Out must exist in the experiment directory</screen>
             </para>
           </listitem>
@@ -878,7 +881,7 @@ OUTPUT_FILES = outfile Out/file.${JOB_ID} #Directory Out must exist in the exper
   </sect2>
 
   <sect2>
-      <title> Defining Standard Streams </title>
+      <title> Defining standard streams </title>
       <para>
         Standard streams includes the standard input for your executable
         (<parameter>STDIN_FILE</parameter>) and its standard output and error
@@ -907,19 +910,19 @@ STDIN_FILE = In/input.${JOB_ID} #Will use input from directory In</screen>
       <para>
         Example:
         <screen>
-          STDOUT_FILE = Out/ofile #Will place stdout in Out directory with name ofile</screen>
+STDOUT_FILE = Out/ofile #Will place stdout in Out directory with name ofile</screen>
       </para>
     </sect2>
 
     <sect2>
-    <title> Defining Restart Files </title>
+    <title> Defining restart files </title>
 
       <para>
         Restart files are periodically copied to the job directory
         (<filename>$GW_LOCATION/var/$JOB_ID/</filename>). Restart files are
         only specified with its name. Note also that you can defined a
         checkpointing server with the <parameter>CHECKPOINT_URL</parameter>
-        job template parameter.
+        Job Template parameter.
       </para>
       <para>
         Example:
@@ -930,7 +933,7 @@ RESTART_FILES = tmp_file</screen>
   </sect1>
 
   <sect1 id='VarSub'>
-	<title>Variable Substitution</title>
+	<title>Variable substitution</title>
 
   <para>
 	You can use variables in the value string of each option, with the format:
@@ -953,7 +956,7 @@ RESTART_FILES = tmp_file</screen>
 	</para>
 
   <table frame='all'>
-    <title>Substitution Variables.</title>
+    <title>Substitution variables.</title>
 		<tgroup cols='2' align='left' colsep='1' rowsep='1'>
 		<colspec colname='c1' colwidth='6cm'>
 		<colspec colname='c2'>
@@ -1007,10 +1010,10 @@ increment, with 1 by default) of the gwsubmit command.</entry>
   </sect1>
 
 	<sect1 id="ResSelectExpr">
-	<title>Resource Selection Expressions</title>
+	<title>Resource selection expressions</title>
 
     <sect2>
-    <title>Requirement Expression Syntax</title>
+    <title>Requirement expression syntax</title>
     <para>
     The syntax of the requirement expressions is defined as:
     <screen>
@@ -1045,7 +1048,7 @@ REQUIREMENTS = HOSTNAME = "hydrus.dacya.ucm.es"; #Only use hydrus.dacya.ucm.es</
     </sect2>
 
     <sect2>
-    <title>Rank Expression Syntax</title>
+    <title>Rank expression syntax</title>
 
     <para>
     The syntax of the rank expressions is defined as:
@@ -1076,7 +1079,7 @@ expr::= VARIABLE
     </sect2>
 
     <sect2>
-    <title>Requirement and Rank Variables</title>
+    <title>Requirement and rank variables</title>
 
 		<para>
     To set the <emphasis>REQUIREMENTS</emphasis> and <emphasis>RANK</emphasis>
@@ -1229,11 +1232,11 @@ expr::= VARIABLE
 	</sect1>
 
 	<sect1>
-	<title>Job Environment</title>
+	<title>Job environment</title>
 
   <para>
   Job environment variables can be easily set with the <parameter>ENVIRONMENT
-  </parameter> parameter of the job template. These environment variables are
+  </parameter> parameter of the Job Template. These environment variables are
   parsed, so you can use the GridWay variables defined in
   <xref linkend='VarSub'>, to set the job environment.
   </para>
@@ -1325,7 +1328,7 @@ ENVIRONMENT = VAR = "`expr ${JOB_ID} + 3`" # will set VAR to JOB_ID + 3</screen>
 <chapter>
 <title>Job Submission Description Language (JSDL)</title>
   <sect1>
-  <title>JSDL Overview</title>
+  <title>JSDL overview</title>
   <para>
     GridWay supports Job Submission Description Language (JSDL). This specification is a language
     for describing the job requirements for submission to resources. The JSDL language specification is based on XML Schema that facilitate the expression of those requirements as a set of XML elements. More info at
@@ -1334,7 +1337,7 @@ ENVIRONMENT = VAR = "`expr ${JOB_ID} + 3`" # will set VAR to JOB_ID + 3</screen>
   </para>
   </sect1>
   <sect1>
-  <title>JSDL Document Structure</title>
+  <title>JSDL document structure</title>
   <para>
     The JDSL document structure is as follows:
   </para>
@@ -1421,10 +1424,10 @@ ENVIRONMENT = VAR = "`expr ${JOB_ID} + 3`" # will set VAR to JOB_ID + 3</screen>
   </para>
 </note>
   <sect2>
-    <title>JSDL POSIX Application</title>
+    <title>JSDL POSIX application</title>
     <para>
       This schema defines the JSDL specification for describing an application executed on a POSIX
-      compliance system. Due to Gridway Job Template specification, this schema MUST be included in the
+      compliance system. Due to GridWay Job Template specification, this schema MUST be included in the
       JSDL file. The JSDL POSIX Application Schema is as follow:
     </para>
 <screen>
@@ -1463,14 +1466,14 @@ ENVIRONMENT = VAR = "`expr ${JOB_ID} + 3`" # will set VAR to JOB_ID + 3</screen>
   <sect1>
   <title>Job Submission Description Language versus GridWay Job Template</title>
   <para>
-      Next table compares JSDL and GridWay Job Template Schema, and the JSDL elements support by the current GridWay version.
+      Next table compares JSDL and GridWay Job Template schema, and the JSDL elements support by the current GridWay version.
 
   <table id='TableJSDLvsGWJT' frame='all'> <title>JSDL vs GWJT</title>
     <tgroup cols='3' align='left' colsep='1' rowsep='1'>
 
-    <colspec colname='c1' colwidth='6cm'>
-    <colspec colname='c2' colwidth='6cm'>
-    <colspec colname='c3' colwidth='6cm'>
+    <colspec colname='c1' colwidth='5cm'>
+    <colspec colname='c2' colwidth='4cm'>
+    <colspec colname='c3' colwidth='3cm'>
     <!--<colspec colname='c4' colwidth='6cm'>-->
 
         <tbody>
@@ -1507,13 +1510,13 @@ ENVIRONMENT = VAR = "`expr ${JOB_ID} + 3`" # will set VAR to JOB_ID + 3</screen>
     <row>
         <entry>JobAnnotation</entry>
         <entry>-</entry>
-        <entry>No Supported</entry>
+        <entry>Not supported</entry>
         <!--<entry>-</entry>-->
     </row>
     <row>
         <entry>JobProject</entry>
         <entry>-</entry>
-        <entry>No Supported</entry>
+        <entry>Not supported</entry>
         <!--<entry>-</entry>-->
     </row>
     <row>
@@ -1561,37 +1564,37 @@ ENVIRONMENT = VAR = "`expr ${JOB_ID} + 3`" # will set VAR to JOB_ID + 3</screen>
     <row>
         <entry>FileSystem</entry>
         <entry>-</entry>
-        <entry>No Supported</entry>
+        <entry>Not supported</entry>
         <!--<entry>-</entry>-->
     </row>
     <row>
         <entry>MountPoint</entry>
         <entry>-</entry>
-        <entry>No Supported</entry>
+        <entry>Not supported</entry>
         <!--<entry>-</entry>-->
     </row>
     <row>
         <entry>MountSource</entry>
         <entry>-</entry>
-        <entry>No Supported</entry>
+        <entry>Not supported</entry>
         <!--<entry>-</entry>-->
     </row>
     <row>
         <entry>DiskSpace</entry>
         <entry>-</entry>
-        <entry>No Supported</entry>
+        <entry>Not supported</entry>
         <!--<entry>-</entry>-->
     </row>
     <row>
         <entry>FileSystemType</entry>
         <entry>-</entry>
-        <entry>No Supported</entry>
+        <entry>Not supported</entry>
         <!--<entry>-</entry>-->
     </row>
     <row>
         <entry>ExclusiveExecution</entry>
         <entry>-</entry>
-        <entry>No Supported</entry>
+        <entry>Not supported</entry>
         <!--<entry>-</entry>-->
     </row>
     <row>
@@ -1639,7 +1642,7 @@ ENVIRONMENT = VAR = "`expr ${JOB_ID} + 3`" # will set VAR to JOB_ID + 3</screen>
     <row>
         <entry>IndividualCPUTime</entry>
         <entry>-</entry>
-        <entry>No Supported</entry>
+        <entry>Not supported</entry>
         <!--<entry>-</entry>-->
     </row>
     <row>
@@ -1651,7 +1654,7 @@ ENVIRONMENT = VAR = "`expr ${JOB_ID} + 3`" # will set VAR to JOB_ID + 3</screen>
     <row>
         <entry>IndividualNetworkBandwidth</entry>
         <entry>-</entry>
-        <entry>No Supported</entry>
+        <entry>Not supported</entry>
         <!--<entry>-</entry>-->
     </row>
     <row>
@@ -1663,7 +1666,7 @@ ENVIRONMENT = VAR = "`expr ${JOB_ID} + 3`" # will set VAR to JOB_ID + 3</screen>
     <row>
         <entry>IndividualVirtualMemory</entry>
         <entry>-</entry>
-        <entry>No Supported</entry>
+        <entry>Not supported</entry>
         <!--<entry>-</entry>-->
     </row>
     <row>
@@ -1675,37 +1678,37 @@ ENVIRONMENT = VAR = "`expr ${JOB_ID} + 3`" # will set VAR to JOB_ID + 3</screen>
     <row>
         <entry>TOTALCPUTime</entry>
         <entry>-</entry>
-        <entry>No Supported</entry>
+        <entry>Not supported</entry>
         <!--<entry>-</entry>-->
     </row>
     <row>
         <entry>TOTALCPUCount</entry>
         <entry>-</entry>
-        <entry>No Supported</entry>
+        <entry>Not supported</entry>
         <!--<entry>-</entry>-->
     </row>
     <row>
         <entry>TOTALPhysicalMemory</entry>
         <entry>-</entry>
-        <entry>No Supported</entry>
+        <entry>Not supported</entry>
         <!--<entry>-</entry>-->
     </row>
     <row>
         <entry>TOTALVirtualMemory</entry>
         <entry>-</entry>
-        <entry>No Supported</entry>
+        <entry>Not supported</entry>
         <!--<entry>-</entry>-->
     </row>
     <row>
         <entry>TOTALDiskSpace</entry>
         <entry>-</entry>
-        <entry>No Supported</entry>
+        <entry>Not supported</entry>
         <!--<entry>-</entry>-->
     </row>
     <row>
         <entry>TOTALResourceCount</entry>
         <entry>-</entry>
-        <entry>No Supported</entry>
+        <entry>Not supported</entry>
         <!--<entry>-</entry>-->
     </row>
     <row>
@@ -1723,7 +1726,7 @@ ENVIRONMENT = VAR = "`expr ${JOB_ID} + 3`" # will set VAR to JOB_ID + 3</screen>
     <row>
         <entry>FileSystemName</entry>
         <entry>-</entry>
-        <entry>No Supported</entry>
+        <entry>Not supported</entry>
         <!--<entry>-</entry>-->
     </row>
     <row>
@@ -1795,7 +1798,7 @@ ENVIRONMENT = VAR = "`expr ${JOB_ID} + 3`" # will set VAR to JOB_ID + 3</screen>
     <row>
         <entry>WorkingDirectory</entry>
         <entry>-</entry>
-        <entry>No Supported</entry>
+        <entry>Not supported</entry>
         <!--<entry>-</entry>-->
     </row>
     <row>
@@ -1807,91 +1810,91 @@ ENVIRONMENT = VAR = "`expr ${JOB_ID} + 3`" # will set VAR to JOB_ID + 3</screen>
     <row>
         <entry>WallTimeLimit</entry>
         <entry>-</entry>
-        <entry>No Supported</entry>
+        <entry>Not supported</entry>
         <!--<entry>-</entry>-->
     </row>
     <row>
         <entry>FileSizeLimit</entry>
         <entry>-</entry>
-        <entry>No Supported</entry>
+        <entry>Not supported</entry>
         <!--<entry>-</entry>-->
     </row>
     <row>
         <entry>CoreDumpLimit</entry>
         <entry>-</entry>
-        <entry>No Supported</entry>
+        <entry>Not supported</entry>
         <!--<entry>-</entry>-->
     </row>
     <row>
         <entry>DataSegmentLimit</entry>
         <entry>-</entry>
-        <entry>No Supported</entry>
+        <entry>Not supported</entry>
         <!--<entry>-</entry>-->
     </row>
     <row>
         <entry>LockedMemoryLimit</entry>
         <entry>-</entry>
-        <entry>No Supported</entry>
+        <entry>Not supported</entry>
         <!--<entry>-</entry>-->
     </row>
     <row>
         <entry>MemoryLimit</entry>
         <entry>-</entry>
-        <entry>No Supported</entry>
+        <entry>Not supported</entry>
         <!--<entry>-</entry>-->
     </row>
     <row>
         <entry>OpenDescriptorsLimit</entry>
         <entry>-</entry>
-        <entry>No Supported</entry>
+        <entry>Not supported</entry>
         <!--<entry>-</entry>-->
     </row>
     <row>
         <entry>PipeSizeLimit</entry>
         <entry>-</entry>
-        <entry>No Supported</entry>
+        <entry>Not supported</entry>
         <!--<entry>-</entry>-->
     </row>
     <row>
         <entry>StackSizeLimit</entry>
         <entry>-</entry>
-        <entry>No Supported</entry>
+        <entry>Not supported</entry>
         <!--<entry>-</entry>-->
     </row>
     <row>
         <entry>CPUTimeLimit</entry>
         <entry>-</entry>
-        <entry>No Supported</entry>
+        <entry>Not supported</entry>
         <!--<entry>-</entry>-->
     </row>
     <row>
         <entry>ProcessCountLimit</entry>
         <entry>-</entry>
-        <entry>No Supported</entry>
+        <entry>Not supported</entry>
         <!--<entry>-</entry>-->
     </row>
     <row>
         <entry>VirtualMemoryLimit</entry>
         <entry>-</entry>
-        <entry>No Supported</entry>
+        <entry>Not supported</entry>
         <!--<entry>-</entry>-->
     </row>
     <row>
         <entry>ThreadCountLimit</entry>
         <entry>-</entry>
-        <entry>No Supported</entry>
+        <entry>Not supported</entry>
         <!--<entry>-</entry>-->
     </row>
     <row>
         <entry>UserName</entry>
         <entry>-</entry>
-        <entry>No Supported</entry>
+        <entry>Not supported</entry>
         <!--<entry>-</entry>-->
     </row>
     <row>
         <entry>GroupName</entry>
         <entry>-</entry>
-        <entry>No Supported</entry>
+        <entry>Not supported</entry>
         <!--<entry>-</entry>-->
     </row>
     </tbody>
@@ -1901,19 +1904,19 @@ ENVIRONMENT = VAR = "`expr ${JOB_ID} + 3`" # will set VAR to JOB_ID + 3</screen>
   </sect1>
 
   <sect1>
-    <title>A Simple Example</title>
+    <title>A simple example</title>
     <para>
       This example shows the representation of a simple job in JSDL format and the translator of this
       example in Gridway Job Template format.
     </para>
     <sect2>
-    <title>JSDL File</title>
+    <title>JSDL file</title>
     <para>
-<screen>
+<screen width='80'>
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--*
-    * Basic schema of GridWay Job
+    * Basic schema of GridWay job
     *
     *-->
 
@@ -1977,7 +1980,7 @@ ENVIRONMENT = VAR = "`expr ${JOB_ID} + 3`" # will set VAR to JOB_ID + 3</screen>
 </para>
 </sect2>
     <sect2>
-    <title>GridWay JobTemplate File</title>
+    <title>GridWay Job Template file</title>
     <para>
 <screen>
 #This file was automatically generated by the JSDL2GWJT parser
@@ -2011,7 +2014,7 @@ INPUT_FILES=file.txt</screen>
   </para>
 
   <para>
-  To submit a job, you will need a job template. The most simple job template
+  To submit a job, you will need a Job Template. The most simple Job Template
   in GridWay could be:
   <screen>
 EXECUTABLE=/bin/ls</screen>
@@ -2033,22 +2036,25 @@ $ gwsubmit -t example/jt</screen>
   </para>
 
   <screen width='80'>
-HID PRIO  OS              ARCH   MHZ %CPU  MEM(F/T)     DISK(F/T)     N(U/F/T) LRMS    HOSTNAME
-0   1     Linux2.6.17-2-6 x86   3215  100  923/2027 105003/118812        0/1/2 Fork    cygnus.dacya.ucm.es
-1   1     Linux2.6.17-2-6 x86   3216  189  384/2027 105129/118812        0/2/2 Fork    draco.dacya.ucm.es
-2   1     Linux2.6.18-3-a x86_6 2211  100  749/1003   76616/77844        0/2/2 SGE     aquila.dacya.ucm.es
-3   1                              0    0       0/0           0/0        0/0/0         hydrus.dacya.ucm.es
-4   1     Linux2.6.18-3-a x86_6 2009   74   319/878 120173/160796        0/1/1 Fork    orion.dacya.ucm.es
-5   1     Linux2.6.16.13- x86   3200  100   224/256       114/312        0/6/6 SGE     ursa.dacya.ucm.es</screen>
+HID PRIO OS              ARCH   MHZ %CPU MEM(F/T)     DISK(F/T)  N(U/F/T) LRMS  HOSTNAME
+0   1    Linux2.6.17-2-6 x86   3215  100 923/2027 105003/118812     0/1/2 Fork  cygnus.dacya.ucm.es
+1   1    Linux2.6.17-2-6 x86   3216  189 384/2027 105129/118812     0/2/2 Fork  draco.dacya.ucm.es
+2   1    Linux2.6.18-3-a x86_6 2211  100 749/1003   76616/77844     0/2/2 SGE   aquila.dacya.ucm.es
+3   1                             0    0      0/0           0/0     0/0/0       hydrus.dacya.ucm.es
+4   1    Linux2.6.18-3-a x86_6 2009   74  319/878 120173/160796     0/1/1 Fork  orion.dacya.ucm.es
+5   1    Linux2.6.16.13- x86   3200  100  224/256       114/312     0/6/6 SGE   ursa.dacya.ucm.es</screen>
 
   <para>
-  Note that hydrus is down in this example, so no information is received at all and of course, this host won't be considered in future scheduling decisions. If you want to retrieve more information about a single resource, issue the <command>gwhost</command> command followed by the host identification (HID):
-  </para>
+  Note that hydrus is down in this example, so no information is received at all
+  and of course, this host won't be considered in future scheduling decisions.
+  If you want to retrieve more information about a single resource, issue the
+  <command>gwhost</command> command followed by the host identification (HID):
+  </para>		  
 
 <screen width='80'>
 $ gwhost 0
-HID PRIO  OS              ARCH   MHZ %CPU  MEM(F/T)     DISK(F/T)     N(U/F/T) LRMS     HOSTNAME
-5   1     Linux2.6.16.13- x86   3200  100   224/256       114/312        0/6/6 SGE      ursa.dacya.ucm.es
+HID PRIO OS              ARCH   MHZ %CPU MEM(F/T)     DISK(F/T)  N(U/F/T) LRMS  HOSTNAME
+5   1    Linux2.6.16.13- x86   3200  100  224/256       114/312     0/6/6 SGE   ursa.dacya.ucm.es
 
 QUEUENAME            SL(F/T) WALLT CPUT  COUNT MAXR  MAXQ  STATUS   DISPATCH   PRIORITY
 all.q                6/6     0     0     0     6     0     enabled  NULL       0</screen>
@@ -2259,10 +2265,10 @@ int main (int argc, char** args)
   </sect2>
 
   <sect2>
-	<title>Defining the Job</title>
+	<title>Defining the job</title>
 
   <para>
-  For making GridWay work with your program, you must create a job template. In
+  For making GridWay work with your program, you must create a Job Template. In
   this case, we will call it <filename>pi.jt</filename>. Copy the following
   lines inside:
   <screen>
@@ -2465,7 +2471,7 @@ int main( int argc, char *argv[])
   </para>
 
   <para>
-  Now you must create a job template. In this case, we will call it
+  Now you must create a Job Template. In this case, we will call it
   <filename>mpi.jt</filename>:
   <screen>
 EXECUTABLE   = mpi
@@ -2534,7 +2540,7 @@ NP            = 2
   </para>
 
   <sect2>
-  <title>A Sample of DAG Workflow</title>
+  <title>A sample of DAG workflow</title>
 
   <para>
   A DAG-based workflow consists of a temporal relationship between tasks, where
@@ -2582,7 +2588,7 @@ STDOUT_FILE=out.workflow</screen>
   </para>
 
   <para>
-  Once you have set up the previous job templates, the workflow can be easily
+  Once you have set up the previous Job Templates, the workflow can be easily
   submitted with the following commands:
   <screen>
 $ gwsubmit -v -t A.jt
@@ -2626,7 +2632,7 @@ echo "Workflow computation `cat out.workflow`"
 
   <para>
   Note that when input and output files vary depending on the iteration or job
-  id number, you should generate job templates dynamically before submitting
+  id number, you should generate Job Templates dynamically before submitting
   each job. This can be done programmatically by using the DRMAA API, or via
   shell scripting.
   </para>
@@ -2637,7 +2643,7 @@ echo "Workflow computation `cat out.workflow`"
 <chapter id='Troubleshooting'>
   <title>Troubleshooting</title>
   <sect1>
-  <title>Debugging Job Execution</title>
+  <title>Debugging job execution</title>
 
   <para>
   GridWay reporting and accounting facilities provide information about overall
@@ -2680,7 +2686,7 @@ echo "Workflow computation `cat out.workflow`"
   </sect1>
 
   <sect1>
-  <title>Frequent Problems</title>
+  <title>Frequent problems</title>
 
   <para>
   Currently, many errors are handled silently and are only shown in the
@@ -2703,7 +2709,5 @@ echo "Workflow computation `cat out.workflow`"
   </sect1>
 </chapter>
 </book>
-
-
 
 
