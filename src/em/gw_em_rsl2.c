@@ -45,7 +45,8 @@ char* gw_generate_rsl2 (gw_job_t *job)
 char* gw_generate_nowrapper_rsl2 (gw_job_t *job)
 {
     char *rsl;
-    char *job_environment; 
+    char *job_environment;
+    char *extensions; 
     char tmp_buffer[GW_RSL_LENGTH];
     char rsl_buffer[GW_RSL_LENGTH];
     int print_queue = 0;
@@ -98,6 +99,15 @@ char* gw_generate_nowrapper_rsl2 (gw_job_t *job)
         sprintf(tmp_buffer," <queue>%s</queue>",job->history->queue);
         strcat(rsl_buffer,tmp_buffer);
     }
+
+	// Extensions are used just when the underlying LRMS
+	// is GridWay itself
+	if(strcmp(job->history->host->lrms_type, "gw") == 0)
+	{
+		extensions = gw_job_rsl2_extensions(job);
+		strcat(rsl_buffer,extensions);
+		free(extensions);
+	}
 	
     strcat(rsl_buffer,"</job>");
 
