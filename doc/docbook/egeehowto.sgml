@@ -308,8 +308,14 @@ IM_MAD = mds2_glue:gw_im_mad_mds2_glue:-l etc/im_examples/host_glue.list
             <screen>
             REQUIREMENTS = QUEUE_ACCESS = "" | QUEUE_ACCESS = "*:fusion:*"
 </screen>
-        if you also want to use those queue with no access restrictions.
+        if you also want to use those queues with no access restrictions.
         </para>
+        <warning>
+        <para>
+        Make sure of using at least one of the above control access alternatives
+        in order to not cause a lot of authorization failures.
+        </para>
+        </warning>
         </listitem>
     </itemizedlist>
     </para>
