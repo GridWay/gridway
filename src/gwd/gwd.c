@@ -96,7 +96,7 @@ void gw_recover_state();
 
 void print_license()
 {
-    printf("Copyright 2002-2006 GridWay Team, Distributed Systems Architecture\n");
+    printf("Copyright 2002-2007 GridWay Team, Distributed Systems Architecture\n");
     printf("Group, Universidad Complutense de Madrid\n");
     printf("\n");
     printf(GW_VERSION" is distributed and licensed for use under the terms of the\n"); 

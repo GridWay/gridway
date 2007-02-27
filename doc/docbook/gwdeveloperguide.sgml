@@ -393,7 +393,7 @@ The information drivers interface to the grid information services to collect th
         <para>
           The format to send a request to the Transfer MAD, through its standard input, is:
         </para>
-          <screen>OPERATION JID TID EXE_MODE SRC_URL DST_URLL</screen>
+          <screen>OPERATION JID TID EXE_MODE SRC_URL DST_URL</screen>
           <para>
             Where:
             <itemizedlist>
@@ -460,8 +460,8 @@ The information drivers interface to the grid information services to collect th
           </para>
         <para>
           On the other side, the format to receive a response from the MAD, through its standard output, is:
-        </para>
         <screen>OPERATION JID TID RESULT INFO</screen>
+        </para>
         <para>
           Where:
         </para>

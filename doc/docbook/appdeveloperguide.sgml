@@ -120,7 +120,7 @@
     <title>Embarrassingly distributed</title>
     <para>
     Applications that can be obviously divided into a number of independent
-    tasks. The application is asynchronous when require distinct instruction
+    tasks. The application is asynchronous when it requires distinct instruction
     streams and so different execution times. A sample of this schema
     with its DRMAA implementation is showed in the following figure.
     </para>
@@ -437,7 +437,7 @@
   There are two kind of attributes: scalar and vector. Scalar attributes are
   simple strings (char *) and corresponds to template attributes in the form:
     <screen>
- attrbitue = value
+ attribute = value
     </screen>
   </para>
   <para>
@@ -445,7 +445,7 @@
   these scalar attributes. On the other hand, vector attributes corresponds to
   job template variables with one or more values i.e:
   <screen>
- attrbitue = value1 value2 ... valueN
+ attribute = value1 value2 ... valueN
   </screen>
   </para>
   <para>
@@ -1504,3 +1504,4 @@
   </sect1>
 </chapter>
 </book>
+

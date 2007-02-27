@@ -37,6 +37,9 @@ if DB2HTMLC
            doc/docbook/commandreference \
            doc/docbook/gwdeveloperguide \
            doc/docbook/installconfguide \
+           doc/docbook/egeehowto \
+           doc/docbook/gwdoc.css \
+           doc/docbook/gwdoc.dsl \
            doc/images \
            @prefix@/doc
 endif

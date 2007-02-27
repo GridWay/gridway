@@ -666,6 +666,9 @@ install-exec-hook:
 @DB2HTMLC_TRUE@@DOC_TRUE@           doc/docbook/commandreference \
 @DB2HTMLC_TRUE@@DOC_TRUE@           doc/docbook/gwdeveloperguide \
 @DB2HTMLC_TRUE@@DOC_TRUE@           doc/docbook/installconfguide \
+@DB2HTMLC_TRUE@@DOC_TRUE@           doc/docbook/egeehowto \
+@DB2HTMLC_TRUE@@DOC_TRUE@           doc/docbook/gwdoc.css \
+@DB2HTMLC_TRUE@@DOC_TRUE@           doc/docbook/gwdoc.dsl \
 @DB2HTMLC_TRUE@@DOC_TRUE@           doc/images \
 @DB2HTMLC_TRUE@@DOC_TRUE@           @prefix@/doc
 @DB2PDFC_TRUE@@DOC_TRUE@	@cp -r doc/docbook/*.pdf \

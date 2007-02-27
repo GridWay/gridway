@@ -1346,8 +1346,7 @@ ENVIRONMENT = VAR = "`expr ${JOB_ID} + 3`" # will set VAR to JOB_ID + 3</screen>
   <para>
     The JDSL document structure is as follows:
   </para>
-<screen>
-&lt;JobDefinition>
+<screen>&lt;JobDefinition>
 |-------&lt;JobDescription>
 |---------------&lt;JobIdentification>
 |-----------------------&lt;JobName>?
@@ -1457,7 +1456,7 @@ ENVIRONMENT = VAR = "`expr ${JOB_ID} + 3`" # will set VAR to JOB_ID + 3</screen>
 |-------&lt;ProcessCountLimit>?
 |-------&lt;VirtualMemoryLimit>?
 |-------&lt;ThreadCountLimit>?
-|-------&lt;UserNamet>?
+|-------&lt;UserName>?
 |-------&lt;GroupName>?
 &lt;/POSIXApplication name="xsd:NCName"?>
 </screen>
@@ -2054,7 +2053,7 @@ HID PRIO OS              ARCH   MHZ %CPU MEM(F/T)     DISK(F/T)  N(U/F/T) LRMS  
   and of course, this host won't be considered in future scheduling decisions.
   If you want to retrieve more information about a single resource, issue the
   <command>gwhost</command> command followed by the host identification (HID):
-  </para>		  
+  </para>
 
 <screen width='80'>
 $ gwhost 0

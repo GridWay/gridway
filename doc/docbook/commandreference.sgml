@@ -972,7 +972,7 @@
   <sect2>
     <title>DESCRIPTION</title>
     <para>
-        Prints usage statistics per user or resource. Note: accounting statistics are update once a job is killed.
+        Prints usage statistics per user or resource. Note: accounting statistics are updated once a job is killed.
     </para>
   </sect2>
 
