@@ -62,30 +62,6 @@ char * gw_job_rsl2_extensions(gw_job_t *job)
                 job->template.cpuload_threshold,
                 (int) job->template.suspension_timeout);    
 
-    if ( job->template.executable != NULL )
-    {
-        var = gw_job_substitute (job->template.executable, job);        
-        
-        if ( var != NULL)
-        {        
-            snprintf(tmp_buffer,sizeof(char) * 1024,"EXECUTABLE=%s\n",var);
-            strncat(rsl_buffer,tmp_buffer,sizeof(char) * (4096 - 1));
-            free(var);
-        }
-    }
-
-    if ( job->template.arguments != NULL )
-    {
-        var = gw_job_substitute (job->template.arguments, job);        
-        
-        if ( var != NULL)
-        {
-            snprintf(tmp_buffer,sizeof(char) * 1024,"ARGUMENTS=%s\n",var);
-            strncat(rsl_buffer,tmp_buffer,sizeof(char) * (4096 - 1));
-            free(var);
-        }
-    }
-
     if ( job->template.num_input_files != 0 )
     {
         file_str = gw_job_template_files2str_extensions(job, 0);
@@ -115,7 +91,7 @@ char * gw_job_rsl2_extensions(gw_job_t *job)
                
             if (var != NULL)
             {
-                snprintf(tmp_buffer,sizeof(char) * 1024,"OUTPUT_FILES=%s, stdout.wrapper, stderr.wrapper\n",var);
+                snprintf(tmp_buffer,sizeof(char) * 1024,"OUTPUT_FILES=%s\n",var);
                 strncat(rsl_buffer,tmp_buffer,sizeof(char) * (4096 - 1));            
                 
                 free(var);
@@ -124,11 +100,6 @@ char * gw_job_rsl2_extensions(gw_job_t *job)
             free(file_str);
         }
     }
-    else
-    {    
-        snprintf(tmp_buffer,sizeof(char) * 1024,"OUTPUT_FILES=stdout.wrapper, stderr.wrapper\n");
-        strncat(rsl_buffer,tmp_buffer,sizeof(char) * (4096 - 1));            
-    }        
 
     if ( job->template.num_restart_files != 0 )
     {
@@ -149,12 +120,6 @@ char * gw_job_rsl2_extensions(gw_job_t *job)
             
             free(file_str);
         }        
-    }
-
-    if ( job->template.stdin_file != NULL )
-    {
-        snprintf(tmp_buffer,sizeof(char) * 1024,"STDIN_FILE=stdin.execution\n");
-        strncat(rsl_buffer,tmp_buffer,sizeof(char) * (4096 - 1));
     }
 
     if ( job->template.requirements != NULL )
