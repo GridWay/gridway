@@ -188,7 +188,7 @@
 
     <itemizedlist>
         <listitem>
-            <para>Scientific Linux CERN Release 3.0.8</para>
+            <para>Scientific Linux CERN Release 3 and 4</para>
         </listitem>
         <listitem>
             <para>gLite 3.0.2</para>
@@ -205,12 +205,16 @@
     <itemizedlist>
         <listitem>
         <para>
-        Before unpacking the distribution, execute (as root) to prepare
-        the environment (this step generates the file globus_config.h
-        and the globus-build-env-$GLOBUS_FLAVOR_NAME.sh):
+        Before unpacking the distribution, in order to prepare
+        the environment, execute (as root) the following:
         <screen>
 # ${GPT_LOCATION}/sbin/gpt-build -force -nosrc -builddir=/tmp/globus_core.$$ \
 > gcc32 gcc32pthr gcc32dbg gcc32dbgpthr</screen>
+        </para>
+        <para>
+        This step generates files
+        <filename>globus-build-env-$GLOBUS_FLAVOR_NAME.sh</filename> and
+        <filename>globus_config.h</filename>.
         </para>
         </listitem>
 
@@ -244,7 +248,7 @@ gwadmin ALL=(GW_USERS) NOPASSWD: $GW_LOCATION/bin/gw_tm_mad_dummy *
     (LCG).
     </para>
     <para>
-    In file $GW_LOCATION/etc/gwd.conf:
+    In file <filename>$GW_LOCATION/etc/gwd.conf</filename>:
     <screen width='80'>
 IM_MAD = mds2_glue:gw_im_mad_mds2_glue:-l etc/im_examples/host_glue.list:dummy:prews_nsh
 EM_MAD = prews_nsh:gw_em_mad_prews:rsl_nsh
@@ -300,8 +304,7 @@ IM_MAD = mds2_glue:gw_im_mad_mds2_glue:-l etc/im_examples/host_glue.list
         <screen>
             QUEUE_ACCESS = ":fusion::dteam:"
 </screen>
-        For example (in the job template or
-        job_template.default):
+        For example (in the Job Template or job_template.default):
             <screen>
             REQUIREMENTS = QUEUE_ACCESS = "*:fusion:*"</screen>
         to only use those queues authorized for "fusion" VO, or

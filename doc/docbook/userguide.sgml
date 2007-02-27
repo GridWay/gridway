@@ -108,7 +108,7 @@
   GridWay enables you to treat your jobs as if they were Unix processes. Each
   job is given a numerical identifier, analogous to the PID of a process. This
   value is called the Job identifier, JID for short. If the job belongs to an
-  array job, it will also have an array identifier, AID for short. A job's index
+  array job, it will also have an array identifier, AID for short. A job index
   within an array is called the task identifier, TID for short.
   </para>
 
@@ -433,19 +433,21 @@ $ setenv PATH $PATH:$GW_LOCATION/bin</screen>
     <listitem>
     <para>
     Optionally, you can set up your environment to use the GridWay
-    DRMAA library.
-    <screen>$ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GW_LOCATION/lib</screen>
+    DRMAA library:
+    <screen>
+$ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GW_LOCATION/lib</screen>
     </para>
     <para>
-    or <screen>$ setenv LD_LIBRARY_PATH $LD_LIBRARY_PATH:$GW_LOCATION/lib</screen>
+    or: <screen>
+$ setenv LD_LIBRARY_PATH $LD_LIBRARY_PATH:$GW_LOCATION/lib</screen>
     </para>
     </listitem>
 
     <listitem>
     <para>
     Finally, if GridWay has been compiled with accounting support, you may need
-    to set up the DB library. Example, if DB library has been installed in
-    <filename>/usr/local/BerkeleyDB.4.4/</filename>:
+    to set up the DB library. For example, if DB library has been installed in
+    <filename>/usr/local/BerkeleyDB.4.4</filename>:
     <screen>$ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/BerkeleyDB.4.4/lib</screen>
     </para>
     <note>
@@ -466,7 +468,7 @@ $ setenv PATH $PATH:$GW_LOCATION/bin</screen>
   <title>Job description overview</title>
 
   <para>
-  Job Templates allow you to configure your job's requirements, in terms of
+  Job Templates allow you to configure your job requirements, in terms of
   needed files, generated files, requirements and ranks of execution hosts, as
   well as other options.
   </para>
@@ -1162,12 +1164,12 @@ expr::= VARIABLE
         <row>
 	    	<entry>LRMS_NAME</entry>
 		    <entry>Name of local DRM system (job manager) for execution, usually
-        not fork (e.g. "jobmanager-pbs", "Pbs", "jobmanager-sge", "SGE")</entry>
+        not fork (e.g. "jobmanager-pbs", "PBS", "jobmanager-sge", "SGE")</entry>
 			  </row>
 
         <row>
 				<entry>LRMS_TYPE</entry>
-				<entry>Type of local DRM system for execution (e.g. "PBS", "SGE")</entry>
+				<entry>Type of local DRM system for execution (e.g. "pbs", "sge")</entry>
     		</row>
 
         <row>
@@ -1330,9 +1332,12 @@ ENVIRONMENT = VAR = "`expr ${JOB_ID} + 3`" # will set VAR to JOB_ID + 3</screen>
   <sect1>
   <title>JSDL overview</title>
   <para>
-    GridWay supports Job Submission Description Language (JSDL). This specification is a language
-    for describing the job requirements for submission to resources. The JSDL language specification is based on XML Schema that facilitate the expression of those requirements as a set of XML elements. More info at
-    <ulink url="http://forge.gridforum.org/sf/projects/jsdl-wg">https://forge.gridforum.org/sf/projects/jsdl-wg
+    GridWay supports Job Submission Description Language (JSDL). This
+    specification is a language for describing the job requirements for
+    submission to resources. The JSDL language specification is based on XML
+    Schema that facilitate the expression of those requirements as a set of XML
+    elements. More info at <ulink
+    url="http://forge.gridforum.org/sf/projects/jsdl-wg">https://forge.gridforum.org/sf/projects/jsdl-wg
     </ulink>
   </para>
   </sect1>
@@ -2690,8 +2695,7 @@ echo "Workflow computation `cat out.workflow`"
 
   <para>
   Currently, many errors are handled silently and are only shown in the
-  <filename>job.log</filename> file. Mainly sintax errors in requirement and
-  rank expressions.
+  <filename>job.log</filename> file.
   </para>
 
   <para>
