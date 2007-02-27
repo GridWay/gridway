@@ -268,7 +268,7 @@ AC_FUNC_ALLOCA
 AC_HEADER_DIRENT
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
-AC_CHECK_HEADERS([arpa/inet.h fcntl.h inttypes.h libintl.h limits.h malloc.h netdb.h netinet/in.h stddef.h stdlib.h string.h sys/socket.h unistd.h])
+AC_CHECK_HEADERS([arpa/inet.h fcntl.h inttypes.h libintl.h limits.h netdb.h netinet/in.h stddef.h stdlib.h string.h sys/socket.h unistd.h])
 
 #------------------------------------------------------------------------------
 # Checks for typedefs, structures, and compiler characteristics.
@@ -296,8 +296,8 @@ AC_TYPE_UINT8_T
 
 AC_REPLACE_FNMATCH
 AC_FUNC_FORK
-AC_FUNC_MALLOC
-AC_FUNC_REALLOC
+#AC_FUNC_MALLOC
+#AC_FUNC_REALLOC
 AC_FUNC_SELECT_ARGTYPES
 AC_FUNC_STAT
 AC_FUNC_VPRINTF
