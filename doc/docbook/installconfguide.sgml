@@ -26,9 +26,10 @@
                 language governing permissions and limitations under the License.
             </para>
             <para>
-                Any academic report, publication, or other academic disclosure
-                of results obtained with this Software will acknowledge this
-                Software's use by an appropriate citation.
+             Any academic report, publication, or other academic disclosure of
+             results obtained with the GridWay Metascheduler will acknowledge
+             GridWay's use by an appropriate citation to relevant papers by
+             GridWay team members.
             </para>
         </legalnotice>
     </bookinfo>
@@ -1133,7 +1134,7 @@ HID PRIO  OS              ARCH   MHZ %CPU  MEM(F/T)     DISK(F/T)     N(U/F/T) L
 </chapter>
 
 <chapter>
-<title>Core Conration Guide</title>
+<title>Core Configuration Guide</title>
 
   <sect1>
   <title>Overview</title>

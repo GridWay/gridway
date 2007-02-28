@@ -13,6 +13,7 @@ DIV.TABLE
 
 TABLE.CALSTABLE
 {
+  width: 700px;
   border: thin solid #333366;
   border: inset 0pt;
   border-spacing:0px;
