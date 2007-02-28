@@ -1852,12 +1852,13 @@ FP_USER[DEFAULT] = 3</screen>
   </para>
 
   <para>
-  Grid resources are shared with other users from other scheduling domains,
-  and with local users from the remote organizations. In addition, the set of
-  resources that can be potentially used by each user is not homogeneous, as each
-  user may belong to a different VO. Therefore, GridWay users share the ability
-  to submit a job to the Grid and not resource usage, as is usual in the
-  well-known fair-share policy of traditional DRMS.
+  This policy resembles the well-known fair-share of traditional LRMS. However,
+  note that what GridWay users share is the ability to submit a job to the Grid
+  and not resource usage. Resource usage share can not be imposed at a Grid level,
+  as Grid resources are shared with other Grid users and with local users
+  from the remote organization. In addition, the set of resources that can be
+  potentially used by each user is not homogeneous, as each user may belong to
+  a different VO.
   </para>
 
   <para>

@@ -2,37 +2,37 @@
 <book lang="en">
     <bookinfo>
         <title>GridWay 5 Documentation: GridWay Developer Guide</title>
-        <pubdate>November, 2006</pubdate>
+        <pubdate>February, 2007</pubdate>
         <copyright>
-            <year>2002-2006</year>
+            <year>2002-2007</year>
             <holder>GridWay Team, Distributed Systems Architecture
                 Group, Universidad Complutense de Madrid.</holder>
         </copyright>
         <legalnotice>
             <para>
-                Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+                Licensed under the Apache License, Version 2.0 (the "License");
+                you may not use this file except in compliance with the License.
+                You may obtain a copy of the License at
             </para>
             <para>
-                <ulink url="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</ulink>
+                <ulink url="http://www.apache.org/licenses/LICENSE-2.0">
+                  http://www.apache.org/licenses/LICENSE-2.0</ulink>
             </para>
             <para>
-                Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+                Unless required by applicable law or agreed to in writing,
+                software distributed under the License is distributed on an
+                "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+                either express or implied. See the License for the specific
+                language governing permissions and limitations under the License.
             </para>
             <para>
-                Any academic report, publication, or other academic disclosure of results obtained with this Software will
-                acknowledge this Software's use by an appropriate citation.
-            </para>
-            <para>
-              GridWay is an effort undergoing incubation at Globus. Incubation is
-              required of all newly accepted projects until a further review indicates
-              that the infrastructure, communications, and decision making process
-              have stabilized in a manner consistent with other successful Globus
-              projects. While incubation status is not necessarily a reflection of
-              the completeness or stability of the code, it does indicate that the
-              project has yet to be fully endorsed by Globus.
+                Any academic report, publication, or other academic disclosure
+                of results obtained with this Software will acknowledge this
+                Software's use by an appropriate citation.
             </para>
         </legalnotice>
     </bookinfo>
+
     <chapter>
         <title>Architecture</title>
         <para>
@@ -378,11 +378,6 @@ The information drivers interface to the grid information services to collect th
             </listitem>
         </itemizedlist>
     </chapter>
-
-
-
-
-
     <chapter>
         <title>Transfer manager MAD</title>
         <para>
@@ -498,22 +493,25 @@ The information drivers interface to the grid information services to collect th
     <chapter>
         <title>Dispatch manager Scheduler</title>
         <para>
-            In order to decouple the scheduling process, GridWay uses a Scheduler module to schedule jobs.
+            In order to decouple the scheduling process, GridWay uses a Scheduler module to schedule
+            jobs.
         </para>
         <para>
             The format to send a scheduling request to the Scheduler, through its standard input, is:
             <screen>SCHEDULE - - -</screen>
         </para>
         <para>
-            On the other side, the format to receive a response from the Scheduler, through its standard output, is:
+            On the other side, the format to receive a response from the Scheduler, through its
+            standard output, is:
         </para>
-        <screen>OPERATION (JID|AID) RESULT INFO</screen>
+        <screen>OPERATION JID RESULT INFO</screen>
         <para>
             Where:
             <itemizedlist>
                 <listitem>
                     <para>
-                        OPERATION: Is the operation requested to the Dispatch Manager. Could be SCHEDULE_JOB or SCHEDULE_TASKS
+                        OPERATION: Is the operation requested to the Dispatch Manager.
+                        The Dispatch Manager only supports the SCHEDULE_JOB operation.
                     </para>
                 </listitem>
                 <listitem>
@@ -523,23 +521,19 @@ The information drivers interface to the grid information services to collect th
                 </listitem>
                 <listitem>
                     <para>
-                        AID: It is an array identifier.
-                    </para>
-                </listitem>
-                <listitem>
-                    <para>
                         RESULT: It is the result of the operation. Could be SUCCESS or FAILURE.
                     </para>
                 </listitem>
                 <listitem>
                     <para>
-                        INFO: If RESULT is FAILURE, it contains the cause of failure. Otherwise, if OPERATION is SCHEDULE_JOB
-                        it contains a resource specification in the form HID:QNAME:RANK, or if OPERATION is SCHEDULE_TASKS it
-                        contains a list of resource specifications in the form HID:QNAME:RANK:NTASKS. Where:
+                        INFO: If RESULT is FAILURE, it contains the cause of failure. Otherwise, if
+                        OPERATION is SCHEDULE_JOB it contains a resource specification in the form
+                        HID:QNAME:RANK, where:
                         <itemizedlist>
                             <listitem>
                                 <para>
-                                    HID: It is the host identifier, as provided by <command>gwhosts</command> command.
+                                    HID: It is the host identifier, as provided by
+                                    <command>gwhosts</command> command.
                                 </para>
                             </listitem>
                             <listitem>
@@ -552,28 +546,18 @@ The information drivers interface to the grid information services to collect th
                                     RANK: It is the rank of the host.
                                 </para>
                             </listitem>
-                            <listitem>
-                                <para>
-                                    NTASKS: It is the number of tasks that should be submitted.
-                                </para>
-                            </listitem>
                         </itemizedlist>
                     </para>
                 </listitem>
             </itemizedlist>
         </para>
         <para>
-          GridWay 5 includes a Round-Robin/Flooding scheduler. This is a very
-          simple scheduling algorithm. It maximizes the number of jobs submitted
-          to the Grid. Available resources, ordered by  rank, are flooded with
-          user jobs in a round-robin fashion.
-        </para>
-        <para>
-        GridWay 5 also includes a scheduler template
+        GridWay 5.2 includes a scheduler template
         (<filename>gw_scheduler_skel.c</filename>) to develop custom schedulers.
-        The previous simple round-robin/flood scheduler
-        (<filename>gw_flood_scheduler.c</filename>) is included as example. You
-        can find these programs in <filename>$GW_LOCATION/src/sched/</filename>
+        As an example a Round-Robin/Flooding scheduler can be found in the
+        GridWay distribution (<filename>gw_flood_scheduler.c</filename>, in
+        <filename>$GW_LOCATION/src/sched/</filename>). This is a very  simple
+        scheduling algorithm, which maximizes the number of jobs submitted to the Grid.
         </para>
     </chapter>
 </book>
