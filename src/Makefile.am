@@ -352,9 +352,9 @@ bin_SCRIPTS   =
 dist_bin_SCRIPTS =
 
 javadir = @prefix@/bin
-dist_java_JAVA =
 
 if JSDL
+dist_java_JAVA =
 dist_java_JAVA += $(JSDL_SRC)
 dist_bin_SCRIPTS += $(CMDS)/jsdl2gw.sh
 endif
@@ -479,6 +479,10 @@ endif
 JAVAROOT = .
 
 if WS
+
+if !JSDL
+dist_java_JAVA =
+endif
 
 dist_java_JAVA += $(EM_MAD)/GW_mad_ws.java $(IM_MAD_MDS4_SRC)
 
