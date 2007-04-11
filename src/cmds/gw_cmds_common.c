@@ -649,20 +649,20 @@ void gw_client_print_host_status(gw_msg_host_t * msg)
     printf("%-3i ",msg->host_id);
     printf("%-5i ",msg->fixed_priority);    
     
-    sprintf(buffer,"%s%s",msg->os_name, msg->os_version);
+    snprintf(buffer,sizeof(char)*25,"%s%s",msg->os_name, msg->os_version);
     printf("%-15.15s ",buffer);
     
     printf("%-5.5s ",msg->arch);
     printf("%4i ",msg->cpu_mhz);
     printf("%4i ",msg->cpu_free);
 
-    sprintf(buffer,"%i/%i",msg->free_mem_mb,msg->size_mem_mb);    
+    snprintf(buffer,sizeof(char)*25,"%i/%i",msg->free_mem_mb,msg->size_mem_mb);    
     tmp = buffer;
     while (*tmp ==' ')
         tmp++;
     printf("%9s ",tmp);
 
-    sprintf(buffer,"%i/%i",msg->free_disk_mb,msg->size_disk_mb);
+    snprintf(buffer,sizeof(char)*25,"%i/%i",msg->free_disk_mb,msg->size_disk_mb);
     tmp = buffer;
     while (*tmp ==' ')
         tmp++;
@@ -675,7 +675,7 @@ void gw_client_print_host_status(gw_msg_host_t * msg)
             freenodecount = msg->queue_freenodecount[i];
     }
     
-    sprintf(buffer,"%i/%i/%i",msg->running_jobs,freenodecount,msg->nodecount);
+    snprintf(buffer,sizeof(char)*25,"%i/%i/%i",msg->running_jobs,freenodecount,msg->nodecount);
     tmp = buffer;
     while (*tmp ==' ')
         tmp++;
