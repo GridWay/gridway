@@ -1485,22 +1485,22 @@ yyreduce:
 
   case 12:
 #line 81 "gw_host_reqs_syntax.y"
-    { (yyval.val_int) = gw_host_get_genvar_int((yyvsp[(1) - (3)].val_str),queue,host) == (yyvsp[(3) - (3)].val_int); }
+    { (yyval.val_int) = gw_host_get_genvar_int((yyvsp[(1) - (3)].val_str),queue,host) == (yyvsp[(3) - (3)].val_int); free((yyvsp[(1) - (3)].val_str));}
     break;
 
   case 13:
 #line 82 "gw_host_reqs_syntax.y"
-    { (yyval.val_int) = gw_host_get_genvar_int((yyvsp[(1) - (4)].val_str),queue,host) != (yyvsp[(4) - (4)].val_int); }
+    { (yyval.val_int) = gw_host_get_genvar_int((yyvsp[(1) - (4)].val_str),queue,host) != (yyvsp[(4) - (4)].val_int); free((yyvsp[(1) - (4)].val_str));}
     break;
 
   case 14:
 #line 83 "gw_host_reqs_syntax.y"
-    { (yyval.val_int) = gw_host_get_genvar_int((yyvsp[(1) - (3)].val_str),queue,host) > (yyvsp[(3) - (3)].val_int) ; }
+    { (yyval.val_int) = gw_host_get_genvar_int((yyvsp[(1) - (3)].val_str),queue,host) > (yyvsp[(3) - (3)].val_int) ; free((yyvsp[(1) - (3)].val_str));}
     break;
 
   case 15:
 #line 84 "gw_host_reqs_syntax.y"
-    { (yyval.val_int) = gw_host_get_genvar_int((yyvsp[(1) - (3)].val_str),queue,host) < (yyvsp[(3) - (3)].val_int) ; }
+    { (yyval.val_int) = gw_host_get_genvar_int((yyvsp[(1) - (3)].val_str),queue,host) < (yyvsp[(3) - (3)].val_int) ; free((yyvsp[(1) - (3)].val_str));}
     break;
 
   case 16:
@@ -1514,7 +1514,7 @@ yyreduce:
                                         (yyval.val_int) = 1;
                                       else
                                         (yyval.val_int) = 0;
-                                      free((yyvsp[(3) - (3)].val_str)); }
+                                      free((yyvsp[(3) - (3)].val_str)); free((yyvsp[(1) - (3)].val_str));}
     break;
 
   case 17:
@@ -1528,7 +1528,7 @@ yyreduce:
                                         (yyval.val_int) = 1;
                                       else
                                         (yyval.val_int) = 0;
-                                      free((yyvsp[(4) - (4)].val_str)); }
+                                      free((yyvsp[(4) - (4)].val_str)); free((yyvsp[(1) - (4)].val_str));}
     break;
 
   case 18:

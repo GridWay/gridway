@@ -75,6 +75,7 @@ QUEUE_DISPATCHTYPE      { lvalp->val_int = QUEUE_DISPATCHTYPE;  return VARIABLE;
 QUEUE_PRIORITY          { lvalp->val_int = QUEUE_PRIORITY;      return VARIABLE;}
 [A-Za-z][0-9A-Za-z_]*   { lvalp->val_str = strdup(yytext);      return GENERICVAR;}
 -?[0-9]+                { lvalp->val_int = atoi(yytext);        return INTEGER;}
+\"\"                    { lvalp->val_str = NULL;                return STRING;}
 \"[^\"]*\"              { lvalp->val_str = strdup(yytext+1);
                           lvalp->val_str[yyleng-2] = '\0';
 				          return STRING;}

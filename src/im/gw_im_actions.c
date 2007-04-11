@@ -35,16 +35,14 @@
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
-void gw_im_discover(void *_mad_name)
+void gw_im_discover(char *mad_name)
 {
     gw_im_mad_t   *mad;
-    char          *mad_name;
 
-    if ( _mad_name == NULL ) 
+    if ( mad_name == NULL ) 
         return;
-    
-    mad_name = (char *) _mad_name;
-    mad      = gw_im_get_mad_by_name(mad_name);
+
+    mad = gw_im_get_mad_by_name(mad_name);
 
     if ( mad == NULL )
     {
@@ -55,7 +53,9 @@ void gw_im_discover(void *_mad_name)
 
     if ( mad->state != GW_IM_MAD_STATE_IDLE )
     {
-        gw_log_print("IM",'I',"Not ready to discover hosts with MAD %s.\n", mad_name);
+#ifdef GWIMDEBUG         
+        gw_log_print("IM",'D',"Not ready to discover hosts with MAD %s.\n", mad_name);
+#endif        
         return;
     }
 
@@ -72,38 +72,18 @@ void gw_im_discover(void *_mad_name)
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
-void gw_im_monitor(void *_host_id)
+void gw_im_monitor(gw_host_t * host)
 {
-    int           host_id;
-    gw_host_t *   host;
     gw_im_mad_t * mad;
     char *        mad_name;
 
-    if ( _host_id != NULL )
+    if ((host->state != GW_HOST_STATE_DISCOVERED) && 
+        (host->state != GW_HOST_STATE_MONITORED ))
     {
-        host_id = *( (int *) _host_id );
-        free(_host_id);
-
-        host = gw_host_pool_get_host(host_id, GW_TRUE);
-
-        if ( host == NULL )
-        {
-            gw_log_print("IM",'E',"Host %d no longer exists.\n", host_id);
-            return;
-        }
-        
-        if ((host->state != GW_HOST_STATE_DISCOVERED) && 
-            (host->state != GW_HOST_STATE_MONITORED ))
-        {
-            gw_log_print("IM",'I',"Not ready to monitor host %d (%s).\n",
-                    host_id, host->hostname);
-                    
-            pthread_mutex_unlock(&(host->mutex));        
-            return;
-        }       
-    }
-    else
+        gw_log_print("IM",'I',"Not ready to monitor host %d (%s).\n",
+                     host->host_id, host->hostname);
         return;
+    }       
     
     mad_name = host->im_mad;
     mad      = gw_im_get_mad_by_name (mad_name);
@@ -111,22 +91,12 @@ void gw_im_monitor(void *_host_id)
     if ( mad == NULL ) 
     {
         gw_log_print("IM",'E',"MAD (%s) not found.\n",mad_name);
-        
-        pthread_mutex_unlock(&(host->mutex));        
         return;
     }
 
-#ifdef GWIMDEBUG
-    gw_log_print ("IM",'D',"Monitoring host %d (%s).\n", 
-                  host->host_id,
-                  host->hostname);
-#endif
-
     host->state = GW_HOST_STATE_MONITORING;
     
-    gw_im_mad_monitor(mad, host_id, host->hostname);
-    
-    pthread_mutex_unlock(&(host->mutex));
+    gw_im_mad_monitor(mad, host->host_id, host->hostname);
 }
 
 /* -------------------------------------------------------------------------- */
@@ -168,7 +138,7 @@ void gw_im_timer(void *_null)
             gw_log_print ("IM",'D',"\tDiscovering hosts with MAD %s.\n",
                     gw_conf.im_mads[i][GW_MAD_NAME_INDEX]);
 #endif
-			gw_im_discover_action (gw_conf.im_mads[i][GW_MAD_NAME_INDEX]);
+			gw_im_discover (gw_conf.im_mads[i][GW_MAD_NAME_INDEX]);
         }
     }
     

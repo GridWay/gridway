@@ -29,6 +29,7 @@
 /* Local functions */
 static int gw_host_search_genvar_int(char *name, gw_host_t *host);
 static int gw_host_search_genvar_str(char *name, gw_host_t *host);
+static int gw_host_is_var_int(gw_host_var_t var);
 
 /*----------------------------------------------------------------------------*/
 
@@ -97,6 +98,71 @@ const char *gw_host_get_varname(gw_host_var_t var)
     return "UNKNOWN";
 }
 
+static int gw_host_is_var_int(gw_host_var_t var)
+{
+    switch(var)
+    {
+    case HOSTNAME:
+        return 0;
+    case ARCH:
+        return 0;
+    case OS_NAME:
+        return 0;
+    case OS_VERSION:
+        return 0;
+    case CPU_MODEL:
+        return 0;
+    case CPU_MHZ:
+        return 1;
+    case CPU_FREE:
+        return 1;
+    case CPU_SMP:
+        return 1;
+    case NODECOUNT:
+        return 1;
+    case SIZE_MEM_MB:
+        return 1;
+    case FREE_MEM_MB:
+        return 1;
+    case SIZE_DISK_MB:
+        return 1;
+    case FREE_DISK_MB:
+        return 1;
+    case FORK_NAME:
+        return 0;
+    case LRMS_NAME:
+        return 0;
+    case LRMS_TYPE:
+        return 0;
+    case QUEUE_NAME:
+        return 0;
+    case QUEUE_NODECOUNT:
+        return 1;
+    case QUEUE_FREENODECOUNT:
+        return 1;
+    case QUEUE_MAXTIME:
+        return 1;
+    case QUEUE_MAXCPUTIME:
+        return 1;
+    case QUEUE_MAXCOUNT:
+        return 1;
+    case QUEUE_MAXRUNNINGJOBS:
+        return 1;
+    case QUEUE_MAXJOBSINQUEUE:
+        return 1;
+    case QUEUE_STATUS:
+        return 0;
+    case QUEUE_DISPATCHTYPE:
+        return 0;
+    case QUEUE_PRIORITY:
+        return 0;
+    default:
+        return -1;
+    }
+}
+
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 
 void gw_host_set_var_int(gw_host_var_t var, int index, int value, gw_host_t *host)
@@ -191,67 +257,92 @@ void gw_host_set_var_str(gw_host_var_t var, int index, char *value, gw_host_t *h
     switch(var)
     {
         case HOSTNAME:
-            if (strcmp(host->hostname, value) != 0)
+            if ( value != NULL )
             {
-                gw_log_print("IM",'W',"Updating host \"%s\" with values of host \"%s\".\n.",
+                if (strcmp(host->hostname, value) != 0)
+                {
+                    gw_log_print("IM",'W',"Updating host \"%s\" with values of host \"%s\".\n.",
                         host->hostname, value);
-            }
+                }
             
-            free(value);
+                free(value);
+            }
             break;
 
         case ARCH:
-            free(host->arch);
+            if ( host->arch != NULL )
+                free(host->arch);
+                
             host->arch = value;
             break;
 
         case OS_NAME:
-            free(host->os_name);
+            if ( host->os_name != NULL )
+                free(host->os_name);
+                
             host->os_name = value;
             break;
 
         case OS_VERSION:
-            free(host->os_version);
+            if ( host->os_version != NULL )
+                free(host->os_version);
+                
             host->os_version = value;
             break;
 
         case CPU_MODEL:
-            free(host->cpu_model);
+            if ( host->cpu_model != NULL )
+                free(host->cpu_model);
+                
             host->cpu_model = value;
             break;
             
         case FORK_NAME:
-            free(host->fork_name);
+            if ( host->fork_name != NULL )
+                free(host->fork_name);
+                
             host->fork_name = value;
             break;
             
         case LRMS_NAME:
-            free(host->lrms_name);
+            if ( host->lrms_name != NULL )        
+                free(host->lrms_name);
+                
             host->lrms_name = value;
             break;
             
         case LRMS_TYPE:
-            free(host->lrms_type);
+            if ( host->lrms_type != NULL )        
+                free(host->lrms_type);
+                
             host->lrms_type = value;
             break;
 
         case QUEUE_NAME:
-            free(host->queue_name[index]);
+            if ( host->queue_name[index] != NULL )
+                free(host->queue_name[index]);
+            
             host->queue_name[index] = value;
             break;
 
         case QUEUE_DISPATCHTYPE:
-            free(host->queue_dispatchtype[index]);
+            if ( host->queue_dispatchtype[index] != NULL )
+                free(host->queue_dispatchtype[index]);
+
             host->queue_dispatchtype[index] = value;
             break;
 
         case QUEUE_PRIORITY:
-            free(host->queue_priority[index]);
+            if ( host->queue_priority[index] != NULL )
+                free(host->queue_priority[index]);
+                
             host->queue_priority[index] = value;
             break;
 
         case QUEUE_STATUS:
-            free(host->queue_status[index]);
+            if ( host->queue_status[index] != NULL )
+                free(host->queue_status[index]);
+
             host->queue_status[index] = value;
             break;
 
@@ -264,6 +355,34 @@ void gw_host_set_var_str(gw_host_var_t var, int index, char *value, gw_host_t *h
 
 /*----------------------------------------------------------------------------*/
 
+void gw_host_set_var_null(gw_host_var_t var, int index, gw_host_t *host)
+{
+#ifdef GWHOSTDEBUG
+    gw_log_print("IM",'D',"Setting null value for variable %s, host %i.\n",    
+                 gw_host_get_varname(var),host->host_id);
+#endif
+    
+    switch(gw_host_is_var_int(var))
+    {
+        case 1:
+            gw_host_set_var_int(var, index, 0, host);
+        break;
+        
+        case 0:
+            gw_host_set_var_str(var, index, NULL, host);
+        break;
+        
+        default:
+            gw_log_print("IM",'E',"Invalid variable %s.\n",
+                    gw_host_get_varname(var));        
+        break;
+    }
+}
+
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+
 void gw_host_set_genvar_int(char *var, int index, int value, gw_host_t *host)
 {
     int p;
@@ -272,7 +391,8 @@ void gw_host_set_genvar_int(char *var, int index, int value, gw_host_t *host)
     if (index == -1)
     {
         /* Scalar variable */
-        strcpy(name, var);
+        strncpy(name, var, sizeof(char) * 499);
+        name[499]='\0';
     } 
     else if (index >= GW_HOST_MAX_QUEUES)
     {
@@ -283,13 +403,15 @@ void gw_host_set_genvar_int(char *var, int index, int value, gw_host_t *host)
     else
     {
         /* Array variable */
-        sprintf(name, "%s[%i]", var, index);
+        snprintf(name, sizeof(char) * 499, "%s[%i]", var, index);
     }
     
-    gw_log_print("IM",'W',"Setting up generic integer variable for host %i (%s = %i).\n",
+#ifdef GWHOSTDEBUG    
+    gw_log_print("IM",'D',"Setting up generic integer variable for host %i (%s = %i).\n",
                  host->host_id, 
                  name, 
                  value);
+#endif
 
     p = gw_host_search_genvar_int(name, host);
 
@@ -301,7 +423,7 @@ void gw_host_set_genvar_int(char *var, int index, int value, gw_host_t *host)
     else
     {
         /* Not found */
-        host->genvar_int[p].name = strdup(name);
+        host->genvar_int[p].name  = strdup(name);
         host->genvar_int[p].value = value;
     }
 }
@@ -316,41 +438,106 @@ void gw_host_set_genvar_str(char *var, int index, char *value, gw_host_t *host)
     if (index == -1)
     {
         /* Scalar variable */
-        strcpy(name, var);
+        strncpy(name, var, sizeof(char) * 499);
+        name[499]='\0';        
     }
     else if (index >= GW_HOST_MAX_QUEUES)
     {
         gw_log_print("IM",'E',"Max number of queues exceeded in variable %s\n",
                 var);
-        return;
+        return;        
     }
     else
     {
         /* Array variable */
-        sprintf(name, "%s[%i]", var, index);
+        snprintf(name, sizeof(char) * 499, "%s[%i]", var, index);
     }
 
-    gw_log_print("IM",'W',"Setting up generic string variable for host %i (%s = \"%s\").\n",
+#ifdef GWHOSTDEBUG
+    gw_log_print("IM",'D',"Setting up generic string variable for host %i (%s = \"%s\").\n",
                  host->host_id, 
                  name, 
-                 value);
+                 GWNSTR(value));
+#endif
     
     p = gw_host_search_genvar_str(name, host);
 
     if (p < GW_HOST_MAX_GENVARS && host->genvar_str[p].name != NULL)
     {
         /* Found */
-        free(host->genvar_str[p].value);
-        host->genvar_str[p].value = strdup(value);
+        if (host->genvar_str[p].value != NULL )
+            free(host->genvar_str[p].value);
+            
+        host->genvar_str[p].value = value;
     }
     else
     {
         /* Not found */
-        host->genvar_str[p].name = strdup(name);
-        host->genvar_str[p].value = strdup(value);
+        host->genvar_str[p].name  = strdup(name);
+        host->genvar_str[p].value = value;
     }
 }
 
+/*----------------------------------------------------------------------------*/
+
+void gw_host_set_genvar_null(char *var, int index, gw_host_t *host)
+{
+    int i;
+    char name[500];
+        
+#ifdef GWHOSTDEBUG
+    gw_log_print("IM",'D',"Setting null value for generic variable %s, host %i.\n",    
+                 var,host->host_id);
+#endif
+
+    if (index == -1)
+    {
+        /* Scalar variable */
+        strncpy(name, var, sizeof(char) * 499);
+        name[499]='\0';
+    }
+    else if (index >= GW_HOST_MAX_QUEUES)
+    {
+        gw_log_print("IM",'E',"Max number of queues exceeded in variable %s\n",
+                var);                
+        return;
+    }
+    else /* Array variable */
+    {        
+        snprintf(name,sizeof(char) * 499,"%s[%i]", var, index);
+    }
+    
+    for (i = 0; i < GW_HOST_MAX_GENVARS; i++)
+    {
+        if ( host->genvar_int[i].name != NULL 
+                && strcmp(host->genvar_int[i].name, name) == 0 )
+        {
+            host->genvar_int[i].value = 0;
+            break;
+        }
+        else if ( host->genvar_str[i].name != NULL 
+                    && strcmp(host->genvar_str[i].name, name) == 0 )
+        {
+            if (host->genvar_str[i].value != NULL )
+                free(host->genvar_str[i].value);
+            
+            host->genvar_str[i].value = NULL;                        
+            break;    
+        }
+       /* If the variable was not previously set do not set it. Anyway,
+        * getty's on not defined vars will return 0 or NULL.
+        * 
+        * else 
+        * {
+        * 
+        * }
+        */        
+    }
+}
+
+
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 
 int gw_host_get_var_int(gw_host_var_t var, int index, gw_host_t *host)
@@ -476,6 +663,8 @@ char *gw_host_get_var_str(gw_host_var_t var, int index, gw_host_t *host)
 }
         
 /*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
 
 int gw_host_get_genvar_int(char *var, int index, gw_host_t *host)
 {
@@ -491,10 +680,11 @@ int gw_host_get_genvar_int(char *var, int index, gw_host_t *host)
     }
 
     /* Scalar variable */
-    strcpy(name, var);
-
-#ifdef GWIMDEBUG
-    gw_log_print("IM",'W',"Getting generic integer variable (%s) for host %i.\n",
+    strncpy(name, var, sizeof(char) * 499);
+    name[499]='\0';
+    
+#ifdef GWHOSTDEBUG
+    gw_log_print("IM",'D',"Getting generic integer variable (%s) for host %i.\n",
                   name,
                   host->host_id);
 #endif
@@ -508,7 +698,7 @@ int gw_host_get_genvar_int(char *var, int index, gw_host_t *host)
     else /* Not found */
     {
         /* Array variable */
-        sprintf(name, "%s[%i]", var, index);
+        snprintf(name, sizeof(char) * 499, "%s[%i]", var, index);
         
         p = gw_host_search_genvar_int(name, host);
 
@@ -522,8 +712,8 @@ int gw_host_get_genvar_int(char *var, int index, gw_host_t *host)
         }
     }
 
-#ifdef GWIMDEBUG
-    gw_log_print("IM",'I',"Generic integer variable for host %i (%s == %i).\n",
+#ifdef GWHOSTDEBUG
+    gw_log_print("IM",'D',"Generic integer variable for host %i (%s == %i).\n",
             host->host_id, name, result);
 #endif
             
@@ -546,10 +736,11 @@ char *gw_host_get_genvar_str(char *var, int index, gw_host_t *host)
     }
 
     /* Scalar variable */
-    strcpy(name, var);
-
-#ifdef GWIMDEBUG
-    gw_log_print("IM",'W',"Getting generic string variable (%s) for host %i.\n",
+    strncpy(name, var, sizeof(char) * 499);
+    name[499]='\0';
+    
+#ifdef GWHOSTDEBUG
+    gw_log_print("IM",'D',"Getting generic string variable (%s) for host %i.\n",
                  name,
                  host->host_id);                  
 #endif
@@ -563,10 +754,10 @@ char *gw_host_get_genvar_str(char *var, int index, gw_host_t *host)
     else /* Not found */
     {
         /* Array variable */
-        sprintf(name, "%s[%i]", var, index);
+        snprintf(name, sizeof(char) * 499, "%s[%i]", var, index);
         
-#ifdef GWIMDEBUG
-        gw_log_print("IM",'W',"Getting generic string variable (%s) for host %i.\n",
+#ifdef GWHOSTDEBUG
+        gw_log_print("IM",'D',"Getting generic string variable (%s) for host %i.\n",
                      name,
                      host->host_id);
 #endif
@@ -583,16 +774,18 @@ char *gw_host_get_genvar_str(char *var, int index, gw_host_t *host)
         }
     }
     
-#ifdef GWIMDEBUG
-    gw_log_print("IM",'I',"Generic string variable for host %i (%s == \"%s\").\n",    
+#ifdef GWHOSTDEBUG
+    gw_log_print("IM",'D',"Generic string variable for host %i (%s == \"%s\").\n",    
                  host->host_id, 
                  name, 
-                 result);
+                 GWNSTR(result));
 #endif
 
     return result;
 }
 
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 
 int gw_host_search_genvar_int(char *name, gw_host_t *host)

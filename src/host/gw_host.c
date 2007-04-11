@@ -56,6 +56,7 @@ void gw_host_init(gw_host_t *host, char *hostname, int host_id, int fixed_priori
 
     host->cpu_mhz      = 0;
     host->cpu_free     = 0;
+    host->cpu_smp      = 0;
     host->free_mem_mb  = 0;
     host->size_mem_mb  = 0;
     host->free_disk_mb = 0;
@@ -71,20 +72,24 @@ void gw_host_init(gw_host_t *host, char *hostname, int host_id, int fixed_priori
     for (i= 0; i<GW_HOST_MAX_QUEUES; i++)
     {
         host->queue_name[i]           = NULL;
+        host->queue_status[i]         = NULL;
+        host->queue_dispatchtype[i]   = NULL;
+        host->queue_priority[i]       = NULL;
+                
+        host->queue_nodecount[i]      = 0;
+        host->queue_freenodecount[i]  = 0;
         host->queue_maxtime[i]        = 0;
         host->queue_maxcputime[i]     = 0;
         host->queue_maxcount[i]       = 0;
         host->queue_maxrunningjobs[i] = 0;
         host->queue_maxjobsinqueue[i] = 0;
-        host->queue_status[i]         = NULL;
-        host->queue_dispatchtype[i]   = NULL;
-        host->queue_priority[i]       = NULL;
     }
 
     for (i= 0; i<GW_HOST_MAX_GENVARS; i++)
     {
         host->genvar_int[i].name  = NULL;
         host->genvar_int[i].value = 0;
+        
         host->genvar_str[i].name  = NULL;
         host->genvar_str[i].value = NULL;
     }
@@ -147,6 +152,18 @@ void gw_host_destroy(gw_host_t *host)
    	    if ( host->queue_status[i] != NULL )
 	        free(host->queue_status[i]);
     }
+    
+    for (i= 0; i<GW_HOST_MAX_GENVARS; i++)
+    {
+        if ( host->genvar_int[i].name != NULL )
+            free(host->genvar_int[i].name);
+            
+        if ( host->genvar_str[i].name  != NULL )
+            free(host->genvar_str[i].name);
+        
+        if ( host->genvar_str[i].value != NULL )
+            free(host->genvar_str[i].value);
+    }    
  
     pthread_mutex_unlock(&(host->mutex));
 
@@ -170,6 +187,7 @@ void gw_host_update(int host_id, char *attrs)
     }
     	
     /* Parse attrs and update host */
+    
     rc = gw_host_update_attr(host, attrs);
  	
     if ( rc != 0 )
@@ -177,11 +195,14 @@ void gw_host_update(int host_id, char *attrs)
         gw_log_print("IM",'E',"Error updating host %i attributes, parse error.\n",
                      host_id);
                      
+        host->state = GW_HOST_STATE_UNKNOWN;                     
+                     
         pthread_mutex_unlock(&(host->mutex));
         return;
     }
 
     /* Calculate free nodes for fork LRMS */
+    
     if (host->lrms_type != NULL && strcmp(host->lrms_type, "fork") == 0)
     {
         host->queue_freenodecount[0] = host->cpu_free / 100;
@@ -220,16 +241,21 @@ void gw_host_clear_dynamic_info(int host_id)
     }
 
     host->cpu_free     = 0;
+    host->nodecount    = 0;
+        
     host->free_mem_mb  = 0;
     host->size_mem_mb  = 0;
+    
     host->free_disk_mb = 0;
     host->size_disk_mb = 0;
-    host->nodecount    = 0;
 
     for (i= 0; i<GW_HOST_MAX_QUEUES; i++)
     {
-        host->queue_status[i]= NULL;
-        host->queue_freenodecount[i]= 0;
+        if ( host->queue_status[i] != NULL )
+            free(host->queue_status[i]);
+            
+        host->queue_status[i]        = NULL;
+        host->queue_freenodecount[i] = 0;
     }
 
     host->state = GW_HOST_STATE_UNKNOWN;
@@ -373,6 +399,7 @@ inline void gw_host_inc_rjobs_nb(gw_host_t *host)
 }
 
 /*----------------------------------------------------------------------------*/
+
 void gw_host_print(FILE *fd, gw_host_t *host)
 {
     int i;

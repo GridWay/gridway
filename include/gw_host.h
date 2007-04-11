@@ -24,8 +24,8 @@
 #include "gw_common.h"
 
 
-#define GW_HOST_MAX_QUEUES       10
-#define GW_HOST_MAX_GENVARS      10
+#define GW_HOST_MAX_QUEUES       20
+#define GW_HOST_MAX_GENVARS      20
 #define GW_HOST_CPU_FREE_LIMIT   50
 
 #define GW_HOST_MAX_PRIORITY       99
@@ -198,9 +198,11 @@ const char *gw_host_get_varname(gw_host_var_t var);
 
 void gw_host_set_var_int(gw_host_var_t var, int index, int value, gw_host_t *host);
 void gw_host_set_var_str(gw_host_var_t var, int index, char *value, gw_host_t *host);
+void gw_host_set_var_null(gw_host_var_t var, int index, gw_host_t *host);
 
 void gw_host_set_genvar_int(char *var, int index, int value, gw_host_t *host);
 void gw_host_set_genvar_str(char *var, int index, char *value, gw_host_t *host);
+void gw_host_set_genvar_null(char *var, int index, gw_host_t *host);
 
 /* -------------------------------------------------------------------------- */
 

@@ -243,7 +243,7 @@ void gw_host_pool_update (char *hostnames, char *em_mad, char *tm_mad, char *im_
     char      *hostname;
     char      *lasts;
     gw_host_t *host;
-    int       *host_id;
+    int       host_id;
     int       priority;
 
     hostname = strtok_r(hostnames, " ", &lasts);
@@ -257,13 +257,21 @@ void gw_host_pool_update (char *hostnames, char *em_mad, char *tm_mad, char *im_
         	priority = gw_sch_get_host_priority(&(gw_conf.sch_conf), 
         	                                    hostname,
                                                 im_mad);
-            host_id  = malloc(sizeof(int));
-            *host_id = gw_host_pool_host_allocate(hostname, 
-                                                  priority, 
-                                                  em_mad,
-                                                  tm_mad, 
-                                                  im_mad);
-            gw_im_monitor(host_id);
+                                                
+            host_id = gw_host_pool_host_allocate(hostname, 
+                                                 priority, 
+                                                 em_mad,
+                                                 tm_mad, 
+                                                 im_mad);
+                                                 
+            host    = gw_host_pool_get_host (host_id, GW_TRUE);
+            
+            if ( host != NULL )
+            {
+                gw_im_monitor(host);
+                
+                pthread_mutex_unlock(&(host->mutex));
+            }
         }
         else
         {
@@ -281,6 +289,39 @@ void gw_host_pool_update (char *hostnames, char *em_mad, char *tm_mad, char *im_
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
+void gw_host_pool_monitor_hosts( )
+{
+    int i;
+    gw_host_t *   host;
+        
+    pthread_mutex_lock(&(gw_host_pool.mutex));
+    
+    for (i= 0; i<gw_host_pool.number_of_hosts; i++) 
+    {
+        host = gw_host_pool.pool[i];
+        
+        if ( host != NULL )
+        {
+#ifdef GWIMDEBUG
+            gw_log_print ("IM",'D',"\tMonitoring host %d.\n", i);
+#endif
+            pthread_mutex_lock(&(host->mutex));
+            
+            gw_im_monitor(host);
+            
+            pthread_mutex_unlock(&(host->mutex));
+        }
+        else
+            gw_log_print("IM",'E',"Host %d no longer exists.\n", i);
+    }
+        
+    pthread_mutex_unlock(&(gw_host_pool.mutex));       
+}
+
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+
 void gw_host_pool_print (FILE *fd)
 {
     int i;
@@ -292,23 +333,6 @@ void gw_host_pool_print (FILE *fd)
             gw_host_print(fd, gw_host_pool.pool[i]);
 
     pthread_mutex_unlock(&(gw_host_pool.mutex));
-}
-
-/* -------------------------------------------------------------------------- */
-/* -------------------------------------------------------------------------- */
-/* -------------------------------------------------------------------------- */
-
-void gw_host_pool_monitor_hosts( )
-{
-	int i;
-	
-	for (i= 0; i<gw_host_pool.number_of_hosts; i++) 
-    {
-#ifdef GWIMDEBUG
-            gw_log_print ("IM",'D',"\tMonitoring host %d.\n", i);
-#endif
-            gw_im_monitor_action (i);
-    }	
 }
 
 /* -------------------------------------------------------------------------- */

@@ -379,7 +379,7 @@ union yyalloc
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  3
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  11
+#define YYNRULES  15
 /* YYNRULES -- Number of states.  */
 #define YYNSTATES  24
 
@@ -428,7 +428,7 @@ static const yytype_uint8 yytranslate[] =
 static const yytype_uint8 yyprhs[] =
 {
        0,     0,     3,     6,     7,    11,    15,    22,    29,    33,
-      37,    44
+      37,    44,    51,    54,    60,    63
 };
 
 /* YYRHS -- A `-1'-separated list of the rules' RHS.  */
@@ -439,14 +439,15 @@ static const yytype_int8 yyrhs[] =
        8,    -1,     6,    11,     8,    12,    10,     9,    -1,     7,
       10,     8,    -1,     7,    10,     9,    -1,     7,    11,     8,
       12,    10,     8,    -1,     7,    11,     8,    12,    10,     9,
-      -1
+      -1,     6,    10,    -1,     6,    11,     8,    12,    10,    -1,
+       7,    10,    -1,     7,    11,     8,    12,    10,    -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
        0,    53,    53,    54,    57,    58,    59,    60,    61,    62,
-      63,    64
+      63,    64,    65,    66,    67,    68
 };
 #endif
 
@@ -475,14 +476,14 @@ static const yytype_uint16 yytoknum[] =
 static const yytype_uint8 yyr1[] =
 {
        0,    13,    14,    14,    15,    15,    15,    15,    15,    15,
-      15,    15
+      15,    15,    15,    15,    15,    15
 };
 
 /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
        0,     2,     2,     0,     3,     3,     6,     6,     3,     3,
-       6,     6
+       6,     6,     2,     5,     2,     5
 };
 
 /* YYDEFACT[STATE-NAME] -- Default rule to reduce with in state
@@ -490,8 +491,8 @@ static const yytype_uint8 yyr2[] =
    means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       3,     0,     1,     0,     0,     2,     0,     0,     0,     0,
-       4,     5,     0,     8,     9,     0,     0,     0,     0,     0,
+       3,     0,     1,     0,     0,     2,    12,     0,    14,     0,
+       4,     5,     0,     8,     9,     0,     0,     0,    13,    15,
        6,     7,    10,    11
 };
 
@@ -1423,27 +1424,47 @@ yyreduce:
 
   case 8:
 #line 61 "gw_host_update_syntax.y"
-    { gw_host_set_genvar_int((yyvsp[(1) - (3)].val_str),-1,(yyvsp[(3) - (3)].val_int),host);}
+    { gw_host_set_genvar_int((yyvsp[(1) - (3)].val_str),-1,(yyvsp[(3) - (3)].val_int),host);free((yyvsp[(1) - (3)].val_str));}
     break;
 
   case 9:
 #line 62 "gw_host_update_syntax.y"
-    { gw_host_set_genvar_str((yyvsp[(1) - (3)].val_str),-1,(yyvsp[(3) - (3)].val_str),host);}
+    { gw_host_set_genvar_str((yyvsp[(1) - (3)].val_str),-1,(yyvsp[(3) - (3)].val_str),host);free((yyvsp[(1) - (3)].val_str));}
     break;
 
   case 10:
 #line 63 "gw_host_update_syntax.y"
-    { gw_host_set_genvar_int((yyvsp[(1) - (6)].val_str),(yyvsp[(3) - (6)].val_int),(yyvsp[(6) - (6)].val_int),host);}
+    { gw_host_set_genvar_int((yyvsp[(1) - (6)].val_str),(yyvsp[(3) - (6)].val_int),(yyvsp[(6) - (6)].val_int),host);free((yyvsp[(1) - (6)].val_str));}
     break;
 
   case 11:
 #line 64 "gw_host_update_syntax.y"
-    { gw_host_set_genvar_str((yyvsp[(1) - (6)].val_str),(yyvsp[(3) - (6)].val_int),(yyvsp[(6) - (6)].val_str),host);}
+    { gw_host_set_genvar_str((yyvsp[(1) - (6)].val_str),(yyvsp[(3) - (6)].val_int),(yyvsp[(6) - (6)].val_str),host);free((yyvsp[(1) - (6)].val_str));}
+    break;
+
+  case 12:
+#line 65 "gw_host_update_syntax.y"
+    { gw_host_set_var_null((yyvsp[(1) - (2)].val_int),-1,host);}
+    break;
+
+  case 13:
+#line 66 "gw_host_update_syntax.y"
+    { gw_host_set_var_null((yyvsp[(1) - (5)].val_int),(yyvsp[(3) - (5)].val_int),host);}
+    break;
+
+  case 14:
+#line 67 "gw_host_update_syntax.y"
+    { gw_host_set_genvar_null((yyvsp[(1) - (2)].val_str),-1,host);free((yyvsp[(1) - (2)].val_str));}
+    break;
+
+  case 15:
+#line 68 "gw_host_update_syntax.y"
+    { gw_host_set_genvar_null((yyvsp[(1) - (5)].val_str),(yyvsp[(3) - (5)].val_int),host);free((yyvsp[(1) - (5)].val_str));}
     break;
 
 
 /* Line 1267 of yacc.c.  */
-#line 1447 "host/gw_host_update_syntax.c"
+#line 1468 "host/gw_host_update_syntax.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1663,7 +1684,7 @@ yyreturn:
 }
 
 
-#line 66 "gw_host_update_syntax.y"
+#line 70 "gw_host_update_syntax.y"
 
 
 void host_update_error(YYLTYPE *llocp, gw_host_t *host, int *pos, const char *str)

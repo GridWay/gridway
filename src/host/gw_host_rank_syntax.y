@@ -59,7 +59,7 @@ stmt:   expr                { *result=$1;}
         | ';'               { *result=host->fixed_priority;} /* TRUE BY DEFAULT, ON EMPTY STRINGS */
         ;
 expr:   VARIABLE		    { $$ = gw_host_get_var_int($1,queue,host);}
-        | GENERICVAR        { $$ = gw_host_get_genvar_int($1,queue,host);}
+        | GENERICVAR        { $$ = gw_host_get_genvar_int($1,queue,host); free($1);}
         | INTEGER		    { $$ = $1;}	
         | expr '+' expr     { $$ = $1 + $3;}
         | expr '-' expr     { $$ = $1 - $3;}

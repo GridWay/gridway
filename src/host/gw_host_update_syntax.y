@@ -58,10 +58,14 @@ asig:
       | VARIABLE '=' STRING                     { gw_host_set_var_str($1,-1,$3,host);}
       | VARIABLE '[' INTEGER ']' '=' INTEGER    { gw_host_set_var_int($1,$3,$6,host);}
       | VARIABLE '[' INTEGER ']' '=' STRING     { gw_host_set_var_str($1,$3,$6,host);}
-      | GENERICVAR '=' INTEGER                  { gw_host_set_genvar_int($1,-1,$3,host);}
-      | GENERICVAR '=' STRING                   { gw_host_set_genvar_str($1,-1,$3,host);}
-      | GENERICVAR '[' INTEGER ']' '=' INTEGER  { gw_host_set_genvar_int($1,$3,$6,host);}
-      | GENERICVAR '[' INTEGER ']' '=' STRING   { gw_host_set_genvar_str($1,$3,$6,host);}
+      | GENERICVAR '=' INTEGER                  { gw_host_set_genvar_int($1,-1,$3,host);free($1);}
+      | GENERICVAR '=' STRING                   { gw_host_set_genvar_str($1,-1,$3,host);free($1);}
+      | GENERICVAR '[' INTEGER ']' '=' INTEGER  { gw_host_set_genvar_int($1,$3,$6,host);free($1);}
+      | GENERICVAR '[' INTEGER ']' '=' STRING   { gw_host_set_genvar_str($1,$3,$6,host);free($1);}
+      | VARIABLE '='                            { gw_host_set_var_null($1,-1,host);}
+      | VARIABLE '[' INTEGER ']' '='            { gw_host_set_var_null($1,$3,host);}      
+      | GENERICVAR '='                          { gw_host_set_genvar_null($1,-1,host);free($1);}
+      | GENERICVAR '[' INTEGER ']' '='          { gw_host_set_genvar_null($1,$3,host);free($1);}
         ;
 %%
 

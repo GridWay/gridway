@@ -70,9 +70,9 @@ gw_im_mad_t * gw_im_get_mad_by_fd(int fd);
 
 /* -------------------------------------------------------------------------- */
 
-void gw_im_discover(void *_mad_name);
+void gw_im_discover(char *mad_name);
 
-void gw_im_monitor(void *_host_id);
+void gw_im_monitor(gw_host_t * host);
 
 void gw_im_timer(void *_null);
 
@@ -85,12 +85,6 @@ void gw_im_listener(void *arg);
 /* -------------------------------------------------------------------------- */
 
 int gw_im_set_pipes (fd_set *in_pipes);
-
-/* -------------------------------------------------------------------------- */
-
-void gw_im_discover_action (const char * mad_name);
-
-void gw_im_monitor_action (int hostid);
 
 /* -------------------------------------------------------------------------- */
 

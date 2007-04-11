@@ -71,16 +71,6 @@ gw_im_t* gw_im_init()
                    gw_im_timer,
                    &(gw_im.am));
 
-    gw_am_register("GW_IM_DISCOVER", 
-                   GW_ACTION_SEQUENTIAL, 
-                   gw_im_discover,
-                   &(gw_im.am));
-                                      
-    gw_am_register("GW_IM_MONITOR", 
-                   GW_ACTION_SEQUENTIAL, 
-                   gw_im_monitor,
-                   &(gw_im.am));
-
     /* ---------------------------------------------------- */
 
     pthread_mutex_unlock(&(gw_im.mutex));
@@ -333,24 +323,3 @@ int gw_im_set_pipes (fd_set *in_pipes)
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
 
-
-void gw_im_discover_action (const char * mad_name)
-{
-    gw_am_trigger(&(gw_im.am), "GW_IM_DISCOVER", (void *) mad_name);
-}
-
-/*---------------------------------------------------------------------------*/
-
-void gw_im_monitor_action (int hostid)
-{
-    int *host_id;
-    
-    host_id  = (int *) malloc(sizeof(int));
-    *host_id = hostid;
-    
-	gw_am_trigger(&(gw_im.am), "GW_IM_MONITOR", (void *)host_id);
-}
-
-/*---------------------------------------------------------------------------*/
-/*---------------------------------------------------------------------------*/
-/*---------------------------------------------------------------------------*/

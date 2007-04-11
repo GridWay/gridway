@@ -78,10 +78,10 @@ expr:   VARIABLE '=' INTEGER        { $$ = gw_host_get_var_int($1,queue,host) ==
                                         $$ = 0;
                                       free($4); }
                                       
-        | GENERICVAR '=' INTEGER    { $$ = gw_host_get_genvar_int($1,queue,host) == $3; }
-        | GENERICVAR '!''=' INTEGER { $$ = gw_host_get_genvar_int($1,queue,host) != $4; }        
-        | GENERICVAR '>' INTEGER    { $$ = gw_host_get_genvar_int($1,queue,host) > $3 ; }
-        | GENERICVAR '<' INTEGER    { $$ = gw_host_get_genvar_int($1,queue,host) < $3 ; }
+        | GENERICVAR '=' INTEGER    { $$ = gw_host_get_genvar_int($1,queue,host) == $3; free($1);}
+        | GENERICVAR '!''=' INTEGER { $$ = gw_host_get_genvar_int($1,queue,host) != $4; free($1);}        
+        | GENERICVAR '>' INTEGER    { $$ = gw_host_get_genvar_int($1,queue,host) > $3 ; free($1);}
+        | GENERICVAR '<' INTEGER    { $$ = gw_host_get_genvar_int($1,queue,host) < $3 ; free($1);}
         | GENERICVAR '=' STRING     { value_str = gw_host_get_genvar_str($1,queue,host);
                                       if ( value_str != NULL
                                           && fnmatch($3, value_str, 0) == 0)
@@ -91,7 +91,7 @@ expr:   VARIABLE '=' INTEGER        { $$ = gw_host_get_var_int($1,queue,host) ==
                                         $$ = 1;
                                       else
                                         $$ = 0;
-                                      free($3); }
+                                      free($3); free($1);}
         | GENERICVAR '!''=' STRING  { value_str = gw_host_get_genvar_str($1,queue,host);
                                       if ( value_str != NULL
                                           && fnmatch($4, value_str, 0) != 0)
@@ -101,7 +101,7 @@ expr:   VARIABLE '=' INTEGER        { $$ = gw_host_get_var_int($1,queue,host) ==
                                         $$ = 1;
                                       else
                                         $$ = 0;
-                                      free($4); }
+                                      free($4); free($1);}
                                       
         | expr '&' expr             { $$ = $1 && $3; }
         | expr '|' expr             { $$ = $1 || $3; }

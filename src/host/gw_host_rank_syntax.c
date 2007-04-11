@@ -1432,7 +1432,7 @@ yyreduce:
 
   case 7:
 #line 62 "gw_host_rank_syntax.y"
-    { (yyval.val_int) = gw_host_get_genvar_int((yyvsp[(1) - (1)].val_str),queue,host);}
+    { (yyval.val_int) = gw_host_get_genvar_int((yyvsp[(1) - (1)].val_str),queue,host); free((yyvsp[(1) - (1)].val_str));}
     break;
 
   case 8:
