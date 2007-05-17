@@ -1521,13 +1521,13 @@ YY_RULE_SETUP
 { switch (dl_comp)
                           {
                               case 1:
-                                  jt->deadline = dl[0]*60;
+                                  jt->deadline = time(NULL) + dl[0]*60;
                                   break;
                               case 2:
-                                  jt->deadline = dl[0]*60*60 + dl[1]*60;
+                                  jt->deadline = time(NULL) + dl[0]*60*60 + dl[1]*60;
                                   break;
                               case 3:
-                                  jt->deadline = dl[0]*24*60*60 + dl[1]*60*60 + dl[2]*60;
+                                  jt->deadline = time(NULL) + dl[0]*24*60*60 + dl[1]*60*60 + dl[2]*60;
                                   break;
                               default:
                                  jtp_error(jt, "Bad deadline format"); return -1;
@@ -1537,11 +1537,16 @@ YY_RULE_SETUP
 case 59:
 YY_RULE_SETUP
 #line 239 "gw_template_parser.l"
-{ dl[dl_comp++] = atoi(jtp_text+1); }
+{ if (dl_comp >= 3 )
+                          {
+							jtp_error(jt, "Bad deadline format"); 
+							return -1;
+						  }
+						  dl[dl_comp++] = atoi(jtp_text+1);}						  
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 240 "gw_template_parser.l"
+#line 245 "gw_template_parser.l"
 { dl[0] = atoi(jtp_text); dl_comp = 1; }
 	YY_BREAK
 /* --------------------------------------------------------------------- */
@@ -1550,22 +1555,22 @@ YY_RULE_SETUP
 case 61:
 /* rule 61 can match eol */
 YY_RULE_SETUP
-#line 246 "gw_template_parser.l"
+#line 251 "gw_template_parser.l"
 ;
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 247 "gw_template_parser.l"
+#line 252 "gw_template_parser.l"
 { fprintf(stderr,"Undefined variable (%s) at line %i\n",
                         jtp_text, jtp_lineno);
                   return -1;}
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 250 "gw_template_parser.l"
+#line 255 "gw_template_parser.l"
 ECHO;
 	YY_BREAK
-#line 1569 "common/gw_template_parser.c"
+#line 1574 "common/gw_template_parser.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(var_int):
 case YY_STATE_EOF(var_yn):
@@ -2535,7 +2540,7 @@ void jtp_free (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 250 "gw_template_parser.l"
+#line 255 "gw_template_parser.l"
 
 
 

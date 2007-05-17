@@ -224,19 +224,24 @@ NAME                    { jtp_var = NAME;                   BEGIN var_str;}
 <val_dl>[ \t]*(#.*)?\n  { switch (dl_comp)
                           {
                               case 1:
-                                  jt->deadline = dl[0]*60;
+                                  jt->deadline = time(NULL) + dl[0]*60;
                                   break;
                               case 2:
-                                  jt->deadline = dl[0]*60*60 + dl[1]*60;
+                                  jt->deadline = time(NULL) + dl[0]*60*60 + dl[1]*60;
                                   break;
                               case 3:
-                                  jt->deadline = dl[0]*24*60*60 + dl[1]*60*60 + dl[2]*60;
+                                  jt->deadline = time(NULL) + dl[0]*24*60*60 + dl[1]*60*60 + dl[2]*60;
                                   break;
                               default:
                                  jtp_error(jt, "Bad deadline format"); return -1;
                           }
                           BEGIN INITIAL;}
-<val_dl>:[0-9]+         { dl[dl_comp++] = atoi(yytext+1); }
+<val_dl>:[0-9]+         { if (dl_comp >= 3 )
+                          {
+							jtp_error(jt, "Bad deadline format"); 
+							return -1;
+						  }
+						  dl[dl_comp++] = atoi(yytext+1);}						  
 <val_dl>[0-9]+          { dl[0] = atoi(yytext); dl_comp = 1; }
 
     /* --------------------------------------------------------------------- */

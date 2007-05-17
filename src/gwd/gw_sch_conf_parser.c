@@ -898,7 +898,7 @@ YY_RULE_SETUP
 case 11:
 YY_RULE_SETUP
 #line 49 "gw_sch_conf_parser.l"
-{ lvalp->val_int = DL_WEIGHT;            return VARIABLE;}
+{ lvalp->val_int = DL_HALF;              return VARIABLE;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
