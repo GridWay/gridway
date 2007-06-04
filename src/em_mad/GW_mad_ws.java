@@ -43,16 +43,45 @@ class GW_mad_ws extends Thread implements GramJobListener {
     private Map jid_pool = null; // JID pool
 //    private Long last_goodtill = 0L;
 
+    private String portNumber;
+    
     public static void main(String args[]) {
-        GW_mad_ws gw_mad_ws = new GW_mad_ws();
+    	 int i = 0;
+         String arg;
+         String _portNumber = "8443";
+         boolean error=false;
+         GW_mad_ws gw_mad_ws;
+         
+         while (i < args.length && args[i].startsWith("-")) 
+         {
+             arg = args[i++];
+             
+             if (arg.equals("-p")) 
+             {
+                 if (i < args.length)
+                	 _portNumber = args[i++];
+                 else
+                 {
+                     System.err.println("-p requires a portnumber");
+                     error = true;
+                 }
+             }
+         }
 
-        //gw_mad_ws.start();
-        gw_mad_ws.loop();
-        //gw_mad_ws.interrupt();
+        if (error == false)
+        {
+        	gw_mad_ws = new GW_mad_ws(_portNumber);
+        	
+            //gw_mad_ws.start();
+            gw_mad_ws.loop();
+            //gw_mad_ws.interrupt();
+        }
     }
 
     // Constructor
-    GW_mad_ws() {
+    GW_mad_ws(String portNumber) {
+    	
+    	this.portNumber = portNumber;
         // Create the job and JID pool
         // Warning! With JDK1.5 should be "new HashMap<Integer,GramJob>()"
         job_pool = Collections.synchronizedMap(new HashMap());
@@ -147,7 +176,7 @@ class GW_mad_ws extends Thread implements GramJobListener {
                         // Add state listener
                         job.addListener(this);
 
-                        Service s = new Service(action, jid, job, contact);
+                        Service s = new Service(action, jid, job, contact, portNumber);
                         s.start();
 
                         // Add job and jid to the pools
@@ -194,7 +223,7 @@ class GW_mad_ws extends Thread implements GramJobListener {
                     }
                     else
                     {
-                        Service s = new Service(action, jid, job, contact);
+                        Service s = new Service(action, jid, job, contact,portNumber);
                         s.start();
                     }
                 }
@@ -389,12 +418,14 @@ class Service extends Thread {
     GramJob job;
     int status = 0;
     String info;
+    String portNumber;
 
-    Service(String action, Integer jid, GramJob job, String contact) {
+    Service(String action, Integer jid, GramJob job, String contact, String portNumber) {
         this.action = action;
         this.jid = jid;
         this.job = job;
         this.contact = contact;
+        this.portNumber = portNumber;
     }
 
     public void run() {
@@ -447,7 +478,7 @@ class Service extends Thread {
             //URL factoryURL =
             //        ManagedJobFactoryClientHelper.getServiceURL(host).getURL();
             URL factoryURL = new URL("https://" + host
-                    + ":8443/wsrf/services/ManagedJobFactoryService");
+                    + ":"+portNumber+"/wsrf/services/ManagedJobFactoryService");
             factoryEndpoint =
                     ManagedJobFactoryClientHelper.getFactoryEndpoint(factoryURL,
                     factoryType);

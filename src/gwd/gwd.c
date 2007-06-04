@@ -396,12 +396,12 @@ int main(int argc, char **argv)
         return -1;
     }
 
-	length   = strlen(GW_LOCATION);
-	log  = (char *) malloc (sizeof(char)*(length + 13));
-    lock = (char *) malloc (sizeof(char)*(length + 11));
+	length   = strlen(GW_LOCATION) + sizeof(GW_VAR_DIR);
+	log  = (char *) malloc (sizeof(char)*(length + 10));
+    lock = (char *) malloc (sizeof(char)*(length + 8));
 
-    sprintf(lock, "%s/var/.lock", GW_LOCATION);
-    sprintf(log,  "%s/var/gwd.log", GW_LOCATION);
+    sprintf(lock, "%s/" GW_VAR_DIR "/.lock", GW_LOCATION);
+    sprintf(log,  "%s/" GW_VAR_DIR "/gwd.log", GW_LOCATION);
 
     /* --------------------------------- */
     /*   Check if other gwd is running   */
@@ -440,7 +440,7 @@ int main(int argc, char **argv)
     if (rc != 0)
     {
         printf("ERROR!, Loading gwd configuration file: %s "
-               "check $GW_LOCATION/var/gwd.log\n",log);
+               "check $GW_LOCATION/" GW_VAR_DIR "/gwd.log\n",log);
         unlink(lock);
         exit(-1);
     }
@@ -466,7 +466,7 @@ int main(int argc, char **argv)
             break;
 
         case 0: /* Child process */
-            sprintf(log,"%s/var/",GW_LOCATION);
+            sprintf(log,"%s/" GW_VAR_DIR "/",GW_LOCATION);
             rc = chdir(log);
             
             free(log);
@@ -508,7 +508,7 @@ void gw_register_mads()
 	
 	gw_log_print("GW",'I',"Loading Information Manager MADs.\n");
     i = 0;
-    while ((gw_conf.im_mads[i][0] != NULL) && (i<GW_MAX_MADS) )
+    while ( ( i < GW_MAX_MADS ) && (gw_conf.im_mads[i][0] != NULL) )
     {
         rc = gw_im_register_mad(gw_conf.im_mads[i][GW_MAD_PATH_INDEX],
                                 gw_conf.im_mads[i][GW_MAD_NAME_INDEX],    	
@@ -546,7 +546,7 @@ void gw_clear_state()
 {
     char sh_command[2048];
 
-    sprintf(sh_command, "rm -rf %s/var/[0-9]*", gw_conf.gw_location);
+    sprintf(sh_command, "rm -rf %s/" GW_VAR_DIR "/[0-9]*", gw_conf.gw_location);
 
     system(sh_command);
 }
@@ -570,10 +570,10 @@ void gw_recover_state()
     
     gw_job_t *      job;
   
-  	length   = strlen(gw_conf.gw_location) + 8;
+  	length   = strlen(gw_conf.gw_location) + 2 + sizeof(GW_VAR_DIR);
   	var_name = malloc(sizeof(char)*length);
   	
-  	sprintf(var_name,"%s/%s",gw_conf.gw_location,"var");
+  	sprintf(var_name,"%s/%s",gw_conf.gw_location,GW_VAR_DIR);
   	
 	dir=opendir(var_name);
 

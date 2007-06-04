@@ -203,6 +203,18 @@ int gw_job_environment(gw_job_t *job)
             free(var);
         }
     }
+    
+    if ( job->template.monitor != NULL )
+    {
+        var = gw_job_substitute (job->template.monitor, job);        
+        
+        if ( var != NULL)
+        {        
+            fprintf(fd,"export GW_MONITOR=\"%s\"\n",var);
+            free(var);
+        }
+    }
+        
 
     if ( job->template.arguments != NULL )
     {

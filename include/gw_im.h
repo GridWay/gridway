@@ -46,10 +46,14 @@ typedef struct gw_im_s {
     int         registered_mads;
     gw_im_mad_t im_mad[GW_MAX_MADS];
 
+    int         active_queries;
+    
     gw_am_t   am;        
     gw_am_t * dm_am;
     
 } gw_im_t;
+
+extern gw_im_t gw_im;
 
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
@@ -84,7 +88,7 @@ void gw_im_listener(void *arg);
 
 /* -------------------------------------------------------------------------- */
 
-int gw_im_set_pipes (fd_set *in_pipes);
+inline int gw_im_set_pipes (fd_set *in_pipes, int *num_mads);
 
 /* -------------------------------------------------------------------------- */
 

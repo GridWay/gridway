@@ -31,6 +31,7 @@ typedef struct gw_tm_mad_s
     char *name;
     char *executable;
     char *argument;
+    char *owner;
     
     char *url;
 
@@ -68,6 +69,7 @@ void gw_tm_mad_exists   (gw_tm_mad_t *mad, int xfr_id, const char *dir);
 
 void gw_tm_mad_finalize (gw_tm_mad_t *mad);
 
+int gw_tm_mad_reload (gw_tm_mad_t *tm_mad);
 
 /* ---------------------------------------------------------------------------*/
 

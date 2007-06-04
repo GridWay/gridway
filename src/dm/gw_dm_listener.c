@@ -29,8 +29,8 @@
 void gw_dm_listener(void *arg)
 {
     fd_set  in_pipes;
-    int     i, j, fd;
-    int     greater, rc;
+    int     i, j,num_mads;
+    int     greater, rc, rcm;
     char    c;
     char    info[GW_DM_MAX_INFO];
     char    s_id[GW_DM_MAX_ID];
@@ -39,37 +39,31 @@ void gw_dm_listener(void *arg)
     char    str[GW_DM_MAX_STRING];
     char    *s_host_id, *queue_name, *s_rank, *lasts;
     int     job_id, host_id, rank;
+    gw_dm_mad_t * dm_mad;
     
     pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL); 
     pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
     
     while (1)
     {
-        FD_ZERO(&in_pipes);
-        greater = 0;
-        
-        for (i= 0; i<gw_dm.registered_mads; i++)
-        {
-            fd = gw_dm.dm_mad[i].mad_dm_pipe;
-            FD_SET(fd, &in_pipes);
-            
-            if ( gw_dm.dm_mad[i].mad_dm_pipe > greater )
-                greater = gw_dm.dm_mad[i].mad_dm_pipe;            
-        }
-        
+        greater = gw_dm_set_pipes (&in_pipes, &num_mads);
+                
         select( greater+1, &in_pipes, NULL, NULL, NULL);
 
-        for (i= 0; i<gw_dm.registered_mads; i++) 
+        for (i= 0; i<=greater; i++) 
         {
-            fd = gw_dm.dm_mad[i].mad_dm_pipe;
-            
-            if ( FD_ISSET(fd, &in_pipes) )
-            {                            
+            if ( FD_ISSET(i, &in_pipes) )
+            {                
+                dm_mad = gw_dm_get_mad_by_fd(i);
+                
+                if ( dm_mad == NULL )
+                    continue;
+                                                
                 j = 0;
 
                 do
                 {
-                    rc = read(fd, (void *) &c, sizeof(char));
+                    rc = read(i, (void *) &c, sizeof(char));
                     str[j++] = c;    
                 }
                 while ( rc > 0 && c != '\n' );
@@ -78,8 +72,28 @@ void gw_dm_listener(void *arg)
 
                 if (rc <= 0) /* Error Reading message from MAD! */
                 {
-                    gw_log_print("DM",'I',"Error reading MAD (%s) message.\n",
-                            gw_dm.dm_mad[i].name, str);
+                    gw_log_print("DM",'W',"Error reading MAD (%s) message\n",
+                            dm_mad->name);
+                    
+                    rcm = gw_dm_mad_reload(dm_mad);
+                    
+                    if ( rcm == 0 )
+                        gw_log_print("DM",'I',"MAD (%s) successfully reloaded\n",
+                            dm_mad->name);
+                    else
+                    {
+                        gw_log_print("DM",'E',"Error reloading the scheduler (%s)\n",
+                            dm_mad->name);
+                            
+                        dm_mad->mad_dm_pipe = -1;
+                        
+                        if ( num_mads == 1 )
+                        {
+                            gw_log_print("DM",'E',"GridWay needs to be restarted! (no scheduler)\n");
+                            
+                            return;
+                        }
+                    }
                     continue;
                 }
                 
@@ -88,8 +102,12 @@ void gw_dm_listener(void *arg)
   
 #ifdef GWDMDEBUG
                 gw_log_print("DM",'D',"MAD (%s) message %s %s %s %s (info length=%d).\n",
-                        gw_dm.dm_mad[i].name, action, s_id, result,
-                        info, strlen(info));
+                        dm_mad->name, 
+                        action, 
+                        s_id, 
+                        result,
+                        info, 
+                        strlen(info));
 #endif
                 if (strcmp(action, "SCHEDULE_JOB") == 0)
                 {
@@ -116,7 +134,8 @@ void gw_dm_listener(void *arg)
                     {
                         gw_log_print("DM",'E',"Can't schedule job %s: %s.\n", s_id, info);
 
-                        job_id     = atoi(s_id);
+                        job_id = atoi(s_id);
+                        
                         gw_dm_uncheck_job(job_id);
                     }
                 }

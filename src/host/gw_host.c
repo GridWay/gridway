@@ -96,6 +96,8 @@ void gw_host_init(gw_host_t *host, char *hostname, int host_id, int fixed_priori
 
     host->state = GW_HOST_STATE_DISCOVERED;
     
+    host->last_monitoring_time = 0;
+    
     pthread_mutex_unlock(&(host->mutex));
 }
 
@@ -260,6 +262,8 @@ void gw_host_clear_dynamic_info(int host_id)
 
     host->state = GW_HOST_STATE_UNKNOWN;
 
+    host->last_monitoring_time = 0;
+    
     pthread_mutex_unlock(&(host->mutex));
 }
 

@@ -783,54 +783,93 @@ class Mds4QueryParser{
     }
     
     public static void main(String[] args){
-        Mds4QueryParser parser = new Mds4QueryParser();
+        int i = 0, j;
+        String arg;
+        boolean host_list_flag=false;
+        boolean host_name_flag=false;
+        String  hostname = null;
+        String  filename = null;
+        String  static_info = null;
         
-        switch(args.length){
-            case 2:{ //hosts names list
-                if (!args[0].equals("-l")){
-                    System.err.println("java Mds4QueryParser [-l] [-i hostname] file");
-                    return;
+        Mds4QueryParser parser = new Mds4QueryParser();
+
+        while (i < args.length && args[i].startsWith("-")) 
+        {
+            arg = args[i++];
+            
+            if (arg.equals("-l")) 
+            {                
+            	host_list_flag = true;
+            }
+            else if (arg.equals("-i")) 
+            {
+                if (i < args.length)
+                {
+                    hostname = args[i++];
+                    host_name_flag = true; 
                 }
-                if (!parser.createTree(args[1])){
-                    System.err.println("Error while procesing the file: " + parser.getErr());
-                    return;
-                }
-                //parser.displayTree();
-                parser.getHostsNames(parser.getDoc());
-                if (parser.getHostsNames().size() == 0)
-                    System.err.println("Error while obtaining hosts names: " + parser.getErr());
                 else
-                    System.out.println(parser.displayHostsNames());
-                break;
-            }
-            case 3:{ //host information
-                if (!args[0].equals("-i")){
-                    System.err.println("java Mds4QueryParser [-l] [-i hostname] file");
+                {
+                    System.err.println("java Mds4QueryParser <-l|-i hostname> file [info]");
                     return;
                 }
-                if (!parser.createTree(args[2])){
-                    System.err.println("Error while procesing the file: " + parser.getErr());
-                    return;
-                }
-                Host h = new Host();
-                parser.resetErr();
-                parser.getHostInfo(parser.getDoc(), h);
-                if (h.getForkName().equals("NULL")){
-                    h.setForkName("Fork");
-                }
-                if (h.getLrmsName().equals("NULL")){
-                    h.setLrmsName("Fork");
-                    h.setLrmsType("fork");
-                }
-                h.setName(args[1]);
-                System.out.println(h.info());
-                System.out.println(parser.getErr());
-                break;
             }
-            default:{
-                System.err.println("java Mds4QueryParser [-l] [-i hostname] file");
-                break;
+            else
+            {
+                System.err.println("java Mds4QueryParser <-l|-i hostname> file [info]");
+                return;            	
             }
         }
+        
+        if ((i == args.length)||((host_name_flag == true)&&(host_list_flag== true)))
+        {
+            System.err.println("java Mds4QueryParser <-l|-i hostname> file [info]");
+            return;
+        }
+        else
+        {
+        	filename = args[i++];
+        
+        	if (i < args.length)
+        		static_info = args[i];
+        }
+        
+        if (!parser.createTree(filename))
+        {
+            System.err.println("Error while procesing the file: " + parser.getErr());
+            return;
+        }
+        
+        if (host_list_flag== true)
+        {
+            parser.getHostsNames(parser.getDoc());
+            
+            if (parser.getHostsNames().size() == 0)
+                System.err.println("Error while obtaining hosts names: " + parser.getErr());
+            else
+                System.out.println(parser.displayHostsNames());
+        }
+        else if (host_name_flag == true)
+        {
+            Host h = new Host(static_info);
+            
+            parser.resetErr();
+            parser.getHostInfo(parser.getDoc(), h);
+            
+            if (h.getForkName().equals("NULL")){
+                h.setForkName("Fork");
+            }
+            
+            if (h.getLrmsName().equals("NULL")){
+                h.setLrmsName("Fork");
+                h.setLrmsType("fork");
+            }
+            
+            h.setName(args[1]);
+            
+            System.out.println(h.info());
+            System.out.println(parser.getErr());        	
+        }
+        
     }
 } //End Mds4QueryParser

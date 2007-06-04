@@ -35,7 +35,9 @@ typedef struct gw_em_mad_s
 {
     char *name;
     char *executable;
+    char *args;
     char *mode;
+    char *owner;
 
     int  mad_em_pipe;
     int  em_mad_pipe;
@@ -51,8 +53,10 @@ typedef struct gw_em_mad_s
 /* -------------------------------------------------------------------------- */
 
 int gw_em_mad_init(gw_em_mad_t * em_mad, 
-                   const char *  exe, 
+                   const char *  exe,
                    const char *  name,
+                   const char *  args,
+                   const char *  mode,
                    const char *  owner);
                         
 void gw_em_mad_submit(gw_em_mad_t *em_mad, int jid, char *rm_contact, char *rsl);
@@ -64,6 +68,8 @@ void gw_em_mad_cancel(gw_em_mad_t *em_mad, int jid);
 void gw_em_mad_poll(gw_em_mad_t *em_mad, int jid);
 
 void gw_em_mad_finalize(gw_em_mad_t *em_mad);
+
+int  gw_em_mad_reload (gw_em_mad_t *em_mad);
 
 /* ---------------------------------------------------------------------------*/
 

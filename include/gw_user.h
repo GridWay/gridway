@@ -55,7 +55,8 @@ void  gw_user_destroy(gw_user_t *user);
 
 int gw_em_register_mad(gw_user_t *  user,
                        const char * executable, 
-                       const char * name, 
+                       const char * name,
+                       const char * args,
                        const char * mode);
 
 gw_em_mad_t* gw_em_get_mad(gw_user_t * user, const char *name);

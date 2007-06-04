@@ -21,6 +21,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h> 
+#include <limits.h>
 
 #include "gw_em.h"
 #include "gw_log.h"
@@ -29,9 +30,9 @@
 void gw_em_listener(void *arg)
 {
     fd_set       in_pipes;
-	int          j;
+	int          i,j;
     int *        job_id;    
-    int          greater, rc;
+    int          greater, rc, rcm;
     char         c;
     
     char         info[GW_EM_MAX_INFO];
@@ -43,7 +44,7 @@ void gw_em_listener(void *arg)
     int          fd;
     gw_job_t *   job;
 
-    char         contact_file[2048];
+    char         contact_file[PATH_MAX];
     FILE         *file;
 
     gw_boolean_t  assume_done;
@@ -51,20 +52,35 @@ void gw_em_listener(void *arg)
     
     char *ptmp;
 
+    int  *         fds;    
+    int            num_fds;
+    gw_em_mad_t ** em_mads;
+    
     pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL); 
     pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
-	
+
+    fds     = (int *) malloc(sizeof(int)*gw_conf.number_of_users*GW_MAX_MADS);
+    
+    em_mads = (gw_em_mad_t **) malloc(sizeof(gw_em_mad_t *) * 
+                                      gw_conf.number_of_users * GW_MAX_MADS);
+                                      	
     while (1)
     {
-    	greater = gw_user_pool_set_em_pipes (&in_pipes,gw_em.um_em_pipe_r);
-        
+    	greater = gw_user_pool_set_em_pipes (&in_pipes,
+                                             fds, 
+                                             &num_fds, 
+                                             em_mads, 
+                                             gw_em.um_em_pipe_r);
+                                                     
         rc = select( greater+1, &in_pipes, NULL, NULL, NULL);
 		
 		if ( rc <= 0 )
 			continue;
         
-        for (fd = 0; fd<=greater; fd++)
-        {            
+        for (i=0; i<num_fds; i++)
+        {   
+            fd = fds[i];
+            
             if ( FD_ISSET(fd, &in_pipes) )
             {
             	if ( fd == gw_em.um_em_pipe_r )
@@ -88,9 +104,26 @@ void gw_em_listener(void *arg)
                 str[j] = '\0';    
 
                 if (rc <= 0)
-                {
-                    gw_log_print("EM",'E',"Error reading MAD message.\n");
-					/* Error in MAD finalize and reload it TBD, do not return from listener*/
+                {					
+                    gw_log_print("EM",'W',"Error reading MAD (%s) message\n",
+                            em_mads[i]->name);
+                    
+                    rcm = gw_em_mad_reload (em_mads[i]);
+                    
+                    if ( rcm == 0 )
+                    {
+                        gw_log_print("EM",'I',"MAD (%s) successfully reloaded\n",
+                            em_mads[i]->name);
+                        
+                        gw_job_pool_recover_jobs (em_mads[i]);
+                    }
+                    else
+                    {
+                        gw_log_print("EM",'E',"Error reloading MAD (%s)\n",
+                            em_mads[i]->name);
+                        
+                        em_mads[i]->mad_em_pipe = -1;
+                    }
                     continue;
                 }
 
@@ -155,14 +188,21 @@ void gw_em_listener(void *arg)
                         gw_am_trigger(&(gw_em.am), "GW_EM_STATE_FAILED",
                                 (void *) job_id); 
                     }
-                    else
+                    else /* Save persistent job contact */
                     {
-                        /* Save persistent job contact */
-                        snprintf(contact_file, 2048, "%s/var/%i/job.contact",
-                                gw_conf.gw_location, job->id);
+                        snprintf(contact_file, 
+                                 PATH_MAX-1, 
+                                 "%s/" GW_VAR_DIR "/%i/job.contact",
+                                 gw_conf.gw_location, 
+                                 job->id);
+                                 
                         file = fopen(contact_file, "w");
-                        fprintf(file, "%s\n", info);
-                        fclose(file);
+                        
+                        if ( file != NULL )
+                        {
+                            fprintf(file, "%s\n", info);
+                            fclose(file);
+                        }
 
                         gw_am_trigger(&(gw_em.am), "GW_EM_STATE_PENDING",
                                     (void *) job_id);

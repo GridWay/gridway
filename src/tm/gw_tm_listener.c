@@ -41,7 +41,7 @@ void gw_tm_listener(void *arg)
     fd_set         in_pipes;
     int            i, j, cp_xfr_id;
     int *          job_id;    
-    int            greater, rc;
+    int            greater, rc, rcm;
     char           c;
     
     char           info[GW_TM_MAX_INFO];
@@ -107,8 +107,25 @@ void gw_tm_listener(void *arg)
                 if (rc <= 0) /* Error Reading message from MAD! */
                 {
                     gw_log_print("TM",'E',"Error reading MAD message.\n");
-   					/* Error in MAD finalize and reload it TBD do not return from listener*/
+                    
+                    rcm = gw_tm_mad_reload (tm_mads[i]);
+                    
+                    if ( rcm == 0 )
+                    {
+                        gw_log_print("TM",'I',"MAD (%s) successfully reloaded\n",
+                            tm_mads[i]->name);
+                        
+                        /* Transfers should be recover, or prolog/epilog restarted*/
+                    }
+                    else
+                    {
+                        gw_log_print("TM",'E',"Error reloading MAD (%s)\n",
+                            tm_mads[i]->name);
+                        
+                        tm_mads[i]->mad_tm_pipe = -1;
+                    }
                     continue;
+
                 }
 
                 sscanf(str,"%s %s %s %s %[^\n]", action, s_job_id, s_cp_xfr_id, result, info);

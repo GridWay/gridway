@@ -69,9 +69,10 @@ bin_PROGRAMS = $(srcdir)/gwd/gwd$(EXEEXT) $(srcdir)/cmds/gwps$(EXEEXT) \
 	$(srcdir)/cmds/gwacct$(EXEEXT) \
 	$(srcdir)/scheduler/gw_flood_scheduler$(EXEEXT) \
 	$(srcdir)/scheduler/gw_sched$(EXEEXT) $(am__EXEEXT_1) \
-	$(srcdir)/tm_mad/gw_tm_mad_ftp.bin$(EXEEXT)
+	$(am__EXEEXT_2)
 @JSDL_TRUE@am__append_1 = $(CMDS)/jsdl2gw.sh
-@DRMAA_TRUE@am__append_2 = $(srcdir)/drmaa/libdrmaa.la \
+@JSDL_TRUE@am__append_2 = $(srcdir)/cmds/gw_jsdl.jar
+@DRMAA_TRUE@am__append_3 = $(srcdir)/drmaa/libdrmaa.la \
 @DRMAA_TRUE@	$(srcdir)/drmaa/libDrmaaJNI.la
 
 # --------------------------------
@@ -81,15 +82,18 @@ bin_PROGRAMS = $(srcdir)/gwd/gwd$(EXEEXT) $(srcdir)/cmds/gwps$(EXEEXT) \
 # ---------------------- EM MADS ------------------------
 
 # ---------------------- TM MADS ------------------------
-@PREWS_TRUE@am__append_3 = $(srcdir)/em_mad/gw_em_mad_prews.bin \
+@PREWS_TRUE@am__append_4 = $(srcdir)/em_mad/gw_em_mad_prews.bin \
 @PREWS_TRUE@	$(srcdir)/tm_mad/gw_tm_mad_dummy.bin
-@PREWS_TRUE@am__append_4 = $(EM_MAD)/gw_em_mad_prews.sh \
+@PREWS_TRUE@am__append_5 = $(EM_MAD)/gw_em_mad_prews.sh \
 @PREWS_TRUE@	$(TM_MAD)/gw_tm_mad_dummy.sh
-@PREWS_TRUE@am__append_5 = $(IM_MAD)/gw_im_mad_mds2.sh \
+@GRIDFTP_TRUE@am__append_6 = $(srcdir)/tm_mad/gw_tm_mad_ftp.bin
+@GRIDFTP_TRUE@am__append_7 = $(TM_MAD)/gw_tm_mad_ftp.sh
+@PREWS_TRUE@am__append_8 = $(IM_MAD)/gw_im_mad_mds2.sh \
 @PREWS_TRUE@	$(IM_MAD)/gw_im_mad_mds2_glue.sh
-@WS_TRUE@am__append_6 = $(EM_MAD)/GW_mad_ws.java $(IM_MAD_MDS4_SRC)
-@WS_TRUE@am__append_7 = $(EM_MAD)/gw_em_mad_ws.sh \
-@WS_TRUE@	$(IM_MAD)/gw_im_mad_mds4.sh
+@WS_TRUE@am__append_9 = $(IM_MAD)/gw_im_mad_mds4.sh \
+@WS_TRUE@	$(EM_MAD)/gw_em_mad_ws.sh
+@WS_TRUE@am__append_10 = $(srcdir)/im_mad/gw_im_mad_ws.jar \
+@WS_TRUE@	$(srcdir)/em_mad/gw_em_mad_ws.jar
 @TESTS_TRUE@test_PROGRAMS = $(srcdir)/test/gwtest$(EXEEXT)
 subdir = src
 DIST_COMMON = $(COMMON)/gw_template_parser.c $(GWD)/gw_conf_parser.c \
@@ -100,10 +104,8 @@ DIST_COMMON = $(COMMON)/gw_template_parser.c $(GWD)/gw_conf_parser.c \
 	$(HOST)/gw_host_update_syntax.c \
 	$(HOST)/gw_host_update_syntax.h \
 	$(JOB)/gw_job_template_var_parser.c \
-	$(am__dist_bin_SCRIPTS_DIST) $(am__dist_jar_DATA_DIST) \
-	$(am__dist_java_JAVA_DIST) $(dist_scripts_SCRIPTS) \
-	$(dist_sysconf_DATA) $(include_HEADERS) $(srcdir)/Makefile.am \
-	$(srcdir)/Makefile.in
+	$(am__dist_bin_SCRIPTS_DIST) $(include_HEADERS) \
+	$(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.in
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
@@ -118,9 +120,9 @@ am__vpath_adj = case $$p in \
 am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(bindir)" \
 	"$(DESTDIR)$(testdir)" "$(DESTDIR)$(bindir)" \
-	"$(DESTDIR)$(bindir)" "$(DESTDIR)$(scriptsdir)" \
-	"$(DESTDIR)$(javadir)" "$(DESTDIR)$(jardir)" \
-	"$(DESTDIR)$(sysconfdir)" "$(DESTDIR)$(includedir)"
+	"$(DESTDIR)$(bindir)" "$(DESTDIR)$(em_ws_jardir)" \
+	"$(DESTDIR)$(im_ws_jardir)" "$(DESTDIR)$(jardir)" \
+	"$(DESTDIR)$(jsdl_jardir)" "$(DESTDIR)$(includedir)"
 libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
 __srcdir__drmaa_libDrmaaJNI_la_DEPENDENCIES =  \
@@ -161,6 +163,8 @@ __srcdir__drmaa_libdrmaa_la_OBJECTS =  \
 @PREWS_TRUE@am__EXEEXT_1 =  \
 @PREWS_TRUE@	$(srcdir)/em_mad/gw_em_mad_prews.bin$(EXEEXT) \
 @PREWS_TRUE@	$(srcdir)/tm_mad/gw_tm_mad_dummy.bin$(EXEEXT)
+@GRIDFTP_TRUE@am__EXEEXT_2 =  \
+@GRIDFTP_TRUE@	$(srcdir)/tm_mad/gw_tm_mad_ftp.bin$(EXEEXT)
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 testPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS) $(test_PROGRAMS)
@@ -343,12 +347,17 @@ am___srcdir__tm_mad_gw_tm_mad_dummy_bin_OBJECTS = $(am__objects_20)
 __srcdir__tm_mad_gw_tm_mad_dummy_bin_OBJECTS =  \
 	$(am___srcdir__tm_mad_gw_tm_mad_dummy_bin_OBJECTS)
 __srcdir__tm_mad_gw_tm_mad_dummy_bin_DEPENDENCIES =
+am____srcdir__tm_mad_gw_tm_mad_ftp_bin_SOURCES_DIST =  \
+	$(TM_MAD)/gw_tm_ftp_mad.c $(TM_MAD)/gw_tm_ftp_queue.c \
+	$(TM_MAD)/gw_tm_ftp_stack.c $(TM_MAD)/gw_tm_ftp_transfer.c \
+	$(TM_MAD)/gw_tm_ftp_xfr_pool.c
 am__objects_21 = $(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_mad.$(OBJEXT) \
 	$(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_queue.$(OBJEXT) \
 	$(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_stack.$(OBJEXT) \
 	$(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_transfer.$(OBJEXT) \
 	$(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_xfr_pool.$(OBJEXT)
-am___srcdir__tm_mad_gw_tm_mad_ftp_bin_OBJECTS = $(am__objects_21)
+@GRIDFTP_TRUE@am___srcdir__tm_mad_gw_tm_mad_ftp_bin_OBJECTS =  \
+@GRIDFTP_TRUE@	$(am__objects_21)
 __srcdir__tm_mad_gw_tm_mad_ftp_bin_OBJECTS =  \
 	$(am___srcdir__tm_mad_gw_tm_mad_ftp_bin_OBJECTS)
 __srcdir__tm_mad_gw_tm_mad_ftp_bin_DEPENDENCIES =
@@ -357,22 +366,17 @@ am__dist_bin_SCRIPTS_DIST = $(CMDS)/jsdl2gw.sh \
 	$(EM_MAD)/gw_em_mad_prews.sh $(TM_MAD)/gw_tm_mad_dummy.sh \
 	$(TM_MAD)/gw_tm_mad_ftp.sh $(IM_MAD)/gw_im_mad_common.sh \
 	$(IM_MAD)/gw_im_mad_static.sh $(IM_MAD)/gw_im_mad_mds2.sh \
-	$(IM_MAD)/gw_im_mad_mds2_glue.sh $(EM_MAD)/gw_em_mad_ws.sh \
-	$(IM_MAD)/gw_im_mad_mds4.sh
+	$(IM_MAD)/gw_im_mad_mds2_glue.sh $(IM_MAD)/gw_im_mad_mds4.sh \
+	$(EM_MAD)/gw_em_mad_ws.sh
 dist_binSCRIPT_INSTALL = $(INSTALL_SCRIPT)
-dist_scriptsSCRIPT_INSTALL = $(INSTALL_SCRIPT)
-SCRIPTS = $(bin_SCRIPTS) $(dist_bin_SCRIPTS) $(dist_scripts_SCRIPTS)
+SCRIPTS = $(bin_SCRIPTS) $(dist_bin_SCRIPTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir)
 depcomp =
 am__depfiles_maybe =
-COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --tag=CC --mode=compile $(CC) $(DEFS) \
 	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
 	$(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
-LINK = $(LIBTOOL) --tag=CC --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 LEXCOMPILE = $(LEX) $(LFLAGS) $(AM_LFLAGS)
 LTLEXCOMPILE = $(LIBTOOL) --mode=compile $(LEX) $(LFLAGS) $(AM_LFLAGS)
 YLWRAP = $(top_srcdir)/config/ylwrap
@@ -412,19 +416,13 @@ DIST_SOURCES = $(__srcdir__drmaa_libDrmaaJNI_la_SOURCES) \
 	$(__srcdir__scheduler_gw_sched_SOURCES) \
 	$(am____srcdir__test_gwtest_SOURCES_DIST) \
 	$(__srcdir__tm_mad_gw_tm_mad_dummy_bin_SOURCES) \
-	$(__srcdir__tm_mad_gw_tm_mad_ftp_bin_SOURCES)
-am__dist_java_JAVA_DIST = $(EM_MAD)/GW_mad_ws.java $(IM_MAD)/Host.java \
-	$(IM_MAD)/Mds4QueryParser.java $(IM_MAD)/Queue.java \
-	$(CMDS)/GWJTElement.java $(CMDS)/GWJT.java \
-	$(CMDS)/GWJTWriter.java $(CMDS)/JSDLElement.java \
-	$(CMDS)/JSDL.java $(CMDS)/JSDLReader.java \
-	$(CMDS)/JSDLParser.java $(CMDS)/JSDLTranslator.java
-JAVAC = javac
-CLASSPATH_ENV = CLASSPATH=$(JAVAROOT):$(srcdir)/$(JAVAROOT):$$CLASSPATH
-am__dist_jar_DATA_DIST = $(srcdir)/drmaa/drmaa.jar
-dist_jarDATA_INSTALL = $(INSTALL_DATA)
-dist_sysconfDATA_INSTALL = $(INSTALL_DATA)
-DATA = $(dist_jar_DATA) $(dist_sysconf_DATA)
+	$(am____srcdir__tm_mad_gw_tm_mad_ftp_bin_SOURCES_DIST)
+em_ws_jarDATA_INSTALL = $(INSTALL_DATA)
+im_ws_jarDATA_INSTALL = $(INSTALL_DATA)
+jarDATA_INSTALL = $(INSTALL_DATA)
+jsdl_jarDATA_INSTALL = $(INSTALL_DATA)
+DATA = $(em_ws_jar_DATA) $(im_ws_jar_DATA) $(jar_DATA) \
+	$(jsdl_jar_DATA)
 includeHEADERS_INSTALL = $(INSTALL_HEADER)
 HEADERS = $(include_HEADERS)
 ETAGS = etags
@@ -476,6 +474,10 @@ EXEEXT = @EXEEXT@
 F77 = @F77@
 FFLAGS = @FFLAGS@
 GREP = @GREP@
+GRIDFTP_FALSE = @GRIDFTP_FALSE@
+GRIDFTP_TRUE = @GRIDFTP_TRUE@
+GW_GLOBUS_DIRS_FALSE = @GW_GLOBUS_DIRS_FALSE@
+GW_GLOBUS_DIRS_TRUE = @GW_GLOBUS_DIRS_TRUE@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
@@ -550,6 +552,7 @@ incgtmk = @incgtmk@
 includedir = @includedir@
 infodir = @infodir@
 install_sh = @install_sh@
+java_home = @java_home@
 libdir = @libdir@
 libexecdir = @libexecdir@
 localedir = @localedir@
@@ -568,6 +571,15 @@ system = @system@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = subdir-objects no-dependencies
 AM_YFLAGS = -d
+CLASSPATH := $(CLASSPATH):$(GLOBUS_LOCATION)/lib/addressing-1.0.jar:$(GLOBUS_LOCATION)/lib/axis.jar:$(GLOBUS_LOCATION)/lib/cog-jglobus.jar:$(GLOBUS_LOCATION)/lib/globus_delegation_service.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft_client.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft_stubs.jar:$(GLOBUS_LOCATION)/lib/gram-client.jar:$(GLOBUS_LOCATION)/lib/gram-stubs.jar:$(GLOBUS_LOCATION)/lib/gram-utils.jar:$(GLOBUS_LOCATION)/lib/jgss.jar:$(GLOBUS_LOCATION)/lib/wsrf_core.jar:$(GLOBUS_LOCATION)/lib/wsrf_core_stubs.jar:$(GLOBUS_LOCATION)/lib/wsrf_test_unit.jar:$(GLOBUS_LOCATION)/lib/xml-apis.jar:$(GLOBUS_LOCATION)/lib/xalan.jar:$(GLOBUS_LOCATION)/lib/xercesImpl.jar
+
+# Get rid of libtool by default
+LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+
+COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+
 
 # -----------------------------
 # Directory definitions
@@ -592,6 +604,7 @@ UM = $(srcdir)/um
 DB = $(srcdir)/acct
 DRMAA = $(srcdir)/drmaa
 DRMAA_PACK = $(DRMAA)/org/ggf/drmaa
+JAVA_HOME = @java_home@
 
 # --------------------------------
 # Object Dependencies
@@ -733,6 +746,7 @@ EM_MAD_PREWS_SRC = $(EM_MAD)/gw_em_mad_prews_actions.c \
         $(EM_MAD)/gw_em_mad_prews.c \
         $(EM_MAD)/gw_em_mad_prews_pool.c
 
+EM_MAD_WS_SRC = $(EM_MAD)/GW_mad_ws.java
 TM_MAD_SRC = $(TM_MAD)/gw_tm_ftp_mad.c \
         $(TM_MAD)/gw_tm_ftp_queue.c \
         $(TM_MAD)/gw_tm_ftp_stack.c \
@@ -755,6 +769,49 @@ DRMAA_SRC = $(COMMON)/gw_file_parser.c $(CLIENT_SRC) \
         $(COMMON)/gw_template.c $(COMMON)/gw_log.c
 
 DRMAAJNI_SRC = $(DRMAA_PACK)/DrmaaJNI.c
+DRMAA_JAVA_SRC = $(DRMAA_PACK)/AlreadyActiveSessionException.java \
+        $(DRMAA_PACK)/AuthorizationException.java \
+        $(DRMAA_PACK)/ConflictingAttributeValuesException.java \
+        $(DRMAA_PACK)/DefaultContactStringException.java \
+        $(DRMAA_PACK)/DeniedByDrmException.java \
+        $(DRMAA_PACK)/DrmaaException.java \
+        $(DRMAA_PACK)/DrmaaJNI.java \
+        $(DRMAA_PACK)/DrmaaRuntimeException.java \
+        $(DRMAA_PACK)/DrmCommunicationException.java \
+        $(DRMAA_PACK)/DrmsExitException.java \
+        $(DRMAA_PACK)/DrmsInitException.java \
+        $(DRMAA_PACK)/ExitTimeoutException.java \
+        $(DRMAA_PACK)/FileTransferMode.java \
+        $(DRMAA_PACK)/HoldInconsistentStateException.java \
+        $(DRMAA_PACK)/InconsistentStateException.java \
+        $(DRMAA_PACK)/InternalException.java \
+        $(DRMAA_PACK)/InvalidAttributeException.java \
+        $(DRMAA_PACK)/InvalidAttributeFormatException.java \
+        $(DRMAA_PACK)/InvalidAttributeValueException.java \
+        $(DRMAA_PACK)/InvalidContactStringException.java \
+        $(DRMAA_PACK)/InvalidJobException.java \
+        $(DRMAA_PACK)/InvalidJobTemplateException.java \
+        $(DRMAA_PACK)/JobInfoImpl.java \
+        $(DRMAA_PACK)/JobInfo.java \
+        $(DRMAA_PACK)/JobTemplateImpl.java \
+        $(DRMAA_PACK)/JobTemplate.java \
+        $(DRMAA_PACK)/NoActiveSessionException.java \
+        $(DRMAA_PACK)/NoDefaultContactStringSelectedException.java \
+        $(DRMAA_PACK)/NoResourceUsageException.java \
+        $(DRMAA_PACK)/PartialTimestampFormat.java \
+        $(DRMAA_PACK)/PartialTimestamp.java \
+        $(DRMAA_PACK)/ReleaseInconsistentStateException.java \
+        $(DRMAA_PACK)/ResumeInconsistentStateException.java \
+        $(DRMAA_PACK)/SessionException.java \
+        $(DRMAA_PACK)/SessionFactoryImpl.java \
+        $(DRMAA_PACK)/SessionFactory.java \
+        $(DRMAA_PACK)/SessionImpl.java \
+        $(DRMAA_PACK)/Session.java \
+        $(DRMAA_PACK)/SuspendInconsistentStateException.java \
+        $(DRMAA_PACK)/TryLaterException.java \
+        $(DRMAA_PACK)/UnsupportedAttributeException.java \
+        $(DRMAA_PACK)/Version.java
+
 SYSTEM = @system@
 INCLUDES = -I$(top_srcdir)/include \
              $(GLOBUS_INCLUDES) \
@@ -865,12 +922,15 @@ __srcdir__cmds_gwacct_SOURCES = $(CMDS)/gw_acct.c \
 bin_SCRIPTS = 
 
 # ---------------------- IM MADS ------------------------
-dist_bin_SCRIPTS = $(am__append_1) $(am__append_4) \
-	$(TM_MAD)/gw_tm_mad_ftp.sh $(IM_MAD)/gw_im_mad_common.sh \
-	$(IM_MAD)/gw_im_mad_static.sh $(am__append_5) $(am__append_7)
-javadir = @prefix@/bin
-@JSDL_FALSE@@WS_TRUE@dist_java_JAVA = $(am__append_6)
-@JSDL_TRUE@dist_java_JAVA = $(JSDL_SRC) $(am__append_6)
+dist_bin_SCRIPTS = $(am__append_1) $(am__append_5) $(am__append_7) \
+	$(IM_MAD)/gw_im_mad_common.sh $(IM_MAD)/gw_im_mad_static.sh \
+	$(am__append_8) $(am__append_9)
+CLEANFILES = $(am__append_2) $(srcdir)/drmaa/drmaa.jar \
+	$(am__append_10)
+
+# Create gw_jsdl.jar
+@JSDL_TRUE@jsdl_jardir = $(prefix)/lib
+@JSDL_TRUE@jsdl_jar_DATA = $(srcdir)/cmds/gw_jsdl.jar
 __srcdir__scheduler_gw_flood_scheduler_SOURCES = \
         $(SCHED)/gw_flood_scheduler.c \
         $(COMMON_SRC) \
@@ -897,13 +957,17 @@ __srcdir__scheduler_gw_sched_LDFLAGS = -lm
 # ----------------------------
 # DRMAA
 # ----------------------------
-lib_LTLIBRARIES = $(am__append_2)
+lib_LTLIBRARIES = $(am__append_3)
 __srcdir__drmaa_libdrmaa_la_SOURCES = $(DRMAA_SRC)
 __srcdir__drmaa_libDrmaaJNI_la_SOURCES = $(DRMAAJNI_SRC)
 __srcdir__drmaa_libDrmaaJNI_la_LIBADD = $(srcdir)/drmaa/libdrmaa.la
 __srcdir__drmaa_libdrmaa_la_CFLAGS = $(AM_CFLAGS)
+
+# Use libtool to generate drmaa library files
+__srcdir__drmaa_libdrmaa_la_LINK = $(LIBTOOL) --tag=CC --mode=link $(LINK)
+__srcdir__drmaa_libDrmaaJNI_la_LINK = $(LIBTOOL) --tag=CC --mode=link $(LINK)
 @DRMAA_TRUE@jardir = $(prefix)/lib
-@DRMAA_TRUE@dist_jar_DATA = $(srcdir)/drmaa/drmaa.jar
+@DRMAA_TRUE@jar_DATA = $(srcdir)/drmaa/drmaa.jar
 __srcdir__em_mad_gw_em_mad_prews_bin_SOURCES = $(EM_MAD_PREWS_SRC)
 __srcdir__em_mad_gw_em_mad_prews_bin_LDFLAGS = $(GLOBUS_LDFLAGS)
 __srcdir__em_mad_gw_em_mad_prews_bin_CFLAGS = $(GLOBUS_INCLUDES) \
@@ -912,13 +976,13 @@ __srcdir__em_mad_gw_em_mad_prews_bin_CFLAGS = $(GLOBUS_INCLUDES) \
 __srcdir__em_mad_gw_em_mad_prews_bin_LDADD = $(GLOBUS_LIBS) \
         $(GLOBUS_PKG_LIBS)
 
-__srcdir__tm_mad_gw_tm_mad_ftp_bin_SOURCES = $(TM_MAD_SRC)
-__srcdir__tm_mad_gw_tm_mad_ftp_bin_LDFLAGS = $(GLOBUS_LDFLAGS)
-__srcdir__tm_mad_gw_tm_mad_ftp_bin_CFLAGS = $(GLOBUS_INCLUDES) \
-        $(GLOBUS_CFLAGS)
+@GRIDFTP_TRUE@__srcdir__tm_mad_gw_tm_mad_ftp_bin_SOURCES = $(TM_MAD_SRC)
+@GRIDFTP_TRUE@__srcdir__tm_mad_gw_tm_mad_ftp_bin_LDFLAGS = $(GLOBUS_LDFLAGS)
+@GRIDFTP_TRUE@__srcdir__tm_mad_gw_tm_mad_ftp_bin_CFLAGS = $(GLOBUS_INCLUDES) \
+@GRIDFTP_TRUE@        $(GLOBUS_CFLAGS)
 
-__srcdir__tm_mad_gw_tm_mad_ftp_bin_LDADD = $(GLOBUS_LIBS) \
-        $(GLOBUS_PKG_LIBS)
+@GRIDFTP_TRUE@__srcdir__tm_mad_gw_tm_mad_ftp_bin_LDADD = $(GLOBUS_LIBS) \
+@GRIDFTP_TRUE@        $(GLOBUS_PKG_LIBS)
 
 __srcdir__tm_mad_gw_tm_mad_dummy_bin_SOURCES = $(TM_MAD_DUMMY_SRC)
 __srcdir__tm_mad_gw_tm_mad_dummy_bin_LDFLAGS = $(GLOBUS_LDFLAGS)
@@ -934,30 +998,18 @@ __srcdir__tm_mad_gw_tm_mad_dummy_bin_LDADD = $(GLOBUS_LIBS) \
 # --------------------------------
 JAVAROOT = .
 
-# ----------------------------
-# AUX SCRIPTS
-# ----------------------------
-scriptsdir = @prefix@/scripts
-dist_scripts_SCRIPTS = $(top_srcdir)/scripts/wrapper.sh \
-        $(top_srcdir)/scripts/monitor.sh
+# ---------------------- IM MADS ------------------------
+@WS_TRUE@im_ws_jardir = $(prefix)/lib
+@WS_TRUE@im_ws_jar_DATA = $(srcdir)/im_mad/gw_im_mad_ws.jar
 
-
-# ----------------------------
-# ETC
-# ----------------------------
-
-#dist_sysconf_DATA = $(top_srcdir)/etc/gwd.conf $(top_srcdir)/etc/job_template.default \
-#        $(top_srcdir)/etc/im_examples/host.list $(top_srcdir)/etc/im_examples/host_glue.list \
-#        $(top_srcdir)/etc/im_examples/machine1.attributes \
-#        $(top_srcdir)/etc/im_examples/machine2.attributes
-dist_sysconf_DATA = $(top_srcdir)/etc/gwd.conf $(top_srcdir)/etc/job_template.default \
-                    $(top_srcdir)/etc/sched.conf
-
+# ---------------------- EM MADS ------------------------
+@WS_TRUE@em_ws_jardir = $(prefix)/lib
+@WS_TRUE@em_ws_jar_DATA = $(srcdir)/em_mad/gw_em_mad_ws.jar
 
 # ----------------------------
 # TESTS
 # ----------------------------
-@TESTS_TRUE@testdir = @prefix@/test
+@TESTS_TRUE@testdir = @prefix@/test/gridway
 @TESTS_TRUE@__srcdir__test_gwtest_SOURCES = test/gw_test.c \
 @TESTS_TRUE@        $(CMDS)/gw_cmds_common.c \
 @TESTS_TRUE@        $(CLIENT_SRC) \
@@ -1031,7 +1083,7 @@ $(srcdir)/drmaa/$(am__dirstamp):
 	@$(mkdir_p) $(srcdir)/drmaa
 	@: > $(srcdir)/drmaa/$(am__dirstamp)
 $(srcdir)/drmaa/libDrmaaJNI.la: $(__srcdir__drmaa_libDrmaaJNI_la_OBJECTS) $(__srcdir__drmaa_libDrmaaJNI_la_DEPENDENCIES) $(srcdir)/drmaa/$(am__dirstamp)
-	$(LINK) $(am___srcdir__drmaa_libDrmaaJNI_la_rpath) $(__srcdir__drmaa_libDrmaaJNI_la_LDFLAGS) $(__srcdir__drmaa_libDrmaaJNI_la_OBJECTS) $(__srcdir__drmaa_libDrmaaJNI_la_LIBADD) $(LIBS)
+	$(__srcdir__drmaa_libDrmaaJNI_la_LINK) $(am___srcdir__drmaa_libDrmaaJNI_la_rpath) $(__srcdir__drmaa_libDrmaaJNI_la_LDFLAGS) $(__srcdir__drmaa_libDrmaaJNI_la_OBJECTS) $(__srcdir__drmaa_libDrmaaJNI_la_LIBADD) $(LIBS)
 $(COMMON)/$(am__dirstamp):
 	@$(mkdir_p) $(COMMON)
 	@: > $(COMMON)/$(am__dirstamp)
@@ -1083,7 +1135,7 @@ $(COMMON)/__srcdir__drmaa_libdrmaa_la-gw_template.lo:  \
 $(COMMON)/__srcdir__drmaa_libdrmaa_la-gw_log.lo:  \
 	$(COMMON)/$(am__dirstamp)
 $(srcdir)/drmaa/libdrmaa.la: $(__srcdir__drmaa_libdrmaa_la_OBJECTS) $(__srcdir__drmaa_libdrmaa_la_DEPENDENCIES) $(srcdir)/drmaa/$(am__dirstamp)
-	$(LINK) $(am___srcdir__drmaa_libdrmaa_la_rpath) $(__srcdir__drmaa_libdrmaa_la_LDFLAGS) $(__srcdir__drmaa_libdrmaa_la_OBJECTS) $(__srcdir__drmaa_libdrmaa_la_LIBADD) $(LIBS)
+	$(__srcdir__drmaa_libdrmaa_la_LINK) $(am___srcdir__drmaa_libdrmaa_la_rpath) $(__srcdir__drmaa_libdrmaa_la_LDFLAGS) $(__srcdir__drmaa_libdrmaa_la_OBJECTS) $(__srcdir__drmaa_libdrmaa_la_LIBADD) $(LIBS)
 install-binPROGRAMS: $(bin_PROGRAMS)
 	@$(NORMAL_INSTALL)
 	test -z "$(bindir)" || $(mkdir_p) "$(DESTDIR)$(bindir)"
@@ -1432,25 +1484,6 @@ uninstall-dist_binSCRIPTS:
 	  echo " rm -f '$(DESTDIR)$(bindir)/$$f'"; \
 	  rm -f "$(DESTDIR)$(bindir)/$$f"; \
 	done
-install-dist_scriptsSCRIPTS: $(dist_scripts_SCRIPTS)
-	@$(NORMAL_INSTALL)
-	test -z "$(scriptsdir)" || $(mkdir_p) "$(DESTDIR)$(scriptsdir)"
-	@list='$(dist_scripts_SCRIPTS)'; for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  if test -f $$d$$p; then \
-	    f=`echo "$$p" | sed 's|^.*/||;$(transform)'`; \
-	    echo " $(dist_scriptsSCRIPT_INSTALL) '$$d$$p' '$(DESTDIR)$(scriptsdir)/$$f'"; \
-	    $(dist_scriptsSCRIPT_INSTALL) "$$d$$p" "$(DESTDIR)$(scriptsdir)/$$f"; \
-	  else :; fi; \
-	done
-
-uninstall-dist_scriptsSCRIPTS:
-	@$(NORMAL_UNINSTALL)
-	@list='$(dist_scripts_SCRIPTS)'; for p in $$list; do \
-	  f=`echo "$$p" | sed 's|^.*/||;$(transform)'`; \
-	  echo " rm -f '$(DESTDIR)$(scriptsdir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(scriptsdir)/$$f"; \
-	done
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -1756,64 +1789,73 @@ clean-libtool:
 distclean-libtool:
 	-rm -f libtool
 uninstall-info-am:
-
-classdist_java.stamp: $(dist_java_JAVA)
-	@if test -n "$?"; then \
-	  echo '$(CLASSPATH_ENV) $(JAVAC) -d $(JAVAROOT) $(AM_JAVACFLAGS) $(JAVACFLAGS) $?' ; \
-	  $(CLASSPATH_ENV) $(JAVAC) -d $(JAVAROOT) \
-	    $(AM_JAVACFLAGS) $(JAVACFLAGS) $?; \
-	else :; fi
-	echo timestamp > classdist_java.stamp
-install-dist_javaJAVA: classdist_java.stamp
+install-em_ws_jarDATA: $(em_ws_jar_DATA)
 	@$(NORMAL_INSTALL)
-	test -z "$(javadir)" || $(mkdir_p) "$(DESTDIR)$(javadir)"
-	@test -z "$(dist_java_JAVA)" || for p in *.class; do \
-	  echo " $(INSTALL_DATA) '$$p' '$(DESTDIR)$(javadir)/$$p'"; \
-	  $(INSTALL_DATA) "$$p" "$(DESTDIR)$(javadir)/$$p"; \
-	done
-
-uninstall-dist_javaJAVA:
-	@$(NORMAL_UNINSTALL)
-	@test -z "$(dist_java_JAVA)" || for p in *.class; do \
-	  echo " rm -f '$(DESTDIR)$(javadir)/$$p'"; \
-	  rm -f "$(DESTDIR)$(javadir)/$$p"; \
-	done
-
-clean-dist_javaJAVA:
-	-rm -f *.class classdist_java.stamp
-install-dist_jarDATA: $(dist_jar_DATA)
-	@$(NORMAL_INSTALL)
-	test -z "$(jardir)" || $(mkdir_p) "$(DESTDIR)$(jardir)"
-	@list='$(dist_jar_DATA)'; for p in $$list; do \
+	test -z "$(em_ws_jardir)" || $(mkdir_p) "$(DESTDIR)$(em_ws_jardir)"
+	@list='$(em_ws_jar_DATA)'; for p in $$list; do \
 	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
 	  f=$(am__strip_dir) \
-	  echo " $(dist_jarDATA_INSTALL) '$$d$$p' '$(DESTDIR)$(jardir)/$$f'"; \
-	  $(dist_jarDATA_INSTALL) "$$d$$p" "$(DESTDIR)$(jardir)/$$f"; \
+	  echo " $(em_ws_jarDATA_INSTALL) '$$d$$p' '$(DESTDIR)$(em_ws_jardir)/$$f'"; \
+	  $(em_ws_jarDATA_INSTALL) "$$d$$p" "$(DESTDIR)$(em_ws_jardir)/$$f"; \
 	done
 
-uninstall-dist_jarDATA:
+uninstall-em_ws_jarDATA:
 	@$(NORMAL_UNINSTALL)
-	@list='$(dist_jar_DATA)'; for p in $$list; do \
+	@list='$(em_ws_jar_DATA)'; for p in $$list; do \
+	  f=$(am__strip_dir) \
+	  echo " rm -f '$(DESTDIR)$(em_ws_jardir)/$$f'"; \
+	  rm -f "$(DESTDIR)$(em_ws_jardir)/$$f"; \
+	done
+install-im_ws_jarDATA: $(im_ws_jar_DATA)
+	@$(NORMAL_INSTALL)
+	test -z "$(im_ws_jardir)" || $(mkdir_p) "$(DESTDIR)$(im_ws_jardir)"
+	@list='$(im_ws_jar_DATA)'; for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  f=$(am__strip_dir) \
+	  echo " $(im_ws_jarDATA_INSTALL) '$$d$$p' '$(DESTDIR)$(im_ws_jardir)/$$f'"; \
+	  $(im_ws_jarDATA_INSTALL) "$$d$$p" "$(DESTDIR)$(im_ws_jardir)/$$f"; \
+	done
+
+uninstall-im_ws_jarDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(im_ws_jar_DATA)'; for p in $$list; do \
+	  f=$(am__strip_dir) \
+	  echo " rm -f '$(DESTDIR)$(im_ws_jardir)/$$f'"; \
+	  rm -f "$(DESTDIR)$(im_ws_jardir)/$$f"; \
+	done
+install-jarDATA: $(jar_DATA)
+	@$(NORMAL_INSTALL)
+	test -z "$(jardir)" || $(mkdir_p) "$(DESTDIR)$(jardir)"
+	@list='$(jar_DATA)'; for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  f=$(am__strip_dir) \
+	  echo " $(jarDATA_INSTALL) '$$d$$p' '$(DESTDIR)$(jardir)/$$f'"; \
+	  $(jarDATA_INSTALL) "$$d$$p" "$(DESTDIR)$(jardir)/$$f"; \
+	done
+
+uninstall-jarDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(jar_DATA)'; for p in $$list; do \
 	  f=$(am__strip_dir) \
 	  echo " rm -f '$(DESTDIR)$(jardir)/$$f'"; \
 	  rm -f "$(DESTDIR)$(jardir)/$$f"; \
 	done
-install-dist_sysconfDATA: $(dist_sysconf_DATA)
+install-jsdl_jarDATA: $(jsdl_jar_DATA)
 	@$(NORMAL_INSTALL)
-	test -z "$(sysconfdir)" || $(mkdir_p) "$(DESTDIR)$(sysconfdir)"
-	@list='$(dist_sysconf_DATA)'; for p in $$list; do \
+	test -z "$(jsdl_jardir)" || $(mkdir_p) "$(DESTDIR)$(jsdl_jardir)"
+	@list='$(jsdl_jar_DATA)'; for p in $$list; do \
 	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
 	  f=$(am__strip_dir) \
-	  echo " $(dist_sysconfDATA_INSTALL) '$$d$$p' '$(DESTDIR)$(sysconfdir)/$$f'"; \
-	  $(dist_sysconfDATA_INSTALL) "$$d$$p" "$(DESTDIR)$(sysconfdir)/$$f"; \
+	  echo " $(jsdl_jarDATA_INSTALL) '$$d$$p' '$(DESTDIR)$(jsdl_jardir)/$$f'"; \
+	  $(jsdl_jarDATA_INSTALL) "$$d$$p" "$(DESTDIR)$(jsdl_jardir)/$$f"; \
 	done
 
-uninstall-dist_sysconfDATA:
+uninstall-jsdl_jarDATA:
 	@$(NORMAL_UNINSTALL)
-	@list='$(dist_sysconf_DATA)'; for p in $$list; do \
+	@list='$(jsdl_jar_DATA)'; for p in $$list; do \
 	  f=$(am__strip_dir) \
-	  echo " rm -f '$(DESTDIR)$(sysconfdir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(sysconfdir)/$$f"; \
+	  echo " rm -f '$(DESTDIR)$(jsdl_jardir)/$$f'"; \
+	  rm -f "$(DESTDIR)$(jsdl_jardir)/$$f"; \
 	done
 install-includeHEADERS: $(include_HEADERS)
 	@$(NORMAL_INSTALL)
@@ -1882,7 +1924,7 @@ distclean-tags:
 	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
 
 distdir: $(DISTFILES)
-	$(mkdir_p) $(distdir)/$(CMDS) $(distdir)/$(COMMON) $(distdir)/$(EM_MAD) $(distdir)/$(GWD) $(distdir)/$(HOST) $(distdir)/$(IM_MAD) $(distdir)/$(JOB) $(distdir)/$(TM_MAD) $(distdir)/../etc $(distdir)/../include $(distdir)/../scripts $(distdir)/drmaa
+	$(mkdir_p) $(distdir)/$(CMDS) $(distdir)/$(COMMON) $(distdir)/$(EM_MAD) $(distdir)/$(GWD) $(distdir)/$(HOST) $(distdir)/$(IM_MAD) $(distdir)/$(JOB) $(distdir)/$(TM_MAD) $(distdir)/../include
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
@@ -1909,14 +1951,17 @@ distdir: $(DISTFILES)
 	    || exit 1; \
 	  fi; \
 	done
+	$(MAKE) $(AM_MAKEFLAGS) \
+	  top_distdir="$(top_distdir)" distdir="$(distdir)" \
+	  dist-hook
 check-am: all-am
 check: check-am
-all-am: Makefile $(LTLIBRARIES) $(PROGRAMS) $(SCRIPTS) \
-		classdist_java.stamp $(DATA) $(HEADERS)
+all-am: Makefile $(LTLIBRARIES) $(PROGRAMS) $(SCRIPTS) $(DATA) \
+		$(HEADERS)
 install-binPROGRAMS: install-libLTLIBRARIES
 
 installdirs:
-	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(testdir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(scriptsdir)" "$(DESTDIR)$(javadir)" "$(DESTDIR)$(jardir)" "$(DESTDIR)$(sysconfdir)" "$(DESTDIR)$(includedir)"; do \
+	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(testdir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(em_ws_jardir)" "$(DESTDIR)$(im_ws_jardir)" "$(DESTDIR)$(jardir)" "$(DESTDIR)$(jsdl_jardir)" "$(DESTDIR)$(includedir)"; do \
 	  test -z "$$dir" || $(mkdir_p) "$$dir"; \
 	done
 install: install-am
@@ -1936,6 +1981,7 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
@@ -1985,9 +2031,8 @@ maintainer-clean-generic:
 	-rm -f $(JOB)/gw_job_template_var_parser.c
 clean: clean-am
 
-clean-am: clean-binPROGRAMS clean-dist_javaJAVA clean-generic \
-	clean-libLTLIBRARIES clean-libtool clean-testPROGRAMS \
-	mostlyclean-am
+clean-am: clean-binPROGRAMS clean-generic clean-libLTLIBRARIES \
+	clean-libtool clean-testPROGRAMS mostlyclean-am
 
 distclean: distclean-am
 	-rm -f Makefile
@@ -2004,13 +2049,12 @@ info: info-am
 
 info-am:
 
-install-data-am: install-dist_jarDATA install-dist_javaJAVA \
-	install-dist_scriptsSCRIPTS install-includeHEADERS \
+install-data-am: install-em_ws_jarDATA install-im_ws_jarDATA \
+	install-includeHEADERS install-jarDATA install-jsdl_jarDATA \
 	install-testPROGRAMS
 
 install-exec-am: install-binPROGRAMS install-binSCRIPTS \
-	install-dist_binSCRIPTS install-dist_sysconfDATA \
-	install-libLTLIBRARIES
+	install-dist_binSCRIPTS install-libLTLIBRARIES
 
 install-info: install-info-am
 
@@ -2036,33 +2080,31 @@ ps: ps-am
 ps-am:
 
 uninstall-am: uninstall-binPROGRAMS uninstall-binSCRIPTS \
-	uninstall-dist_binSCRIPTS uninstall-dist_jarDATA \
-	uninstall-dist_javaJAVA uninstall-dist_scriptsSCRIPTS \
-	uninstall-dist_sysconfDATA uninstall-includeHEADERS \
-	uninstall-info-am uninstall-libLTLIBRARIES \
-	uninstall-testPROGRAMS
+	uninstall-dist_binSCRIPTS uninstall-em_ws_jarDATA \
+	uninstall-im_ws_jarDATA uninstall-includeHEADERS \
+	uninstall-info-am uninstall-jarDATA uninstall-jsdl_jarDATA \
+	uninstall-libLTLIBRARIES uninstall-testPROGRAMS
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean clean-binPROGRAMS \
-	clean-dist_javaJAVA clean-generic clean-libLTLIBRARIES \
-	clean-libtool clean-testPROGRAMS ctags distclean \
-	distclean-compile distclean-generic distclean-libtool \
-	distclean-tags distdir dvi dvi-am html html-am info info-am \
-	install install-am install-binPROGRAMS install-binSCRIPTS \
-	install-data install-data-am install-dist_binSCRIPTS \
-	install-dist_jarDATA install-dist_javaJAVA \
-	install-dist_scriptsSCRIPTS install-dist_sysconfDATA \
-	install-exec install-exec-am install-includeHEADERS \
-	install-info install-info-am install-libLTLIBRARIES \
+	clean-generic clean-libLTLIBRARIES clean-libtool \
+	clean-testPROGRAMS ctags dist-hook distclean distclean-compile \
+	distclean-generic distclean-libtool distclean-tags distdir dvi \
+	dvi-am html html-am info info-am install install-am \
+	install-binPROGRAMS install-binSCRIPTS install-data \
+	install-data-am install-dist_binSCRIPTS install-em_ws_jarDATA \
+	install-exec install-exec-am install-im_ws_jarDATA \
+	install-includeHEADERS install-info install-info-am \
+	install-jarDATA install-jsdl_jarDATA install-libLTLIBRARIES \
 	install-man install-strip install-testPROGRAMS installcheck \
 	installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
 	tags uninstall uninstall-am uninstall-binPROGRAMS \
 	uninstall-binSCRIPTS uninstall-dist_binSCRIPTS \
-	uninstall-dist_jarDATA uninstall-dist_javaJAVA \
-	uninstall-dist_scriptsSCRIPTS uninstall-dist_sysconfDATA \
-	uninstall-includeHEADERS uninstall-info-am \
-	uninstall-libLTLIBRARIES uninstall-testPROGRAMS
+	uninstall-em_ws_jarDATA uninstall-im_ws_jarDATA \
+	uninstall-includeHEADERS uninstall-info-am uninstall-jarDATA \
+	uninstall-jsdl_jarDATA uninstall-libLTLIBRARIES \
+	uninstall-testPROGRAMS
 
 
 # -----------------------------
@@ -2070,13 +2112,53 @@ uninstall-am: uninstall-binPROGRAMS uninstall-binSCRIPTS \
 # -----------------------------
 
 @incgtmk@
+@JSDL_TRUE@$(srcdir)/cmds/gw_jsdl.jar:
+@JSDL_TRUE@	@rm -f lib/gw_jsdl.jar
+@JSDL_TRUE@	@mkdir -p $(CMDS)/package
+@JSDL_TRUE@	$(JAVAC_PATH) $(JSDL_SRC) \
+@JSDL_TRUE@	    -classpath $(CLASSPATH):$(CMDS) \
+@JSDL_TRUE@        -d $(CMDS)/package
+@JSDL_TRUE@	jar cf $(srcdir)/cmds/gw_jsdl.jar -C $(CMDS)/package/ .
+@JSDL_TRUE@	@rm -rf $(CMDS)/package
 @DRMAA_TRUE@$(srcdir)/drmaa/drmaa.jar:
 @DRMAA_TRUE@	@rm -f lib/drmaa.jar
 @DRMAA_TRUE@	@mkdir -p $(DRMAA)/package
-@DRMAA_TRUE@	$(JAVAC) $(srcdir)/drmaa/org/ggf/drmaa/*.java -classpath $(DRMAA) \
+@DRMAA_TRUE@	$(JAVAC_PATH) $(DRMAA_JAVA_SRC) \
+@DRMAA_TRUE@	    -classpath $(DRMAA) \
 @DRMAA_TRUE@        -d $(DRMAA)/package
 @DRMAA_TRUE@	jar cf $(srcdir)/drmaa/drmaa.jar -C $(DRMAA)/package/ .
 @DRMAA_TRUE@	@rm -rf $(DRMAA)/package
+@WS_TRUE@$(srcdir)/im_mad/gw_im_mad_ws.jar:
+@WS_TRUE@	@rm -f lib/gw_im_mad_ws.jar
+@WS_TRUE@	@mkdir -p $(IM_MAD)/package 
+@WS_TRUE@	$(JAVAC_PATH) $(IM_MAD_MDS4_SRC) \
+@WS_TRUE@	    -classpath $(CLASSPATH):$(IM_MAD) \
+@WS_TRUE@        -d $(IM_MAD)/package
+@WS_TRUE@	jar cf $(srcdir)/im_mad/gw_im_mad_ws.jar -C $(IM_MAD)/package/ .
+@WS_TRUE@	@rm -rf $(IM_MAD)/package
+@WS_TRUE@$(srcdir)/em_mad/gw_em_mad_ws.jar:
+@WS_TRUE@	@rm -f lib/gw_em_mad_ws.jar
+@WS_TRUE@	@mkdir -p $(EM_MAD)/package
+@WS_TRUE@	$(JAVAC_PATH) $(EM_MAD_WS_SRC) \
+@WS_TRUE@	    -classpath $(CLASSPATH):$(EM_MAD) \
+@WS_TRUE@        -d $(EM_MAD)/package
+@WS_TRUE@	jar cf $(srcdir)/em_mad/gw_em_mad_ws.jar -C $(EM_MAD)/package/ .
+@WS_TRUE@	@rm -rf $(EM_MAD)/package
+
+# ----------------------------
+# Distribute JAVA sources
+# ----------------------------
+
+dist-hook:
+	@mkdir -p $(distdir)/cmds
+	@mkdir -p $(distdir)/im_mad
+	@mkdir -p $(distdir)/em_mad
+	@mkdir -p $(distdir)/drmaa/org/ggf/drmaa
+	@cp $(JSDL_SRC) $(distdir)/cmds/
+	@cp $(IM_MAD_MDS4_SRC) $(distdir)/im_mad
+	@cp $(EM_MAD_WS_SRC) $(distdir)/em_mad
+	@cp $(DRMAA_JAVA_SRC) $(distdir)/drmaa/org/ggf/drmaa
+	@cp $(DRMAA_PACK)/DrmaaJNI.h $(distdir)/drmaa/org/ggf/drmaa
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

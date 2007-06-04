@@ -56,16 +56,19 @@
 
 #define GW_POLL_INTERVAL_DEFAULT        60
 
-#define GW_WRAPPER_DEFAULT "scripts/wrapper.sh"
+#define GW_MAX_ACTIVE_IM_QUERIES_DEFAULT 4
+
+#define GW_WRAPPER_DEFAULT "libexec/gw_wrapper.sh"
 
 /* MADs */
 #define GW_MAX_MADS       5
 
-#define GW_MAD_NAME_INDEX 0
-#define GW_MAD_PATH_INDEX 1
-#define GW_MAD_ARGS_INDEX 2
-#define GW_MAD_TM_INDEX   3
-#define GW_MAD_EM_INDEX   4
+#define GW_MAD_NAME_INDEX     0
+#define GW_MAD_PATH_INDEX     1
+#define GW_MAD_ARGS_INDEX     2
+#define GW_MAD_RSL_MODE_INDEX 3
+#define GW_MAD_TM_INDEX       3
+#define GW_MAD_EM_INDEX       4
 
 /* -------------------------------------------------------------------- */
 /* -------------------------------------------------------------------- */
@@ -93,6 +96,8 @@ typedef struct gw_conf_s
     time_t poll_interval;
     time_t discovery_interval;
     time_t monitoring_interval;
+
+    int max_active_im_queries;
     
     int  gwd_port;
     int  max_number_of_clients;
@@ -125,6 +130,7 @@ typedef enum {
     DISCOVERY_INTERVAL,
     MONITORING_INTERVAL,
     POLL_INTERVAL,
+    MAX_ACTIVE_IM_QUERIES,
     IM_MAD,
     TM_MAD,
     EM_MAD,

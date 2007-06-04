@@ -29,7 +29,7 @@
 
 /* -------------------------------------------------------------------------- */
 
-static gw_im_t gw_im;
+gw_im_t gw_im;
 
 /* -------------------------------------------------------------------------- */
 
@@ -57,8 +57,6 @@ gw_im_t* gw_im_init()
     /* Register IM events                                    */
     /*   - FINALIZE                                          */
     /*   - TIMER                                             */
-    /*   - GW_IM_DISCOVER                                    */
-    /*   - GW_IM_MONITOR                                     */
     /* ----------------------------------------------------- */    
 
     gw_am_register(GW_ACTION_FINALIZE, 
@@ -119,7 +117,8 @@ void gw_im_finalize()
     /* ----------------------------------------------------- */    
 
     pthread_cancel(gw_im.listener_thread);
-
+    pthread_join(gw_im.listener_thread, NULL);
+    
     /* ----------------------------------------------------- */    
     
     pthread_mutex_unlock(&(gw_im.mutex));
@@ -260,7 +259,7 @@ void gw_im_start ( void *_null )
     pthread_sigmask(SIG_BLOCK,&sig_group,NULL);
 
     /* ----------------------------------------------------- */
-    /* Start the listener thread                             */
+    /* Start the listener thread (MADS must be registered)   */
     /* ----------------------------------------------------- */    
    
     pthread_mutex_lock(&(gw_im.mutex));
@@ -294,13 +293,15 @@ void gw_im_start ( void *_null )
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
 
-int gw_im_set_pipes (fd_set *in_pipes)
+inline int gw_im_set_pipes (fd_set *in_pipes, int *num_mads)
 {
 	int greater = 0;
 	int i;
 	int fd;
 
     pthread_mutex_lock(&(gw_im.mutex));
+    
+    *num_mads = gw_im.registered_mads;
     	
     FD_ZERO(in_pipes);
                 
@@ -308,10 +309,13 @@ int gw_im_set_pipes (fd_set *in_pipes)
     {
     	fd = gw_im.im_mad[i].mad_im_pipe;
     	
-        FD_SET(fd, in_pipes);
+        if (fd != -1)
+        {
+            FD_SET(fd, in_pipes);
             
-        if ( fd > greater )
-        	greater = fd;
+            if ( fd > greater )
+        	   greater = fd;
+        }
     }	
 
     pthread_mutex_unlock(&(gw_im.mutex));

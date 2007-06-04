@@ -236,7 +236,7 @@ void gw_scheduler_del_user(gw_scheduler_t * sched, int uid)
     sched->num_users--;
     
     sched->users = realloc((void *)sched->users,
-                           (sched->num_users) * sizeof(gw_sch_user_t));
+                           (sched->num_users) * sizeof(gw_sch_host_t));
 }
 
 /* -------------------------------------------------------------------------- */

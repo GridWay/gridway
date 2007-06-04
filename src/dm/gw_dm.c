@@ -21,6 +21,9 @@
 #include <stdarg.h>
 #include <time.h>
 #include <signal.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <pthread.h>
 
 #include "gw_dm.h"
 #include "gw_log.h"
@@ -275,6 +278,14 @@ void gw_dm_finalize()
     /* ---------------------------------- */    
 
     gw_am_destroy(&(gw_dm.am));
+
+    /* ---------------------------------- */
+    /* 4.- Cancel listener Thread         */
+    /* ---------------------------------- */    
+
+    pthread_cancel(gw_dm.listener_thread);
+    
+    pthread_join(gw_dm.listener_thread, NULL);
     
     /* ---------------------------------- */
     /* 3.- Stop Registered MADs           */
@@ -282,12 +293,6 @@ void gw_dm_finalize()
     
     for (i=0; i<gw_dm.registered_mads; i++)
         gw_dm_mad_finalize (&(gw_dm.dm_mad[i]));
-
-    /* ---------------------------------- */
-    /* 4.- Cancel listener Thread         */
-    /* ---------------------------------- */    
-
-    pthread_cancel(gw_dm.listener_thread);
 
     pthread_mutex_unlock(&(gw_dm.mutex));
 
@@ -458,4 +463,64 @@ void gw_dm_start ()
     gw_log_print("DM",'I',"Dispatch Manager started.\n");
              
     gw_am_loop(&(gw_dm.am), gw_conf.scheduling_interval, NULL);
+}
+
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+
+inline gw_dm_mad_t * gw_dm_get_mad_by_fd(int fd)
+{
+    int i;
+    gw_dm_mad_t * mad = NULL;
+
+    pthread_mutex_lock(&(gw_dm.mutex));
+            
+    for (i=0; i<gw_dm.registered_mads; i++)
+    {
+        if ( fd == gw_dm.dm_mad[i].mad_dm_pipe)
+        {
+            mad = &(gw_dm.dm_mad[i]);
+            break;
+        }
+    }
+
+    pthread_mutex_unlock(&(gw_dm.mutex));
+        
+    return mad; 
+}
+
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+
+inline int gw_dm_set_pipes (fd_set *in_pipes, int *num_mads)
+{
+    int greater = 0;
+    int i;
+    int fd;
+    
+    pthread_mutex_lock(&(gw_dm.mutex));
+    
+    *num_mads = gw_dm.registered_mads;
+    
+    FD_ZERO(in_pipes);
+    greater = 0;
+        
+    for (i= 0; i<gw_dm.registered_mads; i++)
+    {
+        fd = gw_dm.dm_mad[i].mad_dm_pipe;
+            
+        if (fd != -1)
+        {
+            FD_SET(fd, in_pipes);
+            
+            if ( fd > greater )
+                greater = fd;
+        }            
+    }
+    
+    pthread_mutex_unlock(&(gw_dm.mutex));
+    
+    return greater;
 }

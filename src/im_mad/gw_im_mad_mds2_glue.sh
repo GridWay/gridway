@@ -18,14 +18,22 @@
 # -------------------------------------------------------------------------- 
 
 dynamic_discover (){
+	
     if [ -n "$SERVER" ]
     then
         TMPFILE=".search.$$.$RANDOM"
         ERRFILE=".error.$$.$RANDOM"
-            
-        nice -n $PRIORITY grid-info-search -x -LLL -nowrap -p 2170 -h $SERVER -b $BASE \
+
+		if [ "x$PORTNUMBER" = "x" ]
+		then
+    	    nice -n $PRIORITY grid-info-search -x -LLL -nowrap -h $SERVER -b $BASE \
                 "(&(objectclass=GlueCluster)$HOSTFILTER)" GlueClusterUniqueID \
                 > $TMPFILE 2>$ERRFILE
+		else
+	        nice -n $PRIORITY grid-info-search -x -LLL -nowrap -p $PORTNUMBER -h $SERVER -b $BASE \
+                "(&(objectclass=GlueCluster)$HOSTFILTER)" GlueClusterUniqueID \
+                > $TMPFILE 2>$ERRFILE		
+		fi            
 
         if [ $? -eq 0 ]
         then
@@ -49,11 +57,17 @@ dynamic_discover (){
 }
 
 dynamic_monitor (){
+		
     TMPFILE=".search.$$.$1.$RANDOM"
     ERRFILE=".error.$$.$1.$RANDOM"
-    
-    nice -n $PRIORITY grid-info-search -x -LLL -nowrap -h $2 > $TMPFILE 2> $ERRFILE
-            
+
+	if [ "x$PORTNUMBER" = "x" ]
+	then
+		nice -n $PRIORITY grid-info-search -x -LLL -nowrap -h $2 > $TMPFILE 2> $ERRFILE
+	else
+		nice -n $PRIORITY grid-info-search -x -LLL -nowrap -p $PORTNUMBER -h $2 > $TMPFILE 2> $ERRFILE
+	fi    
+             
     if [ $? -eq 0 ]
     then
         CPU_MHZ=0; CPU_FREE=0; CPU_SMP=0; NODECOUNT=0; FREE_MEM_MB=0
@@ -102,7 +116,7 @@ dynamic_monitor (){
                 "SIZE_MEM_MB=$SIZE_MEM_MB FREE_MEM_MB=$FREE_MEM_MB" \
                 "SIZE_DISK_MB=0 FREE_DISK_MB=0" \
                 "FORK_NAME=\"jobmanager-fork\"" \
-                "LRMS_NAME=\"$LRMS_NAME\" LRMS_TYPE=\"$LRMS_TYPE\""`
+                "LRMS_NAME=\"$LRMS_NAME\" LRMS_TYPE=\"$LRMS_TYPE\" $3"`
 
             for ((j=0, i=0; i<${#QUEUE_NAME[@]}; i++,j++))
             do
@@ -132,5 +146,25 @@ dynamic_monitor (){
 BASE="mds-vo-name=local,o=grid"
 HOSTFILTER=""
 QUEUEFILTER=""
+
+# Common initialization
+if [ -z "${GW_LOCATION}" ]; then
+    echo "Please, set GW_LOCATION variable."
+    exit -1
+fi
+
+. $GW_LOCATION/bin/gw_mad_common.sh
+
+setup_globus
+
+# Common initialization
+if [ -z "${GW_LOCATION}" ]; then
+    echo "Please, set GW_LOCATION variable."
+    exit -1
+fi
+
+. $GW_LOCATION/bin/gw_mad_common.sh
+
+setup_globus
 
 . $GW_LOCATION/bin/gw_im_mad_common.sh

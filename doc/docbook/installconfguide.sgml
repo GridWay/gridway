@@ -672,7 +672,7 @@ $GW_LOCATION/
     |
     +--- lib/       compiled libraries
     |
-    +--- scripts/   wrapper and monitor scripts
+    +--- libexec/   wrapper and monitor scripts
     |
     +--- test/      test suite [Optional]
     |
@@ -805,7 +805,7 @@ $GW_LOCATION/
     |
     +--- lib/       compiled libraries
     |
-    +--- scripts/   wrapper and monitor scripts
+    +--- libexec/   wrapper and monitor scripts
     |
     +--- test/      test suite [Optional]
     |

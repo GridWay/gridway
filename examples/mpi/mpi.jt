@@ -1,5 +1,5 @@
 EXECUTABLE = mpi
-ARGUMENTS  = 
+ARGUMENTS  =
 
 INPUT_FILES   = 
 OUTPUT_FILES  = 
@@ -9,7 +9,7 @@ ENVIRONMENT   =
 STDOUT_FILE =   stdout.${JOB_ID}
 STDERR_FILE =   stderr.${JOB_ID}
 
-REQUIREMENTS = LRMS_NAME != "jobmanager-*"
+REQUIREMENTS = LRMS_TYPE != "Fork"
 RANK         = CPU_MHZ
 
 TYPE = "mpi"

@@ -125,6 +125,8 @@ void gw_tm_finalize()
     /* ---------------------------------- */    
 
     pthread_cancel(gw_tm.listener_thread);
+    
+    pthread_join(gw_tm.listener_thread, NULL);
 
     pthread_mutex_unlock(&(gw_tm.mutex));
 

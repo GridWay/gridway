@@ -174,7 +174,7 @@ execution(){
     
     chmod +x ${GW_EXECUTABLE}
 
-    ${GW_EXECUTABLE} ${GW_ARGUMENTS} < ${STDIN_FILE} >> stdout.execution 2>> stderr.execution &
+    ${GW_EXECUTABLE} ${GW_ARGUMENTS} $@ < ${STDIN_FILE} >> stdout.execution 2>> stderr.execution &
     
     JOB_PID=$!
 
@@ -189,6 +189,8 @@ execution(){
     then
         printf "`date`: Executing monitor \".monitor $JOB_PID\"... "
 
+        chmod +x .monitor
+        
         .monitor $JOB_PID >> stdout.monitor 2>> stderr.monitor &
         
         MONITOR_PID=$!
@@ -279,8 +281,14 @@ transfer_input_files(){
     then
         STG_FILES="$GW_EXECUTABLE,$GW_INPUT_FILES"
     else
-        STG_FILES="$GW_EXECUTABLE,$GW_STDIN_FILE stdin.execution,$GW_INPUT_FILES"    
+        STG_FILES="$GW_EXECUTABLE,$GW_STDIN_FILE stdin.execution,$GW_INPUT_FILES"
     fi
+    
+    if [ -n "$GW_MONITOR" ];
+    then
+    	STG_FILES_SAVED=$STG_FILES
+	    STG_FILES="$STG_FILES_SAVED,file://$GW_MONITOR .monitor"    
+    fi 
     
     SAVED_IFS=$IFS
     IFS=","

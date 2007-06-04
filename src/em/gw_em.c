@@ -175,7 +175,8 @@ void gw_em_finalize()
     /* ---------------------------------- */    
 
     pthread_cancel(gw_em.listener_thread);
-
+    pthread_join(gw_em.listener_thread,NULL);
+    
     pthread_mutex_unlock(&(gw_em.mutex));
 
     /* ----------------------------------- */

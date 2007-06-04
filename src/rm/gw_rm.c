@@ -96,8 +96,12 @@ gw_rm_t* gw_rm_init()
 	} while ( rc == -1 );
 
 	/* ----- Write the port we found in $GW_LOCATION/var/gw.port to let clients know ----- */	
-    rc = snprintf(str_buffer,sizeof(char)*2048,"%s/var/gwd.port",gw_conf.gw_location);    
-    if ( rc >= (sizeof(char) * 2048) )
+    rc = snprintf(str_buffer,
+                  2047,
+                  "%s/" GW_VAR_DIR "/gwd.port",
+                  gw_conf.gw_location);
+                      
+    if ( rc >= 2047)
     {
     	fprintf(stderr,"[RM]: Error creating port filename (%s)\n",str_buffer);
         return NULL;    	

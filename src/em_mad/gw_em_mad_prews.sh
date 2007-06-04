@@ -1,24 +1,14 @@
 #!/bin/bash
 
-PRIORITY=19
-MADDEBUG=
-
-if [ -z "${GLOBUS_LOCATION}" ]; then
-    echo "Please, set GLOBUS_LOCATION variable."
-    exit -1
-fi
-
 if [ -z "${GW_LOCATION}" ]; then
     echo "Please, set GW_LOCATION variable."
     exit -1
 fi
 
-cd ${GW_LOCATION}/var/
+. $GW_LOCATION/bin/gw_mad_common.sh
 
-if [ -n "${MADDEBUG}" ]; then
-    ulimit -c 15000
-fi
+setup_globus
+cd_var
+mad_debug
 
-. $GLOBUS_LOCATION/etc/globus-user-env.sh
-
-nice -n $PRIORITY $GW_LOCATION/bin/gw_em_mad_prews.bin $*
+exec nice -n $PRIORITY $GW_LOCATION/bin/gw_em_mad_prews.bin $*

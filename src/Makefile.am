@@ -22,6 +22,14 @@
 AUTOMAKE_OPTIONS = subdir-objects no-dependencies
 AM_YFLAGS = -d
 
+CLASSPATH := $(CLASSPATH):$(GLOBUS_LOCATION)/lib/addressing-1.0.jar:$(GLOBUS_LOCATION)/lib/axis.jar:$(GLOBUS_LOCATION)/lib/cog-jglobus.jar:$(GLOBUS_LOCATION)/lib/globus_delegation_service.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft_client.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft_stubs.jar:$(GLOBUS_LOCATION)/lib/gram-client.jar:$(GLOBUS_LOCATION)/lib/gram-stubs.jar:$(GLOBUS_LOCATION)/lib/gram-utils.jar:$(GLOBUS_LOCATION)/lib/jgss.jar:$(GLOBUS_LOCATION)/lib/wsrf_core.jar:$(GLOBUS_LOCATION)/lib/wsrf_core_stubs.jar:$(GLOBUS_LOCATION)/lib/wsrf_test_unit.jar:$(GLOBUS_LOCATION)/lib/xml-apis.jar:$(GLOBUS_LOCATION)/lib/xalan.jar:$(GLOBUS_LOCATION)/lib/xercesImpl.jar
+
+# Get rid of libtool by default
+LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+
 # -----------------------------
 # Directory definitions
 # -----------------------------
@@ -48,6 +56,8 @@ DB = $(srcdir)/acct
 
 DRMAA = $(srcdir)/drmaa
 DRMAA_PACK =  $(DRMAA)/org/ggf/drmaa
+
+JAVA_HOME = @java_home@
 
 # --------------------------------
 # Object Dependencies
@@ -122,7 +132,7 @@ EM_SRC = $(EM)/gw_em_actions.c \
         $(EM)/gw_em_rsl2.c \
         $(EM)/gw_em_rsl.c \
         $(EM)/gw_em_state.c
-
+        
 TM_SRC = $(TM)/gw_tm_actions.c \
         $(TM)/gw_tm.c \
         $(TM)/gw_tm_checkpoint.c \
@@ -192,6 +202,8 @@ EM_MAD_PREWS_SRC = $(EM_MAD)/gw_em_mad_prews_actions.c \
         $(EM_MAD)/gw_em_mad_prews.c \
         $(EM_MAD)/gw_em_mad_prews_pool.c
 
+EM_MAD_WS_SRC = $(EM_MAD)/GW_mad_ws.java
+
 TM_MAD_SRC = $(TM_MAD)/gw_tm_ftp_mad.c \
         $(TM_MAD)/gw_tm_ftp_queue.c \
         $(TM_MAD)/gw_tm_ftp_stack.c \
@@ -215,6 +227,49 @@ DRMAA_SRC = $(COMMON)/gw_file_parser.c $(CLIENT_SRC) \
         $(COMMON)/gw_template.c $(COMMON)/gw_log.c
 
 DRMAAJNI_SRC  = $(DRMAA_PACK)/DrmaaJNI.c
+
+DRMAA_JAVA_SRC = $(DRMAA_PACK)/AlreadyActiveSessionException.java \
+        $(DRMAA_PACK)/AuthorizationException.java \
+        $(DRMAA_PACK)/ConflictingAttributeValuesException.java \
+        $(DRMAA_PACK)/DefaultContactStringException.java \
+        $(DRMAA_PACK)/DeniedByDrmException.java \
+        $(DRMAA_PACK)/DrmaaException.java \
+        $(DRMAA_PACK)/DrmaaJNI.java \
+        $(DRMAA_PACK)/DrmaaRuntimeException.java \
+        $(DRMAA_PACK)/DrmCommunicationException.java \
+        $(DRMAA_PACK)/DrmsExitException.java \
+        $(DRMAA_PACK)/DrmsInitException.java \
+        $(DRMAA_PACK)/ExitTimeoutException.java \
+        $(DRMAA_PACK)/FileTransferMode.java \
+        $(DRMAA_PACK)/HoldInconsistentStateException.java \
+        $(DRMAA_PACK)/InconsistentStateException.java \
+        $(DRMAA_PACK)/InternalException.java \
+        $(DRMAA_PACK)/InvalidAttributeException.java \
+        $(DRMAA_PACK)/InvalidAttributeFormatException.java \
+        $(DRMAA_PACK)/InvalidAttributeValueException.java \
+        $(DRMAA_PACK)/InvalidContactStringException.java \
+        $(DRMAA_PACK)/InvalidJobException.java \
+        $(DRMAA_PACK)/InvalidJobTemplateException.java \
+        $(DRMAA_PACK)/JobInfoImpl.java \
+        $(DRMAA_PACK)/JobInfo.java \
+        $(DRMAA_PACK)/JobTemplateImpl.java \
+        $(DRMAA_PACK)/JobTemplate.java \
+        $(DRMAA_PACK)/NoActiveSessionException.java \
+        $(DRMAA_PACK)/NoDefaultContactStringSelectedException.java \
+        $(DRMAA_PACK)/NoResourceUsageException.java \
+        $(DRMAA_PACK)/PartialTimestampFormat.java \
+        $(DRMAA_PACK)/PartialTimestamp.java \
+        $(DRMAA_PACK)/ReleaseInconsistentStateException.java \
+        $(DRMAA_PACK)/ResumeInconsistentStateException.java \
+        $(DRMAA_PACK)/SessionException.java \
+        $(DRMAA_PACK)/SessionFactoryImpl.java \
+        $(DRMAA_PACK)/SessionFactory.java \
+        $(DRMAA_PACK)/SessionImpl.java \
+        $(DRMAA_PACK)/Session.java \
+        $(DRMAA_PACK)/SuspendInconsistentStateException.java \
+        $(DRMAA_PACK)/TryLaterException.java \
+        $(DRMAA_PACK)/UnsupportedAttributeException.java \
+        $(DRMAA_PACK)/Version.java
 
 # -----------------------------
 # -- Includes and Headers
@@ -350,16 +405,27 @@ __srcdir__cmds_gwacct_SOURCES = $(CMDS)/gw_acct.c \
 
 bin_SCRIPTS   =
 dist_bin_SCRIPTS =
-
-javadir = @prefix@/bin
+CLEANFILES =
 
 if JSDL
-dist_java_JAVA =
-dist_java_JAVA += $(JSDL_SRC)
+
 dist_bin_SCRIPTS += $(CMDS)/jsdl2gw.sh
+
+# Create gw_jsdl.jar
+jsdl_jardir = $(prefix)/lib
+jsdl_jar_DATA = $(srcdir)/cmds/gw_jsdl.jar
+$(srcdir)/cmds/gw_jsdl.jar:
+	@rm -f lib/gw_jsdl.jar
+	@mkdir -p $(CMDS)/package
+	$(JAVAC_PATH) $(JSDL_SRC) \
+	    -classpath $(CLASSPATH):$(CMDS) \
+        -d $(CMDS)/package
+	jar cf $(srcdir)/cmds/gw_jsdl.jar -C $(CMDS)/package/ .
+	@rm -rf $(CMDS)/package
+
+CLEANFILES += $(srcdir)/cmds/gw_jsdl.jar
+
 endif
-
-
 
 # ----------------------------
 # Schedulers
@@ -408,18 +474,26 @@ __srcdir__drmaa_libDrmaaJNI_la_LIBADD  = $(srcdir)/drmaa/libdrmaa.la
 
 __srcdir__drmaa_libdrmaa_la_CFLAGS = $(AM_CFLAGS)
 
+# Use libtool to generate drmaa library files
+__srcdir__drmaa_libdrmaa_la_LINK = $(LIBTOOL) --tag=CC --mode=link $(LINK)
+__srcdir__drmaa_libDrmaaJNI_la_LINK = $(LIBTOOL) --tag=CC --mode=link $(LINK)
+
 if DRMAA
+
 jardir = $(prefix)/lib
 
-dist_jar_DATA = $(srcdir)/drmaa/drmaa.jar
+jar_DATA = $(srcdir)/drmaa/drmaa.jar
 $(srcdir)/drmaa/drmaa.jar:
 	@rm -f lib/drmaa.jar
 	@mkdir -p $(DRMAA)/package
-	$(JAVAC) $(srcdir)/drmaa/org/ggf/drmaa/*.java -classpath $(DRMAA) \
+	$(JAVAC_PATH) $(DRMAA_JAVA_SRC) \
+	    -classpath $(DRMAA) \
         -d $(DRMAA)/package
 	jar cf $(srcdir)/drmaa/drmaa.jar -C $(DRMAA)/package/ .
 	@rm -rf $(DRMAA)/package
 endif
+
+CLEANFILES += $(srcdir)/drmaa/drmaa.jar
 
 # --------------------------------
 # Pre-WS Middleware Access Drivers
@@ -446,6 +520,8 @@ bin_PROGRAMS += $(srcdir)/tm_mad/gw_tm_mad_dummy.bin
 dist_bin_SCRIPTS  += $(TM_MAD)/gw_tm_mad_dummy.sh
 endif
 
+if GRIDFTP
+
 bin_PROGRAMS += $(srcdir)/tm_mad/gw_tm_mad_ftp.bin
 dist_bin_SCRIPTS += $(TM_MAD)/gw_tm_mad_ftp.sh
 
@@ -455,6 +531,8 @@ __srcdir__tm_mad_gw_tm_mad_ftp_bin_CFLAGS  = $(GLOBUS_INCLUDES) \
         $(GLOBUS_CFLAGS)
 __srcdir__tm_mad_gw_tm_mad_ftp_bin_LDADD   = $(GLOBUS_LIBS) \
         $(GLOBUS_PKG_LIBS)
+
+endif
 
 __srcdir__tm_mad_gw_tm_mad_dummy_bin_SOURCES = $(TM_MAD_DUMMY_SRC)
 __srcdir__tm_mad_gw_tm_mad_dummy_bin_LDFLAGS = $(GLOBUS_LDFLAGS)
@@ -480,44 +558,48 @@ JAVAROOT = .
 
 if WS
 
-if !JSDL
-dist_java_JAVA =
-endif
+# ---------------------- IM MADS ------------------------
 
-dist_java_JAVA += $(EM_MAD)/GW_mad_ws.java $(IM_MAD_MDS4_SRC)
+im_ws_jardir = $(prefix)/lib
+im_ws_jar_DATA = $(srcdir)/im_mad/gw_im_mad_ws.jar
+$(srcdir)/im_mad/gw_im_mad_ws.jar:
+	@rm -f lib/gw_im_mad_ws.jar
+	@mkdir -p $(IM_MAD)/package 
+	$(JAVAC_PATH) $(IM_MAD_MDS4_SRC) \
+	    -classpath $(CLASSPATH):$(IM_MAD) \
+        -d $(IM_MAD)/package
+	jar cf $(srcdir)/im_mad/gw_im_mad_ws.jar -C $(IM_MAD)/package/ .
+	@rm -rf $(IM_MAD)/package
 
-dist_bin_SCRIPTS += $(EM_MAD)/gw_em_mad_ws.sh
 dist_bin_SCRIPTS += $(IM_MAD)/gw_im_mad_mds4.sh
 
+CLEANFILES += $(srcdir)/im_mad/gw_im_mad_ws.jar
+
+# ---------------------- EM MADS ------------------------
+
+em_ws_jardir = $(prefix)/lib
+em_ws_jar_DATA = $(srcdir)/em_mad/gw_em_mad_ws.jar
+$(srcdir)/em_mad/gw_em_mad_ws.jar:
+	@rm -f lib/gw_em_mad_ws.jar
+	@mkdir -p $(EM_MAD)/package
+	$(JAVAC_PATH) $(EM_MAD_WS_SRC) \
+	    -classpath $(CLASSPATH):$(EM_MAD) \
+        -d $(EM_MAD)/package
+	jar cf $(srcdir)/em_mad/gw_em_mad_ws.jar -C $(EM_MAD)/package/ .
+	@rm -rf $(EM_MAD)/package
+
+dist_bin_SCRIPTS += $(EM_MAD)/gw_em_mad_ws.sh
+
+CLEANFILES += $(srcdir)/em_mad/gw_em_mad_ws.jar
+
 endif
-
-# ----------------------------
-# AUX SCRIPTS
-# ----------------------------
-
-scriptsdir = @prefix@/scripts
-
-dist_scripts_SCRIPTS = $(top_srcdir)/scripts/wrapper.sh \
-        $(top_srcdir)/scripts/monitor.sh
-
-# ----------------------------
-# ETC
-# ----------------------------
-
-#dist_sysconf_DATA = $(top_srcdir)/etc/gwd.conf $(top_srcdir)/etc/job_template.default \
-#        $(top_srcdir)/etc/im_examples/host.list $(top_srcdir)/etc/im_examples/host_glue.list \
-#        $(top_srcdir)/etc/im_examples/machine1.attributes \
-#        $(top_srcdir)/etc/im_examples/machine2.attributes
-
-dist_sysconf_DATA = $(top_srcdir)/etc/gwd.conf $(top_srcdir)/etc/job_template.default \
-                    $(top_srcdir)/etc/sched.conf
 
 # ----------------------------
 # TESTS
 # ----------------------------
 
 if TESTS
-testdir = @prefix@/test
+testdir = @prefix@/test/gridway
 
 test_PROGRAMS = $(srcdir)/test/gwtest
 
@@ -527,3 +609,17 @@ __srcdir__test_gwtest_SOURCES = test/gw_test.c \
         $(COMMON_SRC)
 endif
 
+# ----------------------------
+# Distribute JAVA sources
+# ----------------------------
+
+dist-hook:
+	@mkdir -p $(distdir)/cmds
+	@mkdir -p $(distdir)/im_mad
+	@mkdir -p $(distdir)/em_mad
+	@mkdir -p $(distdir)/drmaa/org/ggf/drmaa
+	@cp $(JSDL_SRC) $(distdir)/cmds/
+	@cp $(IM_MAD_MDS4_SRC) $(distdir)/im_mad
+	@cp $(EM_MAD_WS_SRC) $(distdir)/em_mad
+	@cp $(DRMAA_JAVA_SRC) $(distdir)/drmaa/org/ggf/drmaa
+	@cp $(DRMAA_PACK)/DrmaaJNI.h $(distdir)/drmaa/org/ggf/drmaa

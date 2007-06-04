@@ -16,7 +16,7 @@
 # --------------------------------------------------------------------------
 
 AC_PREREQ(2.60)
-AC_INIT([GridWay], [5.2], [gridway-user@globus.org])
+AC_INIT([GridWay], [5.2.1], [gridway-user@globus.org])
 AC_CONFIG_AUX_DIR(config)
 AC_CONFIG_SRCDIR([src/dm/gw_dm_action_dispatch.c])
 
@@ -101,9 +101,13 @@ case "$build_os" in
       CFLAGS="$CFLAGS -DGWSOLARIS"
       LDFLAGS="$LDFLAGS -lsocket -lnsl"
    ;;
+   *darwin*)
+      JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Home
+   ;;
 esac
 
 AC_SUBST(system, $system)
+AC_SUBST(java_home, $JAVA_HOME)
 
 #------------------------------------------------------------------------------
 # Argument check
@@ -212,11 +216,36 @@ fi
 
 # --- With GridWay tests ---
 
+tests="no"
+
 AC_ARG_WITH(tests,  AC_HELP_STRING([--with-tests],\
         [Build GridWay test suite]),\
         [if test $withval = "yes"; then tests="yes"; else tests="no"; fi], [])
 
 AM_CONDITIONAL(TESTS, test "x$tests" = "xyes")
+
+# --- Enable GRIDFTP TM Mad ---
+
+gridftp="gridftp"
+
+AC_ARG_ENABLE(gridftp,  AC_HELP_STRING([--disable-gridftp],\
+  [Don't build gridftp support. Default is enabled. \
+   Useful to compile in an EGEE UI.]),\
+  [if test $enableval = "no"; then gridftp=" "; fi], [])
+
+AM_CONDITIONAL(GRIDFTP, test "x$gridftp" = "xgridftp")
+
+#-------------------------------------------------------------------------------
+# Globus Directory Scheme
+#-------------------------------------------------------------------------------
+
+GW_DIR_SCHEME="gw"
+
+AC_ARG_ENABLE(globus-scheme,  AC_HELP_STRING([--enable-globus-scheme],\
+  [Adjusts directory layout to install GridWay in GLOBUS_LOCATION.]),\
+  [CFLAGS="$CFLAGS -DGW_GLOBUS_DIRS"; GW_DIR_SCHEME="globus";], [])
+
+AM_CONDITIONAL(GW_GLOBUS_DIRS, test "x$GW_DIR_SCHEME" = "xglobus")
 
 #------------------------------------------------------------------------------
 # Checks for programs.
@@ -229,23 +258,21 @@ AC_PROG_LN_S
 AC_PROG_LIBTOOL
 AC_PROG_MAKE_SET
 
-if test "x$ws" = "xws" ; then
-	AC_PATH_PROG(JAVAC_PATH, javac)
+AC_PATH_PROG(JAVAC_PATH, javac)
 	
-	if test "x$JAVAC_PATH" = "x"; then
-    	AC_MSG_WARN("A Java compiler is needed for GridWay's WS Drivers!!!")
-    fi
+if test "x$JAVAC_PATH" = "x"; then
+   	AC_MSG_WARN("A Java compiler is needed for GridWay's WS Drivers & DRMAA JAVA")
+fi
     
-    if test "x$JAVA_HOME" = "x"; then
-    	AC_MSG_WARN("JAVA_HOME is not set, some Java versions will not work (eg. Mac OS X)")     
-    fi
-fi 
+if test "x$JAVA_HOME" = "x"; then
+   	AC_MSG_WARN("JAVA_HOME is not set, some Java versions will not work (eg. Mac OS X)")     
+fi
 
 #------------------------------------------------------------------------------
 # Automake Directives
 #------------------------------------------------------------------------------
 
-AM_INIT_AUTOMAKE(gw,5.2)
+AM_INIT_AUTOMAKE(gw,5.2.1)
 AM_PROG_CC_C_O
 AM_PROG_LEX
 

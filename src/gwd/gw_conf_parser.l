@@ -70,6 +70,7 @@ SCHEDULING_INTERVAL     { gcp_var = SCHEDULING_INTERVAL;   BEGIN var_int;}
 DISCOVERY_INTERVAL      { gcp_var = DISCOVERY_INTERVAL;    BEGIN var_int;}
 MONITORING_INTERVAL     { gcp_var = MONITORING_INTERVAL;   BEGIN var_int;}
 POLL_INTERVAL           { gcp_var = POLL_INTERVAL;         BEGIN var_int;}
+MAX_ACTIVE_IM_QUERIES   { gcp_var = MAX_ACTIVE_IM_QUERIES; BEGIN var_int;}
 IM_MAD                  { gcp_var = IM_MAD; init_mad_parser(0); BEGIN var_mad;}
 TM_MAD                  { gcp_var = TM_MAD; init_mad_parser(1); BEGIN var_mad;}
 EM_MAD                  { gcp_var = EM_MAD; init_mad_parser(2); BEGIN var_mad;}
@@ -179,7 +180,11 @@ void gcp_set_val_int(gw_conf_var_t var, int val)
 		case POLL_INTERVAL:
 			gw_conf.poll_interval = val;
 			break;
-			
+
+		case MAX_ACTIVE_IM_QUERIES:
+			gw_conf.max_active_im_queries = val;
+			break;
+
 		case SCHEDULING_INTERVAL:
 			gw_conf.scheduling_interval = val;
 			break;		
@@ -208,7 +213,7 @@ void init_mad_parser(int mad_index)
             
 		case 2:
 			gcp_mads = gw_conf.em_mads;
-            gcp_max  = 3;
+            gcp_max  = 4;
 			break;
 			
 		default:

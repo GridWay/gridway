@@ -35,6 +35,6 @@ if [ "x$1" = "x-h" ]; then
   exit 0
 fi
 
-export CLASSPATH=$GW_LOCATION/bin:$CLASSPATH
+export CLASSPATH=$GW_LOCATION/lib/gw_jsdl.jar:$CLASSPATH
 
 java JSDLParser $1 $2

@@ -537,6 +537,62 @@ inline gw_job_t* gw_job_pool_get (int job_id, int lock)
     return (job);
 }
 
+
+
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+
+int gw_job_pool_recover_jobs (gw_em_mad_t * em_mad)
+{
+    gw_job_t * job;
+    int        i;
+    char *     job_contact;
+        
+    pthread_mutex_lock(&(gw_job_pool.mutex));
+    
+    for ( i=0; i < gw_conf.number_of_jobs; i++)
+    {
+        job = gw_job_pool.pool[i];
+        
+        if (job != NULL)
+        {
+            pthread_mutex_lock(&(job->mutex));            
+
+            if ((job->history != NULL) && 
+                (job->history->em_mad == em_mad) &&
+                (job->job_state == GW_JOB_STATE_WRAPPER))
+            {
+                job_contact = gw_job_recover_get_contact(job);
+                
+                if ( job_contact != NULL )
+                {
+#ifdef GWJOBDEBUG
+                    gw_log_print("DM",'D',"Recovering job %i, contact is %s.\n", 
+                            job->id,
+                            job_contact);
+#endif
+                    gw_em_mad_recover(em_mad, job->id, job_contact);
+                    
+                    free(job_contact);      
+                }
+#ifdef GWJOBDEBUG                
+                else
+                    gw_log_print("DM",'D',"Could not recover job %i, no contact.\n", 
+                            job->id);
+                
+#endif                 
+            }
+            
+            pthread_mutex_unlock(&(job->mutex));
+        }
+    }
+        
+    pthread_mutex_unlock(&(gw_job_pool.mutex));
+    
+    return 0;
+}
+
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */

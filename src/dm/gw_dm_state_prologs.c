@@ -287,11 +287,12 @@ void gw_dm_prolog_set_files(gw_job_t * job)
     int  num_xfrs;
     int  i, j;
     char url[512], alt_url[512];
-    int  wbe; /* Wrapper-based execution */
+    gw_boolean_t wbe; /* Wrapper-based execution */
 
-    wbe = job->template.type != GW_JOB_TYPE_MPI
+    wbe = strncmp(job->history->host->lrms_name, "jobmanager-", 11) == 0
+            || ( job->template.type != GW_JOB_TYPE_MPI
             && strcmp(job->history->host->lrms_type, "gw") != 0
-            && job->template.wrapper != NULL;
+            && job->template.wrapper != NULL );
 
     /* ----------------------------------------------------------- */  
     /* 1.- Set xfr array                                           */

@@ -754,7 +754,7 @@ void gw_scheduler_job_policies (gw_scheduler_t * sched)
     float C_half;
     
     the_time  = time(NULL);
-    C_half    = -1.5 * sched->sch_conf.dl_half * 86400;
+    C_half    = -1.5 * sched->sch_conf.dl_half;
 
     wfixed    = sched->sch_conf.wfixed;
     wwaiting  = sched->sch_conf.wwaiting;

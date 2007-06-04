@@ -24,6 +24,7 @@
 #include <unistd.h>
 #include <stdarg.h>
 #include <errno.h>
+#include <limits.h>
 
 #include "gw_job.h"
 #include "gw_dm.h"
@@ -97,7 +98,12 @@ int gw_job_fill(gw_job_t *job, const gw_msg_t *msg)
     
     if ( job->template.checkpoint_url == NULL )
     {
-        sprintf(str_buffer,"file://%s/var/%d/", gw_conf.gw_location, job->id);
+        snprintf(str_buffer,
+                 2047,
+                 "file://%s/" GW_VAR_DIR "/%d/", 
+                 gw_conf.gw_location, 
+                 job->id);
+                 
         job->template.checkpoint_url = strdup(str_buffer);
     }
 
@@ -126,7 +132,7 @@ int gw_job_fill(gw_job_t *job, const gw_msg_t *msg)
 
 int gw_job_init(gw_job_t *job, int job_id)
 {
-    char   str_buffer[2048];
+    char   str_buffer[PATH_MAX];
 	
     pthread_mutex_init(&(job->mutex), (pthread_mutexattr_t *) NULL);
 
@@ -134,20 +140,29 @@ int gw_job_init(gw_job_t *job, int job_id)
 
 /* -------------------------------------------------------------------------- */
        
-	snprintf(str_buffer, sizeof(char)*2048, "%s/var/%i", gw_conf.gw_location,
-            job_id);
+	snprintf(str_buffer, 
+             PATH_MAX -1 , 
+             "%s/" GW_VAR_DIR "/%i", 
+             gw_conf.gw_location,
+             job_id);
                       
     job->directory = strdup(str_buffer);
 
 /* -------------------------------------------------------------------------- */
 
-    snprintf(str_buffer, sizeof(char)*2048, "%s/job.log", job->directory);
+    snprintf(str_buffer, 
+             PATH_MAX - 1, 
+             "%s/job.log", 
+             job->directory);
     
     job->log_file = strdup(str_buffer);
     
 /* -------------------------------------------------------------------------- */
 
-    snprintf(str_buffer,sizeof(char)*2048,"%s/job.env",job->directory);
+    snprintf(str_buffer,
+             PATH_MAX - 1,
+             "%s/job.env",
+             job->directory);
 	
     job->env_file = strdup(str_buffer);
 	

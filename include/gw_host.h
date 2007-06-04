@@ -112,6 +112,8 @@ typedef struct gw_host_s
     gw_genvar_str_t genvar_str[GW_HOST_MAX_GENVARS];
     
     gw_host_state_t state;
+    
+    time_t last_monitoring_time;
 } gw_host_t;
 
 /* -------------------------------------------------------------------------- */

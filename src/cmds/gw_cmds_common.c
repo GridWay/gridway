@@ -675,7 +675,7 @@ void gw_client_print_host_status(gw_msg_host_t * msg)
             freenodecount = msg->queue_freenodecount[i];
     }
     
-    snprintf(buffer,sizeof(char)*25,"%i/%i/%i",msg->running_jobs,freenodecount,msg->nodecount);
+    snprintf(buffer,sizeof(char)*25,"%i/%i/%i",msg->used_slots,freenodecount,msg->nodecount);
     tmp = buffer;
     while (*tmp ==' ')
         tmp++;
@@ -826,6 +826,7 @@ void gw_client_print_host_status_full(gw_msg_host_t * msg)
     }
     
     printf("RUNNING_JOBS=%i\n",msg->running_jobs);
+    printf("USED_SLOTS=%i\n",msg->used_slots);
     printf("FREENODECOUNT=%i\n",freenodecount);
     printf("NODECOUNT=%i\n",msg->nodecount);
 

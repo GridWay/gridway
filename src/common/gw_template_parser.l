@@ -19,6 +19,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <pthread.h>
+#include <limits.h>
 
 #include "gw_template.h"
 
@@ -224,24 +225,19 @@ NAME                    { jtp_var = NAME;                   BEGIN var_str;}
 <val_dl>[ \t]*(#.*)?\n  { switch (dl_comp)
                           {
                               case 1:
-                                  jt->deadline = time(NULL) + dl[0]*60;
+                                  jt->deadline = dl[0]*60;
                                   break;
                               case 2:
-                                  jt->deadline = time(NULL) + dl[0]*60*60 + dl[1]*60;
+                                  jt->deadline = dl[0]*60*60 + dl[1]*60;
                                   break;
                               case 3:
-                                  jt->deadline = time(NULL) + dl[0]*24*60*60 + dl[1]*60*60 + dl[2]*60;
+                                  jt->deadline = dl[0]*24*60*60 + dl[1]*60*60 + dl[2]*60;
                                   break;
                               default:
                                  jtp_error(jt, "Bad deadline format"); return -1;
                           }
                           BEGIN INITIAL;}
-<val_dl>:[0-9]+         { if (dl_comp >= 3 )
-                          {
-							jtp_error(jt, "Bad deadline format"); 
-							return -1;
-						  }
-						  dl[dl_comp++] = atoi(yytext+1);}						  
+<val_dl>:[0-9]+         { dl[dl_comp++] = atoi(yytext+1); }
 <val_dl>[0-9]+          { dl[0] = atoi(yytext); dl_comp = 1; }
 
     /* --------------------------------------------------------------------- */
@@ -433,7 +429,7 @@ void gw_template_set_value_int (gw_template_t *jt,
 int gw_template_parser (gw_template_t *jt)
 {
     int rc;
-    char template_file[1024];
+    char template_file[PATH_MAX];
     
     pthread_mutex_lock(&jtp_mutex);
 
@@ -448,7 +444,7 @@ int gw_template_parser (gw_template_t *jt)
 
     /* Default job template parsing */         
 
-    sprintf(template_file,"%s/etc/job_template.default",GW_LOCATION);
+    sprintf(template_file,"%s/" GW_ETC_DIR "/job_template.default",GW_LOCATION);
 
     yyin = fopen (template_file, "r");
 

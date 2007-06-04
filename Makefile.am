@@ -16,6 +16,22 @@
 # --------------------------------------------------------------------------
 
 SUBDIRS = src
+JAVA_HOME = @java_home@
+
+if GW_GLOBUS_DIRS
+GW_ETC_DIR   = etc/gridway
+GW_VAR_DIR   = var/gridway
+GW_DOC_DIR   = doc/gridway
+GW_SHARE_DIR = share/gridway
+GW_TEST_DIR  = test/gridway
+else
+GW_ETC_DIR   = etc
+GW_VAR_DIR   = var
+GW_DOC_DIR   = doc
+GW_SHARE_DIR = share
+GW_TEST_DIR  = test
+endif
+
 
 if DOC
 SUBDIRS += doc/docbook
@@ -27,10 +43,11 @@ endif
 FLAGS=$(DB4_INCLUDE_PATH)
 
 install-exec-hook:
-	@cp -r LICENSE NOTICE @prefix@
+	@mkdir -p @prefix@/$(GW_SHARE_DIR)
+	@cp -r LICENSE NOTICE @prefix@/$(GW_SHARE_DIR)	
 if DOC
-	@rm -rf @prefix@/doc
-	@mkdir -p @prefix@/doc
+	@rm -rf @prefix@/$(GW_DOC_DIR)
+	@mkdir -p @prefix@/$(GW_DOC_DIR)
 if DB2HTMLC
 	@cp -r doc/docbook/userguide \
            doc/docbook/appdeveloperguide \
@@ -41,133 +58,152 @@ if DB2HTMLC
            doc/docbook/gwdoc.css \
            doc/docbook/gwdoc.dsl \
            doc/images \
-           @prefix@/doc
+           @prefix@/$(GW_DOC_DIR)
 endif
 if DB2PDFC         
 	@cp -r doc/docbook/*.pdf \
-           @prefix@/doc
+           @prefix@/$(GW_DOC_DIR)
 endif                              
 
 if DRMAA
 if DOXYGENC
-	@cp -r doc/drmaa_c @prefix@/doc
+	@cp -r doc/drmaa_c @prefix@/$(GW_DOC_DIR)
 endif
 if JAVADOCC
-	@cp -r doc/drmaa_java @prefix@/doc
+	@cp -r doc/drmaa_java @prefix@/$(GW_DOC_DIR)
 endif		
 endif
 endif
 
-	@rm -rf @prefix@/examples
-	@cp -r examples @prefix@/examples
+	@rm -rf @prefix@/$(GW_SHARE_DIR)/examples
+	@mkdir -p @prefix@/$(GW_SHARE_DIR)
+	@cp -r examples @prefix@/$(GW_SHARE_DIR)/examples
 
 if TESTS
-	@rm -rf @prefix@/test
-	@mkdir -p @prefix@/test
-	@cp -r src/test/gwtest src/test/jt @prefix@/test
+	@rm -rf @prefix@/$(GW_TEST_DIR)
+	@mkdir -p @prefix@/$(GW_TEST_DIR)
+	@cp -r src/test/gwtest src/test/TEST.pl \
+	       src/test/jt \
+	       @prefix@/$(GW_TEST_DIR)
 endif
 
-# ------------------
+# ----------------------------
 # -- Script renaming - Commons
-# -------------------
+# ----------------------------
 
 	@mv @prefix@/bin/gw_im_mad_static.sh @prefix@/bin/gw_im_mad_static
+if GRIDFTP
 	@mv @prefix@/bin/gw_tm_mad_ftp.sh @prefix@/bin/gw_tm_mad_ftp
+endif
 
-# ------------------
+# ----------------------------
 # -- Script renaming - WS
-# -------------------
+# ----------------------------
 
 if WS
 	@mv @prefix@/bin/gw_em_mad_ws.sh @prefix@/bin/gw_em_mad_ws
-#	@mv @prefix@/bin/gw_tm_mad_rft.sh @prefix@/bin/gw_tm_mad_rft
 	@mv @prefix@/bin/gw_im_mad_mds4.sh @prefix@/bin/gw_im_mad_mds4
 endif
 
-# ------------------
+# ----------------------------
 # -- Script renaming - PREWS
-# -------------------
+# ----------------------------
 
 if PREWS
 	@mv @prefix@/bin/gw_im_mad_mds2.sh @prefix@/bin/gw_im_mad_mds2
 	@mv @prefix@/bin/gw_im_mad_mds2_glue.sh @prefix@/bin/gw_im_mad_mds2_glue
 	@mv @prefix@/bin/gw_tm_mad_dummy.sh @prefix@/bin/gw_tm_mad_dummy
-
 	@mv @prefix@/bin/gw_em_mad_prews.sh @prefix@/bin/gw_em_mad_prews
-
 endif
 
-# ------------------
-# -- Script renaming - PREWS
-# -------------------
+# ----------------------------
+# -- Script renaming - JSDL
+# ----------------------------
 
 if JSDL
 	@mv @prefix@/bin/jsdl2gw.sh @prefix@/bin/jsdl2gw
 endif
 
-# ----------------------------
+# ****************************
 # DIR LAYOUT
-# ----------------------------
+# ****************************
 
 install-data-hook:
-	@rm -rf @prefix@/var
-	@mkdir -p @prefix@/var/acct
-	@cp -r $(top_srcdir)/etc/im_examples @prefix@/etc/
+	mkdir -p @prefix@/$(GW_VAR_DIR)/acct
+	mkdir -p @prefix@/$(GW_ETC_DIR)
+	cp -r $(top_srcdir)/etc/im_examples @prefix@/$(GW_ETC_DIR)/
+	cp $(top_srcdir)/etc/gwd.conf \
+	   $(top_srcdir)/etc/job_template.default \
+	   $(top_srcdir)/etc/sched.conf \
+	   $(top_srcdir)/etc/gwrc \
+	   @prefix@/$(GW_ETC_DIR)/
 
-#-----------
+# ----------------------------
 #    remove CVS DIRS
-#   		@find @prefix@ -name CVS -exec rm -rf '{}' \;
-#---------
-	@rm -rf @prefix@/doc/drmaa_c/CVS \
-        @prefix@/doc/images/CVS \
-        @prefix@/etc/im_examples/CVS \
-        @prefix@/src/drmaa/org/CVS \
-        @prefix@/src/drmaa/org/ggf/CVS \
-        @prefix@/src/drmaa/org/ggf/drmaa/CVS \
-        @prefix@/src/test/jt/CVS \
-		@prefix@/etc/im_examples/CVS \
-		@prefix@/examples/im/CVS \
-		@prefix@/examples/ls/CVS \
-		@prefix@/examples/pi/CVS \
-		@prefix@/examples/CVS \
-		@prefix@/examples/drmaa_java/CVS \
-		@prefix@/examples/drmaa/CVS \
-		@prefix@/examples/drmaa/drmaa_java/CVS \
-		@prefix@/examples/drmaa/drmaa_c/CVS \
-		@prefix@/examples/drmaa/TestSuite/CVS \
-		@prefix@/examples/drmaa/TestSuite/org/CVS \
-		@prefix@/examples/drmaa/TestSuite/org/ggf/CVS \
-		@prefix@/examples/drmaa/TestSuite/org/ggf/drmaa/CVS \
-		@prefix@/examples/drmaa/TestSuite/org/ggf/drmaa/testSuite/CVS \
-		@prefix@/examples/sleep/CVS \
-		@prefix@/examples/drmaaTestSuite/CVS \
-		@prefix@/examples/drmaaTestSuite/org/CVS \
-		@prefix@/examples/drmaaTestSuite/org/ggf/CVS \
-		@prefix@/examples/drmaaTestSuite/org/ggf/drmaa/CVS \
-		@prefix@/examples/drmaaTestSuite/org/ggf/drmaa/testSuite/CVS \
-		@prefix@/examples/workflow/CVS \
-		@prefix@/examples/mpi/CVS \
-		@prefix@/examples/jsdl/CVS
+# ----------------------------
+
+	@rm -rf @prefix@/$(GW_DOC_DIR)/drmaa_c/CVS \
+        @prefix@/$(GW_DOC_DIR)/images/CVS \
+        @prefix@/$(GW_ETC_DIR)/im_examples/CVS \
+        @prefix@/$(GW_TEST_DIR)/jt/CVS \
+		@prefix@/$(GW_ETC_DIR)/im_examples/CVS \
+		@prefix@/$(GW_SHARE_DIR)/examples/im/CVS \
+		@prefix@/$(GW_SHARE_DIR)/examples/ls/CVS \
+		@prefix@/$(GW_SHARE_DIR)/examples/pi/CVS \
+		@prefix@/$(GW_SHARE_DIR)/examples/CVS \
+		@prefix@/$(GW_SHARE_DIR)/examples/drmaa_java/CVS \
+		@prefix@/$(GW_SHARE_DIR)/examples/drmaa/CVS \
+		@prefix@/$(GW_SHARE_DIR)/examples/drmaa/drmaa_java/CVS \
+		@prefix@/$(GW_SHARE_DIR)/examples/drmaa/drmaa_c/CVS \
+		@prefix@/$(GW_SHARE_DIR)/examples/drmaa/TestSuite/CVS \
+		@prefix@/$(GW_SHARE_DIR)/examples/drmaa/TestSuite/org/CVS \
+		@prefix@/$(GW_SHARE_DIR)/examples/drmaa/TestSuite/org/ggf/CVS \
+		@prefix@/$(GW_SHARE_DIR)/examples/drmaa/TestSuite/org/ggf/drmaa/CVS \
+		@prefix@/$(GW_SHARE_DIR)/examples/drmaa/TestSuite/org/ggf/drmaa/testSuite/CVS \
+		@prefix@/$(GW_SHARE_DIR)/examples/sleep/CVS \
+		@prefix@/$(GW_SHARE_DIR)/examples/drmaaTestSuite/CVS \
+		@prefix@/$(GW_SHARE_DIR)/examples/drmaaTestSuite/org/CVS \
+		@prefix@/$(GW_SHARE_DIR)/examples/drmaaTestSuite/org/ggf/CVS \
+		@prefix@/$(GW_SHARE_DIR)/examples/drmaaTestSuite/org/ggf/drmaa/CVS \
+		@prefix@/$(GW_SHARE_DIR)/examples/drmaaTestSuite/org/ggf/drmaa/testSuite/CVS \
+		@prefix@/$(GW_SHARE_DIR)/examples/workflow/CVS \
+		@prefix@/$(GW_SHARE_DIR)/examples/mpi/CVS \
+		@prefix@/$(GW_SHARE_DIR)/examples/jsdl/CVS
+		
+# ----------------------------		
+# Copy wrapper, monitor & gw_mad_common.sh
+# ----------------------------
+
+		@mkdir -p @prefix@/libexec
+		@cp $(top_srcdir)/scripts/wrapper.sh @prefix@/libexec/gw_wrapper.sh
+		@cp $(top_srcdir)/scripts/monitor.sh @prefix@/libexec/gw_monitor.sh
+		@mkdir -p @prefix@/bin
+		@cp $(top_srcdir)/scripts/gw_mad_common.sh @prefix@/bin
         
 uninstall-hook:
 	@rm @prefix@/bin/gw_im_mad_mds2
 	@rm @prefix@/bin/gw_im_mad_mds4
 	@rm @prefix@/bin/gw_em_mad_ws
 	@rm @prefix@/bin/gw_im_mad_mds2_glue
+if GRIDFTP
 	@rm @prefix@/bin/gw_tm_mad_ftp
+endif
 	@rm @prefix@/bin/gw_tm_mad_rft
 	@rm @prefix@/bin/gw_em_mad_prews
 	@rm @prefix@/bin/gw_im_mad_static
 	@rm @prefix@/bin/gw_tm_mad_dummy
 	@rm @prefix@/bin/jsdl2gw
-	@rm -rf @prefix@/var
+	@rm -rf @prefix@/$(GW_VAR_DIR)
 
-# ----------------------------
-# Dist specifics
-# ----------------------------
+# *****************************************
+# Dist specifics (see also src/Makefile.am)
+# *****************************************
 
-dist-hook:
-	@cp -r src/drmaa/org $(distdir)/src/drmaa
+dist-hook:	
+	@rm -rf $(distdir)/src/drmaa/org/ggf/drmaa/.dirstamp
+	@rm -rf $(distdir)/src/drmaa/org/ggf/drmaa/.libs
+	@rm -f $(distdir)/src/drmaa/org/ggf/drmaa/DrmaaJNI.lo
+	@rm -f $(distdir)/src/drmaa/org/ggf/drmaa/DrmaaJNI.o
 	@mkdir -p $(distdir)/doc/docbook
 	@cp -r doc/images $(distdir)/doc
 	@cp -r doc/drmaa_c $(distdir)/doc
@@ -175,12 +211,15 @@ dist-hook:
 	@cp -r doc/docbook/*.css $(distdir)/doc/docbook
 	@cp -r doc/docbook/*.dsl $(distdir)/doc/docbook
 	@cp -r examples $(distdir)
-	@cp -r etc/im_examples $(distdir)/etc/	
+	@cp -r etc $(distdir)
 	@cp -r src/test/jt $(distdir)/src/test
-#-----------
+	@cp -r src/test/TEST.pl $(distdir)/src/test
+	@cp -r scripts $(distdir)
+
+# ----------------------------
 #    remove CVS DIRS
-#   	@find $(distdir) -name CVS -exec rm -r '{}' \
-#---------
+# ----------------------------
+
 	@rm -rf $(distdir)/doc/drmaa_c/CVS \
 	    $(distdir)/doc/images/CVS \
         $(distdir)/etc/im_examples/CVS \
@@ -190,6 +229,7 @@ dist-hook:
         $(distdir)/src/test/jt/CVS \
 		$(distdir)/doc/CVS \
 		$(distdir)/etc/im_examples/CVS \
+		$(distdir)/etc/CVS \
 		$(distdir)/examples/im/CVS \
 		$(distdir)/examples/ls/CVS \
 		$(distdir)/examples/pi/CVS \
@@ -214,5 +254,3 @@ dist-hook:
 		$(distdir)/examples/jsdl/CVS
 		
 	@cp -r LICENSE NOTICE $(distdir)
-		
-

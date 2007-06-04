@@ -96,11 +96,11 @@ gw_client_t* gw_client_init()
         return NULL;
     }
     
-    conf_file = malloc(sizeof(char)*(strlen(GW_LOCATION)+14));
-    port_file = malloc(sizeof(char)*(strlen(GW_LOCATION)+14));
+    conf_file = malloc(sizeof(char)*(strlen(GW_LOCATION)+sizeof(GW_ETC_DIR)+11));
+    port_file = malloc(sizeof(char)*(strlen(GW_LOCATION)+sizeof(GW_VAR_DIR)+11));
     
-    sprintf(conf_file,"%s/etc/gwd.conf",GW_LOCATION);
-    sprintf(port_file,"%s/var/gwd.port",GW_LOCATION);
+    sprintf(conf_file,"%s/" GW_ETC_DIR "/gwd.conf",GW_LOCATION);
+    sprintf(port_file,"%s/" GW_VAR_DIR "/gwd.port",GW_LOCATION);
 
 	/* ------------- TCP PORT ------------- */
 	

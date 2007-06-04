@@ -57,6 +57,8 @@ public class Host
     private String lrmsName;
 
     private String lrmsType;
+    
+    private String staticInfo;
 
     private Vector queues;
     
@@ -65,7 +67,7 @@ public class Host
     /**
      * Creates an empty Host. 
      */
-    public Host(){
+    public Host(String staticInfo){
         name = "NULL";
         arch = "NULL";
         os = "NULL";
@@ -84,6 +86,7 @@ public class Host
         lrmsType = "NULL";
         queues = new Vector();
         upToDate = false;
+        this.staticInfo = staticInfo;
     }
     
     public void add(Queue q){
@@ -216,6 +219,9 @@ public class Host
                 " FREE_MEM_MB=" + this.freeMemMB + " SIZE_DISK_MB=" + this.sizeDiskMB + 
                 " FREE_DISK_MB=" + this.freeDiskMB + " FORK_NAME=\"" + this.forkName +
                 "\" LRMS_NAME=\"" + this.lrmsName + "\" LRMS_TYPE=\"" + this.lrmsType + "\" ");
+        if (staticInfo != "")
+        	out.append( staticInfo + " ");
+        
         out.append(queuesInfo());
         return out.toString();
     }

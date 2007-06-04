@@ -92,11 +92,12 @@ void gw_scheduler_loop(gw_scheduler_function_t scheduler, void *user_arg)
     else
     {
         length = strlen(GW_LOCATION);
-	    log    = (char *) malloc (sizeof(char)*(length + 15));
-	    conf   = (char *) malloc (sizeof(char)*(length + 16));
+        
+	    log =(char *) malloc(sizeof(char)*(length + sizeof(GW_VAR_DIR) + 12));
+	    conf=(char *) malloc(sizeof(char)*(length + sizeof(GW_ETC_DIR) + 13));
 	    
-        sprintf(log, "%s/var/sched.log", GW_LOCATION);
-        sprintf(conf,"%s/etc/sched.conf",GW_LOCATION);
+        sprintf(log, "%s/" GW_VAR_DIR "/sched.log", GW_LOCATION);
+        sprintf(conf,"%s/" GW_ETC_DIR "/sched.conf",GW_LOCATION);
         
     	rc = truncate(log, 0);
 	

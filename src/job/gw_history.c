@@ -19,6 +19,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <time.h>
+#include <limits.h>
 
 #include "gw_history.h"
 #include "gw_host.h"
@@ -87,8 +88,9 @@ int gw_job_history_add(gw_history_t **job_history,
     gw_history_t   *new_record;
     int            i;
     char           tmp[256];
-    char           history_file[2048];
+    char           history_file[PATH_MAX];
     FILE           *file;
+	char           *se;
     
     new_record = (gw_history_t *)malloc(sizeof(gw_history_t));
 
@@ -120,10 +122,20 @@ int gw_job_history_add(gw_history_t **job_history,
     new_record->tries        = 0;
     new_record->failed_polls = 0;
 	new_record->counter      = -1;
-	
-    sprintf(tmp,"gsiftp://%s/~/.gw_%s_%i/", host->hostname, owner, jid);
-    new_record->rdir = strdup(tmp);
-    
+
+	se = gw_host_get_genvar_str("SE_HOSTNAME", 0, host);
+
+	if ((se == NULL) || (se[0] == '\0'))
+	{
+	    sprintf(tmp,"gsiftp://%s/~/.gw_%s_%i/", host->hostname, owner, jid);
+	    new_record->rdir = strdup(tmp);
+	}
+	else
+	{
+	    sprintf(tmp,"gsiftp://%s/~/.gw_%s_%i/", se, owner, jid);
+	    new_record->rdir = strdup(tmp);
+	}
+
 	if (lrms != NULL)
 	{
     	sprintf(tmp,"%s/%s", host->hostname, lrms);
@@ -156,7 +168,11 @@ int gw_job_history_add(gw_history_t **job_history,
     /* Save history to persistent storage (not for a recovey action) */
     if (!recover)
     {
-        sprintf(history_file, "%s/var/%d/job.history", gw_conf.gw_location, jid);
+        snprintf(history_file, 
+                 PATH_MAX - 1,
+                 "%s/" GW_VAR_DIR "/%d/job.history", 
+                 gw_conf.gw_location, 
+                 jid);
 
         file = fopen(history_file, "a");
 

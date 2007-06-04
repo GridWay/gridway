@@ -227,7 +227,11 @@ gw_tm_mad_t * gw_user_pool_get_tm_mad (int user_id, const char *name)
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
-int gw_user_pool_set_em_pipes (fd_set *in_pipes, int um_em_pipe_r)
+int gw_user_pool_set_em_pipes (fd_set *       in_pipes,
+                               int *          fds, 
+                               int *          num_fds, 
+                               gw_em_mad_t ** em_mads, 
+                               int            um_em_pipe_r)
 {
 	int greater;
 	int i,j;
@@ -238,21 +242,36 @@ int gw_user_pool_set_em_pipes (fd_set *in_pipes, int um_em_pipe_r)
 	FD_ZERO(in_pipes);
 	
 	FD_SET(um_em_pipe_r, in_pipes);
-    greater = um_em_pipe_r;
-    
+    greater    = um_em_pipe_r;
+    fds[0]     = um_em_pipe_r;
+    em_mads[0] = NULL;
+
+    *num_fds = 1;
+            
     for (i=0; i<gw_conf.number_of_users; i++)
+    {
     	if ( gw_user_pool.pool[i] != NULL )
     	{
 		    for (j=0; j< gw_user_pool.pool[i]->em_mads; j++)
     		{
             	fd = gw_user_pool.pool[i]->em_mad[j].mad_em_pipe;
-            	FD_SET(fd, in_pipes);
+                
+                if ( fd != -1 )
+                {
+	                em_mads[*num_fds] = &(gw_user_pool.pool[i]->em_mad[j]);
+	                fds[*num_fds]     = fd;
+	
+                    FD_SET(fd, in_pipes);
             
-            	if ( fd > greater )
-                	greater = fd;
+                    if ( fd > greater )
+                        greater = fd;
+                        
+                    *num_fds = *num_fds + 1;                         
+                }                
     		}
         }
-
+    }
+    
     pthread_mutex_unlock(&(gw_user_pool.mutex));
     
     return greater;
@@ -284,24 +303,29 @@ int gw_user_pool_set_tm_pipes (fd_set *       in_pipes,
  	*num_fds = 1;
  	
     for (i=0; i<gw_conf.number_of_users; i++)
+    {
     	if ( gw_user_pool.pool[i] != NULL )
     	{
 		    for (j=0; j< gw_user_pool.pool[i]->tm_mads; j++)
     		{
             	fd = gw_user_pool.pool[i]->tm_mad[j].mad_tm_pipe;
-            	
-            	tm_mads[(*num_fds)] = &(gw_user_pool.pool[i]->tm_mad[j]);
-            	fds[(*num_fds)]     = fd;
+                
+                if (fd != -1)
+                {            	
+                    tm_mads[*num_fds] = &(gw_user_pool.pool[i]->tm_mad[j]);
+                    fds[*num_fds]     = fd;
             	 
-            	FD_SET(fd, in_pipes);
+                    FD_SET(fd, in_pipes);
             
-            	if ( fd > greater )
-                	greater = fd;
+                	if ( fd > greater )
+                	   greater = fd;
                 	
-                *num_fds = *num_fds + 1;
+                    *num_fds = *num_fds + 1;
+                }
     		}
         }
-
+    }
+    
     pthread_mutex_unlock(&(gw_user_pool.mutex));
     
     return greater;

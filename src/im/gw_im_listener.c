@@ -32,7 +32,8 @@ void gw_im_listener(void *arg)
     
     int    i,j;
     int    host_id;    
-    int    greater, rc;
+    int    greater, rc, rcm;
+    int    num_mads;
     
     char   c;
     char   info[GW_IM_MAX_INFO];
@@ -49,7 +50,7 @@ void gw_im_listener(void *arg)
         
     while (1)
     {
-        greater = gw_im_set_pipes (&in_pipes);
+        greater = gw_im_set_pipes (&in_pipes, &num_mads);
         
         select(greater+1, &in_pipes, NULL, NULL, NULL);
 
@@ -74,7 +75,32 @@ void gw_im_listener(void *arg)
                 str[j] = '\0';
 
                 if (rc <= 0)
+                {
+                    gw_log_print("IM",'W',"Error reading MAD (%s) message\n",
+                            im_mad->name);
+
+                    rcm = gw_im_mad_reload (im_mad);
+                    
+                    if ( rcm == 0 )
+                        gw_log_print("IM",'I',"MAD (%s) successfully reloaded\n",
+                            im_mad->name);
+                    else
+                    {
+                        gw_log_print("IM",'E',"Error reloading IM MAD (%s)\n",
+                            im_mad->name);
+                            
+                        im_mad->mad_im_pipe = -1;
+                        
+                        if ( num_mads == 1 )
+                        {
+                            gw_log_print("IM",'E',"GridWay needs to be restarted (no IM MADs left)!\n");                            
+                            return;
+                        }
+                    }                            
+                                                
                     continue;
+                    
+                }
                                     
                 info[0] = '\0';
 
@@ -118,10 +144,21 @@ void gw_im_listener(void *arg)
 
                 if (strcmp(action, "DISCOVER") == 0)
                 {
+                    pthread_mutex_lock(&(gw_im.mutex));
+
+                    gw_im.active_queries--;
+
+#ifdef GWIMDEBUG
+                    gw_log_print("IM",'D',"Discovery action done, %i active queries.\n", gw_im.active_queries);
+#endif
+
+                    pthread_mutex_unlock(&(gw_im.mutex));
+
                     if (strcmp(result, "SUCCESS") == 0)
                     {
                         if (strlen(info) > 0)
                         {
+                            
                             gw_log_print("IM",'I',"Hosts discovered by MAD (%s): %s\n",
                                     im_mad->name, info);
                                     
@@ -150,9 +187,24 @@ void gw_im_listener(void *arg)
                 }
                 else if (strcmp(action, "MONITOR") == 0)
                 {
+                    pthread_mutex_lock(&(gw_im.mutex));
+
+                    gw_im.active_queries--;
+
+#ifdef GWIMDEBUG
+                    gw_log_print("IM",'D',"Monitoring action done, %i active queries.\n", gw_im.active_queries);
+#endif
+
+                    pthread_mutex_unlock(&(gw_im.mutex));
+
                     if (strcmp(result, "SUCCESS") == 0)
                     {
                         gw_host_update(host_id, info);
+
+#ifdef GWIMDEBUG
+                        gw_log_print("IM",'D',"Host %i successfully monitored.\n",
+                                host_id);
+#endif
                     }
                     else
                     {

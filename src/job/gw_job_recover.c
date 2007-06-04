@@ -692,3 +692,36 @@ int gw_job_recover_job_contact(gw_job_t *job)
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
+
+inline char * gw_job_recover_get_contact(gw_job_t *job)
+{
+    char filename[2048];
+    FILE *file;
+    int rc;
+    char job_contact[2048];
+    char *jc;
+    gw_em_mad_t *em_mad;
+    
+    jc = NULL;
+    
+    sprintf(filename, "%s/job.contact", job->directory);
+
+    file = fopen(filename, "r");
+
+    if (file != NULL)
+    {
+        rc = fscanf(file, "%s", job_contact);
+        
+        if ( rc == 1 )
+            jc = strdup(job_contact);
+
+        fclose(file);
+    }
+
+    return jc;
+}
+ 
+
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */

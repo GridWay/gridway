@@ -21,7 +21,6 @@
 #include "gw_em_mad.h"
 #include "gw_user.h"
 #include "gw_log.h"
-#include "gw_em_rsl.h"
 
 int gw_user_init(gw_user_t *user, const char *name)
 {
@@ -46,12 +45,13 @@ int gw_user_init(gw_user_t *user, const char *name)
     
     i = 0;
     
-    while ((gw_conf.em_mads[i][0] != NULL) && (i<GW_MAX_MADS) )
+    while ( ( i < GW_MAX_MADS ) && (gw_conf.em_mads[i][0] != NULL) )
     {
         rc = gw_em_register_mad(user,
                 gw_conf.em_mads[i][GW_MAD_PATH_INDEX],
                 gw_conf.em_mads[i][GW_MAD_NAME_INDEX],        
-                gw_conf.em_mads[i][GW_MAD_ARGS_INDEX]);
+                gw_conf.em_mads[i][GW_MAD_ARGS_INDEX],
+                gw_conf.em_mads[i][GW_MAD_RSL_MODE_INDEX]);
 
         if (rc != 0)
         {
@@ -77,7 +77,7 @@ int gw_user_init(gw_user_t *user, const char *name)
     gw_log_print("UM",'I',"Loading transfer MADs for user %s.\n", GWNSTR(name));
     
     i = 0;
-    while ((gw_conf.tm_mads[i][0] != NULL) && (i<GW_MAX_MADS) )
+    while ( ( i < GW_MAX_MADS ) && (gw_conf.tm_mads[i][0] != NULL) )
     {
         rc = gw_tm_register_mad(user,
                 gw_conf.tm_mads[i][GW_MAD_PATH_INDEX],
@@ -147,11 +147,11 @@ void gw_user_destroy(gw_user_t *user)
 int gw_em_register_mad(gw_user_t *  user, 
                        const char * executable,
                        const char * name, 
+                       const char * args,
                        const char * mode)
 {
     int           rc, i;
-    gw_em_mad_t * mad;
-    
+
     /* ----------------------------------------------------- */
     /* 1.- Check if there is space left                      */
     /* ----------------------------------------------------- */
@@ -184,59 +184,21 @@ int gw_em_register_mad(gw_user_t *  user,
     /* 2.- Init MAD structure and start the driver           */
     /* ----------------------------------------------------- */    
     
-    mad = &(user->em_mad[user->em_mads]);
-    
-    rc = gw_em_mad_init (mad, executable, name, user->name);
+    rc = gw_em_mad_init(&(user->em_mad[user->em_mads]),
+                        executable,
+                        name,
+                        args,
+                        mode,
+                        user->name);
 
     if ( rc == 0 )
     {
         user->em_mads++;
         
-        if ( mode != NULL )
-        {
-            mad->mode = strdup(mode);
-         
-            if (strcmp(mode, "rsl") == 0)
-            {
-                mad->wrapper_rsl     = gw_generate_wrapper_rsl;
-                mad->pre_wrapper_rsl = gw_generate_pre_wrapper_rsl;                
-            }
-            else if (strcmp(mode, "rsl_nsh") == 0)
-            {
-                mad->wrapper_rsl     = gw_generate_wrapper_rsl_nsh;
-                mad->pre_wrapper_rsl = gw_generate_pre_wrapper_rsl;                
-            }
-            else if (strcmp(mode, "rsl2") == 0)
-            {
-                mad->wrapper_rsl     = gw_generate_rsl2;
-                mad->pre_wrapper_rsl = gw_generate_pre_wrapper_rsl2;
-            }
-
-            else if (strcmp(mode, "rsl2_wrapper") == 0)
-            {
-                mad->wrapper_rsl     = gw_generate_wrapper_rsl2;
-                mad->pre_wrapper_rsl = gw_generate_pre_wrapper_rsl2;
-            }
-            else if (strcmp(mode, "rsl2_nowrapper") == 0)
-            {
-                mad->wrapper_rsl     = gw_generate_nowrapper_rsl2;
-                mad->pre_wrapper_rsl = gw_generate_pre_wrapper_rsl2;            	            	
-            }
-        }
-        
-        if (mad->wrapper_rsl == NULL )
-        {
-            gw_log_print("UM",'W',"\tMode %s for execution MAD %s not specified or not supported, using mode rsl.\n",
-                         GWNSTR(mode),
-                         GWNSTR(name));
-                    
-            mad->wrapper_rsl     = gw_generate_wrapper_rsl;
-            mad->pre_wrapper_rsl = gw_generate_pre_wrapper_rsl;            
-        }
-        
-        gw_log_print("UM",'I',"\tExecution MAD %s loaded (exec:%s, mode:%s).\n",
+        gw_log_print("UM",'I',"\tExecution MAD %s loaded (exec:%s, args:%s, mode:%s).\n",
 	        		 GWNSTR(name),
 	        		 GWNSTR(executable),
+                     GWNSTR(args),                     
 	        		 GWNSTR(mode));
         
     }
@@ -317,11 +279,13 @@ int gw_tm_register_mad(gw_user_t *  user,
     /* ----------------------------------------------------- */
     /* 2.- Init MAD structure and start the driver           */
     /* ----------------------------------------------------- */    
-    
-    mad = &(user->tm_mad[user->tm_mads]);
-    
-    rc = gw_tm_mad_init(mad,executable,name,arg,user->name);
-    
+
+    rc = gw_tm_mad_init(&(user->tm_mad[user->tm_mads]),
+                        executable,
+                        name,
+                        arg,
+                        user->name);
+
     if ( rc == 0 )
     {        
         user->tm_mads++;

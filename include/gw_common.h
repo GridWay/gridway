@@ -24,6 +24,16 @@
 
 #define GW_VERSION PACKAGE_STRING
 
+#ifdef GW_GLOBUS_DIRS
+#define GW_ETC_DIR "etc/gridway"
+#define GW_VAR_DIR "var/gridway"
+#define GW_TEST_DIR "test/gridway"
+#else
+#define GW_ETC_DIR "etc"
+#define GW_VAR_DIR "var"
+#define GW_TEST_DIR "test"
+#endif
+
 /*----------------------------------------------------------------------------*/
 /* General Types                                                              */
 /*----------------------------------------------------------------------------*/

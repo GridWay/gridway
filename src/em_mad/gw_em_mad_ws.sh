@@ -1,32 +1,18 @@
 #!/bin/bash
 
-PRIORITY=19
-MADDEBUG=
-
-if [ -z "${GLOBUS_LOCATION}" ]; then
-    echo "Please, set GLOBUS_LOCATION variable."
-    exit -1
-fi
-
 if [ -z "${GW_LOCATION}" ]; then
     echo "Please, set GW_LOCATION variable."
     exit -1
 fi
 
-cd ${GW_LOCATION}/var/
+. $GW_LOCATION/bin/gw_mad_common.sh
 
-if [ -n "${MADDEBUG}" ]; then
-    ulimit -c 15000
-fi
-
-. $GLOBUS_LOCATION/etc/globus-user-env.sh
-
-. $GLOBUS_LOCATION/etc/globus-devel-env.sh 
-
-export CLASSPATH=$CLASSPATH:$GW_LOCATION/bin
+setup_globus
+cd_var
+mad_debug
 
 if [ -z "${GLOBUS_TCP_PORT_RANGE}" ]; then
-    nice -n $PRIORITY java -DGLOBUS_LOCATION=$GLOBUS_LOCATION -Djava.endorsed.dirs=$GLOBUS_LOCATION/endorsed GW_mad_ws
+    exec nice -n $PRIORITY java -DGLOBUS_LOCATION=$GLOBUS_LOCATION -Djava.endorsed.dirs=$GLOBUS_LOCATION/endorsed -classpath $CLASSPATH:$GW_LOCATION/lib/gw_em_mad_ws.jar GW_mad_ws $*
 else
-    nice -n $PRIORITY java -DGLOBUS_LOCATION=$GLOBUS_LOCATION -Djava.endorsed.dirs=$GLOBUS_LOCATION/endorsed -DGLOBUS_TCP_PORT_RANGE=$GLOBUS_TCP_PORT_RANGE GW_mad_ws
+    exec nice -n $PRIORITY java -DGLOBUS_LOCATION=$GLOBUS_LOCATION -Djava.endorsed.dirs=$GLOBUS_LOCATION/endorsed -DGLOBUS_TCP_PORT_RANGE=$GLOBUS_TCP_PORT_RANGE -classpath $CLASSPATH:$GW_LOCATION/lib/gw_em_mad_ws.jar GW_mad_ws $*
 fi

@@ -268,7 +268,7 @@ void gw_host_pool_update (char *hostnames, char *em_mad, char *tm_mad, char *im_
             
             if ( host != NULL )
             {
-                gw_im_monitor(host);
+                host->last_monitoring_time = 0;
                 
                 pthread_mutex_unlock(&(host->mutex));
             }
@@ -289,7 +289,7 @@ void gw_host_pool_update (char *hostnames, char *em_mad, char *tm_mad, char *im_
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
-void gw_host_pool_monitor_hosts( )
+void gw_host_pool_monitor_hosts( ) /* Not used any more */
 {
     int i;
     gw_host_t *   host;

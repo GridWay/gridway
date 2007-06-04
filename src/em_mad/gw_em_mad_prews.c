@@ -24,7 +24,7 @@ int main (int argc, char **argv )
     int  rc;
     char action[20];
     char jid_s[20];
-    int  jid;
+    int  jid = 0;
     char contact[500];
     char rsl_file[1024];
     int  status = -1;

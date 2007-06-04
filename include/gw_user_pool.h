@@ -65,8 +65,12 @@ gw_tm_mad_t * gw_user_pool_get_tm_mad_by_fd (int user_id, int fd);
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
-int gw_user_pool_set_em_pipes (fd_set *in_pipes, int um_em_pipe_r);
-
+int gw_user_pool_set_em_pipes (fd_set *       in_pipes,
+                               int *          fds, 
+                               int *          num_fds, 
+                               gw_em_mad_t ** em_mads, 
+                               int            um_em_pipe_r);
+                               
 int gw_user_pool_set_tm_pipes (fd_set *       in_pipes, 
                                int *          fds, 
                                int *          num_fds, 

@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <pthread.h>
+#include <limits.h>
 
 #include "gw_em_rsl.h"
 #include "gw_job.h"
@@ -32,9 +33,10 @@ char* gw_generate_wrapper_rsl (gw_job_t *job)
 {
     char *rsl;
     char *job_environment; 
-    char rsl_buffer[GW_RSL_LENGTH];
-    int print_queue = 0;
-    int rc;
+    char  rsl_buffer[GW_RSL_LENGTH];
+    char  tmp_buffer[GW_RSL_LENGTH];
+    int   print_queue = 0;
+    char *jobtype;
     
     /* ---------------------------------------------------------------------- */
     /* 1.- Create dynamic job data environment                                */
@@ -52,37 +54,36 @@ char* gw_generate_wrapper_rsl (gw_job_t *job)
     if ( job->history->queue != NULL )
         if ( strcmp(job->history->queue,"-") != 0 )
             print_queue = 1;
+    
+    jobtype = strdup(gw_template_jobtype_string(job->template.type));
+    
+    snprintf(rsl_buffer, sizeof(char) * GW_RSL_LENGTH,
+            "&(jobtype=\"%s\")"
+            "(executable=\".gw_%s_%i/.wrapper\")"
+            "(stdout=\".gw_%s_%i/stdout.wrapper\")"
+            "(stderr=\".gw_%s_%i/stderr.wrapper\")"
+            "(environment=%s)"
+            "(count=%d)",
+            jobtype,
+            job->owner, job->id,
+            job->owner, job->id,
+            job->owner, job->id,
+            job_environment,
+            job->template.np);
 
     if ( print_queue )
     {
-        rc = snprintf(rsl_buffer, sizeof(char) * GW_RSL_LENGTH,
-                "&(executable=\".gw_%s_%i/.wrapper\")"
-                "(stdout=\".gw_%s_%i/stdout.wrapper\")"
-                "(stderr=\".gw_%s_%i/stderr.wrapper\")"
-                "(queue=\"%s\")"
-                "(environment=%s)",
-                job->owner, job->id,
-                job->owner, job->id,
-                job->owner, job->id,
-                job->history->queue,
-                job_environment);
-    }
-    else
-    {
-        rc = snprintf(rsl_buffer, sizeof(char) * GW_RSL_LENGTH,
-                "&(executable=\".gw_%s_%i/.wrapper\")"
-                "(stdout=\".gw_%s_%i/stdout.wrapper\")"
-                "(stderr=\".gw_%s_%i/stderr.wrapper\")"
-                "(environment=%s)",
-                job->owner, job->id,
-                job->owner, job->id,
-                job->owner, job->id,
-                job_environment);
+        snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
+                "(queue=\"%s\")", job->history->queue);
+        strncat(rsl_buffer, tmp_buffer, GW_RSL_LENGTH-strlen(rsl_buffer));
     }
     
-    free(job_environment);        
-
-    if ((rc >= (GW_RSL_LENGTH * sizeof(char))) || ( rc < 0 ) )          
+    gw_job_print(job,"EM",'D',"RSL generated.\n");
+    
+    free(job_environment);
+    free(jobtype);
+    
+    if ( strlen(rsl_buffer) >= GW_RSL_LENGTH )
         return NULL;
     
     rsl = strdup(rsl_buffer);
@@ -98,10 +99,11 @@ char* gw_generate_wrapper_rsl_nsh (gw_job_t *job)
     char *rsl;
     char *job_environment; 
     char rsl_buffer[GW_RSL_LENGTH];
+    char tmp_buffer[GW_RSL_LENGTH];
     int print_queue = 0;
     int rc;
     char *staging_url;
-    char wrapper[100], stdout_wrapper[100], stderr_wrapper[100];
+    char wrapper[PATH_MAX], stdout_wrapper[PATH_MAX], stderr_wrapper[PATH_MAX];
 
     if ( job->history->queue != NULL )
         if ( strcmp(job->history->queue,"-") != 0 )
@@ -113,13 +115,21 @@ char* gw_generate_wrapper_rsl_nsh (gw_job_t *job)
         
         staging_url = job->history->tm_mad->url;
         
-        sprintf(wrapper, "%s", job->template.wrapper);
+        snprintf(wrapper, PATH_MAX -1, "%s", job->template.wrapper);
         
-        sprintf(stdout_wrapper, "%s/var/%d/stdout.wrapper.%d",
-                gw_conf.gw_location, job->id, job->restarted);
+        snprintf(stdout_wrapper, 
+                 PATH_MAX -1, 
+                 "%s/" GW_VAR_DIR "/%d/stdout.wrapper.%d",
+                 gw_conf.gw_location, 
+                 job->id, 
+                 job->restarted);
                 
-        sprintf(stderr_wrapper, "%s/var/%d/stderr.wrapper.%d",
-                gw_conf.gw_location, job->id, job->restarted);
+        snprintf(stderr_wrapper,
+                 PATH_MAX - 1, 
+                 "%s/" GW_VAR_DIR "/%d/stderr.wrapper.%d",
+                 gw_conf.gw_location, 
+                 job->id, 
+                 job->restarted);
     }
     else
     {
@@ -129,13 +139,23 @@ char* gw_generate_wrapper_rsl_nsh (gw_job_t *job)
     	    	
         staging_url = job->history->host->hostname;
         
-        sprintf(wrapper, "~/.gw_%s_%i/.wrapper", job->owner, job->id);
+        snprintf(wrapper, 
+                 PATH_MAX - 1,
+                 "~/.gw_%s_%i/.wrapper", 
+                 job->owner, 
+                 job->id);
         
-        sprintf(stdout_wrapper, "~/.gw_%s_%i/stdout.wrapper",
-                job->owner, job->id);
+        snprintf(stdout_wrapper,
+                 PATH_MAX - 1, 
+                 "~/.gw_%s_%i/stdout.wrapper",
+                 job->owner, 
+                 job->id);
                 
-        sprintf(stderr_wrapper, "~/.gw_%s_%i/stderr.wrapper",
-                job->owner, job->id);        
+        snprintf(stderr_wrapper,
+                 PATH_MAX - 1, 
+                 "~/.gw_%s_%i/stderr.wrapper",
+                 job->owner, 
+                 job->id);        
     }
     
     /* ---------------------------------------------------------------------- */
@@ -151,40 +171,28 @@ char* gw_generate_wrapper_rsl_nsh (gw_job_t *job)
     /* 2.- Build RSL String & Return it                                       */
     /* ---------------------------------------------------------------------- */
 
-    if ( print_queue )
-    {
-        rc = snprintf(rsl_buffer, sizeof(char) * GW_RSL_LENGTH,
-                "&(executable=\"%s/%s\")"
-                "(arguments=\"%s/%s/var/%d/job.env\")"
-                "(stdout=\"%s/%s\")"
-                "(stderr=\"%s/%s\")"
-                "(queue=\"%s\")"
-                "(environment=%s)",
-                staging_url, wrapper,
-                staging_url, gw_conf.gw_location, job->id,
-                staging_url, stdout_wrapper,
-                staging_url, stderr_wrapper,
-                job->history->queue,
-                job_environment);
-    }
-    else
-    {
-        rc = snprintf(rsl_buffer, sizeof(char) * GW_RSL_LENGTH,
-                "&(executable=\"%s/%s\")"
-                "(arguments=\"%s/%s/var/%d/job.env\")"
-                "(stdout=\"%s/%s\")"
-                "(stderr=\"%s/%s\")"
-                "(environment=%s)",
-                staging_url, wrapper,
-                staging_url, gw_conf.gw_location, job->id,
-                staging_url, stdout_wrapper,
-                staging_url, stderr_wrapper,
-                job_environment);
-    }
+    rc = snprintf(rsl_buffer, sizeof(char) * GW_RSL_LENGTH,
+            "&(executable=\"%s/%s\")"
+            "(arguments=\"%s/%s/" GW_VAR_DIR "/%d/job.env\")"
+            "(stdout=\"%s/%s\")"
+            "(stderr=\"%s/%s\")"
+            "(environment=%s)",
+            staging_url, wrapper,
+            staging_url, gw_conf.gw_location, job->id,
+            staging_url, stdout_wrapper,
+            staging_url, stderr_wrapper,
+            job_environment);
     
     free(job_environment);        
 
-    if ((rc >= (GW_RSL_LENGTH * sizeof(char))) || ( rc < 0 ) )          
+    if ( print_queue )
+    {
+        snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
+                "(queue=\"%s\")", job->history->queue);
+        strncat(rsl_buffer, tmp_buffer, GW_RSL_LENGTH-strlen(rsl_buffer));
+    }
+    
+    if ( strlen(rsl_buffer) >= GW_RSL_LENGTH )
         return NULL;
     
     rsl = strdup(rsl_buffer);
@@ -220,12 +228,12 @@ char* gw_generate_pre_wrapper_rsl (gw_job_t *job)
     if ( job->template.pre_wrapper[0] == '/' ) /*Absolute path*/
         pre_wrapper = strdup(job->template.pre_wrapper);
     else
-        pre_wrapper = gw_job_substitute (job->template.pre_wrapper, job);
+        pre_wrapper = gw_job_substitute(job->template.pre_wrapper, job);
         
     if ( pre_wrapper == NULL )
     {
         
-        gw_job_print(job,"DM",'E',"Parse error (%s) while generating rsl.\n",job->template.pre_wrapper);    
+        gw_job_print(job,"EM",'E',"Parse error (%s) while generating rsl.\n",job->template.pre_wrapper);    
         free(job_environment);            
         return NULL;
     }
@@ -265,7 +273,7 @@ char* gw_generate_pre_wrapper_rsl (gw_job_t *job)
 
         if ( pre_wrapper_arguments == NULL )
         {
-            gw_job_print(job,"DM",'E',"Parse error (%s) while generating rsl.\n",job->template.pre_wrapper_arguments);    
+            gw_job_print(job,"EM",'E',"Parse error (%s) while generating rsl.\n",job->template.pre_wrapper_arguments);    
             free(job_environment);
             free(pre_wrapper);
             return NULL;
@@ -275,8 +283,8 @@ char* gw_generate_pre_wrapper_rsl (gw_job_t *job)
         if ( size > GW_RSL_LENGTH )
         {
             free(pre_wrapper_arguments);
-            free(job_environment);        
-            free(pre_wrapper);        
+            free(job_environment);
+            free(pre_wrapper);
             return NULL;
         }
         
@@ -284,7 +292,7 @@ char* gw_generate_pre_wrapper_rsl (gw_job_t *job)
         strcat(rsl_buffer,pre_wrapper_arguments);
         strcat(rsl_buffer,")");
         
-        free(pre_wrapper_arguments);        
+        free(pre_wrapper_arguments);
     }
     
     free(job_environment);        

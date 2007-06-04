@@ -30,7 +30,6 @@
 #include "gw_log.h"
 #include "gw_conf.h"
 
-
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
@@ -59,11 +58,18 @@ void gw_im_discover(char *mad_name)
         return;
     }
 
-#ifdef GWIMDEBUG 
-    gw_log_print("IM",'D',"Discovering hosts with MAD %s.\n", mad_name);
+    mad->state = GW_IM_MAD_STATE_DISCOVERING;
+
+    pthread_mutex_lock(&(gw_im.mutex));
+
+    gw_im.active_queries++;
+
+#ifdef GWIMDEBUG
+    gw_log_print ("IM",'D',"Discovering hosts with MAD %s, %i active queries.\n",
+            mad_name, gw_im.active_queries);
 #endif
 
-    mad->state = GW_IM_MAD_STATE_DISCOVERING;
+    pthread_mutex_unlock(&(gw_im.mutex));
 
     gw_im_mad_discover(mad);
 }
@@ -80,8 +86,10 @@ void gw_im_monitor(gw_host_t * host)
     if ((host->state != GW_HOST_STATE_DISCOVERED) && 
         (host->state != GW_HOST_STATE_MONITORED ))
     {
-        gw_log_print("IM",'I',"Not ready to monitor host %d (%s).\n",
+#ifdef GWIMDEBUG         
+        gw_log_print("IM",'D',"Not ready to monitor host %d (%s).\n",
                      host->host_id, host->hostname);
+#endif        
         return;
     }       
     
@@ -95,6 +103,17 @@ void gw_im_monitor(gw_host_t * host)
     }
 
     host->state = GW_HOST_STATE_MONITORING;
+
+    pthread_mutex_lock(&(gw_im.mutex));
+
+    gw_im.active_queries++;
+
+#ifdef GWIMDEBUG
+    gw_log_print ("IM",'D',"Monitoring host %i (\"%s\"), %i active queries.\n",
+            host->host_id, host->hostname, gw_im.active_queries);
+#endif
+
+    pthread_mutex_unlock(&(gw_im.mutex));
     
     gw_im_mad_monitor(mad, host->host_id, host->hostname);
 }
@@ -111,8 +130,10 @@ void gw_im_timer(void *_null)
     time_t discovery_interval;
     time_t monitoring_interval;
     static time_t last_discovery_time = 0;
-    static time_t last_monitoring_time = 0;
+    static int next_host_to_check = 0;
 	static int mark = 0;
+    gw_host_t *host;
+    int hid;
 	
 	mark = mark + 5;
 	if ( mark >= 300 )
@@ -132,23 +153,56 @@ void gw_im_timer(void *_null)
 
         last_discovery_time = the_time;
         
-        for (i=0; gw_conf.im_mads[i][0] != NULL; i++) 
+        for (i=0; (i<GW_MAX_MADS) && (gw_conf.im_mads[i][0] != NULL); i++) 
         {
-#ifdef GWIMDEBUG
-            gw_log_print ("IM",'D',"\tDiscovering hosts with MAD %s.\n",
-                    gw_conf.im_mads[i][GW_MAD_NAME_INDEX]);
-#endif
 			gw_im_discover (gw_conf.im_mads[i][GW_MAD_NAME_INDEX]);
         }
+
     }
     
-    if (the_time - last_monitoring_time >= monitoring_interval) 
-    {
-        gw_log_print ("IM",'I',"Monitoring hosts.\n");
+    /* Go through the host poll checking the last monitoring time */
+    hid = next_host_to_check;
+    
+#ifdef GWIMDEBUG                    
+    gw_log_print ("IM",'D',"Checking hosts starting with %d...\n", hid);
+#endif                    
 
-        last_monitoring_time = the_time;
+    while (gw_im.active_queries < gw_conf.max_active_im_queries)
+    {
+#ifdef GWIMDEBUG                    
+        gw_log_print ("IM",'D',"Checking host %d...\n", hid);
+#endif
+
+        host = gw_host_pool_get_host(hid, GW_TRUE);
         
-		gw_host_pool_monitor_hosts( );
+        if (host == NULL)
+        {
+            if (hid > 0)
+            {
+                next_host_to_check = 0;
+                break;
+            }
+            else
+            {
+#ifdef GWIMDEBUG
+                gw_log_print ("IM",'D',"No hosts to monitor.\n");
+#endif
+                next_host_to_check = 0;
+                break;
+            }
+        }
+
+        if (host->last_monitoring_time == 0
+                || the_time - host->last_monitoring_time >= monitoring_interval)
+        {
+            host->last_monitoring_time = the_time;
+
+            gw_im_monitor(host);
+        }
+
+        pthread_mutex_unlock(&(host->mutex));
+
+        hid++;
     }
 }
 

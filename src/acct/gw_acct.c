@@ -52,7 +52,8 @@ int gw_acct_db_open(gw_boolean_t server)
 			
         return -1;
     }
-	sprintf(env_dir,"%s/var/acct/", gw_location);
+     
+    snprintf(env_dir, PATH_MAX-1, "%s/" GW_VAR_DIR "/acct/", gw_location);
 	
 	/* ----- Open the environment ------ */
 	

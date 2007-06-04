@@ -18,11 +18,18 @@
 # -------------------------------------------------------------------------- 
 
 dynamic_discover (){
+	
     if [ -n "$SERVER" ]
     then
         TMPFILE=".search.$$.$RANDOM"
+
+		if [ "x$PORTNUMBER" = "x" ]
+		then
+			INDEX="https://$SERVER:$PORTNUMBER/wsrf/services/DefaultIndexService"
+		else
+			INDEX="https://$SERVER/wsrf/services/DefaultIndexService"		
+		fi        
         
-        INDEX="https://$SERVER:8443/wsrf/services/DefaultIndexService"
         XPATH='/*/*/*[local-name()="MemberServiceEPR"]/*[local-name()="Address" and substring-after(text(),"/wsrf/services/")="DefaultIndexService"]'
 
         echo "<root>" > $TMPFILE
@@ -33,7 +40,7 @@ dynamic_discover (){
 
         if [ $STATUS -eq 0 ]
         then
-            HOSTNAMES=`nice -n $PRIORITY java -classpath $CLASSPATH:$GW_LOCATION/bin Mds4QueryParser -l $TMPFILE`
+            HOSTNAMES=`nice -n $PRIORITY java -classpath $CLASSPATH:$GW_LOCATION/lib/gw_im_mad_ws.jar Mds4QueryParser -l $TMPFILE`
 
             for HOSTNAME in $HOSTNAMES
             do
@@ -52,10 +59,16 @@ dynamic_discover (){
 }
 
 dynamic_monitor (){
-   
+	   
     TMPFILE=".search.$$.$1.$RANDOM"
+
+	if [ "x$PORTNUMBER" = "x" ]
+	then
+	    INDEX="https://$2/wsrf/services/DefaultIndexService"
+	else
+	    INDEX="https://$2:$PORTNUMBER/wsrf/services/DefaultIndexService"	
+	fi
     
-    INDEX="https://$2:8443/wsrf/services/DefaultIndexService"
     XPATH='/*/*/*[local-name()="MemberServiceEPR"]/*[local-name()="Address" and substring-after(text(),"/wsrf/services/")="ManagedJobFactoryService"]/../..'
 
     echo "<root>" > $TMPFILE
@@ -65,7 +78,7 @@ dynamic_monitor (){
 
     if [ $STATUS -eq 0 ]
     then
-        INFO=`nice -n $PRIORITY java -classpath $CLASSPATH:$GW_LOCATION/bin Mds4QueryParser -i $2 $TMPFILE`
+        INFO=`nice -n $PRIORITY java -classpath $CLASSPATH:$GW_LOCATION/lib/gw_im_mad_ws.jar Mds4QueryParser -i $2 $TMPFILE "$3"`
         echo "MONITOR $1 SUCCESS $INFO"
     else
         echo "MONITOR $1 FAILURE Can't access $2"
@@ -73,5 +86,15 @@ dynamic_monitor (){
     
     rm -f $TMPFILE
 }
+
+# Common initialization
+if [ -z "${GW_LOCATION}" ]; then
+    echo "Please, set GW_LOCATION variable."
+    exit -1
+fi
+
+. $GW_LOCATION/bin/gw_mad_common.sh
+
+setup_globus
 
 . $GW_LOCATION/bin/gw_im_mad_common.sh

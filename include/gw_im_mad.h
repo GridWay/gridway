@@ -26,6 +26,11 @@
 /* ---------------------------------------------------------------------------*/
 /* ---------------------------------------------------------------------------*/
 
+extern int active_im_mads; /* To control the number of active IM MADs */
+
+/* ---------------------------------------------------------------------------*/
+/* ---------------------------------------------------------------------------*/
+
 typedef enum {
    GW_IM_MAD_STATE_IDLE,
    GW_IM_MAD_STATE_DISCOVERING,
@@ -64,6 +69,8 @@ void gw_im_mad_discover(gw_im_mad_t *im_mad);
 void gw_im_mad_monitor(gw_im_mad_t *im_mad, int hid, char *hostname);
 
 void gw_im_mad_finalize(gw_im_mad_t *im_mad);
+
+int gw_im_mad_reload (gw_im_mad_t *im_mad);
 
 /* ---------------------------------------------------------------------------*/
 

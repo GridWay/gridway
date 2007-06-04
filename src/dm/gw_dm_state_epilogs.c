@@ -224,10 +224,11 @@ void gw_dm_stop_epilog ( void *_job_id )
 
 void gw_dm_kill_epilog ( void *_job_id )
 {
-    gw_job_t * job;
-    int        job_id;
-    int        index;
-	int        num_xfrs;
+    gw_job_t *   job;
+    int          job_id;
+    int          index;
+	int          num_xfrs;
+    gw_boolean_t wbe; /* Wrapper-based execution */
     
 	/* ----------------------------------------------------------- */  
     /* 0.- Get job pointer                                         */
@@ -263,9 +264,12 @@ void gw_dm_kill_epilog ( void *_job_id )
 
 	gw_xfr_destroy (&(job->xfrs));
 	
-	if( job->template.type != GW_JOB_TYPE_MPI
+    wbe = strncmp(job->history->host->lrms_name, "jobmanager-", 11) == 0
+            || ( job->template.type != GW_JOB_TYPE_MPI
             && strcmp(job->history->host->lrms_type, "gw") != 0
-            && job->template.wrapper != NULL )
+            && job->template.wrapper != NULL );
+
+	if ( wbe )
 	{
 		index    = 0;	
 		num_xfrs = 2;
@@ -288,10 +292,11 @@ void gw_dm_kill_epilog ( void *_job_id )
 
 void gw_dm_epilog_fail (void *_job_id)
 {
-    gw_job_t * job;
-    int        job_id;
-    int        index;
-	int        num_xfrs;
+    gw_job_t *   job;
+    int          job_id;
+    int          index;
+	int          num_xfrs;
+    gw_boolean_t wbe; /* Wrapper-based execution */
     
 	/* ----------------------------------------------------------- */  
     /* 0.- Get job pointer                                         */
@@ -327,9 +332,12 @@ void gw_dm_epilog_fail (void *_job_id)
 
 	gw_xfr_destroy (&(job->xfrs));
 	
-        if( job->template.type != GW_JOB_TYPE_MPI
+    wbe = strncmp(job->history->host->lrms_name, "jobmanager-", 11) == 0
+            || ( job->template.type != GW_JOB_TYPE_MPI
             && strcmp(job->history->host->lrms_type, "gw") != 0
-            && job->template.wrapper != NULL )
+            && job->template.wrapper != NULL );
+
+    if ( wbe )
 	{
 		index    = 0;
 		num_xfrs = 2;
