@@ -15,14 +15,6 @@
 /* limitations under the License.                                             */
 /* -------------------------------------------------------------------------- */
 
-
-/*
- * Author: Constantino Vázquez Blanco
- * Date:   20 November 2006
- * Group:  DACYA - UCM (Spain)
- **/
-
-
 #include "gw_client.h"
 #include "gw_cmds_common.h"
 
@@ -59,7 +51,7 @@ struct test_result test_matrix[] =
 	{"Prolog Fail (Fake Stdin) No Reschedule", 1, "",0},			    // 4
 	{"Prolog Fail (Fake Stdin) Reschedule", 1, "",0},					// 5
 	{"Prolog Fail (Fake Input File) No Reschedule", 1, "",0},			// 6
-	{"Prolog Fail (Fake Executable) No Reschedule", 1, "",0},				// 7
+	{"Prolog Fail (Fake Executable) No Reschedule", 1, "",0},	    	// 7
 	{"Prolog Fail (Fake Stdin) No Reschedule (BULK)", 1, "",0},		    // 8
 	{"Execution Fail No Reschedule", 1, "",0},							// 9
 	{"Execution Fail Reschedule", 1, "",0},								// 10
@@ -101,7 +93,7 @@ char * epilog_fail_bulk();
 
 int main(int argc, char **argv)
 {
-	char *lock;
+	char lock[PATH_MAX];
 	char *reason;
 	char *jt_dir;
 	char *server_hostname;
@@ -167,7 +159,7 @@ int main(int argc, char **argv)
 	// Check proxy
 	if(check_proxy()!=0)
 	{
-		printf("\nCouldn´t find a valid proxy.\n");
+		printf("\nCould not find a valid proxy.\n");
 		exit(-1);
 	} 
 	
@@ -187,8 +179,7 @@ int main(int argc, char **argv)
     fflush(NULL);
     	
 	// Start gwd, fails if already started	
-	lock = (char *) malloc (sizeof(char)*(strlen(GW_LOCATION) + 11));
-    sprintf(lock, "%s/var/.lock", GW_LOCATION);
+    snprintf(lock, PATH_MAX - 1, "%s/" GW_VAR_DIR "/.lock", GW_LOCATION);
     
    	printf(".");
     fflush(NULL);
@@ -214,8 +205,8 @@ int main(int argc, char **argv)
     
 
 	// Change to job template dir
-	jt_dir = (char *) malloc (sizeof(char)*(strlen(GW_LOCATION) + 11));
-    sprintf(jt_dir, "%s/test/jt", GW_LOCATION);
+	jt_dir = (char *) malloc (sizeof(char)*(strlen(GW_LOCATION) + sizeof(GW_TEST_DIR) + 6));
+    sprintf(jt_dir, "%s/" GW_TEST_DIR "/jt", GW_LOCATION);
     chdir(jt_dir);
     
     printf(".");
@@ -821,12 +812,12 @@ void exit_fail(char *reason)
 void exit_gwd()
 {
 	char *GW_LOCATION;
-	char *lock;
+	char lock[PATH_MAX];
+    
     printf("Killing gwd ...");
 	system("pkill -9 gwd > /dev/null 2>&1");
 	GW_LOCATION=getenv("GW_LOCATION");
-	lock = (char *) malloc (sizeof(char)*(strlen(GW_LOCATION) + 11));
-    sprintf(lock, "%s/var/.lock", GW_LOCATION);
+    snprintf(lock, PATH_MAX - 1,"%s/" GW_VAR_DIR "/.lock", GW_LOCATION);
     unlink(lock);
 	printf("done\n");
 }
@@ -876,8 +867,8 @@ void change_jts(char *server_hostname)
 	cmd = (char *) malloc (sizeof(char)*1024);
 	
 	// Change to job template dir
-	jt_dir = (char *) malloc (sizeof(char)*(strlen(GW_LOCATION) + 11));
-    sprintf(jt_dir, "%s/test/jt", GW_LOCATION);
+	jt_dir = (char *) malloc (sizeof(char)*(strlen(GW_LOCATION) + sizeof(GW_TEST_DIR) + 6));
+    sprintf(jt_dir, "%s/" GW_TEST_DIR "/jt", GW_LOCATION);
     chdir(jt_dir);
     
     // checkpoint_gsiftp.jt
