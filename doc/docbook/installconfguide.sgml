@@ -1306,12 +1306,6 @@ HID PRIO  OS              ARCH   MHZ %CPU  MEM(F/T)     DISK(F/T)     N(U/F/T) L
           <entry>-</entry>
           </row>
 
-          <row>
-          <entry>MAX_ACTIVE_IM_QUERIES</entry>
-          <entry>Maximum number (soft limit) of active IM queries (each query spawns one process)</entry>
-          <entry>4</entry>
-          </row>
-
          <row>
          <entry namest="c1" nameend="c3">Scheduler Options</entry>
          </row>
