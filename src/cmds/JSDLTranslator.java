@@ -1,18 +1,18 @@
 /* -------------------------------------------------------------------------- */
-/* Copyright 2002-2006 GridWay Team, Distributed Systems Architecture         */
-/* Group, Universidad Complutense de Madrid                                   */
-/*                                                                            */
-/* Licensed under the Apache License, Version 2.0 (the "License"); you may    */
-/* not use this file except in compliance with the License. You may obtain    */
-/* a copy of the License at                                                   */
-/*                                                                            */
-/* http://www.apache.org/licenses/LICENSE-2.0                                 */
-/*                                                                            */
-/* Unless required by applicable law or agreed to in writing, software        */
-/* distributed under the License is distributed on an "AS IS" BASIS,          */
-/* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.   */
-/* See the License for the specific language governing permissions and        */
-/* limitations under the License.                                             */
+/* Copyright 2002-2007 GridWay Team, Distributed Systems Architecture         														*/
+/* Group, Universidad Complutense de Madrid                                   																	*/
+/*                                                                            																							*/
+/* Licensed under the Apache License, Version 2.0 (the "License"); you may    														*/
+/* not use this file except in compliance with the License. You may obtain    															*/
+/* a copy of the License at                                                   																				*/
+/*                                                                            																							*/
+/* http://www.apache.org/licenses/LICENSE-2.0                                 																	*/
+/*                                                                            																							*/
+/* Unless required by applicable law or agreed to in writing, software        																*/
+/* distributed under the License is distributed on an "AS IS" BASIS,          																*/
+/* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.   												*/
+/* See the License for the specific language governing permissions and        															*/
+/* limitations under the License.                                             																				*/
 /* -------------------------------------------------------------------------- */
 
 import java.util.*;
@@ -35,6 +35,14 @@ import java.util.*;
  * 			Output
  * 			Error
  * 			Environment
+ * 
+ * 		HPCPHPCProfileApplication:
+ * 			Executable
+ * 			Argument
+ * 			Input
+ * 			Output
+ * 			Error
+ * 			Environment
  * 			
  * 	Resources:
  * 		CandidateHost:
@@ -45,8 +53,8 @@ import java.util.*;
  * 			OperatingSystemVersion
  * 		CPUArchitecture:
  * 			CPUArchitectureName
- * 		IndividualCPUSpeed			<---> JSDLRange
- * 		IndividualCPUCount			<---> JSDLRange
+ * 		IndividualCPUSpeed				<---> JSDLRange
+ * 		IndividualCPUCount				<---> JSDLRange
  * 		IndividualPhysicalMemory	<---> JSDLRange
  * 		IndividualDiskSpace			<---> JSDLRange
  * 
@@ -59,12 +67,12 @@ import java.util.*;
 
 public class JSDLTranslator 
 {
-	private	JSDL		jsdl;
-	private	GWJT		gwjt;
+	private	JSDL			jsdl;
+	private	GWJT			gwjt;
 	private Vector		jsdlElements;
 	private	Vector		gwjtElements;
 		
-	public JSDLTranslator(String jsdlFileName)
+	public JSDLTranslator(String jsdlFileName) throws Exception
 	{
 		this.jsdl = new JSDL(jsdlFileName);
 		this.gwjt = new GWJT(null);
@@ -74,13 +82,13 @@ public class JSDLTranslator
 	}
 	
 	
-	public JSDLTranslator(String jsdlFileName, String gwjtFileName)
+	public JSDLTranslator(String jsdlFileName, String gwjtFileName) throws Exception
 	{
 		this.jsdl = new JSDL(jsdlFileName);
 		this.gwjt = new GWJT(gwjtFileName);
 		this.jsdlElements = this.jsdl.getJSDLElements();
 		this.gwjtElements = new Vector();
-		this.createGWJTElements();	
+		this.createGWJTElements();
 	}
 	
 	public void doTranslation()
@@ -161,7 +169,8 @@ public class JSDLTranslator
 			JSDLElement	childElement = (JSDLElement) children.get(i);
 			GWJTElement	gwjtElement = new GWJTElement();
 			
-			if (childElement.getName().equals(JSDL.environmentPAAJD))
+			if (childElement.getName().equals(JSDL.environmentPAAJD) ||
+				childElement.getName().equals(JSDL.environmentHPCPAJD))
 			{
 				environmentString+= childElement.getAttributes() + "="  + childElement.getText() + ", ";
 			}
@@ -176,6 +185,9 @@ public class JSDLTranslator
 		if (!environmentString.equals("="))
 		{
 			GWJTElement	gwjtElement = new GWJTElement();
+			
+			//In the next sentence the environment translation of environmentPAAJD 
+			// is the same that environmentHPCPAJD
 			gwjtElement.setName(translationTAG(JSDL.environmentPAAJD));
 			gwjtElement.setValue(environmentString.substring(0,environmentString.length()-2));
 			this.gwjtElements.add(gwjtElement);
@@ -232,8 +244,7 @@ public class JSDLTranslator
 					}
 				}
 				
-				if (insertElement)
-								
+				if (insertElement)						
 					filesString = childElement.getText() + ", ";
 			}	
 		}
@@ -336,13 +347,12 @@ public class JSDLTranslator
 		
 		return values;
 	}
-	
 		
 	private String translationTAG(String jsdlTAG)
 	{
 		if (jsdlTAG.equals(JSDL.jobNameJIJD))
 			return GWJT.name;
-		if (jsdlTAG.equals(JSDL.executablePAAJD))
+		else if (jsdlTAG.equals(JSDL.executablePAAJD))
 			return GWJT.executable;
 		else if (jsdlTAG.equals(JSDL.argumentPAAJD))
 			return GWJT.arguments;
@@ -353,6 +363,18 @@ public class JSDLTranslator
 		else if (jsdlTAG.equals(JSDL.errorPAAJD))
 			return GWJT.stderrFile;
 		else if (jsdlTAG.equals(JSDL.environmentPAAJD))
+			return GWJT.environment;
+		else if (jsdlTAG.equals(JSDL.executableHPCPAJD))
+			return GWJT.executable;
+		else if (jsdlTAG.equals(JSDL.argumentHPCPAJD))
+			return GWJT.arguments;
+		else if (jsdlTAG.equals(JSDL.inputHPCPAJD))
+			return GWJT.stdinFile;
+		else if (jsdlTAG.equals(JSDL.outputHPCPAJD))
+			return GWJT.stdoutFile;
+		else if (jsdlTAG.equals(JSDL.errorHPCPAJD))
+			return GWJT.stderrFile;
+		else if (jsdlTAG.equals(JSDL.environmentHPCPAJD))
 			return GWJT.environment;
 		else if (jsdlTAG.equals(JSDL.resourcesJD))
 			return GWJT.requirements;

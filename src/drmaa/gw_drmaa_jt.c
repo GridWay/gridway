@@ -137,7 +137,7 @@ int drmaa_gw_jt_init   (drmaa_job_template_t **jt)
 /* ------------------------------------------------------------------------- */
 /* ------------------------------------------------------------------------- */
 
-inline void drmaa_gw_free_strs(char **strs, int num)
+void drmaa_gw_free_strs(char **strs, int num)
 {
 	int i;
 
@@ -602,7 +602,7 @@ char * drmaa_gw_jt_parse(const char * value)
 /* ------------------------------------------------------------------------- */
 /* ------------------------------------------------------------------------- */
 
-inline void gw_drmaa_jt_w_var (FILE *fd, int var, const char *val)
+void gw_drmaa_jt_w_var (FILE *fd, int var, const char *val)
 {
 	char * val_cp;
 	
@@ -620,7 +620,7 @@ inline void gw_drmaa_jt_w_var (FILE *fd, int var, const char *val)
 
 /* ------------------------------------------------------------------------- */
 
-inline void gw_drmaa_jt_w_vvar(FILE *        fd, 
+void gw_drmaa_jt_w_vvar(FILE *        fd, 
                                int           var, 
                                char **       val,
                                int           num,

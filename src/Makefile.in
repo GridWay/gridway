@@ -61,6 +61,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+@GW_GLOBUS_DIRS_FALSE@am__append_1 = $(GLOBUS_INCLUDES)
 bin_PROGRAMS = $(srcdir)/gwd/gwd$(EXEEXT) $(srcdir)/cmds/gwps$(EXEEXT) \
 	$(srcdir)/cmds/gwsubmit$(EXEEXT) \
 	$(srcdir)/cmds/gwhistory$(EXEEXT) \
@@ -70,9 +71,9 @@ bin_PROGRAMS = $(srcdir)/gwd/gwd$(EXEEXT) $(srcdir)/cmds/gwps$(EXEEXT) \
 	$(srcdir)/scheduler/gw_flood_scheduler$(EXEEXT) \
 	$(srcdir)/scheduler/gw_sched$(EXEEXT) $(am__EXEEXT_1) \
 	$(am__EXEEXT_2)
-@JSDL_TRUE@am__append_1 = $(CMDS)/jsdl2gw.sh
-@JSDL_TRUE@am__append_2 = $(srcdir)/cmds/gw_jsdl.jar
-@DRMAA_TRUE@am__append_3 = $(srcdir)/drmaa/libdrmaa.la \
+@JSDL_TRUE@am__append_2 = $(CMDS)/jsdl2gw.sh
+@JSDL_TRUE@am__append_3 = $(srcdir)/cmds/gw_jsdl.jar
+@DRMAA_TRUE@am__append_4 = $(srcdir)/drmaa/libdrmaa.la \
 @DRMAA_TRUE@	$(srcdir)/drmaa/libDrmaaJNI.la
 
 # --------------------------------
@@ -82,17 +83,20 @@ bin_PROGRAMS = $(srcdir)/gwd/gwd$(EXEEXT) $(srcdir)/cmds/gwps$(EXEEXT) \
 # ---------------------- EM MADS ------------------------
 
 # ---------------------- TM MADS ------------------------
-@PREWS_TRUE@am__append_4 = $(srcdir)/em_mad/gw_em_mad_prews.bin \
+@PREWS_TRUE@am__append_5 = $(srcdir)/em_mad/gw_em_mad_prews.bin \
 @PREWS_TRUE@	$(srcdir)/tm_mad/gw_tm_mad_dummy.bin
-@PREWS_TRUE@am__append_5 = $(EM_MAD)/gw_em_mad_prews.sh \
+@PREWS_TRUE@am__append_6 = $(EM_MAD)/gw_em_mad_prews.sh \
 @PREWS_TRUE@	$(TM_MAD)/gw_tm_mad_dummy.sh
-@GRIDFTP_TRUE@am__append_6 = $(srcdir)/tm_mad/gw_tm_mad_ftp.bin
-@GRIDFTP_TRUE@am__append_7 = $(TM_MAD)/gw_tm_mad_ftp.sh
-@PREWS_TRUE@am__append_8 = $(IM_MAD)/gw_im_mad_mds2.sh \
+@GW_GLOBUS_DIRS_TRUE@am__append_7 = 
+@GRIDFTP_TRUE@am__append_8 = $(srcdir)/tm_mad/gw_tm_mad_ftp.bin
+@GRIDFTP_TRUE@am__append_9 = $(TM_MAD)/gw_tm_mad_ftp.sh
+@GRIDFTP_TRUE@@GW_GLOBUS_DIRS_TRUE@am__append_10 = 
+@GW_GLOBUS_DIRS_TRUE@am__append_11 = 
+@PREWS_TRUE@am__append_12 = $(IM_MAD)/gw_im_mad_mds2.sh \
 @PREWS_TRUE@	$(IM_MAD)/gw_im_mad_mds2_glue.sh
-@WS_TRUE@am__append_9 = $(IM_MAD)/gw_im_mad_mds4.sh \
+@WS_TRUE@am__append_13 = $(IM_MAD)/gw_im_mad_mds4.sh \
 @WS_TRUE@	$(EM_MAD)/gw_em_mad_ws.sh
-@WS_TRUE@am__append_10 = $(srcdir)/im_mad/gw_im_mad_ws.jar \
+@WS_TRUE@am__append_14 = $(srcdir)/im_mad/gw_im_mad_ws.jar \
 @WS_TRUE@	$(srcdir)/em_mad/gw_em_mad_ws.jar
 @TESTS_TRUE@test_PROGRAMS = $(srcdir)/test/gwtest$(EXEEXT)
 subdir = src
@@ -237,7 +241,9 @@ am__objects_8 = $(EM_MAD)/__srcdir__em_mad_gw_em_mad_prews_bin-gw_em_mad_prews_a
 am___srcdir__em_mad_gw_em_mad_prews_bin_OBJECTS = $(am__objects_8)
 __srcdir__em_mad_gw_em_mad_prews_bin_OBJECTS =  \
 	$(am___srcdir__em_mad_gw_em_mad_prews_bin_OBJECTS)
-__srcdir__em_mad_gw_em_mad_prews_bin_DEPENDENCIES =
+am__DEPENDENCIES_1 =
+__srcdir__em_mad_gw_em_mad_prews_bin_DEPENDENCIES =  \
+	$(am__DEPENDENCIES_1)
 am__objects_9 = $(EM)/gw_em_actions.$(OBJEXT) $(EM)/gw_em.$(OBJEXT) \
 	$(EM)/gw_em_listener.$(OBJEXT) $(EM)/gw_em_mad.$(OBJEXT) \
 	$(EM)/gw_em_rsl2.$(OBJEXT) $(EM)/gw_em_rsl.$(OBJEXT) \
@@ -346,7 +352,8 @@ am__objects_20 = $(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_dummy_bin-gw_tm_dummy_mad.
 am___srcdir__tm_mad_gw_tm_mad_dummy_bin_OBJECTS = $(am__objects_20)
 __srcdir__tm_mad_gw_tm_mad_dummy_bin_OBJECTS =  \
 	$(am___srcdir__tm_mad_gw_tm_mad_dummy_bin_OBJECTS)
-__srcdir__tm_mad_gw_tm_mad_dummy_bin_DEPENDENCIES =
+__srcdir__tm_mad_gw_tm_mad_dummy_bin_DEPENDENCIES =  \
+	$(am__DEPENDENCIES_1)
 am____srcdir__tm_mad_gw_tm_mad_ftp_bin_SOURCES_DIST =  \
 	$(TM_MAD)/gw_tm_ftp_mad.c $(TM_MAD)/gw_tm_ftp_queue.c \
 	$(TM_MAD)/gw_tm_ftp_stack.c $(TM_MAD)/gw_tm_ftp_transfer.c \
@@ -360,7 +367,8 @@ am__objects_21 = $(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_mad.$(OB
 @GRIDFTP_TRUE@	$(am__objects_21)
 __srcdir__tm_mad_gw_tm_mad_ftp_bin_OBJECTS =  \
 	$(am___srcdir__tm_mad_gw_tm_mad_ftp_bin_OBJECTS)
-__srcdir__tm_mad_gw_tm_mad_ftp_bin_DEPENDENCIES =
+@GRIDFTP_TRUE@__srcdir__tm_mad_gw_tm_mad_ftp_bin_DEPENDENCIES =  \
+@GRIDFTP_TRUE@	$(am__DEPENDENCIES_1)
 binSCRIPT_INSTALL = $(INSTALL_SCRIPT)
 am__dist_bin_SCRIPTS_DIST = $(CMDS)/jsdl2gw.sh \
 	$(EM_MAD)/gw_em_mad_prews.sh $(TM_MAD)/gw_tm_mad_dummy.sh \
@@ -542,6 +550,7 @@ datarootdir = @datarootdir@
 docdir = @docdir@
 dvidir = @dvidir@
 exec_prefix = @exec_prefix@
+globus_pkg_libs = @globus_pkg_libs@
 host = @host@
 host_alias = @host_alias@
 host_cpu = @host_cpu@
@@ -571,16 +580,26 @@ system = @system@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = subdir-objects no-dependencies
 AM_YFLAGS = -d
-CLASSPATH := $(CLASSPATH):$(GLOBUS_LOCATION)/lib/addressing-1.0.jar:$(GLOBUS_LOCATION)/lib/axis.jar:$(GLOBUS_LOCATION)/lib/cog-jglobus.jar:$(GLOBUS_LOCATION)/lib/globus_delegation_service.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft_client.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft_stubs.jar:$(GLOBUS_LOCATION)/lib/gram-client.jar:$(GLOBUS_LOCATION)/lib/gram-stubs.jar:$(GLOBUS_LOCATION)/lib/gram-utils.jar:$(GLOBUS_LOCATION)/lib/jgss.jar:$(GLOBUS_LOCATION)/lib/wsrf_core.jar:$(GLOBUS_LOCATION)/lib/wsrf_core_stubs.jar:$(GLOBUS_LOCATION)/lib/wsrf_test_unit.jar:$(GLOBUS_LOCATION)/lib/xml-apis.jar:$(GLOBUS_LOCATION)/lib/xalan.jar:$(GLOBUS_LOCATION)/lib/xercesImpl.jar
 
-# Get rid of libtool by default
-LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+# This is for portability issues, do not use := operator
+CLASSPATH = $(GLOBUS_LOCATION)/lib/addressing-1.0.jar:$(GLOBUS_LOCATION)/lib/axis.jar:$(GLOBUS_LOCATION)/lib/cog-jglobus.jar:$(GLOBUS_LOCATION)/lib/globus_delegation_service.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft_client.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft_stubs.jar:$(GLOBUS_LOCATION)/lib/gram-client.jar:$(GLOBUS_LOCATION)/lib/gram-stubs.jar:$(GLOBUS_LOCATION)/lib/gram-utils.jar:$(GLOBUS_LOCATION)/lib/jgss.jar:$(GLOBUS_LOCATION)/lib/wsrf_core.jar:$(GLOBUS_LOCATION)/lib/wsrf_core_stubs.jar:$(GLOBUS_LOCATION)/lib/wsrf_test_unit.jar:$(GLOBUS_LOCATION)/lib/xml-apis.jar:$(GLOBUS_LOCATION)/lib/xalan.jar:$(GLOBUS_LOCATION)/lib/xercesImpl.jar
+@GW_GLOBUS_DIRS_FALSE@LINK_PROG = $(GLOBUS_LD)
 
-COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+# Get rid of libtool by default & make use of globus compiler/linker
+@GW_GLOBUS_DIRS_TRUE@LINK_PROG = $(CCLD)
+@GW_GLOBUS_DIRS_FALSE@COMPILE_PROG = $(GLOBUS_CC)
+@GW_GLOBUS_DIRS_TRUE@COMPILE_PROG = $(CC)
+LINK_OPTS = $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+COMPILE_OPTS = $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+			   $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 
+LINK = $(LINK_PROG) $(LINK_OPTS)
+COMPILE = $(COMPILE_PROG) $(COMPILE_OPTS)
+@GW_GLOBUS_DIRS_FALSE@GT_PKG_LIBS = $(GLOBUS_LIBS) $(GLOBUS_PKG_LIBS)
+@GW_GLOBUS_DIRS_TRUE@GT_PKG_LIBS = @globus_pkg_libs@
 
+# to handle else, not very smart 
+NOP = $(am__append_7) $(am__append_10) $(am__append_11)
 # -----------------------------
 # Directory definitions
 # -----------------------------
@@ -812,13 +831,15 @@ DRMAA_JAVA_SRC = $(DRMAA_PACK)/AlreadyActiveSessionException.java \
         $(DRMAA_PACK)/UnsupportedAttributeException.java \
         $(DRMAA_PACK)/Version.java
 
-SYSTEM = @system@
-INCLUDES = -I$(top_srcdir)/include \
-             $(GLOBUS_INCLUDES) \
-             $(DB4_INCLUDE_PATH) \
-           -I${JAVA_HOME}/include \
-           -I${JAVA_HOME}/include/$(SYSTEM)
 
+# -----------------------------
+# -- Includes and Headers
+# -----------------------------
+INCLUDES = -I$(top_srcdir)/include $(DB4_INCLUDE_PATH) \
+	-I${JAVA_HOME}/include -I${JAVA_HOME}/include/$(SYSTEM) \
+	$(am__append_1)
+@GW_GLOBUS_DIRS_FALSE@SYSTEM = @system@
+@GW_GLOBUS_DIRS_TRUE@SYSTEM = @system@
 include_HEADERS = $(top_srcdir)/include/drmaa.h \
                         $(top_srcdir)/include/gw_acct.h \
                         $(top_srcdir)/include/gw_action.h \
@@ -922,11 +943,11 @@ __srcdir__cmds_gwacct_SOURCES = $(CMDS)/gw_acct.c \
 bin_SCRIPTS = 
 
 # ---------------------- IM MADS ------------------------
-dist_bin_SCRIPTS = $(am__append_1) $(am__append_5) $(am__append_7) \
+dist_bin_SCRIPTS = $(am__append_2) $(am__append_6) $(am__append_9) \
 	$(IM_MAD)/gw_im_mad_common.sh $(IM_MAD)/gw_im_mad_static.sh \
-	$(am__append_8) $(am__append_9)
-CLEANFILES = $(am__append_2) $(srcdir)/drmaa/drmaa.jar \
-	$(am__append_10)
+	$(am__append_12) $(am__append_13)
+CLEANFILES = $(am__append_3) $(srcdir)/drmaa/drmaa.jar \
+	$(am__append_14)
 
 # Create gw_jsdl.jar
 @JSDL_TRUE@jsdl_jardir = $(prefix)/lib
@@ -957,7 +978,7 @@ __srcdir__scheduler_gw_sched_LDFLAGS = -lm
 # ----------------------------
 # DRMAA
 # ----------------------------
-lib_LTLIBRARIES = $(am__append_3)
+lib_LTLIBRARIES = $(am__append_4)
 __srcdir__drmaa_libdrmaa_la_SOURCES = $(DRMAA_SRC)
 __srcdir__drmaa_libDrmaaJNI_la_SOURCES = $(DRMAAJNI_SRC)
 __srcdir__drmaa_libDrmaaJNI_la_LIBADD = $(srcdir)/drmaa/libdrmaa.la
@@ -969,28 +990,22 @@ __srcdir__drmaa_libDrmaaJNI_la_LINK = $(LIBTOOL) --tag=CC --mode=link $(LINK)
 @DRMAA_TRUE@jardir = $(prefix)/lib
 @DRMAA_TRUE@jar_DATA = $(srcdir)/drmaa/drmaa.jar
 __srcdir__em_mad_gw_em_mad_prews_bin_SOURCES = $(EM_MAD_PREWS_SRC)
-__srcdir__em_mad_gw_em_mad_prews_bin_LDFLAGS = $(GLOBUS_LDFLAGS)
-__srcdir__em_mad_gw_em_mad_prews_bin_CFLAGS = $(GLOBUS_INCLUDES) \
-        $(GLOBUS_CFLAGS)
-
-__srcdir__em_mad_gw_em_mad_prews_bin_LDADD = $(GLOBUS_LIBS) \
-        $(GLOBUS_PKG_LIBS)
+__srcdir__em_mad_gw_em_mad_prews_bin_LDADD = $(GT_PKG_LIBS)
+@GW_GLOBUS_DIRS_FALSE@__srcdir__em_mad_gw_em_mad_prews_bin_LDFLAGS = $(GLOBUS_LDFLAGS)
+@GW_GLOBUS_DIRS_FALSE@__srcdir__em_mad_gw_em_mad_prews_bin_CFLAGS = $(GLOBUS_INCLUDES) \
+@GW_GLOBUS_DIRS_FALSE@        $(GLOBUS_CFLAGS)
 
 @GRIDFTP_TRUE@__srcdir__tm_mad_gw_tm_mad_ftp_bin_SOURCES = $(TM_MAD_SRC)
-@GRIDFTP_TRUE@__srcdir__tm_mad_gw_tm_mad_ftp_bin_LDFLAGS = $(GLOBUS_LDFLAGS)
-@GRIDFTP_TRUE@__srcdir__tm_mad_gw_tm_mad_ftp_bin_CFLAGS = $(GLOBUS_INCLUDES) \
-@GRIDFTP_TRUE@        $(GLOBUS_CFLAGS)
-
-@GRIDFTP_TRUE@__srcdir__tm_mad_gw_tm_mad_ftp_bin_LDADD = $(GLOBUS_LIBS) \
-@GRIDFTP_TRUE@        $(GLOBUS_PKG_LIBS)
+@GRIDFTP_TRUE@__srcdir__tm_mad_gw_tm_mad_ftp_bin_LDADD = $(GT_PKG_LIBS)
+@GRIDFTP_TRUE@@GW_GLOBUS_DIRS_FALSE@__srcdir__tm_mad_gw_tm_mad_ftp_bin_LDFLAGS = $(GLOBUS_LDFLAGS)
+@GRIDFTP_TRUE@@GW_GLOBUS_DIRS_FALSE@__srcdir__tm_mad_gw_tm_mad_ftp_bin_CFLAGS = $(GLOBUS_INCLUDES) \
+@GRIDFTP_TRUE@@GW_GLOBUS_DIRS_FALSE@        $(GLOBUS_CFLAGS)
 
 __srcdir__tm_mad_gw_tm_mad_dummy_bin_SOURCES = $(TM_MAD_DUMMY_SRC)
-__srcdir__tm_mad_gw_tm_mad_dummy_bin_LDFLAGS = $(GLOBUS_LDFLAGS)
-__srcdir__tm_mad_gw_tm_mad_dummy_bin_CFLAGS = $(GLOBUS_INCLUDES) \
-        $(GLOBUS_CFLAGS)
-
-__srcdir__tm_mad_gw_tm_mad_dummy_bin_LDADD = $(GLOBUS_LIBS) \
-        $(GLOBUS_PKG_LIBS)
+__srcdir__tm_mad_gw_tm_mad_dummy_bin_LDADD = $(GT_PKG_LIBS)
+@GW_GLOBUS_DIRS_FALSE@__srcdir__tm_mad_gw_tm_mad_dummy_bin_LDFLAGS = $(GLOBUS_LDFLAGS)
+@GW_GLOBUS_DIRS_FALSE@__srcdir__tm_mad_gw_tm_mad_dummy_bin_CFLAGS = $(GLOBUS_INCLUDES) \
+@GW_GLOBUS_DIRS_FALSE@        $(GLOBUS_CFLAGS)
 
 
 # --------------------------------
@@ -2106,12 +2121,7 @@ uninstall-am: uninstall-binPROGRAMS uninstall-binSCRIPTS \
 	uninstall-jsdl_jarDATA uninstall-libLTLIBRARIES \
 	uninstall-testPROGRAMS
 
-
-# -----------------------------
-# -- Includes and Headers
-# -----------------------------
-
-@incgtmk@
+@GW_GLOBUS_DIRS_FALSE@@incgtmk@
 @JSDL_TRUE@$(srcdir)/cmds/gw_jsdl.jar:
 @JSDL_TRUE@	@rm -f lib/gw_jsdl.jar
 @JSDL_TRUE@	@mkdir -p $(CMDS)/package

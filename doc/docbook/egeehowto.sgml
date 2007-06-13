@@ -226,6 +226,25 @@
         </para>
         </listitem>
 
+				<listitem>
+				<para>
+					Compiling GridWay in an EGEE UI had some problems in the past as the gridftp
+					implementation installed in this machines lacked some functions needed by the
+					gridftp transfer mad used by GridWay. It also lacks Globus WS libray support (GT4)
+					so Web Services execution mad can not be built here. Fortunately these mads are not
+					used to interact with EGEE resources as home directories in this clusters are not
+					shared and WN does not necessarily need to have external connection, Pre Web
+					Services execution mad is used to talk to CE's and the dummy transfer mad is used to
+					transfer files. You can now disable gridftp mad building using
+					<option>--disable-gridftp</option> and ws mad with <option>--disable-ws</option> so
+					you can compile GridWay in an EGEE UI and use it to manage EGEE resources. The only
+					caveat is that you can not use gridftp transfer mad with other non EGEE resources or
+					interact with Web Services enabled resources. If you want to have this functionality
+					you have to install GT4 by yourself and use this installation to compile and run
+					GridWay.
+				</para>
+				</listitem>
+
         <listitem>
         <para>
         For a multi-user installation, the <filename>sudoers</filename> file of the

@@ -230,6 +230,7 @@ void init_mad_parser(int mad_index)
         {
             gw_log_print("GW",'W',"gwd.conf: Max. number of MAD reached, ignoring MAD, line %i\n",gcp_lineno);
             gcp_mads = NULL;
+            break;
         }
     }
     

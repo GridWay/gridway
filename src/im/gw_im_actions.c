@@ -128,12 +128,9 @@ void gw_im_timer(void *_null)
     
     time_t the_time;
     time_t discovery_interval;
-    time_t monitoring_interval;
+
     static time_t last_discovery_time = 0;
-    static int next_host_to_check = 0;
 	static int mark = 0;
-    gw_host_t *host;
-    int hid;
 	
 	mark = mark + 5;
 	if ( mark >= 300 )
@@ -145,8 +142,7 @@ void gw_im_timer(void *_null)
     the_time = time(NULL);
     
     discovery_interval  = gw_conf.discovery_interval;
-    monitoring_interval = gw_conf.monitoring_interval;
-       
+
     if (the_time - last_discovery_time >= discovery_interval) 
     {
         gw_log_print ("IM",'I',"Discovering hosts.\n");
@@ -160,50 +156,7 @@ void gw_im_timer(void *_null)
 
     }
     
-    /* Go through the host poll checking the last monitoring time */
-    hid = next_host_to_check;
-    
-#ifdef GWIMDEBUG                    
-    gw_log_print ("IM",'D',"Checking hosts starting with %d...\n", hid);
-#endif                    
-
-    while (gw_im.active_queries < gw_conf.max_active_im_queries)
-    {
-#ifdef GWIMDEBUG                    
-        gw_log_print ("IM",'D',"Checking host %d...\n", hid);
-#endif
-
-        host = gw_host_pool_get_host(hid, GW_TRUE);
-        
-        if (host == NULL)
-        {
-            if (hid > 0)
-            {
-                next_host_to_check = 0;
-                break;
-            }
-            else
-            {
-#ifdef GWIMDEBUG
-                gw_log_print ("IM",'D',"No hosts to monitor.\n");
-#endif
-                next_host_to_check = 0;
-                break;
-            }
-        }
-
-        if (host->last_monitoring_time == 0
-                || the_time - host->last_monitoring_time >= monitoring_interval)
-        {
-            host->last_monitoring_time = the_time;
-
-            gw_im_monitor(host);
-        }
-
-        pthread_mutex_unlock(&(host->mutex));
-
-        hid++;
-    }
+    gw_host_pool_monitor_hosts(&gw_im.active_queries);
 }
 
 /* -------------------------------------------------------------------------- */

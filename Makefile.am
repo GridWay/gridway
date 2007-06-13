@@ -215,6 +215,7 @@ dist-hook:
 	@cp -r src/test/jt $(distdir)/src/test
 	@cp -r src/test/TEST.pl $(distdir)/src/test
 	@cp -r scripts $(distdir)
+	@cp pkg_data_src.gpt  $(distdir)/pkg_data_src.gpt
 
 # ----------------------------
 #    remove CVS DIRS

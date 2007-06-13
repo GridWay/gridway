@@ -205,6 +205,7 @@ datarootdir = @datarootdir@
 docdir = @docdir@
 dvidir = @dvidir@
 exec_prefix = @exec_prefix@
+globus_pkg_libs = @globus_pkg_libs@
 host = @host@
 host_alias = @host_alias@
 host_cpu = @host_cpu@
@@ -822,6 +823,7 @@ dist-hook:
 	@cp -r src/test/jt $(distdir)/src/test
 	@cp -r src/test/TEST.pl $(distdir)/src/test
 	@cp -r scripts $(distdir)
+	@cp pkg_data_src.gpt  $(distdir)/pkg_data_src.gpt
 
 # ----------------------------
 #    remove CVS DIRS

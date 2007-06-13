@@ -289,32 +289,63 @@ void gw_host_pool_update (char *hostnames, char *em_mad, char *tm_mad, char *im_
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
-void gw_host_pool_monitor_hosts( ) /* Not used any more */
+void gw_host_pool_monitor_hosts( int *active_queries)
 {
-    int i;
-    gw_host_t *   host;
+    static int last_checked = 0;
+    
+    int i=0;
+    int hid;
+    int num_hosts;
+    
+    time_t monitoring_interval;
+    time_t the_time;
         
+    gw_host_t * host;
+    
     pthread_mutex_lock(&(gw_host_pool.mutex));
     
-    for (i= 0; i<gw_host_pool.number_of_hosts; i++) 
+    num_hosts = gw_host_pool.number_of_hosts;
+    
+    if ( num_hosts == 0 )
     {
-        host = gw_host_pool.pool[i];
+        pthread_mutex_unlock(&(gw_host_pool.mutex));
+        return;
+    }
+    
+    monitoring_interval = gw_conf.monitoring_interval;    
+    the_time            = time(NULL);
+    
+    hid = (last_checked + 1) % num_hosts;    
+
+#ifdef GWIMDEBUG                    
+    gw_log_print ("IM",'D',"Checking hosts starting with %d...\n", hid);
+#endif   
+            
+    while ((i<num_hosts) && (*active_queries < gw_conf.max_active_im_queries))
+    {
+        host = gw_host_pool.pool[hid];
         
         if ( host != NULL )
         {
+            if (host->last_monitoring_time == 0
+                || the_time - host->last_monitoring_time >= monitoring_interval)
+            {
 #ifdef GWIMDEBUG
-            gw_log_print ("IM",'D',"\tMonitoring host %d.\n", i);
+                gw_log_print ("IM",'D',"\tMonitoring host %d.\n", hid);
 #endif
-            pthread_mutex_lock(&(host->mutex));
-            
-            gw_im_monitor(host);
-            
-            pthread_mutex_unlock(&(host->mutex));
+                last_checked = hid;
+                host->last_monitoring_time = the_time;
+
+                gw_im_monitor(host);
+            }
         }
         else
-            gw_log_print("IM",'E',"Host %d no longer exists.\n", i);
-    }
+            gw_log_print("IM",'E',"Host %d no longer exists.\n", hid);
         
+        hid = ( hid + 1 ) % num_hosts;
+        i++;
+    }
+
     pthread_mutex_unlock(&(gw_host_pool.mutex));       
 }
 

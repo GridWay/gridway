@@ -419,7 +419,7 @@ void gw_scheduler_print (const char mode, const char *str_format,...)
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
                                 
-inline void gw_scheduler_ctime(time_t the_time, char *str)
+void gw_scheduler_ctime(time_t the_time, char *str)
 {
 	int i;
 	

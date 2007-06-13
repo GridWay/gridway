@@ -530,3 +530,28 @@ gw_job_state_t gw_job_get_state_code(char *job_state)
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
+
+int gw_job_is_wrapper_based(gw_job_t *job)
+{
+    int isprews;
+    int ismpi;
+    int isgw;
+    int iswrapper;
+    
+    int wbe;
+    
+    if ((job->history != NULL) && (job->history->host != NULL) 
+        && (job->history->host->lrms_name != NULL))
+        isprews = strncmp(job->history->host->lrms_name, "jobmanager-", 11) == 0;
+    else
+        isprews = 0;
+    
+    ismpi     = job->template.type == GW_JOB_TYPE_MPI;
+    isgw      = strcasecmp(job->history->host->lrms_type, "gw") == 0;
+    iswrapper = job->template.wrapper != NULL;
+    
+    
+    wbe = isprews || ( !ismpi && !isgw && iswrapper );
+    
+    return wbe;  
+}

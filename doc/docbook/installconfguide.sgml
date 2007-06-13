@@ -541,7 +541,35 @@ $ wsrf-query -x -s https://localhost:8443/wsrf/services/DefaultIndexService</scr
 
   </sect1>
 
-  <sect1>
+	<sect1>
+		<title>Installing GridWay</title>
+
+    <para>
+      You can install GridWay in two different ways:
+      <orderedlist>
+        <listitem>
+        <para>
+        <emphasis>Single-user installation</emphasis>. GridWay will be installed
+        configured and executed by each user. In this case, neither the
+        installation nor the configuration require priveledge access to the
+        system. This installation mode will be useful if you  want to set up a
+        personal queue, or for testing purposes.
+        </para>
+        </listitem>
+        <listitem>
+        <para>
+        <emphasis>Multiple-user installation</emphasis>. GridWay will be
+        installed, and configured by the system manager. Regular users are able
+        to submit, control and monitor their jobs  from a front-end
+        (GridWay server host) or from client hosts. This installation mode is
+        recommended for production use.
+        </para>
+        </listitem>
+      </orderedlist>
+      Next sections describe in detail the installation process for these two cases.
+    </para>
+
+  <sect2>
   <title>Single-User Mode Installation</title>
 
   <para>
@@ -597,7 +625,8 @@ $ wsrf-query -x -s https://localhost:8443/wsrf/services/DefaultIndexService</scr
         		</row>
             <row>
                <entry>--with-flavor=flavor</entry>
-               <entry>The configure script will try to detect the flavor (eg. gcc32dbg) of the Globus toolkit installed in your system. However,
+               <entry>The configure script will try to detect the flavor (eg. gcc32dbg) of the
+               Globus toolkit installed in your system. However,
                if the configure script is not able to detect it, specify it with this option.</entry>
             </row>
         		<row>
@@ -612,6 +641,23 @@ $ wsrf-query -x -s https://localhost:8443/wsrf/services/DefaultIndexService</scr
         		   <entry>--disable-ws</entry>
         		   <entry>Don't build web-services support. Default is enabled.</entry>
         		</row>
+            <row>
+              <entry>--enable-globus-scheme</entry>
+              <entry>Adds gridway subdirectories to etc and var. Default is disabled.</entry>
+            </row>
+            <row>
+              <entry>--enable-jsdl</entry>
+              <entry>Does compile jsdl support. Default is disabled.</entry>
+            </row>
+            <row>
+              <entry>--enable-globus-scheme</entry>
+              <entry>Adds gridway subdirectories to etc and var. Default is disabled.</entry>
+            </row>
+            <row>
+              <entry>--disable-gridftp</entry>
+              <entry>Does not compile gridftp mad. Default is enabled.</entry>
+            </row>
+
          		<row>
         		   <entry>--with-db=path_to_db</entry>
         		   <entry>Specify the Berkeley Database path to build accounting support.</entry>
@@ -619,10 +665,6 @@ $ wsrf-query -x -s https://localhost:8443/wsrf/services/DefaultIndexService</scr
          		<row>
         		   <entry>--with-doc</entry>
         		   <entry>Install GridWay documentation</entry>
-        		</row>
-          		<row>
-        		   <entry>--with-examples</entry>
-        		   <entry>Install examples</entry>
         		</row>
          		<row>
         		   <entry>--with-tests</entry>
@@ -632,6 +674,16 @@ $ wsrf-query -x -s https://localhost:8443/wsrf/services/DefaultIndexService</scr
 		</tgroup>
 	   </table>
 	   </para>
+
+			<para>
+				If you want to install GridWay inside <filename>$GLOBUS_LOCATION</filename> you can
+				use the option <option>--enable-globus-scheme</option> so GridWay specific
+				<filename>var</filename>, <filename>etc</filename> and <filename>test</filename>
+				files are relocated to <filename>var/gridway</filename>,
+				<filename>etc/gridway</filename> and <filename>test/gridway</filename> respectively.
+				This new directory scheme lets globus and GridWay share the same root directory
+				without interfering each other.
+			</para>
 	   <para>
 	   The next line will configure GridWay to include documentation and accounting
 	   <screen>$ ./configure --with-doc --with-db=/usr/local/db</screen>
@@ -682,9 +734,9 @@ $GW_LOCATION/
       </listitem>
     </orderedlist>
   </para>
-  </sect1>
+  </sect2>
 
-  <sect1>
+  <sect2>
   <title>Multiple-User Mode Installation</title>
 
   <para>
@@ -696,10 +748,35 @@ $GW_LOCATION/
   intra-organization users.
   </para>
 
+  <important>
+    <para>
+      The instructions here described assumes that you are going to install
+      GridWay in its own directory ($GW_LOCATION, e.g.
+      <filename>/usr/local/gw</filename>). Also it is assumed that the
+      installation, configuration and service execution will be performed by
+      an special account (<filename>gwadmin</filename>).
+    </para>
+    <para>
+      GridWay can be also installed within the Globus Toolkit tree. To do this you have
+      to use the flag <option>--enable-globus-scheme</option> when calling
+      configure script and set the prefix to <filename>$GLOBUS_LOCATION</filename>.
+      In this case, the <filename>gwadmin</filename> user will be the user
+      account that performed the Globus Toolkit installation.
+    </para>
+    <para>
+       When you install it this way you also have to note that
+       <filename>$GW_LOCATION/var</filename> and <filename>$GW_LOCATION/etc</filename>
+       directories will be <filename>$GLOBUS_LOCATION/var/gridway</filename> and
+       <filename>$GLOBUS_LOCATION/etc/gridway</filename>.
+    </para>
+  </important>
+
+  <important>
   <para>
   Note that GridWay daemon SHOULD NOT be run as root. Only part of the
   installation will require privileged access.
   </para>
+  </important>
 
   <para>
   Login as root account and follow the next steps:
@@ -842,7 +919,11 @@ gwadmin ALL=(GW_USERS)     NOPASSWD: /home/gwadmin/gw/bin/gw_tm_mad_ftp *
     Please refer to the <command>sudo</command> manual page for more
     information.
     </para>
+    <para>
+    Additionally you can configure your drivers environment by usignthe
+    <filename>gwrc</filename> interface, see section <xref linkend='gwrc'>
 
+    </para>
     <para>
     To test the <command>sudo</command> command configuration try to execute a
     MAD as a user in the <filename>&lt;gwgroup></filename> group, for example:
@@ -888,6 +969,7 @@ $ sudo -u &lt;gw_user> /home/gwadmin/gw/bin/gw_em_mad_prews
     <graphic align="center" fileref="../images/client-server.jpg">
   </figure>
 
+  </sect2>
   </sect1>
 
   <sect1 id='VerifGWInst'>
@@ -1304,6 +1386,13 @@ HID PRIO  OS              ARCH   MHZ %CPU  MEM(F/T)     DISK(F/T)     N(U/F/T) L
           <entry>EM_MAD</entry>
           <entry>Execution Manager MADs, see <xref linkend='ExecDrivConf'></entry>
           <entry>-</entry>
+          </row>
+
+          <row>
+          <entry>MAX_ACTIVE_IM_QUERIES</entry>
+          <entry>Maximum number (soft limit) of active IM queries (each query
+          spawns one process)</entry>
+          <entry>4</entry>
           </row>
 
          <row>
@@ -2711,9 +2800,66 @@ FR_BANNED_C        = 650</screen>
   These drivers are configured and selected via the GWD configuration interface
   described in <xref linkend='GWDconf'>. Additionally you may need to configure
   your environment (see <xref linkend="VerifGWInst">) in order to successfully
-  load the MADs into the GWD core.
+  load the MADs into the GWD core. To do so, you can also use global and per user
+  environment configuration files (<filename>gwrc</filename>).
   </para>
   </sect1>
+
+	<sect1 id='gwrc'>
+		<title>MAD Environment Configuration</title>
+
+		<para>
+			There are a global and per user configuration files that can be used to set
+			environment variables for mads. These files are standard shell scripts that are sourced
+			into the mad environment before it is loaded. It can be used for example to set the
+			variable <envar>X509_USER_PROXY</envar> so you can have it located elsewhere instead of
+			the standard place (<filename>/tmp/x509_u&lt;uid></filename>). Other variables can be
+			set and you can even source other shell scripts, for instance you can prepare another
+			globus environment for mads for some users, like this:
+		</para>
+
+		<screen>
+X509_USER_PROXY=$HOME/.globus/proxy.pem
+
+GLOBUS_LOCATION=/opt/globus-4.0
+. $GLOBUS_LOCATION/etc/globus-user-env.sh</screen>
+
+		<para>
+			The file for global mad environment configuration is
+			<filename>$GW_LOCATION/etc/gwrc</filename> (or
+			<filename>$GW_LOCATION/etc/gridway/gwrc</filename> if you have GridWay installed using
+			<option>--enable-globus-scheme</option>) and the user specific one is
+			<filename>$HOME/.gwrc</filename>.
+		</para>
+
+		<para>
+			You have to take into account a couple of things:
+		</para>
+
+		<itemizedlist>
+			<listitem>
+				<para>
+					Global environment file is loaded before the user one so the variables set by the
+					user file take precedence over the global ones.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					The files are sourced so you need to export the variables to make them visible in
+					the environment of the called mad. Right now there is a mechanism so variables set
+					as <envar>VARIABLENAME=VALUE</envar> are automatically exported (without spaces
+					preceding the variable name). If you are sourcing other files or you put variables
+					inside an indented block (for example an if statement) you have to explicitly
+					export them. For example:
+				</para>
+				<screen>
+if [ -d /opt/globus-devel ]; then
+       export GLOBUS_LOCATION=/opt/globus-devel
+fi</screen>
+			</listitem>
+		</itemizedlist>
+
+	</sect1>
 
   <sect1 id='ExecDrivConf'>
   <title>
@@ -2751,7 +2897,7 @@ FR_BANNED_C        = 650</screen>
   Execution MADs are configured with the <varname>EM_MAD</varname> option in
   the <filename>$GW_LOCATION/etc/gwd.conf</filename> file, with the following
   format:
-  <screen>EM_MAD = &lt;mad_name>:&lt;path_to_mad>:&lt;rsl|rsl_nsh|rsl2></screen>
+  <screen>EM_MAD = &lt;mad_name>:&lt;path_to_mad>:&lt;args>:&lt;rsl|rsl_nsh|rsl2></screen>
   </para>
 
   <para>
@@ -2775,6 +2921,12 @@ FR_BANNED_C        = 650</screen>
       </listitem>
 
       <listitem>
+      <para>
+      <command>args</command>: Parameters passed to the mad when it is executed.
+      </para>
+      </listitem>
+
+      <listitem>
         <para>
         <command>rsl|rsl_nsh|rsl2</command>: Selects the language that GWD will
         use to describe job requests. It can be
@@ -2790,13 +2942,13 @@ FR_BANNED_C        = 650</screen>
   For example the following line will configure GridWay to use the Execution
   Driver <command>gw_em_mad_prews</command> using RSL syntax with name
   <emphasis>prews</emphasis>:
-  <screen>EM_MAD = prews:gw_em_mad_prews:rsl</screen>
+  <screen>EM_MAD = prews:gw_em_mad_prews::rsl</screen>
   </para>
 
   <para>
   To use WS-GRAM services you can include the following line in your
   <filename>$GW_LOCATION/etc/gwd.conf</filename> file:
-  <screen>EM_MAD = ws:gw_em_mad_ws:rsl2</screen>
+  <screen>EM_MAD = ws:gw_em_mad_ws::rsl2</screen>
   </para>
 
   <note>
@@ -2805,6 +2957,26 @@ FR_BANNED_C        = 650</screen>
   Globus Services.
   </para>
   </note>
+
+	<sect2 id='EmPort'>
+		<title>Port configuration in WS EM MAD</title>
+
+		<para>
+			Now it is possible to specify the gatekeeper port where to connect instead of the
+			standard one (8443) in the Web Service driver. The line to configure EM mads in
+			<filename>gwd.conf</filename> has changed so you can add parameters to it. The
+			parameter to change the port is <option>-p</option> followed by the port number. For
+			example:
+		</para>
+
+		<screen>
+EM_MAD = osg_ws:gw_em_mad_ws:-p 9443:rsl2</screen>
+
+		<para>
+			This line tells the EM mad to use the port 9443 to connect the GT4 Gatekeeper.
+		</para>
+	</sect2>
+
   </sect1>
 
   <sect1 id='TransfDrivConf'>
@@ -3255,6 +3427,17 @@ draco.dacya.ucm.es</screen>
     must be properly configured to use this mode.
     </para>
     </note>
+
+    <important>
+    <para>
+      You can configure your IM's to work in a dynamic monitoring mode but getting
+      some static information from an attributes file (like described in the SS mode).
+      This configuration is useful qhen you want to add some host attributes missing from
+      the IndexService (like software availability, special hardware devices...). You can see
+      a useful use of this mode in section <xref linkend='Troubleshooting'>.
+
+    </para>
+    </important>
   </sect2>
 
   <sect2>
@@ -3296,6 +3479,42 @@ draco.dacya.ucm.es</screen>
     </para>
     </note>
   </sect2>
+
+	<sect2 id="SEHOSTNAME">
+		<title>Separate Storage and Computing Element</title>
+
+		<para>
+			There's a way to specify a different machine from the one that has the gatekeeper
+			installed to be used as gsiftp endpoint. This is useful when the CE machine does not
+			have gsiftp server configured but there is another machine that works as an Storage
+			Element. Right now this information could be set statically but the rest of the
+			information can be updated dynamically. To use this feature you have to create a file
+			for each host you want to configure with extra information and other file with pairs of
+			host and file name (as described above for the SS mode)).
+      The filename can be a full path or a relative path to
+			<envar>GW_LOCATION</envar>. Then in the IM MAD you must specify the list file with
+			<option>-l</option>, like this (in <filename>gwd.conf</filename>):
+		</para>
+
+		<screen>
+IM_MAD = mds4:gw_im_mad_mds4:-l etc/gridway/host.list:gridftp:ws</screen>
+
+		<para>
+			The file list should look like this:
+		</para>
+
+		<screen>
+wsgram-host1.domain.com etc/gridway/wsgram-host1.attr
+wsgram-host2.domain.com etc/gridway/wsgram-host2.attr</screen>
+
+		<para>
+			And the attributes file for each node:
+		</para>
+
+		<screen>
+SE_HOSTNAME="gridftp-host1.domain.com"</screen>
+	</sect2>
+
   </sect1>
 </chapter>
 </book>

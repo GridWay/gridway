@@ -1638,7 +1638,7 @@ int drmaa_synchronize(const char * job_ids[],
  * -------------------------------------------------------------------------- *
  * -------------------------------------------------------------------------- */
 
-inline void drmaa_gw_ctime(time_t the_time, char *str)
+void drmaa_gw_ctime(time_t the_time, char *str)
 {
 	int i;
 #ifdef GWSOLARIS

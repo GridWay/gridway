@@ -1,19 +1,20 @@
 /* -------------------------------------------------------------------------- */
-/* Copyright 2002-2006 GridWay Team, Distributed Systems Architecture         */
-/* Group, Universidad Complutense de Madrid                                   */
-/*                                                                            */
-/* Licensed under the Apache License, Version 2.0 (the "License"); you may    */
-/* not use this file except in compliance with the License. You may obtain    */
-/* a copy of the License at                                                   */
-/*                                                                            */
-/* http://www.apache.org/licenses/LICENSE-2.0                                 */
-/*                                                                            */
-/* Unless required by applicable law or agreed to in writing, software        */
-/* distributed under the License is distributed on an "AS IS" BASIS,          */
-/* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.   */
-/* See the License for the specific language governing permissions and        */
-/* limitations under the License.                                             */
+/* Copyright 2002-2007 GridWay Team, Distributed Systems Architecture         														*/
+/* Group, Universidad Complutense de Madrid                                   																	*/
+/*                                                                            																							*/
+/* Licensed under the Apache License, Version 2.0 (the "License"); you may    														*/
+/* not use this file except in compliance with the License. You may obtain    															*/
+/* a copy of the License at                                                   																				*/
+/*                                                                            																							*/
+/* http://www.apache.org/licenses/LICENSE-2.0                                 																	*/
+/*                                                                            																							*/
+/* Unless required by applicable law or agreed to in writing, software        																*/
+/* distributed under the License is distributed on an "AS IS" BASIS,          																*/
+/* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.   												*/
+/* See the License for the specific language governing permissions and        															*/
+/* limitations under the License.                                             																				*/
 /* -------------------------------------------------------------------------- */
+
 
 import java.util.*;
 import java.io.*;
@@ -23,65 +24,56 @@ import org.w3c.dom.*;
 
 public class JSDLReader 
 {
-	private String						jsdlFileName;
+	private String								jsdlFileName;
 	
-	private File						jsdlFile;
+	private File									jsdlFile;
 	
 	private DocumentBuilderFactory		jsdlBuilderFactory;
 	
 	private DocumentBuilder				jsdlBuilder;
 	
-	private Document					jsdlDocument;
+	private Document							jsdlDocument;
 	
-	private Element						jsdlRoot;
+	private Element								jsdlRoot;
 	
-	private JSDLElement					noInputOutputElement;		
+	private JSDLElement						noInputOutputElement;		
 	
 	
-	public JSDLReader(String jsdlFileName)
+	public JSDLReader(String jsdlFileName) throws Exception
 	{
-		try
-		{
-			this.jsdlFileName = jsdlFileName;
+		this.jsdlFileName = jsdlFileName;
 			
-			// Open the JSDL file
-			this.jsdlFile = new File(this.jsdlFileName);
+		// Open the JSDL file
+		this.jsdlFile = new File(this.jsdlFileName);
+				
+		// Create a DocumentBuilderFactory
+		this.jsdlBuilderFactory = DocumentBuilderFactory.newInstance();
 			
-			// Create a DocumentBuilderFactory
-			this.jsdlBuilderFactory = DocumentBuilderFactory.newInstance();
+		// Use a validating parser
+		this.jsdlBuilderFactory.setValidating(true);
 			
-			// Use a validating parser
-			this.jsdlBuilderFactory.setValidating(true);
-			
-			// Create a document builder
-			this.jsdlBuilder = this.jsdlBuilderFactory.newDocumentBuilder();
-		    this.jsdlBuilder.setErrorHandler(null);
+		// Create a document builder
+		this.jsdlBuilder = this.jsdlBuilderFactory.newDocumentBuilder();
+		this.jsdlBuilder.setErrorHandler(null);
 		    
-		    // Create a document 
+		// Create a document 
+		this.jsdlDocument = this.jsdlBuilder.parse(this.jsdlFile);
 		    
-		    this.jsdlDocument = this.jsdlBuilder.parse(this.jsdlFile);
-		    
-		    // Create the tree root
+		// Create the tree root
 			
-		    this.jsdlRoot = this.jsdlDocument.getDocumentElement() ;
+		this.jsdlRoot = this.jsdlDocument.getDocumentElement() ;
 		    
-		    this.noInputOutputElement = new JSDLElement();
-		    this.noInputOutputElement.setName(JSDL.noInputOutputFiles);
-
-		}
-		catch(Exception e)
-		{
-			System.out.println(e.getMessage());
-		}
+		this.noInputOutputElement = new JSDLElement();
+		this.noInputOutputElement.setName(JSDL.noInputOutputFiles);
 	}	
 	
 	public Vector getJSDLElements()
 	{
-		Vector			jsdlElements = new Vector();
+		Vector				jsdlElements = new Vector();
 		JSDLElement		element = null;		
-		Node			actual;
-		NodeList 		root = this.jsdlRoot.getElementsByTagName(JSDL.jobDescription);
-		NodeList		children = root.item(0).getChildNodes();
+		Node					actual;
+		NodeList 			root = this.jsdlRoot.getElementsByTagName(JSDL.jobDescription);
+		NodeList			children = root.item(0).getChildNodes();
 		
 		for (int i=0; i < children.getLength(); i++)
 		{
@@ -100,7 +92,6 @@ public class JSDLReader
 				if (element != null)
 					jsdlElements.add(element);
 			}
-			
 		}
 		
 		if (this.noInputOutputElement.getHasChildren())
@@ -157,49 +148,15 @@ public class JSDLReader
 		{
 			actual = childrenNodes.item(i);
 			
-			if (!actual.getNodeName().equals("#text") && !actual.getNodeName().equals("#comment") && actual.getNodeName().equals(JSDL.applicationPOSIXAJD)) 
+			if (!actual.getNodeName().equals("#text") && !actual.getNodeName().equals("#comment")) 
 			{
-				Vector			childrenElements = new Vector();
-					
-				Vector			noInputOutputElements = new Vector();
+				Vector			childrenElements = null;
 				
-				NodeList		posixNodes = actual.getChildNodes();
-				
-
-				for(int j=0; j<posixNodes.getLength(); j++) 
-				{
-					if (!posixNodes.item(j).getNodeName().equals("#text") && !posixNodes.item(j).getNodeName().equals("#comment"))
-					{
-						JSDLElement 	childElement = new JSDLElement();
+				if (actual.getNodeName().equals(JSDL.applicationPOSIXAJD))
+						childrenElements = writePOSIXApplicationElements(actual);
+				else if (actual.getNodeName().equals(JSDL.applicationHPCPAJD))
+						childrenElements = writeHPCPApplicationElements(actual);
 						
-						if (posixNodes.item(j).hasAttributes())
-						{
-							NamedNodeMap attrs = posixNodes.item(j).getAttributes();
-							Node 		nameNode = attrs.getNamedItem(JSDL.nameEnvironment);
-							childElement.setAttributes(nameNode.getTextContent());	
-						}
-						
-						childElement.setName(posixNodes.item(j).getNodeName());
-						childElement.setText(posixNodes.item(j).getTextContent());
-						childElement.setHasText(true);
-						childElement.setHasChildren(false);
-						
-						childrenElements.add(childElement);
-						
-						if (posixNodes.item(j).getNodeName().equals(JSDL.inputPAAJD) ||
-							posixNodes.item(j).getNodeName().equals(JSDL.outputPAAJD) ||
-							posixNodes.item(j).getNodeName().equals(JSDL.errorPAAJD))
-							
-						{
-							noInputOutputElements.add(childElement);
-							this.noInputOutputElement.setHasChildren(true);
-						}
-					}
-				}
-				
-				if (this.noInputOutputElement.getHasChildren())
-					this.noInputOutputElement.setChildren(noInputOutputElements);
-				
 				element.setHasChildren(true);
 				element.setChildren(childrenElements);
 			}
@@ -238,8 +195,7 @@ public class JSDLReader
 				}
 				else if (actual.getNodeName().equals(JSDL.cpuArchitectureRJD))
 				{
-					childrenElement = writeFinalElements(actual);
-					
+					childrenElement = writeFinalElements(actual);					
 				}
 				else if (actual.getNodeName().equals(JSDL.individualCPUSpeedRJD))
 				{
@@ -266,6 +222,101 @@ public class JSDLReader
 		
 		element.setChildren(childrenElements);
 		return element;
+	}
+	
+	private Vector writePOSIXApplicationElements( Node actual)
+	{
+		Vector			childrenElements = new Vector();
+			
+		Vector			noInputOutputElements = new Vector();
+		
+		NodeList		posixNodes = actual.getChildNodes();
+		
+		for(int j=0; j<posixNodes.getLength(); j++) 
+		{
+			if (!posixNodes.item(j).getNodeName().equals("#text") && !posixNodes.item(j).getNodeName().equals("#comment"))
+			{
+				
+				JSDLElement 	childElement = new JSDLElement();
+				
+				if (posixNodes.item(j).hasAttributes())
+				{
+					NamedNodeMap attrs			 	= posixNodes.item(j).getAttributes();
+					Node 				nameNode 	= attrs.getNamedItem(JSDL.nameEnvironment);
+					
+					childElement.setAttributes(nameNode.getTextContent());	
+				}
+				
+				childElement.setName(posixNodes.item(j).getNodeName());
+				childElement.setText(posixNodes.item(j).getTextContent());
+				childElement.setHasText(true);
+				childElement.setHasChildren(false);
+				
+				childrenElements.add(childElement);
+				
+				if (posixNodes.item(j).getNodeName().equals(JSDL.inputPAAJD) ||
+					posixNodes.item(j).getNodeName().equals(JSDL.outputPAAJD) ||
+					posixNodes.item(j).getNodeName().equals(JSDL.errorPAAJD))
+					
+				{
+					noInputOutputElements.add(childElement);
+					this.noInputOutputElement.setHasChildren(true);
+				}
+			}
+		}
+		
+		if (this.noInputOutputElement.getHasChildren())
+			this.noInputOutputElement.setChildren(noInputOutputElements);
+		
+		return childrenElements;
+	}
+	
+	
+	private Vector writeHPCPApplicationElements( Node actual)
+	{
+		Vector			childrenElements = new Vector();
+			
+		Vector			noInputOutputElements = new Vector();
+		
+		NodeList		hpcpNodes = actual.getChildNodes();
+		
+		for(int j=0; j<hpcpNodes.getLength(); j++) 
+		{
+			if (!hpcpNodes.item(j).getNodeName().equals("#text") && !hpcpNodes.item(j).getNodeName().equals("#comment"))
+			{
+				
+				JSDLElement 	childElement = new JSDLElement();
+				
+				if (hpcpNodes.item(j).hasAttributes())
+				{
+					NamedNodeMap attrs			 	= hpcpNodes.item(j).getAttributes();
+					Node 				nameNode 	= attrs.getNamedItem(JSDL.nameEnvironment);
+					
+					childElement.setAttributes(nameNode.getTextContent());	
+				}
+				
+				childElement.setName(hpcpNodes.item(j).getNodeName());
+				childElement.setText(hpcpNodes.item(j).getTextContent());
+				childElement.setHasText(true);
+				childElement.setHasChildren(false);
+				
+				childrenElements.add(childElement);
+				
+				if (hpcpNodes.item(j).getNodeName().equals(JSDL.inputHPCPAJD) ||
+					hpcpNodes.item(j).getNodeName().equals(JSDL.outputHPCPAJD) ||
+					hpcpNodes.item(j).getNodeName().equals(JSDL.errorHPCPAJD))
+					
+				{
+					noInputOutputElements.add(childElement);
+					this.noInputOutputElement.setHasChildren(true);
+				}
+			}
+		}
+		
+		if (this.noInputOutputElement.getHasChildren())
+			this.noInputOutputElement.setChildren(noInputOutputElements);
+		
+		return childrenElements;
 	}
 	
 	private JSDLElement writeDataStagingElement(Node root)

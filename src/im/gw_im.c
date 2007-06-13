@@ -293,7 +293,7 @@ void gw_im_start ( void *_null )
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
 
-inline int gw_im_set_pipes (fd_set *in_pipes, int *num_mads)
+int gw_im_set_pipes (fd_set *in_pipes, int *num_mads)
 {
 	int greater = 0;
 	int i;

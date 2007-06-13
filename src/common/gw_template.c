@@ -32,7 +32,7 @@
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
-inline void gw_template_array_init( char array[GW_JT_FILES][2][GW_JT_STR] )
+void gw_template_array_init( char array[GW_JT_FILES][2][GW_JT_STR] )
 {
 	int i;
 			
@@ -47,7 +47,7 @@ inline void gw_template_array_init( char array[GW_JT_FILES][2][GW_JT_STR] )
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */    
 
-inline void gw_template_sarray_init( char array[GW_JT_FILES][GW_JT_STR] )
+void gw_template_sarray_init( char array[GW_JT_FILES][GW_JT_STR] )
 {
 	int i;
 			

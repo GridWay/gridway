@@ -216,7 +216,7 @@ void gw_scheduler_update_usage_host(gw_scheduler_t * sched)
 
 #endif
 
-inline float gw_scheduler_host_estimated_time(gw_sch_user_host_t * th,gw_scheduler_t * sched)
+float gw_scheduler_host_estimated_time(gw_sch_user_host_t * th,gw_scheduler_t * sched)
 {
 	float avrg;
 	float last;
@@ -263,7 +263,7 @@ static int queue_cmp(const void *r1, const void *r2)
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
-inline void gw_scheduler_host_policies (gw_scheduler_t * sched, int jid)
+void gw_scheduler_host_policies (gw_scheduler_t * sched, int jid)
 {
     int j,u;
     gw_sch_queue_t *     mhosts;

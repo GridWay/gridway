@@ -172,21 +172,21 @@ void gw_host_print(FILE *fd, gw_host_t *host);
 
 /*----------------------------------------------------------------------------*/
 
-inline void gw_host_dec_rjobs(gw_host_t *host);
+void gw_host_dec_rjobs(gw_host_t *host);
 
-inline void gw_host_dec_uslots(gw_host_t *host, int slots);
+void gw_host_dec_uslots(gw_host_t *host, int slots);
 
-inline void gw_host_dec_slots(gw_host_t *host, int slots);
+void gw_host_dec_slots(gw_host_t *host, int slots);
 
-inline void gw_host_inc_rjobs(gw_host_t *host);
+void gw_host_inc_rjobs(gw_host_t *host);
 
-inline void gw_host_inc_uslots(gw_host_t *host, int slots);
+void gw_host_inc_uslots(gw_host_t *host, int slots);
 
-inline void gw_host_inc_slots(gw_host_t *host, int slots);
+void gw_host_inc_slots(gw_host_t *host, int slots);
 
-inline void gw_host_inc_slots_nb(gw_host_t *host, int slots);
+void gw_host_inc_slots_nb(gw_host_t *host, int slots);
 
-inline void gw_host_inc_rjobs_nb(gw_host_t *host);
+void gw_host_inc_rjobs_nb(gw_host_t *host);
 
 /* -------------------------------------------------------------------------- */
 

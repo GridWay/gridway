@@ -807,6 +807,7 @@ LIBS
 build_alias
 host_alias
 target_alias
+globus_pkg_libs
 incgtmk
 build
 build_cpu
@@ -1509,17 +1510,16 @@ if test -n "$ac_init_help"; then
 Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --enable-globus-scheme  Adjusts directory layout to install GridWay in
+                          GLOBUS_LOCATION.
   --disable-drmaa         Don't build drmaa support. Default is enabled.
-  --disable-prews         Don't build pre-web-services support. Default is
-                          enabled.
+  --enable-prews          Build pre-web-services support. Default is disabled.
   --disable-ws            Don't build web-services support. Default is
                           enabled.
-  --disable-jsdl          Don't build jsdl support. Default is enabled.
+  --enable-jsdl           Build jsdl support. Default is disabled.
   --enable-debug          Enable debug info in GW logs. Default is disabled.
   --disable-gridftp       Don't build gridftp support. Default is enabled.
                           Useful to compile in an EGEE UI.
-  --enable-globus-scheme  Adjusts directory layout to install GridWay in
-                          GLOBUS_LOCATION.
   --enable-shared[=PKGS]  build shared libraries [default=yes]
   --enable-static[=PKGS]  build static libraries [default=yes]
   --enable-fast-install[=PKGS]
@@ -1532,9 +1532,9 @@ Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
   --with-flavor           Specify globus build flavor (eg. gcc32dbg)
+  --with-docs             Build documentation
   --with-db=<no|path_to_db>
                           Build db support for accounting.
-  --with-doc              Build documentation
   --with-tests            Build GridWay test suite
   --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
   --with-pic              try to use only PIC/non-PIC objects [default=use
@@ -2028,8 +2028,26 @@ ac_configure="$SHELL $ac_aux_dir/configure"  # Please don't use this var.
 
 
 #------------------------------------------------------------------------------
-# Build the makefile-header
+# --- Globus Directory Scheme --- Need to be checked first
 #------------------------------------------------------------------------------
+GW_DIR_SCHEME=""
+
+# Check whether --enable-globus-scheme was given.
+if test "${enable_globus_scheme+set}" = set; then
+  enableval=$enable_globus_scheme; \
+  GW_DIR_SCHEME="globus";
+fi
+
+
+#------------------------------------------------------------------------------
+# Makefile-header setup (actually handled by GPT)
+#------------------------------------------------------------------------------
+
+if test "x$GW_DIR_SCHEME" = "xglobus"; then
+	HEADER_COMMAND=$GLOBUS_LOCATION/sbin/gpt_build_config
+else
+	HEADER_COMMAND=$GLOBUS_LOCATION/bin/globus-makefile-header
+fi
 
 echo -n "checking for Globus Toolkit..."
 if test -z "$GLOBUS_LOCATION" ; then
@@ -2040,7 +2058,7 @@ else
 
    source $GLOBUS_LOCATION/etc/globus-user-env.sh  > /dev/null 2>&1
 
-   if test -x $GLOBUS_LOCATION/bin/globus-makefile-header ; then
+   if test -x $GLOBUS_LOCATION/sbin/gpt_build_config ; then
 
 
 # Check whether --with-flavor was given.
@@ -2053,44 +2071,50 @@ fi
        if test -z "$FLAVOR" ; then
 
            if test -d $GLOBUS_LOCATION/include/gcc32dbg ; then
-            	FLAVOR=gcc32dbg
-	       elif test -d $GLOBUS_LOCATION/include/gcc32 ; then
-	            FLAVOR=gcc32
-	       elif test -d $GLOBUS_LOCATION/include/gcc64dbg ; then
-	            FLAVOR=gcc64dbg
-	       elif test -d $GLOBUS_LOCATION/include/gcc64 ; then
-	            FLAVOR=gcc64
-	       elif test -d $GLOBUS_LOCATION/include/vendorcc32dbg ; then
-	            FLAVOR=vendorcc32dbg
-	       elif test -d $GLOBUS_LOCATION/include/vendorcc32 ; then
-	            FLAVOR=vendorcc32
-	       elif test -d $GLOBUS_LOCATION/include/vendorcc64dbg ; then
-	            FLAVOR=vendorcc64dbg
-	       elif test -d $GLOBUS_LOCATION/include/vendorcc64 ; then
-	            FLAVOR=vendorcc64
-	       else
-	          echo "use --with-flavor"
-	          exit -1
-	       fi
+                FLAVOR=gcc32dbg
+               elif test -d $GLOBUS_LOCATION/include/gcc32 ; then
+                    FLAVOR=gcc32
+               elif test -d $GLOBUS_LOCATION/include/gcc64dbg ; then
+                    FLAVOR=gcc64dbg
+               elif test -d $GLOBUS_LOCATION/include/gcc64 ; then
+                    FLAVOR=gcc64
+               elif test -d $GLOBUS_LOCATION/include/vendorcc32dbg ; then
+                    FLAVOR=vendorcc32dbg
+               elif test -d $GLOBUS_LOCATION/include/vendorcc32 ; then
+                    FLAVOR=vendorcc32
+               elif test -d $GLOBUS_LOCATION/include/vendorcc64dbg ; then
+                    FLAVOR=vendorcc64dbg
+               elif test -d $GLOBUS_LOCATION/include/vendorcc64 ; then
+                    FLAVOR=vendorcc64
+               else
+                  echo "use --with-flavor"
+                  exit -1
+               fi
        fi
    else
-	    echo "Could not find globus-makefile-header..."
-	    exit -1
+            echo "Could not find gpt_build_config..."
+            exit -1
    fi
 
-   echo -n "creating makefile-header..."
+   echo -n "configuring Globus build env..."
 
-   globus-makefile-header -flavor $FLAVOR globus_gram_client \
-       globus_ftp_client globus_gass_copy > makefile-header
+   if test "x$GW_DIR_SCHEME" = "xglobus"; then
+	  $HEADER_COMMAND -src=pkg_data_src.gpt -flavor=$FLAVOR -link=shared
+      export GLOBUS_FLAVOR_NAME=$FLAVOR
+	  source ./gpt_build_temp.sh
+      globus_pkg_libs="$GPT_CONFIG_PKG_LIBS $GPT_CONFIG_LIBS"
+
+   else
+	  $HEADER_COMMAND -flavor $FLAVOR globus_gram_client globus_ftp_client \
+	       globus_gass_copy > makefile-header
+      incgtmk="include $PWD/makefile-header"
+
+   fi
 
    if test $? -ne 0 ; then
       echo "failed"
-      cat makefile-header
-      rm makefile-header
       exit -1
    fi
-
-   incgtmk="include $PWD/makefile-header"
 
    echo "ok"
 
@@ -2159,6 +2183,14 @@ case "$build_os" in
    *darwin*)
       JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Home
    ;;
+
+   *osf5.1* | *tru64*)
+		system=alpha
+		CFLAGS="$CFLAGS -pthread -D_POSIX_PII_SOCKET"
+    ;;
+    *aix*)
+    	system=
+    ;;
 esac
 
 system=$system
@@ -2167,12 +2199,31 @@ java_home=$JAVA_HOME
 
 
 #------------------------------------------------------------------------------
-# Argument check
+# Argument Definition for configure
 #------------------------------------------------------------------------------
 
-# --- Enable DRMAA library ---
+if test "x$GW_DIR_SCHEME" = "xglobus"; then
+#Default options for Globus builds
+	drmaa="drmaa"
+	prews=""
+	ws="ws"
+	jsdl=""
+	db=""
+	doc="no"
+	tests="no"
+	gridftp="gridftp"
+else
+	drmaa="drmaa"
+	prews=""
+	ws="ws"
+	jsdl="jsdl"
+	db="db"
+	doc="no"
+	tests="no"
+	gridftp="gridftp"
+fi
 
-drmaa="drmaa"
+# --- Enable DRMAA library ---
 
 # Check whether --enable-drmaa was given.
 if test "${enable_drmaa+set}" = set; then
@@ -2180,6 +2231,99 @@ if test "${enable_drmaa+set}" = set; then
   if test $enableval = "no"; then drmaa=" "; drmaa_c_howtos=" "; drmaa_java_howtos=" "; fi
 fi
 
+
+# --- Enable preWS Drivers ---
+
+# Check whether --enable-prews was given.
+if test "${enable_prews+set}" = set; then
+  enableval=$enable_prews; \
+  if test $enableval = "yes"; then prews="prews"; fi
+fi
+
+
+# --- Enable WS Drivers ---
+
+# Check whether --enable-ws was given.
+if test "${enable_ws+set}" = set; then
+  enableval=$enable_ws; \
+  if test $enableval = "no"; then ws=" "; fi
+fi
+
+
+# --- Enable JSDL  ---
+
+# Check whether --enable-jsdl was given.
+if test "${enable_jsdl+set}" = set; then
+  enableval=$enable_jsdl; \
+  if test $enableval = "yes"; then jsdl="jsdl"; fi
+fi
+
+
+# --- Enable Debug ---
+
+# Check whether --enable-debug was given.
+if test "${enable_debug+set}" = set; then
+  enableval=$enable_debug; \
+  CFLAGS="$CFLAGS -Wall -g -DGWIMDEBUG -DGWJOBDEBUG -DGWHOSTDEBUG -DGWEMDEBUG -DGWDMDEBUG  -DGWTMDEBUG -DGWUSERDEBUG -DGWSCHEDDEBUG";
+fi
+
+
+# --- With DB ---
+
+
+# Check whether --with-doc was given.
+if test "${with_doc+set}" = set; then
+  withval=$with_doc; \
+        if test $withval = "yes"; then doc="yes"; else doc="no"; fi
+fi
+
+
+# --- With documents ---
+
+
+# Check whether --with-db was given.
+if test "${with_db+set}" = set; then
+  withval=$with_db; \
+       if test $withval = "no";  then  db=" "; else \
+        if test $withval = "yes"; then  db="db"; db_path=" "; fi; \
+        if test $withval != "yes"; then db="db"; db_path="$withval"; fi; \
+        fi
+fi
+
+
+# --- With GridWay tests ---
+
+
+# Check whether --with-tests was given.
+if test "${with_tests+set}" = set; then
+  withval=$with_tests; \
+        if test $withval = "yes"; then tests="yes"; else tests="no"; fi
+fi
+
+
+# --- Enable GRIDFTP TM Mad ---
+
+# Check whether --enable-gridftp was given.
+if test "${enable_gridftp+set}" = set; then
+  enableval=$enable_gridftp; \
+  if test $enableval = "no"; then gridftp=" "; fi
+fi
+
+
+# --- Globus Directory Scheme ---
+
+# Check whether --enable-globus-scheme was given.
+if test "${enable_globus_scheme+set}" = set; then
+  enableval=$enable_globus_scheme; \
+  GW_DIR_SCHEME="globus";
+fi
+
+
+#------------------------------------------------------------------------------
+# Argument check
+#------------------------------------------------------------------------------
+
+# --- Enable DRMAA library ---
 
 
 
@@ -2194,15 +2338,6 @@ fi
 
 # --- Enable preWS Drivers ---
 
-prews="prews"
-
-# Check whether --enable-prews was given.
-if test "${enable_prews+set}" = set; then
-  enableval=$enable_prews; \
-  if test $enableval = "no"; then prews=" "; fi
-fi
-
-
 
 
 if test "x$prews" = "xprews"; then
@@ -2216,15 +2351,6 @@ fi
 
 # --- Enable WS Drivers ---
 
-ws="ws"
-
-# Check whether --enable-ws was given.
-if test "${enable_ws+set}" = set; then
-  enableval=$enable_ws; \
-  if test $enableval = "no"; then ws=" "; fi
-fi
-
-
 
 
 if test "x$ws" = "xws"; then
@@ -2236,16 +2362,7 @@ else
 fi
 
 
-# --- Disable JSDL  ---
-
-jsdl="jsdl"
-
-# Check whether --enable-jsdl was given.
-if test "${enable_jsdl+set}" = set; then
-  enableval=$enable_jsdl; \
-  if test $enableval = "no"; then jsdl=" "; fi
-fi
-
+# --- Enable JSDL  ---
 
 
 
@@ -2258,41 +2375,19 @@ else
 fi
 
 
-# --- Enable Debug ---
-
-dbg=""
-
-# Check whether --enable-debug was given.
-if test "${enable_debug+set}" = set; then
-  enableval=$enable_debug; \
-  CFLAGS="$CFLAGS -Wall -g -DGWIMDEBUG -DGWJOBDEBUG -DGWHOSTDEBUG -DGWEMDEBUG -DGWDMDEBUG  -DGWTMDEBUG -DGWUSERDEBUG -DGWSCHEDDEBUG";
-fi
-
-
 # --- With DB ---
 
-db="db"
-
-LDFLAGS_SAVED=${LDFLAGS}
-LDFLAGS="${LDFLAGS} -L/usr/lib";
-DB4_INCLUDE_PATH="-I /usr/include";
-
-
-# Check whether --with-db was given.
-if test "${with_db+set}" = set; then
-  withval=$with_db; \
-       if test $withval = "no"; then \
-           db=" "; \
-           LDFLAGS="${LDFLAGS_SAVED}"; \
-           DB4_INCLUDE_PATH=" "; \
-        else \
-		if test $withval != "yes" ; then \
-			LDFLAGS="${LDFLAGS_SAVED} -L${withval}/lib"; \
-            DB4_INCLUDE_PATH="-I ${withval}/include"; \
-		fi \
- 		fi
+if test "x$db" = "xdb" ; then
+	if test "x$db_path"="x " ; then
+		LDFLAGS="${LDFLAGS} -L/usr/lib";
+		DB4_INCLUDE_PATH="-I /usr/include";
+	else
+    	LDFLAGS="${LDFLAGS_SAVED} -L${db_path}/lib";
+        DB4_INCLUDE_PATH="-I ${db_path}/include";
+	fi
+else
+	DB4_INCLUDE_PATH=" ";
 fi
-
 
 
 
@@ -2306,16 +2401,6 @@ fi
 
 
 # --- With documents ---
-
-doc="no"
-
-
-# Check whether --with-doc was given.
-if test "${with_doc+set}" = set; then
-  withval=$with_doc; \
-        if test $withval = "yes"; then doc="yes"; else doc="no"; fi
-fi
-
 
 if test "x$doc" = "xyes" ; then
      # Extract the first word of "db2html", so it can be a program name with args.
@@ -2587,16 +2672,6 @@ fi
 
 # --- With GridWay tests ---
 
-tests="no"
-
-
-# Check whether --with-tests was given.
-if test "${with_tests+set}" = set; then
-  withval=$with_tests; \
-        if test $withval = "yes"; then tests="yes"; else tests="no"; fi
-fi
-
-
 
 
 if test "x$tests" = "xyes"; then
@@ -2610,15 +2685,6 @@ fi
 
 # --- Enable GRIDFTP TM Mad ---
 
-gridftp="gridftp"
-
-# Check whether --enable-gridftp was given.
-if test "${enable_gridftp+set}" = set; then
-  enableval=$enable_gridftp; \
-  if test $enableval = "no"; then gridftp=" "; fi
-fi
-
-
 
 
 if test "x$gridftp" = "xgridftp"; then
@@ -2630,18 +2696,11 @@ else
 fi
 
 
-#-------------------------------------------------------------------------------
-# Globus Directory Scheme
-#-------------------------------------------------------------------------------
+# --- Globus Directory Scheme ---
 
-GW_DIR_SCHEME="gw"
-
-# Check whether --enable-globus-scheme was given.
-if test "${enable_globus_scheme+set}" = set; then
-  enableval=$enable_globus_scheme; \
-  CFLAGS="$CFLAGS -DGW_GLOBUS_DIRS"; GW_DIR_SCHEME="globus";
+if test "x$GW_DIR_SCHEME" = "xglobus"; then
+	CFLAGS="$CFLAGS -DGW_GLOBUS_DIRS"
 fi
-
 
 
 
@@ -4412,7 +4471,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 4415 "configure"' > conftest.$ac_ext
+  echo '#line 4474 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -7035,11 +7094,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7038: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7097: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7042: \$? = $ac_status" >&5
+   echo "$as_me:7101: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7303,11 +7362,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7306: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7365: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7310: \$? = $ac_status" >&5
+   echo "$as_me:7369: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7407,11 +7466,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7410: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7469: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:7414: \$? = $ac_status" >&5
+   echo "$as_me:7473: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -9704,7 +9763,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 9707 "configure"
+#line 9766 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -9804,7 +9863,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 9807 "configure"
+#line 9866 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -12140,11 +12199,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:12143: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:12202: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:12147: \$? = $ac_status" >&5
+   echo "$as_me:12206: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -12244,11 +12303,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:12247: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:12306: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:12251: \$? = $ac_status" >&5
+   echo "$as_me:12310: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -13805,11 +13864,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13808: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13867: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:13812: \$? = $ac_status" >&5
+   echo "$as_me:13871: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -13909,11 +13968,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13912: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13971: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:13916: \$? = $ac_status" >&5
+   echo "$as_me:13975: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -16096,11 +16155,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16099: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16158: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16103: \$? = $ac_status" >&5
+   echo "$as_me:16162: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16364,11 +16423,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16367: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16426: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16371: \$? = $ac_status" >&5
+   echo "$as_me:16430: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16468,11 +16527,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16471: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16530: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:16475: \$? = $ac_status" >&5
+   echo "$as_me:16534: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -24951,6 +25010,7 @@ LIBS!$LIBS$ac_delim
 build_alias!$build_alias$ac_delim
 host_alias!$host_alias$ac_delim
 target_alias!$target_alias$ac_delim
+globus_pkg_libs!$globus_pkg_libs$ac_delim
 incgtmk!$incgtmk$ac_delim
 build!$build$ac_delim
 build_cpu!$build_cpu$ac_delim
@@ -25010,7 +25070,6 @@ AR!$AR$ac_delim
 RANLIB!$RANLIB$ac_delim
 STRIP!$STRIP$ac_delim
 CPP!$CPP$ac_delim
-CXX!$CXX$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -25052,6 +25111,7 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+CXX!$CXX$ac_delim
 CXXFLAGS!$CXXFLAGS$ac_delim
 ac_ct_CXX!$ac_ct_CXX$ac_delim
 CXXCPP!$CXXCPP$ac_delim
@@ -25099,7 +25159,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 45; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 46; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5

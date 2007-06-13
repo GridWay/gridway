@@ -32,7 +32,7 @@
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
-inline void gw_job_template_set_str(char **dst, const char *src)
+void gw_job_template_set_str(char **dst, const char *src)
 {
 	if (src[0] == '\0')	
 		*dst = NULL;
@@ -42,7 +42,7 @@ inline void gw_job_template_set_str(char **dst, const char *src)
 
 /* -------------------------------------------------------------------------- */
 
-inline void gw_job_template_array_destroy (char **** array, int num_files)
+void gw_job_template_array_destroy (char **** array, int num_files)
 {
 	int i;
 
@@ -68,7 +68,7 @@ inline void gw_job_template_array_destroy (char **** array, int num_files)
 
 /* -------------------------------------------------------------------------- */
 
-inline void gw_job_template_sarray_destroy (char *** array, int num_files)
+void gw_job_template_sarray_destroy (char *** array, int num_files)
 {
 	int i;
 

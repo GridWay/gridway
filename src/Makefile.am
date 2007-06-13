@@ -22,14 +22,36 @@
 AUTOMAKE_OPTIONS = subdir-objects no-dependencies
 AM_YFLAGS = -d
 
-CLASSPATH := $(CLASSPATH):$(GLOBUS_LOCATION)/lib/addressing-1.0.jar:$(GLOBUS_LOCATION)/lib/axis.jar:$(GLOBUS_LOCATION)/lib/cog-jglobus.jar:$(GLOBUS_LOCATION)/lib/globus_delegation_service.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft_client.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft_stubs.jar:$(GLOBUS_LOCATION)/lib/gram-client.jar:$(GLOBUS_LOCATION)/lib/gram-stubs.jar:$(GLOBUS_LOCATION)/lib/gram-utils.jar:$(GLOBUS_LOCATION)/lib/jgss.jar:$(GLOBUS_LOCATION)/lib/wsrf_core.jar:$(GLOBUS_LOCATION)/lib/wsrf_core_stubs.jar:$(GLOBUS_LOCATION)/lib/wsrf_test_unit.jar:$(GLOBUS_LOCATION)/lib/xml-apis.jar:$(GLOBUS_LOCATION)/lib/xalan.jar:$(GLOBUS_LOCATION)/lib/xercesImpl.jar
+# This is for portability issues, do not use := operator
+CLASSPATH = $(GLOBUS_LOCATION)/lib/addressing-1.0.jar:$(GLOBUS_LOCATION)/lib/axis.jar:$(GLOBUS_LOCATION)/lib/cog-jglobus.jar:$(GLOBUS_LOCATION)/lib/globus_delegation_service.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft_client.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft_stubs.jar:$(GLOBUS_LOCATION)/lib/gram-client.jar:$(GLOBUS_LOCATION)/lib/gram-stubs.jar:$(GLOBUS_LOCATION)/lib/gram-utils.jar:$(GLOBUS_LOCATION)/lib/jgss.jar:$(GLOBUS_LOCATION)/lib/wsrf_core.jar:$(GLOBUS_LOCATION)/lib/wsrf_core_stubs.jar:$(GLOBUS_LOCATION)/lib/wsrf_test_unit.jar:$(GLOBUS_LOCATION)/lib/xml-apis.jar:$(GLOBUS_LOCATION)/lib/xalan.jar:$(GLOBUS_LOCATION)/lib/xercesImpl.jar
 
-# Get rid of libtool by default
-LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+# Get rid of libtool by default & make use of globus compiler/linker
 
+
+if GW_GLOBUS_DIRS
+LINK_PROG    = $(CCLD)
+COMPILE_PROG = $(CC)
+else
+COMPILE_PROG = $(GLOBUS_CC)
+LINK_PROG    = $(GLOBUS_LD)
+endif
+
+LINK_OPTS = $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+
+COMPILE_OPTS = $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+			   $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+
+LINK = $(LINK_PROG) $(LINK_OPTS)
+COMPILE = $(COMPILE_PROG) $(COMPILE_OPTS)
+
+if GW_GLOBUS_DIRS
+GT_PKG_LIBS = @globus_pkg_libs@
+else
+GT_PKG_LIBS = $(GLOBUS_LIBS) $(GLOBUS_PKG_LIBS)
+endif
+
+# to handle else, not very smart 
+NOP =
 # -----------------------------
 # Directory definitions
 # -----------------------------
@@ -275,15 +297,18 @@ DRMAA_JAVA_SRC = $(DRMAA_PACK)/AlreadyActiveSessionException.java \
 # -- Includes and Headers
 # -----------------------------
 
-@incgtmk@
-
-SYSTEM=@system@
-
 INCLUDES = -I$(top_srcdir)/include \
-             $(GLOBUS_INCLUDES) \
              $(DB4_INCLUDE_PATH) \
            -I${JAVA_HOME}/include \
            -I${JAVA_HOME}/include/$(SYSTEM)
+           
+if GW_GLOBUS_DIRS
+SYSTEM=@system@
+else
+SYSTEM=@system@
+@incgtmk@
+INCLUDES += $(GLOBUS_INCLUDES)
+endif
 
 include_HEADERS = $(top_srcdir)/include/drmaa.h \
                         $(top_srcdir)/include/gw_acct.h \
@@ -507,11 +532,16 @@ dist_bin_SCRIPTS  += $(EM_MAD)/gw_em_mad_prews.sh
 endif
 
 __srcdir__em_mad_gw_em_mad_prews_bin_SOURCES = $(EM_MAD_PREWS_SRC)
+__srcdir__em_mad_gw_em_mad_prews_bin_LDADD   = $(GT_PKG_LIBS)
+
+if GW_GLOBUS_DIRS
+NOP +=
+else
 __srcdir__em_mad_gw_em_mad_prews_bin_LDFLAGS = $(GLOBUS_LDFLAGS)
 __srcdir__em_mad_gw_em_mad_prews_bin_CFLAGS  = $(GLOBUS_INCLUDES) \
         $(GLOBUS_CFLAGS)
-__srcdir__em_mad_gw_em_mad_prews_bin_LDADD   = $(GLOBUS_LIBS) \
-        $(GLOBUS_PKG_LIBS)
+endif
+
 
 # ---------------------- TM MADS ------------------------
 
@@ -526,20 +556,28 @@ bin_PROGRAMS += $(srcdir)/tm_mad/gw_tm_mad_ftp.bin
 dist_bin_SCRIPTS += $(TM_MAD)/gw_tm_mad_ftp.sh
 
 __srcdir__tm_mad_gw_tm_mad_ftp_bin_SOURCES = $(TM_MAD_SRC)
+__srcdir__tm_mad_gw_tm_mad_ftp_bin_LDADD   = $(GT_PKG_LIBS)
+
+if GW_GLOBUS_DIRS
+NOP +=
+else
 __srcdir__tm_mad_gw_tm_mad_ftp_bin_LDFLAGS = $(GLOBUS_LDFLAGS)
 __srcdir__tm_mad_gw_tm_mad_ftp_bin_CFLAGS  = $(GLOBUS_INCLUDES) \
         $(GLOBUS_CFLAGS)
-__srcdir__tm_mad_gw_tm_mad_ftp_bin_LDADD   = $(GLOBUS_LIBS) \
-        $(GLOBUS_PKG_LIBS)
+endif
 
 endif
 
 __srcdir__tm_mad_gw_tm_mad_dummy_bin_SOURCES = $(TM_MAD_DUMMY_SRC)
+__srcdir__tm_mad_gw_tm_mad_dummy_bin_LDADD   = $(GT_PKG_LIBS)
+
+if GW_GLOBUS_DIRS
+NOP +=
+else
 __srcdir__tm_mad_gw_tm_mad_dummy_bin_LDFLAGS = $(GLOBUS_LDFLAGS)
 __srcdir__tm_mad_gw_tm_mad_dummy_bin_CFLAGS  = $(GLOBUS_INCLUDES) \
         $(GLOBUS_CFLAGS)
-__srcdir__tm_mad_gw_tm_mad_dummy_bin_LDADD   = $(GLOBUS_LIBS) \
-        $(GLOBUS_PKG_LIBS)
+endif
 
 # ---------------------- IM MADS ------------------------
 
@@ -557,7 +595,6 @@ endif
 JAVAROOT = .
 
 if WS
-
 # ---------------------- IM MADS ------------------------
 
 im_ws_jardir = $(prefix)/lib

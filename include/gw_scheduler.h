@@ -170,7 +170,7 @@ void gw_scheduler_loop(gw_scheduler_function_t scheduler, void *user_arg);
 
 void gw_scheduler_print (const char mode, const char *str_format,...);
 
-inline void gw_scheduler_ctime(time_t the_time, char *str);
+void gw_scheduler_ctime(time_t the_time, char *str);
 
 /* -------------------------------------------------------------------- */
 /* -------------------------------------------------------------------- */
@@ -184,10 +184,10 @@ void gw_scheduler_add_host(gw_scheduler_t * sched,
                            
 void gw_scheduler_update_usage_host(gw_scheduler_t * sched);
 
-inline float gw_scheduler_host_estimated_time(gw_sch_user_host_t * th,
+float gw_scheduler_host_estimated_time(gw_sch_user_host_t * th,
                                               gw_scheduler_t *     sched);
                                               
-inline void gw_scheduler_host_policies (gw_scheduler_t * sched, int jid);                                              
+void gw_scheduler_host_policies (gw_scheduler_t * sched, int jid);                                              
                            
 /* -------------------------------------------------------------------- */
 

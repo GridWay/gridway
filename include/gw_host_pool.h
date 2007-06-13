@@ -60,7 +60,6 @@ void gw_host_pool_update (char * hostnames,
 
 void gw_host_pool_print (FILE *fd);
 
-void gw_host_pool_monitor_hosts( );
-
+void gw_host_pool_monitor_hosts( int *active_queries);
 
 #endif

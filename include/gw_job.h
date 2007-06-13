@@ -160,7 +160,7 @@ int gw_job_recover_history_record(FILE *history_file, gw_job_t *job);
 int gw_job_recover_job_contact(gw_job_t *job);
 void gw_job_destroy (gw_job_t *job);
 
-inline char * gw_job_recover_get_contact(gw_job_t *job);
+char * gw_job_recover_get_contact(gw_job_t *job);
 
 /* -------------------------------------------------------------------------- */
 /*      Function Prototypes to perform persistent job state transitions       */
@@ -183,6 +183,8 @@ char *gw_job_substitute (const char *var, gw_job_t *job);
 /* -------------------------------------------------------------------------- */
 /*    Function Prototypes to generate dynamic job environment                 */
 /* -------------------------------------------------------------------------- */
+
+int gw_job_is_wrapper_based(gw_job_t *job);
 
 int    gw_job_environment(gw_job_t *job);
 char * gw_job_rsl_environment(gw_job_t *job);

@@ -26,7 +26,7 @@ clean_bt(){
 	rm doc/docbook/Makefile > /dev/null 2>&1 
 	rm src/Makefile > /dev/null 2>&1 
 	rm autoscan.log config.status libtool configure.scan config.log > /dev/null 2>&1 
-    rm makefile-header > /dev/null 2>&1 
+    rm makefile-header gpt_build_temp.sh> /dev/null 2>&1 
     rm src/drmaa/drmaa.jar > /dev/null 2>&1 
 }
 

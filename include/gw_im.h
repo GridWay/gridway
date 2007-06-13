@@ -88,7 +88,7 @@ void gw_im_listener(void *arg);
 
 /* -------------------------------------------------------------------------- */
 
-inline int gw_im_set_pipes (fd_set *in_pipes, int *num_mads);
+int gw_im_set_pipes (fd_set *in_pipes, int *num_mads);
 
 /* -------------------------------------------------------------------------- */
 

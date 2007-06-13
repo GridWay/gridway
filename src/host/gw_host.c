@@ -269,7 +269,7 @@ void gw_host_clear_dynamic_info(int host_id)
 
 /*----------------------------------------------------------------------------*/
 
-inline void gw_host_dec_rjobs(gw_host_t *host)
+void gw_host_dec_rjobs(gw_host_t *host)
 {
     pthread_mutex_lock(&(host->mutex));			
 
@@ -286,7 +286,7 @@ inline void gw_host_dec_rjobs(gw_host_t *host)
 
 /*----------------------------------------------------------------------------*/
 
-inline void gw_host_dec_uslots(gw_host_t *host, int slots)
+void gw_host_dec_uslots(gw_host_t *host, int slots)
 {
     pthread_mutex_lock(&(host->mutex));			
 
@@ -303,7 +303,7 @@ inline void gw_host_dec_uslots(gw_host_t *host, int slots)
 
 /*----------------------------------------------------------------------------*/
 
-inline void gw_host_dec_slots(gw_host_t *host, int slots)
+void gw_host_dec_slots(gw_host_t *host, int slots)
 {
     pthread_mutex_lock(&(host->mutex));			
 
@@ -322,7 +322,7 @@ inline void gw_host_dec_slots(gw_host_t *host, int slots)
 
 /*----------------------------------------------------------------------------*/
 
-inline void gw_host_inc_rjobs(gw_host_t *host)
+void gw_host_inc_rjobs(gw_host_t *host)
 {
     pthread_mutex_lock(&(host->mutex));			
 
@@ -340,7 +340,7 @@ inline void gw_host_inc_rjobs(gw_host_t *host)
 /*----------------------------------------------------------------------------*/
 
 
-inline void gw_host_inc_uslots(gw_host_t *host, int slots)
+void gw_host_inc_uslots(gw_host_t *host, int slots)
 {
     pthread_mutex_lock(&(host->mutex));			
 
@@ -357,7 +357,7 @@ inline void gw_host_inc_uslots(gw_host_t *host, int slots)
 
 /*----------------------------------------------------------------------------*/
 
-inline void gw_host_inc_slots(gw_host_t *host, int slots)
+void gw_host_inc_slots(gw_host_t *host, int slots)
 {
     pthread_mutex_lock(&(host->mutex));			
 
@@ -376,7 +376,7 @@ inline void gw_host_inc_slots(gw_host_t *host, int slots)
 
 /*----------------------------------------------------------------------------*/
 
-inline void gw_host_inc_slots_nb(gw_host_t *host, int slots)
+void gw_host_inc_slots_nb(gw_host_t *host, int slots)
 {
 	host->used_slots+= slots;
 	
@@ -391,7 +391,7 @@ inline void gw_host_inc_slots_nb(gw_host_t *host, int slots)
 
 /*----------------------------------------------------------------------------*/
 
-inline void gw_host_inc_rjobs_nb(gw_host_t *host)
+void gw_host_inc_rjobs_nb(gw_host_t *host)
 {
 	host->running_jobs++;
 				

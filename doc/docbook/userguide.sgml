@@ -1322,6 +1322,19 @@ ENVIRONMENT = VAR = "`expr ${JOB_ID} + 3`" # will set VAR to JOB_ID + 3</screen>
     </itemizedlist>
   </para>
   </sect1>
+	
+	<sect1>
+		<title>Monitor and Wrapper Scripts</title>
+		
+		<para>
+			If you want to specify your own monitor or wrapper script you can do it using
+			<envar>WRAPPER</envar> or <envar>MONITOR</envar> variables in your job template (or
+			modifying the default one located in the etc directory of your GW installation). The
+			file you specify must be a full path name of the script or a relative path if it is
+			located inside <filename>$GW_LOCATION</filename>. Here you can not use gsiftp or file
+			url protocol prefixes.
+		</para>
+	</sect1>
 </chapter>
 
 
@@ -1460,6 +1473,31 @@ ENVIRONMENT = VAR = "`expr ${JOB_ID} + 3`" # will set VAR to JOB_ID + 3</screen>
 |-------&lt;UserName>?
 |-------&lt;GroupName>?
 &lt;/POSIXApplication name="xsd:NCName"?>
+</screen>
+  <para>
+    More details at
+    <ulink url="http://forge.gridforum.org/sf/projects/jsdl-wg">https://forge.gridforum.org/sf/projects/jsdl-wg
+    </ulink>
+  </para>
+  </sect2>
+  <sect2>
+    <title>JSDL HPC Profile Application Extension</title>
+    <para>
+      This schema defines the JSDL specification for describing a simple HPC application that is made up of an 
+      executable file running within an operating system process. It shares much in common with the JSDL POSIXApplication.
+      The JSDL HPC Application Schema is as follow:
+    </para>
+<screen>
+&lt;HPCProfileApplication name="xsd:NCName"?>
+|-------&lt;Executable>?
+|-------&lt;Argument>*
+|-------&lt;Input>?
+|-------&lt;Output>?
+|-------&lt;Error>?
+|-------&lt;WorkingDirectory>?
+|-------&lt;Environment>*
+|-------&lt;UserNamet>?
+&lt;/HPCProfileApplication name="xsd:NCName"?>
 </screen>
   <para>
     More details at
@@ -1909,22 +1947,22 @@ ENVIRONMENT = VAR = "`expr ${JOB_ID} + 3`" # will set VAR to JOB_ID + 3</screen>
   </sect1>
 
   <sect1>
+    <title>Examples</title>
+    <sect2>
     <title>A simple example</title>
     <para>
       This example shows the representation of a simple job in JSDL format and the translator of this
       example in Gridway Job Template format.
     </para>
-    <sect2>
+    <sect3>
     <title>JSDL file</title>
     <para>
 <screen width='80'>
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--*
     * Basic schema of GridWay job
     *
     *-->
-
 &lt;jsdl:JobDefinition xmlns="http://www.example.org/"
     xmlns:jsdl="http://schemas.ggf.org/jsdl/2005/11/jsdl"
     xmlns:jsdl-posix="http://schemas.ggf.org/jsdl/2005/11/jsdl-posix"
@@ -1983,8 +2021,8 @@ ENVIRONMENT = VAR = "`expr ${JOB_ID} + 3`" # will set VAR to JOB_ID + 3</screen>
 &lt;/jsdl:JobDefinition>
 </screen>
 </para>
-</sect2>
-    <sect2>
+</sect3>
+    <sect3>
     <title>GridWay Job Template file</title>
     <para>
 <screen>
@@ -1998,13 +2036,100 @@ ENVIRONMENT=LD_LIBRARY_PATH=/usr/local/lib
 REQUIREMENTS=HOSTNAME="*.dacya.ucm.es" & ARCH="x86_32"
 INPUT_FILES=file.txt</screen>
 </para>
-    </sect2>
-  </sect1>
+    </sect3>
+</sect2>
+<sect2>
+    <title>A HPC profile example</title>
+    <para>
+      This example shows the representation of a HPC profile job in JSDL format and the translator of this
+      example in Gridway Job Template format.
+    </para>
+    <sect3>
+    <title>JSDL file</title>
+    <para>
+<screen width='80'>
+<?xml version="1.0" encoding="UTF-8"?>
+<!--*
+    * HPC Profile schema of GridWay job
+    *
+    *-->
+&lt;jsdl:JobDefinition xmlns="http://www.example.org/"
+    xmlns:jsdl="http://schemas.ggf.org/jsdl/2005/11/jsdl"
+    xmlns:jsdl-posix="http://schemas.ggf.org/jsdl/2005/11/jsdl-posix"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  &lt;jsdl:JobDescription>
+    &lt;jsdl:JobIdentification>
+      &lt;jsdl:JobName>Simple Application GW Template vs JSDL&lt;/jsdl:JobName>
+      &lt;jsdl:Description> This is a simple example to describe the main
+             differences between GW Template and the JSDL schema.
+      &lt;/jsdl:Description>
+    &lt;/jsdl:JobIdentification>
+    &lt;jsdl:Application>
+      &lt;jsdl:ApplicationName>ls&lt;/jsdl:ApplicationName>
+      &lt;jsdl-hpcpa:HPCProfileApplication>
+        &lt;jsdl-hpcpa:Executable>/bin/ls&lt;/jsdl-hpcpa:Executable>
+        &lt;jsdl-hpcpa:Argument>-la file.txt&lt;/jsdl-hpcpa:Argument>
+        &lt;jsdl-hpcpa:Environment name="LD_LIBRARY_PATH">/usr/local/lib&lt;/jsdl-hpcpa:Environment>
+        &lt;jsdl-hpcpa:Input>/dev/null&lt;/jsdl-hpcpa:Input>
+        &lt;jsdl-hpcpa:Output>stdout.${JOB_ID}&lt;/jsdl-hpcpa:Output>
+        &lt;jsdl-hpcpa:Error>stderr.${JOB_ID}&lt;/jsdl-hpcpa:Error>
+      &lt;/jsdl-hpcpa:HPCProfileApplication>
+    &lt;/jsdl:Application>
+    &lt;jsdl:Resources>
+      &lt;jsdl:CandidateHost>
+        &lt;jsdl:HostName>*.dacya.ucm.es&lt;/jsdl:HostName>
+      &lt;/jsdl:CandidateHost>
+      &lt;jsdl:CPUArchitecture>
+        &lt;jsdl:CPUArchitectureName>x86_32&lt;/jsdl:CPUArchitectureName>
+      &lt;/jsdl:CPUArchitecture>
+    &lt;/jsdl:Resources>
+    &lt;jsdl:DataStaging>
+      &lt;jsdl:FileName>file.txt&lt;/jsdl:FileName>
+      &lt;jsdl:CreationFlag>overwrite&lt;/jsdl:CreationFlag>
+      &lt;jsdl:DeleteOnTermination>true&lt;/jsdl:DeleteOnTermination>
+      &lt;jsdl:Source>
+        &lt;jsdl:URI>gsiftp://hydrus.dacya.ucm.es/home/jose/file1.txt&lt;/jsdl:URI>
+      &lt;/jsdl:Source>
+    &lt;/jsdl:DataStaging>
+    &lt;jsdl:DataStaging>
+      &lt;jsdl:FileName>stdout.${JOB_ID}&lt;/jsdl:FileName>
+      &lt;jsdl:CreationFlag>overwrite&lt;/jsdl:CreationFlag>
+      &lt;jsdl:DeleteOnTermination>true&lt;/jsdl:DeleteOnTermination>
+      &lt;jsdl:Target>
+        &lt;jsdl:URI>gsiftp://hydrus.dacya.ucm.es/home/jose/stdout.${JOB_ID}&lt;/jsdl:URI>
+      &lt;/jsdl:Target>
+    &lt;/jsdl:DataStaging>
+    &lt;jsdl:DataStaging>
+      &lt;jsdl:FileName>stderr.${JOB_ID}&lt;/jsdl:FileName>
+      &lt;jsdl:CreationFlag>overwrite&lt;/jsdl:CreationFlag>
+      &lt;jsdl:DeleteOnTermination>true&lt;/jsdl:DeleteOnTermination>
+      &lt;jsdl:Target>
+        &lt;jsdl:URI>gsiftp://hydrus.dacya.ucm.es/home/jose/stderr.${JOB_ID}&lt;/jsdl:URI>
+      &lt;/jsdl:Target>
+    &lt;/jsdl:DataStaging>
+  &lt;/jsdl:JobDescription>
+&lt;/jsdl:JobDefinition>
+</screen>
+</para>
+</sect3>
+    <sect3>
+    <title>GridWay Job Template file</title>
+    <para>
+<screen>
+#This file was automatically generated by the JSDL2GWJT parser
+EXECUTABLE=/bin/ls
+ARGUMENTS=-la file.txt
+STDIN_FILE=/dev/null
+STDOUT_FILE=stdout.${JOB_ID}
+STDERR_FILE=stderr.${JOB_ID}
+ENVIRONMENT=LD_LIBRARY_PATH=/usr/local/lib
+REQUIREMENTS=HOSTNAME="*.dacya.ucm.es" & ARCH="x86_32"
+INPUT_FILES=file.txt</screen>
+</para>
+    </sect3>
+  </sect2>
+</sect1>
 </chapter>
-
-
-
-
 
 <chapter>
 <title>Usage scenarios</title>

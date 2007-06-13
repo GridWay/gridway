@@ -79,9 +79,9 @@ int gw_dm_register_mad(const char *executable, const char *name,
 
 gw_dm_mad_t* gw_dm_get_mad(const char *name);
 
-inline int gw_dm_set_pipes (fd_set *in_pipes, int *num_mads);
+int gw_dm_set_pipes (fd_set *in_pipes, int *num_mads);
 
-inline gw_dm_mad_t * gw_dm_get_mad_by_fd(int fd);
+gw_dm_mad_t * gw_dm_get_mad_by_fd(int fd);
 
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */

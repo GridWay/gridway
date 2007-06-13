@@ -128,7 +128,6 @@ void gw_dm_wrapper_done_cb ( void *_job_id )
     time_t         total;
     time_t         active;
     time_t         suspension;
-    gw_boolean_t   wbe; /* Wrapper-based execution */
 
 	/* ----------------------------------------------------------- */  
     /* 0.- Get job pointer                                         */
@@ -207,13 +206,8 @@ void gw_dm_wrapper_done_cb ( void *_job_id )
 			}
 			            		                
     	    /* -------------- Transition to Epilog state ------------------ */
-
-            wbe = strncmp(job->history->host->lrms_name, "jobmanager-", 11) == 0
-                    || ( job->template.type != GW_JOB_TYPE_MPI
-                    && strcmp(job->history->host->lrms_type, "gw") != 0
-                    && job->template.wrapper != NULL );
             
-            if ( wbe )
+            if ( gw_job_is_wrapper_based(job) )
                 gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_EPILOG_STD", _job_id);			
             else
                 gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_EPILOG", _job_id);

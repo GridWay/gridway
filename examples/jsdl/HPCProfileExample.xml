@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--*
+    * Basic schema of GridWay Job
+    * 
+    *-->
+
+<jsdl:JobDefinition xmlns="http://www.example.org/" 
+		xmlns:jsdl="http://schemas.ggf.org/jsdl/2005/11/jsdl" 
+		xmlns:jsdl-posix="http://schemas.ggf.org/jsdl/2005/11/jsdl-posix" 
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<jsdl:JobDescription>
+		<jsdl:JobIdentification>
+			<jsdl:JobName>Simple Application GW Template vs JSDL</jsdl:JobName>
+			<jsdl:Description> This is a simple example to describe the main
+					   differences between GW Template and the JSDL schema.
+					   Using HPC Profile Application Extension.
+			</jsdl:Description>
+		</jsdl:JobIdentification>
+		<jsdl:Application>
+			<jsdl:ApplicationName>ls</jsdl:ApplicationName>
+			<jsdl-hpcpa:HPCProfileApplication>
+				<jsdl-hpcpa:Executable>/bin/ls</jsdl-hpcpa:Executable>
+				<jsdl-hpcpa:Argument>-la file1.txt file2.txt file3.txt> output1.txt output2 output3.zaz</jsdl-hpcpa:Argument>
+				<jsdl-hpcpa:Environment name="LD_LIBRARY_PATH">/usr/local/lib</jsdl-hpcpa:Environment>
+				<jsdl-hpcpa:Environment name="GW_LOCATION">/local/home/jose</jsdl-hpcpa:Environment>
+				<jsdl-hpcpa:Input>/dev/null</jsdl-hpcpa:Input>
+				<jsdl-hpcpa:Output>stdout.${JOB_ID}</jsdl-hpcpa:Output>
+				<jsdl-hpcpa:Error>stderr.${JOB_ID}</jsdl-hpcpa:Error>
+				<!--*
+    				    * Incluir jsdl-posix: RESTART_FILES
+				    *-->
+			</jsdl-hpcpa:HPCProfileApplication>
+		</jsdl:Application>
+		
+		<!--*
+		    * CHECKPOINT_INTERVAL=300
+		    * CHECKPOINT_URL=gsiftp://hydrus.dacya.ucm.es/var/checkpoints/
+		    *-->
+		    
+		<jsdl:Resources>
+			<jsdl:CandidateHost>
+				<jsdl:HostName>*.dacya.ucm.es</jsdl:HostName>
+			</jsdl:CandidateHost>	
+			<jsdl:CPUArchitecture>
+				<jsdl:CPUArchitectureName>x86_32</jsdl:CPUArchitectureName>
+				<!--*
+			    	    * Incluir jsdl:CPUModel
+				    *-->
+			</jsdl:CPUArchitecture>
+			<jsdl:OperatingSystem>
+				<jsdl:OperatingSystemType>
+					<jsdl:OperatingSystemName>LINUX</jsdl:OperatingSystemName>
+				</jsdl:OperatingSystemType>
+				<jsdl:OperatingSystemVersion>2.6.9-1.66</jsdl:OperatingSystemVersion>
+			</jsdl:OperatingSystem>
+			<jsdl:IndividualCPUSpeed>
+				<jsdl:LowerBoundedRange>100000000</jsdl:LowerBoundedRange>
+			</jsdl:IndividualCPUSpeed>
+			<!--*
+			     * Incluir jsdl:CPUFree
+			     * Incluir jsdl:CPUSMP
+			     * Incluir jsdl:FREEMemMB
+			     * Incluir jsdl:FREEDiskMB
+			     * Incluir jsdl:LMRS_NAME
+			     * Incluir jsdl:LMRS_TYPE
+			     * Incluir jsdl:QUEUE_NAME
+			     * Incluir jsdl:QUEUE_NODECOUNT
+			     * Incluir jsdl:QUEUE_FREENODECOUNT
+			     * Incluir jsdl:QUEUE_MAXTIME
+			     * Incluir jsdl:QUEUE_MAXCPUTIME
+			     * Incluir jsdl:QUEUE_MAXCOUNT
+			     * Incluir jsdl:QUEUE_MAXRUNNINGJOBS
+			     * Incluir jsdl:QUEUE_MAXJOBSINQUEUE
+			     * Incluir jsdl:QUEUE_DISPATCHTYPE
+			     * Incluir jsdl:QUEUE_PRIORITY
+			     * Incluir jsdl:QUEUE_STATUS
+			     *-->
+			<jsdl:IndividualCPUCount>
+				<jsdl:Exact>10</jsdl:Exact>
+			</jsdl:IndividualCPUCount>	
+			<jsdl:IndividualPhysicalMemory>
+				<jsdl:LowerBoundedRange>10000000</jsdl:LowerBoundedRange>
+			</jsdl:IndividualPhysicalMemory>
+			<jsdl:IndividualDiskSpace>
+				<jsdl:LowerBoundedRange>500000000</jsdl:LowerBoundedRange>
+			</jsdl:IndividualDiskSpace>
+		</jsdl:Resources>
+		<jsdl:DataStaging>
+			<jsdl:FileName>file1.txt</jsdl:FileName>
+			<jsdl:CreationFlag>overwrite</jsdl:CreationFlag>
+			<jsdl:DeleteOnTermination>true</jsdl:DeleteOnTermination>
+			<jsdl:Source>
+				<jsdl:URI>gsiftp://hydrus.dacya.ucm.es/home/jose/file1.txt</jsdl:URI>
+			</jsdl:Source>
+		</jsdl:DataStaging>
+		<jsdl:DataStaging>
+			<jsdl:FileName>file2.txt</jsdl:FileName>
+			<jsdl:CreationFlag>overwrite</jsdl:CreationFlag>
+			<jsdl:DeleteOnTermination>true</jsdl:DeleteOnTermination>
+			<jsdl:Source>
+				<jsdl:URI>gsiftp://hydrus.dacya.ucm.es/home/jose/file1.txt</jsdl:URI>
+			</jsdl:Source>
+		</jsdl:DataStaging>
+		<jsdl:DataStaging>
+			<jsdl:FileName>file3.txt</jsdl:FileName>
+			<jsdl:CreationFlag>overwrite</jsdl:CreationFlag>
+			<jsdl:DeleteOnTermination>true</jsdl:DeleteOnTermination>
+			<jsdl:Source>
+				<jsdl:URI>gsiftp://hydrus.dacya.ucm.es/home/jose/file1.txt</jsdl:URI>
+			</jsdl:Source>
+		</jsdl:DataStaging>
+		<jsdl:DataStaging>
+			<jsdl:FileName>output1.txt</jsdl:FileName>
+			<jsdl:CreationFlag>overwrite</jsdl:CreationFlag>
+			<jsdl:DeleteOnTermination>true</jsdl:DeleteOnTermination>
+			<jsdl:Target>
+				<jsdl:URI>gsiftp://hydrus.dacya.ucm.es/home/jose</jsdl:URI>
+			</jsdl:Target>
+		</jsdl:DataStaging>
+		<jsdl:DataStaging>
+			<jsdl:FileName>output2</jsdl:FileName>
+			<jsdl:CreationFlag>overwrite</jsdl:CreationFlag>
+			<jsdl:DeleteOnTermination>true</jsdl:DeleteOnTermination>
+			<jsdl:Target>
+				<jsdl:URI>gsiftp://hydrus.dacya.ucm.es/home/jose</jsdl:URI>
+			</jsdl:Target>
+		</jsdl:DataStaging>
+		<jsdl:DataStaging>
+			<jsdl:FileName>output3.zas</jsdl:FileName>
+			<jsdl:CreationFlag>overwrite</jsdl:CreationFlag>
+			<jsdl:DeleteOnTermination>true</jsdl:DeleteOnTermination>
+			<jsdl:Target>
+				<jsdl:URI>gsiftp://hydrus.dacya.ucm.es/home/jose</jsdl:URI>
+			</jsdl:Target>
+		</jsdl:DataStaging>
+		<jsdl:DataStaging>
+			<jsdl:FileName>stdout.${JOB_ID}</jsdl:FileName>
+			<jsdl:CreationFlag>overwrite</jsdl:CreationFlag>
+			<jsdl:DeleteOnTermination>true</jsdl:DeleteOnTermination>
+			<jsdl:Target>
+				<jsdl:URI>gsiftp://hydrus.dacya.ucm.es/home/jose/stdout.${JOB_ID}</jsdl:URI>
+			</jsdl:Target>
+		</jsdl:DataStaging>
+		<jsdl:DataStaging>
+			<jsdl:FileName>stderr.${JOB_ID}</jsdl:FileName>
+			<jsdl:CreationFlag>overwrite</jsdl:CreationFlag>
+			<jsdl:DeleteOnTermination>true</jsdl:DeleteOnTermination>
+			<jsdl:Target>
+				<jsdl:URI>gsiftp://hydrus.dacya.ucm.es/home/jose/stderr.${JOB_ID}</jsdl:URI>
+			</jsdl:Target>
+		</jsdl:DataStaging>
+	</jsdl:JobDescription>
+</jsdl:JobDefinition>

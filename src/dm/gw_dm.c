@@ -469,7 +469,7 @@ void gw_dm_start ()
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
-inline gw_dm_mad_t * gw_dm_get_mad_by_fd(int fd)
+gw_dm_mad_t * gw_dm_get_mad_by_fd(int fd)
 {
     int i;
     gw_dm_mad_t * mad = NULL;
@@ -494,7 +494,7 @@ inline gw_dm_mad_t * gw_dm_get_mad_by_fd(int fd)
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
-inline int gw_dm_set_pipes (fd_set *in_pipes, int *num_mads)
+int gw_dm_set_pipes (fd_set *in_pipes, int *num_mads)
 {
     int greater = 0;
     int i;

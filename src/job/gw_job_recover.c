@@ -693,7 +693,7 @@ int gw_job_recover_job_contact(gw_job_t *job)
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
-inline char * gw_job_recover_get_contact(gw_job_t *job)
+char * gw_job_recover_get_contact(gw_job_t *job)
 {
     char filename[2048];
     FILE *file;

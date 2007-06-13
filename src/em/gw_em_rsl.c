@@ -77,9 +77,7 @@ char* gw_generate_wrapper_rsl (gw_job_t *job)
                 "(queue=\"%s\")", job->history->queue);
         strncat(rsl_buffer, tmp_buffer, GW_RSL_LENGTH-strlen(rsl_buffer));
     }
-    
-    gw_job_print(job,"EM",'D',"RSL generated.\n");
-    
+
     free(job_environment);
     free(jobtype);
     

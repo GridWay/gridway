@@ -31,12 +31,10 @@ char * gw_split_arguments (const char *arguments);
 
 char* gw_generate_rsl2 (gw_job_t *job)
 {
-    if ( job->template.type == GW_JOB_TYPE_MPI
-            || strcmp(job->history->host->lrms_type, "gw") == 0
-            || job->template.wrapper == NULL )
-        return gw_generate_nowrapper_rsl2(job);
-    else
+    if ( gw_job_is_wrapper_based(job) )
         return gw_generate_wrapper_rsl2(job);
+    else
+        return gw_generate_nowrapper_rsl2(job);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -82,7 +80,9 @@ char* gw_generate_nowrapper_rsl2 (gw_job_t *job)
 
 		if ( arguments == NULL )
 		{
-			gw_job_print(job,"DM",'E',"Parse error (%s) while generating rsl.\n",job->template.arguments);
+			gw_job_print(job,"DM",'E',"Parse error (%s) while generating rsl.\n",
+                job->template.arguments);
+                
 			free(job_environment);
 			return NULL;
 		}
@@ -126,7 +126,7 @@ char* gw_generate_nowrapper_rsl2 (gw_job_t *job)
     }
 
 	// Extensions are used just when the underlying LRMS is GridWay itself
-	if(strcmp(job->history->host->lrms_type, "gw") == 0)
+	if(strcasecmp(job->history->host->lrms_type, "gw") == 0)
 	{
 		extensions = gw_job_rsl2_extensions(job);
 		strncat(rsl_buffer, extensions, GW_RSL_LENGTH-strlen(rsl_buffer));
