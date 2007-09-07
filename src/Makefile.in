@@ -71,6 +71,10 @@ bin_PROGRAMS = $(srcdir)/gwd/gwd$(EXEEXT) $(srcdir)/cmds/gwps$(EXEEXT) \
 	$(srcdir)/scheduler/gw_flood_scheduler$(EXEEXT) \
 	$(srcdir)/scheduler/gw_sched$(EXEEXT) $(am__EXEEXT_1) \
 	$(am__EXEEXT_2)
+
+# ----------------------------
+# JSDL Support
+# ----------------------------
 @JSDL_TRUE@am__append_2 = $(CMDS)/jsdl2gw.sh
 @JSDL_TRUE@am__append_3 = $(srcdir)/cmds/gw_jsdl.jar
 @DRMAA_TRUE@am__append_4 = $(srcdir)/drmaa/libdrmaa.la \
@@ -370,12 +374,14 @@ __srcdir__tm_mad_gw_tm_mad_ftp_bin_OBJECTS =  \
 @GRIDFTP_TRUE@__srcdir__tm_mad_gw_tm_mad_ftp_bin_DEPENDENCIES =  \
 @GRIDFTP_TRUE@	$(am__DEPENDENCIES_1)
 binSCRIPT_INSTALL = $(INSTALL_SCRIPT)
-am__dist_bin_SCRIPTS_DIST = $(CMDS)/jsdl2gw.sh \
-	$(EM_MAD)/gw_em_mad_prews.sh $(TM_MAD)/gw_tm_mad_dummy.sh \
-	$(TM_MAD)/gw_tm_mad_ftp.sh $(IM_MAD)/gw_im_mad_common.sh \
-	$(IM_MAD)/gw_im_mad_static.sh $(IM_MAD)/gw_im_mad_mds2.sh \
-	$(IM_MAD)/gw_im_mad_mds2_glue.sh $(IM_MAD)/gw_im_mad_mds4.sh \
-	$(EM_MAD)/gw_em_mad_ws.sh
+am__dist_bin_SCRIPTS_DIST = $(CMDS)/gw_dagman.rb \
+	$(CMDS)/dagman/node.rb $(CMDS)/dagman/runner.rb \
+	$(CMDS)/dagman/parse.rb $(CMDS)/dagman/gridway.rb \
+	$(CMDS)/jsdl2gw.sh $(EM_MAD)/gw_em_mad_prews.sh \
+	$(TM_MAD)/gw_tm_mad_dummy.sh $(TM_MAD)/gw_tm_mad_ftp.sh \
+	$(IM_MAD)/gw_im_mad_common.sh $(IM_MAD)/gw_im_mad_static.sh \
+	$(IM_MAD)/gw_im_mad_mds2.sh $(IM_MAD)/gw_im_mad_mds2_glue.sh \
+	$(IM_MAD)/gw_im_mad_mds4.sh $(EM_MAD)/gw_em_mad_ws.sh
 dist_binSCRIPT_INSTALL = $(INSTALL_SCRIPT)
 SCRIPTS = $(bin_SCRIPTS) $(dist_bin_SCRIPTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir)
@@ -598,7 +604,7 @@ COMPILE = $(COMPILE_PROG) $(COMPILE_OPTS)
 @GW_GLOBUS_DIRS_FALSE@GT_PKG_LIBS = $(GLOBUS_LIBS) $(GLOBUS_PKG_LIBS)
 @GW_GLOBUS_DIRS_TRUE@GT_PKG_LIBS = @globus_pkg_libs@
 
-# to handle else, not very smart 
+# to handle else, not very smart
 NOP = $(am__append_7) $(am__append_10) $(am__append_11)
 # -----------------------------
 # Directory definitions
@@ -680,6 +686,12 @@ CMDS_SRC = $(CMDS)/gw_acct.c \
         $(CMDS)/gw_ps.c \
         $(CMDS)/gw_user.c
 
+CMDS_RB_SRC = $(CMDS)/gw_dagman.rb \
+            $(CMDS)/dagman/node.rb \
+            $(CMDS)/dagman/runner.rb \
+            $(CMDS)/dagman/parse.rb \
+	    $(CMDS)/dagman/gridway.rb
+
 JSDL_SRC = $(CMDS)/GWJTElement.java \
         $(CMDS)/GWJT.java  \
         $(CMDS)/GWJTWriter.java  \
@@ -759,7 +771,7 @@ GWD_SRC = $(GWD)/gw_conf.c \
         $(GWD)/gwd.c \
         $(GWD)/gw_sch_conf_syntax.y \
         $(GWD)/gw_sch_conf_parser.l \
-        $(GWD)/gw_sch_conf.c        
+        $(GWD)/gw_sch_conf.c
 
 EM_MAD_PREWS_SRC = $(EM_MAD)/gw_em_mad_prews_actions.c \
         $(EM_MAD)/gw_em_mad_prews.c \
@@ -894,6 +906,15 @@ __srcdir__gwd_gwd_SOURCES = $(EM_SRC) \
         $(UM_SRC)  \
         $(DB_SRC)
 
+bin_SCRIPTS = 
+
+# ---------------------- IM MADS ------------------------
+dist_bin_SCRIPTS = $(CMDS_RB_SRC) $(am__append_2) $(am__append_6) \
+	$(am__append_9) $(IM_MAD)/gw_im_mad_common.sh \
+	$(IM_MAD)/gw_im_mad_static.sh $(am__append_12) \
+	$(am__append_13)
+CLEANFILES = $(am__append_3) $(srcdir)/drmaa/drmaa.jar \
+	$(am__append_14)
 __srcdir__cmds_gwps_SOURCES = $(CMDS)/gw_ps.c \
         $(CMDS)/gw_cmds_common.c \
         $(CLIENT_SRC) \
@@ -936,18 +957,6 @@ __srcdir__cmds_gwacct_SOURCES = $(CMDS)/gw_acct.c \
         $(CLIENT_ACCT_SRC) \
         $(COMMON_SRC)
 
-
-# ----------------------------
-# JSDL Support
-# ----------------------------
-bin_SCRIPTS = 
-
-# ---------------------- IM MADS ------------------------
-dist_bin_SCRIPTS = $(am__append_2) $(am__append_6) $(am__append_9) \
-	$(IM_MAD)/gw_im_mad_common.sh $(IM_MAD)/gw_im_mad_static.sh \
-	$(am__append_12) $(am__append_13)
-CLEANFILES = $(am__append_3) $(srcdir)/drmaa/drmaa.jar \
-	$(am__append_14)
 
 # Create gw_jsdl.jar
 @JSDL_TRUE@jsdl_jardir = $(prefix)/lib
@@ -1939,7 +1948,7 @@ distclean-tags:
 	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
 
 distdir: $(DISTFILES)
-	$(mkdir_p) $(distdir)/$(CMDS) $(distdir)/$(COMMON) $(distdir)/$(EM_MAD) $(distdir)/$(GWD) $(distdir)/$(HOST) $(distdir)/$(IM_MAD) $(distdir)/$(JOB) $(distdir)/$(TM_MAD) $(distdir)/../include
+	$(mkdir_p) $(distdir)/$(CMDS) $(distdir)/$(CMDS)/dagman $(distdir)/$(COMMON) $(distdir)/$(EM_MAD) $(distdir)/$(GWD) $(distdir)/$(HOST) $(distdir)/$(IM_MAD) $(distdir)/$(JOB) $(distdir)/$(TM_MAD) $(distdir)/../include
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
@@ -2140,7 +2149,7 @@ uninstall-am: uninstall-binPROGRAMS uninstall-binSCRIPTS \
 @DRMAA_TRUE@	@rm -rf $(DRMAA)/package
 @WS_TRUE@$(srcdir)/im_mad/gw_im_mad_ws.jar:
 @WS_TRUE@	@rm -f lib/gw_im_mad_ws.jar
-@WS_TRUE@	@mkdir -p $(IM_MAD)/package 
+@WS_TRUE@	@mkdir -p $(IM_MAD)/package
 @WS_TRUE@	$(JAVAC_PATH) $(IM_MAD_MDS4_SRC) \
 @WS_TRUE@	    -classpath $(CLASSPATH):$(IM_MAD) \
 @WS_TRUE@        -d $(IM_MAD)/package
