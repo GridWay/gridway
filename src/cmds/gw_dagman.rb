@@ -17,15 +17,19 @@
 # limitations under the License.
 # --------------------------------------------------------------------------
 
-require 'dagman'
+# Add to ruby library path gridway libraries
+$:<<ENV["GW_LOCATION"]+"/libexec/ruby"
+
+require 'dagman/node'
+require 'dagman/parse'
+require 'dagman/runner'
+require 'dagman/gridway'
+
 require 'optparse'
 require 'pp'
 
 # Add current directory so PRE/POST scripts can be executed
 ENV['PATH']+=":."
-
-# Add to ruby library path gridway libraries
-$:<<ENV["GW_LOCATION"]+"/lib/ruby"
 
 ###################
 # OPTIONS PARSING #
@@ -33,7 +37,7 @@ $:<<ENV["GW_LOCATION"]+"/lib/ruby"
 
 options={}
 parser=OptionParser.new do |opts|
-	opts.banner="Usage: #{__FILE__} [options] <dagman file>"
+	opts.banner="Usage: #{File.basename(__FILE__)} [options] <dagman file>"
 	opts.separator ""
 	
 	opts.on('-d', '--dot', "Generate DOT file. it is written to STDOUT.") do |d|

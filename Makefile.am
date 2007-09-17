@@ -92,12 +92,12 @@ endif
 # ----------------------------
 
 # -- Dagman Ruby Scripts
-	@mkdir -p @prefix@/lib/ruby/dagman
+	@mkdir -p @prefix@/libexec/ruby/dagman
 	@mv @prefix@/bin/gw_dagman.rb @prefix@/bin/gwdagman
-	@mv @prefix@/bin/node.rb @prefix@/lib/ruby/dagman/node.rb
-	@mv @prefix@/bin/parse.rb @prefix@/lib/ruby/dagman/parse.rb
-	@mv @prefix@/bin/runner.rb @prefix@/lib/ruby/dagman/runner.rb
-	@mv @prefix@/bin/gridway.rb @prefix@/lib/ruby/dagman/gridway.rb
+	@mv @prefix@/bin/node.rb @prefix@/libexec/ruby/dagman/node.rb
+	@mv @prefix@/bin/parse.rb @prefix@/libexec/ruby/dagman/parse.rb
+	@mv @prefix@/bin/runner.rb @prefix@/libexec/ruby/dagman/runner.rb
+	@mv @prefix@/bin/gridway.rb @prefix@/libexec/ruby/dagman/gridway.rb
 
 	@mv @prefix@/bin/gw_im_mad_static.sh @prefix@/bin/gw_im_mad_static
 if GRIDFTP
