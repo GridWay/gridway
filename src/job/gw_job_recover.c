@@ -146,6 +146,7 @@ int gw_job_recover(gw_job_t *job)
     job->pinc       = pinc;
     
     pw_ent = getpwnam(user_name);
+    
     if (pw_ent != NULL)
     	job->template.user_home = strdup(pw_ent->pw_dir);
     else
@@ -165,7 +166,7 @@ int gw_job_recover(gw_job_t *job)
     sprintf(state_filename, "%s/job.state", job->directory);
     sprintf(history_filename, "%s/job.history", job->directory);
 
-    state_file = fopen(state_filename, "r");
+    state_file   = fopen(state_filename, "r");
     history_file = fopen(history_filename, "r");
 
     if (state_file == NULL)
@@ -173,6 +174,10 @@ int gw_job_recover(gw_job_t *job)
         gw_log_print("DM",'E',"Could not open state file of job %d: %s\n",
                      job->id, 
                      state_filename);
+                     
+        if (history_file != NULL)
+            fclose(history_file);
+        
         return -1;
     }
 
@@ -205,9 +210,17 @@ int gw_job_recover(gw_job_t *job)
         if (rc == -1)
         {
             gw_log_print("DM",'E',
-                    "Recovering state transition (%s->%s) of job %d.\n",
+                    "Recovering state transition (%s->%s) of job %d. "
+                    "Will not recover job.\n",
                     gw_job_get_state_name(previous_job_state),
                     gw_job_get_state_name(job_state), job->id);
+                    
+            fclose(state_file);
+        
+            if (history_file != NULL)
+                fclose(history_file);
+                
+            return -1;
         }
     }
 
@@ -215,6 +228,12 @@ int gw_job_recover(gw_job_t *job)
     {
         gw_log_print("DM",'E',"Bad number of fields in job state file of job %d.\n",
                      job->id);
+                     
+        fclose(state_file);
+        
+        if (history_file != NULL)
+            fclose(history_file);
+        
         return -1;
     }
 
@@ -302,7 +321,9 @@ int gw_job_recover_state_transition(gw_job_t *job,
     }
 
     /* ---------------------------------------------------------------------- */
-
+    
+    rc = 0;
+    
     switch (job_state)
     {
     case GW_JOB_STATE_PROLOG:
@@ -312,14 +333,11 @@ int gw_job_recover_state_transition(gw_job_t *job,
 #endif     
         rc = gw_job_recover_history_record(history_file, job);
         
-        if (rc == -1)
+        if (rc == 0)
         {
-            gw_log_print("DM",'E',"Could not recover history record of job %d\n",
-                    job->id);
+            job->history->stats[START_TIME]        = timestamp;
+            job->history->stats[PROLOG_START_TIME] = timestamp;
         }
-
-        job->history->stats[START_TIME]        = timestamp;
-        job->history->stats[PROLOG_START_TIME] = timestamp;
         break;
 
     case GW_JOB_STATE_MIGR_CANCEL:
@@ -329,11 +347,6 @@ int gw_job_recover_state_transition(gw_job_t *job,
 #endif
         rc = gw_job_recover_history_record(history_file, job);
 
-        if (rc == -1)
-        {
-            gw_log_print("DM",'E',"Could not recover history record of job %d\n",
-                    job->id);
-        }
         break;
         
     case GW_JOB_STATE_MIGR_PROLOG:
@@ -383,10 +396,11 @@ int gw_job_recover_state_transition(gw_job_t *job,
 
     case GW_JOB_STATE_INIT:
     case GW_JOB_STATE_LIMIT:
-        return -1;
+        rc = -1;
+        break;
     }
     
-    return 0;
+    return rc;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -700,7 +714,6 @@ char * gw_job_recover_get_contact(gw_job_t *job)
     int rc;
     char job_contact[2048];
     char *jc;
-    gw_em_mad_t *em_mad;
     
     jc = NULL;
     

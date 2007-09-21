@@ -30,7 +30,7 @@ void gw_dm_prolog ( void *_job_id )
     gw_job_t * job;
     int        job_id;
 	int        rc;
-	
+
     /* ----------------------------------------------------------- */  
     /* 0.- Get job pointer                                         */
     /* ----------------------------------------------------------- */  
@@ -56,10 +56,13 @@ void gw_dm_prolog ( void *_job_id )
     /* 1.- Set state and times                                     */
     /* ----------------------------------------------------------- */  
     
-    gw_job_set_state(job, GW_JOB_STATE_PROLOG, GW_FALSE);
+    if (job->job_state != GW_JOB_STATE_PROLOG)
+    {
+    	gw_job_set_state(job, GW_JOB_STATE_PROLOG, GW_FALSE);
     
-    job->history->stats[START_TIME]        = time(NULL);
-    job->history->stats[PROLOG_START_TIME] = time(NULL);
+    	job->history->stats[START_TIME]        = time(NULL);
+    	job->history->stats[PROLOG_START_TIME] = time(NULL);
+    }
     
     /* ----------------------------------------------------------- */  
     /* 2.- Signal the Transfer Manager & set files                 */
@@ -69,12 +72,11 @@ void gw_dm_prolog ( void *_job_id )
 	
 	if ( rc == 0 )
 	{
-		gw_dm_prolog_set_files(job);
-	
-    	gw_am_trigger(gw_dm.tm_am, "GW_TM_PROLOG", _job_id);
+		gw_dm_prolog_set_files(job);	
+    		gw_am_trigger(gw_dm.tm_am, "GW_TM_PROLOG", _job_id);
 	}
 	else
-    	gw_am_trigger(&(gw_dm.am), "GW_DM_PROLOG_FAILED", _job_id);
+	    	gw_am_trigger(&(gw_dm.am), "GW_DM_PROLOG_FAILED", _job_id);
     
     pthread_mutex_unlock(&(job->mutex));
 }

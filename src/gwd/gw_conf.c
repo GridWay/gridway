@@ -31,7 +31,7 @@ gw_conf_t gw_conf;
 
 int  gw_conf_init (gw_boolean_t multiuser)
 {
-    int i,j;
+    int i;
     int loc_length;
 	struct passwd *    pw_ent;
 	
@@ -98,9 +98,9 @@ int  gw_conf_init (gw_boolean_t multiuser)
             
     for (i=0 ; i<GW_MAX_MADS; i++)
     {
-        gw_conf.im_mads[i] = (char **) malloc (sizeof (char *) * 6 );
-        gw_conf.tm_mads[i] = (char **) malloc (sizeof (char *) * 3 );
-        gw_conf.em_mads[i] = (char **) malloc (sizeof (char *) * 3 );
+        gw_conf.im_mads[i] = (char **) malloc (sizeof (char *) * GW_MAD_IM_MAX);
+        gw_conf.tm_mads[i] = (char **) malloc (sizeof (char *) * GW_MAD_TM_MAX);
+        gw_conf.em_mads[i] = (char **) malloc (sizeof (char *) * GW_MAD_EM_MAX);
 
         if ( (gw_conf.im_mads[i] == NULL) || (gw_conf.tm_mads[i] ==NULL) || 
                 (gw_conf.em_mads[i] == NULL) )
@@ -108,24 +108,32 @@ int  gw_conf_init (gw_boolean_t multiuser)
             return -1;
         }
         
-        for (j=0; j<6; j++)
-        {
-            gw_conf.im_mads[i][j]  = NULL;
-        }
+        gw_conf.im_mads[i][GW_MAD_IM_NAME_INDEX] = NULL;
+        gw_conf.im_mads[i][GW_MAD_IM_PATH_INDEX] = NULL;
+        gw_conf.im_mads[i][GW_MAD_IM_ARGS_INDEX] = NULL;
+        gw_conf.im_mads[i][GW_MAD_IM_TM_INDEX]   = NULL;
+        gw_conf.im_mads[i][GW_MAD_IM_EM_INDEX]   = NULL;
 
-        for (j=0; j<3; j++)
-        {
-            gw_conf.tm_mads[i][j]  = NULL;    
-            gw_conf.em_mads[i][j]  = NULL;                
-        }
+        gw_conf.tm_mads[i][GW_MAD_TM_NAME_INDEX] = NULL;
+        gw_conf.tm_mads[i][GW_MAD_TM_PATH_INDEX] = NULL;
+        gw_conf.tm_mads[i][GW_MAD_TM_ARGS_INDEX] = NULL;
+
+        gw_conf.em_mads[i][GW_MAD_EM_NAME_INDEX] = NULL;
+        gw_conf.em_mads[i][GW_MAD_EM_PATH_INDEX] = NULL;
+        gw_conf.em_mads[i][GW_MAD_EM_ARGS_INDEX] = NULL;
+        gw_conf.em_mads[i][GW_MAD_EM_RSL_INDEX]  = NULL;
     }
 
-    gw_conf.dm_mad = (char **) malloc (sizeof (char *) * 3 );
-
-    for (j=0; j<3; j++)
+    gw_conf.dm_mad = (char **) malloc (sizeof (char *) * GW_MAD_DM_MAX );
+    
+    if ( gw_conf.dm_mad == NULL )
     {
-        gw_conf.dm_mad[j]  = NULL;                
-    }    
+            return -1;
+    }
+        
+    gw_conf.dm_mad[GW_MAD_DM_NAME_INDEX] = NULL;
+    gw_conf.dm_mad[GW_MAD_DM_PATH_INDEX] = NULL;
+    gw_conf.dm_mad[GW_MAD_DM_ARGS_INDEX] = NULL;
 
     /* Built-int scheduling policies */
     
@@ -167,11 +175,11 @@ int gw_loadconf ()
     gw_log_print("GW",'I',"  Information Manager MADs\n");  
     while ( ( i < GW_MAX_MADS ) && (gw_conf.im_mads[i][0] != NULL ) )
     {
-        gw_log_print("GW",'I',"    MAD(%-1i)  name  : %s\n",i,GWNSTR(gw_conf.im_mads[i][GW_MAD_NAME_INDEX]));
-        gw_log_print("GW",'I',"        executable: %s\n",GWNSTR(gw_conf.im_mads[i][GW_MAD_PATH_INDEX]));
-        gw_log_print("GW",'I',"        argument  : %s\n",GWNSTR(gw_conf.im_mads[i][GW_MAD_ARGS_INDEX]));
-        gw_log_print("GW",'I',"        TM        : %s\n",GWNSTR(gw_conf.im_mads[i][GW_MAD_TM_INDEX]));
-        gw_log_print("GW",'I',"        EM        : %s\n",GWNSTR(gw_conf.im_mads[i][GW_MAD_EM_INDEX]));
+        gw_log_print("GW",'I',"    MAD(%-1i)  name  : %s\n",i,GWNSTR(gw_conf.im_mads[i][GW_MAD_IM_NAME_INDEX]));
+        gw_log_print("GW",'I',"        executable: %s\n",GWNSTR(gw_conf.im_mads[i][GW_MAD_IM_PATH_INDEX]));
+        gw_log_print("GW",'I',"        argument  : %s\n",GWNSTR(gw_conf.im_mads[i][GW_MAD_IM_ARGS_INDEX]));
+        gw_log_print("GW",'I',"        TM        : %s\n",GWNSTR(gw_conf.im_mads[i][GW_MAD_IM_TM_INDEX]));
+        gw_log_print("GW",'I',"        EM        : %s\n",GWNSTR(gw_conf.im_mads[i][GW_MAD_IM_EM_INDEX]));
         i++;
     }
 
@@ -180,9 +188,9 @@ int gw_loadconf ()
   
     while ( ( i < GW_MAX_MADS ) && (gw_conf.tm_mads[i][0] != NULL ) )
     {
-        gw_log_print("GW",'I',"    MAD(%-1i)  name  : %s\n",i,GWNSTR(gw_conf.tm_mads[i][GW_MAD_NAME_INDEX]));
-        gw_log_print("GW",'I',"        executable: %s\n",GWNSTR(gw_conf.tm_mads[i][GW_MAD_PATH_INDEX]));
-        gw_log_print("GW",'I',"        argument  : %s\n",GWNSTR(gw_conf.tm_mads[i][GW_MAD_ARGS_INDEX]));
+        gw_log_print("GW",'I',"    MAD(%-1i)  name  : %s\n",i,GWNSTR(gw_conf.tm_mads[i][GW_MAD_TM_NAME_INDEX]));
+        gw_log_print("GW",'I',"        executable: %s\n",GWNSTR(gw_conf.tm_mads[i][GW_MAD_TM_PATH_INDEX]));
+        gw_log_print("GW",'I',"        argument  : %s\n",GWNSTR(gw_conf.tm_mads[i][GW_MAD_TM_ARGS_INDEX]));
         i++;
     }
 
@@ -191,19 +199,19 @@ int gw_loadconf ()
   
     while ( ( i < GW_MAX_MADS ) && (gw_conf.em_mads[i][0] != NULL ) )
     {
-        gw_log_print("GW",'I',"    MAD(%-1i)  name  : %s\n",i,GWNSTR(gw_conf.em_mads[i][GW_MAD_NAME_INDEX]));
-        gw_log_print("GW",'I',"        executable: %s\n",GWNSTR(gw_conf.em_mads[i][GW_MAD_PATH_INDEX]));    
-        gw_log_print("GW",'I',"        argument  : %s\n",GWNSTR(gw_conf.em_mads[i][GW_MAD_ARGS_INDEX]));    
+        gw_log_print("GW",'I',"    MAD(%-1i)  name  : %s\n",i,GWNSTR(gw_conf.em_mads[i][GW_MAD_EM_NAME_INDEX]));
+        gw_log_print("GW",'I',"        executable: %s\n",GWNSTR(gw_conf.em_mads[i][GW_MAD_EM_PATH_INDEX]));
+        gw_log_print("GW",'I',"        argument  : %s\n",GWNSTR(gw_conf.em_mads[i][GW_MAD_EM_ARGS_INDEX]));
+        gw_log_print("GW",'I',"        rsl mode  : %s\n",GWNSTR(gw_conf.em_mads[i][GW_MAD_EM_RSL_INDEX]));        
         i++;
     }
   
     gw_log_print("GW",'I',"  Dispatch Manager Scheduler\n");
-    gw_log_print("GW",'I',"        name      : %s\n",GWNSTR(gw_conf.dm_mad[GW_MAD_NAME_INDEX]));
-    gw_log_print("GW",'I',"        executable: %s\n",GWNSTR(gw_conf.dm_mad[GW_MAD_PATH_INDEX]));    
-    gw_log_print("GW",'I',"        argument  : %s\n",GWNSTR(gw_conf.dm_mad[GW_MAD_ARGS_INDEX]));    
+    gw_log_print("GW",'I',"        name      : %s\n",GWNSTR(gw_conf.dm_mad[GW_MAD_DM_NAME_INDEX]));
+    gw_log_print("GW",'I',"        executable: %s\n",GWNSTR(gw_conf.dm_mad[GW_MAD_DM_PATH_INDEX]));    
+    gw_log_print("GW",'I',"        argument  : %s\n",GWNSTR(gw_conf.dm_mad[GW_MAD_DM_ARGS_INDEX]));    
   
     gw_log_print("GW",'I'," ---------------------------------------------------\n");
-    
     
     rc = gw_sch_loadconf(&(gw_conf.sch_conf), gw_conf.sch_conf_file);
     

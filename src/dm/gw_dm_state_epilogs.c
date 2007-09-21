@@ -36,9 +36,9 @@ void gw_dm_epilog_std ( void *_job_id )
     gw_job_t * job;
     int        job_id;
     int        index;
-	int        num_xfrs;
+    int        num_xfrs;
 	
-	/* ----------------------------------------------------------- */  
+    /* ----------------------------------------------------------- */  
     /* 0.- Get job pointer                                         */
     /* ----------------------------------------------------------- */  
     
@@ -62,8 +62,11 @@ void gw_dm_epilog_std ( void *_job_id )
     /* 1.- Set state and times                                     */
     /* ----------------------------------------------------------- */  
     
-	gw_job_set_state(job, GW_JOB_STATE_EPILOG_STD, GW_FALSE);
-    job->history->stats[EPILOG_START_TIME] = time(NULL);
+	if (job->job_state != GW_JOB_STATE_EPILOG_STD)
+	{
+	    gw_job_set_state(job, GW_JOB_STATE_EPILOG_STD, GW_FALSE);
+	    job->history->stats[EPILOG_START_TIME] = time(NULL);
+    }
     
     /* ----------------------------------------------------------- */  
     /* 2.- Signal the Transfer Manager                             */
@@ -122,9 +125,12 @@ void gw_dm_migr_epilog ( void *_job_id )
     /* 1.- Set state and times                                     */
     /* ----------------------------------------------------------- */  
     
-	gw_job_set_state(job, GW_JOB_STATE_MIGR_EPILOG, GW_FALSE);
-    job->history->next->stats[EPILOG_START_TIME] = time(NULL);
-    
+	if (job->job_state != GW_JOB_STATE_MIGR_EPILOG)
+	{
+	    gw_job_set_state(job, GW_JOB_STATE_MIGR_EPILOG, GW_FALSE);
+        job->history->next->stats[EPILOG_START_TIME] = time(NULL);
+    }
+
     /* ----------------------------------------------------------- */  
     /* 2.- Signal the Transfer Manager                             */
     /* ----------------------------------------------------------- */
@@ -158,9 +164,9 @@ void gw_dm_stop_epilog ( void *_job_id )
     gw_job_t * job;
     int        job_id;
     int        index;
-	int        num_xfrs;
+    int        num_xfrs;
 	    
-	/* ----------------------------------------------------------- */  
+    /* ----------------------------------------------------------- */  
     /* 0.- Get job pointer                                         */
     /* ----------------------------------------------------------- */  
     
@@ -184,10 +190,13 @@ void gw_dm_stop_epilog ( void *_job_id )
     /* ----------------------------------------------------------- */  
     /* 1.- Set state and times                                     */
     /* ----------------------------------------------------------- */  
-    
-	gw_job_set_state(job, GW_JOB_STATE_STOP_EPILOG, GW_FALSE);
-    job->history->stats[EPILOG_START_TIME] = time(NULL);
-    
+
+	if (job->job_state != GW_JOB_STATE_STOP_EPILOG)
+	{   
+	    gw_job_set_state(job, GW_JOB_STATE_STOP_EPILOG, GW_FALSE);
+	    job->history->stats[EPILOG_START_TIME] = time(NULL);
+    }
+
     /* ----------------------------------------------------------- */  
     /* 2.- Signal the Transfer Manager                             */
     /* ----------------------------------------------------------- */
@@ -227,9 +236,9 @@ void gw_dm_kill_epilog ( void *_job_id )
     gw_job_t *   job;
     int          job_id;
     int          index;
-	int          num_xfrs;
+    int          num_xfrs;
     
-	/* ----------------------------------------------------------- */  
+    /* ----------------------------------------------------------- */  
     /* 0.- Get job pointer                                         */
     /* ----------------------------------------------------------- */  
     
@@ -254,8 +263,11 @@ void gw_dm_kill_epilog ( void *_job_id )
     /* 1.- Set state and times                                     */
     /* ----------------------------------------------------------- */  
     
-	gw_job_set_state(job, GW_JOB_STATE_KILL_EPILOG, GW_FALSE);
-    job->history->stats[EPILOG_START_TIME] = time(NULL);
+	if (job->job_state != GW_JOB_STATE_KILL_EPILOG)
+	{
+	    gw_job_set_state(job, GW_JOB_STATE_KILL_EPILOG, GW_FALSE);
+        job->history->stats[EPILOG_START_TIME] = time(NULL);
+    }
     
     /* ----------------------------------------------------------- */  
     /* 2.- Signal the Transfer Manager                             */
@@ -289,9 +301,9 @@ void gw_dm_epilog_fail (void *_job_id)
     gw_job_t *   job;
     int          job_id;
     int          index;
-	int          num_xfrs;
+    int          num_xfrs;
     
-	/* ----------------------------------------------------------- */  
+    /* ----------------------------------------------------------- */  
     /* 0.- Get job pointer                                         */
     /* ----------------------------------------------------------- */  
     
@@ -316,9 +328,12 @@ void gw_dm_epilog_fail (void *_job_id)
     /* 1.- Set state and times                                     */
     /* ----------------------------------------------------------- */  
     
-	gw_job_set_state(job, GW_JOB_STATE_EPILOG_FAIL, GW_FALSE);
-    job->history->stats[EPILOG_START_TIME] = time(NULL);
-    
+	if (job->job_state != GW_JOB_STATE_EPILOG_FAIL)
+	{
+	    gw_job_set_state(job, GW_JOB_STATE_EPILOG_FAIL, GW_FALSE);
+        job->history->stats[EPILOG_START_TIME] = time(NULL);
+    }
+
     /* ----------------------------------------------------------- */  
     /* 2.- Signal the Transfer Manager                             */
     /* ----------------------------------------------------------- */
@@ -342,8 +357,6 @@ void gw_dm_epilog_fail (void *_job_id)
     pthread_mutex_unlock(&(job->mutex));
 }
 
-
-
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
@@ -353,9 +366,9 @@ void gw_dm_epilog (void *_job_id)
     gw_job_t * job;
     int        job_id;
     int        index;
-	int        num_xfrs;
+    int        num_xfrs;
     
-	/* ----------------------------------------------------------- */  
+    /* ----------------------------------------------------------- */  
     /* 0.- Get job pointer                                         */
     /* ----------------------------------------------------------- */  
     
@@ -379,10 +392,12 @@ void gw_dm_epilog (void *_job_id)
     /* 1.- Set state                                               */
     /* ----------------------------------------------------------- */  
     
-    if (job->job_state != GW_JOB_STATE_EPILOG_STD)
+    if (job->job_state != GW_JOB_STATE_EPILOG_STD && 
+        job->job_state != GW_JOB_STATE_EPILOG)
         job->history->stats[EPILOG_START_TIME] = time(NULL);
 
-    gw_job_set_state(job, GW_JOB_STATE_EPILOG, GW_FALSE);
+    if (job->job_state != GW_JOB_STATE_EPILOG)
+    	gw_job_set_state(job, GW_JOB_STATE_EPILOG, GW_FALSE);
     
     /* ----------------------------------------------------------- */  
     /* 2.- Signal the Transfer Manager                             */
@@ -421,9 +436,9 @@ void gw_dm_epilog_restart (void *_job_id)
     gw_job_t * job;
     int        job_id;
     int        index;
-	int        num_xfrs;
+    int        num_xfrs;
     
-	/* ----------------------------------------------------------- */  
+    /* ----------------------------------------------------------- */  
     /* 0.- Get job pointer                                         */
     /* ----------------------------------------------------------- */  
     
@@ -448,8 +463,9 @@ void gw_dm_epilog_restart (void *_job_id)
     /* 1.- Set state                                               */
     /* ----------------------------------------------------------- */  
     
-	gw_job_set_state(job, GW_JOB_STATE_EPILOG_RESTART, GW_FALSE);
-    
+	if (job->job_state != GW_JOB_STATE_EPILOG_RESTART)
+	    gw_job_set_state(job, GW_JOB_STATE_EPILOG_RESTART, GW_FALSE);
+
     /* ----------------------------------------------------------- */  
     /* 2.- Signal the Transfer Manager                             */
     /* ----------------------------------------------------------- */
@@ -489,12 +505,12 @@ void gw_dm_epilog_restart (void *_job_id)
 
 void gw_dm_epilog_done_cb ( void *_job_id )
 {
-	gw_job_t * job;
+    gw_job_t * job;
     int        job_id;
     time_t     total;
-	int        rt;
+    int        rt;
 	
-	/* ----------------------------------------------------------- */  
+    /* ----------------------------------------------------------- */  
     /* 0.- Get job pointer                                         */
     /* ----------------------------------------------------------- */  
     
@@ -622,11 +638,11 @@ void gw_dm_epilog_done_cb ( void *_job_id )
 
 void gw_dm_epilog_failed_cb ( void *_job_id )
 {
-	gw_job_t * job;
+    gw_job_t * job;
     int        job_id;
     time_t     total;
 	
-	/* ----------------------------------------------------------- */  
+    /* ----------------------------------------------------------- */  
     /* 0.- Get job pointer                                         */
     /* ----------------------------------------------------------- */  
     
@@ -746,20 +762,18 @@ void gw_dm_epilog_failed_cb ( void *_job_id )
     pthread_mutex_unlock(&(job->mutex));
 }
 
-
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
-
 
 void gw_dm_epilog_std_wrapper_files(gw_job_t * job, int * index)
 {	
-	int  i;
+    int  i;
     char url[512];
     
     i = *index;
 
-	job->xfrs.failure_limit = i;
+    job->xfrs.failure_limit = i;
 
     snprintf(url,sizeof(char)*512,"file://%s/stdout.wrapper.%i",
             job->directory,job->restarted);
@@ -782,10 +796,10 @@ void gw_dm_epilog_std_wrapper_files(gw_job_t * job, int * index)
 
 void gw_dm_epilog_std_files(gw_job_t * job, int * index)
 {
-	int  i;
+    int  i;
     char url[512];
     
-	i = *index;
+    i = *index;
 	
    	/* Execution stdout & stderr */
    	    
@@ -852,7 +866,7 @@ void gw_dm_epilog_std_files(gw_job_t * job, int * index)
 
 void gw_dm_epilog_output_files(gw_job_t * job, int * index)
 {
-	int  i;
+    int  i;
 	
     for (i = 0; i< job->template.num_output_files ; i++)
     {
@@ -875,7 +889,7 @@ void gw_dm_epilog_output_files(gw_job_t * job, int * index)
 
 void gw_dm_epilog_restart_files(gw_job_t * job, int * index)
 {
-	int  i;
+    int  i;
     char url[512];
 	
     for (i = 0; i< job->template.num_restart_files ; i++)

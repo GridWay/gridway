@@ -55,6 +55,9 @@ int gw_em_mad_init(gw_em_mad_t * em_mad,
     em_mad->name       = strdup(name);
     em_mad->owner      = strdup(owner);
     
+    em_mad->wrapper_rsl     = NULL;
+    em_mad->pre_wrapper_rsl = NULL;
+     
     if ( mode != NULL )
     {
         em_mad->mode = strdup(mode);
@@ -88,12 +91,12 @@ int gw_em_mad_init(gw_em_mad_t * em_mad,
     
     if (em_mad->wrapper_rsl == NULL )
     {
-        gw_log_print("EM",'W',"\tMode %s for execution MAD %s not supported, using rsl.\n",
+        gw_log_print("EM",'W',"\tMode %s for execution MAD %s not supported, using rsl2.\n",
             GWNSTR(mode),
             GWNSTR(name));
                     
-        em_mad->wrapper_rsl     = gw_generate_wrapper_rsl;
-        em_mad->pre_wrapper_rsl = gw_generate_pre_wrapper_rsl;            
+        em_mad->wrapper_rsl     = gw_generate_rsl2;
+        em_mad->pre_wrapper_rsl = gw_generate_pre_wrapper_rsl2;            
     }    
        
     sprintf(em_mad->executable, "%s/bin/%s", gw_conf.gw_location, exe);    
@@ -275,11 +278,11 @@ static int gw_em_mad_start(gw_em_mad_t * em_mad)
             close(mad_em_pipe[1]);
             
             if (gw_conf.multiuser == GW_TRUE)
-                execlp("sudo", "sudo", "-u", em_mad->owner, em_mad->executable, em_mad->args, NULL);
+                execlp("sudo", "sudo", "-H", "-u", em_mad->owner, em_mad->executable, em_mad->args, NULL);
             else
                 execlp(em_mad->executable, em_mad->executable, em_mad->args, NULL);
 
-            gw_log_print("EM",'E',"Could not execute MAD %s %s (exec/sudo).\n",
+            gw_log_print("EM",'E',"Could not execute MAD %s %s (exec/sudo), exiting...\n",
                             em_mad->executable, em_mad->args);
             exit(-1);
 

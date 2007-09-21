@@ -46,7 +46,7 @@ void gw_tm_listener(void *arg)
     
     char           info[GW_TM_MAX_INFO];
     char           s_job_id[GW_TM_MAX_JOB_ID];
-    char           s_cp_xfr_id[5];
+    char           s_cp_xfr_id[GW_TM_MAX_XFR_ID];
     char           result[GW_TM_MAX_RESULT];
     char           action[GW_TM_MAX_ACTION];
     char           str[GW_TM_MAX_STRING];    
@@ -99,9 +99,9 @@ void gw_tm_listener(void *arg)
                 {
                     rc = read(fd, (void *) &c, sizeof(char));
                     str[j++] = c;   
-                }
-                while ( rc > 0 && c != '\n' );
-
+                }                
+                while ((rc > 0) && (c != '\n') && (j < (GW_TM_MAX_STRING-1)));
+                
                 str[j] = '\0';    
 
                 if (rc <= 0) /* Error Reading message from MAD! */
@@ -115,7 +115,10 @@ void gw_tm_listener(void *arg)
                         gw_log_print("TM",'I',"MAD (%s) successfully reloaded\n",
                             tm_mads[i]->name);
                         
-                        /* Transfers should be recover, or prolog/epilog restarted*/
+                        /* prolog/epilog needs to be restarted per job */
+						
+						gw_job_pool_tm_recover (gw_tm.dm_am);
+
                     }
                     else
                     {
@@ -127,8 +130,17 @@ void gw_tm_listener(void *arg)
                     continue;
 
                 }
-
-                sscanf(str,"%s %s %s %s %[^\n]", action, s_job_id, s_cp_xfr_id, result, info);
+    
+                sscanf(str,"%" GW2STR(GW_TM_MAX_ACTION) "s %"
+                       GW2STR(GW_TM_MAX_JOB_ID)"s %"
+                       GW2STR(GW_TM_MAX_XFR_ID)"s %"
+                       GW2STR(GW_TM_MAX_RESULT)"s %"
+                       GW2STR(GW_TM_MAX_INFO)"[^\n]", 
+                       action, 
+                       s_job_id, 
+                       s_cp_xfr_id, 
+                       result, 
+                       info);
                 
 #ifdef GWTMDEBUG
                 gw_log_print("TM",'D',"MAD message received: \"%s %s %s %s %s\".\n",

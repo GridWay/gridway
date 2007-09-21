@@ -99,7 +99,7 @@ void gw_em_listener(void *arg)
                     rc = read(fd, (void *) &c, sizeof(char));
                     str[j++] = c;    
                 }
-                while ( rc > 0 && c != '\n' );
+                while ((rc > 0) && (c != '\n') && (j < (GW_EM_MAX_STRING-1)));
 
                 str[j] = '\0';    
 
@@ -115,7 +115,7 @@ void gw_em_listener(void *arg)
                         gw_log_print("EM",'I',"MAD (%s) successfully reloaded\n",
                             em_mads[i]->name);
                         
-                        gw_job_pool_recover_jobs (em_mads[i]);
+                        gw_job_pool_em_recover(em_mads[i]);
                     }
                     else
                     {
@@ -127,7 +127,14 @@ void gw_em_listener(void *arg)
                     continue;
                 }
 
-                sscanf(str,"%s %s %s %[^\n]", action, s_job_id, result, info);
+                sscanf(str,"%" GW2STR(GW_EM_MAX_ACTION) "s %" 
+                       GW2STR(GW_EM_MAX_JOB_ID) "s %" 
+                       GW2STR(GW_EM_MAX_RESULT) "s %" 
+                       GW2STR(GW_EM_MAX_INFO) "[^\n]", 
+                       action, 
+                       s_job_id, 
+                       result, 
+                       info);
 
 #ifdef GWEMDEBUG
                 gw_log_print("EM",'D',"MAD message received:\"%s %s %s %s\".\n",

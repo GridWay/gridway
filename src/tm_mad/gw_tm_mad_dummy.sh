@@ -11,5 +11,6 @@ fi
 setup_globus
 cd_var
 mad_debug
+check_proxy
 
 exec nice -n $PRIORITY $GW_LOCATION/bin/gw_tm_mad_dummy.bin $*

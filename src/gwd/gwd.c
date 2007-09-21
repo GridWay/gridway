@@ -49,6 +49,7 @@
 #include <stdlib.h>
 #include <dirent.h>
 #include <ctype.h>
+#include <dirent.h>
 
 /* ------------------------------------------------------------------------- */
 /* GLOBAL VARIABLES                                                          */
@@ -87,7 +88,7 @@ pthread_cond_t  cond  = PTHREAD_COND_INITIALIZER;
 
 static void gw_register_mads();
 
-void gw_clear_state();
+int gw_clear_state();
 
 void gw_recover_state();
 
@@ -149,7 +150,7 @@ void gwd_main()
     fcntl(2,F_SETFD,0);
 	        
     /* ----------------------------------------------------------- */
-    /* Block all signals except SIGINT                             */
+    /* Capture SIGTERM signal, and ignore SIGPIPE                  */
     /* ----------------------------------------------------------- */
 	
     act.sa_handler = signal_handler;
@@ -157,7 +158,11 @@ void gwd_main()
     sigemptyset(&act.sa_mask);
         
     sigaction(SIGTERM,&act,NULL);
+    
+    act.sa_handler = SIG_IGN;
 
+    sigaction(SIGPIPE,&act,NULL);
+    
     /* ----------------------------------------------------------- */
     /* Init accounting databases                                   */
     /* ----------------------------------------------------------- */
@@ -437,9 +442,10 @@ int main(int argc, char **argv)
     gw_conf_init(multiuser);
     
     rc = gw_loadconf();    
+    
     if (rc != 0)
     {
-        printf("ERROR!, Loading gwd configuration file: %s "
+        printf("ERROR: Loading gwd configuration file: %s "
                "check $GW_LOCATION/" GW_VAR_DIR "/gwd.log\n",log);
         unlink(lock);
         exit(-1);
@@ -448,7 +454,17 @@ int main(int argc, char **argv)
     if (clear_state)
     {
         gw_log_print("GW",'I',"Clearing last GW state.\n");
-        gw_clear_state();
+        
+        rc = gw_clear_state();
+        
+        if (rc  == -1)
+        {
+            printf("ERROR: Removing job dirs, check $GW_LOCATION/" 
+                   GW_VAR_DIR "/gwd.log\n");
+                   
+            unlink(lock);
+            exit(-1);
+        }
     }
 
     /* ---------------------------- */
@@ -510,14 +526,14 @@ void gw_register_mads()
     i = 0;
     while ( ( i < GW_MAX_MADS ) && (gw_conf.im_mads[i][0] != NULL) )
     {
-        rc = gw_im_register_mad(gw_conf.im_mads[i][GW_MAD_PATH_INDEX],
-                                gw_conf.im_mads[i][GW_MAD_NAME_INDEX],    	
-                                gw_conf.im_mads[i][GW_MAD_ARGS_INDEX]);
+        rc = gw_im_register_mad(gw_conf.im_mads[i][GW_MAD_IM_PATH_INDEX],
+                                gw_conf.im_mads[i][GW_MAD_IM_NAME_INDEX],    	
+                                gw_conf.im_mads[i][GW_MAD_IM_ARGS_INDEX]);
 
         if ( rc != 0)
         {
             fprintf(stderr,"Error in Information MAD (%s) initialization, exiting.",
-                           gw_conf.im_mads[i][GW_MAD_NAME_INDEX]);
+                           gw_conf.im_mads[i][GW_MAD_IM_NAME_INDEX]);
             unlink(lock);               
             exit(-1);
         }
@@ -526,9 +542,9 @@ void gw_register_mads()
 
     gw_log_print("GW",'I',"Loading the scheduler.\n");
     
-    rc = gw_dm_register_mad(gw_conf.dm_mad[GW_MAD_PATH_INDEX],
-            gw_conf.dm_mad[GW_MAD_NAME_INDEX],    	
-            gw_conf.dm_mad[GW_MAD_ARGS_INDEX]);
+    rc = gw_dm_register_mad(gw_conf.dm_mad[GW_MAD_DM_PATH_INDEX],
+                            gw_conf.dm_mad[GW_MAD_DM_NAME_INDEX],
+                            gw_conf.dm_mad[GW_MAD_DM_ARGS_INDEX]);
 
     if ( rc != 0)
     {
@@ -542,13 +558,145 @@ void gw_register_mads()
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
-void gw_clear_state()
+static int gw_remove_dir(const char *path)
 {
-    char sh_command[2048];
+  DIR *           dirfp;
+  struct dirent * dentry;
+  struct stat     buf;
+  
+  int  rc;
+  int  error_rc = 0;
+  char * dpath;
+  int  length;
 
-    sprintf(sh_command, "rm -rf %s/" GW_VAR_DIR "/[0-9]*", gw_conf.gw_location);
+  dirfp = opendir(path);
 
-    system(sh_command);
+  if ( dirfp == NULL )
+  {
+    error_rc = -1;
+    
+    if (errno == ENOTDIR)
+    {
+      rc = unlink(path);
+      
+      if (rc != 0)
+        gw_log_print("GW",'E',"Error removing file %s: %s\n",
+                     path,
+                     strerror(errno));
+      else 
+        error_rc = 0;
+    }
+    else
+    {
+      gw_log_print("GW",'E',"Error opening directory %s: %s\n",
+                   path,
+                   strerror(errno));
+    }
+    
+    return error_rc;
+  }
+   
+  while((dentry = readdir(dirfp))!= NULL)
+  {
+    
+    if ((strcmp(dentry->d_name,".")==0)||(strcmp(dentry->d_name,"..")==0))
+      continue;
+    
+    length = strlen(dentry->d_name)+strlen(path)+2;
+    dpath  = malloc( length * sizeof(char));    
+    
+    sprintf(dpath,"%s/%s",path,dentry->d_name);
+    
+    rc = stat(dpath, &buf);
+
+    if (rc != 0)
+    {
+      gw_log_print("GW",'E',"Error removing directory %s: %s\n",
+                   dpath,
+                   strerror(errno));
+                   
+      error_rc = -1;
+         
+      free(dpath);           
+      continue;
+    }
+    
+    if (S_ISDIR(buf.st_mode))
+    {      
+      rc = gw_remove_dir(dpath);
+      
+      if ( rc == -1 )
+        error_rc = -1;
+    }
+    else
+    {
+      rc = unlink(dpath);
+      
+      if ( rc != 0 )
+      {
+        gw_log_print("GW",'E',"Error removing file %s: %s\n",
+                     dpath,
+                     strerror(errno));
+                     
+        error_rc = -1;
+      }      
+    }
+    
+    free(dpath);
+  }
+
+  closedir(dirfp);
+  
+  rc = rmdir(path);
+  
+  if ( rc != 0 )
+  {
+    gw_log_print("GW",'E',"Error removing directory %s: %s\n",
+                 path,
+                 strerror(errno));
+    
+    error_rc = -1;
+  }
+
+  return error_rc;
+}
+
+/* -------------------------------------------------------------------------- */
+
+int gw_clear_state()
+{    
+    DIR *          vardir;
+    struct dirent *dentry;
+    
+    char   s_vardir[PATH_MAX+1];
+    char   j_vardir[PATH_MAX+1];
+    int    rc=0;
+    
+    sprintf(s_vardir,"%s/%s",gw_conf.gw_location,GW_VAR_DIR);
+    
+    vardir = opendir(s_vardir);
+
+    if ( vardir == NULL )
+    {
+        gw_log_print("GW",'E',"Error opening directory %s: %s\n",
+                     s_vardir,
+                     strerror(errno));                     
+        return -1;
+    }
+
+    while((dentry = readdir(vardir))!= NULL)
+    {
+        if (isdigit(dentry->d_name[0]))
+        {            
+            sprintf(j_vardir,"%s/%s",s_vardir,dentry->d_name);
+            
+            if ( gw_remove_dir(j_vardir) == -1 )
+                rc = -1;
+        }
+    }
+  
+    closedir(vardir);    
+    return rc;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -603,7 +751,6 @@ void gw_recover_state()
 			if (S_ISDIR(buf.st_mode) && isdigit(pdir->d_name[0]))
 	        {
 				job_id = atoi(pdir->d_name);
-	        	gw_log_print("GW",'W',"Recovering job %i.\n",job_id);
 	        		          
 	          	rc     = gw_job_pool_allocate_by_id (job_id);
 		    	deps   = NULL;

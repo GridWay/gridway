@@ -11,6 +11,7 @@ fi
 setup_globus
 cd_var
 mad_debug
+check_proxy
 
 if [ -z "${GLOBUS_TCP_PORT_RANGE}" ]; then
     exec nice -n $PRIORITY java -DGLOBUS_LOCATION=$GLOBUS_LOCATION -Djava.endorsed.dirs=$GLOBUS_LOCATION/endorsed GWRftProcessor

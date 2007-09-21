@@ -61,14 +61,39 @@
 #define GW_WRAPPER_DEFAULT "libexec/gw_wrapper.sh"
 
 /* MADs */
-#define GW_MAX_MADS       5
+#define GW_MAX_MADS   5
 
-#define GW_MAD_NAME_INDEX     0
-#define GW_MAD_PATH_INDEX     1
-#define GW_MAD_ARGS_INDEX     2
-#define GW_MAD_RSL_MODE_INDEX 3
-#define GW_MAD_TM_INDEX       3
-#define GW_MAD_EM_INDEX       4
+#define GW_MAD_IM_MAX 5
+#define GW_MAD_EM_MAX 4
+#define GW_MAD_TM_MAX 3
+#define GW_MAD_DM_MAX 3
+ 
+/* Indexes for IM MAD */ 
+ 
+#define GW_MAD_IM_NAME_INDEX 0
+#define GW_MAD_IM_PATH_INDEX 1
+#define GW_MAD_IM_ARGS_INDEX 2
+#define GW_MAD_IM_TM_INDEX   3
+#define GW_MAD_IM_EM_INDEX   4
+ 
+/* Indexes for EM MAD */ 
+ 
+#define GW_MAD_EM_NAME_INDEX 0
+#define GW_MAD_EM_PATH_INDEX 1
+#define GW_MAD_EM_ARGS_INDEX 2
+#define GW_MAD_EM_RSL_INDEX  3
+ 
+/* Indexes for TM MAD */ 
+ 
+#define GW_MAD_TM_NAME_INDEX 0
+#define GW_MAD_TM_PATH_INDEX 1
+#define GW_MAD_TM_ARGS_INDEX 2 
+
+/* Indexes for DM MAD */ 
+
+#define GW_MAD_DM_NAME_INDEX 0
+#define GW_MAD_DM_PATH_INDEX 1
+#define GW_MAD_DM_ARGS_INDEX 2
 
 /* -------------------------------------------------------------------- */
 /* -------------------------------------------------------------------- */

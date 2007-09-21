@@ -663,7 +663,7 @@ $ wsrf-query -x -s https://localhost:8443/wsrf/services/DefaultIndexService</scr
         		   <entry>Specify the Berkeley Database path to build accounting support.</entry>
         		</row>
          		<row>
-        		   <entry>--with-doc</entry>
+        		   <entry>--with-docs</entry>
         		   <entry>Install GridWay documentation</entry>
         		</row>
          		<row>

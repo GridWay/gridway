@@ -80,6 +80,9 @@ static void gw_sched_dispatch (gw_scheduler_t * sched,
     gw_sch_host_t * host;
     
     max_dsp  = sched->sch_conf.max_dispatch;
+    if (max_dsp == 0)
+        max_dsp = sched->num_jobs;
+        
     max_user = sched->sch_conf.max_user;
     max_host = sched->sch_conf.max_resource;
     

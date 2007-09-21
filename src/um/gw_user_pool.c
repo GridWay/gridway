@@ -549,3 +549,37 @@ gw_boolean_t gw_user_pool_get_info(int uid, gw_msg_user_t *msg)
 	
 	return GW_TRUE;
 }
+
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+
+void gw_user_pool_dm_recover (gw_dm_mad_t * dm_mad)
+{
+    gw_user_t * user;
+    int         i;
+    
+    pthread_mutex_lock(&(gw_user_pool.mutex));
+
+    for (i=0; i<gw_conf.number_of_users; i++)
+    {
+        user = gw_user_pool.pool[i];
+        
+        if ( user != NULL )
+        {
+
+#ifdef GWDMDEBUG
+            gw_log_print("DM",'D',"Recovering (sched) user %i.\n",i);
+#endif                       
+            gw_dm_mad_user_add(dm_mad,
+                               i,
+                               user->active_jobs,
+                               user->running_jobs,
+                               user->name);     
+        }
+    }
+    
+    pthread_mutex_unlock(&(gw_user_pool.mutex));
+    
+    return;
+}

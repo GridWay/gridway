@@ -103,4 +103,9 @@ void gw_user_pool_check_users(time_t period);
 
 gw_boolean_t gw_user_pool_get_info(int uid, gw_msg_user_t *msg);
 
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+
+void gw_user_pool_dm_recover (gw_dm_mad_t * dm_mad);
+
 #endif

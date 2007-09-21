@@ -21,6 +21,8 @@
 #include <pthread.h>
 #include "gw_job.h"
 #include "gw_em_mad.h"
+#include "gw_dm_mad.h"
+
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
@@ -61,7 +63,9 @@ gw_job_t* gw_job_pool_get (int job_id, int lock);
 
 int gw_job_pool_get_num_jobs();
 
-int gw_job_pool_recover_jobs (gw_em_mad_t * em_mad);
+int gw_job_pool_em_recover (gw_em_mad_t * em_mad);
+
+int gw_job_pool_dm_recover (gw_dm_mad_t * em_mad);
 
 void gw_job_pool_dep_check(int job_id);
 

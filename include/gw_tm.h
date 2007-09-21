@@ -37,6 +37,8 @@
 
 #define GW_TM_MAX_JOB_ID    5
 
+#define GW_TM_MAX_XFR_ID    5
+
 #define GW_TM_TIMER_PERIOD  5
 
 /* -------------------------------------------------------------------------- */

@@ -151,7 +151,7 @@ void gw_im_timer(void *_null)
         
         for (i=0; (i<GW_MAX_MADS) && (gw_conf.im_mads[i][0] != NULL); i++) 
         {
-			gw_im_discover (gw_conf.im_mads[i][GW_MAD_NAME_INDEX]);
+			gw_im_discover (gw_conf.im_mads[i][GW_MAD_IM_NAME_INDEX]);
         }
 
     }

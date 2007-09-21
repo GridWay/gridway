@@ -295,7 +295,7 @@ static int gw_dm_mad_start(gw_dm_mad_t *dm_mad)
             execlp(dm_mad->executable, dm_mad->executable, dm_mad->argument, NULL);
         
             /* exec should not return */
-            gw_log_print("DM",'E',"Could not execute MAD %s.\n", dm_mad->executable);
+            gw_log_print("DM",'E',"Could not execute MAD %s, exiting...\n", dm_mad->executable);
 
             exit(-1);
             break;

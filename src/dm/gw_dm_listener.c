@@ -25,6 +25,7 @@
 #include "gw_host.h"
 #include "gw_host_pool.h"
 #include "gw_log.h"
+#include "gw_user_pool.h"
 
 void gw_dm_listener(void *arg)
 {
@@ -65,9 +66,9 @@ void gw_dm_listener(void *arg)
                 {
                     rc = read(i, (void *) &c, sizeof(char));
                     str[j++] = c;    
-                }
-                while ( rc > 0 && c != '\n' );
-
+                }                
+                while ((rc > 0) && (c != '\n') && (j < (GW_DM_MAX_STRING-1)));
+                
                 str[j] = '\0';    
 
                 if (rc <= 0) /* Error Reading message from MAD! */
@@ -78,8 +79,16 @@ void gw_dm_listener(void *arg)
                     rcm = gw_dm_mad_reload(dm_mad);
                     
                     if ( rcm == 0 )
+                    {
                         gw_log_print("DM",'I',"MAD (%s) successfully reloaded\n",
                             dm_mad->name);
+                        
+                        gw_user_pool_dm_recover (dm_mad);
+                        
+                        gw_host_pool_dm_recover (dm_mad);
+                        
+                        gw_job_pool_dm_recover  (dm_mad);
+                    }
                     else
                     {
                         gw_log_print("DM",'E',"Error reloading the scheduler (%s)\n",
@@ -98,7 +107,15 @@ void gw_dm_listener(void *arg)
                 }
                 
                 info[0] = '\0';
-                sscanf(str,"%s %s %s %[^\n]", action, s_id, result, info);
+
+                sscanf(str,"%" GW2STR(GW_DM_MAX_ACTION) "s %"
+                       GW2STR(GW_DM_MAX_ID) "s %"
+                       GW2STR(GW_DM_MAX_RESULT) "s %"
+                       GW2STR(GW_DM_MAX_INFO) "[^\n]", 
+                       action, 
+                       s_id, 
+                       result, 
+                       info);
   
 #ifdef GWDMDEBUG
                 gw_log_print("DM",'D',"MAD (%s) message %s %s %s %s (info length=%d).\n",

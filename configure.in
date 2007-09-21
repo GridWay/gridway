@@ -1,4 +1,4 @@
-# --------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Copyright 2002-2006 GridWay Team, Distributed Systems Architecture
 # Group, Universidad Complutense de Madrid
 #
@@ -13,85 +13,94 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# --------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 AC_PREREQ(2.60)
-AC_INIT([GridWay], [5.2.1], [gridway-user@globus.org])
+AC_INIT([GridWay], [5.2.2], [gridway-user@globus.org])
 AC_CONFIG_AUX_DIR(config)
 AC_CONFIG_SRCDIR([src/dm/gw_dm_action_dispatch.c])
 
 AC_PREFIX_DEFAULT("/usr/local/gw")
 
-#------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # --- Globus Directory Scheme --- Need to be checked first
-#------------------------------------------------------------------------------
-GW_DIR_SCHEME=""
+#-------------------------------------------------------------------------------
+
+GW_DIR_SCHEME=" "
 
 AC_ARG_ENABLE(globus-scheme,  AC_HELP_STRING([--enable-globus-scheme],\
-  [Adjusts directory layout to install GridWay in GLOBUS_LOCATION.]),\
-  [GW_DIR_SCHEME="globus";], [])
+  [Adjusts directory layout to install GridWay in GLOBUS_LOCATION. Default is disabled.]),\
+  [if test $enableval = "yes"; then GW_DIR_SCHEME="globus"; else \
+  GW_DIR_SCHEME=" "; fi ], [])
   
-#------------------------------------------------------------------------------
-# Makefile-header setup (actually handled by GPT)
-#------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+# Globus Location and Flavor
+#-------------------------------------------------------------------------------
+   
+echo -n "checking for Globus Toolkit..."
+  
+if test -z "$GLOBUS_LOCATION" ; then
+   echo "GLOBUS_LOCATION is not defined..."
+   exit -1
+else
+   echo "ok"
+fi
+
+source $GLOBUS_LOCATION/etc/globus-user-env.sh  > /dev/null 2>&1
+
+AC_ARG_WITH(flavor,  AC_HELP_STRING([--with-flavor],\
+   [Specify globus build flavor (eg. gcc32dbg)]),\
+   [FLAVOR=$withval], [])
+
+if test -z "$FLAVOR" ; then
+
+   if test -d $GLOBUS_LOCATION/include/gcc32dbg ; then
+      FLAVOR=gcc32dbg
+   elif test -d $GLOBUS_LOCATION/include/gcc32 ; then
+      FLAVOR=gcc32
+   elif test -d $GLOBUS_LOCATION/include/gcc64dbg ; then
+      FLAVOR=gcc64dbg
+   elif test -d $GLOBUS_LOCATION/include/gcc64 ; then
+      FLAVOR=gcc64
+   elif test -d $GLOBUS_LOCATION/include/vendorcc32dbg ; then
+      FLAVOR=vendorcc32dbg
+   elif test -d $GLOBUS_LOCATION/include/vendorcc32 ; then
+      FLAVOR=vendorcc32
+   elif test -d $GLOBUS_LOCATION/include/vendorcc64dbg ; then
+      FLAVOR=vendorcc64dbg
+   elif test -d $GLOBUS_LOCATION/include/vendorcc64 ; then
+      FLAVOR=vendorcc64
+   else
+      echo "use --with-flavor"
+      exit -1
+   fi
+fi
+
+#-------------------------------------------------------------------------------
+# Makefile-header setup (handled by GPT or globus-makefile-header)
+#-------------------------------------------------------------------------------
+
+echo -n "configuring Globus build env..."
 
 if test "x$GW_DIR_SCHEME" = "xglobus"; then
-	HEADER_COMMAND=$GLOBUS_LOCATION/sbin/gpt_build_config
+	if test -z "$GPT_LOCATION" ; then 
+		HEADER_COMMAND=$GLOBUS_LOCATION/sbin/gpt_build_config
+	else
+		HEADER_COMMAND=$GPT_LOCATION/sbin/gpt_build_config
+	fi
 else
 	HEADER_COMMAND=$GLOBUS_LOCATION/bin/globus-makefile-header
 fi
-    
-echo -n "checking for Globus Toolkit..."
-if test -z "$GLOBUS_LOCATION" ; then
-    echo "GLOBUS_LOCATION is not defined..."
-    exit -1
-else
-   echo "ok"
 
-   source $GLOBUS_LOCATION/etc/globus-user-env.sh  > /dev/null 2>&1
- 
-   if test -x $GLOBUS_LOCATION/sbin/gpt_build_config ; then
+if test -x $HEADER_COMMAND; then
 
-       AC_ARG_WITH(flavor,  AC_HELP_STRING([--with-flavor],\
-       [Specify globus build flavor (eg. gcc32dbg)]),\
-       [FLAVOR=$withval], [])
-
-       if test -z "$FLAVOR" ; then
-
-           if test -d $GLOBUS_LOCATION/include/gcc32dbg ; then
-                FLAVOR=gcc32dbg
-               elif test -d $GLOBUS_LOCATION/include/gcc32 ; then
-                    FLAVOR=gcc32
-               elif test -d $GLOBUS_LOCATION/include/gcc64dbg ; then
-                    FLAVOR=gcc64dbg
-               elif test -d $GLOBUS_LOCATION/include/gcc64 ; then
-                    FLAVOR=gcc64
-               elif test -d $GLOBUS_LOCATION/include/vendorcc32dbg ; then
-                    FLAVOR=vendorcc32dbg
-               elif test -d $GLOBUS_LOCATION/include/vendorcc32 ; then
-                    FLAVOR=vendorcc32
-               elif test -d $GLOBUS_LOCATION/include/vendorcc64dbg ; then
-                    FLAVOR=vendorcc64dbg
-               elif test -d $GLOBUS_LOCATION/include/vendorcc64 ; then
-                    FLAVOR=vendorcc64
-               else
-                  echo "use --with-flavor"
-                  exit -1
-               fi
-       fi
-   else
-            echo "Could not find gpt_build_config..."
-            exit -1
-   fi
-
-   echo -n "configuring Globus build env..."
-   
-   if test "x$GW_DIR_SCHEME" = "xglobus"; then
+   if test "x$GW_DIR_SCHEME" = "xglobus"; then   
 	  $HEADER_COMMAND -src=pkg_data_src.gpt -flavor=$FLAVOR -link=shared
       export GLOBUS_FLAVOR_NAME=$FLAVOR
 	  source ./gpt_build_temp.sh
-      AC_SUBST(globus_pkg_libs,"$GPT_CONFIG_PKG_LIBS $GPT_CONFIG_LIBS")      
+      AC_SUBST(globus_pkg_libs,"$GPT_CONFIG_PKG_LIBS $GPT_CONFIG_LIBS")            
    else
+   
 	  $HEADER_COMMAND -flavor $FLAVOR globus_gram_client globus_ftp_client \
 	       globus_gass_copy > makefile-header
       AC_SUBST(incgtmk,"include $PWD/makefile-header")
@@ -100,15 +109,18 @@ else
    if test $? -ne 0 ; then
       echo "failed"
       exit -1
+   else
+      echo "ok"   
    fi
-
-   echo "ok"
-
+      
+else
+   echo "falied. $HEADER_COMMAND not found!"
+   exit -1
 fi
 
-#------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # Check target system
-#------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
 AC_CANONICAL_BUILD
 
@@ -143,48 +155,57 @@ AC_SUBST(java_home, $JAVA_HOME)
 
 if test "x$GW_DIR_SCHEME" = "xglobus"; then
 #Default options for Globus builds
-	drmaa="drmaa"
-	prews=""
-	ws="ws"
-	jsdl=""
+	drmaa="drmaa"	
+	prews=""	
+	ws="ws"	
+	gridftp="gridftp"
+	docs="no"
+	tests="no"		
+
+	jsdl=""		
 	db=""
-	doc="no"
-	tests="no"
-	gridftp="gridftp"
 else
-	drmaa="drmaa"
+	drmaa="drmaa"	
 	prews=""
-	ws="ws"
-	jsdl="jsdl"
-	db="db"
-	doc="no"
-	tests="no"
+	ws="ws"	
 	gridftp="gridftp"
+	docs="no"
+	tests="no"
+		
+	jsdl="jsdl"	
+	db="db"
 fi
 
 # --- Enable DRMAA library ---
 
 AC_ARG_ENABLE(drmaa,  AC_HELP_STRING([--disable-drmaa],\
-  [Don't build drmaa support.  Default is enabled.]),\
-  [if test $enableval = "no"; then drmaa=" "; drmaa_c_howtos=" "; drmaa_java_howtos=" "; fi], [])
+  [Don't build drmaa support. Default is enabled.]),\
+  [if test $enableval = "yes"; then drmaa="drmaa"; else drmaa=" "; fi], [])
 
 # --- Enable preWS Drivers ---
 
 AC_ARG_ENABLE(prews,  AC_HELP_STRING([--enable-prews],\
-  [Build pre-web-services support. Default is disabled.]),\
-  [if test $enableval = "yes"; then prews="prews"; fi], [])
-
+  [Build pre-webservices support. Default is disabled.]),\
+  [if test $enableval = "yes"; then prews="prews"; else prews=" "; fi], [])
+  
 # --- Enable WS Drivers ---
 
 AC_ARG_ENABLE(ws,  AC_HELP_STRING([--disable-ws],\
   [Don't build web-services support. Default is enabled.]),\
-  [if test $enableval = "no"; then ws=" "; fi], [])
+  [if test $enableval = "yes"; then ws="ws"; else ws=" "; fi], [])
+
+# --- Enable GRIDFTP MAD ---
+        
+AC_ARG_ENABLE(gridftp,  AC_HELP_STRING([--disable-gridftp],\
+  [Don't build gridftp support. Default is enabled. \
+   Useful to compile in an EGEE UI.]),\
+  [if test $enableval = "yes"; then gridftp="gridftp"; else gridftp=" "; fi],[])
 
 # --- Enable JSDL  ---
 
 AC_ARG_ENABLE(jsdl,  AC_HELP_STRING([--enable-jsdl],\
-  [Build jsdl support. Default is disabled.]),\
-  [if test $enableval = "yes"; then jsdl="jsdl"; fi], [])
+  [Build jsdl support. Disabled for GT builds.]),\
+  [if test $enableval = "yes"; then jsdl="jsdl"; else jsdl=" "; fi], [])
 
 # --- Enable Debug ---
 
@@ -192,16 +213,16 @@ AC_ARG_ENABLE(debug,  AC_HELP_STRING([--enable-debug],\
   [Enable debug info in GW logs. Default is disabled.]),\
   [CFLAGS="$CFLAGS -Wall -g -DGWIMDEBUG -DGWJOBDEBUG -DGWHOSTDEBUG -DGWEMDEBUG -DGWDMDEBUG  -DGWTMDEBUG -DGWUSERDEBUG -DGWSCHEDDEBUG";], [])
 
-# --- With DB ---
+# --- With documents ---  
 
-AC_ARG_WITH(doc,  AC_HELP_STRING([--with-docs],\
-        [Build documentation]),\
-        [if test $withval = "yes"; then doc="yes"; else doc="no"; fi], [])
+AC_ARG_WITH(docs,  AC_HELP_STRING([--with-docs],\
+        [Build documentation. Default is disbaled.]),\
+        [if test $withval = "yes"; then docs="yes"; else docs="no"; fi], [])
         
-# --- With documents ---        
+# --- With DB ---      
 
 AC_ARG_WITH(db,  AC_HELP_STRING([--with-db=<no|path_to_db>],\
-       [Build db support for accounting.]),\
+       [Build db support for accounting. Disabled for GT builds.]),\
        [if test $withval = "no";  then  db=" "; else \       
         if test $withval = "yes"; then  db="db"; db_path=" "; fi; \
         if test $withval != "yes"; then db="db"; db_path="$withval"; fi; \
@@ -210,22 +231,9 @@ AC_ARG_WITH(db,  AC_HELP_STRING([--with-db=<no|path_to_db>],\
 # --- With GridWay tests ---
 
 AC_ARG_WITH(tests,  AC_HELP_STRING([--with-tests],\
-        [Build GridWay test suite]),\
-        [if test $withval = "yes"; then tests="yes"; else tests="no"; fi], [])        
-
-# --- Enable GRIDFTP TM Mad ---
-        
-AC_ARG_ENABLE(gridftp,  AC_HELP_STRING([--disable-gridftp],\
-  [Don't build gridftp support. Default is enabled. \
-   Useful to compile in an EGEE UI.]),\
-  [if test $enableval = "no"; then gridftp=" "; fi], [])
-
-# --- Globus Directory Scheme ---
-
-AC_ARG_ENABLE(globus-scheme,  AC_HELP_STRING([--enable-globus-scheme],\
-  [Adjusts directory layout to install GridWay in GLOBUS_LOCATION.]),\
-  [GW_DIR_SCHEME="globus";], [])
-  
+        [Build GridWay test suite. Default is disabled.]),\
+        [if test $withval = "yes"; then tests="yes"; else tests="no"; fi], [])
+          
 #------------------------------------------------------------------------------
 # Argument check
 #------------------------------------------------------------------------------
@@ -264,7 +272,7 @@ AM_CONDITIONAL(DB,test "x$db" = "xdb")
 
 # --- With documents ---
 
-if test "x$doc" = "xyes" ; then
+if test "x$docs" = "xyes" ; then
      AC_PATH_PROG(DB2HTML, db2html)
      AM_CONDITIONAL(DB2HTMLC, test -n "$DB2HTML")
 
@@ -327,7 +335,7 @@ fi
 # Automake Directives
 #------------------------------------------------------------------------------
 
-AM_INIT_AUTOMAKE(gw,5.2.1)
+AM_INIT_AUTOMAKE(gw,5.2.2)
 AM_PROG_CC_C_O
 AM_PROG_LEX
 

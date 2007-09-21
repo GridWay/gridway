@@ -10,9 +10,10 @@ fi
 setup_globus
 cd_var
 mad_debug
+check_proxy
 
 if [ -z "${GLOBUS_TCP_PORT_RANGE}" ]; then
-    exec nice -n $PRIORITY java -DGLOBUS_LOCATION=$GLOBUS_LOCATION -Djava.endorsed.dirs=$GLOBUS_LOCATION/endorsed -classpath $CLASSPATH:$GW_LOCATION/lib/gw_em_mad_ws.jar GW_mad_ws $*
+    exec nice -n $PRIORITY java -DGLOBUS_LOCATION=$GLOBUS_LOCATION -DX509_USER_PROXY=$X509_USER_PROXY -Djava.endorsed.dirs=$GLOBUS_LOCATION/endorsed -classpath $CLASSPATH:$GW_LOCATION/lib/gw_em_mad_ws.jar GW_mad_ws $*
 else
-    exec nice -n $PRIORITY java -DGLOBUS_LOCATION=$GLOBUS_LOCATION -Djava.endorsed.dirs=$GLOBUS_LOCATION/endorsed -DGLOBUS_TCP_PORT_RANGE=$GLOBUS_TCP_PORT_RANGE -classpath $CLASSPATH:$GW_LOCATION/lib/gw_em_mad_ws.jar GW_mad_ws $*
+    exec nice -n $PRIORITY java -DGLOBUS_LOCATION=$GLOBUS_LOCATION -DX509_USER_PROXY=$X509_USER_PROXY -Djava.endorsed.dirs=$GLOBUS_LOCATION/endorsed -DGLOBUS_TCP_PORT_RANGE=$GLOBUS_TCP_PORT_RANGE -classpath $CLASSPATH:$GW_LOCATION/lib/gw_em_mad_ws.jar GW_mad_ws $*
 fi

@@ -70,8 +70,8 @@ void gw_im_listener(void *arg)
                     rc = read(i, (void *) &c, sizeof(char));
                     str[j++] = c;    
                 }
-                while ( rc > 0 && c != '\n' );
-
+                while ((rc > 0) && (c != '\n') && (j < (GW_IM_MAX_STRING-1)));
+                
                 str[j] = '\0';
 
                 if (rc <= 0)
@@ -104,7 +104,14 @@ void gw_im_listener(void *arg)
                                     
                 info[0] = '\0';
 
-                rc = sscanf(str,"%s %s %s %[^\n]", action, s_host_id, result, info);
+                rc = sscanf(str,"%" GW2STR(GW_IM_MAX_ACTION)"s %"
+                            GW2STR(GW_IM_MAX_HOST_ID)"s %"
+                            GW2STR(GW_IM_MAX_RESULT)"s %"
+                            GW2STR(GW_IM_MAX_INFO) "[^\n]", 
+                            action, 
+                            s_host_id, 
+                            result, 
+                            info);
         
 #ifdef GWIMDEBUG
                 gw_log_print("IM",'D',"MAD (%s) message %s %s %s %s (info length=%d).\n",

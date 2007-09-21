@@ -346,10 +346,6 @@ typedef struct drmaa_job_ids_s      	drmaa_job_ids_t;
 
 /** Not relevant for the current GridWay implementation, will be ignored
  */
-#define DRMAA_DEADLINE_TIME		    "drmaa_deadline_time"
-
-/** Not relevant for the current GridWay implementation, will be ignored
- */
 #define DRMAA_DURATION_HLIMIT		"drmaa_duration_hlimit"
 
 /** Not relevant for the current GridWay implementation, will be ignored

@@ -206,10 +206,10 @@ static int gw_im_mad_start(gw_im_mad_t *im_mad)
             execlp(im_mad->executable, im_mad->executable, im_mad->argument, NULL);
         
             /* exec should not return */
-            gw_log_print("IM",'E',"Could not execute MAD %s.\n", im_mad->executable);
-
+            gw_log_print("IM",'E',"Could not execute MAD %s, exiting...\n", im_mad->executable);
+            
             exit(-1);
-
+            
             break;
 
         default: /* Parent process (IM) */

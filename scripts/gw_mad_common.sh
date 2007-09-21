@@ -44,13 +44,24 @@ function mad_debug {
 
 function export_rc_vars {
     if [ -f $1 ] ; then
-		GW_VARS=`cat $1 | egrep -e '^[a-zA-Z\-_0-9]*=' | sed 's/=.*$//'`
+		GW_VARS=`cat $1 | egrep -e '^[a-zA-Z\-\_0-9]*=' | sed 's/=.*$//'`
 
         . $1
 
 		for v in $GW_VARS; do
 	      export $v
 		done
+	fi
+}
+
+# Check and set X509_USER_PROXY
+function check_proxy {
+	grid-proxy-info -exists 2> /dev/null
+
+	if [ "x$?" = "x0" ]; then
+		export X509_USER_PROXY=`grid-proxy-info -path`
+	else
+		exit -1
 	fi
 }
 
@@ -64,7 +75,7 @@ export_rc_vars $GW_LOCATION/etc/gridway/gwrc
 
 # Set per user environment
 
-export_rc_vars $HOME/.gwrc
+export_rc_vars ~/.gwrc
 
 # Sanitize PRIORITY variable
 if [ -z "$PRIORITY" ]; then

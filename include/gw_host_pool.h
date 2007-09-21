@@ -20,6 +20,7 @@
 
 #include <pthread.h>
 #include "gw_host.h"
+#include "gw_dm_mad.h"
 
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
@@ -57,6 +58,8 @@ void gw_host_pool_update (char * hostnames,
                           char * em_mad,
                           char * tm_mad, 
                           char * im_mad);
+                          
+void gw_host_pool_dm_recover (gw_dm_mad_t * dm_mad);                          
 
 void gw_host_pool_print (FILE *fd);
 

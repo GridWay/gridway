@@ -158,7 +158,20 @@ execution(){
     #
     #   Execution of actual job in background
     #
-
+    
+    case ${GW_EXECUTABLE} in
+        gsiftp://*)
+	        GW_EXECUTABLE=`basename ${GW_EXECUTABLE}`
+            ;;
+            
+        file:/*)
+			GW_EXECUTABLE=`basename ${GW_EXECUTABLE}`        
+            ;;
+                
+        *)
+            ;;
+    esac
+			
     printf "`date`: Executing actual job \"$GW_EXECUTABLE $GW_ARGUMENTS\"... "
 
     export PATH=.:$PATH

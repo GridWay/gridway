@@ -48,15 +48,15 @@ int gw_user_init(gw_user_t *user, const char *name)
     while ( ( i < GW_MAX_MADS ) && (gw_conf.em_mads[i][0] != NULL) )
     {
         rc = gw_em_register_mad(user,
-                gw_conf.em_mads[i][GW_MAD_PATH_INDEX],
-                gw_conf.em_mads[i][GW_MAD_NAME_INDEX],        
-                gw_conf.em_mads[i][GW_MAD_ARGS_INDEX],
-                gw_conf.em_mads[i][GW_MAD_RSL_MODE_INDEX]);
+                gw_conf.em_mads[i][GW_MAD_EM_PATH_INDEX],
+                gw_conf.em_mads[i][GW_MAD_EM_NAME_INDEX],        
+                gw_conf.em_mads[i][GW_MAD_EM_ARGS_INDEX],
+                gw_conf.em_mads[i][GW_MAD_EM_RSL_INDEX]);
 
         if (rc != 0)
         {
         	gw_log_print("UM",'E',"Could not load execution MAD %s.\n",
-                          gw_conf.em_mads[i][GW_MAD_NAME_INDEX]);
+                          gw_conf.em_mads[i][GW_MAD_EM_NAME_INDEX]);
         	
             for (j = 0; j< user->em_mads ; j++)
             {
@@ -80,14 +80,14 @@ int gw_user_init(gw_user_t *user, const char *name)
     while ( ( i < GW_MAX_MADS ) && (gw_conf.tm_mads[i][0] != NULL) )
     {
         rc = gw_tm_register_mad(user,
-                gw_conf.tm_mads[i][GW_MAD_PATH_INDEX],
-                gw_conf.tm_mads[i][GW_MAD_NAME_INDEX],
-                gw_conf.tm_mads[i][GW_MAD_ARGS_INDEX]);
-                
+                gw_conf.tm_mads[i][GW_MAD_TM_PATH_INDEX],
+                gw_conf.tm_mads[i][GW_MAD_TM_NAME_INDEX],
+                gw_conf.tm_mads[i][GW_MAD_TM_ARGS_INDEX]);
+
         if ( rc != 0)
         {
         	gw_log_print("UM",'E',"Could not load transfer MAD %s.\n",
-                          gw_conf.tm_mads[i][GW_MAD_NAME_INDEX]);
+                          gw_conf.tm_mads[i][GW_MAD_TM_NAME_INDEX]);
         	
             for (j=0; j< user->tm_mads ; j++)
             {  
@@ -246,8 +246,7 @@ int gw_tm_register_mad(gw_user_t *  user,
         const char * arg)
 {
     int           rc,i;
-    gw_tm_mad_t * mad;
-     
+         
     /* ----------------------------------------------------- */
     /* 1.- Check if there is space left                      */
     /* ----------------------------------------------------- */    

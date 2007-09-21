@@ -1270,7 +1270,7 @@ YY_RULE_SETUP
 case 24:
 YY_RULE_SETUP
 #line 109 "gw_template_parser.l"
-{ jtp_var = CHECKPOINT_URL;         BEGIN var_int;}
+{ jtp_var = CHECKPOINT_URL;         BEGIN var_str;}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP

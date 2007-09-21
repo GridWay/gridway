@@ -154,7 +154,6 @@ int gw_host_pool_host_allocate (char* hostname, int fixed_priority,
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
-
 void gw_host_pool_host_free (int host_id)
 {
     if ( ( host_id >= 0 ) && ( host_id < gw_conf.number_of_hosts ) )
@@ -347,6 +346,42 @@ void gw_host_pool_monitor_hosts( int *active_queries)
     }
 
     pthread_mutex_unlock(&(gw_host_pool.mutex));       
+}
+
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+
+void gw_host_pool_dm_recover (gw_dm_mad_t * dm_mad)
+{
+    int i;
+    gw_host_t * host;
+    
+    pthread_mutex_lock(&(gw_host_pool.mutex));
+
+    for (i = 0; i<gw_conf.number_of_hosts; i++)
+    {
+        host=gw_host_pool.pool[i];
+        
+        if (host != NULL)
+        {
+            pthread_mutex_lock(&(host->mutex));
+
+#ifdef GWDMDEBUG
+            gw_log_print("DM",'D',"Recovering (sched) host %i.\n",host->host_id);
+#endif            
+            gw_dm_mad_host_monitor(dm_mad,
+                    host->host_id,
+                    host->used_slots,
+                    host->running_jobs,
+                    host->hostname);
+
+            pthread_mutex_unlock(&(host->mutex));            
+        }
+            
+    }
+    
+    pthread_mutex_unlock(&(gw_host_pool.mutex));
 }
 
 /* -------------------------------------------------------------------------- */

@@ -39,7 +39,6 @@ static gw_job_dep_matrix_t gw_job_deps;
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
-/* -------------------------------------------------------------------------- */
 
 static int gw_job_dep_init()
 {
@@ -285,9 +284,6 @@ void gw_job_pool_dep_consistency()
 	pthread_mutex_unlock(&(gw_job_deps.mutex));	
 }
 
-/* -------------------------------------------------------------------------- */
-/* -------------------------------------------------------------------------- */
-/* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
@@ -537,13 +533,11 @@ gw_job_t* gw_job_pool_get (int job_id, int lock)
     return (job);
 }
 
-
-
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
-int gw_job_pool_recover_jobs (gw_em_mad_t * em_mad)
+int gw_job_pool_em_recover (gw_em_mad_t * em_mad)
 {
     gw_job_t * job;
     int        i;
@@ -591,6 +585,144 @@ int gw_job_pool_recover_jobs (gw_em_mad_t * em_mad)
     pthread_mutex_unlock(&(gw_job_pool.mutex));
     
     return 0;
+}
+
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+
+int gw_job_pool_dm_recover (gw_dm_mad_t * dm_mad)
+{
+    gw_job_t * job;
+    int        i;
+        
+    pthread_mutex_lock(&(gw_job_pool.mutex));
+    
+    for ( i=0; i < gw_conf.number_of_jobs; i++)
+    {
+        job = gw_job_pool.pool[i];
+        
+        if (job != NULL)
+        {
+            pthread_mutex_lock(&(job->mutex));            
+
+            if (job->job_state == GW_JOB_STATE_PENDING)
+            {
+#ifdef GWDMDEBUG
+                gw_log_print("DM",'D',"Recovering (sched) job %i.\n",job->id);
+#endif                
+                gw_dm_mad_job_schedule(dm_mad,
+                                   job->id,
+                                   job->array_id,
+                                   job->user_id,
+                                   GW_REASON_NONE);                
+            }
+
+            pthread_mutex_unlock(&(job->mutex));
+        }
+    }
+        
+    pthread_mutex_unlock(&(gw_job_pool.mutex));
+    
+    return 0;
+}
+
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+
+void gw_job_pool_tm_recover (gw_am_t *dm_am)
+{
+    gw_job_t * job;
+    int        i;
+    int *      _job_id; 
+        
+    pthread_mutex_lock(&(gw_job_pool.mutex));
+    
+    for ( i=0; i < gw_conf.number_of_jobs; i++)
+    {
+        job = gw_job_pool.pool[i];
+        
+        if (job != NULL)
+        {
+            pthread_mutex_lock(&(job->mutex));            
+
+            if (job->job_state == GW_JOB_STATE_PROLOG)
+            {
+#ifdef GWTMDEBUG
+                gw_log_print("TM",'D',"MAD reloaded, recovering job %i from prolog.\n",job->id);
+		        gw_job_print(job,"TM",'D',"MAD reloaded, restarting Prolog\n");
+#endif                
+		        _job_id    = (int *) malloc (sizeof(int));
+                *(_job_id) = job->id;
+			
+                /* Reset TM state */ 				
+                job->tm_state = GW_TM_STATE_INIT;
+		
+                /* Trigger the DM Prolog state */
+                gw_am_trigger(dm_am, "GW_DM_STATE_PROLOG", _job_id);
+            }
+      	    else
+            {
+#ifdef GWTMDEBUG
+	            gw_log_print("TM",'D',"MAD reloaded, recovering job %i from epilog.\n",job->id);
+  	    	    gw_job_print(job,"TM",'D',"MAD reloaded, restarting Epilog\n");
+#endif					
+                _job_id    = (int *) malloc (sizeof(int));
+                *(_job_id) = job->id;
+
+                /* Reset TM state */ 
+                job->tm_state = GW_TM_STATE_INIT;
+
+                switch(job->job_state)
+                {
+                    case GW_JOB_STATE_EPILOG:
+				    /* Trigger the DM epilog state */
+                        gw_am_trigger(dm_am, "GW_DM_STATE_EPILOG", _job_id);					
+				        break;
+                        
+                    case GW_JOB_STATE_EPILOG_STD:
+				    /* Trigger the DM epilog_std state */
+                        gw_am_trigger(dm_am, "GW_DM_STATE_EPILOG_STD", _job_id);				
+				        break;
+                        
+                    case GW_JOB_STATE_MIGR_EPILOG:
+				    /* Trigger the DM migr_epilog state */
+                        gw_am_trigger(dm_am, "GW_DM_STATE_MIGR_EPILOG", _job_id);				
+				        break;
+                        
+        			case GW_JOB_STATE_EPILOG_RESTART:
+			     	/* Trigger the DM epilog_restart state */
+                        gw_am_trigger(dm_am, "GW_DM_STATE_EPILOG_RESTART", _job_id);				
+				        break;
+                        						
+                    case GW_JOB_STATE_EPILOG_FAIL:
+ 			        /* Trigger the DM epilog_fail state */
+                        gw_am_trigger(dm_am, "GW_DM_STATE_EPILOG_FAIL", _job_id);			
+				        break;
+                        
+                    case GW_JOB_STATE_KILL_EPILOG:
+				    /* Trigger the DM kill_epilog state */
+                        gw_am_trigger(dm_am, "GW_DM_STATE_KILL_EPILOG", _job_id);			
+				        break;
+                        	
+                    case GW_JOB_STATE_STOP_EPILOG:
+				    /* Trigger the DM stop_epilog state */
+                        gw_am_trigger(dm_am, "GW_DM_STATE_STOP_EPILOG", _job_id);			
+                        break;
+                        
+                    default:
+                        break;											
+                }						
+            }
+
+            pthread_mutex_unlock(&(job->mutex));
+        }
+    }
+        
+    pthread_mutex_unlock(&(gw_job_pool.mutex));
+    
+    return;
 }
 
 /* -------------------------------------------------------------------------- */

@@ -175,8 +175,8 @@ int gw_im_register_mad(const char * executable,
                         executable, 
                         name, 
                         arg,
-                        gw_conf.im_mads[gw_im.registered_mads][GW_MAD_EM_INDEX],
-                        gw_conf.im_mads[gw_im.registered_mads][GW_MAD_TM_INDEX]);
+                        gw_conf.im_mads[gw_im.registered_mads][GW_MAD_IM_EM_INDEX],
+                        gw_conf.im_mads[gw_im.registered_mads][GW_MAD_IM_TM_INDEX]);
     
     if ( rc == 0 )
     {

@@ -21,13 +21,13 @@ JAVA_HOME = @java_home@
 if GW_GLOBUS_DIRS
 GW_ETC_DIR   = etc/gridway
 GW_VAR_DIR   = var/gridway
-GW_DOC_DIR   = doc/gridway
+GW_DOC_DIR   = share/doc/gridway
 GW_SHARE_DIR = share/gridway
 GW_TEST_DIR  = test/gridway
 else
 GW_ETC_DIR   = etc
 GW_VAR_DIR   = var
-GW_DOC_DIR   = doc
+GW_DOC_DIR   = share/doc
 GW_SHARE_DIR = share
 GW_TEST_DIR  = test
 endif

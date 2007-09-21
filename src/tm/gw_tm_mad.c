@@ -244,7 +244,6 @@ static int gw_tm_mad_start_mad(gw_tm_mad_t * tm_mad)
     
     int tm_mad_pipe[2], mad_tm_pipe[2];
     int i, rc;
-    int length;
     
     if ( pipe(tm_mad_pipe) == -1 ||  pipe(mad_tm_pipe) == -1)
     {
@@ -277,12 +276,12 @@ static int gw_tm_mad_start_mad(gw_tm_mad_t * tm_mad)
                   
                         
             if (gw_conf.multiuser == GW_TRUE)            
-                execlp("sudo","sudo","-u",tm_mad->owner,tm_mad->executable,tm_mad->argument,NULL);
+                execlp("sudo","sudo","-H", "-u",tm_mad->owner,tm_mad->executable,tm_mad->argument,NULL);
             else
                 execlp(tm_mad->executable,tm_mad->executable,tm_mad->argument,NULL);
                 
             /* exec should not return */
-            gw_log_print("TM",'E',"Could not execute MAD %s (exec/sudo).\n",tm_mad->executable);
+            gw_log_print("TM",'E',"Could not execute MAD %s (exec/sudo), exiting...\n",tm_mad->executable);
             
             exit(-1);
 
