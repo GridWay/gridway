@@ -23,10 +23,9 @@ AUTOMAKE_OPTIONS = subdir-objects no-dependencies
 AM_YFLAGS = -d
 
 # This is for portability issues, do not use := operator
-CLASSPATH = $(GLOBUS_LOCATION)/lib/addressing-1.0.jar:$(GLOBUS_LOCATION)/lib/axis.jar:$(GLOBUS_LOCATION)/lib/cog-jglobus.jar:$(GLOBUS_LOCATION)/lib/globus_delegation_service.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft_client.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft_stubs.jar:$(GLOBUS_LOCATION)/lib/gram-client.jar:$(GLOBUS_LOCATION)/lib/gram-stubs.jar:$(GLOBUS_LOCATION)/lib/gram-utils.jar:$(GLOBUS_LOCATION)/lib/jgss.jar:$(GLOBUS_LOCATION)/lib/wsrf_core.jar:$(GLOBUS_LOCATION)/lib/wsrf_core_stubs.jar:$(GLOBUS_LOCATION)/lib/wsrf_test_unit.jar:$(GLOBUS_LOCATION)/lib/xml-apis.jar:$(GLOBUS_LOCATION)/lib/xalan.jar:$(GLOBUS_LOCATION)/lib/xercesImpl.jar
+CLASSPATH = $(GLOBUS_LOCATION)/lib/addressing-1.0.jar:$(GLOBUS_LOCATION)/lib/axis.jar:$(GLOBUS_LOCATION)/lib/cog-jglobus.jar:$(GLOBUS_LOCATION)/lib/globus_delegation_service.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft_client.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft_stubs.jar:$(GLOBUS_LOCATION)/lib/gram-client.jar:$(GLOBUS_LOCATION)/lib/gram-stubs.jar:$(GLOBUS_LOCATION)/lib/gram-utils.jar:$(GLOBUS_LOCATION)/lib/jgss.jar:$(GLOBUS_LOCATION)/lib/wsrf_core.jar:$(GLOBUS_LOCATION)/lib/wsrf_core_stubs.jar:$(GLOBUS_LOCATION)/lib/wsrf_test_unit.jar:$(GLOBUS_LOCATION)/lib/xml-apis.jar:$(GLOBUS_LOCATION)/lib/xalan.jar:$(GLOBUS_LOCATION)/lib/xercesImpl.jar:$(GLOBUS_LOCATION)/lib/jaxrpc.jar:$(GLOBUS_LOCATION)/lib/commons-cli-2.0.jar:$(GLOBUS_LOCATION)/lib/cog-axis.jar:$(GLOBUS_LOCATION)/lib/saaj.jar
 
 # Get rid of libtool by default & make use of globus compiler/linker
-
 
 if GW_GLOBUS_DIRS
 LINK_PROG    = $(CCLD)
@@ -50,7 +49,7 @@ else
 GT_PKG_LIBS = $(GLOBUS_LIBS) $(GLOBUS_PKG_LIBS)
 endif
 
-# to handle else, not very smart
+# to handle else, not very smart 
 NOP =
 # -----------------------------
 # Directory definitions
@@ -137,13 +136,7 @@ CMDS_SRC = $(CMDS)/gw_acct.c \
         $(CMDS)/gw_host.c \
         $(CMDS)/gw_ps.c \
         $(CMDS)/gw_user.c
-
-CMDS_RB_SRC=$(CMDS)/gw_dagman.rb \
-            $(CMDS)/dagman/node.rb \
-            $(CMDS)/dagman/runner.rb \
-            $(CMDS)/dagman/parse.rb \
-	    $(CMDS)/dagman/gridway.rb
-
+        
 JSDL_SRC = $(CMDS)/GWJTElement.java \
         $(CMDS)/GWJT.java  \
         $(CMDS)/GWJTWriter.java  \
@@ -160,7 +153,7 @@ EM_SRC = $(EM)/gw_em_actions.c \
         $(EM)/gw_em_rsl2.c \
         $(EM)/gw_em_rsl.c \
         $(EM)/gw_em_state.c
-
+        
 TM_SRC = $(TM)/gw_tm_actions.c \
         $(TM)/gw_tm.c \
         $(TM)/gw_tm_checkpoint.c \
@@ -224,7 +217,7 @@ GWD_SRC = $(GWD)/gw_conf.c \
         $(GWD)/gwd.c \
         $(GWD)/gw_sch_conf_syntax.y \
         $(GWD)/gw_sch_conf_parser.l \
-        $(GWD)/gw_sch_conf.c
+        $(GWD)/gw_sch_conf.c        
 
 EM_MAD_PREWS_SRC = $(EM_MAD)/gw_em_mad_prews_actions.c \
         $(EM_MAD)/gw_em_mad_prews.c \
@@ -242,7 +235,11 @@ TM_MAD_DUMMY_SRC = $(TM_MAD)/gw_tm_dummy_mad.c
 
 IM_MAD_MDS4_SRC = $(IM_MAD)/Host.java \
         $(IM_MAD)/Mds4QueryParser.java \
-        $(IM_MAD)/Queue.java
+        $(IM_MAD)/Queue.java \
+        $(IM_MAD)/QueryClient.java \
+        $(IM_MAD)/GW_im_mad_mds4.java \
+        $(IM_MAD)/ServiceIM.java
+		
 
 TM_MAD_RFT_SRC = $(TM_MAD)/GWRftClient.java \
         $(TM_MAD)/GWRftProcessor.java \
@@ -307,7 +304,7 @@ INCLUDES = -I$(top_srcdir)/include \
              $(DB4_INCLUDE_PATH) \
            -I${JAVA_HOME}/include \
            -I${JAVA_HOME}/include/$(SYSTEM)
-
+           
 if GW_GLOBUS_DIRS
 SYSTEM=@system@
 else
@@ -375,10 +372,6 @@ __srcdir__gwd_gwd_SOURCES = $(EM_SRC) \
         $(UM_SRC)  \
         $(DB_SRC)
 
-bin_SCRIPTS   =
-dist_bin_SCRIPTS =
-CLEANFILES =
-
 # -----------------------------
 # Commands
 # -----------------------------
@@ -432,12 +425,15 @@ __srcdir__cmds_gwacct_SOURCES = $(CMDS)/gw_acct.c \
         $(DB_SRC) \
         $(CLIENT_ACCT_SRC) \
         $(COMMON_SRC)
-
-dist_bin_SCRIPTS += $(CMDS_RB_SRC)
-
+        
+        
 # ----------------------------
 # JSDL Support
 # ----------------------------
+
+bin_SCRIPTS   =
+dist_bin_SCRIPTS =
+CLEANFILES =
 
 if JSDL
 
@@ -473,7 +469,7 @@ __srcdir__scheduler_gw_flood_scheduler_SOURCES = \
         $(GWD)/gw_sch_conf.c \
         $(GWD)/gw_sch_conf_syntax.y \
         $(GWD)/gw_sch_conf_parser.l
-
+        
 __srcdir__scheduler_gw_flood_scheduler_LDFLAGS = -lm
 
 bin_PROGRAMS += $(srcdir)/scheduler/gw_sched
@@ -608,7 +604,7 @@ im_ws_jardir = $(prefix)/lib
 im_ws_jar_DATA = $(srcdir)/im_mad/gw_im_mad_ws.jar
 $(srcdir)/im_mad/gw_im_mad_ws.jar:
 	@rm -f lib/gw_im_mad_ws.jar
-	@mkdir -p $(IM_MAD)/package
+	@mkdir -p $(IM_MAD)/package 
 	$(JAVAC_PATH) $(IM_MAD_MDS4_SRC) \
 	    -classpath $(CLASSPATH):$(IM_MAD) \
         -d $(IM_MAD)/package
@@ -616,6 +612,7 @@ $(srcdir)/im_mad/gw_im_mad_ws.jar:
 	@rm -rf $(IM_MAD)/package
 
 dist_bin_SCRIPTS += $(IM_MAD)/gw_im_mad_mds4.sh
+dist_bin_SCRIPTS += $(IM_MAD)/gw_im_mad_mds4_thr.sh
 
 CLEANFILES += $(srcdir)/im_mad/gw_im_mad_ws.jar
 

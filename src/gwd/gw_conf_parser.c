@@ -1080,7 +1080,7 @@ YY_RULE_SETUP
                             gcp_j++;
                             if (gcp_j >= gcp_max)
                             {
-                                gw_log_print("GW",'E',"gwd.conf: Parse error in MAD at line %i\n", gcp_lineno);
+                                gw_log_print("GW",'E',"gwd.conf: Parse error in MAD at line %i (more than %i fields)\n", gcp_lineno, gcp_j);
                                 return -1;
                             }
                           }

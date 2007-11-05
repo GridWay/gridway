@@ -737,7 +737,6 @@ public abstract class JobTemplate
  	 *  in the execution host. Input files (sources) ARE RELATIVE TO THE WORKING 
  	 *  DIRECTORY or can be a GSIFTP URL. Example: input_file[0]="param."DRMAA_GW_TASK_ID" param"
  	 *  will copy the local file param.2 (for task 2) as param in the remote working directory.
-	 *  @return A String array with the drmaa_v_gw_input_files value
  	 *
 	 *  @param inputFiles The input files to set
  	 *

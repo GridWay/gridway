@@ -56,7 +56,7 @@
 
 #define GW_POLL_INTERVAL_DEFAULT        60
 
-#define GW_MAX_ACTIVE_IM_QUERIES_DEFAULT 4
+#define GW_MAX_ACTIVE_IM_QUERIES_DEFAULT 10
 
 #define GW_WRAPPER_DEFAULT "libexec/gw_wrapper.sh"
 

@@ -107,7 +107,7 @@ DM_SCHED                { gcp_var = DM_SCHED; gcp_j = 0;   BEGIN var_sch;}
                             gcp_j++;
                             if (gcp_j >= gcp_max)
                             {
-                                gw_log_print("GW",'E',"gwd.conf: Parse error in MAD at line %i\n", yylineno);
+                                gw_log_print("GW",'E',"gwd.conf: Parse error in MAD at line %i (more than %i fields)\n", yylineno, gcp_j);
                                 return -1;
                             }
                           }

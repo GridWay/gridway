@@ -40,6 +40,11 @@ public class JobTemplateImpl extends JobTemplate
 	private String 		drmaa_gw_rank;
 
 	private String 		drmaa_gw_requirements;
+	
+	private String		drmaa_gw_type = SessionImpl.DRMAA_GW_TYPE_SINGLE;
+	
+	private String 	    drmaa_gw_np;
+	
 				
 	public JobTemplateImpl() 
 	{		
@@ -65,6 +70,8 @@ public class JobTemplateImpl extends JobTemplate
 		optAttrNames.add("drmaa_gw_number_of_retries");
 		optAttrNames.add("drmaa_gw_rank");
 		optAttrNames.add("drmaa_gw_requirements");
+		optAttrNames.add("gw_type");
+		optAttrNames.add("gw_np");	
 				
 		attrNames.addAll(optAttrNames);
 	}
@@ -169,6 +176,26 @@ public class JobTemplateImpl extends JobTemplate
 			this.drmaa_gw_requirements = new String(requirements);	
 	}
 	
+	
+	public  void setType(String type)
+		throws DrmaaException
+	{
+		if (type == null)
+			throw new InvalidAttributeValueException("The type attribute is NULL");	
+		else
+			this.drmaa_gw_type = new String(type);	
+	}
+	
+	public  void setNp(String np)
+		throws DrmaaException
+	{
+		if (np == null)
+			throw new InvalidAttributeValueException("The np attribute is NULL");	
+		else
+			this.drmaa_gw_np = new String(np);	
+	}
+
+	
 	public  long getJobTemplatePointer()
 	{
 		return this.jobTemplatePointer;
@@ -220,4 +247,15 @@ public class JobTemplateImpl extends JobTemplate
 	{
 		return this.drmaa_gw_requirements;	
 	}
+	
+	public  String  getType()
+	{
+		return	this.drmaa_gw_type;	
+	}
+	
+	public  String getNp()
+		throws DrmaaException
+	{
+		return 	this.drmaa_gw_np;	
+	}	
 }

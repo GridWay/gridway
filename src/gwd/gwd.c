@@ -670,6 +670,7 @@ int gw_clear_state()
     
     char   s_vardir[PATH_MAX+1];
     char   j_vardir[PATH_MAX+1];
+    int    length;
     int    rc=0;
     
     sprintf(s_vardir,"%s/%s",gw_conf.gw_location,GW_VAR_DIR);

@@ -21,7 +21,7 @@ JAVA_HOME = @java_home@
 if GW_GLOBUS_DIRS
 GW_ETC_DIR   = etc/gridway
 GW_VAR_DIR   = var/gridway
-GW_DOC_DIR   = share/doc/gridway
+GW_DOC_DIR   = share/gridway/doc
 GW_SHARE_DIR = share/gridway
 GW_TEST_DIR  = test/gridway
 else
@@ -44,7 +44,7 @@ FLAGS=$(DB4_INCLUDE_PATH)
 
 install-exec-hook:
 	@mkdir -p @prefix@/$(GW_SHARE_DIR)
-	@cp -r LICENSE NOTICE @prefix@/$(GW_SHARE_DIR)
+	@cp -r LICENSE NOTICE @prefix@/$(GW_SHARE_DIR)	
 if DOC
 	@rm -rf @prefix@/$(GW_DOC_DIR)
 	@mkdir -p @prefix@/$(GW_DOC_DIR)
@@ -60,10 +60,10 @@ if DB2HTMLC
            doc/images \
            @prefix@/$(GW_DOC_DIR)
 endif
-if DB2PDFC
+if DB2PDFC         
 	@cp -r doc/docbook/*.pdf \
            @prefix@/$(GW_DOC_DIR)
-endif
+endif                              
 
 if DRMAA
 if DOXYGENC
@@ -71,7 +71,7 @@ if DOXYGENC
 endif
 if JAVADOCC
 	@cp -r doc/drmaa_java @prefix@/$(GW_DOC_DIR)
-endif
+endif		
 endif
 endif
 
@@ -91,14 +91,6 @@ endif
 # -- Script renaming - Commons
 # ----------------------------
 
-# -- Dagman Ruby Scripts
-	@mkdir -p @prefix@/libexec/ruby/dagman
-	@mv @prefix@/bin/gw_dagman.rb @prefix@/bin/gwdagman
-	@mv @prefix@/bin/node.rb @prefix@/libexec/ruby/dagman/node.rb
-	@mv @prefix@/bin/parse.rb @prefix@/libexec/ruby/dagman/parse.rb
-	@mv @prefix@/bin/runner.rb @prefix@/libexec/ruby/dagman/runner.rb
-	@mv @prefix@/bin/gridway.rb @prefix@/libexec/ruby/dagman/gridway.rb
-
 	@mv @prefix@/bin/gw_im_mad_static.sh @prefix@/bin/gw_im_mad_static
 if GRIDFTP
 	@mv @prefix@/bin/gw_tm_mad_ftp.sh @prefix@/bin/gw_tm_mad_ftp
@@ -111,6 +103,7 @@ endif
 if WS
 	@mv @prefix@/bin/gw_em_mad_ws.sh @prefix@/bin/gw_em_mad_ws
 	@mv @prefix@/bin/gw_im_mad_mds4.sh @prefix@/bin/gw_im_mad_mds4
+	@mv @prefix@/bin/gw_im_mad_mds4_thr.sh @prefix@/bin/gw_im_mad_mds4_thr
 endif
 
 # ----------------------------
@@ -147,26 +140,13 @@ install-data-hook:
 	   @prefix@/$(GW_ETC_DIR)/
 
 # ----------------------------
-#   Dagman Examples
-# ----------------------------
-	@ln -s A.jt @prefix@/$(GW_SHARE_DIR)/examples/dagman/B.jt
-	@ln -s A.jt @prefix@/$(GW_SHARE_DIR)/examples/dagman/C.jt
-	@ln -s A.jt @prefix@/$(GW_SHARE_DIR)/examples/dagman/D.jt
-	@ln -s A.jt @prefix@/$(GW_SHARE_DIR)/examples/dagman/E.jt
-	@ln -s A.jt @prefix@/$(GW_SHARE_DIR)/examples/dagman/F.jt
-	@ln -s A.jt @prefix@/$(GW_SHARE_DIR)/examples/dagman/G.jt
-	@ln -s A.jt @prefix@/$(GW_SHARE_DIR)/examples/dagman/H.jt
-	@ln -s A.jt @prefix@/$(GW_SHARE_DIR)/examples/dagman/I.jt
-	@ln -s A.jt @prefix@/$(GW_SHARE_DIR)/examples/dagman/J.jt
-	@ln -s A.jt @prefix@/$(GW_SHARE_DIR)/examples/dagman/K.jt
-# ----------------------------
 #    remove CVS DIRS
 # ----------------------------
 
 	@rm -rf @prefix@/$(GW_DOC_DIR)/drmaa_c/CVS \
-                @prefix@/$(GW_DOC_DIR)/images/CVS \
-                @prefix@/$(GW_ETC_DIR)/im_examples/CVS \
-                @prefix@/$(GW_TEST_DIR)/jt/CVS \
+        @prefix@/$(GW_DOC_DIR)/images/CVS \
+        @prefix@/$(GW_ETC_DIR)/im_examples/CVS \
+        @prefix@/$(GW_TEST_DIR)/jt/CVS \
 		@prefix@/$(GW_ETC_DIR)/im_examples/CVS \
 		@prefix@/$(GW_SHARE_DIR)/examples/im/CVS \
 		@prefix@/$(GW_SHARE_DIR)/examples/ls/CVS \
@@ -189,10 +169,9 @@ install-data-hook:
 		@prefix@/$(GW_SHARE_DIR)/examples/drmaaTestSuite/org/ggf/drmaa/testSuite/CVS \
 		@prefix@/$(GW_SHARE_DIR)/examples/workflow/CVS \
 		@prefix@/$(GW_SHARE_DIR)/examples/mpi/CVS \
-		@prefix@/$(GW_SHARE_DIR)/examples/dagman/CVS \
 		@prefix@/$(GW_SHARE_DIR)/examples/jsdl/CVS
-
-# ----------------------------
+		
+# ----------------------------		
 # Copy wrapper, monitor & gw_mad_common.sh
 # ----------------------------
 
@@ -201,27 +180,27 @@ install-data-hook:
 		@cp $(top_srcdir)/scripts/monitor.sh @prefix@/libexec/gw_monitor.sh
 		@mkdir -p @prefix@/bin
 		@cp $(top_srcdir)/scripts/gw_mad_common.sh @prefix@/bin
-
+        
 uninstall-hook:
-	@rm -f @prefix@/bin/gwdagman
-	@rm -f @prefix@/bin/gw_im_mad_mds2
-	@rm -f @prefix@/bin/gw_im_mad_mds4
-	@rm -f @prefix@/bin/gw_em_mad_ws
-	@rm -f @prefix@/bin/gw_im_mad_mds2_glue
-	@rm -f @prefix@/bin/gw_tm_mad_ftp
-	@rm -f @prefix@/bin/gw_tm_mad_rft
-	@rm -f @prefix@/bin/gw_em_mad_prews
-	@rm -f @prefix@/bin/gw_im_mad_static
-	@rm -f @prefix@/bin/gw_tm_mad_dummy
-	@rm -f @prefix@/bin/jsdl2gw
+	@rm @prefix@/bin/gw_im_mad_mds2
+	@rm @prefix@/bin/gw_im_mad_mds4
+	@rm @prefix@/bin/gw_em_mad_ws
+	@rm @prefix@/bin/gw_im_mad_mds2_glue
+if GRIDFTP
+	@rm @prefix@/bin/gw_tm_mad_ftp
+endif
+	@rm @prefix@/bin/gw_tm_mad_rft
+	@rm @prefix@/bin/gw_em_mad_prews
+	@rm @prefix@/bin/gw_im_mad_static
+	@rm @prefix@/bin/gw_tm_mad_dummy
+	@rm @prefix@/bin/jsdl2gw
 	@rm -rf @prefix@/$(GW_VAR_DIR)
-	@rm -rf @prefix@/lib/ruby/
 
 # *****************************************
 # Dist specifics (see also src/Makefile.am)
 # *****************************************
 
-dist-hook:
+dist-hook:	
 	@rm -rf $(distdir)/src/drmaa/org/ggf/drmaa/.dirstamp
 	@rm -rf $(distdir)/src/drmaa/org/ggf/drmaa/.libs
 	@rm -f $(distdir)/src/drmaa/org/ggf/drmaa/DrmaaJNI.lo
@@ -244,14 +223,12 @@ dist-hook:
 # ----------------------------
 
 	@rm -rf $(distdir)/doc/drmaa_c/CVS \
-	        $(distdir)/doc/images/CVS \
-	        $(distdir)/scripts/CVS \
-                $(distdir)/etc/im_examples/CVS \
-                $(distdir)/src/cmds/dagman/CVS \
-                $(distdir)/src/drmaa/org/CVS \
-                $(distdir)/src/drmaa/org/ggf/CVS \
-                $(distdir)/src/drmaa/org/ggf/drmaa/CVS \
-                $(distdir)/src/test/jt/CVS \
+	    $(distdir)/doc/images/CVS \
+        $(distdir)/etc/im_examples/CVS \
+        $(distdir)/src/drmaa/org/CVS \
+        $(distdir)/src/drmaa/org/ggf/CVS \
+        $(distdir)/src/drmaa/org/ggf/drmaa/CVS \
+        $(distdir)/src/test/jt/CVS \
 		$(distdir)/doc/CVS \
 		$(distdir)/etc/im_examples/CVS \
 		$(distdir)/etc/CVS \
@@ -275,8 +252,7 @@ dist-hook:
 		$(distdir)/examples/drmaaTestSuite/org/ggf/drmaa/CVS \
 		$(distdir)/examples/drmaaTestSuite/org/ggf/drmaa/testSuite/CVS \
 		$(distdir)/examples/workflow/CVS \
-		$(distdir)/examples/dagman/CVS \
 		$(distdir)/examples/mpi/CVS \
 		$(distdir)/examples/jsdl/CVS
-
+		
 	@cp -r LICENSE NOTICE $(distdir)

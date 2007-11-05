@@ -627,6 +627,22 @@ void    generate_job_template(JNIEnv *env, drmaa_job_template_t *jt, jobject job
                 attribute = (char *) (*env)->GetStringUTFChars(env, object, NULL);
                 rc = drmaa_set_attribute(jt, DRMAA_GW_REQUIREMENTS, attribute, error, DRMAA_ERROR_STRING_BUFFER);
         }
+                  
+        getMethod = (*env)->GetMethodID(env,classTemplate,"getType","()Ljava/lang/String;");
+        object    = (*env)->CallObjectMethod(env,jobTemplate,getMethod);
+        if (object != NULL)
+        {
+                attribute = (char *) (*env)->GetStringUTFChars(env, object, NULL);
+                rc = drmaa_set_attribute(jt, DRMAA_GW_TYPE, attribute, error, DRMAA_ERROR_STRING_BUFFER);
+        }
+        
+        getMethod = (*env)->GetMethodID(env,classTemplate,"getNp","()Ljava/lang/String;");
+        object    = (*env)->CallObjectMethod(env,jobTemplate,getMethod);
+        if (object != NULL)
+        {
+                attribute = (char *) (*env)->GetStringUTFChars(env, object, NULL);
+                rc = drmaa_set_attribute(jt, DRMAA_GW_NP, attribute, error, DRMAA_ERROR_STRING_BUFFER);
+        }
 }
 
 void    throw_exception(JNIEnv *env, int function, int rc)

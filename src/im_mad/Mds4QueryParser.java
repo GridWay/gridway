@@ -16,10 +16,8 @@
 /* -------------------------------------------------------------------------- */
 
 /**
- * Mds4QueryParser parses an XML file that contains information 
+ * Mds4QueryParser parses an XML document that contains information 
  * provided by the Globus Index Service (MDS4). 
- * <p>
- * @author      Katia Leal (ASD)
  */
 
 import java.io.*; 
@@ -52,6 +50,49 @@ class Mds4QueryParser{
     public Mds4QueryParser(){
         err = "";
         hostsNames = new Vector();
+    }
+
+    public String parseXMLString(String xmlString, String hostname)
+	{
+
+
+        if (!this.createTreeFromString(xmlString))
+        {
+            return "FAILURE " + this.getErr();
+        }
+
+        if (hostname.equals(""))
+        {
+            this.getHostsNames(this.getDoc());
+
+            if (this.getHostsNames().size() == 0)
+                return "FAILURE Error while obtaining hosts names: " + this.getErr();
+            else
+                return this.displayHostsNamesFromString();
+        }
+        else 
+        {
+            Host h = new Host("");
+
+            this.resetErr();
+            this.getHostInfo(this.getDoc(), h);
+
+            if (h.getForkName().equals("NULL"))
+			{
+                h.setForkName("Fork");
+            }
+
+            if (h.getLrmsName().equals("NULL"))
+			{
+                h.setLrmsName("Fork");
+                h.setLrmsType("fork");
+            }
+
+            h.setName(hostname);
+
+            return h.info();
+        }
+
     }
     
     /**
@@ -86,6 +127,52 @@ class Mds4QueryParser{
             return false;
         } 
         catch (IOException ioe){
+            err = ioe.getMessage();
+            return false;
+        }
+        return true ;
+    }
+
+   /**
+     * Creates a tree of elements that representing the nodes of 
+     * an XML string.
+     * @param   xmlString     name of the XML string
+     * @return           a boolean indicating that the file was properly parsed
+     */
+    public boolean createTreeFromString(String xmlString)
+	{
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = null;
+
+        try
+		{
+            db = dbf.newDocumentBuilder();
+        } 
+        catch (ParserConfigurationException pce)
+		{
+            err = pce.getMessage();
+            return false;
+        }
+        OutputStreamWriter errorWriter = new OutputStreamWriter(System.err);
+        db.setErrorHandler(new MyErrorHandler(new PrintWriter(errorWriter, true)));
+
+        try
+		{
+            doc = db.parse(new InputSource(new StringReader(xmlString)));
+        }         
+        catch (SAXParseException spe)
+		{ 
+            err = "\n** Parsing error" + ", line " + spe.getLineNumber() + ", uri " + spe.getSystemId();
+            err += "   " + spe.getMessage();
+            return false;
+        } 
+        catch (SAXException se)
+		{ 
+            err = se.getMessage();        
+            return false;
+        } 
+        catch (IOException ioe)
+		{
             err = ioe.getMessage();
             return false;
         }
@@ -185,15 +272,6 @@ class Mds4QueryParser{
         err = "";
     }
 
-    
-    /**
-     * Displays XML tree of nodes 
-     */    
-/*    public void displayTree(){
-        DOMTree tree = new DOMTree();
-        tree.processNode(doc);
-    }*/
-
     /**
      * Returns an string with the names of the hosts obtained from the XML file.
      * @return     a String formatted.
@@ -207,6 +285,21 @@ class Mds4QueryParser{
             out.append(h);
             if (it.hasNext())
                 out.append("\n");
+        }
+        return out.toString();    
+    }
+
+    /**
+     * Returns an string with the names of the hosts obtained from the XML string.
+     * @return     a String formatted.
+     */
+    private String displayHostsNamesFromString(){
+        StringBuffer out = new StringBuffer();
+        Iterator it = hostsNames.iterator();
+        
+        while (it.hasNext()){
+            String h = (String)it.next();
+            out.append(h+" ");
         }
         return out.toString();    
     }

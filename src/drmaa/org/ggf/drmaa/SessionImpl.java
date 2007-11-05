@@ -58,6 +58,14 @@ public class SessionImpl implements Session
  	 */
 	public static final String DRMAA_GW_ARCH	="${ARCH}";
 
+	/** Pre-defined string to define single (one process) jobs.
+	 */
+	public static final String DRMAA_GW_TYPE_SINGLE		="single";
+	
+	/** Pre-defined string to define MPI (Message Passing Interface) jobs.
+	*/
+	public static final String DRMAA_GW_TYPE_MPI			="mpi";
+	
 	/* -------------------------------------------------------------------------- *
  	 * Private attributes used for DRMAA implementation		              *
  	 * -------------------------------------------------------------------------- */

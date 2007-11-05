@@ -435,11 +435,23 @@ $ globus-url-copy gsiftp://localhost/tmp/hosts1 file:///tmp/hosts2</screen>
         <screen>
 $ wsrf-query -x -s https://localhost:8443/wsrf/services/DefaultIndexService</screen>
         You should see a lot of information in XML format.
+			<note>
+			  <para>	 
+				XML documents from wsrf-query should not contain any DEBUG messages. SOAP Message Logging for the client tools has to be disabled in $GLOBUS_LOCATION/log4j.properties.
+			 </para>	  
+			</note>
         </para>
         </listitem>
       </orderedlist>
       Change localhost to the name of the host your want to test.
     </para>
+	<para>
+		If a binary distribution of the Globus Toolkit is installed, you may be required to manually install <emphasis>globus_core</emphasis> (used to detect the compiler and platform settings of the computer that the Toolkit is installed on). The following command can be used to perform this operation:
+		<screen>
+			$GLOBUS_LOCATION/sbin/gpt-build -nosrc &lt;flavor&gt;
+		</screen>
+		More information about this procedure is available (<ulink url="http://www.globus.org/toolkit/docs/4.0/admin/docbook/apb.html">here</ulink>.	
+	</para>
   </sect1>
 
   <sect1>
@@ -647,11 +659,7 @@ $ wsrf-query -x -s https://localhost:8443/wsrf/services/DefaultIndexService</scr
             </row>
             <row>
               <entry>--enable-jsdl</entry>
-              <entry>Does compile jsdl support. Default is disabled.</entry>
-            </row>
-            <row>
-              <entry>--enable-globus-scheme</entry>
-              <entry>Adds gridway subdirectories to etc and var. Default is disabled.</entry>
+              <entry>Does compile jsdl support. Default is enabled. Disabled for GT builds.</entry>
             </row>
             <row>
               <entry>--disable-gridftp</entry>
@@ -682,7 +690,8 @@ $ wsrf-query -x -s https://localhost:8443/wsrf/services/DefaultIndexService</scr
 				files are relocated to <filename>var/gridway</filename>,
 				<filename>etc/gridway</filename> and <filename>test/gridway</filename> respectively.
 				This new directory scheme lets globus and GridWay share the same root directory
-				without interfering each other.
+				without interfering each other. Note that when <option>--enable-globus-scheme</option> is 
+				enabled, the support for jsdl becomes disabled by default. 
 			</para>
 	   <para>
 	   The next line will configure GridWay to include documentation and accounting
@@ -714,17 +723,16 @@ $GW_LOCATION/
     |
     +--- bin/       executables
     |
-    +--- doc/       documentation [Optional]
-    |
     +--- etc/       gwd.conf and job_template.default configuration files
-    |
-    +--- examples/  usage examples [Optional]
     |
     +--- include/   header files
     |
     +--- lib/       compiled libraries
     |
-    +--- libexec/   wrapper and monitor scripts
+    +--- libexec/   wrapper and monitor scripts. 
+    |
+    +--- share/     With subfolders: doc [Optional] for documentation and
+    |               examples [Optional] for practice examples
     |
     +--- test/      test suite [Optional]
     |
@@ -872,21 +880,21 @@ $GW_LOCATION/
     |
     +--- bin/       executables
     |
-    +--- doc/       documentation [Optional]
-    |
     +--- etc/       gwd.conf and job_template.default configuration files
-    |
-    +--- examples/  usage examples [Optional]
     |
     +--- include/   header files
     |
     +--- lib/       compiled libraries
     |
-    +--- libexec/   wrapper and monitor scripts
+    +--- libexec/   wrapper and monitor scripts. 
+    |
+    +--- share/     With subfolders: doc [Optional] for documentation and
+    |               examples [Optional] for practice examples
     |
     +--- test/      test suite [Optional]
     |
-    +--- var/       lock, port and log files</screen>
+    +--- var/       lock, port and log files
+</screen>
     </para>
     </listitem>
 
@@ -1041,7 +1049,7 @@ Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0).</scree
 $ gwps
 USER         JID DM   EM   START    END      EXEC    XFER    EXIT NAME            HOST
 $ gwhost
-HID PRIO  OS              ARCH   MHZ %CPU  MEM(F/T)     DISK(F/T)     N(U/F/T) LRMS                 HOSTNAME</screen>
+HID PRIO  OS    ARCH   MHZ %CPU  MEM(F/T)   DISK(F/T)     N(U/F/T) LRMS       HOSTNAME</screen>
     </para>
     </listitem>
 
@@ -1073,10 +1081,10 @@ HID PRIO  OS              ARCH   MHZ %CPU  MEM(F/T)     DISK(F/T)     N(U/F/T) L
   together automatically.
      <table frame='all'>
      <title>GridWay tests description.</title>
-       <tgroup cols='2' align='left' colsep='1' rowsep='1'>
+       <tgroup cols='3' align='left' colsep='1' rowsep='1'>
        <colspec colname='test1' colwidth='1cm'>
        <colspec colname='test2' colwidth='5cm'>
-       <colspec colname='test3' colwidth='30cm'>
+       <colspec colname='test3'>
        <tbody>
          <row>
          <entry>Test #</entry>
@@ -1390,9 +1398,8 @@ HID PRIO  OS              ARCH   MHZ %CPU  MEM(F/T)     DISK(F/T)     N(U/F/T) L
 
           <row>
           <entry>MAX_ACTIVE_IM_QUERIES</entry>
-          <entry>Maximum number (soft limit) of active IM queries (each query
-          spawns one process)</entry>
-          <entry>4</entry>
+          <entry>Maximum number (soft limit) of active IM queries</entry>
+          <entry>10</entry>
           </row>
 
          <row>
@@ -1429,7 +1436,7 @@ SCHEDULING_INTERVAL = 30
 DISCOVERY_INTERVAL  = 300
 MONITORING_INTERVAL = 120
 POLL_INTERVAL       = 60
-IM_MAD = mds4:gw_im_mad_mds4:-s hydrus.dacya.ucm.es::gridftp:ws
+IM_MAD = mds4:gw_im_mad_mds4_thr:-s hydrus.dacya.ucm.es::gridftp:ws
 TM_MAD = gridftp:gw_tm_mad_ftp:
 EM_MAD = ws:gw_em_mad_ws:rsl2
 DM_SCHED = flood:gw_flood_scheduler:-h 10 -u 30 -c 5</screen>
@@ -3242,8 +3249,17 @@ EM_MAD = osg_ws:gw_em_mad_ws:-p 9443:rsl2</screen>
 
   <para>
   For example, to configure GWD to access a MDS4 hierarchical information service:
-  <screen>IM_MAD = mds4:gw_im_mad_mds4:-s hydrus.dacya.ucm.es::gridftp:ws</screen>
+  <screen>IM_MAD = mds4:gw_im_mad_mds4_thr:-s hydrus.dacya.ucm.es::gridftp:ws</screen>
   </para>
+  
+  <important>
+  <para>
+  Since GridWay 5.2.3, there is a new IM MAD for MDS4
+  (<command>gw_im_mad_mds4_thr</command>) with significant performance
+  improvements. The old IM MAD for MDS4 (<command>gw_im_mad_mds4</command>) is
+  still there.
+  </para>
+  </important>
 
   <para>
   All the Information Drivers provided with GridWay use a common interface
@@ -3449,7 +3465,7 @@ draco.dacya.ucm.es</screen>
     does vary too much, i.e. resource are added or removed very often. To
     configure a Information Driver in SD mode use the server option,
     for example:
-    <screen>IM_MAD = mds4:gw_im_mad_mds4:-s hydrus.dacya.ucm.es::gridftp:ws</screen>
+    <screen>IM_MAD = mds4:gw_im_mad_mds4_thr:-s hydrus.dacya.ucm.es::gridftp:ws</screen>
     </para>
 
     <note>
@@ -3478,6 +3494,13 @@ draco.dacya.ucm.es</screen>
     You can mix SS, SD and DD modes in the same Information Driver.
     </para>
     </note>
+    <note>
+	<para>
+	Means to push monitoring information into MDS when using Dynamic Monitoring must be used in the servers, otherwise GridWay won't retrieve 
+information about the servers architecture, processor speed, available disk space and so on. We recommend Ganglia to perform this task. 
+Instructions on how to configure Globus to use Ganglia as cluster monitoring systems ca be found <ulink url="http://www.globus.org/toolkit/docs/4.0/info/key/gluerp.html">here</ulink>.
+	</para>
+    </note>
   </sect2>
 
 	<sect2 id="SEHOSTNAME">
@@ -3497,7 +3520,7 @@ draco.dacya.ucm.es</screen>
 		</para>
 
 		<screen>
-IM_MAD = mds4:gw_im_mad_mds4:-l etc/gridway/host.list:gridftp:ws</screen>
+IM_MAD = mds4:gw_im_mad_mds4_thr:-l etc/gridway/host.list:gridftp:ws</screen>
 
 		<para>
 			The file list should look like this:
