@@ -31,4 +31,6 @@ char* gw_generate_nowrapper_rsl2(gw_job_t *job);  /* For non-wrapper-based execu
 char* gw_generate_pre_wrapper_rsl(gw_job_t *job);
 char* gw_generate_pre_wrapper_rsl2(gw_job_t *job);
 
+char* gw_generate_wrapper_xrsl(gw_job_t *job);		/* Nordugrid xrsl */
+
 #endif

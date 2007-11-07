@@ -136,6 +136,22 @@ CMDS_SRC = $(CMDS)/gw_acct.c \
         $(CMDS)/gw_host.c \
         $(CMDS)/gw_ps.c \
         $(CMDS)/gw_user.c
+
+CMDS_RB_SRC=$(CMDS)/gw_dagman.rb \
+            $(CMDS)/dagman/node.rb \
+            $(CMDS)/dagman/runner.rb \
+            $(CMDS)/dagman/parse.rb \
+	    $(CMDS)/dagman/gridway.rb
+ 
+# NORDUGRID MADS
+ 
+NORDUGRID_MAD_SRC=\
+	$(EM_MAD)/gw_em_mad_nordugrid.sh \
+	$(EM_MAD)/gw_em_mad_nordugrid.py \
+	$(EM_MAD)/em_nordugrid.py \
+	$(TM_MAD)/gw_tm_mad_nordugrid.sh \
+	$(TM_MAD)/gw_tm_mad_nordugrid.py \
+	$(TM_MAD)/tm_nordugrid.py
         
 JSDL_SRC = $(CMDS)/GWJTElement.java \
         $(CMDS)/GWJT.java  \
@@ -371,6 +387,10 @@ __srcdir__gwd_gwd_SOURCES = $(EM_SRC) \
         $(GWD_SRC) \
         $(UM_SRC)  \
         $(DB_SRC)
+  
+bin_SCRIPTS   =
+dist_bin_SCRIPTS =
+CLEANFILES =
 
 # -----------------------------
 # Commands
@@ -426,14 +446,11 @@ __srcdir__cmds_gwacct_SOURCES = $(CMDS)/gw_acct.c \
         $(CLIENT_ACCT_SRC) \
         $(COMMON_SRC)
         
-        
+dist_bin_SCRIPTS += $(CMDS_RB_SRC) 
+
 # ----------------------------
 # JSDL Support
 # ----------------------------
-
-bin_SCRIPTS   =
-dist_bin_SCRIPTS =
-CLEANFILES =
 
 if JSDL
 
@@ -633,6 +650,14 @@ dist_bin_SCRIPTS += $(EM_MAD)/gw_em_mad_ws.sh
 
 CLEANFILES += $(srcdir)/em_mad/gw_em_mad_ws.jar
 
+endif
+
+# --------------------------------
+# NORDUGRID Middleware Access Drivers
+# --------------------------------
+
+if NORDUGRID
+dist_bin_SCRIPTS += $(NORDUGRID_MAD_SRC)
 endif
 
 # ----------------------------

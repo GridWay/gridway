@@ -91,6 +91,14 @@ endif
 # -- Script renaming - Commons
 # ----------------------------
 
+# -- Dagman Ruby Scripts
+	@mkdir -p @prefix@/libexec/ruby/dagman
+	@mv @prefix@/bin/gw_dagman.rb @prefix@/bin/gwdagman
+	@mv @prefix@/bin/node.rb @prefix@/libexec/ruby/dagman/node.rb
+	@mv @prefix@/bin/parse.rb @prefix@/libexec/ruby/dagman/parse.rb
+	@mv @prefix@/bin/runner.rb @prefix@/libexec/ruby/dagman/runner.rb
+	@mv @prefix@/bin/gridway.rb @prefix@/libexec/ruby/dagman/gridway.rb
+
 	@mv @prefix@/bin/gw_im_mad_static.sh @prefix@/bin/gw_im_mad_static
 if GRIDFTP
 	@mv @prefix@/bin/gw_tm_mad_ftp.sh @prefix@/bin/gw_tm_mad_ftp
@@ -118,6 +126,20 @@ if PREWS
 endif
 
 # ----------------------------
+# -- Script renaming - NORDUGRID
+# ----------------------------
+
+if NORDUGRID
+	@mv @prefix@/bin/gw_em_mad_nordugrid.sh @prefix@/bin/gw_em_mad_nordugrid
+	@mv @prefix@/bin/gw_tm_mad_nordugrid.sh @prefix@/bin/gw_tm_mad_nordugrid
+	@mkdir -p @prefix@/libexec/python
+	@mv @prefix@/bin/gw_em_mad_nordugrid.py @prefix@/libexec/python/gw_em_mad_nordugrid.py
+	@mv @prefix@/bin/gw_tm_mad_nordugrid.py @prefix@/libexec/python/gw_tm_mad_nordugrid.py
+	@mv @prefix@/bin/em_nordugrid.py @prefix@/libexec/python/em_nordugrid.py
+	@mv @prefix@/bin/tm_nordugrid.py @prefix@/libexec/python/tm_nordugrid.py
+endif
+
+# ----------------------------
 # -- Script renaming - JSDL
 # ----------------------------
 
@@ -139,6 +161,19 @@ install-data-hook:
 	   $(top_srcdir)/etc/gwrc \
 	   @prefix@/$(GW_ETC_DIR)/
 
+# ----------------------------
+#   Dagman Examples
+# ----------------------------
+	@ln -s A.jt @prefix@/$(GW_SHARE_DIR)/examples/dagman/B.jt
+	@ln -s A.jt @prefix@/$(GW_SHARE_DIR)/examples/dagman/C.jt
+	@ln -s A.jt @prefix@/$(GW_SHARE_DIR)/examples/dagman/D.jt
+	@ln -s A.jt @prefix@/$(GW_SHARE_DIR)/examples/dagman/E.jt
+	@ln -s A.jt @prefix@/$(GW_SHARE_DIR)/examples/dagman/F.jt
+	@ln -s A.jt @prefix@/$(GW_SHARE_DIR)/examples/dagman/G.jt
+	@ln -s A.jt @prefix@/$(GW_SHARE_DIR)/examples/dagman/H.jt
+	@ln -s A.jt @prefix@/$(GW_SHARE_DIR)/examples/dagman/I.jt
+	@ln -s A.jt @prefix@/$(GW_SHARE_DIR)/examples/dagman/J.jt
+	@ln -s A.jt @prefix@/$(GW_SHARE_DIR)/examples/dagman/K.jt
 # ----------------------------
 #    remove CVS DIRS
 # ----------------------------
@@ -169,6 +204,7 @@ install-data-hook:
 		@prefix@/$(GW_SHARE_DIR)/examples/drmaaTestSuite/org/ggf/drmaa/testSuite/CVS \
 		@prefix@/$(GW_SHARE_DIR)/examples/workflow/CVS \
 		@prefix@/$(GW_SHARE_DIR)/examples/mpi/CVS \
+		@prefix@/$(GW_SHARE_DIR)/examples/dagman/CVS \
 		@prefix@/$(GW_SHARE_DIR)/examples/jsdl/CVS
 		
 # ----------------------------		
@@ -180,8 +216,11 @@ install-data-hook:
 		@cp $(top_srcdir)/scripts/monitor.sh @prefix@/libexec/gw_monitor.sh
 		@mkdir -p @prefix@/bin
 		@cp $(top_srcdir)/scripts/gw_mad_common.sh @prefix@/bin
-        
+
+# TODO: Uninstall nordugrid files
+
 uninstall-hook:
+	@rm -f @prefix@/bin/gwdagman
 	@rm @prefix@/bin/gw_im_mad_mds2
 	@rm @prefix@/bin/gw_im_mad_mds4
 	@rm @prefix@/bin/gw_em_mad_ws
@@ -194,6 +233,7 @@ endif
 	@rm @prefix@/bin/gw_im_mad_static
 	@rm @prefix@/bin/gw_tm_mad_dummy
 	@rm @prefix@/bin/jsdl2gw
+	@rm -rf @prefix@/lib/ruby/
 	@rm -rf @prefix@/$(GW_VAR_DIR)
 
 # *****************************************
@@ -224,7 +264,9 @@ dist-hook:
 
 	@rm -rf $(distdir)/doc/drmaa_c/CVS \
 	    $(distdir)/doc/images/CVS \
+		$(distdir)/scripts/CVS \
         $(distdir)/etc/im_examples/CVS \
+		$(distdir)/src/cmds/dagman/CVS \
         $(distdir)/src/drmaa/org/CVS \
         $(distdir)/src/drmaa/org/ggf/CVS \
         $(distdir)/src/drmaa/org/ggf/drmaa/CVS \
@@ -249,6 +291,7 @@ dist-hook:
 		$(distdir)/examples/drmaaTestSuite/CVS \
 		$(distdir)/examples/drmaaTestSuite/org/CVS \
 		$(distdir)/examples/drmaaTestSuite/org/ggf/CVS \
+		$(distdir)/examples/dagman/CVS \
 		$(distdir)/examples/drmaaTestSuite/org/ggf/drmaa/CVS \
 		$(distdir)/examples/drmaaTestSuite/org/ggf/drmaa/testSuite/CVS \
 		$(distdir)/examples/workflow/CVS \

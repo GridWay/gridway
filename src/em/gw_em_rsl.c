@@ -299,3 +299,112 @@ char* gw_generate_pre_wrapper_rsl (gw_job_t *job)
     rsl = strdup(rsl_buffer);
     return rsl;
 }
+
+/*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+
+/* Nordugrid xrsl */
+char* gw_generate_wrapper_xrsl (gw_job_t *job)
+{
+    char *rsl;
+    char *job_environment; 
+    char rsl_buffer[GW_RSL_LENGTH];
+	char transfers[GW_RSL_LENGTH];
+	char transfer_line[1024];
+    int print_queue = 0;
+    int rc;
+	int c;
+    
+    /* ---------------------------------------------------------------------- */
+    /* 1.- Create dynamic job data environment                                */
+    /* ---------------------------------------------------------------------- */
+  
+    job_environment = gw_job_rsl_environment(job);
+    
+    if ( job_environment == NULL )
+        return NULL;
+    
+    /* ---------------------------------------------------------------------- */
+    /* 2.- Build RSL String & Return it                                       */
+    /* ---------------------------------------------------------------------- */
+
+    if ( job->history->queue != NULL )
+        if ( strcmp(job->history->queue,"-") != 0 )
+            print_queue = 1;
+
+    if ( print_queue )
+    {
+        rc = snprintf(rsl_buffer, sizeof(char) * GW_RSL_LENGTH,
+				"&(executable=\"%s\")"
+				"(arguments=%s)"
+				"(stdout=\"stdout.execution\")"
+				"(stderr=\"stderr.execution\")"
+				"(queue=\"%s\")"
+				"(environment=%s)",
+				job->template.executable,
+				job->template.arguments,
+				job->history->queue,
+				job_environment);
+    }
+    else
+    {
+        rc = snprintf(rsl_buffer, sizeof(char) * GW_RSL_LENGTH,
+                "&(executable=\".gw_%s_%i/.wrapper\")"
+                "(stdout=\".gw_%s_%i/stdout.wrapper\")"
+                "(stderr=\".gw_%s_%i/stderr.wrapper\")"
+                "(environment=%s)",
+                job->owner, job->id,
+                job->owner, job->id,
+                job->owner, job->id,
+                job_environment);
+    }
+    
+	/* Build transfer rsl part */
+	
+	/* Input files */
+	if(job->template.num_input_files)
+	{
+		strcpy(transfers, "(inputFiles=");
+		/*
+		sprintf(transfer_line, "(\"%s\" \"%s\")", job->template.stdin_file,
+				job->template.stdin_file);
+		strcat(transfers, transfer_line);
+		*/
+	
+		for(c=0;c<job->template.num_input_files;c++)
+		{
+			sprintf(transfer_line, "(\"%s\" \"%s\")",
+					job->template.input_files[c][GW_LOCAL_FILE],
+					job->template.input_files[c][GW_REMOTE_FILE]);
+			strcat(transfers, transfer_line);
+		}
+		strcat(transfers, ")");
+	
+		strcat(rsl_buffer, transfers);
+	}
+	
+	/* Output files */
+	if(job->template.num_output_files)
+	{
+		strcpy(transfers, "(outputFiles=");
+		for(c=0;c<job->template.num_output_files;c++)
+		{
+			sprintf(transfer_line, "(\"%s\" \"%s\")",
+					job->template.output_files[c][GW_LOCAL_FILE],
+					job->template.output_files[c][GW_REMOTE_FILE]);
+			strcat(transfers, transfer_line);
+		}
+		strcat(transfers, ")");	
+		strcat(rsl_buffer, transfers);
+	}
+
+    free(job_environment);        
+
+    if ((rc >= (GW_RSL_LENGTH * sizeof(char))) || ( rc < 0 ) )          
+        return NULL;
+    
+    rsl = strdup(rsl_buffer);
+    return rsl;
+}
+

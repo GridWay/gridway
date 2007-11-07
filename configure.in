@@ -159,6 +159,7 @@ if test "x$GW_DIR_SCHEME" = "xglobus"; then
 	prews=""	
 	ws="ws"	
 	gridftp="gridftp"
+	nordugrid=""
 	docs="no"
 	tests="no"		
 
@@ -169,6 +170,7 @@ else
 	prews=""
 	ws="ws"	
 	gridftp="gridftp"
+	nordugrid=""
 	docs="no"
 	tests="no"
 		
@@ -193,6 +195,12 @@ AC_ARG_ENABLE(prews,  AC_HELP_STRING([--enable-prews],\
 AC_ARG_ENABLE(ws,  AC_HELP_STRING([--disable-ws],\
   [Don't build web-services support. Default is enabled.]),\
   [if test $enableval = "yes"; then ws="ws"; else ws=" "; fi], [])
+
+  # --- Enable NORDUGRID Drivers ---
+
+  AC_ARG_ENABLE(nordugrid,  AC_HELP_STRING([--enable-nordugrid],\
+    [Build nordugrid support. Default is disabled.]),\
+    [if test $enableval = "yes"; then nordugrid="nordugrid"; else nordugrid=" "; fi], [])
 
 # --- Enable GRIDFTP MAD ---
         
@@ -249,6 +257,10 @@ AM_CONDITIONAL(PREWS, test "x$prews" = "xprews")
 # --- Enable WS Drivers ---
 
 AM_CONDITIONAL(WS, test "x$ws" = "xws")
+
+# --- Enable Nordugrid Drivers ---
+
+AM_CONDITIONAL(NORDUGRID, test "x$nordugrid" = "xnordugrid")
 
 # --- Enable JSDL  ---
 

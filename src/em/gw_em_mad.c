@@ -87,6 +87,11 @@ int gw_em_mad_init(gw_em_mad_t * em_mad,
             em_mad->wrapper_rsl     = gw_generate_nowrapper_rsl2;
             em_mad->pre_wrapper_rsl = gw_generate_pre_wrapper_rsl2;                                
         }
+	else if (strcmp(mode, "xrsl") == 0)
+        {
+            em_mad->wrapper_rsl     = gw_generate_wrapper_xrsl;
+            em_mad->pre_wrapper_rsl = gw_generate_wrapper_xrsl;
+        }
     }
     
     if (em_mad->wrapper_rsl == NULL )
