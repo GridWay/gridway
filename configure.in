@@ -155,7 +155,8 @@ AC_SUBST(java_home, $JAVA_HOME)
 
 if test "x$GW_DIR_SCHEME" = "xglobus"; then
 #Default options for Globus builds
-	drmaa="drmaa"	
+	drmaa="drmaa"
+	drmaa_ruby=""
 	prews=""	
 	ws="ws"	
 	gridftp="gridftp"
@@ -167,6 +168,7 @@ if test "x$GW_DIR_SCHEME" = "xglobus"; then
 	db=""
 else
 	drmaa="drmaa"	
+	drmaa_ruby=""
 	prews=""
 	ws="ws"	
 	gridftp="gridftp"
@@ -183,6 +185,12 @@ fi
 AC_ARG_ENABLE(drmaa,  AC_HELP_STRING([--disable-drmaa],\
   [Don't build drmaa support. Default is enabled.]),\
   [if test $enableval = "yes"; then drmaa="drmaa"; else drmaa=" "; fi], [])
+
+# --- Enable DRMAA RUBY library ---
+
+AC_ARG_ENABLE(drmaa_ruby,  AC_HELP_STRING([--enable-drmaa-ruby],\
+  [Build ruby drmaa support. Default is disabled.]),\
+  [if test $enableval = "yes"; then drmaa_ruby="drmaa_ruby"; else drmaa_ruby=" "; fi], [])
 
 # --- Enable preWS Drivers ---
 
@@ -249,6 +257,13 @@ AC_ARG_WITH(tests,  AC_HELP_STRING([--with-tests],\
 # --- Enable DRMAA library ---
 
 AM_CONDITIONAL(DRMAA, test "x$drmaa" = "xdrmaa")
+AM_CONDITIONAL(DRMAA_RUBY, test "x$drmaa_ruby" = "xdrmaa_ruby")
+
+if test "x$drmaa_ruby" = "xdrmaa_ruby"; then
+    (GW_SRC=$PWD;cd src/drmaa/ruby;
+    ruby extconf.rb -g $GW_SRC -r $prefix/lib/ruby;
+    echo -e "\n\ndistdir:\n" >> Makefile)
+fi
 
 # --- Enable preWS Drivers ---
 

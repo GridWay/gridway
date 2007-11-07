@@ -89,8 +89,9 @@ build_files.each{|f|
 }
 
 # Configure directories and library
-dir_config('DRMAA', gw_location+'/include', gw_location+'/lib')
-have_library('drmaa')
+dir_config('DRMAA', gw_location+'/include', gw_location+'/src/drmaa/.libs')
+#have_library('drmaa')
+$libs+=" -ldrmaa "
 
 # Generate Makefile
 create_makefile('DRMAA')

@@ -40,6 +40,10 @@ SUBDIRS += doc
 endif
 endif
 
+if DRMAA_RUBY
+SUBDIRS += src/drmaa/ruby
+endif
+
 FLAGS=$(DB4_INCLUDE_PATH)
 
 install-exec-hook:
@@ -191,6 +195,9 @@ install-data-hook:
 		@prefix@/$(GW_SHARE_DIR)/examples/drmaa/CVS \
 		@prefix@/$(GW_SHARE_DIR)/examples/drmaa/drmaa_java/CVS \
 		@prefix@/$(GW_SHARE_DIR)/examples/drmaa/drmaa_c/CVS \
+                @prefix@/$(GW_SHARE_DIR)/examples/drmaa/drmaa_ruby/CVS \
+                @prefix@/$(GW_SHARE_DIR)/examples/drmaa/drmaa_python/CVS \
+                @prefix@/$(GW_SHARE_DIR)/examples/drmaa/drmaa_perl/CVS \
 		@prefix@/$(GW_SHARE_DIR)/examples/drmaa/TestSuite/CVS \
 		@prefix@/$(GW_SHARE_DIR)/examples/drmaa/TestSuite/org/CVS \
 		@prefix@/$(GW_SHARE_DIR)/examples/drmaa/TestSuite/org/ggf/CVS \
@@ -255,6 +262,10 @@ dist-hook:
 	@cp -r etc $(distdir)
 	@cp -r src/test/jt $(distdir)/src/test
 	@cp -r src/test/TEST.pl $(distdir)/src/test
+	@mkdir -p $(distdir)/src/drmaa/ruby
+	@cp src/drmaa/ruby/extconf.rb $(distdir)/src/drmaa/ruby
+	@cp src/drmaa/ruby/drmaa_r.i $(distdir)/src/drmaa/ruby
+	@cp src/drmaa/ruby/drmaa_r_wrap.c $(distdir)/src/drmaa/ruby
 	@cp -r scripts $(distdir)
 	@cp pkg_data_src.gpt  $(distdir)/pkg_data_src.gpt
 
@@ -282,6 +293,9 @@ dist-hook:
 		$(distdir)/examples/drmaa/CVS \
 		$(distdir)/examples/drmaa/drmaa_java/CVS \
 		$(distdir)/examples/drmaa/drmaa_c/CVS \
+		$(distdir)/examples/drmaa/drmaa_ruby/CVS \
+		$(distdir)/examples/drmaa/drmaa_python/CVS \
+		$(distdir)/examples/drmaa/drmaa_perl/CVS \
 		$(distdir)/examples/drmaa/TestSuite/CVS \
 		$(distdir)/examples/drmaa/TestSuite/org/CVS \
 		$(distdir)/examples/drmaa/TestSuite/org/ggf/CVS \
