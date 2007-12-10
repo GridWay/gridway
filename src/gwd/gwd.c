@@ -56,7 +56,7 @@
 /* ------------------------------------------------------------------------- */
 
 const char * usage =
-"\n gwd [-h] [-v] [-m]\n\n"
+"\n gwd [-h] [-v] [-m] [-c]\n\n"
 "SYNOPSIS\n"
 "  Prints information about all the hosts in the GridWay system (default)\n\n"
 "OPTIONS\n"
