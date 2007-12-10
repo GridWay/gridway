@@ -212,7 +212,11 @@ install-data-hook:
 		@prefix@/$(GW_SHARE_DIR)/examples/workflow/CVS \
 		@prefix@/$(GW_SHARE_DIR)/examples/mpi/CVS \
 		@prefix@/$(GW_SHARE_DIR)/examples/dagman/CVS \
-		@prefix@/$(GW_SHARE_DIR)/examples/jsdl/CVS
+		@prefix@/$(GW_SHARE_DIR)/examples/jsdl/CVS \
+		@prefix@/$(GW_SHARE_DIR)/examples/ssh/CVS \
+		@prefix@/$(GW_SHARE_DIR)/examples/ssh/bin/CVS \
+		@prefix@/$(GW_SHARE_DIR)/examples/ssh/libexec/CVS \
+		@prefix@/$(GW_SHARE_DIR)/examples/ssh/libexec/ruby/CVS
 		
 # ----------------------------		
 # Copy wrapper, monitor & gw_mad_common.sh
@@ -310,6 +314,9 @@ dist-hook:
 		$(distdir)/examples/drmaaTestSuite/org/ggf/drmaa/testSuite/CVS \
 		$(distdir)/examples/workflow/CVS \
 		$(distdir)/examples/mpi/CVS \
-		$(distdir)/examples/jsdl/CVS
+		$(distdir)/examples/jsdl/CVS \
+		$(distdir)/examples/ssh/CVS \
+		$(distdir)/examples/ssh/libexec/CVS \
+		$(distdir)/examples/ssh/libexec/ruby/CVS
 		
 	@cp -r LICENSE NOTICE $(distdir)
