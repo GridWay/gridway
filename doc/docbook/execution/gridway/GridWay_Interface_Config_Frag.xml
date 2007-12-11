@@ -1,0 +1,2238 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd"
+[
+
+<!ENTITY % myents SYSTEM "../../entities">
+
+%myents;
+
+]>
+<section>
+    <section><title>Core Configuration Guide</title>
+        
+        <para>
+            GridWay requires that the environment variables GLOBUS_LOCATION and GW_LOCATION are set. 
+            These are set to the base of your Globus installation and GridWay installation. In GT &version;, GridWay is installed in the same place as Globus, 
+            so you can set both of these environment variables to the same location.
+        </para>
+        
+        <important>
+            <para>
+                Note that the GridWay daemon SHOULD NOT be run as root. Only part of the 
+                installation will require privileged access.
+            </para>
+        </important>
+        
+        <para>
+            Login as root account and follow the next steps:
+        </para>
+        
+        <orderedlist>
+            <listitem>
+                <para>
+                    All of the GridWay users must be members of the same UNIX group, <filename>&lt;gwgroup></filename>. 
+                    We recommend creating a new group (called <filename>gwusers</filename>, for example), and make sure that 
+                    all GridWay user accounts are members of this new group.
+                </para>
+            </listitem>
+            
+            <listitem>
+                <para>
+                    The GridWay administrator account, <filename>&lt;adminuser></filename>, can be an existing administrative login 
+                    or a new login. We recommend using the Globus account for the GridWay administration user. This account will own 
+                    all of the files in the GridWay installation plus all of the daemons in the GridWay execution and it can be used to 
+                    configure GridWay once it is installed. Primary group of <filename>&lt;adminuser></filename> should be 
+                    <filename>&lt;gwgroup></filename>. 
+                </para>
+                
+                <para>DO NOT use root account for the  GridWay administrator account.</para>
+            </listitem>
+            
+            <listitem>
+                <para>
+                    The <filename>sudoers</filename> file of the <command>sudo</command> command	should include the following:
+                </para>
+                <screen>
+                    ...
+                    # User alias specification
+                    ...
+                    Runas_Alias     GW_USERS = %&lt;gwgroup>
+                    ...
+                    # GridWay entries
+                    globus ALL=(GW_USERS)     NOPASSWD: /home/gwadmin/gw/bin/gw_em_mad_prews *
+                    globus ALL=(GW_USERS)     NOPASSWD: /home/gwadmin/gw/bin/gw_em_mad_ws *
+                    globus ALL=(GW_USERS)     NOPASSWD: /home/gwadmin/gw/bin/gw_tm_mad_ftp *</screen>
+                
+                <para>
+                    Usually <command>sudo</command> clears all environment variables for security reasons. 
+                    However MADs need the <command>GW_LOCATION</command> and <command>GLOBUS_LOCATION</command> 
+                    variables to be set. To preserve those variables in the MAD environment, add the following line to your 
+                    <filename>sudoers</filename> file:
+                </para>
+                
+                <screen>Defaults>GW_USERS env_keep="GW_LOCATION GLOBUS_LOCATION"</screen>
+                
+                <para>
+                    Please refer to the <command>sudo</command> manual page for more
+                    information.
+                </para>
+                
+                <para>
+                    To test the <command>sudo</command> command configuration try to execute a
+                    MAD as a user in the <filename>&lt;gwgroup></filename> group, for example:
+                    <screen>$ sudo -u &lt;gw_user> /home/gwadmin/gw/bin/gw_em_mad_prews</screen>
+                </para>
+            </listitem>
+        </orderedlist>
+        
+        <section>
+            <title>Configuration Interface</title>
+            
+            <para>
+                The configuration files for GridWay are read from the following locations:
+            </para>
+            
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>
+                            <filename>$GW_LOCATION/etc/gridway/gwd.conf</filename>: Configuration options
+                            for the GridWay daemon (GWD).
+                        </para>
+                    </listitem>
+                    
+                    <listitem>
+                        <para>
+                            <filename>$GW_LOCATION/etc/gridway/sched.conf</filename>: Configuration options
+                            for the GridWay built-in scheduling policies (see <olink targetptr='SchedDrivConf'/>
+                            for more information).
+                        </para>
+                    </listitem>
+                    
+                    <listitem>
+                        <para>
+                            <filename>$GW_LOCATION/etc/gridway/job_template.default</filename>: Default values
+                            for job's templates (i.e. job definition files).
+                        </para>
+                    </listitem>
+                    
+                    <listitem>
+                        <para>
+                            <filename>$GW_LOCATION/etc/gridway/gwrc</filename>: Default environment variables for MADs.
+                        </para>
+                    </listitem>
+                    
+                </itemizedlist>
+            </para>
+            
+            <para>
+                Options are defined one per line, with the following format:
+                <screen>&lt;option> = [value]</screen>
+            </para>
+            
+            <para>
+                If the value is missing the option will fall back to its default. Blank
+                lines and any character after a '#'  are ignored. Note: Job template options
+                can use job or host variables to define their value, these variables are
+                substituted at run time with their corresponding values
+                (see the <ulink url="http://www.gridway.org/documentation/stable/userguide/">GridWay user guide</ulink>).
+            </para>
+        </section>
+        <section id='GWDconf'>
+            <title>GridWay Daemon (GWD) Configuration</title>
+            
+            <para>
+                The GridWay daemon (GWD) configuration options are defined in
+                <filename>$GW_LOCATION/etc/gridway/gwd.conf</filename>. The table below summarizes
+                the configuration file options, their description and default values.
+                Note that blank lines and any character after a '#' are ignored.
+            </para>
+            
+            <table frame='all'>
+                <title>GWD Configuration File Options.</title>
+                <tgroup cols='3' align='left' colsep='1' rowsep='1'>
+                    <colspec colname='c1'/>
+                    <colspec colname='c2'/>
+                    <colspec colname='c3' colwidth='2cm'/>
+                    <thead>
+                        <row>
+                            <entry>Option</entry>
+                            <entry>Description</entry>
+                            <entry>Default</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry namest="c1" nameend="c3">Connection Options</entry>
+                        </row>
+                        
+                        <row>
+                            <entry>GWD_PORT</entry>
+                            <entry>TCP/IP Port where GWD will listen for client requests. If this
+                                port is in use, GWD will try to bind to the next port until it finds a
+                                free one. The TCP/IP port used by GWD can be found in
+                                <filename>$GW_LOCATION/var/gridway/gwd.port</filename>
+                            </entry>
+                            <entry>6725</entry>
+                        </row>
+                        
+                        <row>
+                            <entry>MAX_NUMBER_OF_CLIENTS</entry>
+                            <entry>Maximum number of simultaneous client connections. Note that
+                                only blocking client requests keeps its connection open.</entry>
+                            <entry>20</entry>
+                        </row>
+                        
+                        <row>
+                            <entry namest="c1" nameend="c3">Pool Options</entry>
+                        </row>
+                        
+                        <row>
+                            <entry>NUMBER_OF_JOBS</entry>
+                            <entry>The maximum number of jobs that will be handled by the
+                                GridWay system</entry>
+                            <entry>200</entry>
+                        </row>
+                        
+                        <row>
+                            <entry>NUMBER_OF_ARRAYS</entry>
+                            <entry>The maximum number of array-jobs that will be handled by the
+                                GridWay system</entry>
+                            <entry>20</entry>
+                        </row>
+                        
+                        <row>
+                            <entry>NUMBER_OF_HOSTS</entry>
+                            <entry>The maximum number of hosts that will be handled by the
+                                GridWay system</entry>
+                            <entry>100</entry>
+                        </row>
+                        
+                        <row>
+                            <entry>NUMBER_OF_USERS</entry>
+                            <entry>The maximum number of different users in the GridWay
+                                system</entry>
+                            <entry>30</entry>
+                        </row>
+                        
+                        <row>
+                            <entry namest="c1" nameend="c3">Intervals</entry>
+                        </row>
+                        
+                        <row>
+                            <entry>SCHEDULING_INTERVAL</entry>
+                            <entry>Period (in seconds) between two scheduling actions</entry>
+                            <entry>30</entry>
+                        </row>
+                        
+                        <row>
+                            <entry>DISCOVERY_INTERVAL</entry>
+                            <entry>How often (in seconds) the information manager searches the Grid for
+                                new hosts</entry>
+                            <entry>300</entry>
+                        </row>
+                        
+                        <row>
+                            <entry>MONITORING_INTERVAL</entry>
+                            <entry>How often (in seconds) the information manager updates the
+                                information of each host</entry>
+                            <entry>120</entry>
+                        </row>
+                        
+                        <row>
+                            <entry>POLL_INTERVAL</entry>
+                            <entry>How often (in seconds) the underlying grid middleware is queried
+                                about the state of a job.</entry>
+                            <entry>60</entry>
+                        </row>
+                        
+                        <row>
+                            <entry namest="c1" nameend="c3">Middleware Access Driver (MAD) Options</entry>
+                        </row>
+                        
+                        <row>
+                            <entry>IM_MAD</entry>
+                            <entry>Information Manager MADs, see <olink targetptr='InfDrivConf'/></entry>
+                            <entry>-</entry>
+                        </row>
+                        
+                        <row>
+                            <entry>TM_MAD</entry>
+                            <entry>Transfer Manager MADs, see <olink targetptr='TransfDrivConf'/></entry>
+                            <entry>-</entry>
+                        </row>
+                        
+                        <row>
+                            <entry>EM_MAD</entry>
+                            <entry>Execution Manager MADs, see <olink targetptr='ExecDrivConf'/></entry>
+                            <entry>-</entry>
+                        </row>
+                        
+                        <row>
+                            <entry>MAX_ACTIVE_IM_QUERIES</entry>
+                            <entry>Maximum number (soft limit) of active IM queries (each query
+                                spawns one process)</entry>
+                            <entry>4</entry>
+                        </row>
+                        
+                        <row>
+                            <entry namest="c1" nameend="c3">Scheduler Options</entry>
+                        </row>
+                        
+                        <row>
+                            <entry>DM_SCHED</entry>
+                            <entry>Scheduling module, see <olink targetptr='SchedDrivConf'/></entry>
+                            <entry>-</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            
+            <para>
+                Here is an example of a GWD configuration file:
+            </para>
+            
+            <screen>
+                #--------------------------------
+                # Example: GWD Configuration File
+                #--------------------------------
+                GWD_PORT              = 6725
+                MAX_NUMBER_OF_CLIENTS = 20
+                NUMBER_OF_ARRAYS = 20
+                NUMBER_OF_JOBS   = 200
+                NUMBER_OF_HOSTS  = 100
+                NUMBER_OF_USERS  = 30
+                JOBS_PER_SCHED = 10
+                JOBS_PER_HOST  = 10
+                JOBS_PER_USER  = 30
+                SCHEDULING_INTERVAL = 30
+                DISCOVERY_INTERVAL  = 300
+                MONITORING_INTERVAL = 120
+                POLL_INTERVAL       = 60
+                IM_MAD = mds4:gw_im_mad_mds4:-s hydrus.dacya.ucm.es::gridftp:ws
+                TM_MAD = gridftp:gw_tm_mad_ftp:
+                EM_MAD = ws:gw_em_mad_ws:rsl2
+                DM_SCHED = flood:gw_flood_scheduler:-h 10 -u 30 -c 5</screen>
+        </section>
+        
+        <section>
+            <title>Job Template Default Values</title>
+            
+            <para>
+                Default values for <emphasis>every</emphasis> job template option can be set
+                in <filename>$GW_LOCATION/etc/gridway/job_template.default</filename>. You can use
+                this file to set the value of advanced job configuration options and use them
+                for all your jobs. Note that the values set in a  job template file
+                override those defined in <filename>job_template.default</filename>. See the
+                <ulink url="http://www.gridway.org/documentation/stable/userguide/">GridWay user guide</ulink> for a detailed description of each job option.
+            </para>
+        </section>
+
+      <section id='RunningGWD'>
+            <title>Running gwd</title>
+
+            <para>
+                GridWay reporting and accounting facilities provide information about overall
+                performance and help troubleshoot configuration problems. GWD generates the
+                following logs under the <filename>$GW_LOCATION/var</filename> directory:
+            </para>
+
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>
+                            <filename>$GW_LOCATION/var/gwd.log</filename>: System level log. You can
+                            find log information of the activity of the middleware access drivers;
+                            and a coarse-grain log information about jobs.
+                        </para>
+                    </listitem>
+
+                    <listitem>
+                        <para>
+                            <filename>$GW_LOCATION/var/sched.log</filename>: Scheduler log. You can
+                            find log information to fit the scheduler policies to your organization
+                            needs.
+                        </para>
+                    </listitem>
+
+                    <listitem>
+                        <para>
+                            <filename>$GW_LOCATION/var/$JOB_ID/job.log</filename>: Detailed log
+                            information for each job, it includes details of job resource
+                            usage and performance.
+                        </para>
+                    </listitem>
+
+                    <listitem>
+                        <para>
+                            <filename>$GW_LOCATION/var/acct</filename>: Accounting information. Use
+                            the <command>gwacct</command> command to access the data bases. Note that
+                            you need Berkeley DB library (version 4.4.20).
+                        </para>
+                    </listitem>
+
+                    <listitem>
+                        <para>
+                            <filename>$GW_LOCATION/var/.lock</filename>: Used to prevent from running
+                            more than one instance of the daemon.
+                        </para>
+                    </listitem>
+
+                    <listitem>
+                        <para>
+                            <filename>$GW_LOCATION/var/gwd.port</filename>: TCP/IP port GWD is
+                            listening for client connection requests.
+                        </para>
+                    </listitem>
+
+                    <listitem>
+                        <para>
+                            <filename>$GW_LOCATION/var/globus-gw.log</filename>: Used to
+                            encapsulate GridWay in a GRAM service (please refer to the Grid4Utility
+                            project web page for more information). This log file follows the
+                            globus fork job starter's format (based on SEG, Scheduler Event Generator
+                            messages):
+                        </para>
+                        <screen>001;TIMESTAMP;JOBID;STATE;EXIT_CODE</screen>
+                    </listitem>
+                </itemizedlist>
+            </para>
+        </section>
+        
+        <section>
+            <title>Daemon Failure Recovery</title>
+            
+            <para>
+                Since GridWay 4.9, when you start the daemon, <command>gwd</command> tries
+                to recover its previous state. This is, any submitted job is stored in a
+                persistent pool, and in case of a gwd (or client machine) crash these jobs are
+                recovered. This includes, for jobs in wrapper state, contacting with the
+                remote jobmanager.
+            </para>
+            
+            <para>
+                Recovery actions are performed by default, if you do not want to
+                recover the previous submitted jobs use the <command> -c</command> option.
+            </para>
+            
+            <para>
+                For example, to start gwd in multi-user mode and clear its previous state,
+                use:
+            </para>
+            
+            <screen>$ gwd -c -m</screen>
+            
+        </section>
+             
+        
+    </section>
+    
+    <section><title>Scheduler Configuration Guide</title>
+        
+        <para>
+            Grid scheduling consists of finding a suitable (in terms of a
+            given target) assignment between a computational workload (jobs) and
+            computational resources. The scheduling problem has been thoroughly studied in
+            the past and efficient algorithms have been devised for different computing
+            platforms. Although some of the experience gained in scheduling can be
+            applied to the Grid, it presents some characteristics that differ dramatically
+            from classical computing platforms (i.e. clusters or MPPs), namely: different
+            administration domains, limited control over resources, heterogeneity and
+            dynamism.
+        </para>
+        
+        <para>
+            Grid scheduling is an active research area. The Grid scheduling problem is
+            better understood today and several heuristics, performance models and
+            algorithms have been proposed and evaluated with the aid of simulation tools.
+            However, current working Grid schedulers are only based on match-making, and
+            barely consider multi-user environments.
+        </para>
+        
+        <para>
+            In this section, we describe the state-of-the-art scheduling policies
+            implemented in the GridWay system. The contents of this guide reflect the
+            experience obtained since GridWay version 4, and a strong feedback from
+            the GridWay user community.
+        </para>
+        
+        <section>
+            <title> GridWay Scheduling Architecture </title>
+            <para>
+                The scheduler is responsible for assigning jobs to Grid resources; therefore,
+                it decides when and where to run a job. These decisions are made periodically in
+                an endless loop. The frequency of the scheduler interventions can be adjusted
+                with the <envar>SCHEDULER_INTERVAL</envar> configuration parameter (see
+                <olink targetptr='GWDconf'/>).
+            </para>
+            
+            <para>
+                In order to make job to resource assignments the scheduler receives
+                information from the following sources (see <olink targetptr='schedinfo'/>):
+            </para>
+            
+            <para>
+                <orderedlist>
+                    <listitem>
+                        <para>
+                            <emphasis>List of jobs in the system</emphasis>, which includes pending
+                            jobs as well as running jobs (those in wrapper state). Those jobs that
+                            cannot be started are filtered out from the list, i.e., jobs with unmet
+                            dependencies, stopped or held.
+                        </para>
+                    </listitem>
+                    
+                    <listitem>
+                        <para>
+                            <emphasis>Match-making results:</emphasis> The Information Manager drivers
+                            query the Grid information services to track the availability and status of Grid
+                            resources. The discovery and monitoring processes can both be configured as
+                            static or dynamic, see <olink targetptr='InfDrivConf'/>. This information is
+                            used by the GridWay core to build a list of suitable resources for each
+                            job, i.e., resources meeting the job requirements, and to compute their rank.
+                        </para>
+                    </listitem>
+                    
+                    <listitem>
+                        <para>
+                            <emphasis>Current resource behavior:</emphasis> The scheduler considers the way a
+                            resource is behaving when making its decisions. In particular, it evaluates the migration and
+                            failure rates and execution statistics (transfer, execution and queue wait
+                            times).
+                        </para>
+                    </listitem>
+                    
+                    <listitem>
+                        <para>
+                            <emphasis>Past Grid Usage:</emphasis> The scheduler also considers the past history
+                            (behavior) of Grid resources to issue schedules. Note that database
+                            support needs to be compiled in GridWay for this feature.
+                        </para>
+                    </listitem>
+                </orderedlist>
+            </para>
+            
+            <para> The information gathered from the previous sources is combined with a given
+                scheduling policy to prioritize jobs and resources. Then, the scheduler dispatches
+                the highest priority job to the best resource for it. The process continues
+                until all jobs are dispatched, and those that could not be assigned wait for the
+                next scheduling interval.
+            </para>
+            
+            <figure id='schedinfo'>
+                <title>Job Scheduling in GridWay</title>
+                <graphic align="center" fileref="admin/gw_scheduler.jpg"/>
+            </figure>
+        </section>
+        
+        
+        <section>
+            <title> Scheduling Policies </title>
+            <para>
+                A scheduling policy is used to assign a <emphasis>dispatch priority
+                </emphasis> to each job and a <emphasis>suitability priority</emphasis> to
+                each resource. Therefore, a Grid scheduling policy comprises two components:
+            </para>
+            
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>
+                            <emphasis>Job prioritization policies</emphasis>. Pending jobs are
+                            prioritized according to four policies: fixed, share, deadline and
+                            waiting-time. The job policies are used to sort the jobs of the users of
+                            a given scheduling domain (GridWay instance). Note that these policies
+                            are only enforced in the scheduling domain and not for the whole Grid
+                            infrastructure as discussed above.
+                        </para>
+                    </listitem>
+                    
+                    <listitem>
+                        <para>
+                            <emphasis>Resource prioritization policies</emphasis>. A given job can be
+                            executed on those resources that match its requirements. The resource
+                            policies are used to sort the matching resource list of each job. The
+                            matching resources are prioritized according to four policies: fixed, usage,
+                            failure and rank. Note that these policies do not only depend on the
+                            Grid resource but also on the job owner, as each Grid user (or VO member)
+                            has its own access rights and usage history.
+                        </para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            
+            <para>
+                These two top-level policies can be combined to implement a wide range of
+                scheduling schemes (see <olink targetptr='listinfo'/>). The above
+                scheduling policies are described in the following sections.
+            </para>
+            
+            <figure id='listinfo'>
+                <title>Job and resource prioritization policies in GridWay.</title>
+                <graphic align="center" fileref="admin/gw_list.jpg"/>
+            </figure>
+        </section>
+        
+        <section>
+            <title>Job Prioritization Policies</title>
+            
+            <para>
+                The job prioritization policies allow Grid administrators to influence the
+                dispatch order of the jobs, that is, to decide which job is sent to the Grid.
+                Traditionally, DRMS implement different policies based on the owner of the job,
+                the resources consumed by each user or the requirements of the job. Some of
+                these scheduling strategies can be directly applied in a Grid, while others must
+                be adapted because of their unique characteristics: dynamism, heterogeneity, high
+                fault rate and site autonomy.
+            </para>
+            
+            <section>
+                <title>Fixed Priority Policy (FP)</title>
+                <para>
+                    This policy assigns a fixed priority to each job. The fixed priority ranges
+                    from 00 (lowest priority) to 19 (highest priority), so jobs with a
+                    higher priority will be dispatched first. The default priority values are
+                    assigned, by the Grid administrator, using the following criteria:
+                </para>
+                
+                <para>
+                    <itemizedlist>
+                        <listitem>
+                            <para>
+                                <emphasis>User</emphasis>. All jobs of a User are given a fixed priority.
+                            </para>
+                        </listitem>
+                        
+                        <listitem>
+                            <para>
+                                <emphasis>Group</emphasis>. All jobs of a user belonging to a given Group
+                                get a fixed priority.
+                            </para>
+                        </listitem>
+                    </itemizedlist>
+                </para>
+                
+                <para>
+                    The user priority prevails over the group one. Also there is a special
+                    user (<envar>DEFAULT</envar>) to define the default priority value when
+                    no criteria apply.
+                </para>
+                
+                <para>
+                    The users can set the priority of their own
+                    jobs (<command>gwsubmit -p</command>) but without exceeding their limit set by the administrator in the
+                    scheduler configuration file.
+                </para>
+                
+                <para>
+                    Here is an example configuration for the fixed priority (see also <olink targetptr='schedConfFile'/>):
+                </para>
+                
+                <screen>
+                    # Weight for the Fixed priority policy
+                    FP_WEIGHT = 1
+                    
+                    # Fixed priority values for David's and Alice's jobs
+                    FP_USER[david]  = 2
+                    FP_USER[alice]  = 12
+                    
+                    # Fixed priority for every body in the staff group
+                    FP_GROUP[staff] = 5
+                    
+                    # Anyone else gets a default priority 3
+                    FP_USER[DEFAULT] = 3</screen>
+            </section>
+            
+            <section>
+                <title>Urgent Job Policy</title>
+                <para>
+                    The Grid administrator can also set the fixed priority of a job to 20. When a
+                    job gets a fixed priority of 20, it becomes an <emphasis>urgent job</emphasis>.
+                    Urgent jobs are dispatched as soon as possible, bypassing all
+                    the scheduling policies.
+                </para>
+            </section>
+            
+            <section>
+                <title>Fair-Share Policy (SH)</title>
+                <para>
+                    The fair-share policy allows you to establish a dispatching ratio among the users of a
+                    scheduling domain. For example, a fair-share policy could establish that jobs
+                    from David and Alice must be dispatched to the Grid in a 2:5 ratio. In this
+                    case, the scheduler tracks the jobs submitted to the Grid by these two users
+                    and dispatches the jobs so they target a 2:5 ratio of job submissions.
+                </para>
+                
+                <para>
+                    This policy resembles the well-known fair-share of traditional LRMS. However,
+                    note that what GridWay users share is the ability to submit a job to the Grid
+                    and not resource usage. Resource usage share cannot be imposed at a Grid level,
+                    as Grid resources are shared with other Grid users and with local users
+                    from the remote organization. In addition, the set of resources that can be
+                    potentially used by each user is not homogeneous, as each user may belong to
+                    a different VO.
+                </para>
+                
+                <para>
+                    GridWay tracks the jobs submitted to the Grid by the users over time.
+                    Grid administrators can  specify a timeframe over which user submissions
+                    are evaluated. The amount of time considered by GridWay is defined by a
+                    number of time intervals  (<envar>SH_WINDOW_DEPTH</envar>) and the duration of each one
+                    (<envar>SH_WINDOW_SIZE</envar>, in days). The effective number of submissions in a
+                    given window is exponentially damped, so present events become more relevant.
+                </para>
+                
+                <para>
+                    Here is an example configuration for the share policy (see also <olink targetptr='schedConfFile'/>):
+                </para>
+                
+                <screen>
+                    # Weight for the Fair-share policy
+                    SH_WEIGHT = 1
+                    
+                    # Shared values for David's and Alice's submissions
+                    SH_USER[david]  = 2
+                    SH_USER[alice]  = 5
+                    
+                    # Anyone else gets a default share value of 1
+                    SH_USER[DEFAULT] = 1
+                    
+                    # Consider submissions in the last 5 days
+                    SH_WINDOW_SIZE = 1
+                    SH_WINDOW_DEPTH= 5</screen>
+            </section>
+            
+            <section>
+                <title>Waiting-time Policy (WT)</title>
+                <para>
+                    The goal of this policy is to prevent low-priority jobs from starving. So jobs in
+                    the pending state long enough will be eventually submitted to the Grid. This
+                    policy can be found in most of the DRMS today. In GridWay, the priority of a
+                    job is increased linearly with the waiting time.
+                </para>
+                
+                <para>
+                    Here is an example configuration for this policy:
+                </para>
+                
+                <screen>
+                    # Weight for the Waiting-time policy
+                    WT_WEIGHT = 1</screen>
+            </section>
+            
+            <section>
+                <title>Deadline Policy (DL)</title>
+                <para>
+                    GridWay includes support for specifying deadlines at job submission. The
+                    scheduler will increase the priority of a job as its deadline approaches.
+                    
+                    <important><para>Note
+                        that this policy does not guarantee that a job is completed before the deadline.
+                    </para></important>
+                    Grid administrators should provide a way to qualify the remaining time to reach
+                    the job deadline by defining when a job should get half of the maximum priority
+                    assigned by this policy (<envar>DL_HALF</envar>, in days).
+                </para>
+                
+                <para>
+                    Here is an example configuration for the deadline policy (see also <olink targetptr='schedConfFile'/>):
+                </para>
+                
+                <screen>
+                    # Weight of the Deadline Policy
+                    DL_WEIGHT = 1
+                    
+                    # Assign half of the priority two days before the deadline
+                    DL_HALF = 2</screen>
+            </section>
+            
+            <section>
+                <title>The Overall Dispatch Priority of a Job</title>
+                <para>
+                    The list of all pending jobs is sorted by the <emphasis>dispatch priority</emphasis>,
+                    which is computed as a weighted sum of the contribution from the previous policies. In
+                    this way, the Grid administrator can implement different scheduling schemes by
+                    adjusting the policy weights.
+                </para>
+                
+                <para>
+                    The <emphasis>dispatch priority</emphasis> of a job is therefore computed with:
+                </para>
+                <figure id='jpeq'><title>Dispatch priority of a job</title>
+                    <graphic align="center" fileref="admin/jp_eq.jpg"/>
+                </figure>
+                
+                <para>
+                    where <emphasis>w<subscript>i</subscript></emphasis> is the weight for
+                    each policy (integer value) and
+                    <emphasis>p<subscript>i</subscript></emphasis> is the priority (normalized)
+                    contribution from each policy.
+                </para>
+                
+            </section>
+            
+        </section>
+        
+        
+        
+        <section>
+            <title>Resource Prioritization Policies</title>
+            <para>
+                The resource prioritization policies allow Grid administrators to influence
+                the usage of resources made by the users, that is, decide where to run a job.
+                Usually, in classical DRMS, this resource usage is administered by means of
+                the queue concept.
+            </para>
+            
+            <para>
+                In GridWay, the scheduler builds a <emphasis>meta-queue</emphasis> (a queue
+                consisting of the local queues of the Grid resources) for each job based on
+                its requirements (e.g.,  operating system or architecture). Note that this
+                <emphasis>meta-queue</emphasis> is not only built in terms of resource
+                properties but is also based upon the owner of the job, (as each Grid user may
+                belong to a different VO with its own access rights and usage privileges).
+            </para>
+            
+            <para>
+                The <emphasis>meta-queue</emphasis> for a job consists of the queues of those
+                resources that meet the job requirements specified in the job template and
+                have at least one free slot. By default, this queue is sorted in a
+                first-discovered first-used fashion. This order can be influenced by means of
+                the subsequent resource prioritization policies.
+            </para>
+            
+            <section>
+                <title>Fixed Resource Priority Policy (RP)</title>
+                
+                <para>
+                    Usually, GridWay is configured with several Information Managers (IM). Grid
+                    administrators can prioritize resources based upon the IM that discovered
+                    the resource. Grid administrators can also assign priorities
+                    to individual resources. For example, a fixed priority policy can specify that
+                    resources from the intranet (managed by an IM driver tagged
+                    <command>intranet</command>) should always be used before resources from
+                    other sites (managed by an IM driver tagged <command>grid</command>).
+                </para>
+                
+                <para>
+                    The priority of a resource ranges from 01 (lowest priority) to 99 (highest
+                    priority), so resources with a higher priority will be used first. Grid
+                    administrators can also prioritize individual resources based on business
+                    decisions.
+                </para>
+                
+                <para>
+                    When a resource gets the priority value 00, it becomes a
+                    <emphasis role="bold">banned resource</emphasis>, and will not be used for
+                    any job. So Grid administrators can virtually <emphasis>unplug</emphasis>
+                    resources from their scheduling domain.
+                </para>
+                
+                <para>
+                    Example configuration for the resource Fixed Priority Policy:
+                </para>
+                
+                <screen>
+                    # Weight for the Resource fixed priority policy
+                    RP_WEIGHT = 1
+                    
+                    # Fixed priority values for specific resources
+                    RP_HOST[my.cluster.com]    = 12
+                    RP_HOST[slow.machine.com]  = 02
+                    
+                    # Fixed priority for every resource in the intranet
+                    RP_IM[intranet] = 65
+                    
+                    # Fixed priority for every resource discovered by the grid IM
+                    RP_IM[grid] = 05
+                    
+                    # Anyone else gets a default priority 04 (i.e. other IM)
+                    RP_IM[DEFAULT] = 01</screen>
+            </section>
+            
+            <section>
+                <title>Rank Policy (RA)</title>
+                
+                <para>
+                    The goal of this policy is to prioritize those resources more suitable for
+                    the job, from its own point of view. For example, the rank policy for a job
+                    can state that resources with faster CPUs should be used first.  This policy
+                    is configured through the <envar>RANK</envar> attribute in the job
+                    template, please refer to the <ulink url="http://www.gridway.org/documentation/stable/userguide/">GridWay user guide</ulink>.
+                </para>
+                
+                <para>
+                    Example configuration for the Rank policy:
+                    
+                    <screen>
+                        # Weight of the Rank policy
+                        RA_WEIGHT = 1</screen>
+                </para>
+                
+            </section>
+            
+            <section>
+                <title>Usage Policy (UG)</title>
+                
+                <para>
+                    This policy reflects the behavior of Grid resources based on job execution
+                    statistics. So, crucial performance variables, like the average queue wait
+                    time or network transfer times, are considered when scheduling a job. This
+                    policy is derived from the sum of two contributions: history and current.
+                </para>
+                
+                <itemizedlist>
+                    <listitem>
+                        <para>
+                            <emphasis>History contribution</emphasis>. Execution statistics on a
+                            given period of time (for example, average values in the last 3 days).
+                            This information is obtained from the accounting database, so GridWay
+                            must be compiled with the Berkeley DB libraries.
+                        </para>
+                    </listitem>
+                    
+                    <listitem>
+                        <para>
+                            <emphasis>Last job contribution</emphasis>. Execution statistics of
+                            the last job on that resource.
+                        </para>
+                    </listitem>
+                </itemizedlist>
+                
+                <para>
+                    These values are used to compute an estimated execution time of a job on a
+                    given resource for a given user:
+                    
+                    <figure id='ugeq'><title>Estimated execution time of a job on a resource</title>
+                        <graphic align="center" fileref="admin/ug_eq.jpg"/>
+                    </figure>
+                    
+                    where <emphasis>T<superscript>c</superscript></emphasis> are the execution
+                    statistics of the last job (execution, transfer and queue wait-time),
+                    <emphasis>T<superscript>h</superscript></emphasis> are the execution
+                    statistics based on the history data; and <emphasis>w</emphasis> is the
+                    history ratio. Those resources with a lower estimated time are used first
+                    to execute a job.
+                </para>
+                
+                <para>
+                    The Usage policy can be configured with:
+                    <itemizedlist>
+                        <listitem>
+                            <para>
+                                <computeroutput>UG_HISTORY_WINDOW</computeroutput>. Number of days used
+                                to compute the execution statistics from the History contribution.
+                            </para>
+                        </listitem>
+                        
+                        <listitem>
+                            <para>
+                                <computeroutput>UG_HISTORY_RATIO</computeroutput>. The value of
+                                <emphasis>w</emphasis>, use <emphasis>0</emphasis> to use only data
+                                from the accounting database, and <emphasis>1</emphasis> to use only
+                                results from the last execution.
+                            </para>
+                        </listitem>
+                    </itemizedlist>
+                </para>
+                
+                <para>
+                    Example configuration for Usage policy:
+                    
+                    <screen>
+                        # Weight of the Usage policy
+                        UG_WEIGHT = 1
+                        
+                        # Number of days in the history window
+                        UG_HISTORY_WINDOW = 3
+                        
+                        # Accounting database to last execution ratio
+                        UG_HISTORY_RATIO = 0.25</screen>
+                </para>
+                
+            </section>
+            
+            <section>
+                <title>Failure Rate Policy (FR)</title>
+                
+                <para>
+                    When a resource fails, GridWay implements an exponential linear back-off
+                    strategy at resource level (and per each user); henceforth, resources with
+                    persistent failures are discarded (for a given user).
+                </para>
+                
+                <para>
+                    In particular, when a failure occurs a resource is
+                    <emphasis>banned</emphasis> for <emphasis>T</emphasis> seconds:
+                    <figure id='freq'><title>Banned time formula</title>
+                        <graphic align="center" fileref="admin/fr_eq.jpg"/>
+                    </figure>
+                </para>
+                
+                <para>
+                    where <emphasis>T<subscript>&infin;</subscript></emphasis> is the maximum time
+                    that a resource can be <emphasis>banned</emphasis>,
+                    <emphasis>Delta t</emphasis> is the time since last failure, and
+                    <emphasis>C</emphasis> is a constant that determines how fast the
+                    <emphasis>T<subscript>&infin;</subscript></emphasis> limit is reached.
+                </para>
+                
+                <para>
+                    The failure rate policy can be configured with the following parameters:
+                    
+                    <itemizedlist>
+                        <listitem>
+                            <para>
+                                <userinput>FR_MAX_BANNED_TIME</userinput>. The value of
+                                <emphasis>T<subscript>&infin;</subscript></emphasis>, use
+                                <emphasis>0</emphasis> to disable this policy.
+                            </para>
+                        </listitem>
+                        
+                        <listitem>
+                            <para>
+                                <userinput>FR_BANNED_C</userinput>. The value of the
+                                <emphasis>C</emphasis> constant in the above equation.
+                            </para>
+                        </listitem>
+                    </itemizedlist>
+                </para>
+                
+                <para>
+                    Example configuration for the Failure Rate policy:
+                    
+                    <screen>
+             # Maximum time that a resource will not be used, in seconds
+             FR_MAX_BANNED_TIME = 3600
+             # Exponential constant
+             FR_BANNED_C        = 650</screen>
+                </para>
+            </section>
+            
+            <section>
+                <title>The Overall Suitability Priority of a Resource</title>
+                
+                <para>
+                    The list of all candidate resources is sorted by the <emphasis>suitability
+                        priority</emphasis>, which is computed as a weighted sum of the
+                    contribution from the previous policies. The <emphasis>suitability priority
+                    </emphasis> resource is therefore computed with:
+                </para>
+                <figure id='rpeq'><title>Suitability priority of a resource</title>
+                    <graphic align="center" fileref="admin/rp_eq.jpg"/>
+                </figure>
+                
+                <para>
+                    where <emphasis>w<subscript>i</subscript></emphasis> is the weight for
+                    each policy (integer value) and
+                    <emphasis>p<subscript>i</subscript></emphasis> is the priority (normalized)
+                    contribution from each policy.
+                </para>
+                
+            </section>
+            
+            
+            <section>
+                <title>Re-scheduling Policies</title>
+                
+                <para>
+                    Also, the scheduler can migrate running jobs in the following situations:
+                    
+                    <itemizedlist>
+                        <listitem>
+                            <para>
+                                A better resource is discovered.
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para>
+                                A job has been waiting in the remote queue system more than a given
+                                threshold.
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para>
+                                The application changes its requirements.
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para>
+                                A performance degradation is detected.
+                            </para>
+                        </listitem>
+                    </itemizedlist>
+                    
+                </para>
+                
+                <para>
+                    See <olink targetptr='GWDconf'/> and the <ulink url="http://www.gridway.org/documentation/stable/userguide/">GridWay user guide</ulink>, for information on
+                    configuring these policies.
+                </para>
+            </section>
+            
+        </section>
+        
+        
+        <section id='schedConfFile'>
+            <title>Built-in Scheduler Configuration File</title>
+            
+            <para> The built-in scheduler configuration options are defined in
+                <filename>$GW_LOCATION/etc/sched.conf</filename>. The table below summarizes
+                the configuration file options, their description and default values.
+                Note that blank lines and any character after a '#' are ignored.
+            </para>
+            
+            <table frame='all'>
+                <title>Built-in Scheduler Configuration File Options.</title>
+                <tgroup cols='3' align='left' colsep='1' rowsep='1'>
+                    <colspec colname='c1'/>
+                    <colspec colname='c2'/>
+                    <colspec colname='c3'/>
+                    <tbody>
+                        <row>
+                            <entry>Option</entry>
+                            <entry>Description</entry>
+                            <entry>Default</entry>
+                        </row>
+                        
+                        <row>
+                            <entry namest="c1" nameend="c3"><emphasis role='bold'>
+                                Job Scheduling Policies.</emphasis> Pending jobs are
+                                prioritized according to four policies:fixed (FP), share(SH),
+                                deadline (DL) and waiting-time (WT). The dispatch priority
+                                of a job is computed as a weighted sum of the contribution of each
+                                policy (normalized to one).</entry>
+                        </row>
+                        
+                        <row>
+                            <entry>DISPATCH_CHUNK</entry>
+                            <entry>The maximum number of jobs that will be dispatched for each
+                                scheduling action
+                            </entry>
+                            <entry>15 (0 to dispatch as many jobs as possible)</entry>
+                        </row>
+                        
+                        <row>
+                            <entry>MAX_RUNNING_USER</entry>
+                            <entry>The maximum number of simultaneous running jobs per user.
+                            </entry>
+                            <entry>30 (0 to dispatch as many jobs as possible)</entry>
+                        </row>
+                        
+                        <row>
+                            <entry namest="c1" nameend="c3"><emphasis>
+                                Fixed Priority (FP) Policy:</emphasis> Assigns a fixed priority
+                                to each job</entry>
+                        </row>
+                        
+                        <row>
+                            <entry>FP_WEIGHT</entry>
+                            <entry>Weight for the policy (real numbers allowed).
+                            </entry>
+                            <entry>1</entry>
+                        </row>
+                        
+                        <row>
+                            <entry>FP_USER[&lt;username>]</entry>
+                            <entry>Priority for jobs owned by &lt;username>. Use the special
+                                username DEFAULT to set default priorities. Priority range [0,19]
+                            </entry>
+                            <entry></entry>
+                        </row>
+                        
+                        <row>
+                            <entry>FP_GROUP[&lt;groupname&gt;]</entry>
+                            <entry>Priority for jobs owned by users in group &lt;groupname&gt;.
+                                Priority range [0,19]
+                            </entry>
+                            <entry></entry>
+                        </row>
+                        
+                        <row>
+                            <entry namest="c1" nameend="c3"><emphasis>
+                                Share (SH) Policy:</emphasis> Allows you to establish a dispatch ratio among
+                                users.</entry>
+                        </row>
+                        
+                        <row>
+                            <entry>SH_WEIGHT</entry>
+                            <entry>Weight for the policy (real numbers allowed).
+                            </entry>
+                            <entry></entry>
+                        </row>
+                        
+                        <row>
+                            <entry>SH_USER[&lt;username&gt;]</entry>
+                            <entry>Share for jobs owned by &lt;username&gt;. Use the special
+                                username DEFAULT to set default shares.
+                            </entry>
+                            <entry></entry>
+                        </row>
+                        
+                        <row>
+                            <entry>SH_WINDOW_DEPTH</entry>
+                            <entry>Number of intervals (windows) to "remember" each user's
+                                dispatching history. The submissions of each window are exponentially
+                                "forgotten".
+                            </entry>
+                            <entry>5, the maximum value is 10.</entry>
+                        </row>
+                        
+                        <row>
+                            <entry>SH_WINDOW_SIZE</entry>
+                            <entry>The size of each interval in days (real numbers allowed).
+                            </entry>
+                            <entry>1</entry>
+                        </row>
+                        
+                        
+                        <row>
+                            <entry namest="c1" nameend="c3"><emphasis>
+                                Waiting-time (WT) Policy:</emphasis> The priority of a job is
+                                increased linearly with the waiting time to prevent job starvation
+                            </entry>
+                        </row>
+                        
+                        <row>
+                            <entry>WT_WEIGHT</entry>
+                            <entry>Weight for the policy (real numbers allowed).
+                            </entry>
+                            <entry>0</entry>
+                        </row>
+                        
+                        <row>
+                            <entry namest="c1" nameend="c3"><emphasis>
+                                Deadline (DL) Policy:</emphasis> The priority of a job is increased
+                                exponentially as its deadline approaches.</entry>
+                        </row>
+                        
+                        <row>
+                            <entry>DL_WEIGHT</entry>
+                            <entry>Weight for the policy (real numbers allowed).
+                            </entry>
+                            <entry>1</entry>
+                        </row>
+                        
+                        <row>
+                            <entry>DL_HALF</entry>
+                            <entry>Number of days before the deadline when the job should get
+                                half of the maximum priority.
+                            </entry>
+                            <entry>1</entry>
+                        </row>
+                        
+                        <row>
+                            <entry namest="c1" nameend="c3"><emphasis role='bold'>
+                                Resource Scheduling Policies.</emphasis>The resource policies allows
+                                grid administrators to influence the usage of resources made by the
+                                users, according to: fixed (FP), rank (RA), failure rate (FR), and usage (UG).
+                                The suitability priority of a resource is computed as a weighted sum of the
+                                contribution of each policy (normalized to one).</entry>
+                        </row>
+                        
+                        <row>
+                            <entry>MAX_RUNNING_RESOURCE</entry>
+                            <entry>The maximum number of jobs that the scheduler submits to a
+                                given resource
+                            </entry>
+                            <entry>10</entry>
+                        </row>
+                        
+                        <row>
+                            <entry namest="c1" nameend="c3"><emphasis>
+                                Fixed Priority (RP) Policy:</emphasis> Assigns a fixed priority
+                                (range [01,99]) to each resource</entry>
+                        </row>
+                        
+                        <row>
+                            <entry>RP_WEIGHT</entry>
+                            <entry>Weight for the policy (real numbers allowed).
+                            </entry>
+                            <entry>1 (real numbers allowed)</entry>
+                        </row>
+                        
+                        <row>
+                            <entry>RP_HOST[&lt;FQDN>]</entry>
+                            <entry>Priority for resource &lt;FQDN&gt;. Those resources with
+                                priority 00 WILL NOT be used to dispatch jobs.
+                            </entry>
+                            <entry></entry>
+                        </row>
+                        
+                        <row>
+                            <entry>RP_IM[&lt;im_tag&gt;]</entry>
+                            <entry>Priority for ALL resources discovered by the IM &lt;im_tag&gt; (as
+                                set in <filename>gwd.conf</filename>, see <olink targetptr='GWDconf'/>). Use the special tag
+                                <computeroutput>DEFAULT</computeroutput> to set default priorities for resources.
+                            </entry>
+                            <entry></entry>
+                        </row>
+                        
+                        <row>
+                            <entry namest="c1" nameend="c3"><emphasis>
+                                Usage (UG) Policy:</emphasis> Resources are prioritized based on the
+                                estimated execution time of a job (on each resource). </entry>
+                        </row>
+                        
+                        <row>
+                            <entry>UG_WEIGHT</entry>
+                            <entry>Weight for the policy (real numbers allowed).
+                            </entry>
+                            <entry>1 (real numbers allowed)</entry>
+                        </row>
+                        
+                        <row>
+                            <entry>UG_HISTORY_WINDOW</entry>
+                            <entry>Number of days used to compute the history contribution.
+                            </entry>
+                            <entry>3 (real numbers allowed)</entry>
+                        </row>
+                        
+                        <row>
+                            <entry>UG_HISTORY_RATIO</entry>
+                            <entry>Weight to compute the estimated execution time on a given
+                                resource.
+                            </entry>
+                            <entry>0.25</entry>
+                        </row>
+                        
+                        <row>
+                            <entry namest="c1" nameend="c3"><emphasis>
+                                Rank (RA) Policy:</emphasis> Prioritize resources based on their RANK
+                                (as defined in the job template)</entry>
+                        </row>
+                        
+                        <row>
+                            <entry>RA_WEIGHT</entry>
+                            <entry>Weight for the policy.
+                            </entry>
+                            <entry>0 (real numbers allowed)</entry>
+                        </row>
+                        
+                        <row>
+                            <entry namest="c1" nameend="c3"><emphasis>
+                                Failure Rate (FR) Policy.</emphasis> Resources with persistent failures
+                                are banned</entry>
+                        </row>
+                        
+                        <row>
+                            <entry>FR_MAX_BANNED</entry>
+                            <entry>The maximum time a resource is banned, in seconds.
+                                Use 0 TO DISABLE this policy.
+                            </entry>
+                            <entry>3600</entry>
+                        </row>
+                        
+                        <row>
+                            <entry>FR_BANNED_C</entry>
+                            <entry>Exponential constant to compute banned time
+                            </entry>
+                            <entry>650</entry>
+                        </row>
+                        
+                    </tbody>
+                </tgroup>
+            </table>
+        </section>
+        
+        <section id='SchedDrivConf'>
+            <title>Scheduler Configuration</title>
+            
+            <para>
+                GridWay uses an external and selectable scheduler module to schedule jobs.
+                The following schedulers are distributed with GridWay:
+            </para>
+            
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>
+                            Built-in Scheduler (default), which implements the above policies.
+                        </para>
+                    </listitem>
+                    
+                    <listitem>
+                        <para>
+                            Round-robin/flood Scheduler. This is a simple scheduling algorithm. It maximizes
+                            the number of jobs submitted to the Grid. Available resources are flooded
+                            with user jobs in a round-robin fashion. <important><para>The flood (user
+                                round-robin) scheduler is included as an example, and should not be used
+                                in production environments.</para></important>
+                        </para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            
+            <para>
+                The schedulers are configured with the <parameter>DM_SCHED</parameter>
+                option in the <filename>gwd.conf</filename> file, with the format:
+                <screen>DM_SCHED = &lt;sched_name>:&lt;path_to_sched>:[args]</screen>
+            </para>
+            
+            <para>
+                where:
+            </para>
+            
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>
+                            <command>sched_name</command>: is a tag to further refer to this
+                            scheduler.
+                        </para>
+                    </listitem>
+                    
+                    <listitem>
+                        <para>
+                            <command>path_to_sched</command>: is the name of the  Scheduler
+                            executable. Use an absolute path or include the Scheduler executable
+                            directory in the PATH variable (such directory is
+                            <filename>$GW_LOCATION/bin</filename> by default).
+                        </para>
+                    </listitem>
+                    
+                    <listitem>
+                        <para>
+                            <command>arg</command>: Additional arguments to be passed to the
+                            Scheduler executable.
+                        </para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            
+            <section>
+                <title>Built-in Scheduler</title>
+                
+                <para>
+                    By default, GridWay is configured to use the built-in policy engine
+                    described in the previous sections. If for any reason you need to
+                    recover this configuration, add the following line to
+                    <filename>$GW_LOCATION/etc/gwd.conf</filename>:
+                    <screen>DM_SCHED  = builtin:gw_sched:</screen>
+                </para>
+                
+                <para>
+                    Do not forget to adjust the scheduler policies to your needs by editing
+                    the <filename>$GW_LOCATION/etc/sched.conf</filename> file.
+                </para>
+            </section>
+            
+            <section>
+                <title>Flood Scheduler</title>
+                <para>
+                    To configure the round-robin/flood scheduler, first disable the built-in
+                    engine policy in the <filename>$GW_LOCATION/etc/sched.conf</filename>
+                    configuration file by adding the following line:
+                    <screen>DISABLE = yes</screen>
+                </para>
+                
+                <para>
+                    Then add the following line to <filename>$GW_LOCATION/etc/gwd.conf</filename>:
+                    <screen>DM_SCHED = flood:gw_flood_scheduler:-h 10 -u 30 -c 5 -s 15</screen>
+                </para>
+                <para>
+                    where:
+                </para>
+                
+                <para>
+                    <itemizedlist>
+                        <listitem>
+                            <para>
+                                <command>-h</command>: The max number of jobs that the scheduler
+                                submits to a given host. Default value is 10; use 0 to dispatch to each
+                                host as many jobs as possible.
+                            </para>
+                        </listitem>
+                        
+                        <listitem>
+                            <para>
+                                <command>-u</command>: The maximum number of simultaneous running
+                                jobs per user. Default value is 30; use 0 to dispatch as many jobs as
+                                possible.
+                            </para>
+                        </listitem>
+                        
+                        <listitem>
+                            <para>
+                                <command>-c</command>: Scheduling Chunk. Jobs of the same user are
+                                submitted in a round-robin fashion with the given chunk. Default
+                                value is 5.
+                            </para>
+                        </listitem>
+                        
+                        <listitem>
+                            <para>
+                                <command>-s</command>: Dispatch Chunk. The maximum number of jobs
+                                that will be dispatched each scheduling action. Default value is
+                                15; use 0 to dispatch as many jobs as possible.
+                            </para>
+                        </listitem>
+                        
+                    </itemizedlist>
+                </para>
+            </section>
+            
+        </section>
+    </section>
+    
+    <section><title>MAD Configuration Guide</title>
+        
+        <para>
+            GridWay uses several Middleware Access Drivers (MAD) to interface with different
+            Grid services. The following MADs are part of the GridWay distribution:
+        </para>
+        
+        <para>
+            <itemizedlist>
+                <listitem>
+                    <para>
+                        Execution Managers to interface with both pre-WS GRAM and WS GRAM services.
+                    </para>
+                </listitem>
+                
+                <listitem>
+                    <para>
+                        Information Managers to interface with both MDS2 (MDS and GLUE schemas) and MDS4 services.
+                    </para>
+                </listitem>
+                
+                <listitem>
+                    <para>
+                        Transfer Managers to interface with GridFTP servers.
+                    </para>
+                </listitem>
+            </itemizedlist>
+        </para>
+        
+        <para>
+            These drivers are configured and selected via the GWD configuration interface
+            described in <olink targetptr='GWDconf'/>. Additionally you may need to configure
+            your environment (see <olink targetdoc="gridwayAdmin" targetptr="s-gridway-admin-testing"/>) in order to successfully
+            load the MADs into the GWD core. To do so, you can also use global and per user
+            environment configuration files (<filename>gwrc</filename>).
+        </para>
+        
+        <section id='gwrc'>
+            <title>MAD Environment Configuration</title>
+            
+            <para>
+                There is one global config file and per user configuration files that can be used to set
+                environment variables for MADs. These files are standard shell scripts that are sourced
+                into the MAD environment before it is loaded. It can be used, for example, to set the
+                variable <envar>X509_USER_PROXY</envar> so you can have it located elsewhere instead of
+                the standard place (<filename>/tmp/x509_u&lt;uid&gt;</filename>). Other variables can be
+                set and you can even source other shell scripts, for instance, you can prepare another
+                globus environment for MADs for some users, like this:
+            </para>
+            
+            <screen>
+                X509_USER_PROXY=$HOME/.globus/proxy.pem
+                
+                GLOBUS_LOCATION=/opt/globus-4.0
+                . $GLOBUS_LOCATION/etc/globus-user-env.sh</screen>
+            
+            <para>
+                The file for global MAD environment configuration is
+                <filename>$GW_LOCATION/etc/gridway/gwrc</filename> and the user specific one is
+                <filename>$HOME/.gwrc</filename>.
+            </para>
+            
+            <para>
+                You have to take into account a couple of things:
+            </para>
+            
+            <itemizedlist>
+                <listitem>
+                    <para>
+                        The global environment file is loaded <emphasis>before</emphasis> the user one, so the variables set by the
+                        user file take precedence over the global ones.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        The files are sourced so you need to export the variables to make them visible in
+                        the environment of the called MAD. Right now there is a mechanism so variables set
+                        as <envar>VARIABLENAME=VALUE</envar> are automatically exported (without spaces
+                        preceding the variable name). If you are sourcing other files or you put variables
+                        inside an indented block (for example, in an if statement) you have to explicitly
+                        export them. For example:
+                    </para>
+                    <screen>
+                        if [ -d /opt/globus-devel ]; then
+                        export GLOBUS_LOCATION=/opt/globus-devel
+                    </screen>
+                </listitem>
+            </itemizedlist>
+            
+        </section>
+        
+        <section id='ExecDrivConf'>
+            <title>
+                Execution Driver Configuration
+            </title>
+            
+            <para>
+                The Execution Driver interfaces with Grid Execution Services and is responsible for
+                low-level job execution and management. The GridWay distribution includes the
+                following Execution MADs:
+            </para>
+            
+            <para>
+                <itemizedlist>
+                    
+                    <listitem>
+                        <para>
+                            Pre-WS GRAM (Globus Toolkit 2.4 and above)
+                        </para>
+                    </listitem>
+                    
+                    <listitem>
+                        <para>
+                            WS GRAM (Globus Toolkit 4.0)
+                        </para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            
+            <para>
+                Note that the use of these MADs requires a valid proxy.
+            </para>
+            
+            <para>
+                Execution MADs are configured with the <varname>EM_MAD</varname> option in
+                the <filename>$GW_LOCATION/etc/gwd.conf</filename> file, with the following
+                format:
+                <screen>EM_MAD = &lt;mad_name>:&lt;path_to_mad>:&lt;args>:&lt;rsl|rsl_nsh|rsl2></screen>
+            </para>
+            
+            <para>
+                where:
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>
+                            <command>mad_name</command>:  is a tag to further refer to this
+                            Execution Driver, and it is also useful for logging purposes.
+                        </para>
+                    </listitem>
+                    
+                    <listitem>
+                        <para>
+                            <command>path_to_mad</command>:  is the name of the Execution Driver
+                            executable, which <emphasis>must</emphasis> be placed in the
+                            <filename>$GW_LOCATION/bin</filename> directory.
+                        </para>
+                    </listitem>
+                    
+                    <listitem>
+                        <para>
+                            <command>args</command>: Parameters passed to the mad when it is executed.
+                        </para>
+                    </listitem>
+                    
+                    <listitem>
+                        <para>
+                            <command>rsl|rsl_nsh|rsl2</command>: Selects the language that GWD will
+                            use to describe job requests. It can be
+                            <emphasis>rsl</emphasis> (intended to be used with pre-WS drivers),
+                            <emphasis>rsl_nsh</emphasis> (intended to be used with pre-WS drivers over resources with non-shared home directories, like in LCG) and
+                            <emphasis>rsl2</emphasis> (intended to be used with WS drivers).
+                        </para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            
+            <para>
+                For example, the following line will configure GridWay to use the Execution
+                Driver <command>gw_em_mad_prews</command> using RSL syntax with name
+                <emphasis>prews</emphasis>:
+                <screen>EM_MAD = prews:gw_em_mad_prews::rsl</screen>
+            </para>
+            
+            <para>
+                To use WS-GRAM services, you can include the following line in your
+                <filename>$GW_LOCATION/etc/gwd.conf</filename> file:
+                <screen>EM_MAD = ws:gw_em_mad_ws::rsl2</screen>
+            </para>
+            
+            <note>
+                <para>You can simultaneously use as many Execution Drivers as you need
+                    (up to 10). So GridWay allows you to simultaneously use pre-WS and WS
+                    Globus Services.
+                </para>
+            </note>
+            
+            <section id='EmPort'>
+                <title>Port configuration in WS EM MAD</title>
+                
+                <para>
+                    Now it is possible to specify a different gatekeeper port than the
+                    standard one (8443) in the Web Service driver. The line to configure EM MADs in
+                    <filename>gwd.conf</filename> has changed so you can add parameters to it. The
+                    parameter to change the port is the <option>-p</option> followed by the port number. For
+                    example:
+                </para>
+                
+                <screen>
+                    EM_MAD = osg_ws:gw_em_mad_ws:-p 9443:rsl2</screen>
+                
+                <para>
+                    This line tells the EM MAD to use port 9443 to connect to the GT4 Gatekeeper.
+                </para>
+            </section>
+        </section>
+        
+        
+        <section id='TransfDrivConf'>
+            <title>File Transfer Driver Configuration</title>
+            
+            <para>
+                The File Transfer Driver interfaces with Grid Data Management Services and is
+                responsible for file staging, remote working directory set-up and remote host
+                clean up. The GridWay distribution includes:
+            </para>
+            
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>GridFTP server (version 1.1.2 and above)</para>
+                    </listitem>
+                    <listitem>
+                        <para>Dummy Transfer driver (to be used with clusters without shared home)</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            
+            <para>
+                The use of this driver requires a valid Proxy.
+            </para>
+            
+            <para>
+                File Transfer Managers are configured with the TM_MAD option in the
+                <filename>gwd.conf</filename> file, with the format:
+                <screen>TM_MAD = &lt;mad_name>:&lt;path_to_mad>:[arg]</screen>
+            </para>
+            <para>
+                where:
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>
+                            <command>mad_name</command>: is a tag to further refer to this
+                            File Transfer Driver, and it is also useful for logging purposes.
+                        </para>
+                    </listitem>
+                    
+                    <listitem>
+                        <para>
+                            <command>path_to_mad</command>: is the name of the File Transfer
+                            Driver executable, which <emphasis>must</emphasis> be placed in the
+                            <filename>$GW_LOCATION/bin</filename> directory.
+                        </para>
+                    </listitem>
+                    
+                    <listitem>
+                        <para>
+                            <command>arg</command>: Additional arguments to be passed to the
+                            File Transfer executable.
+                        </para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            
+            <para>
+                To configure the Transfer Driver, add a line to
+                <filename>$GW_LOATION/etc/gwd.conf</filename>, with the following format:
+                <screen>TM_MAD = &lt;mad_name>:&lt;path_to_mad>:[arguments]></screen>
+            </para>
+            
+            <section>
+                <title>Configuring the GridFTP Transfer Driver</title>
+                <para>
+                    The GridFTP driver does not require any command line arguments. So to
+                    configure the driver, add the following line to
+                    <filename>$GW_LOCATION/etc/gwd.conf</filename>:
+                    <screen>TM_MAD = gridftp:gw_tm_mad_ftp:</screen>
+                </para>
+                <para>
+                    The name of the driver will be later used to specify the transfer mechanisms
+                    with Grid resource.
+                </para>
+            </section>
+            
+            <section>
+                <title>Configuring the Dummy Transfer Driver</title>
+                <para>
+                    The Dummy driver should be used with those resources (clusters) which do not
+                    have   a shared home. In this case, transfer and execution are performed as
+                    follows:
+                    <itemizedlist>
+                        <listitem>
+                            <para>
+                                The Dummy Transfer MAD performs data movements from the cluster worker node
+                                and the client using a reverse server model.
+                            </para>
+                        </listitem>
+                        
+                        <listitem>
+                            <para>
+                                The <emphasis>rsl_nsh</emphasis> RSL generation function is used, which
+                                transfers the wrapper along with its stdout and stderr streams.
+                            </para>
+                        </listitem>
+                        
+                        <listitem>
+                            <para>
+                                The wrapper executing in the worker node automatically
+                                transfers job.env and input/output files from the client.
+                            </para>
+                        </listitem>
+                    </itemizedlist>
+                </para>
+                
+                <para>
+                    The following servers can be configured to access files on the client machine:
+                </para>
+                
+                <para>
+                    <itemizedlist>
+                        <listitem>
+                            <para>
+                                <emphasis>GASS Server</emphasis>, started for each user.
+                            </para>
+                        </listitem>
+                        <listitem><para>
+                            <emphasis>GridFTP</emphasis>, specified by its URL running on the
+                            GridWay server.
+                        </para>
+                        </listitem>
+                    </itemizedlist>
+                </para>
+                
+                <para>
+                    The Dummy driver behavior is specified with the following command line
+                    arguments:
+                </para>
+                <para>
+                    <itemizedlist>
+                        <listitem>
+                            <para>
+                                <command>-u &lt;URL></command>:URL of the GridFTP server.
+                            </para>
+                        </listitem>
+                        <listitem>
+                            <para>
+                                <command>-g</command>: Use a user GASS server to transfer files.
+                            </para>
+                        </listitem>
+                    </itemizedlist>
+                </para>
+                
+                <para>Sample configuration to use a GridFTP server:
+                    <screen>TM_MAD = dummy:gw_tm_mad_dummy:-u gsiftp\://hostname</screen>
+                </para>
+                <important>
+                    <para>
+                        You MUST escape the colon character in gsiftp URL.
+                        Also, <computeroutput>hostname</computeroutput> should be the host running the GridWay instance.
+                    </para>
+                </important>
+                
+                <para>Sample configuration to use GASS servers:
+                    <screen>TM_MAD = dummy:gw_tm_mad_dummy:-g</screen>
+                </para>
+                
+            </section>
+            
+        </section>
+        
+        <section id='InfDrivConf'>
+            <title>Information Driver Configuration</title>
+            
+            <para>
+                The Information Driver interfaces with Grid Monitoring Services and is responsible for
+                host discovery and monitoring. The following Information Drivers are included
+                in GridWay:
+            </para>
+            
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>
+                            Static host information data
+                        </para>
+                    </listitem>
+                    
+                    <listitem>
+                        <para>
+                            MDS2 with MDS schema (Globus Toolkit 2.4)
+                        </para>
+                    </listitem>
+                    
+                    <listitem>
+                        <para>
+                            MDS2 with GLUE schema (Globus Toolkit 2.4 and LCG middleware)
+                        </para>
+                    </listitem>
+                    
+                    <listitem>
+                        <para>
+                            MDS4 (Globus Toolkit 4.0)
+                        </para>
+                    </listitem>
+                    
+                </itemizedlist>
+            </para>
+            
+            <para>
+                To configure an Information Driver, add a line to
+                <filename>$GW_LOATION/etc/gwd.conf</filename>, with the following format:
+                <screen>IM_MAD = &lt;mad_name>:&lt;path_to_mad>:[args]:[nice]:&lt;tm_mad_name>:&lt;em_mad_name></screen>
+            </para>
+            <para>
+                where:
+            </para>
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>
+                            <command>mad_name</command>: is a tag to further refer to this
+                            Information Driver.
+                        </para>
+                    </listitem>
+                    
+                    <listitem>
+                        <para>
+                            <command>path_to_mad</command>:  is the name of the Information Driver
+                            executable. Use an absolute path or include the Information Driver
+                            directory in the <envar>PATH</envar> variable (such directory is
+                            <filename>$GW_LOCATION/bin</filename> by default).
+                        </para>
+                    </listitem>
+                    
+                    <listitem>
+                        <para>
+                            <command>arg</command>: Additional arguments to be passed to the
+                            Information Driver executable.
+                        </para>
+                    </listitem>
+                    
+                    <listitem>
+                        <para>
+                            <command>nice</command>: Integer value that will be added to the rank
+                            calculated for the hosts managed by this Information Driver. So you
+                            can prioritize, at a coarse level, hosts from different Information
+                            Drivers (or Grids).
+                        </para>
+                    </listitem>
+                    
+                    <listitem>
+                        <para>
+                            <command>tm_mad_name</command>: File Transfer Driver to be used with
+                            the hosts managed by this Information Driver.
+                        </para>
+                    </listitem>
+                    
+                    <listitem>
+                        <para>
+                            <command>em_mad_name</command>: Execution Driver to be used with
+                            the hosts managed by this Information Driver.
+                        </para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            
+            <para>
+                For example, to configure GWD to access a MDS4 hierarchical information service:
+                <screen>IM_MAD = mds4:gw_im_mad_mds4:-s hydrus.dacya.ucm.es::gridftp:ws</screen>
+            </para>
+            
+            <para>
+                All the Information Drivers provided with GridWay use a common interface
+                to configure their operation mode. The arguments used by the Information
+                Drivers are:
+            </para>
+            
+            <para>
+                <itemizedlist>
+                    <listitem>
+                        <para>
+                            <command>-s &lt;server></command>: The information server in a
+                            hierarchical configuration, i.e. MDS2 GIIS or MDS4 root IndexService.
+                        </para>
+                    </listitem>
+                    
+                    <listitem>
+                        <para>
+                            <command>-l &lt;host list></command>: A host list file to be used by
+                            GridWay, only relevant for static discovery and monitoring. See the
+                            Information Driver operation mode below (Relative path to $GW_LOCATION).
+                        </para>
+                    </listitem>
+                    
+                    <listitem>
+                        <para>
+                            <command>-b &lt;base></command>: The Virtual Organization name in the
+                            DN of the LDIF entries, i.e. the Mds-Vo-name attribute, only relevant
+                            for MDS2.
+                        </para>
+                    </listitem>
+                    
+                    <listitem>
+                        <para>
+                            <command>-f &lt;filter></command>: Additional requirements to be
+                            imposed on all the hosts managed by this Information Driver, in LDIF
+                            format.
+                        </para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            
+            
+            <para>
+                These options allow you to configure your Information Drivers in the
+                three operation modes, described below.
+            </para>
+            
+            <section>
+                <title>Static Discovery and Monitoring (SS mode)</title>
+                <para>
+                    In this mode, hosts are statically discovered by reading a host list file
+                    (note: each time it is read). Also the attributes of each host are read
+                    from files. Hint: Use this mode for testing purposes and not in a production
+                    environment. To configure a Information Driver in SS mode use the host
+                    list option, for example:
+                    <screen>IM_MAD = static:gw_im_mad_static:-l examples/im/host.static::gridftp:ws</screen>
+                </para>
+                
+                <para>
+                    The host list file contains one host per line, with format:
+                    <screen>FQDN    attribute_file</screen>
+                </para>
+                <para>
+                    where:
+                </para>
+                
+                <para>
+                    <itemizedlist>
+                        <listitem>
+                            <para>
+                                <command>FQDN</command>: is the Full Qualified Domain Name of the host.
+                            </para>
+                        </listitem>
+                        
+                        <listitem>
+                            <para>
+                                <command>attribute_file</command>: is the name of the file with the static
+                                attributes of this host. Relative to the <filename>GW_LOCATION</filename>
+                                directory.
+                            </para>
+                        </listitem>
+                    </itemizedlist>
+                </para>
+                
+                <para>
+                    For example (you can find this file, <filename>host.list</filename>, in
+                    <filename>$GW_LOCATION/examples/im/</filename>)
+                    <screen>
+                        hydrus.dacya.ucm.es examples/im/hydrus.attr
+                        draco.dacya.ucm.es examples/im/draco.attr</screen>
+                </para>
+                
+                <para>
+                    The <parameter>attribute_file</parameter> includes a
+                    <emphasis>single line</emphasis> with the host information and
+                    <emphasis>other lines</emphasis> with the information of each queue
+                    (one line per queue).  Use the examples below as templates for your hosts.
+                </para>
+                
+                <para>
+                    Example of attribute file for a PBS cluster (you can find this file in
+                    <filename>$GW_LOCATION/examples/im/</filename>):
+                    <screen>
+  HOSTNAME="hydrus.dacya.ucm.es" ARCH="i686" OS_NAME="Linux" OS_VERSION="2.6.4"
+  CPU_MODEL="Intel(R) Pentium(R) 4 CPU 2" CPU_MHZ=2539 CPU_FREE=098 CPU_SMP=1
+  NODECOUNT=4 SIZE_MEM_MB=503 FREE_MEM_MB=188 SIZE_DISK_MB=55570
+  FREE_DISK_MB=39193 FORK_NAME="jobmanager-fork" LRMS_NAME="jobmanager-pbs"
+  LRMS_TYPE="pbs" QUEUE_NAME[0]="q4small" QUEUE_NODECOUNT[0]=1
+  QUEUE_FREENODECOUNT[0]=4 QUEUE_MAXTIME[0]=0 QUEUE_MAXCPUTIME[0]=20
+  QUEUE_MAXCOUNT[0]=4 QUEUE_MAXRUNNINGJOBS[0]=0 QUEUE_MAXJOBSINQUEUE[0]=1
+  QUEUE_STATUS[0]="enabled" QUEUE_DISPATCHTYPE[0]="batch"
+  QUEUE_NAME[1]="q4medium" QUEUE_NODECOUNT[1]=4 QUEUE_FREENODECOUNT[1]=4
+  QUEUE_MAXTIME[1]=0 QUEUE_MAXCPUTIME[1]=120 QUEUE_MAXCOUNT[1]=4
+  QUEUE_MAXRUNNINGJOBS[1]=0 QUEUE_MAXJOBSINQUEUE[1]=1
+  QUEUE_STATUS[1]="enabled" QUEUE_DISPATCHTYPE[1]="batch"</screen>
+                </para>
+                
+                <para>
+                    Example of attribute file for a Fork Desktop (you can find this file in
+                    <filename>$GW_LOCATION/examples/im/</filename>):
+                    <screen>
+  HOSTNAME="draco.dacya.ucm.es" ARCH="i686" OS_NAME="Linux" OS_VERSION="2.6-xen"
+  CPU_MODEL="Intel(R) Pentium(R) 4 CPU 3" CPU_MHZ=3201 CPU_FREE=185 CPU_SMP=2
+  NODECOUNT=2 SIZE_MEM_MB=431 FREE_MEM_MB=180 SIZE_DISK_MB=74312
+  FREE_DISK_MB=40461 FORK_NAME="jobmanager-fork" LRMS_NAME="jobmanager-fork"
+  LRMS_TYPE="fork" QUEUE_NAME[0]="default" QUEUE_NODECOUNT[0]=1
+  QUEUE_FREENODECOUNT[0]=1 QUEUE_MAXTIME[0]=0 QUEUE_MAXCPUTIME[0]=0
+  QUEUE_MAXCOUNT[0]=0 QUEUE_MAXRUNNINGJOBS[0]=0 QUEUE_MAXJOBSINQUEUE[0]=0
+  QUEUE_STATUS[0]="0" QUEUE_DISPATCHTYPE[0]="Immediate"</screen>
+                </para>
+                <para>
+                    To use the WS version of these files just change jobmanager-fork with Fork
+                    and jobmanager-pbs with PBS.
+                </para>
+            </section>
+            
+            <section>
+                <title>Static Discovery and Dynamic Monitoring (SD mode)</title>
+                
+                <para>
+                    Hosts are discovered by reading a host list file. However, the information
+                    of each host is gathered by querying its information service (GRIS in MDS2
+                    or the DefaultIndexService in MDS4). Hint: Use this mode if the resources in
+                    your Grid does not vary too much, i.e. resource are not added or removed
+                    very often. To configure an Information Driver in SD mode, use the host
+                    list option, for example:
+                    <screen>IM_MAD = glue:gw_im_mad_mds2_glue:-l examples/im/host.list::gridftp:prews</screen>
+                </para>
+                <para>
+                    In this case the host list file contains one host per line, in the format:
+                    <screen>
+                        FQDN
+                        ...
+                        FQDN</screen>
+                </para>
+                
+                <para>
+                    where:
+                    <itemizedlist>
+                        <listitem>
+                            <para>
+                                <command>FQDN</command>: is the Full Qualified Domain Name of the host.
+                            </para>
+                        </listitem>
+                    </itemizedlist>
+                </para>
+                
+                <para>
+                    For example (you can find this file in
+                    <filename>$GW_LOCATION/examples/im/</filename>)
+                    <screen>
+                        hydrus.dacya.ucm.es
+                        ursa.dacya.ucm.es
+                        draco.dacya.ucm.es</screen>
+                </para>
+                
+                <note>
+                    <para>
+                        The information services of each host (GRIS or/and DefaultIndexServices)
+                        must be properly configured to use this mode.
+                    </para>
+                </note>
+                
+                <important>
+                    <para>
+                        You can configure your IMs to work in a dynamic monitoring mode but get
+                        some static information from an attributes file (as described in the SS mode).
+                        This configuration is useful when you want to add some host attributes missing from
+                        the IndexService (like software availability, special hardware devices...). You can see
+                        a useful use of this mode in section <olink targetdoc="gridwayAdmin" targetptr='s-gridway-admin-troubleshooting'/>.
+                        
+                    </para>
+                </important>
+            </section>
+            
+            <section>
+                <title>Dynamic Discovery and Monitoring (DD mode)</title>
+                
+                <para>
+                    In this mode, hosts are discovered and monitored by directly accessing the
+                    Grid Information Service. Hint: Use this mode if the resources in your Grid
+                    does vary too much, i.e. resource are added or removed very often. To
+                    configure a Information Driver in SD mode, use the server option,
+                    for example:
+                    <screen>IM_MAD = mds4:gw_im_mad_mds4:-s hydrus.dacya.ucm.es::gridftp:ws</screen>
+                </para>
+                
+                <note>
+                    <para>
+                        A hierarchical information service (GIIS or/and DefaultIndexService)
+                        must be properly configured to use this mode.
+                    </para>
+                </note>
+                
+                <para>
+                    If you are using an MDS2 information service you may need to specify the
+                    Virtual Organization name in the DN of the LDIF entries
+                    (<emphasis>Mds-vo-name</emphasis>) with the base option described above.
+                </para>
+                
+                <note>
+                    <para>
+                        You can simultaneously use as many Information Drivers as you need
+                        (up to 10). So GridWay allows you to simultaneously use MDS2 and MDS4
+                        Services. You can also use resources from different Grids at the same time.
+                    </para>
+                </note>
+                
+                <note>
+                    <para>
+                        You can mix SS, SD and DD modes in the same Information Driver.
+                    </para>
+                </note>
+            </section>
+            
+            <section id="SEHOSTNAME">
+                <title>Separate Storage and Computing Element</title>
+                
+                <para>
+                    There is a way to specify a different machine to be used as gsiftp endpoint than the one that
+                    has the gatekeeper installed. This is useful when the CE machine does not
+                    have gsiftp server configured but there is another machine that works as a Storage
+                    Element. Right now, this information could be set statically but the rest of the
+                    information can be updated dynamically. To use this feature you have to create a file
+                    for each host you want to configure with extra information and another file with pairs of
+                    host and file name (as described above for the SS mode).
+                    The filename can be a full path or a relative path to
+                    <envar>GW_LOCATION</envar>. Then in the IM MAD you must specify the list file with
+                    <option>-l</option>, like this (in <filename>gwd.conf</filename>):
+                </para>
+                
+                <screen>
+    IM_MAD = mds4:gw_im_mad_mds4:-l etc/gridway/host.list:gridftp:ws</screen>
+                
+                <para>
+                    The file list should look like this:
+                </para>
+                
+                <screen>
+    wsgram-host1.domain.com etc/gridway/wsgram-host1.attr
+    wsgram-host2.domain.com etc/gridway/wsgram-host2.attr</screen>
+                
+                <para>
+                    And the attributes file for each node should look like this:
+                </para>
+                
+                <screen>
+                    SE_HOSTNAME="gridftp-host1.domain.com"</screen>
+            </section>
+            
+            
+            
+        </section>
+    </section>
+  <section>
+	<title>Integration Guides</title>
+	<para>GridWay architecture flexibility allows it to interoperate with grids based on different middleware stacks. The following documents states how to configure GridWay for the following infrastructures:</para>
+	<itemizedlist>
+		<listitem><para>Integration of GridWay within the EGEE infrastructure<ulink url="http://www.gridway.org/documentation/stable/egeehowto/">[HTML]</ulink><ulink url="http://www.gridway.org/documentation/stable/egeehowto.pdf">[PDF]</ulink></para></listitem>
+		<listitem><para>Integration of GridWay within the OSG infrastructure<ulink url="http://www.gridway.org/documentation/stable/osghowto/">[HTML]</ulink><ulink url="http://www.gridway.org/documentation/stable/osghowto.pdf">[PDF]</ulink></para></listitem>
+		<listitem><para>Integration of GridWay within the Teragrid infrastructure<ulink url="http://www.gridway.org/documentation/stable/tghowto/">[HTML]</ulink><ulink url="http://www.gridway.org/documentation/stable/tghowto.pdf">[PDF]</ulink></para></listitem>
+		<listitem><para>Integration of GridWay within the Nordugrid infrastructure<ulink url="http://www.gridway.org/documentation/stable/norduhowto">[HTML]</ulink><ulink url="http://www.gridway.org/documentation/stable/norduhowto.pdf">[PDF]</ulink></para></listitem>
+		<listitem><para>Accessing SSH Hosts using GridWay<ulink url="http://www.gridway.org/documentation/stable/sshhowto">[HTML]</ulink><ulink url="http://www.gridway.org/documentation/stable/sshhowto.pdf">[PDF]</ulink></para></listitem>		
+	</itemizedlist>
+  </section>  
+</section>

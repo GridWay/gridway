@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd"
+[
+
+<!ENTITY % myents SYSTEM "../../../entities">
+
+%myents;
+
+]>
+<book id="gridwayUser">
+
+<bookinfo>
+	<title>
+       GT &shortversion; GridWay: User's Guide
+    </title>
+	<titleabbrev>User's Guide</titleabbrev>
+    <pubdate>December, 2007</pubdate>
+    <copyright>
+        <year>2002-2007</year>
+        <holder>Distributed Systems Architecture
+            Group, Universidad Complutense de Madrid 
+(http://dsa-research.org).</holder>
+    </copyright>
+    <legalnotice>
+        <para>
+            Licensed under the Apache License, Version 2.0 (the "License");
+            you may not use this file except in compliance with the License.
+            You may obtain a copy of the License at
+        </para>
+        <para>
+            <ulink url="http://www.apache.org/licenses/LICENSE-2.0">
+              http://www.apache.org/licenses/LICENSE-2.0</ulink>
+        </para>
+        <para>
+            Unless required by applicable law or agreed to in writing,
+            software distributed under the License is distributed on an
+            "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+            either express or implied. See the License for the specific
+            language governing permissions and limitations under the License.
+        </para>
+        <para>
+         Any academic report, publication, or other academic disclosure of
+         results obtained with the GridWay Metascheduler will acknowledge
+         GridWay's use by an appropriate citation to relevant papers by
+         GridWay team members.
+        </para>
+    </legalnotice>
+</bookinfo>
+
+	<chapter id="gridway-user-introduction"><title>Introduction</title>
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+	    href="../GridWay_User_Introduction_Frag.xml" xpointer="xpointer(/section/*)"/> 
+	</chapter>
+
+  <chapter id="gridway-user-env-vars">
+    <title>User environment configuration</title>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+	      href="../GridWay_Interface_Env_Frag.xml" xpointer="xpointer(/section/*)"/>
+  </chapter>
+
+  <chapter id="gridway-user-functionality">
+    <title>Functionality</title>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+	      href="../GridWay_User_Job_Definition_Frag.xml" xpointer="xpointer(/section/*)"/>
+  </chapter>
+
+
+  <chapter id="gridway-user-usagescenarios">
+    <title>Usage Scenarios</title>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+	      href="../GridWay_User_Usage_Scenarios_Frag.xml" xpointer="xpointer(/section/*)"/>
+  </chapter>
+
+  <chapter id="gridway-user-commandline"><title>Command-line tools</title>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../GridWay_Interface_Commandline_Frag.xml" xpointer="xpointer(/reference/*)"/>
+  </chapter>
+
+  <chapter id="gridway-user-troubleshooting">
+    <title>Troubleshooting</title>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../GridWay_User_Troubleshooting_Frag.xml" xpointer="xpointer(/section/*)"/>
+  </chapter>
+</book>

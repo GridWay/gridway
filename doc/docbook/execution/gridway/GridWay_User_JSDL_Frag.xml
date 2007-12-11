@@ -1,0 +1,797 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd"
+[
+
+<!ENTITY % myents SYSTEM "../../entities">
+
+%myents;
+
+]>
+
+<section>
+<section>
+<title>Job Submission Description Language (JSDL)</title>
+  <section>
+  <title>JSDL overview</title>
+  <para>
+    GridWay supports Job Submission Description Language (JSDL). This
+    specification is a language for describing the job requirements for
+    submission to resources. The JSDL language specification is based on XML
+    Schema that facilitate the expression of those requirements as a set of XML
+    elements. More info at <ulink
+    url="http://forge.gridforum.org/sf/projects/jsdl-wg">https://forge.gridforum.org/sf/projects/jsdl-wg
+    </ulink>
+  </para>
+  </section>
+  <section>
+  <title>JSDL document structure</title>
+  <para>
+    The JSDL document structure is as follows:
+  </para>
+<screen>&lt;JobDefinition>
+|-------&lt;JobDescription>
+|---------------&lt;JobIdentification>
+|-----------------------&lt;JobName>?
+|-----------------------&lt;Description>?
+|-----------------------&lt;JobAnnotation>*
+|-----------------------&lt;JobProject>*
+|-----------------------&lt;xsd:any##other>*
+|---------------&lt;/JobIdentification>?
+|---------------&lt;Application>
+|-----------------------&lt;ApplicationName>?
+|-----------------------&lt;ApplicationVersion>?
+|-----------------------&lt;Description>?
+|-----------------------&lt;xsd:any##other>*
+|---------------&lt;/Application>?
+|---------------&lt;Resources>?
+|-----------------------&lt;CandidateHosts>
+|-------------------------------&lt;HostName>+
+|-----------------------&lt;/CandidateHosts>?
+|-----------------------&lt;FileSystem>
+|-------------------------------&lt;Description>?
+|-------------------------------&lt;MountPoint>?
+|-------------------------------&lt;MountSource>?
+|-------------------------------&lt;DiskSpace>?
+|-------------------------------&lt;FileSystemType>?
+|-------------------------------&lt;xsd:any##other>*
+|-----------------------&lt;/FileSystem>*
+|-----------------------&lt;ExclusiveExecution>?
+|-----------------------&lt;OperatingSystem>?
+|-------------------------------&lt;OperatingSystemType>
+|---------------------------------------&lt;OperatingSystemName>
+|---------------------------------------&lt;xsd:any##other>*
+|-------------------------------&lt;/OperatingSystemType>?
+|-------------------------------&lt;OperatingSystemVersion>?
+|-------------------------------&lt;Description>?
+|-------------------------------&lt;xsd:any##other>*
+|-----------------------&lt;/OperatingSystem>?
+|-----------------------&lt;CPUArchitecture>
+|-------------------------------&lt;CPUArchitectureName>
+|-------------------------------&lt;xsd:any##other>*
+|-----------------------&lt;/CPUArchitecture>?
+|-----------------------&lt;IndividualCPUSpeed>?
+|-----------------------&lt;IndividualCPUTime>?
+|-----------------------&lt;IndividualCPUCount>?
+|-----------------------&lt;IndividualNetworkBandwidth>?
+|-----------------------&lt;IndividualPhysicalMemory>?
+|-----------------------&lt;IndividualVirtualMemory>?
+|-----------------------&lt;IndividualDiskSpace>?
+|-----------------------&lt;TOTALCPUTime>?
+|-----------------------&lt;TOTALCPUCount>?
+|-----------------------&lt;TOTALPhysicalMemory>?
+|-----------------------&lt;TOTALVirtualMemory>?
+|-----------------------&lt;TOTALDiskSpace>?
+|-----------------------&lt;TOTALResourceCount>?
+|-----------------------&lt;xsd:any##other>*
+|---------------&lt;/Resources>?
+|---------------&lt;DataStaging>
+|-----------------------&lt;FileName>
+|-----------------------&lt;FileSystemName>?
+|-----------------------&lt;CreationFlag>
+|-----------------------&lt;DeleteOnTermination>?
+|-----------------------&lt;Source>
+|-------------------------------&lt;URI>?
+|-------------------------------&lt;xsd:any##other>*
+|-----------------------&lt;/Source>?
+|-----------------------&lt;Target>
+|-------------------------------&lt;URI>?
+|-------------------------------&lt;xsd:any##other>*
+|-----------------------&lt;/Target>?
+|-----------------------&lt;xsd:any##other>*
+|---------------&lt;/DataStaging>*
+|---------------&lt;xsd:any##other>*
+&lt;/JobDefinition>
+</screen>
+<note>
+  <para>
+  The symbol <emphasis role="bold">"?"</emphasis> denotes zero or one occurrences,
+  <emphasis role="bold">"*"</emphasis> denotes zero or more occurrences and
+  <emphasis role="bold">"+"</emphasis> denotes one or more occurrences.
+  </para>
+</note>
+  </section>  
+  <section>
+    <title>JSDL POSIX application</title>
+    <para>
+      This schema defines the JSDL specification for describing an application executed on a POSIX
+      compliance system. Due to GridWay Job Template specification, this schema MUST be included in the
+      JSDL file. The JSDL POSIX Application Schema is as follow:
+    </para>
+<screen>
+&lt;POSIXApplication name="xsd:NCName"?>
+|-------&lt;Executable>?
+|-------&lt;Argument>*
+|-------&lt;Input>?
+|-------&lt;Output>?
+|-------&lt;Error>?
+|-------&lt;WorkingDirectory>?
+|-------&lt;Environment>*
+|-------&lt;WallTimeLimit>?
+|-------&lt;FileSizeLimit>?
+|-------&lt;CoreDumpLimit>?
+|-------&lt;DataSegmentLimit>?
+|-------&lt;LockedMemoryLimit>?
+|-------&lt;MemoryLimit>?
+|-------&lt;OpenDescriptorsLimit>?
+|-------&lt;PipeSizeLimit>?
+|-------&lt;StackSizeLimit>?
+|-------&lt;CPUTimeLimit>?
+|-------&lt;ProcessCountLimit>?
+|-------&lt;VirtualMemoryLimit>?
+|-------&lt;ThreadCountLimit>?
+|-------&lt;UserName>?
+|-------&lt;GroupName>?
+&lt;/POSIXApplication name="xsd:NCName"?>
+</screen>
+  <para>
+    More details at
+    <ulink url="http://forge.gridforum.org/sf/projects/jsdl-wg">https://forge.gridforum.org/sf/projects/jsdl-wg
+    </ulink>
+  </para>
+  </section>
+  <section>
+    <title>JSDL HPC Profile Application Extension</title>
+    <para>
+      This schema defines the JSDL specification for describing a simple HPC application that is made up of an 
+      executable file running within an operating system process. It shares much in common with the JSDL POSIXApplication.
+      The JSDL HPC Application Schema is as follow:
+    </para>
+<screen>
+&lt;HPCProfileApplication name="xsd:NCName"?>
+|-------&lt;Executable>?
+|-------&lt;Argument>*
+|-------&lt;Input>?
+|-------&lt;Output>?
+|-------&lt;Error>?
+|-------&lt;WorkingDirectory>?
+|-------&lt;Environment>*
+|-------&lt;UserNamet>?
+&lt;/HPCProfileApplication name="xsd:NCName"?>
+</screen>
+  <para>
+    More details at
+    <ulink url="http://forge.gridforum.org/sf/projects/jsdl-wg">https://forge.gridforum.org/sf/projects/jsdl-wg
+    </ulink>
+  </para>
+  </section>
+
+  <section>
+  <title>Job Submission Description Language versus GridWay Job Template</title>
+  <para>
+      Next table compares JSDL and GridWay Job Template schema, and the JSDL elements support by the current GridWay version.
+
+  <table id='TableJSDLvsGWJT' frame='all'> <title>JSDL vs GWJT</title>
+    <tgroup cols='3' align='left' colsep='1' rowsep='1'>
+        <tbody>
+          <row>
+        <entry><emphasis role="bold">JSDL Element</emphasis></entry>
+        <entry><emphasis role="bold">GWJT Attribute</emphasis></entry>
+        <entry><emphasis role="bold">Adoption</emphasis></entry>
+        <!--<entry><emphasis role="bold">Comments</emphasis></entry>-->
+    </row>
+    <row>
+        <entry>JobDefinition</entry>
+        <entry>-</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>JobDescription</entry>
+        <entry>-</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>JobIdentification</entry>
+        <entry>-</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>JobName</entry>
+        <entry>NAME</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>JobAnnotation</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>JobProject</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>Application</entry>
+        <entry>-</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>ApplicationName</entry>
+        <entry>-</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>ApplicationVersion</entry>
+        <entry>-</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>Description</entry>
+        <entry>-</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>Resources</entry>
+        <entry>-</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>CandidateHosts</entry>
+        <entry>-</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>HostName</entry>
+        <entry>HOSTNAME</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>FileSystem</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>MountPoint</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>MountSource</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>DiskSpace</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>FileSystemType</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>ExclusiveExecution</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>OperatingSystem</entry>
+        <entry>-</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>OperatingSystemType</entry>
+        <entry>-</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>OperatingSystemName</entry>
+        <entry>OS_NAME</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>OperatingSystemVersion</entry>
+        <entry>OS_VERSION</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>CPUArchitecture</entry>
+        <entry>-</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>CPUArchitectureName</entry>
+        <entry>ARCH</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>IndividualCPUSpeed</entry>
+        <entry>CPU_MHZ</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>IndividualCPUTime</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>IndividualCPUCount</entry>
+        <entry>NODECOUNT</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>IndividualNetworkBandwidth</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>IndividualPhysicalMemory</entry>
+        <entry>MEM_MB</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>IndividualVirtualMemory</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>IndividualDiskSpace</entry>
+        <entry>SIZE_DISK_MB</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>TOTALCPUTime</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>TOTALCPUCount</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>TOTALPhysicalMemory</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>TOTALVirtualMemory</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>TOTALDiskSpace</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>TOTALResourceCount</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>DataStaging</entry>
+        <entry>-</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>FileName</entry>
+        <entry>-</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>FileSystemName</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>CreationFlag</entry>
+        <entry>-</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>DeleteOnTermination</entry>
+        <entry>-</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>Source</entry>
+        <entry>INPUT_FILES</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>Target</entry>
+        <entry>OUTPUT_FILES</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>URI</entry>
+        <entry>-</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>POSIXApplication</entry>
+        <entry>-</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>Executable</entry>
+        <entry>EXECUTABLE</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>Argument</entry>
+        <entry>ARGUMENTS</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>Input</entry>
+        <entry>STDIN_FILE</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>Output</entry>
+        <entry>STDOUT_FILE</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>Error</entry>
+        <entry>STDERR_FILE</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>WorkingDirectory</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>Environment</entry>
+        <entry>ENVIRONMENT</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>WallTimeLimit</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>FileSizeLimit</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>CoreDumpLimit</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>DataSegmentLimit</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>LockedMemoryLimit</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>MemoryLimit</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>OpenDescriptorsLimit</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>PipeSizeLimit</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>StackSizeLimit</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>CPUTimeLimit</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>ProcessCountLimit</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>VirtualMemoryLimit</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>ThreadCountLimit</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>UserName</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>GroupName</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    </tbody>
+    </tgroup>
+  </table>
+    </para>
+  </section>
+
+  <section>
+    <title>Examples</title>
+    <section>
+    <title>A simple example</title>
+    <para>
+      This example shows the representation of a simple job in JSDL format and the translator of this
+      example in Gridway Job Template format.
+    </para>
+    <section>
+    <title>JSDL file</title>
+    <para>
+<screen width='80'>
+&lt;?xml version="1.0" encoding="UTF-8"?>
+<!--*
+    * Basic schema of GridWay job
+    *
+    *-->
+&lt;jsdl:JobDefinition xmlns="http://www.example.org/"
+    xmlns:jsdl="http://schemas.ggf.org/jsdl/2005/11/jsdl"
+    xmlns:jsdl-posix="http://schemas.ggf.org/jsdl/2005/11/jsdl-posix"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  &lt;jsdl:JobDescription>
+    &lt;jsdl:JobIdentification>
+      &lt;jsdl:JobName>Simple Application GW Template vs JSDL&lt;/jsdl:JobName>
+      &lt;jsdl:Description> This is a simple example to describe the main
+             differences between GW Template and the JSDL schema.
+      &lt;/jsdl:Description>
+    &lt;/jsdl:JobIdentification>
+    &lt;jsdl:Application>
+      &lt;jsdl:ApplicationName>ls&lt;/jsdl:ApplicationName>
+      &lt;jsdl-posix:POSIXApplication>
+        &lt;jsdl-posix:Executable>/bin/ls&lt;/jsdl-posix:Executable>
+        &lt;jsdl-posix:Argument>-la file.txt&lt;/jsdl-posix:Argument>
+        &lt;jsdl-posix:Environment name="LD_LIBRARY_PATH">/usr/local/lib&lt;/jsdl-posix:Environment>
+        &lt;jsdl-posix:Input>/dev/null&lt;/jsdl-posix:Input>
+        &lt;jsdl-posix:Output>stdout.${JOB_ID}&lt;/jsdl-posix:Output>
+        &lt;jsdl-posix:Error>stderr.${JOB_ID}&lt;/jsdl-posix:Error>
+      &lt;/jsdl-posix:POSIXApplication>
+    &lt;/jsdl:Application>
+    &lt;jsdl:Resources>
+      &lt;jsdl:CandidateHost>
+        &lt;jsdl:HostName>*.dacya.ucm.es&lt;/jsdl:HostName>
+      &lt;/jsdl:CandidateHost>
+      &lt;jsdl:CPUArchitecture>
+        &lt;jsdl:CPUArchitectureName>x86_32&lt;/jsdl:CPUArchitectureName>
+      &lt;/jsdl:CPUArchitecture>
+    &lt;/jsdl:Resources>
+    &lt;jsdl:DataStaging>
+      &lt;jsdl:FileName>file.txt&lt;/jsdl:FileName>
+      &lt;jsdl:CreationFlag>overwrite&lt;/jsdl:CreationFlag>
+      &lt;jsdl:DeleteOnTermination>true&lt;/jsdl:DeleteOnTermination>
+      &lt;jsdl:Source>
+        &lt;jsdl:URI>gsiftp://hydrus.dacya.ucm.es/home/jose/file1.txt&lt;/jsdl:URI>
+      &lt;/jsdl:Source>
+    &lt;/jsdl:DataStaging>
+    &lt;jsdl:DataStaging>
+      &lt;jsdl:FileName>stdout.${JOB_ID}&lt;/jsdl:FileName>
+      &lt;jsdl:CreationFlag>overwrite&lt;/jsdl:CreationFlag>
+      &lt;jsdl:DeleteOnTermination>true&lt;/jsdl:DeleteOnTermination>
+      &lt;jsdl:Target>
+        &lt;jsdl:URI>gsiftp://hydrus.dacya.ucm.es/home/jose/stdout.${JOB_ID}&lt;/jsdl:URI>
+      &lt;/jsdl:Target>
+    &lt;/jsdl:DataStaging>
+    &lt;jsdl:DataStaging>
+      &lt;jsdl:FileName>stderr.${JOB_ID}&lt;/jsdl:FileName>
+      &lt;jsdl:CreationFlag>overwrite&lt;/jsdl:CreationFlag>
+      &lt;jsdl:DeleteOnTermination>true&lt;/jsdl:DeleteOnTermination>
+      &lt;jsdl:Target>
+        &lt;jsdl:URI>gsiftp://hydrus.dacya.ucm.es/home/jose/stderr.${JOB_ID}&lt;/jsdl:URI>
+      &lt;/jsdl:Target>
+    &lt;/jsdl:DataStaging>
+  &lt;/jsdl:JobDescription>
+&lt;/jsdl:JobDefinition>
+</screen>
+</para>
+</section>
+    <section>
+    <title>GridWay Job Template file</title>
+    <para>
+<screen>
+#This file was automatically generated by the JSDL2GWJT parser
+EXECUTABLE=/bin/ls
+ARGUMENTS=-la file.txt
+STDIN_FILE=/dev/null
+STDOUT_FILE=stdout.${JOB_ID}
+STDERR_FILE=stderr.${JOB_ID}
+ENVIRONMENT=LD_LIBRARY_PATH=/usr/local/lib
+REQUIREMENTS=HOSTNAME="*.dacya.ucm.es" &amp; ARCH="x86_32"
+INPUT_FILES=file.txt</screen>
+</para>
+    </section>
+</section>
+<section>
+    <title>A HPC profile example</title>
+    <para>
+      This example shows the representation of a HPC profile job in JSDL format and the translator of this
+      example in Gridway Job Template format.
+    </para>
+    <section>
+    <title>JSDL file</title>
+    <para>
+<screen width='80'>
+&lt;?xml version="1.0" encoding="UTF-8"?>
+<!--*
+    * HPC Profile schema of GridWay job
+    *
+    *-->
+&lt;jsdl:JobDefinition xmlns="http://www.example.org/"
+    xmlns:jsdl="http://schemas.ggf.org/jsdl/2005/11/jsdl"
+    xmlns:jsdl-posix="http://schemas.ggf.org/jsdl/2005/11/jsdl-posix"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  &lt;jsdl:JobDescription>
+    &lt;jsdl:JobIdentification>
+      &lt;jsdl:JobName>Simple Application GW Template vs JSDL&lt;/jsdl:JobName>
+      &lt;jsdl:Description> This is a simple example to describe the main
+             differences between GW Template and the JSDL schema.
+      &lt;/jsdl:Description>
+    &lt;/jsdl:JobIdentification>
+    &lt;jsdl:Application>
+      &lt;jsdl:ApplicationName>ls&lt;/jsdl:ApplicationName>
+      &lt;jsdl-hpcpa:HPCProfileApplication>
+        &lt;jsdl-hpcpa:Executable>/bin/ls&lt;/jsdl-hpcpa:Executable>
+        &lt;jsdl-hpcpa:Argument>-la file.txt&lt;/jsdl-hpcpa:Argument>
+        &lt;jsdl-hpcpa:Environment name="LD_LIBRARY_PATH">/usr/local/lib&lt;/jsdl-hpcpa:Environment>
+        &lt;jsdl-hpcpa:Input>/dev/null&lt;/jsdl-hpcpa:Input>
+        &lt;jsdl-hpcpa:Output>stdout.${JOB_ID}&lt;/jsdl-hpcpa:Output>
+        &lt;jsdl-hpcpa:Error>stderr.${JOB_ID}&lt;/jsdl-hpcpa:Error>
+      &lt;/jsdl-hpcpa:HPCProfileApplication>
+    &lt;/jsdl:Application>
+    &lt;jsdl:Resources>
+      &lt;jsdl:CandidateHost>
+        &lt;jsdl:HostName>*.dacya.ucm.es&lt;/jsdl:HostName>
+      &lt;/jsdl:CandidateHost>
+      &lt;jsdl:CPUArchitecture>
+        &lt;jsdl:CPUArchitectureName>x86_32&lt;/jsdl:CPUArchitectureName>
+      &lt;/jsdl:CPUArchitecture>
+    &lt;/jsdl:Resources>
+    &lt;jsdl:DataStaging>
+      &lt;jsdl:FileName>file.txt&lt;/jsdl:FileName>
+      &lt;jsdl:CreationFlag>overwrite&lt;/jsdl:CreationFlag>
+      &lt;jsdl:DeleteOnTermination>true&lt;/jsdl:DeleteOnTermination>
+      &lt;jsdl:Source>
+        &lt;jsdl:URI>gsiftp://hydrus.dacya.ucm.es/home/jose/file1.txt&lt;/jsdl:URI>
+      &lt;/jsdl:Source>
+    &lt;/jsdl:DataStaging>
+    &lt;jsdl:DataStaging>
+      &lt;jsdl:FileName>stdout.${JOB_ID}&lt;/jsdl:FileName>
+      &lt;jsdl:CreationFlag>overwrite&lt;/jsdl:CreationFlag>
+      &lt;jsdl:DeleteOnTermination>true&lt;/jsdl:DeleteOnTermination>
+      &lt;jsdl:Target>
+        &lt;jsdl:URI>gsiftp://hydrus.dacya.ucm.es/home/jose/stdout.${JOB_ID}&lt;/jsdl:URI>
+      &lt;/jsdl:Target>
+    &lt;/jsdl:DataStaging>
+    &lt;jsdl:DataStaging>
+      &lt;jsdl:FileName>stderr.${JOB_ID}&lt;/jsdl:FileName>
+      &lt;jsdl:CreationFlag>overwrite&lt;/jsdl:CreationFlag>
+      &lt;jsdl:DeleteOnTermination>true&lt;/jsdl:DeleteOnTermination>
+      &lt;jsdl:Target>
+        &lt;jsdl:URI>gsiftp://hydrus.dacya.ucm.es/home/jose/stderr.${JOB_ID}&lt;/jsdl:URI>
+      &lt;/jsdl:Target>
+    &lt;/jsdl:DataStaging>
+  &lt;/jsdl:JobDescription>
+&lt;/jsdl:JobDefinition>
+</screen>
+</para>
+</section>
+    <section>
+    <title>GridWay Job Template file</title>
+    <para>
+<screen>
+#This file was automatically generated by the JSDL2GWJT parser
+EXECUTABLE=/bin/ls
+ARGUMENTS=-la file.txt
+STDIN_FILE=/dev/null
+STDOUT_FILE=stdout.${JOB_ID}
+STDERR_FILE=stderr.${JOB_ID}
+ENVIRONMENT=LD_LIBRARY_PATH=/usr/local/lib
+REQUIREMENTS=HOSTNAME="*.dacya.ucm.es" &amp; ARCH="x86_32"
+INPUT_FILES=file.txt</screen>
+</para>
+    </section>
+  </section>
+</section>
+</section>
+</section>

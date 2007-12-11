@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd"
+[
+
+<!ENTITY % myents SYSTEM "../../entities">
+
+%myents;
+
+]>
+<section>
+<section>
+<title>Debugging job execution</title>
+
+<para>
+GridWay reporting and accounting facilities provide information about overall
+performance and help debug job execution. GWD generates the following files
+under the <filename>$GW_LOCATION/var</filename> directory:
+<itemizedlist>
+  <listitem>
+  <para>
+   <filename>gwd.log</filename>: System level log. You can find log
+  information of the activity of the middleware access drivers; and a
+  coarse-grain log information about jobs.
+  </para>
+  </listitem>
+
+  <listitem>
+  <para>
+  <filename>$JOB_ID/job.log</filename>: Detailed log information for each job,
+  it includes details of job state transitions, resource usage and
+  performance.
+  </para>
+  </listitem>
+
+  <listitem>
+  <para>
+  <filename>$JOB_ID/stdout.wrapper</filename>: Standard output of the wrapper
+  executable.
+  </para>
+  </listitem>
+
+  <listitem>
+  <para>
+  <filename>$JOB_ID/stderr.wrapper</filename>: Standard error output of the
+  wrapper executable. By default, wrapper is executed with shell debugging
+  options (<option>-xv</option>) active, so this is usually the best source of
+  information in case of failure.
+  </para>
+  </listitem>
+</itemizedlist>
+</para>
+</section>
+
+<section>
+<title>Frequent problems</title>
+
+<para>
+Currently, many errors are handled silently and are only shown in the
+<filename>job.log</filename> file.
+</para>
+
+<para>
+Also, there is a number of failures related to the underlying middleware
+(Globus in this case) that could make some jobs fail. It is a good idea to
+perform some basic testing of Globus when some jobs unexpectedly fail
+(see the <emphasis>Installation and Configuration Guide</emphasis> to learn
+how to verify a Globus installation)
+</para>
+
+<para>
+Use the GridWay lists (see <filename>www.gridway.org/support.php</filename>),
+to submit your problems and they will be eventually appear in this guide.
+</para>
+</section>
+</section>

@@ -1,0 +1,328 @@
+<div element="book" href="#gridwayAdmin" number="" targetptr="gridwayAdmin">
+  <ttl>
+            GT 4.2-drafts GridWay: System Administrator's Guide
+        </ttl>
+  <xreftext>
+            GT 4.2-drafts GridWay: System Administrator's Guide
+        </xreftext>
+  <div element="chapter" href="#s-gridway-admin-introduction" number="1" targetptr="s-gridway-admin-introduction">
+    <ttl>Introduction</ttl>
+    <xreftext>Chapter 1, <fo:inline xmlns:fo="http://www.w3.org/1999/XSL/Format" font-style="italic">Introduction</fo:inline></xreftext>
+    <div element="section" href="#id2628498" number="1">
+      <ttl>GridWay Architecture</ttl>
+      <xreftext>Section 1, “GridWay Architecture”</xreftext>
+      <obj element="figure" href="#id2608389" number="1.1">
+        <ttl>Components of the GridWay Meta-scheduler.</ttl>
+        <xreftext>Figure 1.1, “Components of the GridWay Meta-scheduler.”</xreftext>
+      </obj>
+    </div>
+    <div element="section" href="#id2596032" number="2">
+      <ttl>Meta-scheduling Infrastructures with GridWay</ttl>
+      <xreftext>Section 2, “Meta-scheduling Infrastructures with GridWay”</xreftext>
+      <div element="section" href="#id2616244" number="2.1">
+        <ttl>Enterprise Grid Infrastructures</ttl>
+        <xreftext>Section 2.1, “Enterprise Grid Infrastructures”</xreftext>
+        <obj element="figure" href="#id2608754" number="1.2">
+          <ttl>Enterprise Grid deployment with GridWay.</ttl>
+          <xreftext>Figure 1.2, “Enterprise Grid deployment with GridWay.”</xreftext>
+        </obj>
+      </div>
+      <div element="section" href="#id2619510" number="2.2">
+        <ttl>Partner Grid Infrastructures</ttl>
+        <xreftext>Section 2.2, “Partner Grid Infrastructures”</xreftext>
+        <obj element="figure" href="#id2596706" number="1.3">
+          <ttl>Partner Grid deployment with GridWay.</ttl>
+          <xreftext>Figure 1.3, “Partner Grid deployment with GridWay.”</xreftext>
+        </obj>
+      </div>
+      <div element="section" href="#id2603743" number="2.3">
+        <ttl>Federation of Grid Infrastructures</ttl>
+        <xreftext>Section 2.3, “Federation of Grid Infrastructures”</xreftext>
+        <obj element="figure" href="#id2611201" number="1.4">
+          <ttl>Grid Federation with GridWay and GridGateWays.</ttl>
+          <xreftext>Figure 1.4, “Grid Federation with GridWay and GridGateWays.”</xreftext>
+        </obj>
+      </div>
+    </div>
+  </div>
+  <div element="chapter" href="#s-gridway-admin-installing" number="2" targetptr="s-gridway-admin-installing">
+    <ttl>Building and installing</ttl>
+    <xreftext>Chapter 2, <fo:inline xmlns:fo="http://www.w3.org/1999/XSL/Format" font-style="italic">Building and installing</fo:inline></xreftext>
+    <div element="section" href="#id2621334" number="1">
+      <ttl>Verifying Globus Installation</ttl>
+      <xreftext>Section 1, “Verifying Globus Installation”</xreftext>
+    </div>
+    <div element="section" href="#id2618183" number="2">
+      <ttl>Required Software</ttl>
+      <xreftext>Section 2, “Required Software”</xreftext>
+    </div>
+    <div element="section" href="#id2603280" number="3">
+      <ttl>Platform Notes</ttl>
+      <xreftext>Section 3, “Platform Notes”</xreftext>
+      <div element="section" href="#id2594488" number="3.1">
+        <ttl>Fedora Core</ttl>
+        <xreftext>Section 3.1, “Fedora Core”</xreftext>
+      </div>
+      <div element="section" href="#id2613813" number="3.2">
+        <ttl>Debian Testing</ttl>
+        <xreftext>Section 3.2, “Debian Testing”</xreftext>
+      </div>
+      <div element="section" href="#id2529314" number="3.3">
+        <ttl>Mac OS X</ttl>
+        <xreftext>Section 3.3, “Mac OS X”</xreftext>
+      </div>
+      <div element="section" href="#id2628790" number="3.4">
+        <ttl>Solaris 10</ttl>
+        <xreftext>Section 3.4, “Solaris 10”</xreftext>
+      </div>
+      <div element="section" href="#id2596055" number="3.5">
+        <ttl>Other Linux/UNIX flavors</ttl>
+        <xreftext>Section 3.5, “Other Linux/UNIX flavors”</xreftext>
+      </div>
+    </div>
+    <div element="section" href="#id2614392" number="4">
+      <ttl>Installing GridWay</ttl>
+      <xreftext>Section 4, “Installing GridWay”</xreftext>
+      <div element="section" href="#id2627137" number="4.1">
+        <ttl>Single-User Mode Installation</ttl>
+        <xreftext>Section 4.1, “Single-User Mode Installation”</xreftext>
+        <obj element="table" href="#id2545800" number="2.1">
+          <ttl>Configure Options.</ttl>
+          <xreftext>Table 2.1, “Configure Options.”</xreftext>
+        </obj>
+      </div>
+      <div element="section" href="#id2629802" number="4.2">
+        <ttl>Multiple-User Mode Installation</ttl>
+        <xreftext>Section 4.2, “Multiple-User Mode Installation”</xreftext>
+      </div>
+    </div>
+  </div>
+  <div element="chapter" href="#s-gridway-admin-configuring" number="3" targetptr="s-gridway-admin-configuring">
+    <ttl>Configuration Guide</ttl>
+    <xreftext>Chapter 3, <fo:inline xmlns:fo="http://www.w3.org/1999/XSL/Format" font-style="italic">Configuration Guide</fo:inline></xreftext>
+    <div element="section" href="#id2592842" number="1">
+      <ttl>Core Configuration Guide</ttl>
+      <xreftext>Section 1, “Core Configuration Guide”</xreftext>
+      <div element="section" href="#id2587398" number="1.1">
+        <ttl>Configuration Interface</ttl>
+        <xreftext>Section 1.1, “Configuration Interface”</xreftext>
+      </div>
+      <div element="section" href="#GWDconf" number="1.2" targetptr="GWDconf">
+        <ttl>GridWay Daemon (GWD) Configuration</ttl>
+        <xreftext>Section 1.2, “GridWay Daemon (GWD) Configuration”</xreftext>
+        <obj element="table" href="#id2609294" number="3.1">
+          <ttl>GWD Configuration File Options.</ttl>
+          <xreftext>Table 3.1, “GWD Configuration File Options.”</xreftext>
+        </obj>
+      </div>
+      <div element="section" href="#id2627224" number="1.3">
+        <ttl>Job Template Default Values</ttl>
+        <xreftext>Section 1.3, “Job Template Default Values”</xreftext>
+      </div>
+      <div element="section" href="#RunningGWD" number="1.4" targetptr="RunningGWD">
+        <ttl>Running gwd</ttl>
+        <xreftext>Section 1.4, “Running gwd”</xreftext>
+      </div>
+      <div element="section" href="#id2593324" number="1.5">
+        <ttl>Daemon Failure Recovery</ttl>
+        <xreftext>Section 1.5, “Daemon Failure Recovery”</xreftext>
+      </div>
+    </div>
+    <div element="section" href="#id2593370" number="2">
+      <ttl>Scheduler Configuration Guide</ttl>
+      <xreftext>Section 2, “Scheduler Configuration Guide”</xreftext>
+      <div element="section" href="#id2593405" number="2.1">
+        <ttl> GridWay Scheduling Architecture </ttl>
+        <xreftext>Section 2.1, “ GridWay Scheduling Architecture ”</xreftext>
+        <obj element="figure" href="#schedinfo" number="3.1" targetptr="schedinfo">
+          <ttl>Job Scheduling in GridWay</ttl>
+          <xreftext>Figure 3.1, “Job Scheduling in GridWay”</xreftext>
+        </obj>
+      </div>
+      <div element="section" href="#id2593556" number="2.2">
+        <ttl> Scheduling Policies </ttl>
+        <xreftext>Section 2.2, “ Scheduling Policies ”</xreftext>
+        <obj element="figure" href="#listinfo" number="3.2" targetptr="listinfo">
+          <ttl>Job and resource prioritization policies in GridWay.</ttl>
+          <xreftext>Figure 3.2, “Job and resource prioritization policies in GridWay.”</xreftext>
+        </obj>
+      </div>
+      <div element="section" href="#id2608285" number="2.3">
+        <ttl>Job Prioritization Policies</ttl>
+        <xreftext>Section 2.3, “Job Prioritization Policies”</xreftext>
+        <div element="section" href="#id2605972" number="2.3.1">
+          <ttl>Fixed Priority Policy (FP)</ttl>
+          <xreftext>Section 2.3.1, “Fixed Priority Policy (FP)”</xreftext>
+        </div>
+        <div element="section" href="#id2585792" number="2.3.2">
+          <ttl>Urgent Job Policy</ttl>
+          <xreftext>Section 2.3.2, “Urgent Job Policy”</xreftext>
+        </div>
+        <div element="section" href="#id2629343" number="2.3.3">
+          <ttl>Fair-Share Policy (SH)</ttl>
+          <xreftext>Section 2.3.3, “Fair-Share Policy (SH)”</xreftext>
+        </div>
+        <div element="section" href="#id2629423" number="2.3.4">
+          <ttl>Waiting-time Policy (WT)</ttl>
+          <xreftext>Section 2.3.4, “Waiting-time Policy (WT)”</xreftext>
+        </div>
+        <div element="section" href="#id2629454" number="2.3.5">
+          <ttl>Deadline Policy (DL)</ttl>
+          <xreftext>Section 2.3.5, “Deadline Policy (DL)”</xreftext>
+        </div>
+        <div element="section" href="#id2636918" number="2.3.6">
+          <ttl>The Overall Dispatch Priority of a Job</ttl>
+          <xreftext>Section 2.3.6, “The Overall Dispatch Priority of a Job”</xreftext>
+          <obj element="figure" href="#jpeq" number="3.3" targetptr="jpeq">
+            <ttl>Dispatch priority of a job</ttl>
+            <xreftext>Figure 3.3, “Dispatch priority of a job”</xreftext>
+          </obj>
+        </div>
+      </div>
+      <div element="section" href="#id2636981" number="2.4">
+        <ttl>Resource Prioritization Policies</ttl>
+        <xreftext>Section 2.4, “Resource Prioritization Policies”</xreftext>
+        <div element="section" href="#id2637027" number="2.4.1">
+          <ttl>Fixed Resource Priority Policy (RP)</ttl>
+          <xreftext>Section 2.4.1, “Fixed Resource Priority Policy (RP)”</xreftext>
+        </div>
+        <div element="section" href="#id2637108" number="2.4.2">
+          <ttl>Rank Policy (RA)</ttl>
+          <xreftext>Section 2.4.2, “Rank Policy (RA)”</xreftext>
+        </div>
+        <div element="section" href="#id2637148" number="2.4.3">
+          <ttl>Usage Policy (UG)</ttl>
+          <xreftext>Section 2.4.3, “Usage Policy (UG)”</xreftext>
+          <obj element="figure" href="#ugeq" number="3.4" targetptr="ugeq">
+            <ttl>Estimated execution time of a job on a resource</ttl>
+            <xreftext>Figure 3.4, “Estimated execution time of a job on a resource”</xreftext>
+          </obj>
+        </div>
+        <div element="section" href="#id2637313" number="2.4.4">
+          <ttl>Failure Rate Policy (FR)</ttl>
+          <xreftext>Section 2.4.4, “Failure Rate Policy (FR)”</xreftext>
+          <obj element="figure" href="#freq" number="3.5" targetptr="freq">
+            <ttl>Banned time formula</ttl>
+            <xreftext>Figure 3.5, “Banned time formula”</xreftext>
+          </obj>
+        </div>
+        <div element="section" href="#id2637452" number="2.4.5">
+          <ttl>The Overall Suitability Priority of a Resource</ttl>
+          <xreftext>Section 2.4.5, “The Overall Suitability Priority of a Resource”</xreftext>
+          <obj element="figure" href="#rpeq" number="3.6" targetptr="rpeq">
+            <ttl>Suitability priority of a resource</ttl>
+            <xreftext>Figure 3.6, “Suitability priority of a resource”</xreftext>
+          </obj>
+        </div>
+        <div element="section" href="#id2637511" number="2.4.6">
+          <ttl>Re-scheduling Policies</ttl>
+          <xreftext>Section 2.4.6, “Re-scheduling Policies”</xreftext>
+        </div>
+      </div>
+      <div element="section" href="#schedConfFile" number="2.5" targetptr="schedConfFile">
+        <ttl>Built-in Scheduler Configuration File</ttl>
+        <xreftext>Section 2.5, “Built-in Scheduler Configuration File”</xreftext>
+        <obj element="table" href="#id2637603" number="3.2">
+          <ttl>Built-in Scheduler Configuration File Options.</ttl>
+          <xreftext>Table 3.2, “Built-in Scheduler Configuration File Options.”</xreftext>
+        </obj>
+      </div>
+      <div element="section" href="#SchedDrivConf" number="2.6" targetptr="SchedDrivConf">
+        <ttl>Scheduler Configuration</ttl>
+        <xreftext>Section 2.6, “Scheduler Configuration”</xreftext>
+        <div element="section" href="#id2638376" number="2.6.1">
+          <ttl>Built-in Scheduler</ttl>
+          <xreftext>Section 2.6.1, “Built-in Scheduler”</xreftext>
+        </div>
+        <div element="section" href="#id2638413" number="2.6.2">
+          <ttl>Flood Scheduler</ttl>
+          <xreftext>Section 2.6.2, “Flood Scheduler”</xreftext>
+        </div>
+      </div>
+    </div>
+    <div element="section" href="#id2638537" number="3">
+      <ttl>MAD Configuration Guide</ttl>
+      <xreftext>Section 3, “MAD Configuration Guide”</xreftext>
+      <div element="section" href="#gwrc" number="3.1" targetptr="gwrc">
+        <ttl>MAD Environment Configuration</ttl>
+        <xreftext>Section 3.1, “MAD Environment Configuration”</xreftext>
+      </div>
+      <div element="section" href="#ExecDrivConf" number="3.2" targetptr="ExecDrivConf">
+        <ttl>
+                Execution Driver Configuration
+            </ttl>
+        <xreftext>Section 3.2, “
+                Execution Driver Configuration
+            ”</xreftext>
+        <div element="section" href="#EmPort" number="3.2.1" targetptr="EmPort">
+          <ttl>Port configuration in WS EM MAD</ttl>
+          <xreftext>Section 3.2.1, “Port configuration in WS EM MAD”</xreftext>
+        </div>
+      </div>
+      <div element="section" href="#TransfDrivConf" number="3.3" targetptr="TransfDrivConf">
+        <ttl>File Transfer Driver Configuration</ttl>
+        <xreftext>Section 3.3, “File Transfer Driver Configuration”</xreftext>
+        <div element="section" href="#id2639101" number="3.3.1">
+          <ttl>Configuring the GridFTP Transfer Driver</ttl>
+          <xreftext>Section 3.3.1, “Configuring the GridFTP Transfer Driver”</xreftext>
+        </div>
+        <div element="section" href="#id2639132" number="3.3.2">
+          <ttl>Configuring the Dummy Transfer Driver</ttl>
+          <xreftext>Section 3.3.2, “Configuring the Dummy Transfer Driver”</xreftext>
+        </div>
+      </div>
+      <div element="section" href="#InfDrivConf" number="3.4" targetptr="InfDrivConf">
+        <ttl>Information Driver Configuration</ttl>
+        <xreftext>Section 3.4, “Information Driver Configuration”</xreftext>
+        <div element="section" href="#id2639590" number="3.4.1">
+          <ttl>Static Discovery and Monitoring (SS mode)</ttl>
+          <xreftext>Section 3.4.1, “Static Discovery and Monitoring (SS mode)”</xreftext>
+        </div>
+        <div element="section" href="#id2639778" number="3.4.2">
+          <ttl>Static Discovery and Dynamic Monitoring (SD mode)</ttl>
+          <xreftext>Section 3.4.2, “Static Discovery and Dynamic Monitoring (SD mode)”</xreftext>
+        </div>
+        <div element="section" href="#id2639890" number="3.4.3">
+          <ttl>Dynamic Discovery and Monitoring (DD mode)</ttl>
+          <xreftext>Section 3.4.3, “Dynamic Discovery and Monitoring (DD mode)”</xreftext>
+        </div>
+        <div element="section" href="#SEHOSTNAME" number="3.4.4" targetptr="SEHOSTNAME">
+          <ttl>Separate Storage and Computing Element</ttl>
+          <xreftext>Section 3.4.4, “Separate Storage and Computing Element”</xreftext>
+        </div>
+      </div>
+    </div>
+    <div element="section" href="#id2640033" number="4">
+      <ttl>Integration Guides</ttl>
+      <xreftext>Section 4, “Integration Guides”</xreftext>
+    </div>
+  </div>
+  <div element="chapter" href="#s-gridway-admin-testing" number="4" targetptr="s-gridway-admin-testing">
+    <ttl>Testing</ttl>
+    <xreftext>Chapter 4, <fo:inline xmlns:fo="http://www.w3.org/1999/XSL/Format" font-style="italic">Testing</fo:inline></xreftext>
+    <div element="section" href="#VerifGWInst" number="1" targetptr="VerifGWInst">
+      <ttl>Verifying the installation</ttl>
+      <xreftext>Section 1, “Verifying the installation”</xreftext>
+    </div>
+    <div element="section" href="#id2611141" number="2">
+      <ttl>Test Suite</ttl>
+      <xreftext>Section 2, “Test Suite”</xreftext>
+      <obj element="table" href="#id2602604" number="4.1">
+        <ttl>GridWay tests description.</ttl>
+        <xreftext>Table 4.1, “GridWay tests description.”</xreftext>
+      </obj>
+    </div>
+    <div element="section" href="#id2627967" number="3">
+      <ttl>DRMAA Test Suite</ttl>
+      <xreftext>Section 3, “DRMAA Test Suite”</xreftext>
+    </div>
+  </div>
+  <div element="chapter" href="#s-gridway-admin-security_considerations" number="5" targetptr="s-gridway-admin-security_considerations">
+    <ttl>Security considerations</ttl>
+    <xreftext>Chapter 5, <fo:inline xmlns:fo="http://www.w3.org/1999/XSL/Format" font-style="italic">Security considerations</fo:inline></xreftext>
+  </div>
+  <div element="chapter" href="#s-gridway-admin-troubleshooting" number="6" targetptr="s-gridway-admin-troubleshooting">
+    <ttl>Troubleshooting</ttl>
+    <xreftext>Chapter 6, <fo:inline xmlns:fo="http://www.w3.org/1999/XSL/Format" font-style="italic">Troubleshooting</fo:inline></xreftext>
+  </div>
+</div>

@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd"
+[
+
+<!ENTITY % myents SYSTEM "../../entities">
+
+%myents;
+
+]>
+<section>
+<variablelist>
+
+<varlistentry>
+  <term>Advanced Scheduling Capabilities</term>
+  <listitem>
+    <para>
+      GridWay implements several state-of-the-art Grid-aware scheduling
+policies, comprising <emphasis>job prioritization</emphasis> policies (fixed
+priority, urgency, share, deadline and waiting-time) and <emphasis>resource
+prioritization</emphasis> policies (fixed priority, usage, failure and rank).
+  </para>
+  <para>
+These policies are combined with:</para>
+<itemizedlist>
+<listitem><para><emphasis>Adaptive Scheduling</emphasis>, to
+periodically adapt the schedule considering applications' demands and Grid
+resource characteristics.</para></listitem>
+
+<listitem><para><emphasis>Adaptive Execution</emphasis> to migrate
+running applications in terms of resource availability, capacity or cost, and
+new application requirements or preferences.</para></listitem>
+</itemizedlist>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+  <term>Transparent Grid Access</term>
+  <listitem>
+    <para>
+    GridWay interfaces infrastructures with
+different middleware stacks. With GridWay, users can access heterogeneous
+resources in a transparent way. For example, it can access resources configured
+with both GRAM pre web services and GRAM web services. It also permits the use
+of different grids with different software stacks, for example, Teragrid with
+Globus and EGEE with gLite.
+    </para>
+  </listitem>
+</varlistentry>
+
+
+<varlistentry>
+  <term>Flexible Deployment Capabilities</term>
+  <listitem>
+    <para>
+    GridWay supports multiple-user operation mode, and does not require
+additional middleware installation (apart from standard Globus services). Globus
+installation is not required in each end-user system.
+    </para>
+
+    <para>
+     GridWay allows different Grid deployment strategies, like Enterprise Grids,
+Partner Grids or Utility Grids.
+    </para>
+
+  </listitem>
+</varlistentry>
+
+<varlistentry>
+  <term>Different Application Profiles</term>
+  <listitem>
+    <para>GridWay executes different Grid application profiles:</para>
+<itemizedlist>
+<listitem><para>Array (Bulk) jobs, for parameter sweep
+applications</para></listitem>
+<listitem><para>DAG Workflows</para></listitem>
+<listitem><para>Single-site MPI applications</para></listitem>
+</itemizedlist>
+  </listitem>
+</varlistentry>
+
+<varlistentry>
+  <term>Fault Detection and Recovery</term>
+  <listitem>
+    <para>GridWay is able to detect several problems that can occur when
+executing a remote job. It also implements mechanisms that make the execution
+more reliable. It can detect a remote system crash, a job failure (via the job
+exit code) or even a network disconnection (using the polling mechanism) and
+migrate the problematic job to another resource.</para><para>GridWay also
+performs periodic saves of its state in order to recover from local
+failure.</para>
+  </listitem>
+</varlistentry>
+
+<varlistentry>
+  <term>Reporting and Accounting</term>
+  <listitem>
+    <para>GridWay provides detailed statistics of Grid usage. In this
+way, the Grid administrator can properly plan usage policies and forecast
+workload. In addition, these statistics can be used by the scheduler to
+predict (per user) Grid resource response time.</para>
+  </listitem>
+</varlistentry>
+
+<varlistentry>
+  <term>Standard Compliance</term>
+  <listitem>
+    <para>GridWay is an open-source project, flexible and completely based on standards
+to leverage its usability and interoperability. For example, users can describe
+their jobs using JSDL. Similarly, programmers can build grid
+enabled applications using the DRMAA standard.</para>
+  </listitem>
+</varlistentry>
+
+<varlistentry>
+  <term>User Interface</term>
+  <listitem>
+    <para>GridWay provides end-users with a familiar environment similar
+to that found on classical LRM systems. So GridWay CLI eases the adoption
+of Grid technologies.</para>
+  </listitem>
+</varlistentry>
+
+</variablelist>
+</section>

@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd"
+[
+
+<!ENTITY % myents SYSTEM "../../entities">
+
+%myents;
+
+]>
+<section>
+<para>Since GridWay 5.2, development activities have been focused on easing the
+integration of GridWay with the major Grid infrastructures: EGEE, TeraGrid and
+OSG. As a result, the flexibility of GridWay has been considerably improved. In
+addition, an important effort has been made to improve the reliability of
+GridWay's core.</para>
+
+<para>Also, GridWay 5.2.1 is the first release shipped with the Globus
+Toolkit. Therefore, some modifications have been introduced to build and install
+GridWay in a GT tree: the directory layout has been slighly changed, and
+support to build GridWay with GPT has been added.</para>
+
+<para>New to GridWay 5.2.1:</para>
+
+<variablelist>
+<varlistentry>
+  <term>Integration with major Grid Infrastructures</term>
+  <listitem>
+    <para>GridWay 5.2.1 can be easily integrated with all the major Grid
+infrastructures. Its functionality has been extended to operate different Grid
+deployments, which includes support for different execution/transfer schemes,
+information models and service configurations.</para>
+  </listitem>
+</varlistentry>
+
+<varlistentry>
+  <term>Improved Reliability</term>
+  <listitem>
+    <para>Previous GridWay releases do not handle MAD crashes. GridWay 5.2.1
+will reload a MAD process whenever a MAD is killed or crashed.</para>
+  </listitem>
+</varlistentry>
+
+<varlistentry>
+  <term>New Information model</term>
+  <listitem>
+    <para>The dynamic information of a host gathered from the Grid Information
+server can be mixed with custom variables defined by the GridWay administrator.
+This functionality is very useful when you need to extend the information scheme
+but have no access to the Grid server. For example, you can use this new feature
+to add software or license attributes to grid resources that can 
+subsequently be used for resource requirement expressions.</para>
+  </listitem>
+</varlistentry>
+
+<varlistentry>
+  <term>Configuration Interface for MADs</term>
+  <listitem>
+    <para>Middleware Access Drivers need some environment variables to work
+properly. Usually, sudo must be configured to preserve these variables (e.g.
+<computeroutput>GLOBUS_LOCATION</computeroutput> or
+<computeroutput>GW_LOCATION</computeroutput>). GridWay 5.2.1 has a new
+configuration interface to ease this configuration. In this way, global (and per
+user) environment variables can be defined for MAD execution. This new feature
+allows GridWay to work with delegated credentials when configured with a GRAM
+interface.</para>
+  </listitem>
+</varlistentry>
+
+<varlistentry>
+  <term>Flexible definition of file transfer servers</term>
+  <listitem>
+    <para>A GridFTP server, different from the GRAM server, can be defined for
+file staging. The storage server must be defined
+(<computeroutput>SE_HOSTNAME</computeroutput>, attribute) for those resources
+operated on in this way. This can be done either by modifying the IM's MAD or using
+the new static-dynamic information model.</para>
+  </listitem>
+</varlistentry>
+
+<varlistentry>
+  <term>Support for JSDL HPC profile </term>
+  <listitem>
+    <para>Now job templates can be also defined using the OGF standard JSDL HPC
+profile.</para>
+  </listitem>
+</varlistentry>
+</variablelist>
+</section>

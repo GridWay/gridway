@@ -1,0 +1,261 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd"
+[
+
+<!ENTITY % myents SYSTEM "../../entities">
+
+%myents;
+
+]>
+<section>
+	 <section id='VerifGWInst'>
+	  <title>Verifying the installation</title>
+
+	  <para>
+	  In order to test the GridWay installation, login as your user account, in
+	  the single-mode installation, or as the <filename>&lt;gwadmin></filename>
+	  account, in the multiple-user installation, and follow the steps listed below:
+	  </para>
+
+	  <para>
+	  <orderedlist>
+	    <listitem>
+	    <para>
+	    Set up the environment variables <envar>GW_LOCATION</envar> and
+	    <envar>PATH</envar>:
+	    <screen>
+	$ export GW_LOCATION=&lt;path_to_GridWay_installation>
+	$ export PATH=$PATH:$GW_LOCATION/bin</screen>
+	    </para>
+	    <para>
+	    or <screen>
+	$ setenv GW_LOCATION &lt;path_to_GridWay_installation>
+	$ setenv PATH $PATH:$GW_LOCATION/bin</screen>
+	    </para>
+	    <para>
+	    depending on the shell you are using.
+	    </para>
+	    </listitem>
+
+	    <listitem>
+	    <para>
+	    Generate a valid proxy
+	    <screen>
+	$ grid-proxy-init
+	Your identity: /O=Grid/OU=GRIDWAY/CN=GRIDWAY User
+	Enter GRID pass phrase for this identity:
+	Creating proxy ................................. Done
+	Your proxy is valid until: Mon Oct 29 03:29:17 2005</screen>
+	    </para>
+	    </listitem>
+
+	    <listitem>
+	    <para>
+	    Show the GridWay license:
+	    <screen>
+	$ gwd -v
+	Copyright 2002-2007 GridWay Team, Distributed Systems Architecture
+	Group, Universidad Complutense de Madrid
+
+	GridWay 5.2 is distributed and licensed for use under the terms of the
+	Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0).</screen>
+	    </para>
+	    </listitem>
+
+	    <listitem>
+	    <para>
+	    Start the GridWay daemon (GWD) (in multiple-mode add the
+	    <command>-m</command> option):
+	    <screen>$ gwd</screen>
+	    </para>
+	    </listitem>
+
+	    <listitem>
+	    <para>
+	    Check the connection to GWD:
+	    <screen width='80'>
+	$ gwps
+	USER         JID DM   EM   START    END      EXEC    XFER    EXIT NAME            HOST
+	$ gwhost
+	HID PRIO  OS              ARCH   MHZ %CPU  MEM(F/T)     DISK(F/T)     N(U/F/T) LRMS                 HOSTNAME</screen>
+	    </para>
+	    </listitem>
+
+	    <listitem>
+	    <para>
+	    Stop GWD:
+	    <screen>$ pkill gwd</screen>
+	    </para>
+	    </listitem>
+	  </orderedlist>
+	  </para>
+
+	  <para>
+	  To perform more sophisticated tests, check the
+	  <emphasis>User Guide</emphasis>. If you experience problems,
+	  check <xref linkend='s-gridway-admin-troubleshooting'/>.
+	  </para>
+	  </section>
+
+	
+	
+<section><title>Test Suite</title>	
+
+<para>
+GridWay is shipped with a test suite, available in the test directory. The
+test suite exercises different parts of GridWay, and can be used to track
+functionality bugs. However you need a working GridWay installation and
+testbed to execute the suite. Usage information is available with
+"gwtest -h". Tests can be performed individually (using the test id) or all
+together automatically.
+   <table frame='all'>
+   <title>GridWay tests description.</title>
+     <tgroup cols='2' align='left' colsep='1' rowsep='1'>
+     <colspec colname='test1' colwidth='1cm'/>
+     <colspec colname='test2' colwidth='5cm'/>
+     <colspec colname='test3' colwidth='30cm'/>
+     <tbody>
+       <row>
+       <entry>Test #</entry>
+       <entry>Test Name</entry>
+       <entry>Description</entry>
+       </row>
+         <row>
+           <entry>1</entry>
+           <entry>Normal Execution (SINGLE)</entry>
+           <entry>Submits a single job and verifies it is executed correctly</entry>
+         </row>
+         <row>
+           <entry>2</entry>
+           <entry>Normal Execution (BULK)</entry>
+           <entry>Submits an array of 5 jobs and verifies that all of them are executed correctly.</entry>
+         </row>
+         <row>
+           <entry>3</entry>
+           <entry>Pre Wrapper</entry>
+           <entry>Verifies that GridWay is able to execute the pre wrapper functionality.</entry>
+         </row>
+         <row>
+           <entry>4</entry>
+           <entry>Prolog Fail (Fake Stdin) No Reschedule</entry>
+           <entry>Submits a single job that fails in the prolog state due to a wrong input file for stdin.</entry>
+         </row>
+         <row>
+           <entry>5</entry>
+           <entry>Prolog Fail (Fake Stdin) Reschedule</entry>
+           <entry>Equal to the previous one, but GridWay tries to reschedule the job up to 2 times.</entry>
+         </row>
+         <row>
+           <entry>6</entry>
+           <entry>Prolog Fail (Fake Input File) No Reschedule</entry>
+           <entry>Same as #4 with a wrong input file for the executable.</entry>
+         </row>
+         <row>
+           <entry>7</entry>
+           <entry>Prolog Fail (Fake Executable) No Reschedule</entry>
+           <entry>Same as #4 with a wrong filename for the executable.</entry>
+         </row>
+         <row>
+           <entry>8</entry>
+           <entry>Prolog Fail (Fake Executable) No Reschedule</entry>
+           <entry>Same as #4 with a wrong filename for the executable.</entry>
+         </row>
+         <row>
+           <entry>9</entry>
+           <entry>Prolog Fail (Fake Stdin) No Reschedule (BULK)</entry>
+           <entry>Same as #4 submitting an array of 5 jobs.</entry>
+         </row>
+         <row>
+           <entry>10</entry>
+           <entry>Execution Fail No Reschedule</entry>
+           <entry>Submits a single job designed to fail (bad exit code) and verifies the correctness of the final state (failed).</entry>
+         </row>
+         <row>
+           <entry>11</entry>
+           <entry>Execution Fail Reschedule</entry>
+           <entry>Same as #9 but GridWay tries to reschedule the job up to 2 times.</entry>
+         </row>
+         <row>
+           <entry>12</entry>
+           <entry>Hold Release</entry>
+           <entry>Submits a single job on hold, releases it and verifies that it is executed correctly.</entry>
+         </row>
+         <row>
+           <entry>13</entry>
+           <entry>Stop Resume</entry>
+           <entry>Submits a single job, stops it (in Wrapper state), resumes it and verifies that it is executed correctly.</entry>
+         </row>
+         <row>
+           <entry>14</entry>
+           <entry>Kill Sync</entry>
+           <entry>Submits a job and kills it using a synchronous signal.</entry>
+         </row>
+         <row>
+           <entry>15</entry>
+           <entry>Kill Async</entry>
+           <entry>Submits a job and kills it using an asynchronous signal.</entry>
+         </row>
+         <row>
+           <entry>16</entry>
+           <entry>Kill Hard</entry>
+           <entry>Submits a job and hard kills it.</entry>
+         </row>
+         <row>
+           <entry>17</entry>
+           <entry>Migrate</entry>
+           <entry>Submits a job and sends a migrate signal when it reaches the Wrapper state. It then verifies the correct execution of the job.</entry>
+         </row>
+         <row>
+           <entry>18</entry>
+           <entry>Checkpoint local</entry>
+           <entry>Submits a job which creates a checkpoint file and verifies the correct execution of the job and the correct creation of the checkpoint file.</entry>
+         </row>
+         <row>
+           <entry>19</entry>
+           <entry>Checkpoint remote server</entry>
+           <entry>Same as #17 but the checkpoint file is created in a remote gsiftp server.</entry>
+         </row>
+         <row>
+           <entry>20</entry>
+           <entry>Wait Timeout</entry>
+           <entry>Submits a job and waits for it repeatedly using short timeouts until it finishes correctly.</entry>
+         </row>
+         <row>
+           <entry>21</entry>
+           <entry>Wait Zerotimeout</entry>
+           <entry>Same as #19 but with zero timeout (effectively, an asynchronous wait).</entry>
+         </row>
+         <row>
+           <entry>22</entry>
+           <entry>Input Output files</entry>
+           <entry>Tests the different methods GridWay offers to stage files (both input and output).</entry>
+         </row>
+         <row>
+           <entry>23</entry>
+           <entry>Epilog Fail (Fake Output) No Reschedule</entry>
+           <entry>Submits a single job that fails in the epilog state due to a wrong output filename.</entry>
+         </row>
+         <row>
+           <entry>24</entry>
+           <entry>Epilog Fail (Fake Output) Reschedule</entry>
+           <entry>Same as #22 but GridWay tries to reschedule the job up to 2 times.</entry>
+         </row>
+         <row>
+           <entry>25</entry>
+           <entry>Epilog Fail (Fake Output) No Reschedule (BULK)</entry>
+           <entry>Same as #22 but submitting an array of 5 jobs.</entry>
+         </row>
+       </tbody>
+   </tgroup>
+ </table>
+ </para>
+</section>
+<section>
+	<title>DRMAA Test Suite</title>
+	<para>
+		GridWay also ships with a <ulink url="http://www.gridway.org/documentation/stable/drmaaTestSuite.tgz">DRMAA test suite</ulink>, conceived to test the DRMAA Java implementations. Download and untar the following tarball, then follow the instructions found in the README file.
+	</para>
+	
+</section>
+</section>

@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd"
+[
+
+<!ENTITY % myents SYSTEM "../../entities">
+
+%myents;
+
+]>
+
+	<para>
+	Due to GridWay's architecture, mainly it's MADs components, debugging it is not a trivial task. The most obvious way to see what is going on is to monitor what happens in the log files. Here are the files to look into in case of trouble:
+	<itemizedlist>
+		<listitem><para><emphasis>$GW_LOCATION/var/gwd.log</emphasis>: This is the general log file, where the gwd daemon logs whatever the Resource, Dispatch, Transfer, Execution, Information managers inform it about.</para></listitem>
+		<listitem><para><emphasis>$GW_LOCATION/var/sched.log</emphasis>: The scheduler is a separate process that communicates with the daemon using the standard input/output. It writes log information to this file.</para></listitem>
+		<listitem><para><emphasis>$GW_LOCATION/var/&lt;job_id&gt;/job.log</emphasis>: Each job has its own log file, with information regarding its context (input/output files, MADs, resource) and it's life cycle. In this folder also reside the job.template, the job.env with the environment variable and the standard output and error of the wrapper script (stdout.wrapper and stderr.wrapper)</para></listitem>
+	</itemizedlist>
+	
+	In order to get the maximum amount of debug information in the gwd.log file (specially more information about what the MADs are doing), you should compile gridway with the following configure option:
+	
+	<screen>./configure --enable-debug</screen>
+	
+	If there is a problem with GridWay that makes any MAD to crash, it will be useful to have a coredump. To tell the MADs that they should write to a coredump file when they crash, use the following environment variable before you execute your first job:
+	
+	<screen>export MADDEBUG=yes</screen>
+	
+	Sometimes is the daemon (the gwd process) that crashes. In order to obtain a coredump of the daemon, run the following command before executing the daemon:
+	
+	<screen>ulimit -c unlimited</screen>
+	
+	The coredump file will be written to the $GW_LOCATION/var directory, with a filename corresponding to the process PID, that is, 
+	
+	<screen>$GW_LOCATION/var/core.&lt;process_pid&gt;</screen>
+	
+	If you cannot figure out what is wrong, you can always use the mailing list gridway-user to get support. Please provide a detailed explanation of your problem so the community can reproduce it and give advice. Also, send along:
+	
+	<itemizedlist>
+		<listitem><para>$GW_LOCATION/var/gwd.log</para></listitem>
+		<listitem><para>$GW_LOCATION/var/sched.log</para></listitem>
+		<listitem><para>$GW_LOCATION/var/&lt;job_id&gt;/{job.log,stderr.wrapper}: If relevant. The stderr.wrapper file is specially useful for debugging, it shows step by step the wrapper script being executed.</para></listitem>
+	</itemizedlist>
+		
+	</para>

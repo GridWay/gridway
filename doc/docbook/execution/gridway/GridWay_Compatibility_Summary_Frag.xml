@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd"
+[
+
+<!ENTITY % myents SYSTEM "../../entities">
+
+%myents;
+
+]>
+<section>
+<para>GridWay 5.2.1 is a new component in GT starting with this release. 
+  The following information regards compatibility with its previous version, 5.2:</para>
+
+<para>API changes since GridWay 5.2: </para>
+<itemizedlist>
+  <listitem><simpara>None</simpara></listitem>
+</itemizedlist>
+
+<para>CLI changes since GridWay 5.2: </para>
+<itemizedlist>
+  <listitem><simpara>None</simpara></listitem>
+</itemizedlist>
+
+<para>Configuration interface changes since GridWay 5.2: </para>
+<itemizedlist>
+  <listitem><simpara>Arguments can be specified for the EM
+and TM drivers. Beware that <filename>gwd.conf</filename> configuration files
+from previous versions of GridWay <emphasis role="strong">will not work with
+version 5.2.1</emphasis></simpara></listitem>
+</itemizedlist>
+</section>

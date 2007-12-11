@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd"
+[
+
+<!ENTITY % myents SYSTEM "../../entities">
+
+%myents;
+
+]>
+<section>
+<para>
+Starting with version 4.0.5, GT includes the GridWay Metascheduler, which enables large-scale, reliable and efficient sharing of
+computing resources (clusters , computing farms, servers, supercomputers...),
+managed by different LRM (Local Resource Management) systems, such as PBS, SGE,
+LSF, Condor..., within a single organization (enterprise grid) or scattered
+across several administrative domains (partner or supply-chain grid).
+</para>
+
+<para>
+There exist a number of commercial and open source workload management and
+scheduling systems available today, each one suitable for different underlying
+computer infrastructures and execution profiles. GridWay stands out from other
+metascheduling systems because it has been specifically designed to work on top
+of Globus services, offering the highest functionality, quality of service and
+reliability on this kind of infrastructure, namely:
+<itemizedlist>
+    <listitem>
+      <para><emphasis role="strong">For project and infrastructure directors:
+      </emphasis> GridWay is an open-source community project, adhering to
+      Globus philosophy and guidelines for collaborative development.</para>
+    </listitem>
+    <listitem>
+      <para><emphasis role="strong">For system integrators:</emphasis> GridWay
+is highly modular, allowing
+      adaptation to different grid infrastructures, and supports several OGF
+      standards.</para>
+    </listitem>
+    <listitem>
+      <para><emphasis role="strong">For system managers:</emphasis> GridWay
+      provides a scheduling framework similar to
+      that found on local LRM systems, supporting resource accounting and the
+      definition of state-of-the-art scheduling policies.</para>
+    </listitem>
+    <listitem>
+      <para><emphasis role="strong">For application developers:</emphasis>
+GridWay implements the OGF standard
+      DRMAA API (C and JAVA bindings), assuring compatibility between applications
+      with LRM systems that implement the standard, such as SGE,
+      Condor, Torque...etc.</para>
+    </listitem>
+    <listitem>
+      <para><emphasis role="strong">For end users:</emphasis> GridWay provides an
+        LRM-like CLI for submitting, monitoring, synchronizing and
+        controlling jobs, that could be described using the OGF
+        standard JSDL.</para>
+    </listitem>
+</itemizedlist>
+GridWay gives end users, application developers and managers of Globus
+infrastructures a scheduling functionality similar to that found on local DRM
+systems.
+</para>
+</section>

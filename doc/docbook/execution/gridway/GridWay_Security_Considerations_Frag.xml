@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd"
+[
+
+<!ENTITY % myents SYSTEM "../../entities">
+
+%myents;
+
+]>
+<section>
+<para>Access authorization to the GridWay server is done based on the Unix identity of the user (accessing GridWay directly or through a Web Services GRAM, as in <ulink url="http://www.grid4utility.org">GridGateWay</ulink>). Hence, security in GridWay has the same implications as the Unix accounts of their users.</para>
+<para>Also, GridWay uses proxy certificates to use Globus services, so the security implications of managing certificates also must be taken into account</para>
+</section>

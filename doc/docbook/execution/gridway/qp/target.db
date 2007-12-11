@@ -1,0 +1,24 @@
+<div element="article" href="#gridwayQP" number="" targetptr="gridwayQP">
+  <ttl>GT 4.2-drafts GridWay: Quality Profile</ttl>
+  <xreftext>Quality Profile</xreftext>
+  <div element="section" href="#gridway-qp-test" number="1" targetptr="gridway-qp-test">
+    <ttl>Test coverage reports </ttl>
+    <xreftext>Section 1, “Test coverage reports ”</xreftext>
+  </div>
+  <div element="section" href="#gridway-qp-code" number="2" targetptr="gridway-qp-code">
+    <ttl>Code analysis reports </ttl>
+    <xreftext>Section 2, “Code analysis reports ”</xreftext>
+  </div>
+  <div element="section" href="#gridway-qp-oustanding" number="3" targetptr="gridway-qp-oustanding">
+    <ttl>Outstanding bugs</ttl>
+    <xreftext>Section 3, “Outstanding bugs”</xreftext>
+  </div>
+  <div element="section" href="#gridway-qp-fixed" number="4" targetptr="gridway-qp-fixed">
+    <ttl>Bug Fixes</ttl>
+    <xreftext>Section 4, “Bug Fixes”</xreftext>
+  </div>
+  <div element="section" href="#gridway-qp-performance" number="5" targetptr="gridway-qp-performance">
+    <ttl>Performance reports </ttl>
+    <xreftext>Section 5, “Performance reports ”</xreftext>
+  </div>
+</div>

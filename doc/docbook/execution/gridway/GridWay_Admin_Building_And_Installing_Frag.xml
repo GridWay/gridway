@@ -1,0 +1,634 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd"
+[
+
+<!ENTITY % myents SYSTEM "../../entities">
+
+%myents;
+
+]>
+<section>
+ <section>
+  <title>Verifying Globus Installation</title>
+
+    <para>
+    As GridWay relies on Globus services, it is assumed that a Globus grid
+    infrastructure has been installed and configured. You can perform the
+    following tests to verify your Globus pre-WS installation, and to
+    ensure that it will work with GridWay:
+
+      <orderedlist>
+        <listitem>
+        <para>
+        Authorization test:
+        <screen>$ globusrun -a -r localhost</screen>
+        You should receive the message "GRAM Authentication test successful".
+        </para>
+        </listitem>
+
+        <listitem>
+        <para>
+        Submission test:
+        <screen>$ globus-job-run localhost /bin/uname -a</screen>
+        You should see the output of the "/bin/uname -a" command.
+        </para>
+        </listitem>
+
+        <listitem>
+        <para>
+        File transfer test:
+        <screen>
+$ globus-url-copy file:///etc/hosts gsiftp://localhost/tmp/hosts1</screen>
+        <screen>
+$ globus-url-copy gsiftp://localhost/tmp/hosts1 file:///tmp/hosts2</screen>
+        The contents of files /etc/hosts, /tmp/hosts1 and /tmp/hosts2 should be identical.
+        </para>
+        </listitem>
+
+        <listitem>
+        <para>
+        Information retrieval test:
+        <screen>
+$ grid-info-search -x</screen>
+        You should see a lot of information in LDIF format.
+        </para>
+        </listitem>
+      </orderedlist>
+    Change localhost to the name of the host your want to test.
+    </para>
+
+    <para>
+    You can perform the following tests to verify your Globus WS installation,
+    and to ensure that it will work with GridWay:
+      <orderedlist>
+        <listitem>
+        <para>
+        Submission test:
+        <screen>$ globusrun-ws -submit -F localhost -s -c /bin/uname -a</screen>
+        You should see the output of the "/bin/uname -a" command (along with
+        other information about submission progress).
+        </para>
+        </listitem>
+
+        <listitem>
+        <para>
+        File transfer test:
+        <screen>
+$ globus-url-copy file:///etc/hosts gsiftp://localhost/tmp/hosts1</screen>
+        <screen>
+$ globus-url-copy gsiftp://localhost/tmp/hosts1 file:///tmp/hosts2</screen>
+         The contents of files /etc/hosts, /tmp/hosts1 and /tmp/hosts2 should be identical.
+        </para>
+        </listitem>
+
+        <listitem>
+        <para>
+        Information retrieval test:
+        <screen>
+$ wsrf-query -x -s https://localhost:8443/wsrf/services/DefaultIndexService</screen>
+        You should see a lot of information in XML format.
+                        <note>
+                          <para>         
+                                XML documents from wsrf-query should not contain any DEBUG messages. SOAP Message Logging for the client tools has to be disabled in $GLOBUS_LOCATION/log4j.properties.
+                         </para>          
+                        </note>
+        </para>
+        </listitem>
+      </orderedlist>
+      Change localhost to the name of the host your want to test.
+    </para>
+        <para>
+                If a binary distribution of the Globus Toolkit is installed, you may be required to manually install <emphasis>globus_core</emphasis> (used to detect the compiler and platform settings of the computer that the Toolkit is installed on). The following command can be used to perform this operation:
+                <screen>
+                        $GLOBUS_LOCATION/sbin/gpt-build -nosrc &lt;flavor&gt;
+                </screen>
+                More information about this procedure is available (<ulink url="http://www.globus.org/toolkit/docs/4.0/admin/docbook/apb.html">here</ulink>).
+        </para>
+  </section>
+
+  <section>
+  <title>Required Software</title>
+
+  <para>
+  GridWay is distributed as a source package, required software to compile it:
+  </para>
+
+  <para>
+  <itemizedlist>
+    <listitem>
+    <para>
+    C compiler: Tested versions gcc 3.4.2, 3.4.4, 4.0.3, 4.0.3 and 4.1.2
+    </para>
+    </listitem>
+
+    <listitem>
+    <para>
+    Globus C libraries: globus_gram_client, globus_ftp_client and globus_gass_copy
+    </para>
+    </listitem>
+
+    <listitem>
+    <para>
+    Globus JAVA development libraries
+    </para>
+    </listitem>
+
+    <listitem>
+    <para>
+    J2SE versions 1.4.2_10+ (Builds higher than 10) or 1.5.0+
+    </para>
+    </listitem>
+
+    <listitem>
+    <para>
+    GNU Make
+    </para>
+    </listitem>
+
+    <listitem>
+    <para>
+		Sudo command (only required for multiple-user mode)
+    </para>
+    </listitem>
+
+    <listitem>
+    <para>
+    Berkeley Database library version 4.4.20 (only required to compile the accounting module)
+    </para>
+    </listitem>
+  </itemizedlist>
+  </para>
+  </section>
+
+  <section>
+  <title>Platform Notes</title>
+  <para>GridWay has been run on the following platforms:</para>
+
+    <section>
+    <title>Fedora Core</title>
+      <para>
+      There are issues with Fedora Core 4 and Sun's Java 1.4.2. Please upgrade
+      to Java 1.5+ on these platforms. Also problems have been reported on Fedora
+      Core platforms when using 32 bit JSDK binaries on AMD64 architectures.
+      </para>
+    </section>
+
+    <section>
+    <title>Debian Testing</title>
+      <para>
+      No known issues.
+      </para>
+    </section>
+
+    <section>
+    <title>Mac OS X</title>
+      <para>
+      No known issues. Tested on Mac OS X 10.4 (Tiger).
+      </para>
+    </section>
+
+    <section>
+    <title>Solaris 10</title>
+      <para>
+      No known issues.
+      </para>
+    </section>
+
+    <section>
+    <title>Other Linux/UNIX flavors</title>
+      <para>
+      GridWay should run smoothly on any linux based distribution and it is also
+      likely to work on any unix based operating system, although it just have been
+      tested in the aforementioned platforms.
+      </para>
+    </section>
+
+  </section>
+
+	<section>
+		<title>Installing GridWay</title>
+
+    <para>
+      You can install GridWay in two different ways:
+      <orderedlist>
+        <listitem>
+        <para>
+        <emphasis>Single-user installation</emphasis>. GridWay will be installed
+        configured and executed by each user. In this case, neither the
+        installation nor the configuration require priveledge access to the
+        system. This installation mode will be useful if you  want to set up a
+        personal queue, or for testing purposes.
+        </para>
+        </listitem>
+        <listitem>
+        <para>
+        <emphasis>Multiple-user installation</emphasis>. GridWay will be
+        installed, and configured by the system manager. Regular users are able
+        to submit, control and monitor their jobs  from a front-end
+        (GridWay server host) or from client hosts. This installation mode is
+        recommended for production use.
+        </para>
+        </listitem>
+      </orderedlist>
+      Next sections describe in detail the installation process for these two cases.
+    </para>
+
+  <section>
+  <title>Single-User Mode Installation</title>
+
+  <para>
+  In this scenario, GridWay is installed by each end-user in his client host.
+  </para>
+
+  <para>
+  Login as your user account and follow these steps:
+    <orderedlist>
+		  <listitem>
+      <para>
+		  Download the distribution file to the installation directory, for example
+      your <filename>$HOME</filename> directory
+      </para>
+      </listitem>
+
+      <listitem>
+      <para>
+      Unpack the distribution file and change to <filename>gw5</filename>
+      directory:
+      <screen>$ tar xzf gw5.tgz</screen>
+      <screen>$ cd gw5</screen>
+      </para>
+      </listitem>
+
+      <listitem>
+      <para>
+      Set up Globus development environment:
+      <screen>$ source $GLOBUS_LOCATION/etc/globus-devel-env.sh</screen>
+      or
+      <screen>$ . $GLOBUS_LOCATION/etc/globus-devel-env.csh</screen>
+      depending on the shell you are using.
+      </para>
+      </listitem>
+
+      <listitem>
+      <para>
+      Run configure to set up GridWay installation. Possible options
+      for configure are:
+      <table frame='all'>
+		<title>Configure Options.</title>
+    	<tgroup cols='2' align='left' colsep='1' rowsep='1'>
+			<tbody>
+		  		<row>
+					<entry namest="c1">Option</entry>
+					<entry namest="c2">Description</entry>
+				</row>
+        		<row>
+        		   <entry>--prefix</entry>
+        		   <entry>Sets final GridWay installation dir. Defaults to /usr/local/gw.</entry>
+        		</row>
+            <row>
+               <entry>--with-flavor=flavor</entry>
+               <entry>The configure script will try to detect the flavor (eg. gcc32dbg) of the
+               Globus toolkit installed in your system. However,
+               if the configure script is not able to detect it, specify it with this option.</entry>
+            </row>
+        		<row>
+        		   <entry>--disable-drmaa</entry>
+        		   <entry>Don't build drmaa support. Default is enabled.</entry>
+        		</row>
+				<row>
+					<entry>--enable-drmaa-ruby</entry>
+					<entry>Build ruby drmaa support. Default is disabled.</entry>
+				</row>
+        		<row>
+        		   <entry>--disable-prews</entry>
+        		   <entry>Don't build pre-web-services support. Default is enabled.</entry>
+        		</row>
+         		<row>
+        		   <entry>--disable-ws</entry>
+        		   <entry>Don't build web-services support. Default is enabled.</entry>
+        		</row>
+            <row>
+              <entry>--enable-globus-scheme</entry>
+              <entry>Adds gridway subdirectories to etc and var. Default is disabled.</entry>
+            </row>
+            <row>
+              <entry>--enable-jsdl</entry>
+              <entry>Does compile jsdl support. Default is enabled. Disabled for GT builds.</entry>
+            </row>
+            <row>
+              <entry>--enable-globus-scheme</entry>
+              <entry>Adds gridway subdirectories to etc and var. Default is disabled.</entry>
+            </row>
+            <row>
+              <entry>--disable-gridftp</entry>
+              <entry>Does not compile gridftp mad. Default is enabled.</entry>
+            </row>
+
+         		<row>
+        		   <entry>--with-db=path_to_db</entry>
+        		   <entry>Specify the Berkeley Database path to build accounting support.</entry>
+        		</row>
+         		<row>
+        		   <entry>--with-doc</entry>
+        		   <entry>Install GridWay documentation</entry>
+        		</row>
+         		<row>
+        		   <entry>--with-tests</entry>
+        		   <entry>Install tests</entry>
+        		</row>
+           </tbody>
+		</tgroup>
+	   </table>
+	   </para>
+
+			<para>
+				If you want to install GridWay inside <filename>$GLOBUS_LOCATION</filename> you can
+				use the option <option>--enable-globus-scheme</option> so GridWay specific
+				<filename>var</filename>, <filename>etc</filename> and <filename>test</filename>
+				files are relocated to <filename>var/gridway</filename>,
+				<filename>etc/gridway</filename> and <filename>test/gridway</filename> respectively.
+				This new directory scheme lets globus and GridWay share the same root directory
+				without interfering each other.
+			</para>
+	   <para>
+	   The next line will configure GridWay to include documentation and accounting
+	   <screen>$ ./configure --with-doc --with-db=/usr/local/db</screen>
+      </para>
+      </listitem>
+
+
+      <listitem>
+      <para>
+      Run make:
+      <screen>$ make</screen>
+      </para>
+      </listitem>
+
+      <listitem>
+      <para>
+      Run make install:
+      <screen>$ make install</screen>
+      </para>
+      </listitem>
+
+      <listitem>
+      <para>
+      Once installed, you should have the following directory tree in your
+      GridWay location directory:
+      <screen>
+$GW_LOCATION/
+    |
+    +--- bin/       executables
+    |
+    +--- etc/       gwd.conf and job_template.default configuration files
+    |
+    +--- share/     Include examples and [Optionally] documentation
+    |
+    +--- include/   header files
+    |
+    +--- lib/       compiled libraries
+    |
+    +--- libexec/   wrapper and monitor scripts
+    |
+    +--- test/      test suite [Optional]
+    |
+    +--- var/       lock, port and log files
+</screen>
+      </para>
+      </listitem>
+    </orderedlist>
+  </para>
+  </section>
+
+  <section>
+  <title>Multiple-User Mode Installation</title>
+
+  <para>
+  In this scenario, the installation of GridWay is performed by the system
+  manager and the users are able to submit, control and monitor their jobs
+  from a front-end (GridWay server host) or from client hosts, which may not
+  require a GridWay/Globus installation.  This means that there is one GridWay
+  installation for each organization that provides support for multiple
+  intra-organization users.
+  </para>
+
+  <important>
+    <para>
+      The instructions here described assumes that you are going to install
+      GridWay in its own directory ($GW_LOCATION, e.g.
+      <filename>/usr/local/gw</filename>). Also it is assumed that the
+      installation, configuration and service execution will be performed by
+      an special account (<filename>gwadmin</filename>).
+    </para>
+    <para>
+      GridWay can be also installed within the Globus Toolkit tree. To do this you have
+      to use the flag <option>--enable-globus-scheme</option> when calling
+      configure script and set the prefix to <filename>$GLOBUS_LOCATION</filename>.
+      In this case, the <filename>gwadmin</filename> user will be the user
+      account that performed the Globus Toolkit installation.
+    </para>
+    <para>
+       When you install it this way you also have to note that
+       <filename>$GW_LOCATION/var</filename> and <filename>$GW_LOCATION/etc</filename>
+       directories will be <filename>$GLOBUS_LOCATION/var/gridway</filename> and
+       <filename>$GLOBUS_LOCATION/etc/gridway</filename>.
+    </para>
+  </important>
+
+  <important>
+  <para>
+  Note that GridWay daemon SHOULD NOT be run as root. Only part of the
+  installation will require privileged access.
+  </para>
+  </important>
+
+  <para>
+  Login as root account and follow the next steps:
+    <orderedlist>
+
+    <listitem>
+    <para>
+		All of the GridWay users must be members of the same UNIX group,
+    <filename>&lt;gwgroup></filename>. We recommend to create a new
+    group (call <filename>gwusers</filename>, for example), and assure that
+    all GridWay user accounts are members of this new group.
+    </para>
+    </listitem>
+
+	  <listitem>
+    <para>
+    The GridWay administrator account, <filename>&lt;adminuser></filename>,
+    can be an existing administrative login or a new login. We recommend
+    creating a new account for the GridWay administration user
+    (call <filename>gwadmin</filename>, for example). This account will own
+    all of the files in the GridWay installation, all of the daemons in the
+    GridWay execution and it can be used to configure GridWay once it is
+    installed. Primary group of <filename>&lt;adminuser></filename>
+    should be <filename>&lt;gwgroup></filename>.
+    </para>
+    <para>
+    DO NOT use root account for the  GridWay administrator account.
+    </para>
+    </listitem>
+
+    <listitem>
+    <para>
+		Download the distribution file to the installation directory,
+    for example your <filename>/usr/local</filename> directory
+    </para>
+    </listitem>
+
+    <listitem>
+    <para>
+    Unpack the distribution file and change ownership:
+    <screen># tar xzf gw5.tgz</screen>
+    <screen>
+# chown -R &lt;adminuser>:&lt;gwgroup> &lt;gwlocation>
+# chmod 755 &lt;gwlocation></screen>
+    </para>
+    <para>
+    Become GridWay administrator user, and change to <filename>gw5</filename>
+    directory:
+    <screen># su gwadmin</screen>
+    <screen>$ cd gw5</screen>
+    </para>
+    </listitem>
+
+    <listitem>
+    <para>
+    Set up Globus development environment:
+    <screen>$ source $GLOBUS_LOCATION/etc/globus-devel-env.sh</screen>
+    </para>
+    <para>or</para>
+    <screen>$ . $GLOBUS_LOCATION/etc/globus-devel-env.csh</screen>
+    <para>
+    depending on the shell you are using.
+    </para>
+    </listitem>
+
+    <listitem>
+    <para>
+    Run configure to set up GridWay installation. Check above for possible options or
+    just type <command>configure --help</command>.
+	  </para>
+    </listitem>
+
+
+      <listitem>
+      <para>
+      Run make:
+      <screen>$ make</screen>
+      </para>
+      </listitem>
+
+      <listitem>
+      <para>
+      Run make install:
+      <screen>$ make install</screen>
+      </para>
+      </listitem>
+
+		<listitem>
+    <para>
+    Once installed, you should have the following directory tree in your GridWay location directory:
+    <screen>
+$GW_LOCATION/
+    |
+    +--- bin/       executables
+    |
+    +--- etc/       gwd.conf and job_template.default configuration files
+    |
+    +--- share/     Include examples and [Optionally] documentation
+    |
+    +--- include/   header files
+    |
+    +--- lib/       compiled libraries
+    |
+    +--- libexec/   wrapper and monitor scripts
+    |
+    +--- test/      test suite [Optional]
+    |
+    +--- var/       lock, port and log files</screen>
+    </para>
+    </listitem>
+
+    <listitem>
+    <para>
+    The <filename>sudoers</filename> file of the <command>sudo</command> command
+    should include the following
+<screen>
+...
+# User alias specification
+...
+Runas_Alias     GW_USERS = %&lt;gwgroup>
+...
+# GridWay entries
+gwadmin ALL=(GW_USERS)     NOPASSWD: /usr/local/gw/bin/gw_em_mad_prews *
+gwadmin ALL=(GW_USERS)     NOPASSWD: /usr/local/gw/bin/gw_em_mad_ws *
+gwadmin ALL=(GW_USERS)     NOPASSWD: /usr/local/gw/bin/gw_tm_mad_ftp *
+</screen>
+    </para>
+
+    <para>
+    Usually <command>sudo</command> clears all environment variables for
+    security reasons. However MADs need the <command>GW_LOCATION</command>
+    and <command>GLOBUS_LOCATION</command> variables to be set. To preserve
+    those variables in the MAD environment, add the following line to your
+    <filename>sudoers</filename> file:
+    <screen>Defaults>GW_USERS env_keep="GW_LOCATION GLOBUS_LOCATION"</screen>
+    </para>
+    <para>
+    Please refer to the <command>sudo</command> manual page for more
+    information.
+    </para>
+    <para>
+    Additionally you can configure your drivers environment by using the
+    <filename>gwrc</filename> interface, see section <xref linkend='gwrc'/>
+
+    </para>
+    <para>
+    To test the <command>sudo</command> command configuration try to execute a
+    MAD as a user in the <filename>&lt;gwgroup></filename> group, for example:
+    <screen>
+$ sudo -u &lt;gw_user> /usr/local/gw/bin/gw_em_mad_prews
+    </screen>
+    </para>
+    </listitem>
+    </orderedlist>
+  </para>
+
+  <para>
+  Following previous steps, the end-users must login to the GridWay server host
+  to be able to execute GridWay commands and use the DRMAA libraries.
+  </para>
+
+  <para>
+  Additionally, client hosts, that are not required to have GridWay/Globus
+  installed, could be deployed to remotely interface to the GridWay server host.
+  In such a case, user accounts and home directories must be shared between
+  the GridWay server and the client hosts, via for example NIS and NFS; and
+  <filename>&lt;gwlocation> </filename> directory should be readable on all
+  client hosts. The  <filename>&lt;gwlocation> </filename> directory may be
+  available via for example NFS by exporting
+  <filename>&lt;gwlocation></filename> from GridWay server,
+  creating <filename>&lt;gwlocation></filename>  directory in the client
+  hosts, changing its ownership to
+  <filename>&lt;adminuser>:&lt;gwgroup></filename>  and mounting the
+  <filename>&lt;gwlocation></filename>  directory exported by the GridWay server
+  on the <filename>&lt;gwlocation></filename> of the client hosts.
+  </para>
+
+  <para>
+  Following those steps, a user logged in a client hosts is able to interface
+  to the GridWay daemon in the GridWay server host. However, the
+  <command>grid-proxy-init</command> globus command must be executed in the
+  server host in order to create a proxy by, for example, executing
+  <filename>  ssh &lt;GridWay server> grid-proxy-init </filename> .
+  </para>
+
+  </section>
+
+  </section>
+
+</section>

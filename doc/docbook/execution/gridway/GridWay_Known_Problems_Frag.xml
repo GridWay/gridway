@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd"
+[
+
+<!ENTITY % myents SYSTEM "../../entities">
+
+%myents;
+
+]>
+<section>
+<simpara>The following is a list of all of the bugs known at the time for the 4.0.5 release:</simpara>
+<itemizedlist>
+	<listitem>
+	  <simpara><ulink url="http://bugzilla.globus.org/globus/show_bug.cgi?id=5308">Bug 5308:</ulink> gwd doesn't recover AIDs and TIDs</simpara>
+	</listitem>
+</itemizedlist>
+
+
+</section>
