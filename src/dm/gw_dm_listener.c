@@ -76,6 +76,12 @@ void gw_dm_listener(void *arg)
                     gw_log_print("DM",'W',"Error reading MAD (%s) message\n",
                             dm_mad->name);
                     
+                    pthread_mutex_lock(&(gw_dm.mutex));
+                    
+                    gw_dm.scheduling = GW_TRUE; /* Prevents to call the scheduler while recovering*/
+                    
+                    pthread_mutex_unlock(&(gw_dm.mutex));                    
+                    
                     rcm = gw_dm_mad_reload(dm_mad);
                     
                     if ( rcm == 0 )
@@ -103,6 +109,13 @@ void gw_dm_listener(void *arg)
                             return;
                         }
                     }
+                    
+                    pthread_mutex_lock(&(gw_dm.mutex));
+                    
+                    gw_dm.scheduling = GW_FALSE; /* Activate the scheduler again*/
+                    
+                    pthread_mutex_unlock(&(gw_dm.mutex));                    
+                    
                     continue;
                 }
                 
