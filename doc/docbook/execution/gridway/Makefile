@@ -1,24 +1,18 @@
 export UMASK=002
-export XML_CATALOG_FILES=../../../catalog
+export XML_CATALOG_FILES=../../catalog
 #export XML_DEBUG_CATALOG= 1
 FILENAME= index.xml
+SUBDIRS=admin developer pi qp rn user
 
-all: lint html
+all: lint html subdirs
 
 html:
 	xsltproc \
 	--xinclude \
-	--stringparam target.database.document "../../../olinkdb.xml" \
-	--stringparam current.docid "gridwayUser" \
-	../../../custom_html.xsl \
+	--stringparam target.database.document "../../olinkdb.xml" \
+	--stringparam current.docid "gridway" \
+	../../custom_html.xsl \
 	$(FILENAME)
-
-
-pdf:
-	~bacon/XEP/xep \
-	-xml $(FILENAME) \
-	-xsl ../../../custom_fo.xsl \
-	-out index.pdf
 
 debian-sarge:
 	xsltproc --stringparam chunk.section.depth 0 \
@@ -47,5 +41,10 @@ olink:
 	xsltproc \
 	--xinclude \
 	--stringparam  collect.xref.targets  "only"  \
-	../../../custom_html.xsl \
+	../../custom_html.xsl \
 	$(FILENAME)
+
+subdirs:
+	for dir in $(SUBDIRS); do \
+	(cd $$dir; ${MAKE} all); \
+	done
