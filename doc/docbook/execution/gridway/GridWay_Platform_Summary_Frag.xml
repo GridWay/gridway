@@ -21,5 +21,5 @@
       </itemizedlist>
   </para></listitem>
 </itemizedlist>
-<para>In addition, GridWay has been tested with the major Grid infrastructures. Click the following links to find more information on how to use GridWay with <ulink url="http://www.gridway.org/documentation/stable/egeehowto">EGEE</ulink>,<ulink url="http://www.gridway.org/documentation/stable/tghowto/">TeraGrid</ulink> and <ulink url="http://www.gridway.org/documentation/stable/osghowto/">OSG</ulink>.</para>
+<para>In addition, GridWay has been tested with the major Grid infrastructures. Click the following links to find more information on how to use GridWay with <ulink url="http://www.gridway.org/documentation/stable/egeehowto">EGEE</ulink>,<ulink url="http://www.gridway.org/documentation/stable/tghowto/">TeraGrid</ulink>,<ulink url="http://www.gridway.org/documentation/stable/osghowto/">OSG</ulink> and <ulink url="http://www.gridway.org/documentation/stable/nghowtoo/">NorduGrid</ulink>.</para>
 </section>

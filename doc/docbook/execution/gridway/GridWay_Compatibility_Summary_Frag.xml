@@ -9,24 +9,20 @@
 
 ]>
 <section>
-<para>GridWay 5.2.1 is a new component in GT starting with this release. 
-  The following information regards compatibility with its previous version, 5.2:</para>
+<para>GridWay 5.3.0 is a development release that ships with functionality additions focused in extending usability for the end users. The following information regards compatibility with its previous stable version, 5.2.3:</para>
 
-<para>API changes since GridWay 5.2: </para>
+<para>API changes since GridWay 5.2.3: </para>
 <itemizedlist>
-  <listitem><simpara>None</simpara></listitem>
+  <listitem><simpara>Added DRMAA scripting language bindings for Python, Ruby and Perl.</simpara></listitem>
 </itemizedlist>
 
-<para>CLI changes since GridWay 5.2: </para>
+<para>CLI changes since GridWay 5.2.3: </para>
 <itemizedlist>
-  <listitem><simpara>None</simpara></listitem>
+  <listitem><simpara>Added gwdag, a tool to run Condor DAGMAN compatible workflows.</simpara></listitem>
 </itemizedlist>
 
 <para>Configuration interface changes since GridWay 5.2: </para>
 <itemizedlist>
-  <listitem><simpara>Arguments can be specified for the EM
-and TM drivers. Beware that <filename>gwd.conf</filename> configuration files
-from previous versions of GridWay <emphasis role="strong">will not work with
-version 5.2.1</emphasis></simpara></listitem>
+  <listitem><simpara>None</simpara></listitem>
 </itemizedlist>
 </section>

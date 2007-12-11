@@ -9,11 +9,25 @@
 
 ]>
 <section>
-<simpara>The following is a list of all of the bugs known at the time for the 4.0.5 release:</simpara>
+<simpara>The following is a list of all of the bugs known at the time for the 5.3 release:</simpara>
 <itemizedlist>
+	
 	<listitem>
 	  <simpara><ulink url="http://bugzilla.globus.org/globus/show_bug.cgi?id=5308">Bug 5308:</ulink> gwd doesn't recover AIDs and TIDs</simpara>
 	</listitem>
+	
+	<listitem>
+	  <simpara><ulink url="http://bugzilla.globus.org/globus/show_bug.cgi?id=5641">Bug 5641:</ulink> Sudoers configuration not allowing sudo to be run from a program</simpara>
+	</listitem>
+
+	<listitem>
+	  <simpara><ulink url="http://bugzilla.globus.org/globus/show_bug.cgi?id=5718">Bug 5718:</ulink> Transfer Errors</simpara>
+	</listitem>
+
+	<listitem>
+	  <simpara><ulink url="http://bugzilla.globus.org/globus/show_bug.cgi?id=5719">Bug 5719:</ulink> Timeouts for EM and TM Drivers</simpara>
+	</listitem>
+
 </itemizedlist>
 
 

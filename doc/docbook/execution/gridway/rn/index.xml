@@ -11,6 +11,7 @@
 <article id="gridwayRN">
     <title> GT &version; Incremental Release Notes: GridWay</title>
     <titleabbrev>&version; Release Notes</titleabbrev>
+
     <section id="s-gridway-Release_Notes-overview">
         <title>Component Overview</title>
         <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -36,22 +37,22 @@
         <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
             href="../GridWay_Compatibility_Summary_Frag.xml" xpointer="xpointer(/section/*)"/>
     </section>
-    <section id="s-gridway-Release_Notes_405-changes">
+    <section id="s-gridway-Release_Notes_413-changes">
         <title>Changes Summary</title>
         <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
             href="../GridWay_Change_Summary_Frag.xml" xpointer="xpointer(/section/*)"/>
     </section>
-    <section id="s-gridway-Release_Notes_405-bugfixes">
+    <section id="s-gridway-Release_Notes_413-bugfixes">
         <title>Bug Fixes</title>
         <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="../GridWay_Fixed_Bugs_Frag.xml"
             xpointer="xpointer(/section/*)"/>
     </section>
-    <section id="s-gridway-Release_Notes_405-knownproblems">
+    <section id="s-gridway-Release_Notes_413-knownproblems">
         <title>Known Problems</title>
         <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
             href="../GridWay_Known_Problems_Frag.xml" xpointer="xpointer(/section/*)"/>
     </section>
-    <section id="s-gridway-Release_Notes_405-formoreinfo">
+    <section id="s-gridway-Release_Notes_413-formoreinfo">
         <title>For More Information </title>
         <para>Click <ulink url="http://www.gridway.org">here</ulink> for more information about this
             component. </para>
