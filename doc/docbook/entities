@@ -1,0 +1,25 @@
+<!-- This file contains all system entities for the target databases of all books in this version of GT -->
+
+<!-- Shared Text - must be updated for each release -->
+<!ENTITY version "4.2-drafts"> <!-- three digit version number -->
+<!ENTITY shortversion "4.2-drafts"> <!-- two digit version number -->
+<!ENTITY previousversion "4.0.4"> <!-- three digit version number for previous stable version -->
+<!ENTITY tag "globus_4_1_0"> <!-- CVS tag -->
+<!ENTITY docpath "http://www.globus.org/toolkit/docs/development/4.2-drafts/">
+ <!ENTITY JavaWSCoreAPI "http://www-unix.mcs.anl.gov/~gawor/javawscore/HEAD/doc/javadocs/">
+
+<!-- target database entities (used in olinkdb.xml) using catalog to rewrite uri -->
+
+       
+       <!ENTITY gridwayTarget SYSTEM "execution/gridway/target.db">
+       <!ENTITY gridwayAdminTarget SYSTEM "execution/gridway/admin/target.db">
+       <!ENTITY gridwayDeveloperTarget SYSTEM "execution/gridway/developer/target.db">
+       <!ENTITY gridwayMigTarget SYSTEM "execution/gridway/mig/target.db">
+       <!ENTITY gridwayPITarget SYSTEM "execution/gridway/pi/target.db">
+       <!ENTITY gridwayQPTarget SYSTEM "execution/gridway/qp/target.db">
+       <!ENTITY gridwayRNTarget SYSTEM "execution/gridway/rn/target.db">
+       <!ENTITY gridwayUserTarget SYSTEM "execution/gridway/user/target.db">
+       
+
+
+

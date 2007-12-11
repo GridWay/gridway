@@ -1,0 +1,1464 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE glossary
+PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+                    "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd"
+                    [
+                    
+                    <!ENTITY % myents SYSTEM "entities">
+                    
+                    %myents;
+                    
+                    ]>
+<glossary id="toolkit-glossary"><title>GT &version; Glossary</title>
+      <!-- includes glossary excerpts from all the standards definitions in the WS-ServiceGroup specification 
+      see "Terminology and Concepts" in "http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-02.pdf".  
+      
+      setting up glossary database throughout a version's set of books, as outlined here:
+      http://www.sagehill.net/docbookxsl/GlossDatabase.html 
+      (requires at least version 1.68 of the DocBook XSL stylesheets and version 4.4 of the DocBook XML DTD)
+      
+    -->
+      <glossdiv>
+            <title>A</title>
+            <glossentry id="aggregator-framework">
+                  <glossterm>Aggregator Framework</glossterm>
+                  <glossdef>
+                        <para>A software framework used to build services that collect and aggregate
+                              data. MDS4 Services (such as the Index and Trigger services) are built
+                              on the Aggregator Framework, and are sometimes called Aggregator
+                              Services.</para>
+                        <para>[olink to agg framework doc]</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="aggregator-services">
+                  <glossterm>aggregator services</glossterm>
+                  <glossdef>
+                        <para> Services that are built on the Aggregator Framework, such as the MDS4
+                              Index Service and Trigger Service.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="aggregator-source">
+                  <glossterm>aggregator source</glossterm>
+                  <glossdef>
+                        <para> A Java class that implements an interface (defined as part of the
+                              Aggregator Framework) to collect XML-formatted data. MDS4 contains
+                              three aggregator sources: the query aggregator source, the
+                              subscription aggregator source, and the execution aggregator
+                        source.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="ant">
+                  <glossterm>Ant</glossterm>
+                  <glossdef>
+                        <para>Apache Open Source Java based build tool. [needed to install, olink to
+                              install guide?]</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="axis">
+                  <glossterm>Apache Axis</glossterm>
+                  <glossdef>
+                        <para>The SOAP engine implementation used within the Globus Toolkit. See the
+                                    <ulink url="http://ws.apache.org/axis/">Apache Axis
+                              website</ulink> for details.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="apache-commons">
+                  <glossterm>Apache Commons</glossterm>
+                  <glossdef>
+                        <para>[what does this have to do with GT?]. See <ulink
+                                    url="http://jakarta.apache.org/commons/"
+                                    >http://jakarta.apache.org/commons/</ulink> for more
+                        details.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="autoconf">
+                  <glossterm>autoconf</glossterm>
+                  <glossdef>
+                        <para>GNU Open Source package used to automatically configure the source
+                              code package. [olink to install guide?]</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="automake">
+                  <glossterm>automake</glossterm>
+                  <glossdef>
+                        <para>GNU Open Source used to automatically generate Makefile in files.
+                              [olink to install guide?]</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="axis-c">
+                  <glossterm>Axis C++</glossterm>
+                  <glossdef>
+                        <para>Open Source SOAP implementation used by C-Hosting. See <ulink
+                                    url="http://ws.apache.org/axis/cpp">
+                                    http://ws.apache.org/axis/cpp</ulink> for more details.</para>
+                  </glossdef>
+            </glossentry>
+      </glossdiv>
+      <glossdiv>
+            <title>B</title>
+            <glossentry id="batch-scheduler">
+                  <glossterm>batch scheduler</glossterm>
+                  <glossdef>
+                        <para>See the definition for scheduler</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="bloom-filter">
+                  <glossterm>Bloom filter</glossterm>
+                  <glossdef>
+                        <para> Compression scheme used by the Replica Location Service (RLS) that is
+                              intended to reduce the size of soft state updates between Local
+                              Replica Catalogs (LRCs) and Replica Location Index (RLI) servers. A
+                              Bloom filter is a bit map that summarizes the contents of a Local
+                              Replica Catalog (LRC). An LRC constructs the bit map by applying a
+                              series of hash functions to each logical name registered in the LRC
+                              and setting the corresponding bits.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="bouncy-castle">
+                  <glossterm>Bouncy Castle Crypto APIs</glossterm>
+                  <glossdef>
+                        <para>
+                              <ulink url="http://www.bouncycastle.org"
+                              >http://www.bouncycastle.org</ulink> (what is this for?) </para>
+                  </glossdef>
+            </glossentry>
+      </glossdiv>
+      <glossdiv>
+            <title>C</title>
+            <glossentry id="ca">
+                  <glossterm>Certificate Authority</glossterm>
+                  <acronym> CA </acronym>
+                  <glossdef>
+                        <para> An entity that issues certificates. [re: security - olink to useful
+                              page]</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="ca-cert">
+                  <glossterm>CA Certificate</glossterm>
+                  <glossdef>
+                        <para> The CA's certificate. This certificate is used to verify signature on
+                              certificates issued by the CA. GSI typically stores a given CA
+                              certificate in
+                                          
+<filename>/etc/grid-security/certificates/<replaceable>&lt;hash&gt;</replaceable>.0</filename>,
+                              where &lt;hash&gt; is the hash code of the CA identity.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="ca-sign">
+                  <glossterm>CA Signing Policy</glossterm>
+                  <glossdef>
+                        <para> The CA signing policy is used to place constraints on the information
+                              you trust a given CA to bind to public keys. Specifically it
+                              constrains the identities a CA is trusted to assert in a certificate.
+                              In GSI the signing policy for a given CA can typically be found in
+                                          
+<filename>/etc/grid-security/certificates/<replaceable>&lt;hash&gt;</replaceable>.signing_policy</filename>,
+                              where &lt;hash&gt; is the hash code of the CA identity. For
+                              more information see [add link].</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="cert">
+                  <glossterm>certificate</glossterm>
+                  <glossdef>
+                        <para> A public key plus information about the certificate owner bound
+                              together by the digital signature of a CA. In the case of a CA
+                              certificate, the certificate is self signed, i.e. it was signed using
+                              its own private key.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="crl">
+                  <glossterm>Certificate Revocation List</glossterm>
+                  <acronym>CRL</acronym>
+                  <glossdef>
+                        <para> A list of revoked certificates generated by the CA that originally
+                              issued them. When using GSI [not really defined in gt4...] this list
+                              is typically found in
+                                          
+<filename>/etc/grid-security/certificates/<replaceable>&lt;hash&gt;</replaceable>.r0</filename>,
+                              where &lt;hash&gt; is the hash code of the CA identity.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="cert-subject">
+                  <glossterm>certificate subject</glossterm>
+                  <glossdef>
+                        <para> An identifier for the certificate owner, e.g.
+                                    "<filename>/DC=org/DC=doegrids/OU=People/CN=John Doe
+                              123456</filename>". The subject is part of the information the CA
+                              binds to a public key when creating a certificate.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="client">
+                  <glossterm>client</glossterm>
+                  <glossdef>
+                        <para>[too specific to data - more details or more general] FTP is a
+                              command/response protocol. The defining characteristic of a client is
+                              that it is the process sending the commands and receiving the
+                              responses. It may or may not take part in the actual movement of data.
+                        </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="client-config.wsdd">
+                  <glossterm>client-config.wsdd</glossterm>
+                  <glossdef>
+                        <para> Axis client-side WSDD configuration file. It contains information
+                              about the type mappings, the transport and other handlers. [need a
+                              little more info tying it to Core...] </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="client-server-transfer">
+                  <glossterm>client/server transfer</glossterm>
+                  <glossdef>
+                        <para>In a client/server transfer, there are only two entities involved in
+                              the transfer, the client entity and the server entity. We use the term
+                              entity here rather than process because in the implementation provided
+                              in GT4, the server entity may actually run as two or more separate
+                              processes. </para>
+                        <para>The client will either move data from or to his local host. The client
+                              will decide whether or not he wishes to connect to the server to
+                              establish the data channel or the server should connect to him (MODE E
+                              dictates who must connect).</para>
+                        <para>If the client wishes to connect to the server, he will send the PASV
+                              (passive) command. The server will start listening on an ephemeral
+                              (random, non-privileged) port and will return the IP and port as a
+                              response to the command. The client will then connect to that IP/Port. </para>
+                        <para>If the client wishes to have the server connect to him, the client
+                              would start listening on an ephemeral port, and would then send the
+                              PORT command which includes the IP/Port as part of the command to the
+                              server and the server would initiate the TCP connect. Note that this
+                              decision has an impact on traversing firewalls. For instance, the
+                              client's host may be behind a firewall and the server may not be able
+                              to connect. </para>
+                        <para>Finally, now that the data channel is established, the client will
+                              send either the RETR a?filenamea command to transfer a file from the
+                              server to the client (GET), or the STOR a?filenamea command to transfer
+                              a file from the client to the server (PUT). </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="command-response">
+                  <glossterm>command/response</glossterm>
+                  <glossdef>
+                        <para> [can't find this term anywhere in gridftp docs] Both FTP and GridFTP
+                              are command/response protocols. What this means is that once a client
+                              sends a command to the server, it can only accept responses from the
+                              server until it receives a response indicating that the server is
+                              finished with that command. For most commands this is not a big deal.
+                              For instance, setting the type of the file transfer to binary (called
+                              "I" for "image in the protocol"), simply consists of the client
+                              sending TYPE I and the server responding with 220 OK. Type set to I.
+                              However, the SEND and RETR commands (which actually initiate the
+                              movement of data) can run for a long time. Once the command is sent,
+                              the clientas only options are to wait until it receives the completion
+                              reply, or kill the transfer. </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="concurrency">
+                  <glossterm>concurrency</glossterm>
+                  <glossdef>
+                        <para> [can't find this term anywhere in gridftp docs] When speaking of
+                              GridFTP transfers, concurrency refers to having multiple files in
+                              transit at the same time. They may all be on the same host or across
+                              multiple hosts. This is equivalent to starting up a?na different
+                              clients for a?na different files, and having them all running at the
+                              same time. This can be effective if you have many small files to move.
+                              The Reliable File Transfer (RFT) service utilizes concurrency to
+                              improve its performance.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="condor">
+                  <glossterm>Condor</glossterm>
+                  <glossdef>
+                        <para>A job scheduler mechanism supported by GRAM. See <ulink
+                                    url="http://www.cs.wisc.edu/condor/"
+                                    >http://www.cs.wisc.edu/condor/</ulink> for more
+                        information.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="container">
+                  <glossterm>container</glossterm>
+                  <glossdef>
+                        <para>Also referred to as the "hosting environment." Provides a common
+                              runtime environment for web services. It manages the execution of
+                              services and resources, and manages their lifecycles. Provides
+                              security and data persistence infrasturcure, and other functionality
+                              such as managed threading and registry.</para>
+                        <para>A default "standalone" container is provided with a default GT
+                              installation.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="cred">
+                  <glossterm>credentials</glossterm>
+                  <glossdef>
+                        <para>[more details or links] The combination of a certificate and the
+                              matching private key.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="cryptix">
+                  <glossterm>Cryptix</glossterm>
+                  <glossdef>
+                        <para>
+                              <ulink url="https://www.cryptix.org">https://www.cryptix.org</ulink>
+                              [re: what?] </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="cvs">
+                  <glossterm>Concurrent Version System</glossterm>
+                  <acronym>CVS</acronym>
+                  <glossdef>
+                        <para>Source code repository used by the Globus Toolkit. [olink to
+                              instructions for using cvs with warning that this is for advanced
+                              developers...]</para>
+                  </glossdef>
+            </glossentry>
+      </glossdiv>
+      <glossdiv>
+            <title>D</title>
+            <glossentry id="dual-channel-protocol">
+                  <glossterm>dual channel protocol</glossterm>
+                  <glossdef>
+                        <para> [this term does not appear anywhere in the gridftp docs] GridFTP uses
+                              two channels: </para>
+                        <itemizedlist>
+                              <listitem>
+                                    <simpara>One of the channels, called the control channel, is
+                                          used for sending commands and responses. It is low
+                                          bandwidth and is encrypted for security reasons.
+                                    </simpara>
+                              </listitem>
+                              <listitem>
+                                    <simpara>The second channel is known as the data channel. Its
+                                          sole purpose is to transfer the data. It is high bandwidth
+                                          and uses an efficient protocol. </simpara>
+                              </listitem>
+                        </itemizedlist>
+                        <para>By default, the data channel is authenticated at connection time, but
+                              no integrity checking or encryption is performed due to performance
+                              reasons. Integrity checking and encryption are both available via the
+                              client and libraries. </para>
+                        <para>Note that in GridFTP (not FTP) the data channel may actually consist
+                              of several TCP streams from multiple hosts. </para>
+                  </glossdef>
+            </glossentry>
+      </glossdiv>
+      <glossdiv>
+            <title>E</title>
+            <glossentry id="eec">
+                  <glossterm>End Entity Certificate</glossterm>
+                  <acronym>EEC</acronym>
+                  <glossdef>
+                        <para> A certificate belonging to a non-CA entity, e.g. you, me or the
+                              computer on your desk.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="execution-aggregator-source">
+                  <glossterm>execution aggregator source</glossterm>
+                  <glossdef>
+                        <para> An Aggregator Source (included in MDS4) that executes an
+                              administrator-supplied program to collect information and make it
+                              available to an Aggregator Service such as the Index Service.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="exolab">
+                  <glossterm>Exolab Core</glossterm>
+                  <glossdef>
+                        <para>
+                              <ulink url="http://www.exolab.org/">http://www.exolab.org/</ulink>
+                              [what does this have to do with gt?] </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="extended-block-mode">
+                  <glossterm>extended block mode (MODE E)</glossterm>
+                  <glossdef>
+                        <para> MODE E is a critical GridFTP components because it allows for out of
+                              order reception of data. This in turn, means we can send the data down
+                              multiple paths and do not need to worry if one of the paths is slower
+                              than the others and the data arrives out of order. This enables
+                              parallelism and striping within GridFTP. In MODE E, a series of
+                              a?blocksa are sent over the data channel. Each block consists of:</para>
+                        <itemizedlist>
+                              <listitem>
+                                    <simpara>an 8 bit flag field, </simpara>
+                              </listitem>
+                              <listitem>
+                                    <simpara>a 64 bit field indicating the offset in the
+                                    transfer,</simpara>
+                              </listitem>
+                              <listitem>
+                                    <simpara>and a 64 bit field indicating the length of the
+                                          payload, </simpara>
+                              </listitem>
+                              <listitem>
+                                    <simpara>followed by length bytes of payload. </simpara>
+                              </listitem>
+                        </itemizedlist>
+                        <para>Note that since the offset and length are included in the block, out
+                              of order reception is possible, as long as the receiving side can
+                              handle it, either via something like a seek on a file, or via some
+                              application level buffering and ordering logic that will wait for the
+                              out of order blocks. [TODO: LINK TO GRAPHIC]</para>
+                  </glossdef>
+            </glossentry>
+      </glossdiv>
+      <glossdiv>
+            <title>F</title>
+            <glossentry id="flavor">
+                  <glossterm>flavor</glossterm>
+                  <glossdef>
+                        <para>Pre-OGSI Globus description term that uniquely encompasses Machine
+                              Architecture, OS, Compiler and other attributes into a single term,
+                              for example: gcc32dbgpthr for a threaded Linux debug
+                        distribution.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="fork">
+                  <glossterm>fork</glossterm>
+                  <glossdef>
+                        <para>Terms used to refer to a Unix fork, supported MJS scheduler
+                        mechanism.</para>
+                  </glossdef>
+            </glossentry>
+      </glossdiv>
+      <glossdiv>
+            <title>G</title>
+            <glossentry id="gaa-config">
+                  <glossterm>GAA configuration file</glossterm>
+                  <glossdef>
+                        <para> A file that configures the Generic Authorization and Access control
+                                    <acronym>GAA</acronym> libraries. When using GSI [term not well
+                              described in gt4], this file is typically found in
+                                    <filename>/etc/grid-security/gsi-gaa.conf</filename>.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="ganglia">
+                  <glossterm>Ganglia</glossterm>
+                  <glossdef>
+                        <para>A cluster monitoring tool (re: MDS4). See <ulink
+                                    url="http://ganglia.sourceforge.net"
+                                    >http://ganglia.sourceforge.net</ulink>. </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="GAR">
+                  <glossterm>GAR</glossterm>
+                  <glossdef>
+                        <para>The GAR (Grid ARchive) file is a single file which contains all the
+                              files and information that the container needs to deploy a service.
+                              See the Java WS Core Developer's Guide for details.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="globusrunws">
+                  <glossterm>globusrun-ws</glossterm>
+                  <glossdef>
+                        <para>A command line program used to submit jobs to a GRAM4 service. See the
+                              the GRAM4 Commandline page.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="gram">
+                  <glossterm>Grid Resource Allocation and Management (GRAM)</glossterm>
+                  <acronym>GRAM</acronym>
+                  <glossdef>
+                        <para>[FIXME: copy info from overview brief]</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="grid-map-file">
+                  <glossterm>grid map file</glossterm>
+                  <glossdef>
+                        <para> A file containing entries mapping certificate subjects to local user
+                              names. This file can also serve as a access control list for GSI
+                              enabled services and is typically found in
+                                    <filename>/etc/grid-security/grid-mapfile</filename>. For more
+                              information see the [Gridmap file in Pre-WS Authorization &amp;
+                              Authentication Developer's Guide ("Environmental Variables"
+                        section)].</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="grid-sec-dir">
+                  <glossterm>grid security directory</glossterm>
+                  <glossdef>
+                        <para> The directory containing GSI configuration files such as the GSI
+                              authorization callout configuration and GAA configuration files.
+                              Typically this directory is <filename>/etc/grid-security</filename>.
+                              For more information see [Grid security directory in Pre-WS
+                              Authorization &amp; Authentication Developer's Guide
+                              ("Environmental Variables" section)].</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="gsi">
+                  <glossterm>Grid Security Infrastructure</glossterm>
+                  <acronym>GSI</acronym>
+                  <glossdef>
+                        <para>FIXME</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="gsi-authz-config">
+                  <glossterm>GSI authorization callout configuration file</glossterm>
+                  <glossdef>
+                        <para> A file that configures authorization callouts to be used for mapping
+                              and authorization in GSI enabled services. When using GSI this file is
+                              typically found in
+                              <filename>/etc/grid-security/gsi-authz.conf</filename>.</para>
+                  </glossdef>
+            </glossentry>
+      </glossdiv>
+      <glossdiv>
+            <title>H</title>
+            <glossentry id="hawkeye">
+                  <glossterm>Hawkeye</glossterm>
+                  <glossdef>
+                        <para>A monitoring service for Condor Pools. See <ulink
+                                    url="http://www.cs.wisc.edu/condor/hawkeye/"
+                                    >http://www.cs.wisc.edu/condor/hawkeye/</ulink>. </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="host-cert">
+                  <glossterm>host certificate</glossterm>
+                  <glossdef>
+                        <para> An EEC belonging to a host. When using GSI this certificate is
+                              typically stored in
+                              <filename>/etc/grid-security/hostcert.pem</filename>. For more
+                              information on possible host certificate locations see the [Pre-WS
+                              Authentication &amp; Authorization Developer's Guide
+                              ("Environmental Variables" section) on Credentials]. </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="host-cred">
+                  <glossterm>host credentials</glossterm>
+                  <glossdef>
+                        <para> The combination of a host certificate and its corresponding private
+                              key.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="hosting-env">
+                  <glossterm>hosting environment</glossterm>
+                  <glosssee>container</glosssee>
+            </glossentry>
+      </glossdiv>
+      <glossdiv>
+            <title>I</title>
+            <glossentry id="improved-extended-block-mode">
+                  <glossterm>improved extended block mode (MODE X)</glossterm>
+                  <glossdef>
+                        <para>[this term does not appear anywhere in the gridftp docs] This protocol
+                              is still under development. It is intended to address a number of the
+                              deficiencies found in MODE E. For instance, it will have explicit
+                              negotiation for use of a data channel, thus removing the race
+                              condition and the requirement for the sender to be the connector. This
+                              will help with firewall traversal. A method will be added to allow the
+                              filename to be provided prior to the data channel connection being
+                              established to help large data farms better allocate resources. Other
+                              additions under consideration include block checksumming, resends of
+                              blocks that fail checksums, and inclusion of a transfer ID to allow
+                              pipelining and de-multiplexing of commands. </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="index-service">
+                  <glossterm>Index Service</glossterm>
+                  <glossdef>
+                        <para>An aggregator service in MDS4 that serves as a registry similar to
+                              UDDI, but much more flexible. Indexes collect information and publish
+                              that information as WSRF resource properties.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="information-provider">
+                  <glossterm>information provider</glossterm>
+                  <glossdef>
+                        <para>A "helper" software component that collects or formats resource
+                              information, for use in MDS4 by an aggregator source or by a WSRF
+                              service when creating resource properties.</para>
+                  </glossdef>
+            </glossentry>
+      </glossdiv>
+      <glossdiv>
+            <title>J</title>
+            <glossentry id="javadocs">
+                  <glossterm>Javadocs</glossterm>
+                  <glossdef>
+                        <para>Java-generated documentation files. The Globus Toolkit distribution
+                              uses this tool to automatically generate API documentation from the
+                              code itself. [add olink to api]</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="jax-rpc">
+                  <glossterm>JAX-RPC</glossterm>
+                  <glossdef>
+                        <para>
+                              <ulink url="http://www.apache.org">http://www.apache.org</ulink> (re:
+                              what in GT?) </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="jndi">
+                  <glossterm>JNDI</glossterm>
+                  <glossdef>
+                        <para>Java Naming and Directory Interface (JNDI) API are used to access a
+                              central transient container registry. The registry is mainly used for
+                              discovery of the <emphasis>ResourceHome</emphasis> implementations.
+                              However, the registry can also be used store and retrieve arbitrary
+                              information. The <emphasis>jndi-config.xml</emphasis> files are used
+                              to populate the registry. See the <ulink
+                                    url="http://java.sun.com/products/jndi/tutorial/">JNDI
+                              Tutorial</ulink> for details.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="jndi-config.xml">
+                  <glossterm>jndi-config.xml</glossterm>
+                  <glossdef>
+                        <para> It is an XML-based configuration file used to populate the container
+                              registry accessible via the JNDI API. See in the Java WS Core
+                              Developer's Guide] for details.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="job-description">
+                  <glossterm>job description</glossterm>
+                  <glossdef>
+                        <para>Term used to describe a GRAM4 job for GT4.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="job-scheduler">
+                  <glossterm>job scheduler</glossterm>
+                  <glossdef>
+                        <para>See the term <ulink url="&docpath;glossary.html#scheduler"
+                                    >scheduler</ulink>.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="junit">
+                  <glossterm>JUnit</glossterm>
+                  <glossdef>
+                        <para>Java testing framework.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="jvm">
+                  <glossterm>Java Virtual Machine</glossterm>
+                  <acronym>JVM</acronym>
+                  <glossdef>
+                        <para>The Java Runtime under which OGSI modules run.</para>
+                  </glossdef>
+            </glossentry>
+      </glossdiv>
+      <glossdiv>
+            <title>L</title>
+            <glossentry id="libtool">
+                  <glossterm>Libtool</glossterm>
+                  <glossdef>
+                        <para>Libtool is a GNU library support script that abstracts shared library
+                              interface. Used by GSI/Sysconfig. Libtool hides the complexity of
+                              using shared libraries behind a portable interface.</para>
+                        <para>For more information, see <ulink
+                                    url="http://www.gnu.org/software/libtool"
+                                    >http://www.gnu.org/software/libtool</ulink>.</para>
+                        <para>See also <ulink url="&docpath;glossary.html#gsi"
+                        >GSI</ulink>.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="lrc">
+                  <glossterm>Local Replica Catalog (LRC)</glossterm>
+                  <glossdef>
+                        <para> Stores mappings between logical names for data items and the target
+                              names (often the physical locations) of replicas of those items.
+                              Clients query the LRC to discover replicas associated with a logical
+                              name. Also may associate attributes with logical or target names. Each
+                              LRC periodically sends information about its logical name mappings to
+                              one or more RLIs. </para>
+                        <para>See also <ulink url="&docpath;glossary.html#rli"
+                        >RLI</ulink>.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="log4j">
+                  <glossterm>Log4J</glossterm>
+                  <glossdef>
+                        <para>
+                              <ulink url="http://www.apache.org">http://www.apache.org</ulink> (re:
+                              what in gt4?) </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="logical-file-name">
+                  <glossterm>logical file name</glossterm>
+                  <glossdef>
+                        <para> A unique identifier for the contents of a file.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="logical-name">
+                  <glossterm>logical name</glossterm>
+                  <glossdef>
+                        <para> A unique identifier for the contents of a data item. </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="lsf">
+                  <glossterm>LSF</glossterm>
+                  <glossdef>
+                        <para>A job scheduler mechanism supported by GRAM.</para>
+                        <para>For more information, see <ulink
+                                    url="http://www.platform.com/Products/Platform.LSF.Family/Platform.LSF/"
+                                    >
+                                    http://www.platform.com/Products/Platform.LSF.Family/Platform.LSF/</ulink>.</para>
+                  </glossdef>
+            </glossentry>
+      </glossdiv>
+      <glossdiv>
+            <title>M</title>
+            <glossentry id="meta-scheduler">
+                  <glossterm>metascheduler</glossterm>
+                  <glossdef>
+                        <para>[no mention of this term in any of the documentation...] A program
+                              that typically operates at a higher level than a job scheduler
+                              (typically, above the GRAM level). It schedules and submits jobs to
+                              GRAM services.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="mejs">
+                  <glossterm>Managed Executable Job Service</glossterm>
+                  <acronym>MEJS</acronym>
+                  <glossdef>
+                        <para>[FIXME]</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="mjfs">
+                  <glossterm>Managed Job Factory Service</glossterm>
+                  <acronym>MJFS</acronym>
+                  <glossdef>
+                        <para>[FIXME]</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="mmjs">
+                  <glossterm>Managed Multi Job Service</glossterm>
+                  <acronym>MMJS</acronym>
+                  <glossdef>
+                        <para>[FIXME]</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="mmjs-subjob">
+                  <glossterm>MMJS subjob</glossterm>
+                  <glossdef>
+                        <para>[ phrase does not appear in documentation] One of the executable jobs
+                              in a multijob rendezvous. (re: GRAM)</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="mpi">
+                  <glossterm>Message Passing Interface</glossterm>
+                  <acronym>MPI</acronym>
+                  <glossdef>
+                        <para>The Message Passing Interface (MPI) is a library specification for
+                              message-passing, proposed as a standard by a broadly based committee
+                              of vendors, implementors, and users.</para>
+                        <para>For more information, see <ulink
+                                    url="http://www-unix.mcs.anl.gov/mpi/"
+                                    >http://www-unix.mcs.anl.gov/mpi/</ulink>. </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="mode-command">
+                  <glossterm>MODE command</glossterm>
+                  <!-- not sure which instances of the word 'mode' to code -->
+                  <glossdef>
+                        <para> In reality, GridFTP is not one protocol, but a collection of several
+                              protocols. There is a protocol used on the control channel, but there
+                              is a range of protocols available for use on the data channel. Which
+                              protocol is used is selected by the MODE command. Four modes are
+                              defined: STREAM (S), BLOCK (B), COMPRESSED (C) in RFC 959 for FTP, and
+                              EXTENDED BLOCK (E) in GFD.020 for GridFTP. There is also a new data
+                              channel protocol, or mode, being defined in the GGF GridFTP Working
+                              group which, for lack of a better name at this point, is called MODE
+                              X. </para>
+                        <para>See also <ulink url="&docpath;glossary.html#extended-block-mode"
+                                    >extended block mode (MODE E)</ulink>.</para>
+                        <para>See also <ulink
+                                    url="&docpath;glossary.html#improved-extended-block-mode"
+                                    >improved extended block mode (MODE X)</ulink>.</para>
+                        <para>See also <ulink url="&docpath;glossary.html#stream-mode">stream
+                                    mode (MODE S)</ulink>.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="multijob">
+                  <glossterm>multijob</glossterm>
+                  <glossdef>
+                        <para>A job that is itself composed of several executable jobs; these are
+                              processed by the MMJS subjob.</para>
+                        <para>See also <ulink url="&docpath;glossary.html#mmjs-subjob">MMJS
+                                    subjob</ulink>.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="multijob-rendezvous">
+                  <glossterm>multijob rendezvous</glossterm>
+                  <glossdef>
+                        <para>[phrase not used in documentation] A mechanism used by GRAM to
+                              synchronize between job processes in a multiprocess job and
+                        between.</para>
+                  </glossdef>
+                  <!--  -->
+            </glossentry>
+      </glossdiv>
+      <glossdiv>
+            <title>N</title>
+            <glossentry id="network-end-points">
+                  <glossterm>network end points</glossterm>
+                  <glossdef>
+                        <para>[this term does not appear anywhere in the gridftp docs] A network
+                              endpoint is generally something that has an IP address (a network
+                              interface card). It is a point of access to the network for
+                              transmission or reception of data. Note that a single host could have
+                              multiple network end points if it haS multiple NICs installed
+                              (multi-homed). This definition is necessary to differentiate between
+                              parallelism and striping.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="nfs">
+                  <glossterm>Network File System</glossterm>
+                  <acronym>NFS</acronym>
+                  <glossdef>
+                        <para>The Network File System (NFS) provides remote access to shared file
+                              systems across networks. </para>
+                        <para>For more information, see <ulink
+                                    url="http://www.uwsg.iu.edu/usail/network/nfs/overview.html">
+                                    http://www.uwsg.iu.edu/usail/network/nfs/overview.html</ulink>.
+                        </para>
+                  </glossdef>
+            </glossentry>
+      </glossdiv>
+      <glossdiv>
+            <title>O</title>
+            <glossentry id="openjms">
+                  <glossterm>OpenJMS</glossterm>
+                  <glossdef>
+                        <para>
+                              <ulink url="http://www.exolab.org/">http://www.exolab.org/</ulink>
+                              (re: what in gt4?) </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="openldap">
+                  <glossterm>OpenLDAP</glossterm>
+                  <glossdef>
+                        <para>
+                              <ulink url=" http://www.openldap.org"> http://www.openldap.org</ulink>
+                              Open Source Lightweight Directory Access Protocol in the C Language.
+                        h</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="openssl">
+                  <glossterm>OpenSSL</glossterm>
+                  <glossdef>
+                        <para>SSL implementation used by GSI. Stands for Open Source Secure Sockets
+                              Layer. Distribution in the C Language. For more information, see
+                                    <ulink url="http://www.openssl.org"
+                              >http://www.openssl.org</ulink>.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="OperationProvider">
+                  <glossterm>operation provider</glossterm>
+                  <glossdef>
+                        <para>A reusable Java component that implements one or more web service
+                              functions. A web service can be composed of one or more operation
+                              providers. See the in the Java WS Core Developer's Guide for details.
+                        </para>
+                  </glossdef>
+            </glossentry>
+      </glossdiv>
+      <glossdiv>
+            <title>P</title>
+            <glossentry id="parallelism">
+                  <glossterm>parallelism</glossterm>
+                  <glossdef>
+                        <para> When speaking about GridFTP transfers, parallelism refers to having
+                              multiple TCP connections between a single pair of network endpoints.
+                              This is used to improve performance of transfers on connections with
+                              light to moderate packet loss.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="pbs">
+                  <glossterm>Portable Batch System</glossterm>
+                  <acronym>PBS</acronym>
+                  <glossdef>
+                        <para>A job scheduler mechanism supported by GRAM. For more information, see
+                                    <ulink url="http://www.openpbs.org"
+                              >http://www.openpbs.org</ulink>.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="physical-file-name">
+                  <glossterm>physical file name</glossterm>
+                  <glossdef>
+                        <para> The address or the location of a copy of a file on a storage system.
+                        </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="priv-key">
+                  <glossterm>private key</glossterm>
+                  <glossdef>
+                        <para>The private part of a key pair. Depending on the type of certificate
+                              the key corresponds to it may typically be found in
+                                    <filename>$HOME/.globus/userkey.pem</filename> (for user
+                              certificates), <filename>/etc/grid-security/hostkey.pem</filename>
+                              (for host certificates) or
+                                          
+<filename>/etc/grid-security/<replaceable>&lt;service&gt;</replaceable>/<replaceable>&lt;service&gt;</replaceable>key.pem</filename>
+                              (for service certificates).</para>
+                        <para>For more information on possible private key locations see
+                              [Credentials in the Pre-WS Authentication &amp; Authorization
+                              Developer's Guide ("Environmental Variables" section)].</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="proxy-cert">
+                  <glossterm>proxy certificate</glossterm>
+                  <glossdef>
+                        <para> A short lived certificate issued using a EEC. A proxy certificate
+                              typically has the same effective subject as the EEC that issued it and
+                              can thus be used in its place. GSI uses proxy certificates for single
+                              sign on and delegation of rights to other entities.</para>
+                        <para>For more information about types of proxy certificates and their
+                              compatibility in different versions of GT, see <ulink
+                                    url="http://dev.globus.org/wiki/Security/ProxyCertTypes"
+                                    >http://dev.globus.org/wiki/Security/ProxyCertTypes</ulink>.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="proxy-cred">
+                  <glossterm>proxy credentials</glossterm>
+                  <glossdef>
+                        <para> The combination of a proxy certificate and its corresponding private
+                              key. GSI typically stores proxy credentials in
+                                          <filename>/tmp/x509up_u<replaceable>&lt;uid&gt;</replaceable>
+                              </filename>, where &lt;uid&gt; is the user id of the proxy
+                              owner.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="pub-key">
+                  <glossterm>public key</glossterm>
+                  <glossdef>
+                        <para> The public part of a key pair used for cryptographic operations (e.g.
+                              signing, encrypting).</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="puretls">
+                  <glossterm>PureTLS</glossterm>
+                  <glossdef>
+                        <para>
+                              <ulink url="http://www.rtfm.com/puretls/"
+                              >http://www.rtfm.com/puretls/</ulink>
+                        </para>
+                  </glossdef>
+            </glossentry>
+      </glossdiv>
+      <glossdiv>
+            <title>Q</title>
+            <glossentry id="query-aggregator-source">
+                  <glossterm>query aggregator source</glossterm>
+                  <glossdef>
+                        <para>An aggregator source (included in MDS4) that polls a WSRF service for
+                              resource property information.</para>
+                  </glossdef>
+            </glossentry>
+      </glossdiv>
+      <glossdiv>
+            <title>R</title>
+            <glossentry id="rli">
+                  <glossterm>Replica Location Index</glossterm>
+                  <acronym>RLI</acronym>
+                  <glossdef>
+                        <para> Collects information about the logical name mappings stored in one or
+                              more Local Replica Catalogs (LRCs) and answers queries about those
+                              mappings. Each RLI periodically receives updates from one or more LRCs
+                              that summarize their contents.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="rls">
+                  <glossterm>Replica Location Service (RLS)</glossterm>
+                  <glossdef>
+                        <para> A distributed registry that keeps track of where replicas exist on
+                              physical storage systems. The job of the RLS is to maintain
+                              associations, or mappings, between logical names for data objects and
+                              one or more target or physical names for replicas. Users or services
+                              register data items in the RLS and query RLS servers to find
+                        replicas.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="resource">
+                  <glossterm>resource</glossterm>
+                  <glossdef>
+                        <para> As part of the WSRF strategy of keeping the web service and the state
+                              information separate from each other, the state information is kept in
+                              a separate entity called a resource. </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="rp">
+                  <glossterm>resource properties</glossterm>
+                  <glossdef>
+                        <para> A resource is composed of zero or more resource properties which
+                              describe the resource. For example, a resource can have the following
+                              three resource properties: Filename, Size, and Descriptors. The
+                              resource properties are defined in the web service's WSDL interface
+                              description. </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="rsl">
+                  <glossterm>Resource Specification Language</glossterm>
+                  <acronym>RSL</acronym>
+                  <glossdef>
+                        <para>Term used to describe a GRAM job for GT2 and GT3. (Note: This is not
+                              the same as RLS - the Replica Location Service) </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="ResourceHome">
+                  <glossterm>ResourceHome</glossterm>
+                  <glossdef>
+                        <para>In Java WS Core, resources are managed and discovered via
+                                    <emphasis>ResourceHome</emphasis> implementations. The
+                                    <emphasis>ResourceHome</emphasis> implementations can also be
+                              responsible for creating new resources, performing operations on a set
+                              of resources at a time, etc. <emphasis>ResourceHome</emphasis>s are
+                              configured in JNDI and are associated with a particular web
+                        service.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="rls-attribute">
+                  <glossterm>RLS attribute</glossterm>
+                  <glossdef>
+                        <para> Descriptive information that may be associated with a logical or
+                              target name mapping registered in a Local Replica Catalog (LRC).
+                              Clients can query the LRC to discover logical names or target names
+                              that have specified RLS attributes.</para>
+                  </glossdef>
+            </glossentry>
+      </glossdiv>
+      <glossdiv>
+            <title>S</title>
+            <glossentry id="saaj">
+                  <glossterm>SAAJ</glossterm>
+                  <glossdef>
+                        <para>[re: what in gt4?] For more information, see <ulink
+                                    url="http://www.apache.org">http://www.apache.org</ulink>.
+                        </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="sasl">
+                  <glossterm>SASL</glossterm>
+                  <glossdef>
+                        <para>Utilized by GSI. Open Source Simple Authentication and Security Layer
+                              in the C Language. For more information, see <ulink
+                                    url="http://asg.web.cmu.edu/sasl"
+                              >http://asg.web.cmu.edu/sasl</ulink>.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="scheduler">
+                  <glossterm>scheduler</glossterm>
+                  <glossdef>
+                        <para>Term used to describe a job scheduler mechanism to which GRAM
+                              interfaces. It is a networked system for submitting, controlling, and
+                              monitoring the workload of batch jobs in one or more computers. The
+                              jobs or tasks are scheduled for execution at a time chosen by the
+                              subsystem according to an available policy and availability of
+                              resources. Popular job schedulers include Portable Batch System (PBS),
+                              Platform LSF, and IBM LoadLeveler.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="scheduler-adapter">
+                  <glossterm>scheduler adapter</glossterm>
+                  <glossdef>
+                        <para>The interface used by GRAM to communicate/interact with a job
+                              scheduler mechanism. In GT 4.x, this is both the perl submission
+                              scripts and the SEG program.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="seg">
+                  <glossterm>Scheduler Event Generator</glossterm>
+                  <acronym>SEG</acronym>
+                  <glossdef>
+                        <para>[FIXME]</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="server">
+                  <glossterm>server</glossterm>
+                  <glossdef>
+                        <para>The compliment to the client is the server. Its defining
+                              characteristic is that it receives commands and sends responses to
+                              those commands. Since it is a server or service, and it receives
+                              commands, it must be listening on a port somewhere to receive the
+                              commands. Both FTP and GridFTP have IANA registered ports. For FTP it
+                              is port 21, for GridFTP it is port 2811. This is normally handled via
+                              inetd or xinetd on Unix variants. However, it is also possible to
+                              implement a daemon that listens on the specified port. This is
+                              described more fully in in the [Architecture section of the GridFTP
+                              Developer's Guide].</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="server-config.wsdd">
+                  <glossterm>server-config.wsdd</glossterm>
+                  <glossdef>
+                        <para>Axis server-side WSDD configuration file. It contains information
+                              about the services, the type mappings and various handlers.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="service">
+                  <glossterm>service</glossterm>
+                  <glossdef><para>See <ulink url="&docpath;glossary.html#web-service">web
+                  service</ulink>.</para></glossdef>
+            </glossentry>
+            <glossentry id="svc-cert">
+                  <glossterm>service certificate</glossterm>
+                  <glossdef>
+                        <para> A EEC for a specific service (e.g. FTP or LDAP). When using GSI this
+                              certificate is typically stored in
+                                          
+<filename>/etc/grid-security/<replaceable>&lt;service&gt;</replaceable>/<replaceable>&lt;service&gt;</replaceable>cert.pem</filename>.
+                              For more information on possible service certificate locations, see
+                              [Credentials in the Pre-WS Authentication &amp; Authorization
+                              Developer's Guide ("Environmental Variables" section)].</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="svc-cred">
+                  <glossterm>service credentials</glossterm>
+                  <glossdef>
+                        <para> The combination of a service certificate and its corresponding
+                              private key.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="servlet">
+                  <glossterm>servlet</glossterm>
+                  <glossdef>
+                        <para>For more information, see <ulink url="http://www.apache.org"
+                                    >http://www.apache.org</ulink>. </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="soap">
+                  <glossterm>SOAP</glossterm>
+                  <glossdef>
+                        <para> SOAP provides a standard, extensible, composable framework for
+                              packaging and exchanging XML messages between a service provider and a
+                              service requester. SOAP is independent of the underlying transport
+                              protocol, but is most commonly carried on HTTP. See the <ulink
+                                    url="http://www.w3.org/TR/soap/">SOAP specifications</ulink> for
+                              details. </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="standalone">
+                  <glossterm>standalone container</glossterm>
+                  <glossdef>
+                        <para>A simple HTTP server that passes requests to the SOAP engine and it
+                              can only serve .wsdl and .xsd files. Included with a standard
+                              installation of the Globus Toolkit for use as the build hosting
+                              environment for testing or extremely basic deployments. </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="stream-mode">
+                  <glossterm>stream mode (MODE S)</glossterm>
+                  <glossdef>
+                        <para> The only mode normally implemented for FTP is MODE S. This is simply
+                              sending each byte, one after another over the socket in order, with no
+                              application level framing of any kind. This is the default and is what
+                              a standard FTP server will use. This is also the default for GridFTP.
+                        </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="striping">
+                  <glossterm>striping</glossterm>
+                  <glossdef>
+                        <para> When speaking about GridFTP transfers, striping refers to having
+                              multiple network endpoints at the source, destination, or both
+                              participating in the transfer of the same file. This is normally
+                              accomplished by having a cluster with a parallel shared file system.
+                              Each node in the cluster reads a section of the file and sends it over
+                              the network. This mode of transfer is necessary if you wish to
+                              transfer a single file faster than a single host is capable of. This
+                              also tends to only be effective for large files, though how large
+                              depends on how many hosts and how fast the end-to-end transfer is.
+                              Note that while it is theoretically possible to use NFS for the shared
+                              file system, your performance will be poor, and would make using
+                              striping pointless. </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="subscription-aggregator-source">
+                  <glossterm>subscription aggregator source</glossterm>
+                  <glossdef>
+                        <para>An aggregator source (included in MDS4) that collects data from a WSRF
+                              service via WSRF subscription/notification.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="sudo">
+                  <glossterm>superuser do</glossterm>
+                  <abbrev>sudo</abbrev>
+                  <glossdef>
+                        <para>Allows a system administrator to give certain users (or groups of
+                              users) the ability to run some (or all) commands as root or another
+                              user while logging the commands and arguments. See <ulink
+                                    url="http://www.courtesan.com/sudo/"
+                                    >http://www.courtesan.com/sudo/</ulink> for more
+                        information.</para>
+                  </glossdef>
+            </glossentry>
+      </glossdiv>
+      <glossdiv>
+            <title>T</title>
+            <glossentry id="target-name">
+                  <glossterm>target name</glossterm>
+                  <glossdef>
+                        <para> The address or location of a copy of a data item on a storage system.
+                        </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="third-party-transfers">
+                  <glossterm>third party transfers</glossterm>
+                  <glossdef>
+                        <para>In the simplest terms, a third party transfer moves a file between two
+                              GridFTP servers.</para>
+                        <para> The following is a more detailed, programmatic description [should be
+                              in documentation somewhere-key concepts?]. </para>
+                        <para>In a third party transfer, there are three entities involved. The
+                              client, who will only orchestrate, but not actually take place in the
+                              data transfer, and two servers one of which will be sending data to
+                              the other. This scenario is common in Grid applications where you may
+                              wish to stage data from a data store somewhere to a supercomputer you
+                              have reserved. The commands are quite similar to the client/server
+                              transfer. However, now the client must establish two control channels,
+                              one to each server. He will then choose one to listen, and send it the
+                              PASV command. When it responds with the IP/port it is listening on,
+                              the client will send that IP/port as part of the PORT command to the
+                              other server. This will cause the second server to connect to the
+                              first server, rather than the client. To initiate the actual movement
+                              of the data, the client then sends the RETR a?filenamea command to the
+                              server that will read from disk and write to the network (the
+                              a?sendinga server) and will send the STOR a?filenamea command to the
+                              other server which will read from the network and write to the disk
+                              (the a?receivinga server). </para>
+                        <glossseealso otherterm="client-server-transfer">client/server
+                        transfer</glossseealso>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="transport-level-security">
+                  <glossterm>transport-level security</glossterm>
+                  <glossdef>
+                        <para>Uses transport-level security (TLS) mechanisms.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="trigger-service">
+                  <glossterm>Trigger Service</glossterm>
+                  <glossdef>
+                        <para>An aggregator service (in MDS4) that collects information and compares
+                              that data against a set of conditions defined in a configuration file.
+                              When a condition is met, or triggered, the specified action takes
+                              place (for example, an email is sent to a system administrator when
+                              the disk space on a server reaches a threshold).</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="trusted-ca-dir">
+                  <glossterm>trusted CAs directory</glossterm>
+                  <glossdef>
+                        <para> The directory containing the CA certificates and signing policy files
+                              of the CAs trusted by GSI. Typically this directory is
+                                    <filename>/etc/grid-security/certificates</filename>. For more
+                              information see Grid security directory in the [Pre-WS A&amp;A
+                              Developer's Guide ("Environmental Variables" section)].</para>
+                  </glossdef>
+            </glossentry>
+      </glossdiv>
+      <glossdiv>
+            <title>U</title>
+            <glossentry id="uuid">
+                  <glossterm>Universally Unique Identifier</glossterm>
+                  <acronym>UUID</acronym>
+                  <glossdef>
+                        <para>Identifier that is immutable and unique across time and space.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="user-cert">
+                  <glossterm>user certificate</glossterm>
+                  <glossdef>
+                        <para> A EEC belonging to a user. When using GSI, this certificate is
+                              typically stored in <filename>$HOME/.globus/usercert.pem</filename>.
+                              For more information on possible user certificate locations, see
+                              [Credentials in the Pre-WS A&amp;A Developer's Guide
+                              ("Environmental Variables" section)].</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="user-cred">
+                  <glossterm>user credentials</glossterm>
+                  <glossdef>
+                        <para> The combination of a user certificate and its corresponding private
+                              key.</para>
+                  </glossdef>
+            </glossentry>
+      </glossdiv>
+      <glossdiv>
+            <title>W</title>
+            <glossentry id="web-service">
+                  <glossterm>web service</glossterm>
+                  <glossdef>
+                        <para>FIXME</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="webmds">
+                  <glossterm>WebMDS</glossterm>
+                  <glossdef>
+                        <para>In MDS4, WebMDS is a web-based interface to WSRF resource property
+                              information that can be used as a user-friendly front-end to the Index
+                              Service or other WSRF services.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="wsa">
+                  <glossterm>Web Services Addressing</glossterm>
+                  <acronym>WSA</acronym>
+                  <glossdef>
+                        <para> The WS-Addressing specification defines transport-neutral mechanisms
+                              to address web services and messages. Specifically, it defines XML
+                              elements to identify web service endpoints and to secure end-to-end
+                              endpoint identification in messages. See the <ulink
+                                    url="http://www.w3.org/2002/ws/addr/">W3C WS Addressing Working
+                                    Group</ulink> for details. </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="wsdd">
+                  <glossterm>Web Services Deployment Descriptor</glossterm>
+                  <acronym>WSDD</acronym>
+                  <glossdef>
+                        <para>An Axis XML-based configuration file.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="wsdl">
+                  <glossterm>Web Services Description Language</glossterm>
+                  <acronym>WSDL</acronym>
+                  <glossdef>
+                        <para> WSDL is an XML document for describing Web services. Standardized
+                              binding conventions define how to use WSDL in conjunction with SOAP
+                              and other messaging substrates. WSDL interfaces can be compiled to
+                              generate proxy code that constructs messages and manages
+                              communications on behalf of the client application. The proxy
+                              automatically maps the XML message structures into native language
+                              objects that can be directly manipulated by the application. The proxy
+                              frees the developer from having to understand and manipulate XML. See
+                              the <ulink url="http://www.w3.org/TR/wsdl">WSDL 1.1
+                              specification</ulink> for details. </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="wsdl4j">
+                  <glossterm>Web Services Description Language for Java Toolkit</glossterm>
+                  <acronym>WSDL4j</acronym>
+                  <glossdef>
+                        <para>WSDL4J allows the creation, representation, and manipulation of WSDL
+                              documents. For more information, see <ulink
+                                    url="http://www-136.ibm.com/developerworks/opensource">
+                                    http://www-136.ibm.com/developerworks/opensource</ulink>.</para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="wsibp">
+                  <glossterm>Web Services Interoperability Basic Profile</glossterm>
+                  <acronym>WS-I Basic Profile</acronym>
+                  <glossdef>
+                        <para> The <ulink
+                                    url="http://www.ws-i.org/Profiles/BasicProfile-1.0-2004-04-16.html"
+                                    >WS-I Basic Profile</ulink> specification is a set of
+                              recommendations on how to use the different web services
+                              specifications such as SOAP, WSDL, etc. to maximize interoperability.
+                        </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="wsif">
+                  <glossterm>Web Services Invocation Framework</glossterm>
+                  <acronym>WSIF</acronym>
+                  <glossdef>
+                        <para>For more information, see <ulink url="http://ws.apache.org/wsif/"
+                                    >http://ws.apache.org/wsif/</ulink>. </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="wsn">
+                  <glossterm>Web Services Notification</glossterm>
+                  <acronym>WSN</acronym>
+                  <glossdef>
+                        <para> The WS-Notification family of specifications define a pattern-based
+                              approach to allowing Web services to disseminate information to one
+                              another. This framework comprises mechanisms for basic notification
+                              (WS-Notification), topic-based notification (WS-Topics), and brokered
+                              notification (WS-BrokeredNotification). See the <ulink
+                                    url="http://www.oasis-open.org/committees/tc_home.php?wg_abbrev=wsn"
+                                    >OASIS Web Services Notification (WSN) TC</ulink> for details.
+                        </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="wsrf">
+                  <glossterm>Web Services Resource Framework</glossterm>
+                  <acronym>WSRF</acronym>
+                  <glossdef>
+                        <para>Web Services Resource Framework (WSRF) is a specification that extends
+                              web services for grid applications by giving them the ability to
+                              retain state information while at the same time retaining
+                              statelessness (using resources). The combination of a web service and
+                              a resource is referred to as a WS-Resource. WSRF is a collection of
+                              different specifications that manage WS-Resources.</para>
+                        <para>This framework comprises mechanisms to describe views on the state
+                              (WS-ResourceProperties), to support management of the state through
+                              properties associated with the Web service (WS-ResourceLifetime), to
+                              describe how these mechanisms are extensible to groups of Web services
+                              (WS-ServiceGroup), and to deal with faults (WS-BaseFaults). </para>
+                        <para>For more information, go to: <ulink url="http://www.globus.org/wsrf/"
+                                    >http://www.globus.org/wsrf/</ulink> and <ulink
+                                    url="http://www.oasis-open.org/committees/tc_home.php?wg_abbrev=wsrf"
+                                    >OASIS Web Services Notification (WSRF) TC</ulink> .</para>
+                  </glossdef>
+            </glossentry>
+      </glossdiv>
+      <glossdiv>
+            <title>X</title>
+            <glossentry id="xalan">
+                  <glossterm>Xalan</glossterm>
+                  <glossdef>
+                        <para>XSLT stylesheet processor. For more information, see <ulink
+                                    url="http://xml.apache.org/xalan-j/"
+                                    >http://xml.apache.org/xalan-j/</ulink>
+                        </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="xerces">
+                  <glossterm>Xerces</glossterm>
+                  <glossdef>
+                        <para>Advanced parsing. For more information, see <ulink
+                                    url="http://xerces.apache.org/xerces-j/"
+                                    >http://xerces.apache.org/xerces-j/</ulink>. </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="xindice">
+                  <glossterm>Xindice</glossterm>
+                  <glossdef>
+                        <para>Native XML database. For more information, see <ulink
+                                    url="http://xml.apache.org/xindice/"
+                                    >http://xml.apache.org/xindice/</ulink>. </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="xml">
+                  <glossterm>XML</glossterm>
+                  <glossdef>
+                        <para> Extensible Markup Language (XML) is standard, flexible, and
+                              extensible data format used for web services. See the <ulink
+                                    url="http://www.w3.org/XML/">W3C XML site</ulink> for details.
+                        </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="xml-db">
+                  <glossterm>XML::DB</glossterm>
+                  <glossdef>
+                        <para>Provides an XML persistance layer using the postgresql database. For
+                              more information, see <ulink url="http://xmldb.sourceforge.net/"
+                                    >http://xmldb.sourceforge.net/</ulink>. </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="xml-apis">
+                  <glossterm>XML-APIs</glossterm>
+                  <glossdef>
+                        <para>For more information, see <ulink url="http://www.apache.org"
+                                    >http://www.apache.org</ulink>. </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="xml-rpc">
+                  <glossterm>XML-RPC</glossterm>
+                  <glossdef>
+                        <para>For more information, see <ulink url="http://www.apache.org"
+                                    >http://www.apache.org</ulink>. </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="xmlsec">
+                  <glossterm>XMLSec</glossterm>
+                  <glossdef>
+                        <para>For more information, see <ulink url="http://www.apache.org"
+                                    >http://www.apache.org</ulink>. </para>
+                  </glossdef>
+            </glossentry>
+            <glossentry id="xpath">
+                  <glossterm>XPath</glossterm>
+                  <glossdef>
+                        <para>XPath is a language for finding information in an XML document. XPath
+                              is used to navigate through elements and attributes in an XML
+                              document. See the <ulink url="http://www.w3.org/TR/xpath">XPath
+                                    specification</ulink> for details.</para>
+                  </glossdef>
+            </glossentry>
+      </glossdiv>
+</glossary>
