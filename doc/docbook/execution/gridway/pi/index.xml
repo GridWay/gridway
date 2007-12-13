@@ -13,11 +13,11 @@
 <bookinfo>
 	<title>GT &shortversion; Component Guide to Public Interfaces: GridWay</title>
 	<titleabbrev> Guide to Public Interfaces</titleabbrev>
-    <pubdate>February, 2007</pubdate>
+    <pubdate>December, 2007</pubdate>
     <copyright>
         <year>2002-2007</year>
         <holder>GridWay Team, Distributed Systems Architecture
-            Group, Universidad Complutense de Madrid.</holder>
+            Group, Universidad Complutense de Madrid (dsa-research.org).</holder>
     </copyright>
     <legalnotice>
         <para>
@@ -50,10 +50,12 @@
         href="../GridWay_Interface_API_Frag.xml" xpointer="xpointer(/section/*)"/>
 </chapter>
 
+<!--
 <chapter id="gridway-pi-wsdl"><title>Semantics and syntax of the WSDL</title>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
         href="../GridWay_Interface_WSDL_Frag.xml" xpointer="xpointer(/section/*)"/>
 </chapter>
+-->
 
 <chapter id="gridway-pi-protocols"><title>Semantics and syntax of non-WSDL protocols</title>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -65,15 +67,19 @@
         href="../GridWay_Interface_Commandline_Frag.xml" xpointer="xpointer(/reference/*)"/>
 </chapter>
 
+<!--
 <chapter id="gridway-pi-guis"><title>Graphical User Interface</title>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
         href="../GridWay_Interface_GUI_Frag.xml" xpointer="xpointer(/section/*)"/>
 </chapter>
+-->
 
+<!--
 <chapter id="gridway-pi-domain"><title>Semantics and syntax of domain-specific interface data</title>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
         href="../GridWay_Interface_Domain_Frag.xml" xpointer="xpointer(/section/*)"/>
 </chapter>
+-->
 
 <chapter id="gridway-pi-config"><title>Configuration interface</title>
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -85,3 +91,4 @@
         href="../GridWay_Interface_Env_Frag.xml" xpointer="xpointer(/section/*)"/>
 </chapter>
 </book>
+

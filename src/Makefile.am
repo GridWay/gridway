@@ -75,8 +75,14 @@ RM = $(srcdir)/rm
 UM = $(srcdir)/um
 DB = $(srcdir)/acct
 
-DRMAA = $(srcdir)/drmaa
-DRMAA_PACK =  $(DRMAA)/org/ggf/drmaa
+if DRMAA1
+DRMAA_SRC_DIR=drmaa/drmaa1.0
+else
+DRMAA_SRC_DIR=drmaa
+endif
+
+DRMAA= $(srcdir)/drmaa
+DRMAA_PACK =$(srcdir)/$(DRMAA_SRC_DIR)/org/ggf/drmaa
 
 JAVA_HOME = @java_home@
 
@@ -267,7 +273,7 @@ DRMAA_SRC = $(COMMON)/gw_file_parser.c $(CLIENT_SRC) \
         $(COMMON)/gw_template_parser.l \
         $(COMMON)/gw_template.c $(COMMON)/gw_log.c
 
-DRMAAJNI_SRC  = $(DRMAA_PACK)/DrmaaJNI.c
+DRMAAJNI_SRC = $(DRMAA_PACK)/DrmaaJNI.c
 
 DRMAA_JAVA_SRC = $(DRMAA_PACK)/AlreadyActiveSessionException.java \
         $(DRMAA_PACK)/AuthorizationException.java \
@@ -276,7 +282,6 @@ DRMAA_JAVA_SRC = $(DRMAA_PACK)/AlreadyActiveSessionException.java \
         $(DRMAA_PACK)/DeniedByDrmException.java \
         $(DRMAA_PACK)/DrmaaException.java \
         $(DRMAA_PACK)/DrmaaJNI.java \
-        $(DRMAA_PACK)/DrmaaRuntimeException.java \
         $(DRMAA_PACK)/DrmCommunicationException.java \
         $(DRMAA_PACK)/DrmsExitException.java \
         $(DRMAA_PACK)/DrmsInitException.java \
@@ -285,33 +290,42 @@ DRMAA_JAVA_SRC = $(DRMAA_PACK)/AlreadyActiveSessionException.java \
         $(DRMAA_PACK)/HoldInconsistentStateException.java \
         $(DRMAA_PACK)/InconsistentStateException.java \
         $(DRMAA_PACK)/InternalException.java \
-        $(DRMAA_PACK)/InvalidAttributeException.java \
         $(DRMAA_PACK)/InvalidAttributeFormatException.java \
         $(DRMAA_PACK)/InvalidAttributeValueException.java \
         $(DRMAA_PACK)/InvalidContactStringException.java \
         $(DRMAA_PACK)/InvalidJobException.java \
         $(DRMAA_PACK)/InvalidJobTemplateException.java \
-        $(DRMAA_PACK)/JobInfoImpl.java \
         $(DRMAA_PACK)/JobInfo.java \
-        $(DRMAA_PACK)/JobTemplateImpl.java \
         $(DRMAA_PACK)/JobTemplate.java \
         $(DRMAA_PACK)/NoActiveSessionException.java \
         $(DRMAA_PACK)/NoDefaultContactStringSelectedException.java \
-        $(DRMAA_PACK)/NoResourceUsageException.java \
         $(DRMAA_PACK)/PartialTimestampFormat.java \
         $(DRMAA_PACK)/PartialTimestamp.java \
         $(DRMAA_PACK)/ReleaseInconsistentStateException.java \
         $(DRMAA_PACK)/ResumeInconsistentStateException.java \
-        $(DRMAA_PACK)/SessionException.java \
-        $(DRMAA_PACK)/SessionFactoryImpl.java \
         $(DRMAA_PACK)/SessionFactory.java \
-        $(DRMAA_PACK)/SessionImpl.java \
         $(DRMAA_PACK)/Session.java \
         $(DRMAA_PACK)/SuspendInconsistentStateException.java \
         $(DRMAA_PACK)/TryLaterException.java \
         $(DRMAA_PACK)/UnsupportedAttributeException.java \
         $(DRMAA_PACK)/Version.java
-
+if DRMAA1        
+        DRMAA_JAVA_SRC += $(DRMAA_PACK)/GridWayJobInfo.java \
+        $(DRMAA_PACK)/GridWayJobTemplate.java \
+        $(DRMAA_PACK)/GridWaySessionFactory.java \
+        $(DRMAA_PACK)/GridWaySession.java \
+        $(DRMAA_PACK)/SimpleJobTemplate.java
+else
+        DRMAA_JAVA_SRC += $(DRMAA_PACK)/DrmaaRuntimeException.java \
+        $(DRMAA_PACK)/InvalidAttributeException.java \
+        $(DRMAA_PACK)/JobTemplateImpl.java \
+        $(DRMAA_PACK)/JobInfoImpl.java \
+        $(DRMAA_PACK)/NoResourceUsageException.java \
+        $(DRMAA_PACK)/SessionException.java \
+        $(DRMAA_PACK)/SessionImpl.java \
+        $(DRMAA_PACK)/SessionFactoryImpl.java        
+endif        
+        
 # -----------------------------
 # -- Includes and Headers
 # -----------------------------
@@ -683,9 +697,9 @@ dist-hook:
 	@mkdir -p $(distdir)/cmds
 	@mkdir -p $(distdir)/im_mad
 	@mkdir -p $(distdir)/em_mad
-	@mkdir -p $(distdir)/drmaa/org/ggf/drmaa
+	@mkdir -p $(distdir)/$(DRMAA_SRC_DIR)/org/ggf/drmaa
 	@cp $(JSDL_SRC) $(distdir)/cmds/
 	@cp $(IM_MAD_MDS4_SRC) $(distdir)/im_mad
 	@cp $(EM_MAD_WS_SRC) $(distdir)/em_mad
-	@cp $(DRMAA_JAVA_SRC) $(distdir)/drmaa/org/ggf/drmaa
-	@cp $(DRMAA_PACK)/DrmaaJNI.h $(distdir)/drmaa/org/ggf/drmaa
+	@cp $(DRMAA_JAVA_SRC) $(distdir)/$(DRMAA_SRC_DIR)/org/ggf/drmaa
+	@cp $(DRMAA_PACK)/DrmaaJNI.h $(distdir)/$(DRMAA_SRC_DIR)/org/ggf/drmaa

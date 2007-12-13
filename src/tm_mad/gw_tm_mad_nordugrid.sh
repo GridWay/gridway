@@ -17,14 +17,12 @@
 # limitations under the License.
 # ------------------------------------------------------------------------------
 
+if [ -z "${GW_LOCATION}" ]; then
+    echo "Please, set GW_LOCATION variable."
+    exit -1
+fi
 
-CURRENT_DIR=$PWD
-
-cd /local/jfontan/tmp/nordugrid
-
-. ./setup.sh
-
-cd $CURRENT_DIR
+. $GW_LOCATION/bin/gw_mad_common.sh
 
 /usr/bin/python2.3 $GW_LOCATION/bin/gw_tm_mad_nordugrid.py | tee /tmp/nordugrid_tm.log
 

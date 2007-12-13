@@ -13,9 +13,6 @@
                 <!-- speed up the chunking process? -->
                 <xsl:param name="chunk.fast">1</xsl:param>
                 
-                <!-- which css stylesheet to use?
-                <xsl:param name="html.stylesheet" select="'/toolkit/css/default.css'"></xsl:param> -->
-                
                 <!-- Use graphics in admonitions? like 'warnings' 'important' 'note' etc -->
                 <xsl:param name="admon.graphics">1</xsl:param>
                 
@@ -143,34 +140,7 @@
                 </xsl:template>
                 
                 <xsl:template name="user.head.content">
-                                <link href="http://www.globus.org/toolkit/css/default.css" rel="stylesheet" type="text/css" /> 
-                                <link rel="stylesheet" type="text/css" href="/toolkit/css/print.css" media="print" />
-
-                                <xsl:comment> calling in special style sheet if detected browser is IE 7 </xsl:comment>
-
-                                <xsl:call-template name="conditionalComment">
-                                                <xsl:with-param name="qualifier" select="'IE 7'"/>
-                                                <xsl:with-param name="contentRTF">
-                                                                &lt;link rel="stylesheet" type="text/css" href="/toolkit/css/ie7.css" /&gt;
-                                                </xsl:with-param>
-                                </xsl:call-template>                                
-
-                                <link rel="alternate" title="Globus Toolkit RSS" href="/toolkit/rss/downloadNews/downloadNews.xml" type="application/rss+xml"/>
-                                <script>
-                                                <xsl:comment>
-                                                function GlobusSubmit()
-                                                {
-                                                var f=document.GlobusSearchForm;
-                                                
-                                                f.action="http://www.google.com/custom";
-                                                if (f.elements[0].checked) {
-                                                f.q.value = f.qinit.value + " -inurl:mail_archive " ;
-                                                } else {
-                                                f.q.value = f.qinit.value + " inurl:mail_archive " ;
-                                                }
-                                                }
-                                                </xsl:comment>
-                                </script>
+                                <link rel="stylesheet" type="text/css" href="../gwdoc.css"/>
                 </xsl:template>
                 
                 <!-- add an attribute to the BODY tag -->
@@ -197,11 +167,7 @@
                                                 
                                                 <body>
                                                                 <xsl:call-template name="body.attributes"/>
-                                                                <xsl:processing-instruction name="php">
-                                                                                include_once("http://www.globus.org/toolkit/docs/development/4.2-drafts/includes/globus_header_docbook.inc");
-                                                                                ?</xsl:processing-instruction>
-                                                                
- 
+<!-- 
                                                                 <xsl:call-template name="user.header.navigation"/>
                                                                 
                                                                 <xsl:call-template name="header.navigation">
@@ -209,29 +175,16 @@
                                                                                 <xsl:with-param name="next" select="$next"/>
                                                                                 <xsl:with-param name="nav.context" select="$nav.context"/>
                                                                 </xsl:call-template>
-                                                                
-                                                                <xsl:call-template name="user.header.content"/>
-                                                                
-                                                                
-                                                               
-
+   -->                                                             
                                                                 
                                                                 <xsl:copy-of select="$content"/>
                                                                 
-                                                                <xsl:call-template name="user.footer.content"/>
                                                                 
                                                                 <xsl:call-template name="footer.navigation">
                                                                                 <xsl:with-param name="prev" select="$prev"/>
                                                                                 <xsl:with-param name="next" select="$next"/>
                                                                                 <xsl:with-param name="nav.context" select="$nav.context"/>
                                                                 </xsl:call-template>
-                                                                
-                                                                <xsl:call-template name="user.footer.navigation"/>
-
-                                                                <xsl:processing-instruction name="php">
-                                                                                include_once("http://www.globus.org/toolkit/docs/development/4.2-drafts/includes/globus_footer_docbook.inc");
-                                                                                ?</xsl:processing-instruction>
-                                                      
                                                 </body>
                                 </html>
                 </xsl:template>

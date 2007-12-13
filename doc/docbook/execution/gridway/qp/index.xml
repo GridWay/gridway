@@ -11,24 +11,24 @@
 <article id="gridwayQP">
     <title>GT &shortversion; GridWay: Quality Profile</title>
     <titleabbrev>Quality Profile</titleabbrev>
-    <section id="gridway-qp-test">
-        <title>Test coverage reports </title>
-        <itemizedlist>
-            <listitem>
-                <simpara>
-                    <ulink url="path">Not available</ulink>
-                </simpara>
-            </listitem>
-        </itemizedlist>
-    </section>
-    <section id="gridway-qp-code">
-        <title>Code analysis reports </title>
-        <itemizedlist>
-            <listitem>
-                <simpara>[list]</simpara>
-            </listitem>
-        </itemizedlist>
-    </section>
+     <section id="gridway-qp-test">
+         <title>Test coverage reports </title>
+         <itemizedlist>
+             <listitem>
+                 <simpara>
+                     <ulink url="path">Not available</ulink>
+                 </simpara>
+             </listitem>
+         </itemizedlist>
+     </section>
+     <section id="gridway-qp-code">
+         <title>Code analysis reports </title>
+         <itemizedlist>
+             <listitem>
+                 <simpara>[list]</simpara>
+             </listitem>
+         </itemizedlist>
+     </section>
     <section id="gridway-qp-oustanding">
         <title>Outstanding bugs</title>
         <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="../GridWay_Known_Problems_Frag.xml"

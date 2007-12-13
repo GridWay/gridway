@@ -1,39 +1,27 @@
-export UMASK=002
-export XML_CATALOG_FILES=../../../catalog
-#export XML_DEBUG_CATALOG= 1
-FILENAME= index.xml
-
-all: lint html
-
-html:
+all: lint html pdf
+	
+images:
+	ln -s ../../../images  images
+        
+%.html: %.xml
 	xsltproc \
 	--xinclude \
 	--stringparam target.database.document "../../../olinkdb.xml" \
 	--stringparam current.docid "gridwayPI" \
 	../../../custom_html.xsl \
-	$(FILENAME)
+	index.xml
 
+%.pdf: %.xml
+	xsltproc --xinclude -o index.fo --stringparam current.docid "gridwayPI" \
+	../../../custom_fo.xsl  \
+	index.xml;
 
-pdf:
-	~bacon/XEP/xep \
-	-xml $(FILENAME) \
-	-xsl ../../../custom_fo.xsl \
-	-out index.pdf
-
-debian-sarge:
-	xsltproc --stringparam chunk.section.depth 0 \
-	--stringparam suppress.navigation 1 \
-	--stringparam  chapter.autolabel 0 \
-	--stringparam  section.autolabel 1 \
-	--stringparam toc.section.depth 0\
-           /usr/share/xml/docbook/stylesheet/nwalsh/html/chunk.xsl \
-           $(FILENAME)
-
-mac:
-	xsltproc --stringparam chunk.section.depth 0 \
-	--stringparam chapter.autolabel 0 \
-	/sw/share/xml/xsl/docbook-xsl/html/chunk.xsl \
-	$(FILENAME)
+	xep -quiet -fo index.fo -pdf GWPublicInterfaces.pdf
+    
+    
+html: images index.html
+    
+pdf: images index.pdf
 	
 lint:
 	xmllint \
@@ -41,11 +29,8 @@ lint:
 	--noent \
 	--xinclude \
 	--postvalid \
-	$(FILENAME)
-
-olink:
-	xsltproc \
-	--xinclude \
-	--stringparam  collect.xref.targets  "only"  \
-	../../../custom_html.xsl \
-	$(FILENAME)
+	index.xml
+	
+clean:
+	@rm -f *.pdf;
+	@rm -f *.html; 

@@ -15,7 +15,13 @@
 # limitations under the License.
 # --------------------------------------------------------------------------
 
-SUBDIRS = docbook
+if DRMAA1
+DRMAA_SRC_DIR=drmaa/drmaa1.0
+else
+DRMAA_SRC_DIR=drmaa
+endif
+
+DRMAA_PACK =../src/$(DRMAA_SRC_DIR)
 
 all: doxygen javadoc
 
@@ -28,7 +34,7 @@ endif
 
 javadoc:
 if JAVADOCC
-	javadoc org.ggf.drmaa -sourcepath ../src/drmaa/ -d ./drmaa_java
+	javadoc org.ggf.drmaa -sourcepath $(DRMAA_PACK) -d ./drmaa_java
 endif
 
 clean:

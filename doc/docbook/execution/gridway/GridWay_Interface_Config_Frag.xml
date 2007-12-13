@@ -54,15 +54,15 @@
                     The <filename>sudoers</filename> file of the <command>sudo</command> command	should include the following:
                 </para>
                 <screen>
-                    ...
-                    # User alias specification
-                    ...
-                    Runas_Alias     GW_USERS = %&lt;gwgroup>
-                    ...
-                    # GridWay entries
-                    globus ALL=(GW_USERS)     NOPASSWD: /home/gwadmin/gw/bin/gw_em_mad_prews *
-                    globus ALL=(GW_USERS)     NOPASSWD: /home/gwadmin/gw/bin/gw_em_mad_ws *
-                    globus ALL=(GW_USERS)     NOPASSWD: /home/gwadmin/gw/bin/gw_tm_mad_ftp *</screen>
+   ...
+   # User alias specification
+   ...
+   Runas_Alias     GW_USERS = %&lt;gwgroup>
+   ...
+   # GridWay entries
+   globus ALL=(GW_USERS)     NOPASSWD: /home/gwadmin/gw/bin/gw_em_mad_prews *
+   globus ALL=(GW_USERS)     NOPASSWD: /home/gwadmin/gw/bin/gw_em_mad_ws *
+   globus ALL=(GW_USERS)     NOPASSWD: /home/gwadmin/gw/bin/gw_tm_mad_ftp *</screen>
                 
                 <para>
                     Usually <command>sudo</command> clears all environment variables for security reasons. 
@@ -294,26 +294,26 @@
             </para>
             
             <screen>
-                #--------------------------------
-                # Example: GWD Configuration File
-                #--------------------------------
-                GWD_PORT              = 6725
-                MAX_NUMBER_OF_CLIENTS = 20
-                NUMBER_OF_ARRAYS = 20
-                NUMBER_OF_JOBS   = 200
-                NUMBER_OF_HOSTS  = 100
-                NUMBER_OF_USERS  = 30
-                JOBS_PER_SCHED = 10
-                JOBS_PER_HOST  = 10
-                JOBS_PER_USER  = 30
-                SCHEDULING_INTERVAL = 30
-                DISCOVERY_INTERVAL  = 300
-                MONITORING_INTERVAL = 120
-                POLL_INTERVAL       = 60
-                IM_MAD = mds4:gw_im_mad_mds4:-s hydrus.dacya.ucm.es::gridftp:ws
-                TM_MAD = gridftp:gw_tm_mad_ftp:
-                EM_MAD = ws:gw_em_mad_ws:rsl2
-                DM_SCHED = flood:gw_flood_scheduler:-h 10 -u 30 -c 5</screen>
+   #--------------------------------
+   # Example: GWD Configuration File
+   #--------------------------------
+   GWD_PORT              = 6725
+   MAX_NUMBER_OF_CLIENTS = 20
+   NUMBER_OF_ARRAYS = 20
+   NUMBER_OF_JOBS   = 200
+   NUMBER_OF_HOSTS  = 100
+   NUMBER_OF_USERS  = 30
+   JOBS_PER_SCHED = 10
+   JOBS_PER_HOST  = 10
+   JOBS_PER_USER  = 30
+   SCHEDULING_INTERVAL = 30
+   DISCOVERY_INTERVAL  = 300
+   MONITORING_INTERVAL = 120
+   POLL_INTERVAL       = 60
+   IM_MAD = mds4:gw_im_mad_mds4:-s hydrus.dacya.ucm.es::gridftp:ws
+   TM_MAD = gridftp:gw_tm_mad_ftp:
+   EM_MAD = ws:gw_em_mad_ws:rsl2
+   DM_SCHED = flood:gw_flood_scheduler:-h 10 -u 30 -c 5</screen>
         </section>
         
         <section>
@@ -630,18 +630,18 @@
                 </para>
                 
                 <screen>
-                    # Weight for the Fixed priority policy
-                    FP_WEIGHT = 1
-                    
-                    # Fixed priority values for David's and Alice's jobs
-                    FP_USER[david]  = 2
-                    FP_USER[alice]  = 12
-                    
-                    # Fixed priority for every body in the staff group
-                    FP_GROUP[staff] = 5
-                    
-                    # Anyone else gets a default priority 3
-                    FP_USER[DEFAULT] = 3</screen>
+   # Weight for the Fixed priority policy
+   FP_WEIGHT = 1
+   
+   # Fixed priority values for David's and Alice's jobs
+   FP_USER[david]  = 2
+   FP_USER[alice]  = 12
+   
+   # Fixed priority for every body in the staff group
+   FP_GROUP[staff] = 5
+   
+   # Anyone else gets a default priority 3
+   FP_USER[DEFAULT] = 3</screen>
             </section>
             
             <section>
@@ -688,19 +688,19 @@
                 </para>
                 
                 <screen>
-                    # Weight for the Fair-share policy
-                    SH_WEIGHT = 1
-                    
-                    # Shared values for David's and Alice's submissions
-                    SH_USER[david]  = 2
-                    SH_USER[alice]  = 5
-                    
-                    # Anyone else gets a default share value of 1
-                    SH_USER[DEFAULT] = 1
-                    
-                    # Consider submissions in the last 5 days
-                    SH_WINDOW_SIZE = 1
-                    SH_WINDOW_DEPTH= 5</screen>
+   # Weight for the Fair-share policy
+   SH_WEIGHT = 1
+   
+   # Shared values for David's and Alice's submissions
+   SH_USER[david]  = 2
+   SH_USER[alice]  = 5
+   
+   # Anyone else gets a default share value of 1
+   SH_USER[DEFAULT] = 1
+   
+   # Consider submissions in the last 5 days
+   SH_WINDOW_SIZE = 1
+   SH_WINDOW_DEPTH= 5</screen>
             </section>
             
             <section>
@@ -717,8 +717,8 @@
                 </para>
                 
                 <screen>
-                    # Weight for the Waiting-time policy
-                    WT_WEIGHT = 1</screen>
+    # Weight for the Waiting-time policy
+    WT_WEIGHT = 1</screen>
             </section>
             
             <section>
@@ -740,11 +740,11 @@
                 </para>
                 
                 <screen>
-                    # Weight of the Deadline Policy
-                    DL_WEIGHT = 1
-                    
-                    # Assign half of the priority two days before the deadline
-                    DL_HALF = 2</screen>
+    # Weight of the Deadline Policy
+    DL_WEIGHT = 1
+    
+    # Assign half of the priority two days before the deadline
+    DL_HALF = 2</screen>
             </section>
             
             <section>
@@ -834,21 +834,21 @@
                 </para>
                 
                 <screen>
-                    # Weight for the Resource fixed priority policy
-                    RP_WEIGHT = 1
-                    
-                    # Fixed priority values for specific resources
-                    RP_HOST[my.cluster.com]    = 12
-                    RP_HOST[slow.machine.com]  = 02
-                    
-                    # Fixed priority for every resource in the intranet
-                    RP_IM[intranet] = 65
-                    
-                    # Fixed priority for every resource discovered by the grid IM
-                    RP_IM[grid] = 05
-                    
-                    # Anyone else gets a default priority 04 (i.e. other IM)
-                    RP_IM[DEFAULT] = 01</screen>
+   # Weight for the Resource fixed priority policy
+   RP_WEIGHT = 1
+   
+   # Fixed priority values for specific resources
+   RP_HOST[my.cluster.com]    = 12
+   RP_HOST[slow.machine.com]  = 02
+   
+   # Fixed priority for every resource in the intranet
+   RP_IM[intranet] = 65
+   
+   # Fixed priority for every resource discovered by the grid IM
+   RP_IM[grid] = 05
+   
+   # Anyone else gets a default priority 04 (i.e. other IM)
+   RP_IM[DEFAULT] = 01</screen>
             </section>
             
             <section>
@@ -866,8 +866,8 @@
                     Example configuration for the Rank policy:
                     
                     <screen>
-                        # Weight of the Rank policy
-                        RA_WEIGHT = 1</screen>
+    # Weight of the Rank policy
+    RA_WEIGHT = 1</screen>
                 </para>
                 
             </section>
@@ -941,14 +941,14 @@
                     Example configuration for Usage policy:
                     
                     <screen>
-                        # Weight of the Usage policy
-                        UG_WEIGHT = 1
-                        
-                        # Number of days in the history window
-                        UG_HISTORY_WINDOW = 3
-                        
-                        # Accounting database to last execution ratio
-                        UG_HISTORY_RATIO = 0.25</screen>
+   # Weight of the Usage policy
+   UG_WEIGHT = 1
+   
+   # Number of days in the history window
+   UG_HISTORY_WINDOW = 3
+   
+   # Accounting database to last execution ratio
+   UG_HISTORY_RATIO = 0.25</screen>
                 </para>
                 
             </section>
@@ -1003,10 +1003,10 @@
                     Example configuration for the Failure Rate policy:
                     
                     <screen>
-             # Maximum time that a resource will not be used, in seconds
-             FR_MAX_BANNED_TIME = 3600
-             # Exponential constant
-             FR_BANNED_C        = 650</screen>
+    # Maximum time that a resource will not be used, in seconds
+    FR_MAX_BANNED_TIME = 3600
+    # Exponential constant
+    FR_BANNED_C        = 650</screen>
                 </para>
             </section>
             
@@ -1527,10 +1527,10 @@
             </para>
             
             <screen>
-                X509_USER_PROXY=$HOME/.globus/proxy.pem
-                
-                GLOBUS_LOCATION=/opt/globus-4.0
-                . $GLOBUS_LOCATION/etc/globus-user-env.sh</screen>
+    X509_USER_PROXY=$HOME/.globus/proxy.pem
+    
+    GLOBUS_LOCATION=/opt/globus-4.0
+    . $GLOBUS_LOCATION/etc/globus-user-env.sh</screen>
             
             <para>
                 The file for global MAD environment configuration is
@@ -1559,9 +1559,8 @@
                         export them. For example:
                     </para>
                     <screen>
-                        if [ -d /opt/globus-devel ]; then
-                        export GLOBUS_LOCATION=/opt/globus-devel
-                    </screen>
+   if [ -d /opt/globus-devel ]; then
+   export GLOBUS_LOCATION=/opt/globus-devel</screen>
                 </listitem>
             </itemizedlist>
             
@@ -1674,9 +1673,8 @@
                     parameter to change the port is the <option>-p</option> followed by the port number. For
                     example:
                 </para>
-                
-                <screen>
-                    EM_MAD = osg_ws:gw_em_mad_ws:-p 9443:rsl2</screen>
+
+                <screen> EM_MAD = osg_ws:gw_em_mad_ws:-p 9443:rsl2</screen>
                 
                 <para>
                     This line tells the EM MAD to use port 9443 to connect to the GT4 Gatekeeper.
@@ -2038,8 +2036,8 @@
                     For example (you can find this file, <filename>host.list</filename>, in
                     <filename>$GW_LOCATION/examples/im/</filename>)
                     <screen>
-                        hydrus.dacya.ucm.es examples/im/hydrus.attr
-                        draco.dacya.ucm.es examples/im/draco.attr</screen>
+   hydrus.dacya.ucm.es examples/im/hydrus.attr
+   draco.dacya.ucm.es examples/im/draco.attr</screen>
                 </para>
                 
                 <para>
@@ -2099,11 +2097,11 @@
                     <screen>IM_MAD = glue:gw_im_mad_mds2_glue:-l examples/im/host.list::gridftp:prews</screen>
                 </para>
                 <para>
-                    In this case the host list file contains one host per line, in the format:
+                     In this case the host list file contains one host per line, with the format:
                     <screen>
-                        FQDN
-                        ...
-                        FQDN</screen>
+    FQDN
+    ...
+    FQDN</screen>
                 </para>
                 
                 <para>
@@ -2121,9 +2119,9 @@
                     For example (you can find this file in
                     <filename>$GW_LOCATION/examples/im/</filename>)
                     <screen>
-                        hydrus.dacya.ucm.es
-                        ursa.dacya.ucm.es
-                        draco.dacya.ucm.es</screen>
+    hydrus.dacya.ucm.es
+    ursa.dacya.ucm.es
+    draco.dacya.ucm.es</screen>
                 </para>
                 
                 <note>
@@ -2202,22 +2200,22 @@
                 </para>
                 
                 <screen>
-    IM_MAD = mds4:gw_im_mad_mds4:-l etc/gridway/host.list:gridftp:ws</screen>
+   IM_MAD = mds4:gw_im_mad_mds4:-l etc/gridway/host.list:gridftp:ws</screen>
                 
                 <para>
                     The file list should look like this:
                 </para>
                 
                 <screen>
-    wsgram-host1.domain.com etc/gridway/wsgram-host1.attr
-    wsgram-host2.domain.com etc/gridway/wsgram-host2.attr</screen>
+   wsgram-host1.domain.com etc/gridway/wsgram-host1.attr
+   wsgram-host2.domain.com etc/gridway/wsgram-host2.attr</screen>
                 
                 <para>
                     And the attributes file for each node should look like this:
                 </para>
                 
                 <screen>
-                    SE_HOSTNAME="gridftp-host1.domain.com"</screen>
+   SE_HOSTNAME="gridftp-host1.domain.com"</screen>
             </section>
             
             
@@ -2232,7 +2230,7 @@
 		<listitem><para>Integration of GridWay within the OSG infrastructure<ulink url="http://www.gridway.org/documentation/stable/osghowto/">[HTML]</ulink><ulink url="http://www.gridway.org/documentation/stable/osghowto.pdf">[PDF]</ulink></para></listitem>
 		<listitem><para>Integration of GridWay within the Teragrid infrastructure<ulink url="http://www.gridway.org/documentation/stable/tghowto/">[HTML]</ulink><ulink url="http://www.gridway.org/documentation/stable/tghowto.pdf">[PDF]</ulink></para></listitem>
 		<listitem><para>Integration of GridWay within the Nordugrid infrastructure<ulink url="http://www.gridway.org/documentation/stable/norduhowto">[HTML]</ulink><ulink url="http://www.gridway.org/documentation/stable/norduhowto.pdf">[PDF]</ulink></para></listitem>
-		<listitem><para>Accessing SSH Hosts using GridWay<ulink url="http://www.gridway.org/documentation/stable/sshhowto">[HTML]</ulink><ulink url="http://www.gridway.org/documentation/stable/sshhowto.pdf">[PDF]</ulink></para></listitem>		
+        <listitem><para>Creating MADs: SSH Example<ulink url="http://www.gridway.org/documentation/stable/sshhowto">[HTML]</ulink><ulink url="http://www.gridway.org/documentation/stable/sshhowto.pdf">[PDF]</ulink></para></listitem>
 	</itemizedlist>
   </section>  
 </section>
