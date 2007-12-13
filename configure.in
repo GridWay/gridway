@@ -16,7 +16,7 @@
 # ------------------------------------------------------------------------------
 
 AC_PREREQ(2.60)
-AC_INIT([GridWay], [5.2.3], [gridway-user@globus.org])
+AC_INIT([GridWay], [5.3.0], [gridway-user@globus.org])
 AC_CONFIG_AUX_DIR(config)
 AC_CONFIG_SRCDIR([src/dm/gw_dm_action_dispatch.c])
 
@@ -375,7 +375,7 @@ fi
 # Automake Directives
 #------------------------------------------------------------------------------
 
-AM_INIT_AUTOMAKE(gw,5.2.3)
+AM_INIT_AUTOMAKE(gw,5.3.0)
 AM_PROG_CC_C_O
 AM_PROG_LEX
 
