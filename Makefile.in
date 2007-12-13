@@ -814,9 +814,7 @@ dist-hook:
 	@mkdir -p $(distdir)/doc/docbook
 	@cp -r doc/images $(distdir)/doc
 	@cp -r doc/drmaa_c $(distdir)/doc
-	@cp -r doc/docbook/*.sgml $(distdir)/doc/docbook
-	@cp -r doc/docbook/*.css $(distdir)/doc/docbook
-	@cp -r doc/docbook/*.dsl $(distdir)/doc/docbook
+	@cp -r doc/docbook $(distdir)/doc/
 	@cp -r examples $(distdir)
 	@cp -r etc $(distdir)
 	@cp -r src/test/jt $(distdir)/src/test
