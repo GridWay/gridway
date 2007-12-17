@@ -11,15 +11,13 @@
 <book id="gridwayUser">
 
 <bookinfo>
-	<title>
-       GT &shortversion; GridWay: User's Guide
-    </title>
-	<titleabbrev>User's Guide</titleabbrev>
+	<title> GridWay 5.3: User's Guide</title>
+	<titleabbrev> User's Guide</titleabbrev>
     <pubdate>December, 2007</pubdate>
     <copyright>
         <year>2002-2007</year>
            <holder>GridWay Team, Distributed Systems Architecture
-            Group, Universidad Complutense de Madrid (dsa-research.org).</holder>
+            Group (dsa-research.org), Universidad Complutense de Madrid.</holder>
 </copyright>
     <legalnotice>
         <para>

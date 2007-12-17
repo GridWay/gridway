@@ -11,13 +11,13 @@
 <book id="gridwayPI">
 
 <bookinfo>
-	<title>GT &shortversion; Component Guide to Public Interfaces: GridWay</title>
+	<title> GridWay 5.3: Guide to Public Interfaces</title>
 	<titleabbrev> Guide to Public Interfaces</titleabbrev>
     <pubdate>December, 2007</pubdate>
     <copyright>
         <year>2002-2007</year>
         <holder>GridWay Team, Distributed Systems Architecture
-            Group, Universidad Complutense de Madrid (dsa-research.org).</holder>
+            Group (dsa-research.org), Universidad Complutense de Madrid.</holder>
     </copyright>
     <legalnotice>
         <para>

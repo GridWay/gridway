@@ -10,15 +10,13 @@
 ]>
 <book id="gridwayAdmin">
 	<bookinfo>
-		<title>
-            GT &version; GridWay: System Administrator's Guide
-        </title>
+		<title> GridWay 5.3: System Administrator's Guide</title>
 		<titleabbrev>System Administrator's Guide</titleabbrev>
         <pubdate>December, 2007</pubdate>
         <copyright>
             <year>2002-2007</year>
                <holder>GridWay Team, Distributed Systems Architecture
-            Group, Universidad Complutense de Madrid (dsa-research.org).</holder>
+            Group (dsa-research.org), Universidad Complutense de Madrid.</holder>
 </copyright>
         <legalnotice>
             <para>
