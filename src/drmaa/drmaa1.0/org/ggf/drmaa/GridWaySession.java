@@ -142,10 +142,10 @@ public class GridWaySession implements Session
 		return drmaaImpl.wait(jobName, timeout);
 	};
 
-	public int getJobProgramStatus(java.lang.String jobName)
+	public int getJobStatus(java.lang.String jobName)
 	throws DrmaaException
 	{
-		return drmaaImpl.getJobProgramStatus(jobName);
+		return drmaaImpl.getJobStatus(jobName);
 	};
 	
 	public java.lang.String getContact()

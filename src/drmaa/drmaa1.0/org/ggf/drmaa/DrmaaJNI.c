@@ -348,7 +348,7 @@ JNIEXPORT jobject JNICALL Java_org_ggf_drmaa_DrmaaJNI_wait(JNIEnv *env, jobject 
         return jobInfo;
 }
 
-JNIEXPORT jint JNICALL Java_org_ggf_drmaa_DrmaaJNI_getJobProgramStatus(JNIEnv *env, jobject obj, jstring jobName)
+JNIEXPORT jint JNICALL Java_org_ggf_drmaa_DrmaaJNI_getJobStatus(JNIEnv *env, jobject obj, jstring jobName)
 {
         char                                    error[DRMAA_ERROR_STRING_BUFFER];
         int                                     rc;

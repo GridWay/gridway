@@ -461,7 +461,7 @@ public abstract interface Session
 	 *  @throws InternalException
  	 *  
  	 */      
-	public int getJobProgramStatus(java.lang.String jobName)
+	public int getJobStatus(java.lang.String jobName)
 	throws DrmaaException;
 	
 	/** If called before {@link #init}, this method returns a string containing a 

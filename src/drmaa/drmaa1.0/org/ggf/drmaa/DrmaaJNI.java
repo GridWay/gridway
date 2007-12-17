@@ -67,7 +67,7 @@ public class DrmaaJNI
 	
 	/**The normal user of this API <b><i>SHOULD NEVER</i></b> use this method.
 	  */
-	public native int getJobProgramStatus(String jobName);
+	public native int getJobStatus(String jobName);
 	
 	/**The normal user of this API <b><i>SHOULD NEVER</i></b> use this method.
 	  */

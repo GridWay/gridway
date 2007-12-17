@@ -81,10 +81,10 @@ JNIEXPORT jobject JNICALL Java_org_ggf_drmaa_DrmaaJNI_wait
 
 /*
  * Class:     org_ggf_drmaa_DrmaaJNI
- * Method:    getJobProgramStatus
+ * Method:    getJobStatus
  * Signature: (Ljava/lang/String;)I
  */
-JNIEXPORT jint JNICALL Java_org_ggf_drmaa_DrmaaJNI_getJobProgramStatus
+JNIEXPORT jint JNICALL Java_org_ggf_drmaa_DrmaaJNI_getJobStatus
   (JNIEnv *, jobject, jstring);
   
 /*
