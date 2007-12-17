@@ -24,8 +24,4 @@ fi
 
 . $GW_LOCATION/bin/gw_mad_common.sh
 
-/usr/bin/python2.3 $GW_LOCATION/bin/gw_tm_mad_nordugrid.py | tee /tmp/nordugrid_tm.log
-
-
-
-
+python $GW_LOCATION/bin/gw_tm_mad_nordugrid.py | tee /tmp/nordugrid_tm.log
