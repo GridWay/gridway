@@ -371,6 +371,32 @@ if test "x$JAVA_HOME" = "x"; then
    	AC_MSG_WARN("JAVA_HOME is not set, some Java versions will not work (eg. Mac OS X)")     
 fi
 
+###########################
+# CHECKING GLOBUS VERSION #
+###########################
+      
+if test -f $GLOBUS_LOCATION/lib/addressing-1.0.jar; then
+        if test -f src/em_mad/GW_mad_ws.java; then
+            rm -f src/em_mad/GW_mad_ws.java;
+        fi
+        (cd src/em_mad ; ln -s GW_mad_ws.GT4.0.java GW_mad_ws.java);
+     
+        if test -f src/im_mad/QueryClient.java; then
+            rm -f src/im_mad/QueryClient.java;
+        fi
+        (cd src/im_mad ; ln -s QueryClient.GT4.0.java QueryClient.java);
+else
+        if test -f src/em_mad/GW_mad_ws.java; then
+            rm -f src/em_mad/GW_mad_ws.java;
+        fi
+        (cd src/em_mad ; ln -s GW_mad_ws.GT4.1.java GW_mad_ws.java);
+
+        if test -f src/im_mad/QueryClient.java; then
+            rm -f src/im_mad/QueryClient.java;
+        fi
+        (cd src/im_mad ; ln -s QueryClient.GT4.1.java QueryClient.java);
+fi
+
 #------------------------------------------------------------------------------
 # Automake Directives
 #------------------------------------------------------------------------------
