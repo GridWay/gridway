@@ -64,11 +64,7 @@ class Mds4QueryParser{
         if (hostname.equals(""))
         {
             this.getHostsNames(this.getDoc());
-
-            if (this.getHostsNames().size() == 0)
-                return "FAILURE Error while obtaining hosts names: " + this.getErr();
-            else
-                return this.displayHostsNamesFromString();
+            return this.displayHostsNamesFromString();
         }
         else 
         {
