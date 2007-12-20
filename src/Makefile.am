@@ -695,13 +695,25 @@ endif
 # Distribute JAVA sources
 # ----------------------------
 
+
+EM_MAD_WS_SRC_DIST=$(EM_MAD)/GW_mad_ws.GT4.0.java \
+	$(EM_MAD)/GW_mad_ws.GT4.0.java
+
+IM_MAD_MDS4_SRC_DIST = $(IM_MAD)/Host.java \
+        $(IM_MAD)/Mds4QueryParser.java \
+        $(IM_MAD)/Queue.java \
+        $(IM_MAD)/QueryClient.GT4.0.java \
+        $(IM_MAD)/QueryClient.GT4.1.java \
+        $(IM_MAD)/GW_im_mad_mds4.java \
+        $(IM_MAD)/ServiceIM.java
+
 dist-hook:
 	@mkdir -p $(distdir)/cmds
 	@mkdir -p $(distdir)/im_mad
 	@mkdir -p $(distdir)/em_mad
 	@mkdir -p $(distdir)/$(DRMAA_SRC_DIR)/org/ggf/drmaa
 	@cp $(JSDL_SRC) $(distdir)/cmds/
-	@cp $(IM_MAD_MDS4_SRC) $(distdir)/im_mad
-	@cp $(EM_MAD_WS_SRC) $(distdir)/em_mad
+	@cp $(IM_MAD_MDS4_SRC_DIST) $(distdir)/im_mad
+	@cp $(EM_MAD_WS_SRC_DIST) $(distdir)/em_mad
 	@cp $(DRMAA_JAVA_SRC) $(distdir)/$(DRMAA_SRC_DIR)/org/ggf/drmaa
 	@cp $(DRMAA_PACK)/DrmaaJNI.h $(distdir)/$(DRMAA_SRC_DIR)/org/ggf/drmaa
