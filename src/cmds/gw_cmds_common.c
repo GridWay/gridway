@@ -815,8 +815,8 @@ void gw_client_print_host_status_full(gw_msg_host_t * msg)
 
     printf("FREE_MEM_MB=%d\n", msg->free_mem_mb);
     printf("SIZE_MEM_MB=%d\n", msg->size_mem_mb);
-    printf("FREE_DISK_MB=%d\n", msg->free_mem_mb);
-    printf("SIZE_DISK_MB=%d\n", msg->size_mem_mb);
+    printf("FREE_DISK_MB=%d\n", msg->free_disk_mb);
+    printf("SIZE_DISK_MB=%d\n", msg->size_disk_mb);
 
     freenodecount = 0;
     for (i=0; i<msg->number_of_queues; i++)
