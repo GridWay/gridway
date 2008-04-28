@@ -385,6 +385,11 @@ if test -f $GLOBUS_LOCATION/lib/addressing-1.0.jar; then
             rm -f src/im_mad/QueryClient.java;
         fi
         (cd src/im_mad ; ln -s QueryClient.GT4.0.java QueryClient.java);
+        
+        if test -f src/im_mad/Mds4QueryParser.java; then
+            rm -f src/im_mad/Mds4QueryParser.java;
+        fi        
+        (cd src/im_mad ; ln -s Mds4QueryParser.GT4.0.java Mds4QueryParser.java);
 else
         if test -f src/em_mad/GW_mad_ws.java; then
             rm -f src/em_mad/GW_mad_ws.java;
@@ -395,6 +400,11 @@ else
             rm -f src/im_mad/QueryClient.java;
         fi
         (cd src/im_mad ; ln -s QueryClient.GT4.1.java QueryClient.java);
+    
+        if test -f src/im_mad/Mds4QueryParser.java; then
+            rm -f src/im_mad/Mds4QueryParser.java;
+        fi
+        (cd src/im_mad ; ln -s Mds4QueryParser.GT4.1.java Mds4QueryParser.java);
 fi
 
 #------------------------------------------------------------------------------
