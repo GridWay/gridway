@@ -267,6 +267,9 @@ static int gw_dm_mad_start(gw_dm_mad_t *dm_mad)
     char result[GW_DM_MAX_RESULT];
     char action[GW_DM_MAX_ACTION];
     
+    fd_set          rfds;
+    struct timeval  tv;
+    
     int dm_mad_pipe[2], mad_dm_pipe[2];
     int i, rc;
     
@@ -317,6 +320,20 @@ static int gw_dm_mad_start(gw_dm_mad_t *dm_mad)
             
             do
             {
+                FD_ZERO(&rfds);
+                FD_SET(dm_mad->mad_dm_pipe, &rfds);
+
+                // Wait up to one 0.5 seconds
+                tv.tv_sec  = 0;
+                tv.tv_usec = 500000;
+
+                rc = select(dm_mad->mad_dm_pipe+1,&rfds,0,0, &tv);
+
+                if ( rc <= 0 ) // MAD did not answered
+                {
+                   return -1;
+                }               
+                
                 rc = read(dm_mad->mad_dm_pipe, (void *) &c, sizeof(char));
                 str[i++] = c;              
             }

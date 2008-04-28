@@ -51,6 +51,9 @@ char* gw_generate_nowrapper_rsl2 (gw_job_t *job)
     int print_queue = 0;
     char *arguments;
     char *xml_arguments;
+
+	char * var;
+	int    i;
 	
     /* ---------------------------------------------------------------------- */
     /* 1.- Create dynamic job data environment                                */
@@ -135,6 +138,24 @@ char* gw_generate_nowrapper_rsl2 (gw_job_t *job)
 	
     if (strlen(rsl_buffer) + 6 > GW_RSL_LENGTH)
         return NULL;
+
+	// Add environment variables to RSL
+	if ( job->template.num_env != 0 )
+    {
+        for (i=0;i<job->template.num_env;i++)
+        {
+               var = gw_job_substitute (job->template.environment[i][GW_ENV_VAL], job);        
+            
+            if (var != NULL)
+            {
+            	sprintf(tmp_buffer,
+					"<environment><name>%s</name><value>%s</value></environment>\n",
+                    job->template.environment[i][GW_ENV_VAR], var);
+				strncat(rsl_buffer, tmp_buffer, GW_RSL_LENGTH-strlen(rsl_buffer));
+                free(var);                
+            }
+        }
+    }
 
     strcat(rsl_buffer,"</job>");
 

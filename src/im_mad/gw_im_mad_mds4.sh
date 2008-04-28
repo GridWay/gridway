@@ -25,9 +25,9 @@ dynamic_discover (){
 
 		if [ "x$PORTNUMBER" = "x" ]
 		then
-			INDEX="https://$SERVER:$PORTNUMBER/wsrf/services/DefaultIndexService"
+			INDEX="https://$SERVER/wsrf/services/DefaultIndexService"
 		else
-			INDEX="https://$SERVER/wsrf/services/DefaultIndexService"		
+			INDEX="https://$SERVER:$PORTNUMBER/wsrf/services/DefaultIndexService"		
 		fi        
         
         XPATH='/*/*/*[local-name()="MemberServiceEPR"]/*[local-name()="Address" and substring-after(text(),"/wsrf/services/")="DefaultIndexService"]'

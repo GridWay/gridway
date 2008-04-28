@@ -63,7 +63,8 @@ const char * usage =
 "  -h            prints this help.\n"
 "  -v            prints GridWay version and license\n"
 "  -m            runs GridWay daemon in multiuser mode\n"
-"  -c            clears previous GridWay state (otherwise, it is recovered)\n";
+"  -c            clears previous GridWay state (otherwise, it is recovered)\n"
+"  -f            run GridWay in foreground mode (no detached)\n";
 
 const char * susage =
 "usage: gwd [-h] [-v] [-m] [-c]\n";
@@ -362,9 +363,10 @@ int main(int argc, char **argv)
     char *log;
     pid_t pid, sid;
     int   length;
-    gw_boolean_t multiuser = GW_FALSE, clear_state = GW_FALSE;
+    gw_boolean_t multiuser  = GW_FALSE, clear_state = GW_FALSE;
+    gw_boolean_t fg_mode = GW_FALSE;
     
-    while((opt = getopt(argc,argv,"vhmc")) != -1)
+    while((opt = getopt(argc,argv,"vhmcf")) != -1)
         switch(opt)
         {
             case 'v':
@@ -380,7 +382,10 @@ int main(int argc, char **argv)
             	break;        
             case 'c':
             	clear_state = GW_TRUE;
-            	break;        
+            	break;       
+            case 'f':
+            	fg_mode  = GW_TRUE;
+            	break; 
             default:
                 fprintf(stderr,"error: invalid option \'%c\'\n",optopt);
                 printf("%s", susage);
@@ -471,43 +476,62 @@ int main(int argc, char **argv)
     /*   Fork & exit main process   */
     /* ---------------------------- */
     
-    pid = fork();
+    if (fg_mode == GW_TRUE) {
+       	sprintf(log,"%s/" GW_VAR_DIR "/",GW_LOCATION);
+       	rc = chdir(log);
 
-    switch (pid){
-        case -1: /* Error */
-            fprintf(stderr,"Error! Unable to fork.\n"); 
-            unlink(lock);
-            free(log);
-            exit(-1);
-            break;
+       	free(log);
 
-        case 0: /* Child process */
-            sprintf(log,"%s/" GW_VAR_DIR "/",GW_LOCATION);
-            rc = chdir(log);
-            
-            free(log);
-            
-            if (rc != 0)
-            {
-                perror("Error, can not change to dir.");
-                unlink(lock);
-                exit(-1);
-            }
-               
-            sid = setsid();
-            if (sid == -1)
-            {
-                perror("Error, creating new session");
-                unlink(lock);                
-                return -1;
-            }
-                        
-            gwd_main();            
-            break;
+       	if (rc != 0)
+       	{
+       		perror("Error, can not change to dir.");
+       		unlink(lock);
+       		exit(-1);
+       	}
 
-        default: /* Parent process */
-            free(log);
-            break;               
+       	gwd_main();            
+    } 
+    else 
+    {
+       	pid = fork();
+
+       	switch (pid)
+       	{
+       		case -1: /* Error */
+       			fprintf(stderr,"Error! Unable to fork.\n"); 
+       			unlink(lock);
+       			free(log);
+       			exit(-1);
+       			break;
+
+       		case 0: /* Child process */
+       			sprintf(log,"%s/" GW_VAR_DIR "/",GW_LOCATION);
+       			rc = chdir(log);
+
+       			free(log);
+
+       			if (rc != 0)
+       			{
+       				perror("Error, can not change to dir.");
+       				unlink(lock);
+       				exit(-1);
+       			}
+
+       			sid = setsid();
+       			if (sid == -1)
+       			{
+       				perror("Error, creating new session");
+       				unlink(lock);                
+       				return -1;
+       			}
+
+       			gwd_main();            
+       			break;
+
+       		default: /* Parent process */
+       			free(log);
+       			break;               
+        }
     }
     
     return 0;
