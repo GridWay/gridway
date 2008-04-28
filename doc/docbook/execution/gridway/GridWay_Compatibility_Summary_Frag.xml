@@ -14,6 +14,7 @@
 <para>API changes since GridWay 5.2.3: </para>
 <itemizedlist>
   <listitem><simpara>Added DRMAA scripting language bindings for Python, Ruby and Perl.</simpara></listitem>
+  <listitem><simpara>Support for Java DRMAA version 1.0.</simpara></listitem>
 </itemizedlist>
 
 <para>CLI changes since GridWay 5.2.3: </para>

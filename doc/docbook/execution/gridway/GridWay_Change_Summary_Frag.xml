@@ -33,6 +33,13 @@ OSG. In this new development release, GridWay 5.3, support to access the NorduGr
 </varlistentry>
 
 <varlistentry>
+  <term>New Java DRMAA binding : 1.0</term>
+  <listitem>
+    <para>GridWay now supports the 1.0 binding of DRMAA Java, as well as the previous 0.6 version.</para>
+  </listitem>
+</varlistentry>
+
+<varlistentry>
   <term>Support for DAGMAN workflows</term>
   <listitem>
     <para>There is an increasing interest from the scientific community to be able to run complex workflows on a Grid environment. An almost de-facto standard to represent DAG workflows is Condor DAGMAN. In this development release GridWay includes a new workflow launcher (gwdag) that handles this kind of workflows.</para>

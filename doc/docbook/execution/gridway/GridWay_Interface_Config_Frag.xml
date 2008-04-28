@@ -74,6 +74,12 @@
                 <screen>Defaults>GW_USERS env_keep="GW_LOCATION GLOBUS_LOCATION"</screen>
                 
                 <para>
+                    The following line <emphasis>shouldn't</emphasis> be in the sudoers file, otherwise gridway could not use sudo as it will ask for a tty:
+                </para>
+
+                <screen>Defaults    requiretty</screen>
+
+                <para>
                     Please refer to the <command>sudo</command> manual page for more
                     information.
                 </para>
