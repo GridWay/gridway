@@ -292,7 +292,7 @@ class GW_mad_ws extends Thread implements GramJobListener {
                 else
                 {
                     status = 1;
-                    info = job.getFault().getDescription(0).toString().replace('\n', ' ');
+                    info = job.getFault()[0].getDescription(0).toString().replace('\n', ' ');
                 }
             }
             else
