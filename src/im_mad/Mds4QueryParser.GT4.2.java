@@ -104,7 +104,7 @@ class Mds4QueryParser{
             db = dbf.newDocumentBuilder();
         } 
         catch (ParserConfigurationException pce){
-            err = pce.getMessage();
+            err = pce.getMessage().replace('\n', ' ');
             return false;
         }
         OutputStreamWriter errorWriter = new OutputStreamWriter(System.err);
@@ -115,15 +115,15 @@ class Mds4QueryParser{
         }         
         catch (SAXParseException spe){ 
             err = "\n** Parsing error" + ", line " + spe.getLineNumber() + ", uri " + spe.getSystemId();
-            err += "   " + spe.getMessage();
+            err += "   " + spe.getMessage().replace('\n', ' ');
             return false;
         } 
         catch (SAXException se){ 
-            err = se.getMessage();        
+            err = se.getMessage().replace('\n', ' ');
             return false;
         } 
         catch (IOException ioe){
-            err = ioe.getMessage();
+            err = ioe.getMessage().replace('\n', ' ');
             return false;
         }
         return true ;
@@ -146,7 +146,7 @@ class Mds4QueryParser{
         } 
         catch (ParserConfigurationException pce)
 		{
-            err = pce.getMessage();
+            err = pce.getMessage().replace('\n', ' ');
             return false;
         }
         OutputStreamWriter errorWriter = new OutputStreamWriter(System.err);
@@ -159,17 +159,17 @@ class Mds4QueryParser{
         catch (SAXParseException spe)
 		{ 
             err = "\n** Parsing error" + ", line " + spe.getLineNumber() + ", uri " + spe.getSystemId();
-            err += "   " + spe.getMessage();
+            err += "   " + spe.getMessage().replace('\n', ' ');
             return false;
         } 
         catch (SAXException se)
 		{ 
-            err = se.getMessage();        
+            err = se.getMessage().replace('\n', ' ');
             return false;
         } 
         catch (IOException ioe)
 		{
-            err = ioe.getMessage();
+            err = ioe.getMessage().replace('\n', ' ');
             return false;
         }
         return true ;
@@ -195,7 +195,7 @@ class Mds4QueryParser{
     
             String info = "URI=" + systemId +
                 " Line=" + spe.getLineNumber() +
-                ": " + spe.getMessage();
+                ": " + spe.getMessage().replace('\n', ' ');
                 
             return info;
         }

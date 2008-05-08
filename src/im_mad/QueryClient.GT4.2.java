@@ -93,7 +93,7 @@ public class QueryClient
 		}
 		catch(MalformedURIException mfue)
 		{
-			result = "FAILED Malformed URI Exception. Error message:" + mfue.getMessage();
+			result = "FAILED Malformed URI Exception. Error message:" + mfue.getMessage().replace('\n', ' ');
 			return result;			
 		}
 	
@@ -123,7 +123,7 @@ public class QueryClient
 		} 
 		catch(Exception e) 
 		{
-			result = "FAILED " + e.getMessage();
+			result = "FAILED " + e.getMessage().replace('\n', ' ');
 			return result;
 		}
 		
@@ -160,7 +160,7 @@ public class QueryClient
 		}
 		catch(MalformedURIException mfue)
 		{
-			result = "FAILED Malformed URI Exception. Error message:" + mfue.getMessage();
+			result = "FAILED Malformed URI Exception. Error message:" + mfue.getMessage().replace('\n', ' ');
 			return result;			
 		}				
 		
@@ -190,7 +190,7 @@ public class QueryClient
 		} 
 		catch(Exception e) 
 		{
-			result = "FAILED " + e.getMessage();
+			result = "FAILED " + e.getMessage().replace('\n', ' ');
 			return result;
 		}
 		
