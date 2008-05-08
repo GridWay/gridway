@@ -21,7 +21,7 @@
 
 #include "gw_file_parser.h"
 
-static int gw_parse_line( const char *line, const char *patern , char **return_msg )
+static int gw_parse_line( const char *line, const char *pattern , char **return_msg )
 {
     int  found = 0;
     char *pline, *token, *lasts;
@@ -31,17 +31,16 @@ static int gw_parse_line( const char *line, const char *patern , char **return_m
     
     pline  = strdup(line);
     
-	token = strtok_r(pline, delimiters, &lasts);
+    token = strtok_r(pline, delimiters, &lasts);
    
     if ( token != NULL )
     {
-        if ( strcasecmp(patern, token) == 0 )
+        if ( strcasecmp(pattern, token) == 0 )
         {
-            /* Next token is the requested value */
-            token = strtok_r(NULL, delimiters, &lasts);
-               
+            token = strchr(line, '=');   
+
             if (token != NULL)
-                *return_msg = strdup(token);                
+                *return_msg = strdup(token+1);
             else
                 *return_msg = NULL;
    
@@ -54,7 +53,7 @@ static int gw_parse_line( const char *line, const char *patern , char **return_m
     return found;
 }
 
-int gw_parse_file( const char *file, const char *patern ,char **return_msg )
+int gw_parse_file( const char *file, const char *pattern ,char **return_msg )
 {
     FILE *fd;
     char line[256];
@@ -79,7 +78,7 @@ int gw_parse_file( const char *file, const char *patern ,char **return_msg )
             end   = 1;
         }
                 
-        if ( gw_parse_line( line, patern, return_msg ) )
+        if ( gw_parse_line( line, pattern, return_msg ) )
         {
             found = 1;
             end   = 1;             
