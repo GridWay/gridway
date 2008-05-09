@@ -779,21 +779,20 @@ class Mds4QueryParser{
      * @return    a boolean indicating a valid host id
      */    
     public boolean processContentNode(Node node, Host host){
+        Node c;
+        String tag;
+        int pos;
+
         NodeList list = node.getChildNodes();
         if (list == null){
             err += err + "processContentNode: no child nodes\n";
             return false;
         }
 
-        Node c = list.item(0); 
-        String tag = c.getNodeName();
-        int pos = tag.lastIndexOf(":");
-	list = c.getChildNodes();
-	// Get hold of first value
-	c = list.item(0);
-	list = c.getChildNodes();
-	 // Get hold of second value
-	c = list.item(0);
+	// Get hold of AggregatorContent
+        c = list.item(0);
+        tag = c.getNodeName();	
+        pos = tag.lastIndexOf(":");
 	list = c.getChildNodes();
     
         for (int j = 0; j < list.getLength(); j++){
