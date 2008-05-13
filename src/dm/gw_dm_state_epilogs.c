@@ -928,41 +928,39 @@ int gw_dm_epilog_parse_wrapper_std(gw_job_t *job)
     {
     	switch ( exit_code[0] )
         {
-        	case 'S':
+            case 'S':
             	gw_job_print(job,"DM",'I',"The application has requested a self-migration.\n");
 				
-				gw_parse_file(stdout_wrapper, "NEW_REQS", &new_reqs);
+                gw_parse_file(stdout_wrapper, "NEW_REQS", &new_reqs);
 		            
-		        if ( new_reqs != NULL )
-		        {
-					gw_parse_file(stdout_wrapper, "NEW_RANK", &new_rank);
+                if ( new_reqs != NULL )
+                {
+                    if ( job->template.requirements != NULL )
+                        free(job->template.requirements);
+
+                    job->template.requirements = new_reqs;
+
+                    gw_job_print(job, "DM",'E',"New requirements found: %s.\n", new_reqs);
+                }
+
+                gw_parse_file(stdout_wrapper, "NEW_RANK", &new_rank);
 		            	
-		            if ( new_rank != NULL)
-		            {
-		            	if ( job->template.requirements != NULL )
-		            		free(job->template.requirements);
-		            		
-		            	if ( job->template.rank != NULL )
-		            		free(job->template.rank);
+                if ( new_rank != NULL)
+                {
+                    if ( job->template.rank != NULL )
+                        free(job->template.rank);
 		            			
-		            	job->template.requirements = new_reqs;
-		            	job->template.rank         = new_rank;		            		
-		            }
-		            else
-		            {
-		            	gw_job_print(job,"DM",'E',"Could not find new rank.\n");
-		            	free(new_reqs);
-		            }		            
-				}
-		        else
-	            	gw_job_print(job, "DM",'E',"Could not find new requirements.\n");
-	
+                    job->template.rank = new_rank;
+
+                    gw_job_print(job, "DM",'E',"New rank found: %s.\n", new_rank);
+                }
+
                 job->history->reason = GW_REASON_SELF_MIGRATION;
-                
                 rt = 1;
-				break;
+
+                break;
                     
-			case 'P' :
+            case 'P' :
             	gw_job_print(job,"DM",'I',"The application has detected a performance slowdown.\n");
                         
                 job->history->reason = GW_REASON_PERFORMANCE;
@@ -970,25 +968,26 @@ int gw_dm_epilog_parse_wrapper_std(gw_job_t *job)
 
                 break;
 	                    
-			default:
+            default:
             	job->exit_code = atoi(exit_code);
             	rt = 0;
+
             	break;
-		}
+        }
                 
         free (exit_code);
-	}
-	else
+    }
+    else
     {
-    	if ( rc == -1 )
+        if ( rc == -1 )
         	gw_job_print(job,"DM",'E',"Unable to open wrapper stdout %s.\n",strerror(errno));
-		else
+        else
         	gw_job_print(job,"DM",'E',"Unable to find exit code, assuming that the job failed or was cancelled.\n");
-	        	
+        	
       	job->history->reason = GW_REASON_EXECUTION_ERROR;
-	      	
+      	
         rt = -1;
-	} 
+    } 
 	
-	return rt;
+    return rt;
 }

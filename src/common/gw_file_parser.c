@@ -40,7 +40,9 @@ static int gw_parse_line( const char *line, const char *pattern , char **return_
             token = strchr(line, '=');   
 
             if (token != NULL)
+            {
                 *return_msg = strdup(token+1);
+            }
             else
                 *return_msg = NULL;
    
@@ -56,32 +58,27 @@ static int gw_parse_line( const char *line, const char *pattern , char **return_
 int gw_parse_file( const char *file, const char *pattern ,char **return_msg )
 {
     FILE *fd;
-    char line[256];
-    int end=0;
-    int found;
+    char line[256], *pline;
+    int found=0;
     
     line[255]='\0';
     fd = fopen(file,"r");
     
+    *return_msg = NULL;
+
     if (fd==NULL)
-    {
-        *return_msg = NULL;
         return -1;
-    }
     
-    while(!end)
+    while( fgets(line, 255, fd) != NULL )
     {
-        if ( fgets(line, 255, fd) == NULL )
-        {
-            *return_msg = NULL;
-            found = 0;
-            end   = 1;
-        }
-                
+        pline =  strchr(line, '\n');
+        if (pline != NULL)
+            *pline = '\0';
+
         if ( gw_parse_line( line, pattern, return_msg ) )
         {
             found = 1;
-            end   = 1;             
+            break;             
         }
     }
         
