@@ -273,17 +273,17 @@ execution(){
 
     if [ -f gw_rank ]
     then
-        echo "NEW_RANK=\"`cat gw_rank`"\"
+        echo "NEW_RANK=`cat gw_rank`"
     fi
 
     if [ -f gw_reqs ]
     then
-        echo "NEW_REQS=\"`cat gw_reqs`"\"
+        echo "NEW_REQS=`cat gw_reqs`"
     fi
 
     if [ -f gw_perf ]
     then
-        echo "PERF_DEGR=\"`cat gw_perf`"\"
+        echo "PERF_DEGR=`cat gw_perf`"
     fi
 }    
 
