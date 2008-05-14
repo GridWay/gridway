@@ -24,7 +24,7 @@ module DAGMan
 		# Wait for jobs specified in the array
 		def self.wait(job_ids)
 			ids=job_ids.collect{|id| id.to_s.strip }.join(' ')
-			`gwwait -k #{ids}`
+			`gwwait -k -a #{ids}`
 		end
 		
 		def initialize(template)
