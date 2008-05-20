@@ -129,7 +129,7 @@ DIST_COMMON = $(COMMON)/gw_template_parser.c $(GWD)/gw_conf_parser.c \
 	$(HOST)/gw_host_update_syntax.c \
 	$(HOST)/gw_host_update_syntax.h \
 	$(JOB)/gw_job_template_var_parser.c \
-	$(am__dist_bin_SCRIPTS_DIST) $(include_HEADERS) \
+	$(am__dist_bin_SCRIPTS_DIST) $(flavorinclude_HEADERS) \
 	$(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.in
@@ -147,7 +147,7 @@ am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(bindir)" \
 	"$(DESTDIR)$(testdir)" "$(DESTDIR)$(bindir)" \
 	"$(DESTDIR)$(bindir)" "$(DESTDIR)$(em_ws_jardir)" \
 	"$(DESTDIR)$(im_ws_jardir)" "$(DESTDIR)$(jardir)" \
-	"$(DESTDIR)$(jsdl_jardir)" "$(DESTDIR)$(includedir)"
+	"$(DESTDIR)$(jsdl_jardir)" "$(DESTDIR)$(flavorincludedir)"
 libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
 __srcdir__drmaa_libDrmaaJNI_la_DEPENDENCIES =  \
@@ -482,8 +482,8 @@ jarDATA_INSTALL = $(INSTALL_DATA)
 jsdl_jarDATA_INSTALL = $(INSTALL_DATA)
 DATA = $(em_ws_jar_DATA) $(im_ws_jar_DATA) $(jar_DATA) \
 	$(jsdl_jar_DATA)
-includeHEADERS_INSTALL = $(INSTALL_HEADER)
-HEADERS = $(include_HEADERS)
+flavorincludeHEADERS_INSTALL = $(INSTALL_HEADER)
+HEADERS = $(flavorinclude_HEADERS)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -613,7 +613,7 @@ AM_YFLAGS = -d
 
 # This is for portability issues, do not use := operator
 #CLASSPATH = $(GLOBUS_LOCATION)/lib/addressing-1.0.jar:$(GLOBUS_LOCATION)/lib/axis.jar:$(GLOBUS_LOCATION)/lib/cog-jglobus.jar:$(GLOBUS_LOCATION)/lib/globus_delegation_service.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft_client.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft_stubs.jar:$(GLOBUS_LOCATION)/lib/gram-client.jar:$(GLOBUS_LOCATION)/lib/gram-stubs.jar:$(GLOBUS_LOCATION)/lib/gram-utils.jar:$(GLOBUS_LOCATION)/lib/jgss.jar:$(GLOBUS_LOCATION)/lib/wsrf_core.jar:$(GLOBUS_LOCATION)/lib/wsrf_core_stubs.jar:$(GLOBUS_LOCATION)/lib/wsrf_test_unit.jar:$(GLOBUS_LOCATION)/lib/xml-apis.jar:$(GLOBUS_LOCATION)/lib/xalan.jar:$(GLOBUS_LOCATION)/lib/xercesImpl.jar:$(GLOBUS_LOCATION)/lib/jaxrpc.jar:$(GLOBUS_LOCATION)/lib/commons-cli-2.0.jar:$(GLOBUS_LOCATION)/lib/cog-axis.jar:$(GLOBUS_LOCATION)/lib/saaj.jar
-CLASSPATH = $(GLOBUS_LOCATION)/lib/addressing-1.0.jar:$(GLOBUS_LOCATION)/lib/axis.jar:$(GLOBUS_LOCATION)/lib/cog-jglobus.jar:$(GLOBUS_LOCATION)/lib/globus_delegation_service.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft_client.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft_stubs.jar:$(GLOBUS_LOCATION)/lib/gram-client.jar:$(GLOBUS_LOCATION)/lib/gram-stubs.jar:$(GLOBUS_LOCATION)/lib/gram-utils.jar:$(GLOBUS_LOCATION)/lib/jgss.jar:$(GLOBUS_LOCATION)/lib/wsrf_core.jar:$(GLOBUS_LOCATION)/lib/wsrf_core_stubs.jar:$(GLOBUS_LOCATION)/lib/wsrf_test_unit.jar:$(GLOBUS_LOCATION)/lib/xml-apis.jar:$(GLOBUS_LOCATION)/lib/xalan.jar:$(GLOBUS_LOCATION)/lib/xercesImpl.jar:$(GLOBUS_LOCATION)/lib/jaxrpc.jar:$(GLOBUS_LOCATION)/lib/commons-cli-2.0.jar:$(GLOBUS_LOCATION)/lib/cog-axis.jar:$(GLOBUS_LOCATION)/lib/saaj.jar:$(GLOBUS_LOCATION):$(GLOBUS_LOCATION)/build/classes:$(GLOBUS_LOCATION)/endorsed/xalan-2.6.jar:$(GLOBUS_LOCATION)/endorsed/xercesImpl-2.7.1.jar:$(GLOBUS_LOCATION)/endorsed/xml-apis.jar:$(GLOBUS_LOCATION)/lib/common/ant.jar:$(GLOBUS_LOCATION)/lib/common/ant-nodeps.jar:$(GLOBUS_LOCATION)/lib/common/axis.jar:$(GLOBUS_LOCATION)/lib/common/axis-url.jar:$(GLOBUS_LOCATION)/lib/common/bootstrap.jar:$(GLOBUS_LOCATION)/lib/common/cog-axis.jar:$(GLOBUS_LOCATION)/lib/common/cog-jglobus.jar:$(GLOBUS_LOCATION)/lib/common/cog-tomcat.jar:$(GLOBUS_LOCATION)/lib/common/cog-url.jar:$(GLOBUS_LOCATION)/lib/common/commonj.jar:$(GLOBUS_LOCATION)/lib/common/commons-beanutils-1.6.1.jar:$(GLOBUS_LOCATION)/lib/common/commons-cli-2.0.jar:$(GLOBUS_LOCATION)/lib/common/commons-codec-1.3.jar:$(GLOBUS_LOCATION)/lib/common/commons-collections-3.2.jar:$(GLOBUS_LOCATION)/lib/common/commons-digester-1.5.jar:$(GLOBUS_LOCATION)/lib/common/commons-discovery-0.2.jar:$(GLOBUS_LOCATION)/lib/common/commons-httpclient-3.0.jar:$(GLOBUS_LOCATION)/lib/common/commons-logging-1.1.jar:$(GLOBUS_LOCATION)/lib/common/concurrent.jar:$(GLOBUS_LOCATION)/lib/common/cryptix32.jar:$(GLOBUS_LOCATION)/lib/common/cryptix-asn1.jar:$(GLOBUS_LOCATION)/lib/common/cryptix.jar:$(GLOBUS_LOCATION)/lib/common/geronimo-activation_1.0.2_spec-1.1.jar:$(GLOBUS_LOCATION)/lib/common/geronimo-javamail_1.3.1_spec-1.1.jar:$(GLOBUS_LOCATION)/lib/common/globus-addressing-1.0.jar:$(GLOBUS_LOCATION)/lib/common/globus_java_authz_framework.jar:$(GLOBUS_LOCATION)/lib/common/globus_ogsi_authz.jar:$(GLOBUS_LOCATION)/lib/common/globus_usage_core.jar:$(GLOBUS_LOCATION)/lib/common/globus_usage_packets_common.jar:$(GLOBUS_LOCATION)/lib/common/jaxrpc.jar:$(GLOBUS_LOCATION)/lib/common/jce-jdk13-131.jar:$(GLOBUS_LOCATION)/lib/common/log4j-1.2.13.jar:$(GLOBUS_LOCATION)/lib/common/naming-core-0.8.jar:$(GLOBUS_LOCATION)/lib/common/naming-factory-0.8.jar:$(GLOBUS_LOCATION)/lib/common/naming-java-0.8.jar:$(GLOBUS_LOCATION)/lib/common/naming-resources-0.8.jar:$(GLOBUS_LOCATION)/lib/common/opensaml-1.1.jar:$(GLOBUS_LOCATION)/lib/common/puretls.jar:$(GLOBUS_LOCATION)/lib/common/resolver.jar:$(GLOBUS_LOCATION)/lib/common/saaj.jar:$(GLOBUS_LOCATION)/lib/commons-dbcp-1.2.1.jar:$(GLOBUS_LOCATION)/lib/common/servlet.jar:$(GLOBUS_LOCATION)/lib/commons-pool-1.2.jar:$(GLOBUS_LOCATION)/lib/common/wsdl4j-1.5.1.jar:$(GLOBUS_LOCATION)/lib/common/wsrf_common.jar:$(GLOBUS_LOCATION)/lib/common/wsrf_core.jar:$(GLOBUS_LOCATION)/lib/common/wsrf_core_stubs.jar:$(GLOBUS_LOCATION)/lib/common/wsrf_deployment.jar:$(GLOBUS_LOCATION)/lib/common/wsrf_deployment_stubs.jar:$(GLOBUS_LOCATION)/lib/common/wsrf_desc_schema.jar:$(GLOBUS_LOCATION)/lib/common/wsrf_provider_jce.jar:$(GLOBUS_LOCATION)/lib/common/wsrf_tools.jar:$(GLOBUS_LOCATION)/lib/common/wss4j.jar:$(GLOBUS_LOCATION)/lib/common/xalan-2.6.jar:$(GLOBUS_LOCATION)/lib/common/xercesImpl-2.7.1.jar:$(GLOBUS_LOCATION)/lib/common/xml-apis.jar:$(GLOBUS_LOCATION)/lib/common/xmlsec-1.2.1.jar:$(GLOBUS_LOCATION)/lib/derby-10.1.1.0.jar:$(GLOBUS_LOCATION)/lib/derbyclient-10.1.1.0.jar:$(GLOBUS_LOCATION)/lib/derbynet-10.1.1.0.jar:$(GLOBUS_LOCATION)/lib/derbytools-10.1.1.0.jar:$(GLOBUS_LOCATION)/lib/globus_cas_client.jar:$(GLOBUS_LOCATION)/lib/globus_cas_localPdpTest_stubs.jar:$(GLOBUS_LOCATION)/lib/globus_cas_service.jar:$(GLOBUS_LOCATION)/lib/globus_cas_stubs.jar:$(GLOBUS_LOCATION)/lib/globus_cas_unit_test.jar:$(GLOBUS_LOCATION)/lib/globus_cas_utils.jar:$(GLOBUS_LOCATION)/lib/globus_delegation_client.jar:$(GLOBUS_LOCATION)/lib/globus_delegation_service.jar:$(GLOBUS_LOCATION)/lib/globus_delegation_stubs.jar:$(GLOBUS_LOCATION)/lib/globus_delegation_test.jar:$(GLOBUS_LOCATION)/lib/globus_java_authz_framework_test.jar:$(GLOBUS_LOCATION)/lib/globus_rls_client.jar:$(GLOBUS_LOCATION)/lib/globus_usage_packets.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_gram_client.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_gram_common.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_gram.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_gram_monitoring_common.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_gram_test_throughput.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_gram_test_unit.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_gram_usage.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_gram_utils.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_mds_aggregator.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_mds_aggregator_stubs.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_mds_aggregator_test.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_mds_index_test.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_mds_trigger_test.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_mds_usefulrp_test.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rendezvous_service.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rendezvous_stubs.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_replicator_client.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_replicator.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_replicator_stubs.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft_client.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft_service_java_usage.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft_setup.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft_stubs.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft_test.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_servicegroup.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_servicegroup_stubs.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_tools_test.jar:$(GLOBUS_LOCATION)/lib/junit.jar:$(GLOBUS_LOCATION)/lib/pg73jdbc2.jar:$(GLOBUS_LOCATION)/lib/rls.jar:$(GLOBUS_LOCATION)/lib/webmds-0.1-dev.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/axis.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/cog-axis.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/cog-jglobus.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/commons-codec-1.3.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/commons-discovery-0.2.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/commons-httpclient-3.0.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/commons-logging-1.1.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/cryptix32.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/cryptix-asn1.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/cryptix.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/globus-addressing-1.0.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/globus_java_authz_framework.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/globus_wsrf_mds_aggregator_stubs.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/globus_wsrf_servicegroup_stubs.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/jaxrpc.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/jce-jdk13-131.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/log4j-1.2.13.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/puretls.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/saaj.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/webmds-0.1-dev.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/webmds-0.1-dev-stubs.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/webmds-file-source-0.1.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/webmds-resource-property-source-0.1.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/webmds-xml-dom-node-source-0.1.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/wsdl4j-1.5.1.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/wsrf_core.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/wsrf_core_registry_stubs.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/wsrf_core_samples_authzService_stubs.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/wsrf_core_samples_counter_stubs.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/wsrf_core_samples_logging_stubs.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/wsrf_core_samples_mgmt_stubs.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/wsrf_core_stubs.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/wsrf_provider_jce.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/wss4j.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/xalan-2.6.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/xmlsec-1.2.1.jar:$(GLOBUS_LOCATION)/lib/wsrf_core_registry.jar:$(GLOBUS_LOCATION)/lib/wsrf_core_registry_stubs.jar:$(GLOBUS_LOCATION)/lib/wsrf_core_samples_authzService.jar:$(GLOBUS_LOCATION)/lib/wsrf_core_samples_authzService_stubs.jar:$(GLOBUS_LOCATION)/lib/wsrf_core_samples_counter.jar:$(GLOBUS_LOCATION)/lib/wsrf_core_samples_counter_stubs.jar:$(GLOBUS_LOCATION)/lib/wsrf_core_samples_logging.jar:$(GLOBUS_LOCATION)/lib/wsrf_core_samples_logging_stubs.jar:$(GLOBUS_LOCATION)/lib/wsrf_core_samples_mgmt.jar:$(GLOBUS_LOCATION)/lib/wsrf_core_samples_mgmt_stubs.jar:$(GLOBUS_LOCATION)/lib/wsrf_mds_gkrellm.jar:$(GLOBUS_LOCATION)/lib/wsrf_mds_gkrellm_stubs.jar:$(GLOBUS_LOCATION)/lib/wsrf_mds_index.jar:$(GLOBUS_LOCATION)/lib/wsrf_mds_index_stubs.jar:$(GLOBUS_LOCATION)/lib/wsrf_mds_trigger.jar:$(GLOBUS_LOCATION)/lib/wsrf_mds_trigger_stubs.jar:$(GLOBUS_LOCATION)/lib/wsrf_mds_usefulrp.jar:$(GLOBUS_LOCATION)/lib/wsrf_mds_usefulrp_schema_stubs.jar:$(GLOBUS_LOCATION)/lib/wsrf_test_interop.jar:$(GLOBUS_LOCATION)/lib/wsrf_test_interop_stubs.jar:$(GLOBUS_LOCATION)/lib/wsrf_test.jar:$(GLOBUS_LOCATION)/lib/wsrf_test_unit.jar:$(GLOBUS_LOCATION)/lib/wsrf_test_unit_schema.jar:$(GLOBUS_LOCATION)/lib/wsrf_test_unit_stubs.jar:$(GLOBUS_LOCATION)/tmp/globus_wsrf_gram/lib/globus_wsrf_gram.jar
+CLASSPATH = $(GLOBUS_LOCATION)/lib/addressing-1.0.jar:$(GLOBUS_LOCATION)/lib/axis.jar:$(GLOBUS_LOCATION)/lib/cog-jglobus.jar:$(GLOBUS_LOCATION)/lib/globus_delegation_service.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft_client.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft_stubs.jar:$(GLOBUS_LOCATION)/lib/gram-client.jar:$(GLOBUS_LOCATION)/lib/gram-stubs.jar:$(GLOBUS_LOCATION)/lib/gram-utils.jar:$(GLOBUS_LOCATION)/lib/jgss.jar:$(GLOBUS_LOCATION)/lib/wsrf_core.jar:$(GLOBUS_LOCATION)/lib/wsrf_core_stubs.jar:$(GLOBUS_LOCATION)/lib/wsrf_test_unit.jar:$(GLOBUS_LOCATION)/lib/xml-apis.jar:$(GLOBUS_LOCATION)/lib/xalan.jar:$(GLOBUS_LOCATION)/lib/xercesImpl.jar:$(GLOBUS_LOCATION)/lib/jaxrpc.jar:$(GLOBUS_LOCATION)/lib/commons-cli-2.0.jar:$(GLOBUS_LOCATION)/lib/cog-axis.jar:$(GLOBUS_LOCATION)/lib/saaj.jar:$(GLOBUS_LOCATION):$(GLOBUS_LOCATION)/build/classes:$(GLOBUS_LOCATION)/endorsed/xalan-2.6.jar:$(GLOBUS_LOCATION)/endorsed/xercesImpl-2.7.1.jar:$(GLOBUS_LOCATION)/endorsed/xml-apis.jar:$(GLOBUS_LOCATION)/lib/common/ant.jar:$(GLOBUS_LOCATION)/lib/common/ant-nodeps.jar:$(GLOBUS_LOCATION)/lib/common/axis.jar:$(GLOBUS_LOCATION)/lib/common/axis-url.jar:$(GLOBUS_LOCATION)/lib/common/bootstrap.jar:$(GLOBUS_LOCATION)/lib/common/cog-axis.jar:$(GLOBUS_LOCATION)/lib/common/cog-jglobus-1.4.1.jar:$(GLOBUS_LOCATION)/lib/common/cog-tomcat.jar:$(GLOBUS_LOCATION)/lib/common/cog-url.jar:$(GLOBUS_LOCATION)/lib/common/commonj.jar:$(GLOBUS_LOCATION)/lib/common/commons-beanutils-1.6.1.jar:$(GLOBUS_LOCATION)/lib/common/commons-cli-2.0.jar:$(GLOBUS_LOCATION)/lib/common/commons-codec-1.3.jar:$(GLOBUS_LOCATION)/lib/common/commons-collections-3.2.jar:$(GLOBUS_LOCATION)/lib/common/commons-digester-1.5.jar:$(GLOBUS_LOCATION)/lib/common/commons-discovery-0.2.jar:$(GLOBUS_LOCATION)/lib/common/commons-httpclient-3.0.jar:$(GLOBUS_LOCATION)/lib/common/commons-logging-1.1.jar:$(GLOBUS_LOCATION)/lib/common/concurrent.jar:$(GLOBUS_LOCATION)/lib/common/cryptix32.jar:$(GLOBUS_LOCATION)/lib/common/cryptix-asn1.jar:$(GLOBUS_LOCATION)/lib/common/cryptix.jar:$(GLOBUS_LOCATION)/lib/common/geronimo-activation_1.0.2_spec-1.1.jar:$(GLOBUS_LOCATION)/lib/common/geronimo-javamail_1.3.1_spec-1.1.jar:$(GLOBUS_LOCATION)/lib/common/globus-addressing-1.0.jar:$(GLOBUS_LOCATION)/lib/common/globus_java_authz_framework.jar:$(GLOBUS_LOCATION)/lib/common/globus_ogsi_authz.jar:$(GLOBUS_LOCATION)/lib/common/globus_usage_core.jar:$(GLOBUS_LOCATION)/lib/common/globus_usage_packets_common.jar:$(GLOBUS_LOCATION)/lib/common/jaxrpc.jar:$(GLOBUS_LOCATION)/lib/common/jce-jdk13-131.jar:$(GLOBUS_LOCATION)/lib/common/log4j-1.2.13.jar:$(GLOBUS_LOCATION)/lib/common/naming-core-0.8.jar:$(GLOBUS_LOCATION)/lib/common/naming-factory-0.8.jar:$(GLOBUS_LOCATION)/lib/common/naming-java-0.8.jar:$(GLOBUS_LOCATION)/lib/common/naming-resources-0.8.jar:$(GLOBUS_LOCATION)/lib/common/opensaml-1.1.jar:$(GLOBUS_LOCATION)/lib/common/puretls.jar:$(GLOBUS_LOCATION)/lib/common/resolver.jar:$(GLOBUS_LOCATION)/lib/common/saaj.jar:$(GLOBUS_LOCATION)/lib/commons-dbcp-1.2.1.jar:$(GLOBUS_LOCATION)/lib/common/servlet.jar:$(GLOBUS_LOCATION)/lib/commons-pool-1.2.jar:$(GLOBUS_LOCATION)/lib/common/wsdl4j-1.5.1.jar:$(GLOBUS_LOCATION)/lib/common/wsrf_common.jar:$(GLOBUS_LOCATION)/lib/common/wsrf_core.jar:$(GLOBUS_LOCATION)/lib/common/wsrf_core_stubs.jar:$(GLOBUS_LOCATION)/lib/common/wsrf_deployment.jar:$(GLOBUS_LOCATION)/lib/common/wsrf_deployment_stubs.jar:$(GLOBUS_LOCATION)/lib/common/wsrf_desc_schema.jar:$(GLOBUS_LOCATION)/lib/common/wsrf_provider_jce.jar:$(GLOBUS_LOCATION)/lib/common/wsrf_tools.jar:$(GLOBUS_LOCATION)/lib/common/wss4j.jar:$(GLOBUS_LOCATION)/lib/common/xalan-2.6.jar:$(GLOBUS_LOCATION)/lib/common/xercesImpl-2.7.1.jar:$(GLOBUS_LOCATION)/lib/common/xml-apis.jar:$(GLOBUS_LOCATION)/lib/common/xmlsec-1.2.1.jar:$(GLOBUS_LOCATION)/lib/derby-10.1.1.0.jar:$(GLOBUS_LOCATION)/lib/derbyclient-10.1.1.0.jar:$(GLOBUS_LOCATION)/lib/derbynet-10.1.1.0.jar:$(GLOBUS_LOCATION)/lib/derbytools-10.1.1.0.jar:$(GLOBUS_LOCATION)/lib/globus_cas_client.jar:$(GLOBUS_LOCATION)/lib/globus_cas_localPdpTest_stubs.jar:$(GLOBUS_LOCATION)/lib/globus_cas_service.jar:$(GLOBUS_LOCATION)/lib/globus_cas_stubs.jar:$(GLOBUS_LOCATION)/lib/globus_cas_unit_test.jar:$(GLOBUS_LOCATION)/lib/globus_cas_utils.jar:$(GLOBUS_LOCATION)/lib/globus_delegation_client.jar:$(GLOBUS_LOCATION)/lib/globus_delegation_service.jar:$(GLOBUS_LOCATION)/lib/globus_delegation_stubs.jar:$(GLOBUS_LOCATION)/lib/globus_delegation_test.jar:$(GLOBUS_LOCATION)/lib/globus_java_authz_framework_test.jar:$(GLOBUS_LOCATION)/lib/globus_rls_client.jar:$(GLOBUS_LOCATION)/lib/globus_usage_packets.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_gram_client.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_gram_common.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_gram.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_gram_monitoring_common.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_gram_test_throughput.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_gram_test_unit.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_gram_usage.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_gram_utils.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_mds_aggregator.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_mds_aggregator_stubs.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_mds_aggregator_test.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_mds_index_test.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_mds_trigger_test.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_mds_usefulrp_test.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rendezvous_service.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rendezvous_stubs.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_replicator_client.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_replicator.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_replicator_stubs.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft_client.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft_service_java_usage.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft_setup.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft_stubs.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_rft_test.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_servicegroup.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_servicegroup_stubs.jar:$(GLOBUS_LOCATION)/lib/globus_wsrf_tools_test.jar:$(GLOBUS_LOCATION)/lib/junit.jar:$(GLOBUS_LOCATION)/lib/pg73jdbc2.jar:$(GLOBUS_LOCATION)/lib/rls.jar:$(GLOBUS_LOCATION)/lib/webmds-0.1-dev.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/axis.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/cog-axis.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/cog-jglobus-1.4.1.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/commons-codec-1.3.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/commons-discovery-0.2.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/commons-httpclient-3.0.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/commons-logging-1.1.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/cryptix32.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/cryptix-asn1.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/cryptix.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/globus-addressing-1.0.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/globus_java_authz_framework.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/globus_wsrf_mds_aggregator_stubs.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/globus_wsrf_servicegroup_stubs.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/jaxrpc.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/jce-jdk13-131.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/log4j-1.2.13.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/puretls.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/saaj.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/webmds-0.1-dev.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/webmds-0.1-dev-stubs.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/webmds-file-source-0.1.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/webmds-resource-property-source-0.1.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/webmds-xml-dom-node-source-0.1.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/wsdl4j-1.5.1.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/wsrf_core.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/wsrf_core_registry_stubs.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/wsrf_core_samples_authzService_stubs.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/wsrf_core_samples_counter_stubs.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/wsrf_core_samples_logging_stubs.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/wsrf_core_samples_mgmt_stubs.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/wsrf_core_stubs.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/wsrf_provider_jce.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/wss4j.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/xalan-2.6.jar:$(GLOBUS_LOCATION)/lib/webmds/WEB-INF/lib/xmlsec-1.2.1.jar:$(GLOBUS_LOCATION)/lib/wsrf_core_registry.jar:$(GLOBUS_LOCATION)/lib/wsrf_core_registry_stubs.jar:$(GLOBUS_LOCATION)/lib/wsrf_core_samples_authzService.jar:$(GLOBUS_LOCATION)/lib/wsrf_core_samples_authzService_stubs.jar:$(GLOBUS_LOCATION)/lib/wsrf_core_samples_counter.jar:$(GLOBUS_LOCATION)/lib/wsrf_core_samples_counter_stubs.jar:$(GLOBUS_LOCATION)/lib/wsrf_core_samples_logging.jar:$(GLOBUS_LOCATION)/lib/wsrf_core_samples_logging_stubs.jar:$(GLOBUS_LOCATION)/lib/wsrf_core_samples_mgmt.jar:$(GLOBUS_LOCATION)/lib/wsrf_core_samples_mgmt_stubs.jar:$(GLOBUS_LOCATION)/lib/wsrf_mds_gkrellm.jar:$(GLOBUS_LOCATION)/lib/wsrf_mds_gkrellm_stubs.jar:$(GLOBUS_LOCATION)/lib/wsrf_mds_index.jar:$(GLOBUS_LOCATION)/lib/wsrf_mds_index_stubs.jar:$(GLOBUS_LOCATION)/lib/wsrf_mds_trigger.jar:$(GLOBUS_LOCATION)/lib/wsrf_mds_trigger_stubs.jar:$(GLOBUS_LOCATION)/lib/wsrf_mds_usefulrp.jar:$(GLOBUS_LOCATION)/lib/wsrf_mds_usefulrp_schema_stubs.jar:$(GLOBUS_LOCATION)/lib/wsrf_test_interop.jar:$(GLOBUS_LOCATION)/lib/wsrf_test_interop_stubs.jar:$(GLOBUS_LOCATION)/lib/wsrf_test.jar:$(GLOBUS_LOCATION)/lib/wsrf_test_unit.jar:$(GLOBUS_LOCATION)/lib/wsrf_test_unit_schema.jar:$(GLOBUS_LOCATION)/lib/wsrf_test_unit_stubs.jar:$(GLOBUS_LOCATION)/tmp/globus_wsrf_gram/lib/globus_wsrf_gram.jar
 @GW_GLOBUS_DIRS_FALSE@LINK_PROG = $(GLOBUS_LD)
 
 # Get rid of libtool by default & make use of globus compiler/linker
@@ -880,7 +880,9 @@ INCLUDES = -I$(top_srcdir)/include $(DB4_INCLUDE_PATH) \
 	$(am__append_3)
 @GW_GLOBUS_DIRS_FALSE@SYSTEM = @system@
 @GW_GLOBUS_DIRS_TRUE@SYSTEM = @system@
-include_HEADERS = $(top_srcdir)/include/drmaa.h \
+@GW_GLOBUS_DIRS_FALSE@flavorincludedir = $(prefix)/include
+@GW_GLOBUS_DIRS_TRUE@flavorincludedir = $(GLOBUS_LOCATION)/include/@globusflavor@
+flavorinclude_HEADERS = $(top_srcdir)/include/drmaa.h \
                         $(top_srcdir)/include/gw_acct.h \
                         $(top_srcdir)/include/gw_action.h \
                         $(top_srcdir)/include/gw_array.h \
@@ -1078,7 +1080,7 @@ IM_MAD_MDS4_SRC_DIST = $(IM_MAD)/Host.java \
         $(IM_MAD)/Mds4QueryParser.java \
         $(IM_MAD)/Queue.java \
         $(IM_MAD)/QueryClient.GT4.0.java \
-        $(IM_MAD)/QueryClient.GT4.1.java \
+        $(IM_MAD)/QueryClient.GT4.2.java \
         $(IM_MAD)/GW_im_mad_mds4.java \
         $(IM_MAD)/ServiceIM.java
 
@@ -1920,22 +1922,22 @@ uninstall-jsdl_jarDATA:
 	  echo " rm -f '$(DESTDIR)$(jsdl_jardir)/$$f'"; \
 	  rm -f "$(DESTDIR)$(jsdl_jardir)/$$f"; \
 	done
-install-includeHEADERS: $(include_HEADERS)
+install-flavorincludeHEADERS: $(flavorinclude_HEADERS)
 	@$(NORMAL_INSTALL)
-	test -z "$(includedir)" || $(MKDIR_P) "$(DESTDIR)$(includedir)"
-	@list='$(include_HEADERS)'; for p in $$list; do \
+	test -z "$(flavorincludedir)" || $(MKDIR_P) "$(DESTDIR)$(flavorincludedir)"
+	@list='$(flavorinclude_HEADERS)'; for p in $$list; do \
 	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
 	  f=$(am__strip_dir) \
-	  echo " $(includeHEADERS_INSTALL) '$$d$$p' '$(DESTDIR)$(includedir)/$$f'"; \
-	  $(includeHEADERS_INSTALL) "$$d$$p" "$(DESTDIR)$(includedir)/$$f"; \
+	  echo " $(flavorincludeHEADERS_INSTALL) '$$d$$p' '$(DESTDIR)$(flavorincludedir)/$$f'"; \
+	  $(flavorincludeHEADERS_INSTALL) "$$d$$p" "$(DESTDIR)$(flavorincludedir)/$$f"; \
 	done
 
-uninstall-includeHEADERS:
+uninstall-flavorincludeHEADERS:
 	@$(NORMAL_UNINSTALL)
-	@list='$(include_HEADERS)'; for p in $$list; do \
+	@list='$(flavorinclude_HEADERS)'; for p in $$list; do \
 	  f=$(am__strip_dir) \
-	  echo " rm -f '$(DESTDIR)$(includedir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(includedir)/$$f"; \
+	  echo " rm -f '$(DESTDIR)$(flavorincludedir)/$$f'"; \
+	  rm -f "$(DESTDIR)$(flavorincludedir)/$$f"; \
 	done
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
@@ -2022,7 +2024,7 @@ all-am: Makefile $(LTLIBRARIES) $(PROGRAMS) $(SCRIPTS) $(DATA) \
 install-binPROGRAMS: install-libLTLIBRARIES
 
 installdirs:
-	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(testdir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(em_ws_jardir)" "$(DESTDIR)$(im_ws_jardir)" "$(DESTDIR)$(jardir)" "$(DESTDIR)$(jsdl_jardir)" "$(DESTDIR)$(includedir)"; do \
+	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(testdir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(em_ws_jardir)" "$(DESTDIR)$(im_ws_jardir)" "$(DESTDIR)$(jardir)" "$(DESTDIR)$(jsdl_jardir)" "$(DESTDIR)$(flavorincludedir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-am
@@ -2110,8 +2112,8 @@ info: info-am
 
 info-am:
 
-install-data-am: install-em_ws_jarDATA install-im_ws_jarDATA \
-	install-includeHEADERS install-jarDATA install-jsdl_jarDATA \
+install-data-am: install-em_ws_jarDATA install-flavorincludeHEADERS \
+	install-im_ws_jarDATA install-jarDATA install-jsdl_jarDATA \
 	install-testPROGRAMS
 
 install-dvi: install-dvi-am
@@ -2150,7 +2152,7 @@ ps-am:
 
 uninstall-am: uninstall-binPROGRAMS uninstall-binSCRIPTS \
 	uninstall-dist_binSCRIPTS uninstall-em_ws_jarDATA \
-	uninstall-im_ws_jarDATA uninstall-includeHEADERS \
+	uninstall-flavorincludeHEADERS uninstall-im_ws_jarDATA \
 	uninstall-jarDATA uninstall-jsdl_jarDATA \
 	uninstall-libLTLIBRARIES uninstall-testPROGRAMS
 
@@ -2164,8 +2166,8 @@ uninstall-am: uninstall-binPROGRAMS uninstall-binSCRIPTS \
 	install-binPROGRAMS install-binSCRIPTS install-data \
 	install-data-am install-dist_binSCRIPTS install-dvi \
 	install-dvi-am install-em_ws_jarDATA install-exec \
-	install-exec-am install-html install-html-am \
-	install-im_ws_jarDATA install-includeHEADERS install-info \
+	install-exec-am install-flavorincludeHEADERS install-html \
+	install-html-am install-im_ws_jarDATA install-info \
 	install-info-am install-jarDATA install-jsdl_jarDATA \
 	install-libLTLIBRARIES install-man install-pdf install-pdf-am \
 	install-ps install-ps-am install-strip install-testPROGRAMS \
@@ -2174,8 +2176,8 @@ uninstall-am: uninstall-binPROGRAMS uninstall-binSCRIPTS \
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
 	tags uninstall uninstall-am uninstall-binPROGRAMS \
 	uninstall-binSCRIPTS uninstall-dist_binSCRIPTS \
-	uninstall-em_ws_jarDATA uninstall-im_ws_jarDATA \
-	uninstall-includeHEADERS uninstall-jarDATA \
+	uninstall-em_ws_jarDATA uninstall-flavorincludeHEADERS \
+	uninstall-im_ws_jarDATA uninstall-jarDATA \
 	uninstall-jsdl_jarDATA uninstall-libLTLIBRARIES \
 	uninstall-testPROGRAMS
 

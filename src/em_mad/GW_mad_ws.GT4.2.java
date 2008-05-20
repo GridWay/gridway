@@ -461,7 +461,7 @@ class Service extends Thread {
         info = "-";
 
         // Default factory type is Fork
-        String factoryType = ManagedJobFactoryConstants.DEFAULT_FACTORY_TYPE;
+        String factoryType = "Fork";
 
         // Parse resource contact string
         String resource_split[] = contact.split("/");
@@ -492,7 +492,13 @@ class Service extends Thread {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.WEEK_OF_YEAR , calendar.get(Calendar.WEEK_OF_YEAR) + 1);
         
-        job.setTerminationTime(calendar.getTime()); // One week
+	try
+	{ 
+        	job.setTerminationTime(calendar.getTime()); // One week
+	}
+	catch (Exception e)
+	{
+	}
 
         // Submit the job
         

@@ -705,7 +705,7 @@ IM_MAD_MDS4_SRC_DIST = $(IM_MAD)/Host.java \
         $(IM_MAD)/Mds4QueryParser.java \
         $(IM_MAD)/Queue.java \
         $(IM_MAD)/QueryClient.GT4.0.java \
-        $(IM_MAD)/QueryClient.GT4.1.java \
+        $(IM_MAD)/QueryClient.GT4.2.java \
         $(IM_MAD)/GW_im_mad_mds4.java \
         $(IM_MAD)/ServiceIM.java
 
