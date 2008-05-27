@@ -46,8 +46,6 @@ else
    echo "ok"
 fi
 
-source $GLOBUS_LOCATION/etc/globus-user-env.sh  > /dev/null 2>&1
-
 AC_ARG_WITH(flavor,  AC_HELP_STRING([--with-flavor],\
    [Specify globus build flavor (eg. gcc32dbg)]),\
    [FLAVOR=$withval], [])
@@ -83,26 +81,28 @@ fi
 echo -n "configuring Globus build env..."
 
 if test "x$GW_DIR_SCHEME" = "xglobus"; then
-	if test -z "$GPT_LOCATION" ; then 
-		HEADER_COMMAND=$GLOBUS_LOCATION/sbin/gpt_build_config
-	else
-		HEADER_COMMAND=$GPT_LOCATION/sbin/gpt_build_config
-	fi
+   if test -z "$GPT_LOCATION" ; then 
+      HEADER_COMMAND=$GLOBUS_LOCATION/sbin/gpt_build_config
+   else
+      HEADER_COMMAND=$GPT_LOCATION/sbin/gpt_build_config
+   fi
 else
-	HEADER_COMMAND=$GLOBUS_LOCATION/bin/globus-makefile-header
+   source $GLOBUS_LOCATION/etc/globus-user-env.sh  > /dev/null 2>&1
+
+   HEADER_COMMAND=$GLOBUS_LOCATION/bin/globus-makefile-header
 fi
 
 if test -x $HEADER_COMMAND; then
 
    if test "x$GW_DIR_SCHEME" = "xglobus"; then   
-	  $HEADER_COMMAND -src=pkg_data_src.gpt -flavor=$FLAVOR -link=shared
+      $HEADER_COMMAND -src=pkgdata/pkg_data_src.gpt -flavor=$FLAVOR -link=shared
       export GLOBUS_FLAVOR_NAME=$FLAVOR
 	  source ./gpt_build_temp.sh
       AC_SUBST(globus_pkg_libs,"$GPT_CONFIG_PKG_LIBS $GPT_CONFIG_LIBS")            
    else
    
-	  $HEADER_COMMAND -flavor $FLAVOR globus_gram_client globus_ftp_client \
-	       globus_gass_copy > makefile-header
+      $HEADER_COMMAND -flavor $FLAVOR globus_gram_client globus_ftp_client \
+            globus_gass_copy > makefile-header
       AC_SUBST(incgtmk,"include $PWD/makefile-header")
    fi
    
@@ -118,6 +118,7 @@ else
    exit -1
 fi
 
+AC_SUBST(globusflavor,$FLAVOR)
 #-------------------------------------------------------------------------------
 # Check target system
 #-------------------------------------------------------------------------------
@@ -212,11 +213,11 @@ AC_ARG_ENABLE(ws,  AC_HELP_STRING([--disable-ws],\
   [Don't build web-services support. Default is enabled.]),\
   [if test $enableval = "yes"; then ws="ws"; else ws=" "; fi], [])
 
-  # --- Enable NORDUGRID Drivers ---
+# --- Enable NORDUGRID Drivers ---
 
-  AC_ARG_ENABLE(nordugrid,  AC_HELP_STRING([--enable-nordugrid],\
-    [Build nordugrid support. Default is disabled.]),\
-    [if test $enableval = "yes"; then nordugrid="nordugrid"; else nordugrid=" "; fi], [])
+AC_ARG_ENABLE(nordugrid,  AC_HELP_STRING([--enable-nordugrid],\
+  [Build nordugrid support. Default is disabled.]),\
+  [if test $enableval = "yes"; then nordugrid="nordugrid"; else nordugrid=" "; fi], [])
 
 # --- Enable GRIDFTP MAD ---
         
@@ -478,4 +479,5 @@ AC_CONFIG_FILES([Makefile
                   doc/Makefile
                   doc/docbook/execution/gridway/Makefile])
                   
-AC_OUTPUT
+AC_OUTPUT(
+                  pkgdata/pkg_data_src.gpt)

@@ -809,6 +809,7 @@ host_alias
 target_alias
 globus_pkg_libs
 incgtmk
+globusflavor
 build
 build_cpu
 build_vendor
@@ -2069,8 +2070,6 @@ else
    echo "ok"
 fi
 
-source $GLOBUS_LOCATION/etc/globus-user-env.sh  > /dev/null 2>&1
-
 
 # Check whether --with-flavor was given.
 if test "${with_flavor+set}" = set; then
@@ -2110,27 +2109,29 @@ fi
 echo -n "configuring Globus build env..."
 
 if test "x$GW_DIR_SCHEME" = "xglobus"; then
-	if test -z "$GPT_LOCATION" ; then
-		HEADER_COMMAND=$GLOBUS_LOCATION/sbin/gpt_build_config
-	else
-		HEADER_COMMAND=$GPT_LOCATION/sbin/gpt_build_config
-	fi
+   if test -z "$GPT_LOCATION" ; then
+      HEADER_COMMAND=$GLOBUS_LOCATION/sbin/gpt_build_config
+   else
+      HEADER_COMMAND=$GPT_LOCATION/sbin/gpt_build_config
+   fi
 else
-	HEADER_COMMAND=$GLOBUS_LOCATION/bin/globus-makefile-header
+   source $GLOBUS_LOCATION/etc/globus-user-env.sh  > /dev/null 2>&1
+
+   HEADER_COMMAND=$GLOBUS_LOCATION/bin/globus-makefile-header
 fi
 
 if test -x $HEADER_COMMAND; then
 
    if test "x$GW_DIR_SCHEME" = "xglobus"; then
-	  $HEADER_COMMAND -src=pkg_data_src.gpt -flavor=$FLAVOR -link=shared
+      $HEADER_COMMAND -src=pkgdata/pkg_data_src.gpt -flavor=$FLAVOR -link=shared
       export GLOBUS_FLAVOR_NAME=$FLAVOR
 	  source ./gpt_build_temp.sh
       globus_pkg_libs="$GPT_CONFIG_PKG_LIBS $GPT_CONFIG_LIBS"
 
    else
 
-	  $HEADER_COMMAND -flavor $FLAVOR globus_gram_client globus_ftp_client \
-	       globus_gass_copy > makefile-header
+      $HEADER_COMMAND -flavor $FLAVOR globus_gram_client globus_ftp_client \
+            globus_gass_copy > makefile-header
       incgtmk="include $PWD/makefile-header"
 
    fi
@@ -2146,6 +2147,8 @@ else
    echo "falied. $HEADER_COMMAND not found!"
    exit -1
 fi
+
+globusflavor=$FLAVOR
 
 #-------------------------------------------------------------------------------
 # Check target system
@@ -2303,12 +2306,12 @@ if test "${enable_ws+set}" = set; then
 fi
 
 
-  # --- Enable NORDUGRID Drivers ---
+# --- Enable NORDUGRID Drivers ---
 
-  # Check whether --enable-nordugrid was given.
+# Check whether --enable-nordugrid was given.
 if test "${enable_nordugrid+set}" = set; then
   enableval=$enable_nordugrid; \
-    if test $enableval = "yes"; then nordugrid="nordugrid"; else nordugrid=" "; fi
+  if test $enableval = "yes"; then nordugrid="nordugrid"; else nordugrid=" "; fi
 fi
 
 
@@ -4578,7 +4581,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 4581 "configure"' > conftest.$ac_ext
+  echo '#line 4584 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -7201,11 +7204,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7204: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7207: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7208: \$? = $ac_status" >&5
+   echo "$as_me:7211: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7469,11 +7472,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7472: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7475: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7476: \$? = $ac_status" >&5
+   echo "$as_me:7479: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7573,11 +7576,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7576: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7579: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:7580: \$? = $ac_status" >&5
+   echo "$as_me:7583: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -9870,7 +9873,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 9873 "configure"
+#line 9876 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -9970,7 +9973,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 9973 "configure"
+#line 9976 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -12306,11 +12309,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:12309: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:12312: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:12313: \$? = $ac_status" >&5
+   echo "$as_me:12316: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -12410,11 +12413,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:12413: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:12416: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:12417: \$? = $ac_status" >&5
+   echo "$as_me:12420: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -13971,11 +13974,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13974: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13977: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:13978: \$? = $ac_status" >&5
+   echo "$as_me:13981: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -14075,11 +14078,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:14078: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:14081: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:14082: \$? = $ac_status" >&5
+   echo "$as_me:14085: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -16262,11 +16265,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16265: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16268: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16269: \$? = $ac_status" >&5
+   echo "$as_me:16272: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16530,11 +16533,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16533: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16536: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16537: \$? = $ac_status" >&5
+   echo "$as_me:16540: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16634,11 +16637,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16637: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16640: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:16641: \$? = $ac_status" >&5
+   echo "$as_me:16644: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -24336,6 +24339,8 @@ done
 ac_config_files="$ac_config_files Makefile src/Makefile doc/Makefile doc/docbook/execution/gridway/Makefile"
 
 
+ac_config_files="$ac_config_files pkgdata/pkg_data_src.gpt"
+
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -25106,6 +25111,7 @@ do
     "src/Makefile") CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
     "doc/Makefile") CONFIG_FILES="$CONFIG_FILES doc/Makefile" ;;
     "doc/docbook/execution/gridway/Makefile") CONFIG_FILES="$CONFIG_FILES doc/docbook/execution/gridway/Makefile" ;;
+    "pkgdata/pkg_data_src.gpt") CONFIG_FILES="$CONFIG_FILES pkgdata/pkg_data_src.gpt" ;;
 
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
@@ -25207,6 +25213,7 @@ host_alias!$host_alias$ac_delim
 target_alias!$target_alias$ac_delim
 globus_pkg_libs!$globus_pkg_libs$ac_delim
 incgtmk!$incgtmk$ac_delim
+globusflavor!$globusflavor$ac_delim
 build!$build$ac_delim
 build_cpu!$build_cpu$ac_delim
 build_vendor!$build_vendor$ac_delim
@@ -25264,7 +25271,6 @@ EXEEXT!$EXEEXT$ac_delim
 OBJEXT!$OBJEXT$ac_delim
 LN_S!$LN_S$ac_delim
 host!$host$ac_delim
-host_cpu!$host_cpu$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -25306,6 +25312,7 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+host_cpu!$host_cpu$ac_delim
 host_vendor!$host_vendor$ac_delim
 host_os!$host_os$ac_delim
 GREP!$GREP$ac_delim
@@ -25364,7 +25371,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 56; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 57; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
