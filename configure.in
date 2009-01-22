@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------
-# Copyright 2002-2006 GridWay Team, Distributed Systems Architecture
+# Copyright 2002-2009 GridWay Team, Distributed Systems Architecture
 # Group, Universidad Complutense de Madrid
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
@@ -15,7 +15,7 @@
 # limitations under the License.
 # ------------------------------------------------------------------------------
 
-AC_PREREQ(2.60)
+AC_PREREQ(2.61)
 AC_INIT([GridWay], [5.5.0], [gridway-user@globus.org])
 AC_CONFIG_AUX_DIR(config)
 AC_CONFIG_SRCDIR([src/dm/gw_dm_action_dispatch.c])
@@ -97,7 +97,7 @@ if test -x $HEADER_COMMAND; then
    if test "x$GW_DIR_SCHEME" = "xglobus"; then   
       $HEADER_COMMAND -src=pkgdata/pkg_data_src.gpt -flavor=$FLAVOR -link=shared
       export GLOBUS_FLAVOR_NAME=$FLAVOR
-	  source ./gpt_build_temp.sh
+      source ./gpt_build_temp.sh
       AC_SUBST(globus_pkg_libs,"$GPT_CONFIG_PKG_LIBS $GPT_CONFIG_LIBS")            
    else
    
@@ -118,7 +118,7 @@ else
    exit -1
 fi
 
-AC_SUBST(globusflavor,$FLAVOR)
+AC_SUBST(GLOBUS_FLAVOR_NAME,$FLAVOR)
 #-------------------------------------------------------------------------------
 # Check target system
 #-------------------------------------------------------------------------------
@@ -375,8 +375,9 @@ fi
 ###########################
 # CHECKING GLOBUS VERSION #
 ###########################
-      
+ 
 if test -f $GLOBUS_LOCATION/lib/addressing-1.0.jar; then
+# GT4.0
         if test -f src/em_mad/GW_mad_ws.java; then
             rm -f src/em_mad/GW_mad_ws.java;
         fi
@@ -391,7 +392,11 @@ if test -f $GLOBUS_LOCATION/lib/addressing-1.0.jar; then
             rm -f src/im_mad/Mds4QueryParser.java;
         fi        
         (cd src/im_mad ; ln -s Mds4QueryParser.GT4.0.java Mds4QueryParser.java);
+
+        CLASSPATH=$GLOBUS_LOCATION/lib/addressing-1.0.jar:$GLOBUS_LOCATION/lib/axis.jar:$GLOBUS_LOCATION/lib/cog-jglobus.jar:$GLOBUS_LOCATION/lib/globus_delegation_service.jar:$GLOBUS_LOCATION/lib/globus_wsrf_rft.jar:$GLOBUS_LOCATION/lib/globus_wsrf_rft_client.jar:$GLOBUS_LOCATION/lib/globus_wsrf_rft_stubs.jar:$GLOBUS_LOCATION/lib/gram-client.jar:$GLOBUS_LOCATION/lib/gram-stubs.jar:$GLOBUS_LOCATION/lib/gram-utils.jar:$GLOBUS_LOCATION/lib/jgss.jar:$GLOBUS_LOCATION/lib/wsrf_core.jar:$GLOBUS_LOCATION/lib/wsrf_core_stubs.jar:$GLOBUS_LOCATION/lib/jaxrpc.jar:$GLOBUS_LOCATION/lib/cog-axis.jar:$GLOBUS_LOCATION/lib/saaj.jar
+
 else
+# GT4.2
         if test -f src/em_mad/GW_mad_ws.java; then
             rm -f src/em_mad/GW_mad_ws.java;
         fi
@@ -406,7 +411,16 @@ else
             rm -f src/im_mad/Mds4QueryParser.java;
         fi
         (cd src/im_mad ; ln -s Mds4QueryParser.GT4.2.java Mds4QueryParser.java);
+
+        CLASSPATH=$GLOBUS_LOCATION/lib/globus_wsrf_gram_client.jar:$GLOBUS_LOCATION/lib/globus_wsrf_gram_common.jar:$GLOBUS_LOCATION/lib/globus_wsrf_gram_utils.jar:$GLOBUS_LOCATION/lib/globus_delegation_service.jar:$GLOBUS_LOCATION/lib/globus_wsrf_rft.jar:$GLOBUS_LOCATION/lib/globus_wsrf_rft_client.jar:$GLOBUS_LOCATION/lib/globus_wsrf_rft_stubs.jar
+
+        for i in `ls $GLOBUS_LOCATION/lib/common/*.jar`; do
+            CLASSPATH=$CLASSPATH:$i;
+        done
+
 fi
+
+AC_SUBST(classpath,$CLASSPATH)
 
 #------------------------------------------------------------------------------
 # Automake Directives
