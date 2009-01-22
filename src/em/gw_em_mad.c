@@ -317,14 +317,15 @@ static int gw_em_mad_start(gw_em_mad_t * em_mad)
                 FD_ZERO(&rfds);
                 FD_SET(em_mad->mad_em_pipe, &rfds);
 
-                // Wait up to one 0.5 seconds
-                tv.tv_sec  = 0;
-                tv.tv_usec = 500000;
+                // Wait up to 5 seconds
+                tv.tv_sec  = 5;
+                tv.tv_usec = 0;
 
                 rc = select(em_mad->mad_em_pipe+1,&rfds,0,0, &tv);
 
-                if ( rc <= 0 ) // MAD did not answered
+                if ( rc <= 0 ) // MAD did not answer
                 {
+                   gw_log_print("EM",'E',"\tInitialization failure, MAD %s did not answer.\n", em_mad->name);                
                    return -1;
                 }
                 

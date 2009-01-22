@@ -41,8 +41,8 @@
 
 int gw_job_fill(gw_job_t *job, const gw_msg_t *msg)
 {
-	int    rc;
-	FILE   *log, *template_file, *file;
+    int    rc;
+    FILE   *log, *template_file, *file;
     char   str_buffer[2048];
     char   sh_command[1024];
     char   conf_filename[2048], template_filename[2048];
@@ -118,8 +118,12 @@ int gw_job_fill(gw_job_t *job, const gw_msg_t *msg)
         return -1;
     }
 
-    fprintf(file, "%ld %s %s %i %i\n", job->start_time, job->owner,
-            job->template.job_home, msg->pstart, msg->pinc);
+    if (msg->proxy_path[0] == '\0')
+        fprintf(file, "%ld %s - %s %i %i\n", job->start_time, job->owner,
+                job->template.job_home, msg->pstart, msg->pinc);
+    else
+        fprintf(file, "%ld %s %s %s %i %i\n", job->start_time, job->owner, msg->proxy_path,
+                job->template.job_home, msg->pstart, msg->pinc);
     
     fclose(file);
     

@@ -323,9 +323,9 @@ static int gw_dm_mad_start(gw_dm_mad_t *dm_mad)
                 FD_ZERO(&rfds);
                 FD_SET(dm_mad->mad_dm_pipe, &rfds);
 
-                // Wait up to one 0.5 seconds
-                tv.tv_sec  = 0;
-                tv.tv_usec = 500000;
+                // Wait up to 5 seconds
+                tv.tv_sec  = 5;
+                tv.tv_usec = 0;
 
                 rc = select(dm_mad->mad_dm_pipe+1,&rfds,0,0, &tv);
 

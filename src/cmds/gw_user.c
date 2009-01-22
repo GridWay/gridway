@@ -36,14 +36,15 @@ const char * usage =
 "  -h    prints this help\n"
 "  -n    do not print the header lines\n\n"
 "FIELD INFORMATION\n"
-"  UID   user unique identification assigned by the Gridway system\n"
-"  NAME  name of this user\n"
-"  JOBS  number of Jobs in the GridWay system\n"
-"  RUN   number of running jobs\n"
-"  IDLE  idle time, (time with JOBS = 0)\n"
-"  EM    execution manager drivers loaded for this user\n"
-"  TM    transfer manager drivers loaded for this user\n"
-"  PID   process identification of driver processes\n";
+"  UID      user unique identification assigned by the Gridway system\n"
+"  NAME     name of this user\n"
+"  JOBS     number of Jobs in the GridWay system\n"
+"  RUN      number of running jobs\n"
+"  IDLE     idle time, (time with JOBS = 0)\n"
+"  EM       execution manager drivers loaded for this user\n"
+"  TM       transfer manager drivers loaded for this user\n"
+"  PID      process identification of driver processes\n"
+"  IDENTITY distinguished name of the user's proxy\n";
 
 const char * susage =
 "usage: gwuser [-h] [-n]\n";
@@ -57,23 +58,23 @@ extern int   optind, opterr, optopt;
 
 void signal_handler (int sig)
 {
-   	gw_client_finalize();
+    gw_client_finalize();
     exit(0);
 }
 
 int main(int argc, char **argv)
 {
-  	char               opt;
-  	int                n = 0;
-  	gw_client_t *      gw_session;
-	int                num_users, i;
+    char               opt;
+    int                n = 0;
+    gw_client_t *      gw_session;
+    int                num_users, i;
     gw_msg_user_t *    user_status;
     struct sigaction   act;
     gw_return_code_t   rc;
   	
-	/* ---------------------------------------------------------------- */
-	/* Parse arguments                                                  */
-	/* ---------------------------------------------------------------- */
+    /* ---------------------------------------------------------------- */
+    /* Parse arguments                                                  */
+    /* ---------------------------------------------------------------- */
 	
     opterr = 0;
     optind = 1;
@@ -113,19 +114,19 @@ int main(int argc, char **argv)
     sigaction(SIGTERM||SIGINT,&act,NULL);
     
     
-	/* ---------------------------------------------------------------- */
-	/* Get job or pool status                                           */
-	/* ---------------------------------------------------------------- */
+    /* ---------------------------------------------------------------- */
+    /* Get job or pool status                                           */
+    /* ---------------------------------------------------------------- */
 
-	rc = gw_client_user_status(&user_status, &num_users);
+    rc = gw_client_user_status(&user_status, &num_users);
 	
-   	if (rc == GW_RC_SUCCESS)
+    if (rc == GW_RC_SUCCESS)
     {
        	if (!n)
-       		gw_client_print_user_header();
+       	    gw_client_print_user_header();
 
-		for (i=0;i<num_users;i++)
-			gw_client_print_user(&(user_status[i]));
+        for (i=0;i<num_users;i++)
+                gw_client_print_user(&(user_status[i]));
 				
         gw_client_finalize();				
     }  
@@ -137,5 +138,5 @@ int main(int argc, char **argv)
         return -1;
     }  
 	
-	return 0;
+    return 0;
 }

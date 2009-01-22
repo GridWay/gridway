@@ -48,6 +48,7 @@ int gw_job_recover(gw_job_t *job)
         
     char   job_state_name[2048];
     char   user_name[2048];
+    char   proxy_path[2048];
     char   job_home[2048];
     char   history_filename[2048];
     char   state_filename[2048];
@@ -102,10 +103,13 @@ int gw_job_recover(gw_job_t *job)
         return -1;
     }
 
-    rc = fscanf(file, "%ld %s %s %i %i", &timestamp, user_name, job_home,
+    rc = fscanf(file, "%ld %s %s %s %i %i", &timestamp, user_name, proxy_path, job_home,
             &pstart, &pinc);
+
+    if (proxy_path[0] == '-' && proxy_path[1] == '\0')
+        proxy_path[0] = '\0';
     
-    if (rc != 5)
+    if (rc != 6)
     {
         gw_log_print("DM",'E',"Bad filed number (%d) in job %d configuration file.\n",
                      rc,
@@ -117,12 +121,12 @@ int gw_job_recover(gw_job_t *job)
     
     /*------------------------------------------------------------------------*/
 
-    if (gw_user_pool_exists(user_name, &user_id) == GW_FALSE)
+    if (gw_user_pool_exists(user_name, proxy_path, &user_id) == GW_FALSE)
     {
 #ifdef GWJOBDEBUG    	
-        gw_log_print("DM",'D',"Registering user %s.\n", user_name);
+        gw_log_print("DM",'D',"Registering user %s with proxy path %s.\n", user_name, proxy_path);
 #endif    
-        rc = gw_user_pool_user_allocate(user_name, &user_id);
+        rc = gw_user_pool_user_allocate(user_name, proxy_path, &user_id);
 
         if ( rc != 0 )
         {
@@ -592,7 +596,7 @@ int gw_job_recover_history_record(FILE *history_file, gw_job_t *job)
 
     if (rc != 9)
     {
-        gw_log_print("DM",'E',"Wrond field number (%d) in history record of job %d.\n",
+        gw_log_print("DM",'E',"Wrong field number (%d) in history record of job %d.\n",
                      rc,
                      job->id);
         return -1;

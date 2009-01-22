@@ -29,7 +29,9 @@
 
 typedef struct gw_user_s
 {
-	char * name;
+    char * name;
+    char * proxy_path;
+    char * dn;
 	
 	int    active_jobs;
 	int    running_jobs;
@@ -46,7 +48,7 @@ typedef struct gw_user_s
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
-int   gw_user_init(gw_user_t *user, const char *name);
+int   gw_user_init(gw_user_t *user, const char *name, const char *proxy_path);
 
 void  gw_user_destroy(gw_user_t *user);
 

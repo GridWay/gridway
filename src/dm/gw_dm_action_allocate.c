@@ -27,7 +27,7 @@
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
-void gw_dm_jalloc     (void *_msg)
+void gw_dm_jalloc(void *_msg)
 {
     gw_msg_t *   msg;
     gw_job_t *   job;
@@ -35,30 +35,34 @@ void gw_dm_jalloc     (void *_msg)
     int          uid;
     int          rc;
     
-	gw_boolean_t   useradd;    
+    gw_boolean_t   useradd;    
     gw_job_state_t init_state;
 	
     msg  = (gw_msg_t *) _msg;
 
-	/* ------------- Check if user is already registered ------------ */
+    /* ------------- Check if user is already registered ------------ */
 	    
-	useradd = gw_user_pool_exists (msg->owner, &uid) == GW_FALSE;
+    useradd = gw_user_pool_exists (msg->owner, msg->proxy_path, &uid) == GW_FALSE;
 	
     if (useradd)
     {
-    	rc = gw_user_pool_user_allocate (msg->owner, &uid);
-    	
+    	rc = gw_user_pool_user_allocate (msg->owner, msg->proxy_path, &uid);
+ 
+#ifdef GWDMDEBUG
+        gw_log_print("DM",'D',"User %s registered with UID %i.\n", msg->owner, uid);
+#endif
+
     	if ( rc != 0 )
     	{
-	        gw_log_print("DM",'E',"Could not register user %s.\n", msg->owner);
+            gw_log_print("DM",'E',"Could not register user %s.\n", msg->owner);
         
-        	msg->rc = GW_RC_FAILED_USER;        
-        	gw_am_trigger(gw_dm.rm_am,"GW_RM_SUBMIT",_msg);        
-        	return;
+            msg->rc = GW_RC_FAILED_USER;        
+            gw_am_trigger(gw_dm.rm_am,"GW_RM_SUBMIT",_msg);        
+            return;
     	}
     }
 
-	/* ------------- Allocate job structure ------------ */
+    /* ------------- Allocate job structure ------------ */
 	    
     jid = gw_job_pool_allocate();
     
@@ -71,16 +75,16 @@ void gw_dm_jalloc     (void *_msg)
         return;
     }
     
-	/* ------------------------------------------ */
-	/*               Update job data              */
-	/* ------------------------------------------ */
+    /* ------------------------------------------ */
+    /*               Update job data              */
+    /* ------------------------------------------ */
 		
     job = gw_job_pool_get(jid, GW_TRUE);
     
     if ( job == NULL )
     {
        	msg->rc = GW_RC_FAILED;
-		gw_am_trigger(gw_dm.rm_am,"GW_RM_SUBMIT",_msg);        
+        gw_am_trigger(gw_dm.rm_am,"GW_RM_SUBMIT",_msg);        
     	
       	return;
     }  
@@ -106,17 +110,17 @@ void gw_dm_jalloc     (void *_msg)
     init_state = msg->init_state;
  		 
     if ( init_state == GW_JOB_STATE_PENDING )
-	    gw_job_set_state(job, GW_JOB_STATE_PENDING, GW_FALSE);
-	else
-	    gw_job_set_state(job, GW_JOB_STATE_HOLD, GW_FALSE);
+        gw_job_set_state(job, GW_JOB_STATE_PENDING, GW_FALSE);
+    else
+        gw_job_set_state(job, GW_JOB_STATE_HOLD, GW_FALSE);
 	    
-    job->tm_state  = GW_TM_STATE_INIT;
-    job->em_state  = GW_EM_STATE_INIT;
-    job->user_id   = uid;
+    job->tm_state = GW_TM_STATE_INIT;
+    job->em_state = GW_EM_STATE_INIT;
+    job->user_id  = uid;
     
-	/* --------- Set the initial priority ---------- */
+    /* --------- Set the initial priority ---------- */
 	
-	job->fixed_priority = msg->fixed_priority;
+    job->fixed_priority = msg->fixed_priority;
 	
     pthread_mutex_unlock(&(job->mutex));
 
@@ -125,11 +129,10 @@ void gw_dm_jalloc     (void *_msg)
     if ( msg->jt.job_deps[0] != -1 )
     	gw_job_pool_dep_set(jid, msg->jt.job_deps); 	   
 
-    
     if (!useradd)
- 	   gw_user_pool_inc_jobs(uid,1);
+        gw_user_pool_inc_jobs(uid,1);
 	
-	/* ------------- Callback msg ------------ */
+    /* ------------- Callback msg ------------ */
 	
     msg->rc       = GW_RC_SUCCESS;
     msg->array_id = -1;    
@@ -140,11 +143,8 @@ void gw_dm_jalloc     (void *_msg)
     /* ------------- Notify the scheduler ------------ */
     
     if ( init_state == GW_JOB_STATE_PENDING )
-        gw_dm_mad_job_schedule(&gw_dm.dm_mad[0],
-                               jid,
-                               -1,
-                               uid,
-                               GW_REASON_NONE);
+        gw_dm_mad_job_schedule(&gw_dm.dm_mad[0], jid, -1, uid,
+                GW_REASON_NONE);
 
     gw_log_print("DM",'I',"New job %i allocated and initialized.\n", jid);
 }
@@ -169,11 +169,11 @@ void gw_dm_aalloc     (void *_msg)
     
     msg  = (gw_msg_t *) _msg;
 
-	useradd = gw_user_pool_exists (msg->owner, &uid) == GW_FALSE;
+    useradd = gw_user_pool_exists (msg->owner, msg->proxy_path, &uid) == GW_FALSE;
 	
     if (useradd)
     {
-    	rc = gw_user_pool_user_allocate (msg->owner, &uid);
+    	rc = gw_user_pool_user_allocate (msg->owner, msg->proxy_path, &uid);
     	
     	if ( rc != 0 )
     	{
@@ -202,7 +202,7 @@ void gw_dm_aalloc     (void *_msg)
     if ( array == NULL )
     {
         msg->rc = GW_RC_FAILED;
-		gw_am_trigger(gw_dm.rm_am,"GW_RM_SUBMIT",_msg);
+        gw_am_trigger(gw_dm.rm_am,"GW_RM_SUBMIT",_msg);
         
         return;
     }
@@ -223,29 +223,29 @@ void gw_dm_aalloc     (void *_msg)
         {
             pthread_mutex_unlock(&(array->mutex));        
 			
-			msg->rc = GW_RC_FAILED;
-		    gw_am_trigger(gw_dm.rm_am,"GW_RM_SUBMIT",_msg);
+            msg->rc = GW_RC_FAILED;
+            gw_am_trigger(gw_dm.rm_am,"GW_RM_SUBMIT",_msg);
 		    
             return;
         }        
     
     	/* --------- Set the initial state ---------- */
     
-	    if ( init_state == GW_JOB_STATE_PENDING )
-		    gw_job_set_state(job, GW_JOB_STATE_PENDING, GW_FALSE);
-		else
-		    gw_job_set_state(job, GW_JOB_STATE_HOLD, GW_FALSE);
+        if ( init_state == GW_JOB_STATE_PENDING )
+            gw_job_set_state(job, GW_JOB_STATE_PENDING, GW_FALSE);
+        else
+            gw_job_set_state(job, GW_JOB_STATE_HOLD, GW_FALSE);
 	    
-  	    job->tm_state = GW_TM_STATE_INIT;
-	    job->em_state = GW_EM_STATE_INIT;        
+        job->tm_state = GW_TM_STATE_INIT;
+        job->em_state = GW_EM_STATE_INIT;        
         job->user_id  = uid;
 
-		/* --------- Set the parameter values ---------- */
+        /* --------- Set the parameter values ---------- */
 		
         job->pstart   = msg->pstart;
         job->pinc     = msg->pinc;
         
-		/* --------- Set the initial priority ---------- */
+        /* --------- Set the initial priority ---------- */
         
         job->fixed_priority = msg->fixed_priority;
         
@@ -254,16 +254,13 @@ void gw_dm_aalloc     (void *_msg)
         /* ------------- Notify the scheduler ------------ */
     
         if ( init_state == GW_JOB_STATE_PENDING )
-            gw_dm_mad_job_schedule(&gw_dm.dm_mad[0],
-                                   jid,
-                                   array_id,
-                                   uid,
-                                   GW_REASON_NONE);
+            gw_dm_mad_job_schedule(&gw_dm.dm_mad[0], jid, array_id,
+                    uid, GW_REASON_NONE);
                                    
         /* ------------- Set job dependencies ------------ */
         
-	    if ( msg->jt.job_deps[0] != -1 )
-	    	gw_job_pool_dep_set(jid, msg->jt.job_deps);        
+        if ( msg->jt.job_deps[0] != -1 )
+            gw_job_pool_dep_set(jid, msg->jt.job_deps);        
     }
 
     gw_user_pool_inc_jobs(uid,msg->number_of_tasks - useradd);

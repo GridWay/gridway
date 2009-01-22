@@ -29,23 +29,24 @@
 #include "gw_rm.h"
 #include "gw_file_parser.h"
 
-gw_client_t gw_client={PTHREAD_MUTEX_INITIALIZER,NULL,NULL,-1,"",GW_FALSE,0,NULL,0,NULL};
+gw_client_t gw_client={PTHREAD_MUTEX_INITIALIZER,NULL,NULL,NULL,-1,"",GW_FALSE,0,NULL,0,NULL};
 
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
 gw_client_t* gw_client_init()
 {
-	char *          GW_LOCATION;
+    char *          GW_LOCATION;
     char *          conf_file;
     char *          port_file;
     char *          number_of_jobs_s;
     char *          number_of_hosts_s;
+    char *          proxy_path;
     int             rc; 
     int             i;
     FILE *          fd;
-	struct passwd * pw_ent;
-	struct group *  gr_ent;
+    struct passwd * pw_ent;
+    struct group *  gr_ent;
 	
 	pthread_mutex_lock(&gw_client.mutex);
 
@@ -81,6 +82,12 @@ gw_client_t* gw_client_init()
 		pthread_mutex_unlock(&gw_client.mutex);
 		return NULL;
 	}
+
+        proxy_path = getenv("X509_USER_PROXY");
+        if (proxy_path == NULL)
+            gw_client.proxy_path = strdup("");
+        else
+            gw_client.proxy_path = strdup(proxy_path);
 	
 	/* ---------------------------------------------- */
 	/* Open gwd.conf to get number of jobs & hosts    */
@@ -180,35 +187,38 @@ gw_client_t* gw_client_init()
 
 void gw_client_finalize()
 {
-	int      i;
+    int      i;
 
-	pthread_mutex_lock(&gw_client.mutex);
-		
-	if ( gw_client.initialize == GW_FALSE )
-	{
-    	pthread_mutex_unlock(&gw_client.mutex);
-		return;
-	}
+    pthread_mutex_lock(&gw_client.mutex);
+
+    if ( gw_client.initialize == GW_FALSE )
+    {
+        pthread_mutex_unlock(&gw_client.mutex);
+        return;
+    }
 	
-	if ( gw_client.owner !=  NULL )
-		free(gw_client.owner);
+    if ( gw_client.owner !=  NULL )
+        free(gw_client.owner);
 		
-	if ( gw_client.group !=  NULL )
-		free(gw_client.group);
+    if ( gw_client.group !=  NULL )
+        free(gw_client.group);
+
+    if ( gw_client.proxy_path !=  NULL )
+        free(gw_client.proxy_path);
 			
     for (i = 0 ; i < gw_client.number_of_jobs; i++)
     	if ( gw_client.job_pool[i] != NULL )
-       		free(gw_client.job_pool[i]);
+       	    free(gw_client.job_pool[i]);
 
     for (i = 0 ; i < gw_client.number_of_hosts; i++)
     	if ( gw_client.host_pool[i] != NULL )
-       		free(gw_client.host_pool[i]);
+       	    free(gw_client.host_pool[i]);
 	
-	free(gw_client.job_pool);
+    free(gw_client.job_pool);
         
     gw_client.initialize = GW_FALSE;
 
-	pthread_mutex_unlock(&gw_client.mutex);    
+    pthread_mutex_unlock(&gw_client.mutex);    
 }
 
 /*---------------------------------------------------------------------------*/

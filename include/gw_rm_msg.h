@@ -49,11 +49,21 @@
 #define gw_rm_copy_str_short(src,dst)\
 if (src != NULL){\
     strncpy(dst, src, GW_MSG_STRING_SHORT);\
-	if ( strlen(src) >= GW_MSG_STRING_SHORT )\
-        dst[GW_MSG_STRING_SHORT-1] = '\0';\
+    if ( strlen(src) >= GW_MSG_STRING_SHORT )\
+    dst[GW_MSG_STRING_SHORT-1] = '\0';\
  }\
  else\
-	dst[0]='\0'
+    dst[0]='\0'
+
+#define gw_rm_copy_str_long(src,dst)\
+if (src != NULL){\
+    strncpy(dst, src, GW_MSG_STRING_LONG);\
+    if ( strlen(src) >= GW_MSG_STRING_LONG )\
+    dst[GW_MSG_STRING_SHORT-1] = '\0';\
+ }\
+ else\
+    dst[0]='\0'
+
 
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
@@ -97,20 +107,21 @@ typedef enum
 
 typedef struct gw_msg_s
 {
-	gw_msg_type_t msg_type;	
-	gw_return_code_t rc;
-	
-	int client_socket;
-	
-	gw_msg_wait_type_t wait_type;
-	
+    gw_msg_type_t msg_type;	
+    gw_return_code_t rc;
+
+    int client_socket;
+
+    gw_msg_wait_type_t wait_type;
+
     char owner[GW_MSG_STRING_SHORT];
-	char group[GW_MSG_STRING_SHORT];
-	
-	int	      init_state;	
+    char group[GW_MSG_STRING_SHORT];
+    char proxy_path[GW_MSG_STRING_LONG];
+
+    int	      init_state;	
     gw_template_t jt;
 
-	int job_id;
+    int job_id;
     int array_id;	
     int number_of_tasks;
     int exit_code;
@@ -119,7 +130,7 @@ typedef struct gw_msg_s
     int pinc;
     
     int fixed_priority;
-    
+ 
 } gw_msg_t;   
 
 /* -------------------------------------------------------------------------- */
@@ -127,11 +138,11 @@ typedef struct gw_msg_s
 
 typedef struct gw_msg_job_s
 {
-	gw_msg_type_t msg_type;
-	gw_return_code_t rc;
+    gw_msg_type_t msg_type;
+    gw_return_code_t rc;
 
-	char owner[GW_MSG_STRING_SHORT];
-	char name[GW_MSG_STRING_SHORT];
+    char owner[GW_MSG_STRING_SHORT];
+    char name[GW_MSG_STRING_SHORT];
     char host[GW_MSG_STRING_SHORT];
     
     int id;
@@ -141,7 +152,7 @@ typedef struct gw_msg_job_s
     
     int uid;
 
-	int fixed_priority;
+    int fixed_priority;
     time_t deadline;
 
     gw_jobtype_t type;
@@ -290,11 +301,12 @@ typedef struct gw_msg_match_s
 
 typedef struct gw_msg_user_s 
 {
-	gw_msg_type_t msg_type;
-	gw_return_code_t rc;
+    gw_msg_type_t msg_type;
+    gw_return_code_t rc;
 	
-	int user_id;
+    int user_id;
     char name[GW_MSG_STRING_SHORT];	
+    char dn[GW_MSG_STRING_LONG];	
     
 	int active_jobs;
 	int running_jobs;

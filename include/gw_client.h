@@ -38,6 +38,7 @@ typedef struct gw_client_s
   
   char *           owner;
   char *           group;
+  char *           proxy_path;
   
   int              gwd_port;
   char             hostname[256];

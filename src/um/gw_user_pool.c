@@ -35,13 +35,13 @@ gw_user_pool_t gw_user_pool;
 gw_user_pool_t * gw_user_pool_init()
 {
 	int i;
-	
+
 	pthread_mutex_init(&(gw_user_pool.mutex),(pthread_mutexattr_t *) NULL);
 
 	pthread_mutex_lock(&(gw_user_pool.mutex));
 
 	gw_user_pool.pool = (gw_user_t**) malloc(gw_conf.number_of_users
-                                                           * sizeof(gw_user_t*));
+		* sizeof(gw_user_t*));
 	gw_user_pool.number_of_users = 0;
 
   	if (gw_user_pool.pool == NULL)
@@ -76,7 +76,7 @@ void  gw_user_pool_finalize()
       	{	
 	        gw_user_pool.number_of_users--;
 	        
-			gw_user_destroy(gw_user_pool.pool[i]);
+		gw_user_destroy(gw_user_pool.pool[i]);
 
 	        free(gw_user_pool.pool[i]);
 	                
@@ -107,53 +107,53 @@ void gw_user_pool_set_mad_pipes(int um_em_pipe_w, int um_tm_pipe_w)
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
-int gw_user_pool_user_allocate (const char *user, int *user_id)
+int gw_user_pool_user_allocate (const char *user, const char *proxy_path, int *user_id)
 {
-	int  i=0;
-	int  rc;
-	char buf = 'A';
+    int  i=0;
+    int  rc;
+    char buf = 'A';
 	
-	pthread_mutex_lock(&(gw_user_pool.mutex));
+    pthread_mutex_lock(&(gw_user_pool.mutex));
 	
-	if (gw_user_pool.number_of_users == gw_conf.number_of_users)
-	{
-		pthread_mutex_unlock(&(gw_user_pool.mutex));
-		return -1;
-	}	
+    if (gw_user_pool.number_of_users == gw_conf.number_of_users)
+    {
+        pthread_mutex_unlock(&(gw_user_pool.mutex));
+        return -1;
+    }	
 	
-	while (i < gw_conf.number_of_users)
-		if ( gw_user_pool.pool[i] == NULL )
-			break;
-		else
-			i = i + 1;
+    while (i < gw_conf.number_of_users)
+        if ( gw_user_pool.pool[i] == NULL )
+            break;
+        else
+            i = i + 1;
 	
-	gw_user_pool.pool[i] = (gw_user_t *) malloc (sizeof(gw_user_t));
+    gw_user_pool.pool[i] = (gw_user_t *) malloc (sizeof(gw_user_t));
+
+    rc = gw_user_init(gw_user_pool.pool[i], user, proxy_path);
 	
-	rc = gw_user_init(gw_user_pool.pool[i], user);
-	
-	if ( rc == 0 )
-	{
-		*user_id = i;
-		gw_user_pool.pool[i]->active_jobs = 1;
-				
-		write(gw_user_pool.um_em_pipe_w, &buf, sizeof(char));
-		write(gw_user_pool.um_tm_pipe_w, &buf, sizeof(char));
+    if ( rc == 0 )
+    {
+        *user_id = i;
+        gw_user_pool.pool[i]->active_jobs = 1;
+
+        write(gw_user_pool.um_em_pipe_w, &buf, sizeof(char));
+        write(gw_user_pool.um_tm_pipe_w, &buf, sizeof(char));
 		
-		gw_dm_mad_user_add(&gw_dm.dm_mad[0],
-		                   i,
-		                   gw_user_pool.pool[i]->active_jobs,
-		                   gw_user_pool.pool[i]->running_jobs,
-		                   gw_user_pool.pool[i]->name);		
-	}
-	else
-	{
-		free(gw_user_pool.pool[i]);
-		gw_user_pool.pool[i] = NULL;
-	}
+        gw_dm_mad_user_add(&gw_dm.dm_mad[0],
+                i,
+                gw_user_pool.pool[i]->active_jobs,
+                gw_user_pool.pool[i]->running_jobs,
+                gw_user_pool.pool[i]->name);
+    }
+    else
+    {
+        free(gw_user_pool.pool[i]);
+        gw_user_pool.pool[i] = NULL;
+    }
 	
-	pthread_mutex_unlock(&(gw_user_pool.mutex));
-	
-	return rc;
+    pthread_mutex_unlock(&(gw_user_pool.mutex));
+
+    return rc;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -189,14 +189,14 @@ void gw_user_pool_user_free (int user_id)
 
 gw_em_mad_t * gw_user_pool_get_em_mad (int user_id, const char *name)
 {
-	gw_em_mad_t * em_mad;
+    gw_em_mad_t * em_mad;
 	
-	em_mad = NULL;
+    em_mad = NULL;
 
     pthread_mutex_lock(&(gw_user_pool.mutex));
 
     if ( ( user_id >= 0 ) && ( user_id < gw_conf.number_of_users ) )
-		em_mad = gw_em_get_mad(gw_user_pool.pool[user_id], name);
+        em_mad = gw_em_get_mad(gw_user_pool.pool[user_id], name);
 
     pthread_mutex_unlock(&(gw_user_pool.mutex));
 
@@ -233,15 +233,15 @@ int gw_user_pool_set_em_pipes (fd_set *       in_pipes,
                                gw_em_mad_t ** em_mads, 
                                int            um_em_pipe_r)
 {
-	int greater;
-	int i,j;
-	int fd;
+    int greater;
+    int i,j;
+    int fd;
 
     pthread_mutex_lock(&(gw_user_pool.mutex));
   	   	
-	FD_ZERO(in_pipes);
-	
-	FD_SET(um_em_pipe_r, in_pipes);
+    FD_ZERO(in_pipes);
+
+    FD_SET(um_em_pipe_r, in_pipes);
     greater    = um_em_pipe_r;
     fds[0]     = um_em_pipe_r;
     em_mads[0] = NULL;
@@ -252,8 +252,8 @@ int gw_user_pool_set_em_pipes (fd_set *       in_pipes,
     {
     	if ( gw_user_pool.pool[i] != NULL )
     	{
-		    for (j=0; j< gw_user_pool.pool[i]->em_mads; j++)
-    		{
+            for (j=0; j< gw_user_pool.pool[i]->em_mads; j++)
+            {
             	fd = gw_user_pool.pool[i]->em_mad[j].mad_em_pipe;
                 
                 if ( fd != -1 )
@@ -293,14 +293,14 @@ int gw_user_pool_set_tm_pipes (fd_set *       in_pipes,
 
     pthread_mutex_lock(&(gw_user_pool.mutex));
   	   	
-	FD_ZERO(in_pipes);
+    FD_ZERO(in_pipes);
 
-	FD_SET(um_tm_pipe_r, in_pipes);
+    FD_SET(um_tm_pipe_r, in_pipes);
     greater    = um_tm_pipe_r;
     fds[0]     = um_tm_pipe_r;
     tm_mads[0] = NULL;
 
- 	*num_fds = 1;
+    *num_fds = 1;
  	
     for (i=0; i<gw_conf.number_of_users; i++)
     {
@@ -335,26 +335,28 @@ int gw_user_pool_set_tm_pipes (fd_set *       in_pipes,
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
-gw_boolean_t gw_user_pool_exists (const char *name, int *user_id)
+gw_boolean_t gw_user_pool_exists (const char *name, const char *proxy_path,
+        int *user_id)
 {
-	gw_boolean_t exists;
-	int          i;
+    gw_boolean_t exists;
+    int          i;
 	
     pthread_mutex_lock(&(gw_user_pool.mutex));
 
-	exists   = GW_FALSE;
- 	*user_id = -1;
+    exists   = GW_FALSE;
+    *user_id = -1;
     
     for (i=0; i<gw_conf.number_of_users; i++)
-    	if ( gw_user_pool.pool[i] != NULL )
-    	{
-    		if ( strcmp(gw_user_pool.pool[i]->name, name) == 0 )
-    		{
-    			exists   = GW_TRUE;
-    			*user_id = i;
-    			break;
-    		}
+    {
+        if ( gw_user_pool.pool[i] != NULL
+    	        && strcmp(gw_user_pool.pool[i]->name, name) == 0
+                && strcmp(gw_user_pool.pool[i]->proxy_path, proxy_path) == 0)
+        {
+            exists   = GW_TRUE;
+            *user_id = i;
+            break;
         }
+    }
 
     pthread_mutex_unlock(&(gw_user_pool.mutex));
     
@@ -415,10 +417,10 @@ void gw_user_pool_dec_jobs(int uid)
 
 void gw_user_pool_check_users(time_t period)
 {
-	int    i;
-	char * name;
+    int    i;
+    char * name;
 	
-	pthread_mutex_lock(&(gw_user_pool.mutex));
+    pthread_mutex_lock(&(gw_user_pool.mutex));
 	
     for (i=0; i<gw_conf.number_of_users; i++)
     	if ( gw_user_pool.pool[i] != NULL )    	
@@ -521,8 +523,9 @@ gw_boolean_t gw_user_pool_get_info(int uid, gw_msg_user_t *msg)
 	    		
     msg->user_id  = uid;
     gw_rm_copy_str_short(gw_user_pool.pool[uid]->name,msg->name);
+    gw_rm_copy_str_long(gw_user_pool.pool[uid]->dn,msg->dn);
             
-	msg->active_jobs  = gw_user_pool.pool[uid]->active_jobs;
+    msg->active_jobs  = gw_user_pool.pool[uid]->active_jobs;
     msg->running_jobs = gw_user_pool.pool[uid]->running_jobs;
     msg->idle         = gw_user_pool.pool[uid]->idle;
     

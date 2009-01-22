@@ -1,5 +1,5 @@
 /* -------------------------------------------------------------------------- */
-/* Copyright 2002-2006 GridWay Team, Distributed Systems Architecture         */
+/* Copyright 2002-2009 GridWay Team, Distributed Systems Architecture         */
 /* Group, Universidad Complutense de Madrid                                   */
 /*                                                                            */
 /* Licensed under the Apache License, Version 2.0 (the "License"); you may    */
@@ -98,7 +98,7 @@ void gw_recover_state();
 
 void print_license()
 {
-    printf("Copyright 2002-2007 GridWay Team, Distributed Systems Architecture\n");
+    printf("Copyright 2002-2009 GridWay Team, Distributed Systems Architecture\n");
     printf("Group, Universidad Complutense de Madrid\n");
     printf("\n");
     printf(GW_VERSION" is distributed and licensed for use under the terms of the\n"); 
@@ -694,7 +694,6 @@ int gw_clear_state()
     
     char   s_vardir[PATH_MAX+1];
     char   j_vardir[PATH_MAX+1];
-    int    length;
     int    rc=0;
     
     sprintf(s_vardir,"%s/%s",gw_conf.gw_location,GW_VAR_DIR);

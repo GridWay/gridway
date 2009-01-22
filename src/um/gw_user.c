@@ -1,5 +1,5 @@
 /* -------------------------------------------------------------------------- */
-/* Copyright 2002-2006 GridWay Team, Distributed Systems Architecture         */
+/* Copyright 2002-2009 GridWay Team, Distributed Systems Architecture         */
 /* Group, Universidad Complutense de Madrid                                   */
 /*                                                                            */
 /* Licensed under the Apache License, Version 2.0 (the "License"); you may    */
@@ -21,27 +21,105 @@
 #include "gw_em_mad.h"
 #include "gw_user.h"
 #include "gw_log.h"
+#include "gw_rm_msg.h"
 
-int gw_user_init(gw_user_t *user, const char *name)
+int gw_user_init(gw_user_t *user, const char *name, const char *proxy_path)
 {
     int i,j;
     int rc;
-    
-    if ( user == NULL )
+    FILE *file;
+    char dn[GW_MSG_STRING_LONG], *pline;
+    /*gss_cred_id_t gss_cred = GSS_C_NO_CREDENTIAL;
+    OM_uint32 major_status;
+    OM_uint32 minor_status;
+    gss_name_t gss_name;
+    gss_buffer_desc gss_buffer = GSS_C_EMPTY_BUFFER;*/
+ 
+    if ( user == NULL)
         return -1;
         
     user->name = strdup(name);
-    
+
     if (user->name == NULL)
         return -1;
-        
+
+    if (strcmp(proxy_path, "") == 0)
+    {
+#ifdef GWUSERDEBUG
+        gw_log_print("UM",'I',"Unsetting X509_USER_PROXY variable.\n");
+#endif
+
+        unsetenv("X509_USER_PROXY");
+    }
+    else
+    {
+#ifdef GWUSERDEBUG
+        gw_log_print("UM",'I',"Setting X509_USER_PROXY variable to %s.\n",
+                proxy_path);
+#endif
+
+        setenv("X509_USER_PROXY", proxy_path, 1);
+    }
+
+    user->proxy_path = strdup(proxy_path);
+
+    /* Adquire credentials */
+    /*globus_module_activate(GLOBUS_GSI_GSS_ASSIST_MODULE);
+    major_status = globus_gss_assist_acquire_cred(&minor_status,
+            GSS_C_INITIATE, &gss_cred);
+
+    if (major_status != GSS_S_COMPLETE)
+    {
+        gw_log_print("UM",'I',"Error loading credentials for user %s (%d).\n",
+                GWNSTR(name), minor_status);
+        return -1;
+    }
+
+    gss_inquire_cred(&minor_status, gss_cred, &gss_name, NULL, NULL, NULL);
+
+    gss_display_name(&minor_status, gss_name, &gss_buffer, NULL);
+
+    user->dn = strdup(gss_buffer.value);
+
+    gss_release_name(&minor_status, &gss_name);
+    gss_release_buffer(&minor_status, &gss_buffer);*/
+
+    file = popen("grid-proxy-info -identity", "r");
+    if (file != NULL)
+    {
+        fgets(dn, GW_MSG_STRING_LONG, file);
+        pclose(file);
+
+        if (dn != NULL)
+        {
+            pline =  strchr(dn, '\n');
+            if (pline != NULL)
+                *pline = '\0';
+
+            user->dn = strdup(dn);
+        }
+        else
+        {
+            gw_log_print("UM",'I',"Error getting indentity of user %s.\n",
+                    GWNSTR(name));
+            user->dn = strdup("Unknown");
+        }
+    }
+    else
+    {
+        gw_log_print("UM",'I',"Error getting indentity of user %s.\n",
+                GWNSTR(name));
+        user->dn = strdup("Unknown");
+    }
+
     user->active_jobs  = 0;
     user->running_jobs = 0;
     user->idle         = 0;
     user->em_mads      = 0;
     user->tm_mads      = 0;
     
-    gw_log_print("UM",'I',"Loading execution MADs for user %s.\n",GWNSTR(name));
+    gw_log_print("UM",'I',"Loading execution MADs for user %s (%s).\n",
+            GWNSTR(name), GWNSTR(user->dn));
     
     i = 0;
     
@@ -55,8 +133,8 @@ int gw_user_init(gw_user_t *user, const char *name)
 
         if (rc != 0)
         {
-        	gw_log_print("UM",'E',"Could not load execution MAD %s.\n",
-                          gw_conf.em_mads[i][GW_MAD_EM_NAME_INDEX]);
+            gw_log_print("UM",'E',"Could not load execution MAD %s.\n",
+                    gw_conf.em_mads[i][GW_MAD_EM_NAME_INDEX]);
         	
             for (j = 0; j< user->em_mads ; j++)
             {
@@ -74,7 +152,8 @@ int gw_user_init(gw_user_t *user, const char *name)
         i++;
     }
     
-    gw_log_print("UM",'I',"Loading transfer MADs for user %s.\n", GWNSTR(name));
+    gw_log_print("UM",'I',"Loading transfer MADs for user %s (%s).\n",
+            GWNSTR(name), GWNSTR(user->dn));
     
     i = 0;
     while ( ( i < GW_MAX_MADS ) && (gw_conf.tm_mads[i][0] != NULL) )
@@ -86,8 +165,8 @@ int gw_user_init(gw_user_t *user, const char *name)
 
         if ( rc != 0)
         {
-        	gw_log_print("UM",'E',"Could not load transfer MAD %s.\n",
-                          gw_conf.tm_mads[i][GW_MAD_TM_NAME_INDEX]);
+            gw_log_print("UM",'E',"Could not load transfer MAD %s.\n",
+                    gw_conf.tm_mads[i][GW_MAD_TM_NAME_INDEX]);
         	
             for (j=0; j< user->tm_mads ; j++)
             {  
@@ -112,7 +191,8 @@ int gw_user_init(gw_user_t *user, const char *name)
         i++;
     }
 
-    gw_log_print("UM",'I',"User %s registered.\n",GWNSTR(name));
+    gw_log_print("UM",'I',"User %s (%s) registered.\n",
+            GWNSTR(name), GWNSTR(user->dn));
             
     return 0;
 }
@@ -127,16 +207,23 @@ void gw_user_destroy(gw_user_t *user)
     if ( user == NULL )
         return;
     
-    gw_log_print("UM",'I',"Removing MADs for user %s.\n", GWNSTR(user->name));
+    gw_log_print("UM",'I',"Removing MADs for user %s (%s).\n",
+            GWNSTR(user->name), GWNSTR(user->dn));
             
     if (user->name != NULL )
         free(user->name);
+
+    if (user->proxy_path != NULL )
+        free(user->proxy_path);
+
+    if (user->dn!= NULL )
+        free(user->dn);
 
     for (i = 0; i< user->em_mads; i++)
         gw_em_mad_finalize(&(user->em_mad[i]));
 
     for (i = 0; i< user->tm_mads; i++)
-       gw_tm_mad_finalize(&(user->tm_mad[i]));
+        gw_tm_mad_finalize(&(user->tm_mad[i]));
 
 }
 
@@ -150,7 +237,7 @@ int gw_em_register_mad(gw_user_t *  user,
                        const char * args,
                        const char * mode)
 {
-    int           rc, i;
+    int rc, i;
 
     /* ----------------------------------------------------- */
     /* 1.- Check if there is space left                      */
@@ -171,12 +258,12 @@ int gw_em_register_mad(gw_user_t *  user,
     {
     	for (i=0;i<user->em_mads;i++)
     	{
-    		if (strcmp(user->em_mad[i].name,name)==0)
-    		{
-				gw_log_print ("UM",'W',"\tExecution MAD %s already loaded.\n",
-                              GWNSTR(name));
-    			return 0;    			
-    		}
+            if (strcmp(user->em_mad[i].name,name) == 0)
+            {
+                gw_log_print ("UM",'W',"\tExecution MAD %s already loaded.\n",
+                        GWNSTR(name));
+                return 0;    			
+            }
     	}
     }
 	    
@@ -196,11 +283,10 @@ int gw_em_register_mad(gw_user_t *  user,
         user->em_mads++;
         
         gw_log_print("UM",'I',"\tExecution MAD %s loaded (exec:%s, args:%s, mode:%s).\n",
-	        		 GWNSTR(name),
-	        		 GWNSTR(executable),
-                     GWNSTR(args),                     
-	        		 GWNSTR(mode));
-        
+                GWNSTR(name),
+                GWNSTR(executable),
+                GWNSTR(args),
+       	        GWNSTR(mode));
     }
     else
         gw_log_print("UM",'E',"\tCould not load execution MAD %s (Check name/path of %s or live proxy).\n",

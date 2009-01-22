@@ -214,6 +214,10 @@ void gw_em_start ( void *_null )
     
     pthread_attr_setdetachstate (&attr, PTHREAD_CREATE_DETACHED);
         
+#ifdef GWEMDEBUG
+    gw_log_print ("EM",'D',"Starting the listener thread.\n");
+#endif
+
     rc = pthread_create(&(gw_em.listener_thread), &attr, (void *)gw_em_listener,
                 NULL);
                 

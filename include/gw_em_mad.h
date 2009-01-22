@@ -38,6 +38,7 @@ typedef struct gw_em_mad_s
     char *args;
     char *mode;
     char *owner;
+    char *proxy_path;
 
     int  mad_em_pipe;
     int  em_mad_pipe;

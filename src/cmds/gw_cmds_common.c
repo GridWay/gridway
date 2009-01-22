@@ -181,7 +181,7 @@ void gw_client_print_status_header(char *outoption)
                 break;
             case 'u':
                 sprintf(tmpstr,"%-12s ","USER");
-                break;   			
+                break;
             case 'j':
                 sprintf(tmpstr,"%-15.15s ","NAME");
                 break;					    			
@@ -234,6 +234,7 @@ void gw_client_print_status_header(char *outoption)
 void gw_client_print_status(gw_msg_job_t * msg,char *outoption)
 {
     char the_time[15];
+    char buf[25];
     char *out_options;
     int  i;
 
@@ -258,8 +259,9 @@ void gw_client_print_status(gw_msg_job_t * msg,char *outoption)
                 printf("%-4s ", gw_job_state_string(msg->job_state));
                 break;
             case 'u':
-                printf("%-12s ",msg->owner);
-                break;   			
+                sprintf(buf, "%s:%i", msg->owner,msg->uid);
+                printf("%-12s ", buf);
+                break;
             case 'j':
                 printf("%-15.15s ", msg->name);
                 break;					    			
@@ -412,11 +414,12 @@ void gw_client_print_status_full(gw_msg_job_t * msg)
 
     the_time[5]='\0';
 
-	printf("JOB_ID=%d\n",msg->id);
+    printf("JOB_ID=%d\n",msg->id);
     printf("NAME=%s\n",msg->name);
-    printf("OWNER=%s\n",msg->owner);
-	                
-	if(msg->array_id != -1)
+    printf("USER=%s\n",msg->owner);
+    printf("UID=%d\n",msg->uid);
+
+    if(msg->array_id != -1)
     {
 	    printf("ARRAY_ID=%d\n",msg->array_id);
 	    printf("TASK_ID=%d\n",msg->task_id);
@@ -867,8 +870,8 @@ void gw_client_print_user_header()
 {
     char head_string[200];
     
-    sprintf(head_string,"%-3s %-10s %-4s %-3s %-6s %-10s %-5s %-10s %-5s",
-    "UID","NAME","JOBS","RUN","IDLE","EM","PID","TM","PID");
+    sprintf(head_string,"%-3s %-10s %-4s %-3s %-6s %-40s",
+    "UID","NAME","JOBS","RUN","IDLE","IDENTITY");
                         
     bold();
     underline(); 
@@ -884,43 +887,37 @@ void gw_client_print_user_header()
 
 void gw_client_print_user(gw_msg_user_t *msg_user)
 {
-	int max;
-	int i;
+    int i;
 	
     printf("%-3i ", msg_user->user_id);
-	printf("%-10s ",msg_user->name);
+    printf("%-10s ", msg_user->name);
     printf("%-4i ", msg_user->active_jobs);
     printf("%-3i ", msg_user->running_jobs);
     printf("%-6i ", (int) msg_user->idle);
+    printf("%s\n", msg_user->dn);
     
-    if (msg_user->num_ems > msg_user->num_tms)
-    	max = msg_user->num_ems;
-    else
-    	max = msg_user->num_tms;
-    	    
-    for (i=0;i<max;i++)
-    {
-    	if (i!=0)
-    		printf("                               ");
-    		
-    	if (i<msg_user->num_ems)
-    	{
-    		printf("%-10s ", msg_user->em_name[i]);
-    		printf("%-5i ", msg_user->em_pid[i]);
-    	}
-    	else
-    		printf("               ");
+    printf("    EM MADs: ");
 
-    	if (i<msg_user->num_tms)
-    	{
-    		printf("%-10s ", msg_user->tm_name[i]);
-    		printf("%-5i ", msg_user->tm_pid[i]);
-    	}
-    	else
-    		printf("              ");
-    	
-    	printf("\n");
+    for (i=0;i<msg_user->num_ems;i++)
+    {
+        if (i != 0)
+            printf(", ");
+
+    	printf("%s (PID=%i)", msg_user->em_name[i],
+                msg_user->em_pid[i]);
     }
+
+    printf("\n    TM MADs: ");
+
+    for (i=0;i<msg_user->num_tms;i++)
+    {
+        if (i != 0)
+            printf(", ");
+    	printf("%s (PID=%i)", msg_user->tm_name[i],
+                msg_user->tm_pid[i]);
+    }
+
+    printf("\n");
 }
 
 /*---------------------------------------------------------------------------*/

@@ -36,30 +36,30 @@ void gw_rm_user_pool(int client_socket)
 {
     gw_msg_user_t msg;
     int           length;
-	int           rc;
-	int           i;
+    int           rc;
+    int           i;
 	      
-	length       = sizeof(gw_msg_user_t);
+    length = sizeof(gw_msg_user_t);
 	
     for (i=0; i<gw_conf.number_of_users; i++)
     {
     	if ( gw_user_pool_get_info(i, &msg) == GW_TRUE )
     	{
-       		msg.msg_type = GW_MSG_USERS;
-    		msg.rc       = GW_RC_SUCCESS;
+       	    msg.msg_type = GW_MSG_USERS;
+            msg.rc       = GW_RC_SUCCESS;
     		          		      
-			rc = send(client_socket,(void *) &msg,length,0);
+            rc = send(client_socket,(void *) &msg,length,0);
 	
-			if ( rc == -1 )
-				gw_log_print("RM",'E',"Error sending message %s\n",strerror(errno));		    		
+            if ( rc == -1 )
+                gw_log_print("RM",'E',"Error sending message %s\n",strerror(errno));		    		
         }
     }
 	
     msg.msg_type = GW_MSG_END;
     msg.rc       = GW_RC_SUCCESS;
     
-	rc = send(client_socket,(void *) &msg,length,0);
+    rc = send(client_socket,(void *) &msg,length,0);
 	
-	if ( rc == -1 )
-		gw_log_print("RM",'E',"Error sending message %s\n",strerror(errno));
+    if ( rc == -1 )
+        gw_log_print("RM",'E',"Error sending message %s\n",strerror(errno));
 }

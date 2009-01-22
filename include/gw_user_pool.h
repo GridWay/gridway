@@ -47,7 +47,7 @@ void gw_user_pool_set_mad_pipes(int um_em_pipe_w, int um_tm_pipe_w);
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
-int gw_user_pool_user_allocate (const char *user, int *user_id);
+int gw_user_pool_user_allocate (const char *user, const char *proxy_path, int *user_id);
 
 void gw_user_pool_user_free (int user_id);
 
@@ -80,7 +80,7 @@ int gw_user_pool_set_tm_pipes (fd_set *       in_pipes,
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
-gw_boolean_t gw_user_pool_exists (const char *name, int *user_id);
+gw_boolean_t gw_user_pool_exists (const char *name, const char *proxy_path, int *user_id);
 
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
