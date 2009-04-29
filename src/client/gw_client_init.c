@@ -130,7 +130,16 @@ gw_client_t* gw_client_init()
 	     
     rc = gw_parse_file(conf_file,"NUMBER_OF_JOBS",&number_of_jobs_s);
 
-    if ( (rc != -1) && (number_of_jobs_s != NULL) )
+    if ( rc == -1 )
+    {
+        fprintf(stderr,"Error parsing gwd.conf. Cannot access %s\n", conf_file);
+        free(conf_file);
+
+        pthread_mutex_unlock(&gw_client.mutex);
+        return NULL;
+    }
+
+    if ( number_of_jobs_s != NULL )
     {
     	gw_client.number_of_jobs = atoi(number_of_jobs_s);
     	gw_client.job_pool = (gw_msg_job_t **) malloc( sizeof(gw_msg_job_t *) *
@@ -140,7 +149,7 @@ gw_client_t* gw_client_init()
     }
     else
     {
-    	fprintf(stderr,"Error parsing gwd.conf. Cannot find NUMBER_OF_HOSTS\n");
+    	fprintf(stderr,"Error parsing gwd.conf. Cannot find NUMBER_OF_JOBS\n");
     	free(conf_file);
     	
     	pthread_mutex_unlock(&gw_client.mutex);
@@ -153,7 +162,16 @@ gw_client_t* gw_client_init()
 	     
     rc = gw_parse_file(conf_file,"NUMBER_OF_HOSTS",&number_of_hosts_s);
 
-    if ( (rc != -1) && (number_of_hosts_s != NULL) )
+    if ( rc == -1 )
+    {
+        fprintf(stderr,"Error parsing gwd.conf. Cannot access %s\n", conf_file);
+        free(conf_file);
+
+        pthread_mutex_unlock(&gw_client.mutex);
+        return NULL;
+    }
+
+    if ( number_of_hosts_s != NULL )
     {
     	gw_client.number_of_hosts = atoi(number_of_hosts_s);
     	gw_client.host_pool = (gw_msg_host_t **) malloc( sizeof(gw_msg_host_t *) *

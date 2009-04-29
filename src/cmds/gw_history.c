@@ -29,12 +29,13 @@
 /* ------------------------------------------------------------------------- */
 
 const char * usage =
-"\n gwhistory [-h] [-n] <job_id>\n\n"
+"\n gwhistory [-h] [-nx] <job_id>\n\n"
 "SYNOPSIS\n"
 "  Prints information about the execution history of a job\n\n"
 "OPTIONS\n"
 "  -h        prints this help.\n"
 "  -n        do not print the header lines.\n"
+"  -x        xml format.\n"
 "  job_id    job identification as provided by gwps.\n\n"
 "FIELD INFORMATION\n"
 "  HID       host unique identification assigned by the Gridway system.\n"
@@ -50,7 +51,7 @@ const char * usage =
 "  HOST      FQDN of the host.\n";
 
 const char * susage =
-"usage: gwhistory [-h] [-n] <job_id>\n";
+"usage: gwhistory [-h] [-nx] <job_id>\n";
 
 extern char *optarg;
 extern int   optind, opterr, optopt;
@@ -69,7 +70,7 @@ int main(int argc, char **argv)
 {
     int                job_id = -1;
   	char               opt;
-  	int                n = 0;
+  	int                n = 0, x = 0;
   	gw_client_t *      gw_session;
 	int                num_records, i;
     gw_msg_history_t * history_list;
@@ -83,10 +84,12 @@ int main(int argc, char **argv)
     opterr = 0;
     optind = 1;
 	
-    while((opt = getopt(argc,argv,"nh"))!= -1)
+    while((opt = getopt(argc,argv,"nxh"))!= -1)
         switch(opt)
         {
             case 'n': n  = 1;
+                break;
+            case 'x': x  = 1;
                 break;
             case 'h':
             	printf("%s", usage);
@@ -141,13 +144,36 @@ int main(int argc, char **argv)
 		
    	if (rc == GW_RC_SUCCESS)
     {
-       	if (!n)
-       		gw_client_print_history_header();
+	  if (x){
+		// A.L: It would be nice to include all this settings for header and footer
+		// in the gw_client_print_history_xml function
+		int max_command_open_len=24;
+		char command[]="gwhistory";
+		char command_open[max_command_open_len];
 
+		sprintf (command_open, "%s JOB_ID=\"%i\"", command, job_id);
+		int xml_header_flag = 1, xml_footer_flag = 1;
+		
+		for (i=0;i<num_records;i++){
+		  if ( xml_header_flag ){
+			gw_print_xml_header(command_open);
+			xml_header_flag = 0;
+		  }
+		  gw_client_print_history_xml(&(history_list[i]));
+		}
+		if ( xml_footer_flag ){
+		  gw_print_xml_footer(command);
+		  xml_footer_flag = 0;
+		}
+	  }
+	  else {
+		if (!n)
+		  gw_client_print_history_header();
+		
 		for (i=0;i<num_records;i++)
-			gw_client_print_history(&(history_list[i]));
-				
-        gw_client_finalize();				
+		  gw_client_print_history(&(history_list[i]));
+	  }
+	  gw_client_finalize();
     }  
     else
     {

@@ -103,7 +103,6 @@ gw_return_code_t gw_client_host_and_user_accts(const char *host, const char *use
 		return GW_RC_FAILED;
 	}
 	
-	
 	rc = gw_acct_join_search_by_host_and_user(host, user, accts, num_records, from_time);
 	
  	gw_acct_db_close();

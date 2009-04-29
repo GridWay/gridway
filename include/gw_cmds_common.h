@@ -52,9 +52,15 @@ void gw_client_print_status_full(gw_msg_job_t * msg);
 
 void gw_client_print_pool_status_full(char *username, char *hostname, char jobstate, int array_id);
 
+void gw_client_print_status_xml(gw_msg_job_t * msg, int xml_header_flag, int xml_footer_flag);
+
+void gw_client_print_pool_status_xml(char *username, char *hostname, char jobstate, int array_id);
+
 void gw_client_print_history_header();
 
 void gw_client_print_history(gw_msg_history_t *msg_history);
+
+void gw_client_print_history_xml(gw_msg_history_t *msg_history);
 
 void gw_client_print_host_status_header();
 
@@ -64,24 +70,39 @@ void gw_client_print_host_queues(gw_msg_host_t * msg, gw_boolean_t header);
 
 void gw_client_print_host_status_full(gw_msg_host_t * msg);
 
+void gw_client_print_host_status_xml(gw_msg_host_t * msg, int xml_header_flag, int xml_footer_flag);
+
 void gw_client_print_host_pool_status();
 
 void gw_client_print_host_pool_status_full();
+
+void gw_client_print_host_pool_status_xml();
 
 void gw_client_print_host_match_header();
 
 void gw_client_print_host_match(gw_msg_match_t *match_list);
 
+void gw_client_print_host_match_xml(gw_msg_match_t *match_list);
+
 void gw_client_print_user_header();
 
 void gw_client_print_user(gw_msg_user_t *msg_user);
+
+void gw_client_print_user_xml(gw_msg_user_t *msg_user);
+
+void gw_print_xml_header(const char *command);
+
+void gw_print_xml_footer(const char *command);
 
 #ifdef HAVE_LIBDB
 
 void gw_client_print_user_accts_header(const char *user, time_t from_time);
 void gw_client_print_host_accts_header(const char *host, time_t from_time);
 void gw_client_print_host_and_user_accts_header(const char *host, const char *user, time_t from_time);
+
 void gw_client_print_accts(gw_acct_t **accts, int num);
+
+void gw_client_print_accts_xml(gw_acct_t **accts, int num, const int u, const int r);
 
 #endif
 

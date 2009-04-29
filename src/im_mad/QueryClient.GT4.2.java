@@ -28,8 +28,8 @@ import org.oasis.wsrf.properties.QueryResourcePropertiesResponse;
 import org.oasis.wsrf.properties.QueryExpressionType;
 import org.oasis.wsrf.properties.QueryResourceProperties_PortType;
 
-import org.apache.commons.cli.ParseException;
-import org.apache.commons.cli.CommandLine;
+//import org.apache.commons.cli.ParseException;
+//import org.apache.commons.cli.CommandLine;
 import org.globus.axis.message.addressing.Address;
 import org.globus.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI.MalformedURIException;

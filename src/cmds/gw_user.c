@@ -29,12 +29,13 @@
 /* ------------------------------------------------------------------------- */
 
 const char * usage =
-"\n gwuser [-h] [-n]\n\n"
+"\n gwuser [-h] [-nx]\n\n"
 "SYNOPSIS\n"
 "  Prints information about users in the GridWay system\n\n"
 "OPTIONS\n"
 "  -h    prints this help\n"
 "  -n    do not print the header lines\n\n"
+"  -x    xml format\n"
 "FIELD INFORMATION\n"
 "  UID      user unique identification assigned by the Gridway system\n"
 "  NAME     name of this user\n"
@@ -47,7 +48,7 @@ const char * usage =
 "  IDENTITY distinguished name of the user's proxy\n";
 
 const char * susage =
-"usage: gwuser [-h] [-n]\n";
+"usage: gwuser [-h] [-nx]\n";
 
 extern char *optarg;
 extern int   optind, opterr, optopt;
@@ -65,7 +66,7 @@ void signal_handler (int sig)
 int main(int argc, char **argv)
 {
     char               opt;
-    int                n = 0;
+    int                n = 0, x = 0;
     gw_client_t *      gw_session;
     int                num_users, i;
     gw_msg_user_t *    user_status;
@@ -79,12 +80,14 @@ int main(int argc, char **argv)
     opterr = 0;
     optind = 1;
 	
-    while((opt = getopt(argc,argv,"nh"))!= -1)
+    while((opt = getopt(argc,argv,"nhx"))!= -1)
         switch(opt)
         {
             case 'n': n  = 1;
                 break;
-            case 'h':
+            case 'x': x  = 1;
+                break; 
+		    case 'h':
             	printf("%s", usage);
                 exit(0);
                 break;
@@ -122,21 +125,39 @@ int main(int argc, char **argv)
 	
     if (rc == GW_RC_SUCCESS)
     {
+	  if (x){
+		// A.L: It would be nice to include all this settings for header and footer
+		// in the gw_client_print_user_xml function
+		char command[]="gwuser";
+		int xml_header_flag = 1, xml_footer_flag = 1;
+		if ( xml_header_flag ){
+		  gw_print_xml_header(command);
+		  xml_header_flag = 0;
+		}
+		for (i=0;i<num_users;i++){
+		  gw_client_print_user_xml(&(user_status[i]));
+		}
+		if ( xml_footer_flag ){
+		  gw_print_xml_footer(command);
+		  xml_footer_flag = 0;
+		}
+	  }
+	  else {
        	if (!n)
-       	    gw_client_print_user_header();
-
+		  gw_client_print_user_header();
+		
         for (i=0;i<num_users;i++)
-                gw_client_print_user(&(user_status[i]));
-				
-        gw_client_finalize();				
+		  gw_client_print_user(&(user_status[i]));
+	  }
+	  gw_client_finalize();
     }  
     else
-    {
+	  {
     	fprintf(stderr,"FAILED: %s\n",gw_ret_code_string(rc)); 
-           	
+        
         gw_client_finalize();
         return -1;
-    }  
+	  }  
 	
     return 0;
 }

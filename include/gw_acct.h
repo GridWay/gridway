@@ -117,10 +117,10 @@ int gw_acct_join_search_by_host(const char * hostname,
                                 time_t from_time);  
                                 
 int gw_acct_join_search_by_host_and_user(const char * hostname, 
-										 const char * username,
-                               		     gw_acct_t *** accts,
+					 const char * username,
+					 gw_acct_t *** accts,
                                          int *        nrecs,
-                                         time_t from_time);                                                                                      
+                                         time_t from_time);
 
 #endif
 

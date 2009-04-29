@@ -23,13 +23,14 @@
 #include <limits.h>
 #include <unistd.h>
 #include <signal.h>
+#include <math.h>
 
 /* ------------------------------------------------------------------------- */
 /* GLOBAL VARIABLES                                                          */
 /* ------------------------------------------------------------------------- */
 
 const char * usage =
-"\n gwhost [-h] [-c delay] [-nf] [-m job_id] [host_id]\n\n"
+"\n gwhost [-h] [-c delay] [-nfx] [-m job_id] [host_id]\n\n"
 "SYNOPSIS\n"
 "  Prints information about all the hosts in the GridWay system (default)\n\n"
 "OPTIONS\n"
@@ -38,6 +39,7 @@ const char * usage =
 "               seconds continuously (similar to top command)\n"
 "  -n           do not print the header\n"
 "  -f           full format\n"
+"  -x           xml format\n"
 "  -m <job_id>  prints hosts matching the requirements of a given job\n"
 "  host_id      only monitor this host_id, also prints queue information\n\n"
 "FIELD INFORMATION\n"
@@ -65,7 +67,7 @@ const char * usage =
 "  PRIORITY     queue priority\n";
        
 const char * susage =
-"usage: gwhost [-h] [-c delay] [-nf] [-m job_id] [host_id]\n";
+"usage: gwhost [-h] [-c delay] [-nfx] [-m job_id] [host_id]\n";
 
 extern char *optarg;
 extern int   optind, opterr, optopt;
@@ -85,7 +87,7 @@ int main(int argc, char **argv)
     int               host_id = -1;
     int               job_id  = -1;    
   	char              opt;
-  	int               c = 0, n = 0, f = 0, m = 0;
+  	int               c = 0, n = 0, f = 0, x = 0, m = 0;
     int               delay = 0;
   	gw_client_t *     gw_session;
 	gw_msg_host_t     host_status;
@@ -103,7 +105,7 @@ int main(int argc, char **argv)
     opterr = 0;
     optind = 1;
 	
-    while((opt = getopt(argc,argv,":nfhc:m:"))!= -1)
+    while((opt = getopt(argc,argv,":nfxhc:m:"))!= -1)
         switch(opt)
         {
             case 'c': c  = 1;
@@ -112,6 +114,8 @@ int main(int argc, char **argv)
             case 'n': n = 1;
                 break;    
             case 'f': f = 1;
+                break;    
+            case 'x': x = 1;
                 break;    
             case 'm': m = 1;
                 job_id = atoi(optarg);
@@ -164,15 +168,39 @@ int main(int argc, char **argv)
 		
     	if (rc == GW_RC_SUCCESS)
         {
+		  if (x){
+			// A.L: It would be nice to include all this settings for header and footer
+			// in the gw_client_print_history_xml function
+			int max_command_open_len=24;
+			char command[]="gwhost";
+			char command_open[max_command_open_len];
+			
+			sprintf (command_open, "%s JOB_ID=\"%\i\"", command, job_id);
+			int xml_header_flag = 1, xml_footer_flag = 1;
+			
+			for (i=0;i<num_records;i++){
+			  if ( xml_header_flag ){
+				gw_print_xml_header(command_open);
+				xml_header_flag = 0;
+			  }
+			  gw_client_print_host_match_xml(&(match_list[i]));
+			}
+			if ( xml_footer_flag ){
+			  gw_print_xml_footer(command);
+			  xml_footer_flag = 0;
+			}
+		  } 
+		  else {
+
         	if (!n)
         		gw_client_print_host_match_header();
 			
 			for (i=0;i<num_records;i++)
 	    		gw_client_print_host_match(&(match_list[i]));
-	    	
-	    	if (match_list != NULL)
-	    		free(match_list);
-        }  
+		  }
+		  if (match_list != NULL)
+			free(match_list);
+        }
 	    else
 	    {
 	    	fprintf(stderr,"FAILED: %s\n",gw_ret_code_string(rc)); 
@@ -185,52 +213,57 @@ int main(int argc, char **argv)
 	}
 	
 	do
-	{
+	  {
 		if (c)
-		{
+		  {
 			cls();
             move(0,0);
-        }
-
+		  }
+		
 	    if (host_id != -1)
-	    	rc = gw_client_host_status(host_id, &host_status);
+		  rc = gw_client_host_status(host_id, &host_status);
 		else	    		    
-			rc = gw_client_host_status_all( );
-
+		  rc = gw_client_host_status_all( );
+		
     	if (rc == GW_RC_SUCCESS)
-        {
+		  {
             if (f)
-    		    if (host_id != -1)
-	    	    	gw_client_print_host_status_full(&host_status);
-                else
-    		    	gw_client_print_host_pool_status_full();
-            else
-            {
-               	if (!n)
-                	gw_client_print_host_status_header();
-
-    		    if (host_id != -1)
-                {
-    	    	    gw_client_print_host_status(&host_status);
-        		    gw_client_print_host_queues(&host_status,!n);
-                }
-                else
-                {
-    		    	gw_client_print_host_pool_status();
-                }
-            }
-        }  
+			  if (host_id != -1)
+				gw_client_print_host_status_full(&host_status);
+			  else
+				gw_client_print_host_pool_status_full();
+			else if (x)
+			  if (host_id != -1)
+				gw_client_print_host_status_xml(&host_status, 1, 1);
+			  else
+				gw_client_print_host_pool_status_xml();
+			else
+			  {
+				if (!n)
+				  gw_client_print_host_status_header();
+				
+				if (host_id != -1)
+				  {
+					gw_client_print_host_status(&host_status);
+					gw_client_print_host_queues(&host_status,!n);
+				  }
+				else
+				  {
+					gw_client_print_host_pool_status();
+				  }
+			  }
+		  }
 	    else
-	    {
+		  {
 	    	fprintf(stderr,"FAILED: %s\n",gw_ret_code_string(rc)); 
            	
 	        gw_client_finalize();
 	        return -1;
-	    }  
-
+		  }
+		
 		sleep(delay);	    
 		
-	} while(c);
+	  }  while(c);
 	
 	return 0;
 }

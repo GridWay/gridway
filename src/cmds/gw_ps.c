@@ -29,7 +29,7 @@
 /* ------------------------------------------------------------------------- */
 
 const char * usage =
-"\n gwps [-h] [-u user] [-r host] [-A AID] [-s job_state] [-o output_format] [-c delay] [-nf] [job_id]\n\n"
+"\n gwps [-h] [-u user] [-r host] [-A AID] [-s job_state] [-o output_format] [-c delay] [-nfx] [job_id]\n\n"
 "SYNOPSIS\n"
 "  Prints information about all the jobs in the GridWay system (default)\n\n"
 "OPTIONS\n"
@@ -43,6 +43,7 @@ const char * usage =
 "                   seconds continuously (similar to top command)\n"
 "  -n               do not print the header\n"
 "  -f               full format\n"
+"  -x               xml format\n"
 "  job_id           only monitor this job_id\n\n"
 "FIELD INFORMATION\n"
 "  USER     (u)  owner of this job\n"
@@ -85,7 +86,7 @@ const char * usage =
 
 
 const char * susage =
-"usage: gwps [-h] [-u user] [-r host] [-A AID] [-s job_state] [-o output_format] [-c delay] [-nf] [job_id]\n";
+"usage: gwps [-h] [-u user] [-r host] [-A AID] [-s job_state] [-o output_format] [-c delay] [-nfx] [job_id]\n";
 
 extern char *optarg;
 extern int   optind, opterr, optopt;
@@ -104,7 +105,7 @@ int main(int argc, char **argv)
 {
     int               job_id = -1;
   	char              opt;
-  	int               c = 0, n = 0, f = 0;
+  	int               c = 0, n = 0, f = 0, x = 0;
     int               delay = 0;
   	gw_client_t *     gw_session;
 	gw_msg_job_t      job_status;
@@ -126,7 +127,7 @@ int main(int argc, char **argv)
     opterr = 0;
     optind = 1;
 	
-    while((opt = getopt(argc, argv, ":nfhc:u:r:s:o:A:")) != -1)
+    while((opt = getopt(argc, argv, ":nfxhc:u:r:s:o:A:")) != -1)
         switch(opt)
         {
             case 'c': c  = 1;
@@ -135,6 +136,8 @@ int main(int argc, char **argv)
             case 'n': n = 1;
                 break;  
             case 'f': f = 1;
+                break;  
+		    case 'x': x = 1;
                 break;  
             case 'u':                     	
             	username = strdup(optarg);         
@@ -286,6 +289,13 @@ int main(int argc, char **argv)
     			else	   	    
 	    	    	gw_client_print_pool_status_full(username, hostname, jobstate, array_id);
             }
+			else if (x)
+			  {
+		        if (job_id != -1)
+				  gw_client_print_status_xml(&job_status, 1, 1);
+    			else	   	    
+				  gw_client_print_pool_status_xml(username, hostname, jobstate, array_id);
+			  }
             else
             {
             	if (!n)

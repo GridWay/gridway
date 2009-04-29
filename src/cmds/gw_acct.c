@@ -29,12 +29,13 @@
 /* ------------------------------------------------------------------------- */
 
 const char * usage =
-"\n gwacct [-h] [-n] [<-d n | -w n | -m n | -t s>] <-u user|-r host>\n\n"
+"\n gwacct [-h] [-nx] [<-d n | -w n | -m n | -t s>] <-u user|-r host>\n\n"
 "SYNOPSIS\n"
 "  Prints accounting information about users or hosts in the GridWay system\n\n"
 "OPTIONS\n"
 "  -h        prints this help\n"
 "  -n        do not print the header lines\n"
+"  -x        xml format\n"
 "  -d n      print accounting information from n days ago  (ex: -d 1)\n"
 "  -w n      print accounting information from n weeks ago (ex: -w 1)\n"
 "  -m n      print accounting information from n months ago(ex: -m 1)\n"
@@ -61,7 +62,7 @@ const char * usage =
 
 
 const char * susage =
-"usage: gwacct [-h] [-n] [<-d n | -w n | -m n | -t s>] <-u user|-r host>\n";
+"usage: gwacct [-h] [-nx] [<-d n | -w n | -m n | -t s>] <-u user|-r host>\n";
 
 extern char *optarg;
 extern int   optind, opterr, optopt;
@@ -81,7 +82,7 @@ void signal_handler (int sig)
 int main(int argc, char **argv)
 {
   	char               opt;
-  	int                n = 0, u = 0, r = 0, t = 0;
+  	int                n = 0, x = 0, u = 0, r = 0, t = 0;
 	char *             hostname = NULL;
 	char *             username = NULL;
 	char * 			   time_arg = NULL;
@@ -103,12 +104,13 @@ int main(int argc, char **argv)
     opterr = 0;
     optind = 1;
 	
-    while((opt = getopt(argc,argv,":nhu:r:d:w:m:t:"))!= -1)
+    while((opt = getopt(argc,argv,":nxh:u:r:d:w:m:t:"))!= -1)
         switch(opt)
         {
             case 'n': n  = 1;
                 break;
-                
+            case 'x': x  = 1;
+                break;                
             case 'h':
             	printf("%s", usage);
                 exit(0);
@@ -202,16 +204,15 @@ int main(int argc, char **argv)
 	/* ---------------------------------------------------------------- */
 
 #ifdef HAVE_LIBDB
-	if( (u + r) == 2 )
-		rc = gw_client_host_and_user_accts(hostname, username, &accts, &num, from_time);	
-	else
-	{
-		if ( u == 1 )
-			rc = gw_client_user_accts(username, &accts, &num, from_time);
-		else
-			rc = gw_client_host_accts(hostname, &accts, &num, from_time);
-	}
-
+    if( (u + r) == 2 )
+      rc = gw_client_host_and_user_accts(hostname, username, &accts, &num, from_time);
+    else {
+      if ( u == 1 )
+	rc = gw_client_user_accts(username, &accts, &num, from_time);
+      else
+	rc = gw_client_host_accts(hostname, &accts, &num, from_time);
+    }
+    
    	if (rc == GW_RC_SUCCESS)
     {
     	if (num == 0)
@@ -245,20 +246,48 @@ int main(int argc, char **argv)
     		}    		
     	}
     	
-       	if (!n)
-       	{
-       		if( (u + r) == 2 )
+		if (x){
+		  int max_command_open_len=24;
+		  char command[]="gwacct";
+		  char user_string[]="USER";
+		  char host_string[]="HOST";
+		  char command_open[max_command_open_len];
+ 
+		  if ( ( u + r ) == 2 ){
+                    sprintf (command_open, "%s USER@HOSTNAME=\"%s@%s\"", command, username, hostname);
+		    gw_print_xml_header(command_open);		  
+		    gw_client_print_accts_xml( accts, num, u, r );
+		    gw_print_xml_footer(command);
+		  } 
+		  else if ( u == 1 ){
+		    sprintf (command_open, "%s %sNAME=\"%s\"", command, user_string, username);
+		    gw_print_xml_header(command_open);		  
+		    gw_client_print_accts_xml( accts, num, u, 0 );
+		    gw_print_xml_footer(command);
+		  } 
+		  else if ( r == 1 ){
+		    sprintf (command_open, "%s %sNAME=\"%s\"", command, host_string, hostname);
+		    gw_print_xml_header(command_open);		  
+		    gw_client_print_accts_xml( accts, num, 0, r );
+		    gw_print_xml_footer(command);		  
+		  }
+		}
+		else {
+		  if (!n)
+			{
+			  if( (u + r) == 2 )
        			gw_client_print_host_and_user_accts_header(hostname, username, from_time);
-       		else
-       		{
-	       		if ( u == 1 )
+			  else
+				{
+				  if ( u == 1 )
 		       		gw_client_print_user_accts_header(username, from_time);
-	       		else
+				  else
 	      			gw_client_print_host_accts_header(hostname, from_time);
-	      	}
-       	}
+				}
+			}
 
-		gw_client_print_accts(accts, num);
+		  gw_client_print_accts(accts, num);
+		}
     }  
     else
     {

@@ -843,8 +843,8 @@ int gw_acct_join_search_by_host(const char *  hostname,
 
 
 int gw_acct_join_search_by_host_and_user(const char * hostname, 
-										 const char * username,
-                               		     gw_acct_t ***accts,
+					 const char * username,
+					 gw_acct_t ***accts,
                                          int *        nrecs,
                                          time_t       from_time)
 {	
@@ -854,17 +854,16 @@ int gw_acct_join_search_by_host_and_user(const char * hostname,
 	
 	*nrecs = 0;
     *accts = NULL;	
-    
-    char * user_at_host;		
+    // This fifty is the sum of truncated 25+1+25 chars from user+@+host
+        char user_at_host[51];
 
 	tmp = (gw_acct_t *) malloc(sizeof(gw_acct_t));
 	rc  = gw_acct_join_search(hostname, username, tmp, from_time);
-	
 	if ( rc == 0 )
-	{	
-		sprintf(user_at_host,"%s @ %s",username,hostname);
-		gw_rm_copy_str_short(user_at_host,tmp->name);		
-			
+	  {
+	    sprintf(user_at_host,"%s@%s",username,hostname);
+	    gw_rm_copy_str_short(user_at_host,tmp->name);		
+
 		 /* This always is going to be 1 (username @ hostname)*/
 		*nrecs = *nrecs + 1; 
 		*accts = realloc(*accts, *nrecs *sizeof(gw_acct_t *));	

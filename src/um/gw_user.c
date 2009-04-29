@@ -70,7 +70,7 @@ int gw_user_init(gw_user_t *user, const char *name, const char *proxy_path)
 
     if (major_status != GSS_S_COMPLETE)
     {
-        gw_log_print("UM",'I',"Error loading credentials for user %s (%d).\n",
+        gw_log_print("UM",'E',"Error loading credentials for user %s (%d).\n",
                 GWNSTR(name), minor_status);
         return -1;
     }
@@ -88,9 +88,9 @@ int gw_user_init(gw_user_t *user, const char *name, const char *proxy_path)
     if (file != NULL)
     {
         fgets(dn, GW_MSG_STRING_LONG, file);
-        pclose(file);
+        rc = pclose(file);
 
-        if (dn != NULL)
+        if (dn != NULL && rc != -1)
         {
             pline =  strchr(dn, '\n');
             if (pline != NULL)
@@ -100,14 +100,14 @@ int gw_user_init(gw_user_t *user, const char *name, const char *proxy_path)
         }
         else
         {
-            gw_log_print("UM",'I',"Error getting indentity of user %s.\n",
+            gw_log_print("UM",'E',"Error getting indentity of user %s.\n",
                     GWNSTR(name));
             user->dn = strdup("Unknown");
         }
     }
     else
     {
-        gw_log_print("UM",'I',"Error getting indentity of user %s.\n",
+        gw_log_print("UM",'E',"Error getting indentity of user %s.\n",
                 GWNSTR(name));
         user->dn = strdup("Unknown");
     }
