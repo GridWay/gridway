@@ -175,7 +175,7 @@ int main(int argc, char **argv)
 			char command[]="gwhost";
 			char command_open[max_command_open_len];
 			
-			sprintf (command_open, "%s JOB_ID=\"%\i\"", command, job_id);
+			sprintf (command_open, "%s JOB_ID=\"%i\"", command, job_id);
 			int xml_header_flag = 1, xml_footer_flag = 1;
 			
 			for (i=0;i<num_records;i++){
