@@ -105,9 +105,9 @@ void gw_rm_job_status(int client_socket, int job_id)
     if ( job->history != NULL )
         if (job->history->em_rc != NULL)
         {
-            strncpy(msg.host,job->history->em_rc,GW_MSG_STRING_SHORT);
-            if ( strlen(job->history->em_rc) >= GW_MSG_STRING_SHORT )
-                msg.host[GW_MSG_STRING_SHORT-1] = '\0';
+            strncpy(msg.host,job->history->em_rc,GW_MSG_STRING_USER_AT_HOST);
+            if ( strlen(job->history->em_rc) >= GW_MSG_STRING_USER_AT_HOST )
+                msg.host[GW_MSG_STRING_USER_AT_HOST-1] = '\0';
         }
             
     pthread_mutex_unlock(&(job->mutex));

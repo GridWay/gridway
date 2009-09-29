@@ -38,6 +38,8 @@ char *gw_print_time(time_t t, char *the_time);
 
 char *gw_print_time2(time_t t, char *the_time);
 
+char *gw_print_time_xml(time_t t);
+
 char *gw_print_date_and_time(time_t t, char *the_time);
 
 int gw_check_state(char jobstate_from_user, gw_job_state_t current_job_state);
@@ -52,7 +54,7 @@ void gw_client_print_status_full(gw_msg_job_t * msg);
 
 void gw_client_print_pool_status_full(char *username, char *hostname, char jobstate, int array_id);
 
-void gw_client_print_status_xml(gw_msg_job_t * msg, int xml_header_flag, int xml_footer_flag);
+void gw_client_print_status_xml(gw_msg_job_t * msg);
 
 void gw_client_print_pool_status_xml(char *username, char *hostname, char jobstate, int array_id);
 
@@ -60,7 +62,7 @@ void gw_client_print_history_header();
 
 void gw_client_print_history(gw_msg_history_t *msg_history);
 
-void gw_client_print_history_xml(gw_msg_history_t *msg_history);
+void gw_client_print_history_xml(gw_msg_history_t *msg_history, int history_id);
 
 void gw_client_print_host_status_header();
 
@@ -70,7 +72,7 @@ void gw_client_print_host_queues(gw_msg_host_t * msg, gw_boolean_t header);
 
 void gw_client_print_host_status_full(gw_msg_host_t * msg);
 
-void gw_client_print_host_status_xml(gw_msg_host_t * msg, int xml_header_flag, int xml_footer_flag);
+void gw_client_print_host_status_xml(gw_msg_host_t * msg);
 
 void gw_client_print_host_pool_status();
 
@@ -101,8 +103,7 @@ void gw_client_print_host_accts_header(const char *host, time_t from_time);
 void gw_client_print_host_and_user_accts_header(const char *host, const char *user, time_t from_time);
 
 void gw_client_print_accts(gw_acct_t **accts, int num);
-
-void gw_client_print_accts_xml(gw_acct_t **accts, int num, const int u, const int r);
+void gw_client_print_accts_xml(gw_acct_t **accts, int num, int u, int r);
 
 #endif
 

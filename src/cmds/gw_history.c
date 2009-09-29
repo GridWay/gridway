@@ -48,7 +48,7 @@ const char * usage =
 "  MIGR      total migration time.\n"
 "  REASON    the reason why the job left this host.\n"
 "  QUEUE     name of the queue.\n"
-"  HOST      FQDN of the host.\n";
+"  HOST      FQDN/LRMS of the resource.\n";
 
 const char * susage =
 "usage: gwhistory [-h] [-nx] <job_id>\n";
@@ -140,31 +140,21 @@ int main(int argc, char **argv)
 	/* Get job or pool status                                           */
 	/* ---------------------------------------------------------------- */
 
-	rc = gw_client_job_history(job_id, &history_list, &num_records);	
-		
+	rc = gw_client_job_history(job_id, &history_list, &num_records);
+
    	if (rc == GW_RC_SUCCESS)
     {
 	  if (x){
-		// A.L: It would be nice to include all this settings for header and footer
-		// in the gw_client_print_history_xml function
-		int max_command_open_len=24;
-		char command[]="gwhistory";
-		char command_open[max_command_open_len];
+		char command[]=GW_HISTORY_COMMAND_XML;
+		char command_open[GW_HISTORY_COMMAND_OPEN_SIZE_XML];
 
 		sprintf (command_open, "%s JOB_ID=\"%i\"", command, job_id);
-		int xml_header_flag = 1, xml_footer_flag = 1;
+		gw_print_xml_header(command_open);
 		
 		for (i=0;i<num_records;i++){
-		  if ( xml_header_flag ){
-			gw_print_xml_header(command_open);
-			xml_header_flag = 0;
-		  }
-		  gw_client_print_history_xml(&(history_list[i]));
+		  gw_client_print_history_xml(&(history_list[i]), i);
 		}
-		if ( xml_footer_flag ){
-		  gw_print_xml_footer(command);
-		  xml_footer_flag = 0;
-		}
+		gw_print_xml_footer(command);
 	  }
 	  else {
 		if (!n)

@@ -30,6 +30,7 @@ static gw_log_t gw_log;
 
 void gw_log_init(const char *log_file)
 {
+  int truncate_result;
     pthread_mutex_init(&(gw_log.mutex),(pthread_mutexattr_t *) NULL);
 
     pthread_mutex_lock(&(gw_log.mutex));
@@ -37,7 +38,7 @@ void gw_log_init(const char *log_file)
     if (log_file != NULL)
     {
         gw_log.log_file = strdup(log_file);
-        truncate(log_file, 0);        
+        truncate_result = truncate(log_file, 0);        
     }
     else
         gw_log.log_file = NULL;    

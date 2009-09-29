@@ -17,6 +17,8 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
+
 
 #include "gw_em_mad.h"
 #include "gw_user.h"
@@ -25,9 +27,12 @@
 
 int gw_user_init(gw_user_t *user, const char *name, const char *proxy_path)
 {
+
     int i,j;
     int rc;
+	int proxy_var;
     FILE *file;
+	char proxy_command[GW_MSG_STRING_LONG];
     char dn[GW_MSG_STRING_LONG], *pline;
     /*gss_cred_id_t gss_cred = GSS_C_NO_CREDENTIAL;
     OM_uint32 major_status;
@@ -50,6 +55,7 @@ int gw_user_init(gw_user_t *user, const char *name, const char *proxy_path)
 #endif
 
         unsetenv("X509_USER_PROXY");
+		proxy_var=0;
     }
     else
     {
@@ -57,7 +63,7 @@ int gw_user_init(gw_user_t *user, const char *name, const char *proxy_path)
         gw_log_print("UM",'I',"Setting X509_USER_PROXY variable to %s.\n",
                 proxy_path);
 #endif
-
+		proxy_var=1;
         setenv("X509_USER_PROXY", proxy_path, 1);
     }
 
@@ -70,7 +76,7 @@ int gw_user_init(gw_user_t *user, const char *name, const char *proxy_path)
 
     if (major_status != GSS_S_COMPLETE)
     {
-        gw_log_print("UM",'E',"Error loading credentials for user %s (%d).\n",
+        gw_log_print("UM",'I',"Error loading credentials for user %s (%d).\n",
                 GWNSTR(name), minor_status);
         return -1;
     }
@@ -84,34 +90,47 @@ int gw_user_init(gw_user_t *user, const char *name, const char *proxy_path)
     gss_release_name(&minor_status, &gss_name);
     gss_release_buffer(&minor_status, &gss_buffer);*/
 
-    file = popen("grid-proxy-info -identity", "r");
-    if (file != NULL)
-    {
-        fgets(dn, GW_MSG_STRING_LONG, file);
-        rc = pclose(file);
-
-        if (dn != NULL && rc != -1)
-        {
-            pline =  strchr(dn, '\n');
-            if (pline != NULL)
-                *pline = '\0';
-
-            user->dn = strdup(dn);
-        }
-        else
-        {
-            gw_log_print("UM",'E',"Error getting indentity of user %s.\n",
-                    GWNSTR(name));
-            user->dn = strdup("Unknown");
-        }
-    }
-    else
-    {
-        gw_log_print("UM",'E',"Error getting indentity of user %s.\n",
-                GWNSTR(name));
-        user->dn = strdup("Unknown");
-    }
-
+	sprintf(proxy_command, "grid-proxy-info -exists");
+	if (system(proxy_command) == 0){
+	  /* Here the code relies on the ability of the GridWay daemon to run grid-proxy-info as user
+		 so it will fail on a multi-user instance */
+	  sprintf(proxy_command, "grid-proxy-info -identity");
+	  gw_log_print("UM",'I',"Executing command %s\n", proxy_command);
+	  file = popen(proxy_command, "r");
+	  if (file != NULL){
+		while( fgets(dn, sizeof(dn), file) != NULL ){
+		  // Keep looping even if we just expect one line
+		}
+		
+		pclose(file);
+	  
+	  if (dn != NULL){
+		pline =  strchr(dn, '\n');
+		if (pline != NULL)
+		  *pline = '\0';
+		
+		user->dn = strdup(dn);
+		gw_log_print("UM",'I',"User proxy info, %s\n", user->dn);
+		
+	  }
+	  else{
+		gw_log_print("UM",'I',"Error getting identity of user %s.\n",
+					 GWNSTR(name));
+		user->dn = strdup("Unknown");
+	  }
+	  }
+	  else {
+		gw_log_print("UM",'I',"Error executing grid-proxy-info -identity for user %s.\n",
+					 GWNSTR(name));
+		user->dn = strdup("Unknown");
+	  }
+	}
+	else {
+	  gw_log_print("UM",'I',"Not executing grid-proxy-info for user %s.\n",
+				   GWNSTR(name));
+	  user->dn = strdup("Unknown"); 
+	}
+	
     user->active_jobs  = 0;
     user->running_jobs = 0;
     user->idle         = 0;

@@ -407,8 +407,8 @@ void gw_host_inc_rjobs_nb(gw_host_t *host)
 void gw_host_print(FILE *fd, gw_host_t *host)
 {
     int i;
-    char str[500];
-    char str2[500];
+    char str[GW_MSG_STRING_LONG];
+    char str2[GW_MSG_STRING_SHORT];
     
     if (host != NULL)
     {
@@ -438,23 +438,25 @@ void gw_host_print(FILE *fd, gw_host_t *host)
                         host->queue_maxcputime[i], host->queue_maxcount[i],
                         host->queue_maxrunningjobs[i],
                         host->queue_maxjobsinqueue[i]);
+
                 if (host->queue_status[i] != NULL)
                 {
                     sprintf (str2, ", %s status", 
                                 GWNSTR(host->queue_status[i]));
-                    strncat (str, str2, sizeof(str));
+					//					strncat (str, str2, sizeof(str));
+					strncat (str, str2, GW_MSG_STRING_LONG - strlen(str) - 1);
                 }
                 if (host->queue_dispatchtype[i] != NULL)
                 {
                     sprintf (str2, ", %s type",
                                 GWNSTR(host->queue_dispatchtype[i]));
-                    strncat (str, str2, sizeof(str));
+                    strncat (str, str2, GW_MSG_STRING_LONG - strlen(str) - 1);
                 }
                 if (host->queue_priority[i] != NULL)
                 {
                     sprintf (str2, ", %s priority",
                                 GWNSTR(host->queue_priority[i]));
-                    strncat (str, str2, sizeof(str));
+                    strncat (str, str2, GW_MSG_STRING_LONG - strlen(str) - 1);
                 }
                 gw_print (fd, "IM",'I',"\t%s\n", str);
             }
@@ -464,5 +466,3 @@ void gw_host_print(FILE *fd, gw_host_t *host)
         pthread_mutex_unlock(&(host->mutex));
     }
 }
-
-

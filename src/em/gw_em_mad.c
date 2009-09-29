@@ -120,10 +120,10 @@ int gw_em_mad_init(gw_em_mad_t * em_mad,
 void gw_em_mad_submit(gw_em_mad_t *em_mad, int jid, char *rm_contact, char *rsl)
 {
     char buf[GW_EM_MAX_STRING];
-
+    int write_result;
     sprintf(buf, "SUBMIT %d %s %s\n", jid, rm_contact, rsl);
-    write(em_mad->em_mad_pipe, buf, strlen(buf));
-
+    write_result = write(em_mad->em_mad_pipe, buf, strlen(buf));
+    // We can do something with the result
 }
 
 /* -------------------------------------------------------------------------- */
@@ -132,9 +132,9 @@ void gw_em_mad_submit(gw_em_mad_t *em_mad, int jid, char *rm_contact, char *rsl)
 void gw_em_mad_recover(gw_em_mad_t *em_mad, int jid, char *job_contact)
 {
     char buf[GW_EM_MAX_STRING];
-
+    int write_result;
     sprintf(buf, "RECOVER %d %s -\n", jid, job_contact);
-    write(em_mad->em_mad_pipe, buf, strlen(buf));
+    write_result = write(em_mad->em_mad_pipe, buf, strlen(buf));
 
 }
 
@@ -144,10 +144,9 @@ void gw_em_mad_recover(gw_em_mad_t *em_mad, int jid, char *job_contact)
 void gw_em_mad_cancel(gw_em_mad_t *em_mad, int jid)
 {
     char buf[500];
-
+    int write_result;
     sprintf(buf, "CANCEL %d - -\n", jid);
-    
-    write(em_mad->em_mad_pipe, buf, strlen(buf));
+    write_result = write(em_mad->em_mad_pipe, buf, strlen(buf));
 }
 
 /* -------------------------------------------------------------------------- */
@@ -156,10 +155,9 @@ void gw_em_mad_cancel(gw_em_mad_t *em_mad, int jid)
 void gw_em_mad_poll(gw_em_mad_t *em_mad, int jid)
 {
     char buf[500];
-
+    int write_result;
     sprintf(buf, "POLL %d - -\n", jid);
-    
-    write(em_mad->em_mad_pipe, buf, strlen(buf));
+    write_result = write(em_mad->em_mad_pipe, buf, strlen(buf));
 }
 
 /* -------------------------------------------------------------------------- */
@@ -168,11 +166,13 @@ void gw_em_mad_poll(gw_em_mad_t *em_mad, int jid)
 void gw_em_mad_finalize (gw_em_mad_t *em_mad)
 {
     char buf[50];
-	int  status;
-	pid_t pid;
+    int write_result;
+    int  status;
+    pid_t pid;
 	
     strcpy(buf, "FINALIZE - - -\n");
-    write(em_mad->em_mad_pipe, buf, strlen(buf));
+    write_result = write(em_mad->em_mad_pipe, buf, strlen(buf));
+
 
     close(em_mad->em_mad_pipe);
     close(em_mad->mad_em_pipe);
@@ -210,12 +210,13 @@ void gw_em_mad_finalize (gw_em_mad_t *em_mad)
 int gw_em_mad_reload (gw_em_mad_t *em_mad)
 {
     char  buf[50];
+    int write_result;
     int   status;
     pid_t pid;
     int   rc;
     
     strcpy(buf, "FINALIZE - - -\n");
-    write(em_mad->em_mad_pipe, buf, strlen(buf));
+    write_result = write(em_mad->em_mad_pipe, buf, strlen(buf));
 
     close(em_mad->em_mad_pipe);
     close(em_mad->mad_em_pipe);
@@ -243,6 +244,7 @@ int gw_em_mad_reload (gw_em_mad_t *em_mad)
 static int gw_em_mad_start(gw_em_mad_t * em_mad)
 {
     char buf[50];
+    int write_result;
     char str[GW_EM_MAX_STRING], c;
     char info[GW_EM_MAX_INFO];
     char s_job_id[GW_EM_MAX_JOB_ID];
@@ -308,7 +310,7 @@ static int gw_em_mad_start(gw_em_mad_t * em_mad)
             fcntl(em_mad->mad_em_pipe, F_SETFD, FD_CLOEXEC);
             
             sprintf(buf, "INIT %i - -\n",gw_conf.number_of_jobs);
-            write(em_mad->em_mad_pipe, buf, strlen(buf));
+            write_result = write(em_mad->em_mad_pipe, buf, strlen(buf));
 
             i = 0;
 

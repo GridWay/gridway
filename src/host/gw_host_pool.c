@@ -253,8 +253,8 @@ void gw_host_pool_update (char *hostnames, char *em_mad, char *tm_mad, char *im_
 
         if (host == NULL) 
         {
-            priority = gw_sch_get_host_priority(&(gw_conf.sch_conf), 
-                                                hostname,
+        	priority = gw_sch_get_host_priority(&(gw_conf.sch_conf), 
+        	                                    hostname,
                                                 im_mad);
                                                 
             host_id = gw_host_pool_host_allocate(hostname, 

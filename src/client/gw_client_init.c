@@ -45,6 +45,7 @@ gw_client_t* gw_client_init()
     int             rc; 
     int             i;
     FILE *          fd;
+	int fscanf_result;
     struct passwd * pw_ent;
     struct group *  gr_ent;
 	
@@ -121,7 +122,7 @@ gw_client_t* gw_client_init()
     	pthread_mutex_unlock(&gw_client.mutex);
         return NULL;		
 	} 
-	fscanf(fd,"%s %i",gw_client.hostname, &gw_client.gwd_port);
+	fscanf_result = fscanf(fd,"%s %i",gw_client.hostname, &gw_client.gwd_port);
 	fclose(fd);
 	
 	free(port_file);
@@ -130,16 +131,7 @@ gw_client_t* gw_client_init()
 	     
     rc = gw_parse_file(conf_file,"NUMBER_OF_JOBS",&number_of_jobs_s);
 
-    if ( rc == -1 )
-    {
-        fprintf(stderr,"Error parsing gwd.conf. Cannot access %s\n", conf_file);
-        free(conf_file);
-
-        pthread_mutex_unlock(&gw_client.mutex);
-        return NULL;
-    }
-
-    if ( number_of_jobs_s != NULL )
+    if ( (rc != -1) && (number_of_jobs_s != NULL) )
     {
     	gw_client.number_of_jobs = atoi(number_of_jobs_s);
     	gw_client.job_pool = (gw_msg_job_t **) malloc( sizeof(gw_msg_job_t *) *
@@ -149,7 +141,7 @@ gw_client_t* gw_client_init()
     }
     else
     {
-    	fprintf(stderr,"Error parsing gwd.conf. Cannot find NUMBER_OF_JOBS\n");
+    	fprintf(stderr,"Error parsing gwd.conf. Cannot find NUMBER_OF_HOSTS\n");
     	free(conf_file);
     	
     	pthread_mutex_unlock(&gw_client.mutex);
@@ -162,16 +154,7 @@ gw_client_t* gw_client_init()
 	     
     rc = gw_parse_file(conf_file,"NUMBER_OF_HOSTS",&number_of_hosts_s);
 
-    if ( rc == -1 )
-    {
-        fprintf(stderr,"Error parsing gwd.conf. Cannot access %s\n", conf_file);
-        free(conf_file);
-
-        pthread_mutex_unlock(&gw_client.mutex);
-        return NULL;
-    }
-
-    if ( number_of_hosts_s != NULL )
+    if ( (rc != -1) && (number_of_hosts_s != NULL) )
     {
     	gw_client.number_of_hosts = atoi(number_of_hosts_s);
     	gw_client.host_pool = (gw_msg_host_t **) malloc( sizeof(gw_msg_host_t *) *
@@ -249,7 +232,7 @@ int gw_client_connect()
     struct sockaddr_in gw_addr;
 	struct hostent *   host;
 	int                rc;
-	
+
 	pthread_mutex_lock(&gw_client.mutex);
 	
 	/* ---------------------------------------------- */
@@ -294,7 +277,6 @@ int gw_client_connect()
     }
 	
 	pthread_mutex_unlock(&gw_client.mutex);
-	
 	return fd;
 }
 
@@ -306,7 +288,7 @@ void gw_client_disconnect(int fd)
 {
 	gw_msg_t msg;
 	int      length;
-	
+
 	pthread_mutex_lock(&gw_client.mutex);
 
     msg.msg_type = GW_MSG_DISENGAGE;
@@ -317,4 +299,6 @@ void gw_client_disconnect(int fd)
     close(fd);
 
 	pthread_mutex_unlock(&gw_client.mutex);	
+
 }
+

@@ -201,7 +201,7 @@ int main(int argc, char **argv)
     /* ---------------------------------------------------------------- */
 
     gw_session = gw_client_init();
-    
+
     if ( gw_session == NULL )
     {
         fprintf(stderr,"Could not connect to gwd\n");
@@ -213,9 +213,9 @@ int main(int argc, char **argv)
     /* ---------------------------------------------------------------- */
     
     if (!n) 
-    {                
+    {
         rc = gw_client_job_submit(rpath,init_state,&job_id,deps,fp);
-        
+
         if (rc == GW_RC_SUCCESS)
         {
             if (v)
@@ -231,8 +231,8 @@ int main(int argc, char **argv)
             gw_client_finalize();
             return -1;
         }  
-    }  
-    
+    }
+
     rc = gw_client_array_submit(rpath,
                                 tasks,
                                 init_state,

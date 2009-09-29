@@ -292,16 +292,14 @@ int gw_acct_hidx_cb(DB * uidx_db, const DBT *pkey, const DBT *pdata, DBT *skey)
 void gw_acct_db_close()
 {
 	int rc;
-	
 	if (gw_acct_db.acct_db != NULL)
-	{
+	  {
 		rc = gw_acct_db.acct_db->close(gw_acct_db.acct_db,0);
-		
-		if ( rc != 0 )
-			gw_log_print("DB",'E',"Error closing database (%s).\n",db_strerror(rc));
-			
+		if ( rc != 0 ){
+		  gw_log_print("DB",'E',"Error closing database (%s).\n",db_strerror(rc));
+		}
 		gw_acct_db.acct_db = NULL;
-	}
+	  }
 
 	if ( gw_acct_db.ucursor != NULL )
 	{
@@ -383,7 +381,7 @@ static void gw_acct_db_write_record(gw_job_t *job, gw_history_t *record, int num
 	gw_data.reason = record->reason;	
 	
 	gw_rm_copy_str_short(job->owner,gw_data.username);
-	gw_rm_copy_str_short(record->host->hostname,gw_data.hostname);
+	gw_rm_copy_str_host(record->host->hostname,gw_data.hostname);
 	
 	for (i=0;i<GW_HISTORY_MAX_STATS;i++)
 		gw_data.stats[i] = record->stats[i];
@@ -631,7 +629,7 @@ int gw_acct_join_search_by_user(const char *  username,
                                 time_t        from_time)
 {
 	char **hosts = NULL;
-	char hostname[GW_MSG_STRING_SHORT];
+	char hostname[GW_MSG_STRING_HOST];
 	
 	DBT hkey;
 	DBT pdata;
@@ -664,7 +662,7 @@ int gw_acct_join_search_by_user(const char *  username,
 	memset(&hkey,0,sizeof(DBT));
 
 	hkey.data  = (void *) hostname;
-	hkey.ulen  = sizeof(char) * GW_MSG_STRING_SHORT;
+	hkey.ulen  = sizeof(char) * GW_MSG_STRING_HOST;
 	hkey.flags = DB_DBT_USERMEM;
 			
 	memset(&pdata,0,sizeof(DBT));
@@ -673,8 +671,8 @@ int gw_acct_join_search_by_user(const char *  username,
 	{
 		nhost  = nhost +1;        
 		hosts = realloc((hosts),nhost*sizeof(char *));
-		hosts[nhost-1] = malloc(sizeof(char) * GW_MSG_STRING_SHORT);
-		gw_rm_copy_str_short(hkey.data,hosts[nhost-1]);
+		hosts[nhost-1] = malloc(sizeof(char) * GW_MSG_STRING_HOST);
+		gw_rm_copy_str_host(hkey.data,hosts[nhost-1]);
 	}
 	
 	if ((rc != DB_NOTFOUND) || (hosts == NULL))
@@ -708,7 +706,7 @@ int gw_acct_join_search_by_user(const char *  username,
 		
 		if ( rc == 0 )
 		{
-			gw_rm_copy_str_short(hosts[i],tmp->name);
+			gw_rm_copy_str_host(hosts[i],tmp->name);
 			
 			*nrecs   = *nrecs + 1;
 			*accts = realloc(*accts, *nrecs *sizeof(gw_acct_t *));	
@@ -843,8 +841,8 @@ int gw_acct_join_search_by_host(const char *  hostname,
 
 
 int gw_acct_join_search_by_host_and_user(const char * hostname, 
-					 const char * username,
-					 gw_acct_t ***accts,
+										 const char * username,
+										 gw_acct_t ***accts,
                                          int *        nrecs,
                                          time_t       from_time)
 {	
@@ -853,16 +851,17 @@ int gw_acct_join_search_by_host_and_user(const char * hostname,
 	int rc;
 	
 	*nrecs = 0;
-    *accts = NULL;	
-    // This fifty is the sum of truncated 25+1+25 chars from user+@+host
-        char user_at_host[51];
+    *accts = NULL;
+    // This sum is for the combination of user+@+host
+	int user_at_host_size=GW_MSG_STRING_USER_AT_HOST;
+	char user_at_host[user_at_host_size];
 
 	tmp = (gw_acct_t *) malloc(sizeof(gw_acct_t));
 	rc  = gw_acct_join_search(hostname, username, tmp, from_time);
 	if ( rc == 0 )
 	  {
 	    sprintf(user_at_host,"%s@%s",username,hostname);
-	    gw_rm_copy_str_short(user_at_host,tmp->name);		
+	    gw_rm_copy_str_user_at_host(user_at_host,tmp->name);		
 
 		 /* This always is going to be 1 (username @ hostname)*/
 		*nrecs = *nrecs + 1; 

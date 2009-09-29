@@ -29,11 +29,11 @@
 
 #define GW_EM_MAX_ACTION    20
 
-#define GW_EM_MAX_INFO      500
+#define GW_EM_MAX_INFO      65536
 
 #define GW_EM_MAX_RESULT    10
 
-#define GW_EM_MAX_STRING    16384
+#define GW_EM_MAX_STRING    65536
 
 #define GW_EM_MAX_JOB_ID    5
 

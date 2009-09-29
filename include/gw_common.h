@@ -75,10 +75,12 @@ typedef enum{
 
 /* -------------------------------------------------------------------------- */
 
+/* The next typedef affects the drmaa and some other functions in gw_common.c */
 typedef char gw_short_string_t[50];
 
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
+
 
 char *gw_ret_code_string(gw_return_code_t code);
 

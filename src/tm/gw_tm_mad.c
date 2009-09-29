@@ -76,9 +76,9 @@ int gw_tm_mad_init(gw_tm_mad_t * tm_mad,
 void gw_tm_mad_mkdir(gw_tm_mad_t *tm_mad, int xfr_id, const char *dir)
 {
     char buf[GW_TM_MAX_STRING];
-
+	int write_result;
     sprintf(buf, "MKDIR %d - - %s - \n", xfr_id, dir);
-    write(tm_mad->tm_mad_pipe, buf, strlen(buf));
+    write_result = write(tm_mad->tm_mad_pipe, buf, strlen(buf));
     
     return;    
 
@@ -90,10 +90,9 @@ void gw_tm_mad_mkdir(gw_tm_mad_t *tm_mad, int xfr_id, const char *dir)
 void gw_tm_mad_rmdir(gw_tm_mad_t *tm_mad, int xfr_id, const char *dir)
 {
     char buf[GW_TM_MAX_STRING];
-
+	int write_result;
     sprintf(buf, "RMDIR %d - - %s - \n",xfr_id,dir);
-    
-    write(tm_mad->tm_mad_pipe, buf, strlen(buf));
+    write_result = write(tm_mad->tm_mad_pipe, buf, strlen(buf));
     
     return;    
 }
@@ -109,10 +108,9 @@ void gw_tm_mad_cp(gw_tm_mad_t * tm_mad,
                   const char *  dst)
 {
     char buf[GW_TM_MAX_STRING];
-
+	int write_result;
     sprintf(buf, "CP %d %d %c %s %s\n",xfr_id,cp_xfr_id,modex,src,dst);
-
-    write(tm_mad->tm_mad_pipe, buf, strlen(buf));
+	write_result = write(tm_mad->tm_mad_pipe, buf, strlen(buf));
 }
 
 /* -------------------------------------------------------------------------- */
@@ -121,10 +119,9 @@ void gw_tm_mad_cp(gw_tm_mad_t * tm_mad,
 void gw_tm_mad_start(gw_tm_mad_t *tm_mad, int xfr_id)
 {
     char buf[80];
-
+	int write_result;
     sprintf(buf, "START %d - - - - \n", xfr_id);
-    
-    write(tm_mad->tm_mad_pipe, buf, strlen(buf));
+    write_result = write(tm_mad->tm_mad_pipe, buf, strlen(buf));
 }
 
 /* -------------------------------------------------------------------------- */
@@ -133,10 +130,9 @@ void gw_tm_mad_start(gw_tm_mad_t *tm_mad, int xfr_id)
 void gw_tm_mad_end(gw_tm_mad_t *tm_mad, int xfr_id)
 {
     char buf[80];
-
+	int write_result;
     sprintf(buf, "END %d - - - - \n", xfr_id);
-    
-    write(tm_mad->tm_mad_pipe, buf, strlen(buf));
+	write_result = write(tm_mad->tm_mad_pipe, buf, strlen(buf));
 }
 
 /* -------------------------------------------------------------------------- */
@@ -145,10 +141,9 @@ void gw_tm_mad_end(gw_tm_mad_t *tm_mad, int xfr_id)
 void gw_tm_mad_exists(gw_tm_mad_t *tm_mad, int xfr_id, const char *dir)
 {
     char buf[GW_TM_MAX_STRING];
-
+	int write_result;
     sprintf(buf, "EXISTS %d - - %s - \n",xfr_id,dir);
-    
-    write(tm_mad->tm_mad_pipe, buf, strlen(buf));
+    write_result = write(tm_mad->tm_mad_pipe, buf, strlen(buf));
 }
 
 /* -------------------------------------------------------------------------- */
@@ -159,9 +154,9 @@ void gw_tm_mad_finalize (gw_tm_mad_t *tm_mad)
     char buf[50];
 	int  status;
 	pid_t pid;
-	
+	int write_result;
     strcpy(buf, "FINALIZE - - - - -\n");
-    write(tm_mad->tm_mad_pipe, buf, strlen(buf));
+    write_result = write(tm_mad->tm_mad_pipe, buf, strlen(buf));
 
     close(tm_mad->tm_mad_pipe);
     close(tm_mad->mad_tm_pipe);
@@ -204,9 +199,9 @@ int gw_tm_mad_reload (gw_tm_mad_t *tm_mad)
     char buf[50];
     int  status;
     pid_t pid, rc;
-    
+    int write_result;
     strcpy(buf, "FINALIZE - - - - -\n");
-    write(tm_mad->tm_mad_pipe, buf, strlen(buf));
+    write_result = write(tm_mad->tm_mad_pipe, buf, strlen(buf));
 
     close(tm_mad->tm_mad_pipe);
     close(tm_mad->mad_tm_pipe);
@@ -241,7 +236,7 @@ static int gw_tm_mad_start_mad(gw_tm_mad_t * tm_mad)
     char s_cp_xfr_id[5];
     char result[GW_TM_MAX_RESULT];
     char action[GW_TM_MAX_ACTION];
-    
+    int write_result;
     fd_set          rfds;
     struct timeval  tv;
     
@@ -301,7 +296,7 @@ static int gw_tm_mad_start_mad(gw_tm_mad_t * tm_mad)
             fcntl(tm_mad->mad_tm_pipe, F_SETFD, FD_CLOEXEC);
             
             sprintf(buf, "INIT %i - - - -\n",gw_conf.number_of_jobs);
-            write(tm_mad->tm_mad_pipe, buf, strlen(buf));
+            write_result = write(tm_mad->tm_mad_pipe, buf, strlen(buf));
 
             i = 0;
             

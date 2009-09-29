@@ -24,6 +24,9 @@
 #include "gw_rm_msg.h"
 #include "gw_job.h"
 
+#define GW_ACCT_COMMAND_XML "gwacct"
+// Next size corresponds to the maximum 6+1+USERNAME="..."+1+HOSTNAME="..."
+#define GW_ACCT_COMMAND_OPEN_SIZE_XML 29+GW_MSG_STRING_USER_AT_HOST
 /* -------------------------------------------------------------------------- */
 
 typedef struct gw_acct_key_s
@@ -38,8 +41,7 @@ typedef struct gw_acct_key_s
 typedef struct gw_acct_data_s
 {
 	char                  username[GW_MSG_STRING_SHORT];
-	
-	char                  hostname[GW_MSG_STRING_SHORT];
+	char                  hostname[GW_MSG_STRING_HOST];
 	int                   rank;
     time_t                stats[GW_HISTORY_MAX_STATS];
     
@@ -50,7 +52,7 @@ typedef struct gw_acct_data_s
 
 typedef struct gw_acct_s
 {
-	char    name[GW_MSG_STRING_SHORT];
+	char    name[GW_MSG_STRING_HOST];
 	
 	time_t	transfer;
 	time_t  execution;
@@ -117,8 +119,8 @@ int gw_acct_join_search_by_host(const char * hostname,
                                 time_t from_time);  
                                 
 int gw_acct_join_search_by_host_and_user(const char * hostname, 
-					 const char * username,
-					 gw_acct_t *** accts,
+										 const char * username,
+										 gw_acct_t *** accts,
                                          int *        nrecs,
                                          time_t from_time);
 

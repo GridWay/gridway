@@ -81,7 +81,7 @@ void gw_scheduler_add_host(gw_scheduler_t * sched,
     
     sched->hosts[i].dispatched   = 0;
 
-    strncpy(sched->hosts[i].name, hostname, GW_MSG_STRING_SHORT-1);
+    strncpy(sched->hosts[i].name, hostname, GW_MSG_STRING_HOST-1);
 
 #ifdef GWSCHEDDEBUG
    	gw_scheduler_print('D',"Host %s (%i) added, updating user information:\n",

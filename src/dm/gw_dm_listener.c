@@ -59,7 +59,7 @@ void gw_dm_listener(void *arg)
                 
                 if ( dm_mad == NULL )
                     continue;
-                                                
+
                 j = 0;
 
                 do
@@ -68,8 +68,8 @@ void gw_dm_listener(void *arg)
                     str[j++] = c;    
                 }                
                 while ((rc > 0) && (c != '\n') && (j < (GW_DM_MAX_STRING-1)));
-                
-                str[j] = '\0';    
+
+				str[j] = '\0';    
 
                 if (rc <= 0) /* Error Reading message from MAD! */
                 {

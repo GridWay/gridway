@@ -60,10 +60,10 @@ int gw_dm_mad_init(gw_dm_mad_t *dm_mad, const char *exe, const char *name,
 void gw_dm_mad_schedule(gw_dm_mad_t *dm_mad)
 {
     char buf[GW_DM_MAX_STRING];
-
+	int write_result;
     sprintf(buf, "SCHEDULE - - - - -\n");
-    write(dm_mad->dm_mad_pipe, buf, strlen(buf));
-    
+    write_result = write(dm_mad->dm_mad_pipe, buf, strlen(buf));
+
     return;
 }
 
@@ -77,9 +77,9 @@ void gw_dm_mad_host_monitor(gw_dm_mad_t * dm_mad,
                             char *        name)
 {
     char buf[GW_DM_MAX_STRING];
-
+	int write_result;
     sprintf(buf, "HOST_MONITOR %i %i %i %s -\n",hid,uslots,rjobs,name);
-    write(dm_mad->dm_mad_pipe, buf, strlen(buf));
+    write_result = write(dm_mad->dm_mad_pipe, buf, strlen(buf));
     
     return;
 }
@@ -94,9 +94,9 @@ void gw_dm_mad_user_add(gw_dm_mad_t * dm_mad,
                         char *        name)
 {
     char buf[GW_DM_MAX_STRING];
-
+	int write_result;
     sprintf(buf, "USER_ADD %i %i %i %s -\n",uid,aslots,rslots,name);
-    write(dm_mad->dm_mad_pipe, buf, strlen(buf));
+	write_result = write(dm_mad->dm_mad_pipe, buf, strlen(buf));
     
     return;
 }
@@ -108,9 +108,9 @@ void gw_dm_mad_user_del(gw_dm_mad_t * dm_mad,
                         int           uid)
 {
     char buf[GW_DM_MAX_STRING];
-
+	int write_result;
     sprintf(buf, "USER_DEL %i - - - -\n",uid);
-    write(dm_mad->dm_mad_pipe, buf, strlen(buf));
+    write_result = write(dm_mad->dm_mad_pipe, buf, strlen(buf));
     
     return;
 }
@@ -122,9 +122,9 @@ void gw_dm_mad_job_del(gw_dm_mad_t * dm_mad,
                        int           jid)
 {
     char buf[GW_DM_MAX_STRING];
-
+	int write_result;
     sprintf(buf, "JOB_DEL %i - - - -\n",jid);
-    write(dm_mad->dm_mad_pipe, buf, strlen(buf));
+    write_result = write(dm_mad->dm_mad_pipe, buf, strlen(buf));
     
     return;
 }
@@ -138,9 +138,9 @@ void gw_dm_mad_job_failed(gw_dm_mad_t *         dm_mad,
                           gw_migration_reason_t reason)
 {
     char buf[GW_DM_MAX_STRING];
-
+	int write_result;
     sprintf(buf, "JOB_FAILED %i %i %i - -\n",hid,uid,reason);
-    write(dm_mad->dm_mad_pipe, buf, strlen(buf));
+    write_result = write(dm_mad->dm_mad_pipe, buf, strlen(buf));
     
     return;
 }
@@ -156,9 +156,9 @@ void gw_dm_mad_job_success(gw_dm_mad_t * dm_mad,
                            float         exe)
 {
     char buf[GW_DM_MAX_STRING];
-
+	int write_result;
     sprintf(buf, "JOB_SUCCESS %i %i %f %f %f\n",hid,uid,xfr,sus,exe);
-    write(dm_mad->dm_mad_pipe, buf, strlen(buf));
+    write_result = write(dm_mad->dm_mad_pipe, buf, strlen(buf));
     
     return;
 }
@@ -173,10 +173,10 @@ void gw_dm_mad_job_schedule(gw_dm_mad_t *         dm_mad,
                             gw_migration_reason_t reason)
 {
     char buf[GW_DM_MAX_STRING];
-
+	int write_result;
     sprintf(buf, "JOB_SCHEDULE %i %i %i %i -\n",
             jid,aid,uid,reason);
-    write(dm_mad->dm_mad_pipe, buf, strlen(buf));
+    write_result = write(dm_mad->dm_mad_pipe, buf, strlen(buf));
     
     return;
 }
@@ -189,10 +189,10 @@ void gw_dm_mad_finalize (gw_dm_mad_t *dm_mad)
     char buf[50];
 	int  status;
 	pid_t pid;
-	
+	int write_result;
     strcpy(buf, "FINALIZE - - - - -\n");
     
-    write(dm_mad->dm_mad_pipe, buf, strlen(buf));
+    write_result = write(dm_mad->dm_mad_pipe, buf, strlen(buf));
 
     close(dm_mad->dm_mad_pipe);
     close(dm_mad->mad_dm_pipe);
@@ -227,13 +227,13 @@ int gw_dm_mad_reload (gw_dm_mad_t *dm_mad)
     int   status;
     pid_t pid;
     int   rc;
-   
+	int write_result;
     gw_log_print("DM",'I',"Reloading the scheduler: %s (pid %i).\n"
                  ,dm_mad->name, dm_mad->pid);
 
     strcpy(buf, "FINALIZE - - - - -\n");
     
-    write(dm_mad->dm_mad_pipe, buf, strlen(buf));
+    write_result = write(dm_mad->dm_mad_pipe, buf, strlen(buf));
 
     close(dm_mad->dm_mad_pipe);
     close(dm_mad->mad_dm_pipe);
@@ -266,7 +266,7 @@ static int gw_dm_mad_start(gw_dm_mad_t *dm_mad)
     char s_id[GW_DM_MAX_ID];
     char result[GW_DM_MAX_RESULT];
     char action[GW_DM_MAX_ACTION];
-    
+    int write_result;
     fd_set          rfds;
     struct timeval  tv;
     
@@ -314,7 +314,7 @@ static int gw_dm_mad_start(gw_dm_mad_t *dm_mad)
             fcntl(dm_mad->mad_dm_pipe, F_SETFD, FD_CLOEXEC);
 
             strcpy(buf, "INIT - - - - -\n");
-            write(dm_mad->dm_mad_pipe, buf, strlen(buf));
+            write_result = write(dm_mad->dm_mad_pipe, buf, strlen(buf));
 
             i = 0;
             

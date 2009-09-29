@@ -32,7 +32,9 @@
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
-#define GW_MSG_STRING_LONG   256
+#define GW_MSG_STRING_LONG   1024
+#define GW_MSG_STRING_HOST   40
+#define GW_MSG_STRING_USER_AT_HOST   66
 #define GW_MSG_STRING_SHORT  25
 #define GW_MSG_STATS_LENGTH  5
 
@@ -55,11 +57,29 @@ if (src != NULL){\
  else\
     dst[0]='\0'
 
+#define gw_rm_copy_str_host(src,dst)\
+if (src != NULL){\
+    strncpy(dst, src, GW_MSG_STRING_HOST);\
+    if ( strlen(src) >= GW_MSG_STRING_HOST )\
+    dst[GW_MSG_STRING_HOST-1] = '\0';\
+ }\
+ else\
+    dst[0]='\0'
+
+#define gw_rm_copy_str_user_at_host(src,dst)\
+if (src != NULL){\
+    strncpy(dst, src, GW_MSG_STRING_USER_AT_HOST);\
+    if ( strlen(src) >= GW_MSG_STRING_USER_AT_HOST )\
+    dst[GW_MSG_STRING_USER_AT_HOST-1] = '\0';\
+ }\
+ else\
+    dst[0]='\0'
+
 #define gw_rm_copy_str_long(src,dst)\
 if (src != NULL){\
     strncpy(dst, src, GW_MSG_STRING_LONG);\
     if ( strlen(src) >= GW_MSG_STRING_LONG )\
-    dst[GW_MSG_STRING_SHORT-1] = '\0';\
+    dst[GW_MSG_STRING_LONG-1] = '\0';\
  }\
  else\
     dst[0]='\0'
@@ -118,7 +138,7 @@ typedef struct gw_msg_s
     char group[GW_MSG_STRING_SHORT];
     char proxy_path[GW_MSG_STRING_LONG];
 
-    int	      init_state;	
+    int	init_state;	
     gw_template_t jt;
 
     int job_id;
@@ -143,7 +163,8 @@ typedef struct gw_msg_job_s
 
     char owner[GW_MSG_STRING_SHORT];
     char name[GW_MSG_STRING_SHORT];
-    char host[GW_MSG_STRING_SHORT];
+  // This host includes the hostname/lrms combination, using larger size than host
+    char host[GW_MSG_STRING_USER_AT_HOST];
     
     int id;
     int array_id;
@@ -205,8 +226,8 @@ typedef struct gw_msg_history_s
     time_t migration_etime;
        
     char rdir[GW_MSG_STRING_SHORT];
-    		     
-	char em_rc[GW_MSG_STRING_SHORT];
+  // Next contains hostname/lrms
+	char em_rc[GW_MSG_STRING_USER_AT_HOST];
     char queue[GW_MSG_STRING_SHORT];
     	
     int tries;
@@ -219,7 +240,7 @@ typedef struct gw_msg_history_s
 
 typedef struct gw_msg_host_s 
 {
-	gw_msg_type_t	 msg_type;
+	gw_msg_type_t msg_type;
 	gw_return_code_t rc;
 	
     char em_mad[GW_MSG_STRING_SHORT];
@@ -232,7 +253,7 @@ typedef struct gw_msg_host_s
     int host_id;
     int fixed_priority;
 
-    char hostname[GW_MSG_STRING_SHORT];
+    char hostname[GW_MSG_STRING_HOST];
     char arch[GW_MSG_STRING_SHORT];
     char os_name[GW_MSG_STRING_SHORT];
     char os_version[GW_MSG_STRING_SHORT];
@@ -271,7 +292,7 @@ typedef struct gw_msg_host_s
 
 	int  number_of_str_vars;
    	char gen_var_str_name[GW_HOST_MAX_GENVARS][GW_MSG_STRING_SHORT];
-   	char gen_var_str_value[GW_HOST_MAX_GENVARS][GW_MSG_STRING_SHORT];   	
+   	char gen_var_str_value[GW_HOST_MAX_GENVARS][GW_MSG_STRING_LONG];   	
     
 } gw_msg_host_t;
 
@@ -287,7 +308,7 @@ typedef struct gw_msg_match_s
 
 	gw_boolean_t     matched;
 
-    char hostname[GW_MSG_STRING_SHORT];
+    char hostname[GW_MSG_STRING_HOST];
 	int  running_jobs;
 	
 	int  number_of_queues;

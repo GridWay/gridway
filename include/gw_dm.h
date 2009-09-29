@@ -25,9 +25,9 @@
 #include "gw_dm_mad.h"
 
 #define GW_DM_MAX_ACTION    20
-#define GW_DM_MAX_INFO      500
+#define GW_DM_MAX_INFO      1024
 #define GW_DM_MAX_RESULT    10
-#define GW_DM_MAX_STRING    16384
+#define GW_DM_MAX_STRING    32768
 #define GW_DM_MAX_ID        5
 
 /* -------------------------------------------------------------------------- */

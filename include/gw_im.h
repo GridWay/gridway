@@ -28,9 +28,9 @@
 /* -------------------------------------------------------------------------- */
 
 #define GW_IM_MAX_ACTION    20
-#define GW_IM_MAX_INFO      16384
+#define GW_IM_MAX_INFO      65536
 #define GW_IM_MAX_RESULT    10
-#define GW_IM_MAX_STRING    16384
+#define GW_IM_MAX_STRING    65536
 #define GW_IM_MAX_HOST_ID   5
 
 /* -------------------------------------------------------------------------- */

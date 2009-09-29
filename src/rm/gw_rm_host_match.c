@@ -73,7 +73,7 @@ void gw_rm_job_match(int client_socket, int job_id)
 			msg.fixed_priority = host->fixed_priority;
 			msg.running_jobs   = host->running_jobs;
 			
-			gw_rm_copy_str_short(host->hostname, msg.hostname);
+			gw_rm_copy_str_host(host->hostname, msg.hostname);
               
             for (j=0;j<GW_HOST_MAX_QUEUES;j++)
             {

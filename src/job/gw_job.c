@@ -43,9 +43,9 @@ int gw_job_fill(gw_job_t *job, const gw_msg_t *msg)
 {
     int    rc;
     FILE   *log, *template_file, *file;
-    char   str_buffer[2048];
-    char   sh_command[1024];
-    char   conf_filename[2048], template_filename[2048];
+    char   str_buffer[PATH_MAX];
+    char   sh_command[PATH_MAX];
+    char   conf_filename[PATH_MAX], template_filename[PATH_MAX];
     
 /* -------------------------------------------------------------------------- */
 
@@ -99,7 +99,7 @@ int gw_job_fill(gw_job_t *job, const gw_msg_t *msg)
     if ( job->template.checkpoint_url == NULL )
     {
         snprintf(str_buffer,
-                 2047,
+                 PATH_MAX-1,
                  "file://%s/" GW_VAR_DIR "/%d/", 
                  gw_conf.gw_location, 
                  job->id);
@@ -118,12 +118,14 @@ int gw_job_fill(gw_job_t *job, const gw_msg_t *msg)
         return -1;
     }
 
-    if (msg->proxy_path[0] == '\0')
+    if (msg->proxy_path[0] == '\0'){
         fprintf(file, "%ld %s - %s %i %i\n", job->start_time, job->owner,
                 job->template.job_home, msg->pstart, msg->pinc);
-    else
+	}
+    else {
         fprintf(file, "%ld %s %s %s %i %i\n", job->start_time, job->owner, msg->proxy_path,
                 job->template.job_home, msg->pstart, msg->pinc);
+	}
     
     fclose(file);
     
@@ -326,7 +328,7 @@ void gw_job_set_state(gw_job_t *job, gw_job_state_t job_state,
         gw_boolean_t recover)
 {
     FILE* file;
-    char state_file[2048];
+    char state_file[PATH_MAX];
     
     if ( job == NULL )
     	return;

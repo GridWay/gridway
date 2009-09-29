@@ -169,29 +169,16 @@ int main(int argc, char **argv)
     	if (rc == GW_RC_SUCCESS)
         {
 		  if (x){
-			// A.L: It would be nice to include all this settings for header and footer
-			// in the gw_client_print_history_xml function
-			int max_command_open_len=24;
-			char command[]="gwhost";
-			char command_open[max_command_open_len];
-			
+			char command[]=GW_HOST_COMMAND_XML;
+			char command_open[GW_HOST_COMMAND_OPEN_SIZE_XML];
 			sprintf (command_open, "%s JOB_ID=\"%i\"", command, job_id);
-			int xml_header_flag = 1, xml_footer_flag = 1;
-			
+			gw_print_xml_header(command_open);
 			for (i=0;i<num_records;i++){
-			  if ( xml_header_flag ){
-				gw_print_xml_header(command_open);
-				xml_header_flag = 0;
-			  }
 			  gw_client_print_host_match_xml(&(match_list[i]));
 			}
-			if ( xml_footer_flag ){
-			  gw_print_xml_footer(command);
-			  xml_footer_flag = 0;
-			}
+			gw_print_xml_footer(command);
 		  } 
 		  else {
-
         	if (!n)
         		gw_client_print_host_match_header();
 			
@@ -232,11 +219,19 @@ int main(int argc, char **argv)
 				gw_client_print_host_status_full(&host_status);
 			  else
 				gw_client_print_host_pool_status_full();
-			else if (x)
-			  if (host_id != -1)
-				gw_client_print_host_status_xml(&host_status, 1, 1);
-			  else
+			else if (x){
+			  char command[]=GW_HOST_COMMAND_XML;
+			  char command_open[GW_HOST_COMMAND_OPEN_SIZE_XML];
+			  sprintf (command_open, "%s", command);
+			  gw_print_xml_header(command_open);		  
+			  if (host_id != -1){
+				gw_client_print_host_status_xml(&host_status);
+			  }
+			  else{
 				gw_client_print_host_pool_status_xml();
+			  }
+			  gw_print_xml_footer(command);
+			}
 			else
 			  {
 				if (!n)

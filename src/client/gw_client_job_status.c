@@ -40,7 +40,6 @@ gw_return_code_t gw_client_job_status(int job_id, gw_msg_job_t *job_status)
 	int      rc;
 	gw_msg_t msg;
 	int      fd;
-	
 	if ( gw_client.initialize == GW_FALSE )
 		return GW_RC_FAILED_INIT;
  	
@@ -128,7 +127,7 @@ gw_return_code_t gw_client_job_status_all( )
 	int            i;
 	int            rc;
 	int            fd;
-	
+
 	if ( gw_client.initialize == GW_FALSE )
 		return GW_RC_FAILED_INIT;
 	   
@@ -295,7 +294,7 @@ gw_return_code_t gw_client_job_history(int                 job_id,
     pthread_mutex_unlock(&(gw_client.mutex));
    	
    	length       = sizeof(gw_msg_t);
-   	
+
     /* ----------------------------------------------------------------- */
     /* 2.- Send pool status request    	      	      	      	      	 */
     /* ----------------------------------------------------------------- */

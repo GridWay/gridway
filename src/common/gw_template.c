@@ -22,6 +22,7 @@
 #include <unistd.h>
 #include <ctype.h>
 #include <time.h>
+#include <limits.h>
 
 #include "gw_template.h"
 #include "gw_job_template.h"
@@ -62,24 +63,25 @@ void gw_template_sarray_init( char array[GW_JT_FILES][GW_JT_STR] )
 int gw_template_init(gw_template_t *jt, const char *jt_file)
 {
     struct passwd * pw_ent;
-    char            path[1024];
+	
+	char            path[PATH_MAX];
     char *          tmp;
     time_t          the_time;
     char *          GW_LOCATION;
 	int             rc;
-
 
     if ( jt_file[strlen(jt_file)-1] == '/' )
     {
         strncpy(path,     jt_file, strlen(jt_file)-1);
         strncpy(jt->file, "stdin", GW_JT_PATH);
         strncpy(jt->name, "stdin", GW_JT_STR);
-        
     }
     else
     {
+
         if ( realpath (jt_file, path) == NULL )
             return -1;
+
 
         tmp = strrchr(path,'/') + 1;
 

@@ -24,12 +24,17 @@
 #include "gw_common.h"
 
 
-#define GW_HOST_MAX_QUEUES       20
-#define GW_HOST_MAX_GENVARS      20
+#define GW_HOST_MAX_QUEUES       67
+//Double the GW_HOST_MAX_QUEUES for 2 variables
+#define GW_HOST_MAX_GENVARS      134
 #define GW_HOST_CPU_FREE_LIMIT   50
 
 #define GW_HOST_MAX_PRIORITY       99
 #define GW_HOST_MIN_PRIORITY       00
+
+#define GW_HOST_COMMAND_XML "gwhost"
+//  Next size corresponds to the maximum 6+1+JOB_ID="..." (don't expect more than 99 million jobs)
+#define GW_HOST_COMMAND_OPEN_SIZE_XML 24
 
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */

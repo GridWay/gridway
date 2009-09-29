@@ -275,14 +275,16 @@ int main(int argc, char **argv)
             move(0,0);
         }
 
-	    if (job_id != -1)
-	    	rc = gw_client_job_status(job_id, &job_status);
-		else	    		    
-			rc = gw_client_job_status_all( );
+	    if (job_id != -1){
+		  rc = gw_client_job_status(job_id, &job_status);
+		}
+		else {
+		  rc = gw_client_job_status_all( );
+		}
 
     	if (rc == GW_RC_SUCCESS)
         {
-        	if (f)
+		    if (f)
             {
 		        if (job_id != -1)
 		        	gw_client_print_status_full(&job_status);
@@ -290,14 +292,33 @@ int main(int argc, char **argv)
 	    	    	gw_client_print_pool_status_full(username, hostname, jobstate, array_id);
             }
 			else if (x)
-			  {
-		        if (job_id != -1)
-				  gw_client_print_status_xml(&job_status, 1, 1);
-    			else	   	    
-				  gw_client_print_pool_status_xml(username, hostname, jobstate, array_id);
+			{
+			  char command[]=GW_PS_COMMAND_XML;
+			  char command_open[GW_PS_COMMAND_OPEN_SIZE_XML];
+
+			  if ( username == NULL && hostname == NULL ){
+				sprintf (command_open, "%s", command);
+			  } 
+			  else if ( username != NULL && hostname == NULL ){
+				sprintf (command_open, "%s USERNAME=\"%s\"", command, username);
+			  } 
+			  else if ( username == NULL && hostname != NULL ){
+				sprintf (command_open, "%s HOSTNAME=\"%s\"", command, hostname);
+			  } 
+			  else if ( username != NULL && hostname != NULL ){
+				sprintf (command_open, "%s USERNAME=\"%s\" HOSTNAME=\"%s\"", command, username, hostname);
 			  }
+			  gw_print_xml_header(command_open);		  
+			  if (job_id != -1){
+				gw_client_print_status_xml(&job_status);
+			  }
+			  else {
+				gw_client_print_pool_status_xml(username, hostname, jobstate, array_id);
+			  }
+			  gw_print_xml_footer(command);
+			}
             else
-            {
+			{
             	if (!n)
             		gw_client_print_status_header(outoption);
 

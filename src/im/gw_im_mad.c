@@ -69,12 +69,11 @@ int gw_im_mad_init(gw_im_mad_t *im_mad, const char *exe, const char *name,
 void gw_im_mad_discover(gw_im_mad_t *im_mad)
 {
     char buf[GW_IM_MAX_STRING];
-
+	int write_result;
     sprintf(buf, "DISCOVER - - -\n");
-    write(im_mad->im_mad_pipe, buf, strlen(buf));
-    
-    return;    
+    write_result = write(im_mad->im_mad_pipe, buf, strlen(buf));
 
+    return;    
 }
 
 /* -------------------------------------------------------------------------- */
@@ -83,10 +82,9 @@ void gw_im_mad_discover(gw_im_mad_t *im_mad)
 void gw_im_mad_monitor(gw_im_mad_t *im_mad, int host_id, char *host)
 {
     char buf[GW_IM_MAX_STRING];
-
+	int write_result;
     sprintf(buf, "MONITOR %d %s -\n", host_id, host);
-    
-    write(im_mad->im_mad_pipe, buf, strlen(buf));
+    write_result = write(im_mad->im_mad_pipe, buf, strlen(buf));
     
     return;    
 }
@@ -97,13 +95,14 @@ int gw_im_mad_reload (gw_im_mad_t *im_mad)
     int  status;
     pid_t pid;
     int rc;
+	int write_result;
 
     gw_log_print("DM",'I',"Reloading IM driver: %s (pid %i).\n"
                  ,im_mad->name, im_mad->pid);
                      
     strcpy(buf, "FINALIZE - - -\n");
     
-    write(im_mad->im_mad_pipe, buf, strlen(buf));
+    write_result = write(im_mad->im_mad_pipe, buf, strlen(buf));
 
     close(im_mad->im_mad_pipe);
     close(im_mad->mad_im_pipe);
@@ -135,10 +134,10 @@ void gw_im_mad_finalize (gw_im_mad_t *im_mad)
     char buf[50];
 	int  status;
 	pid_t pid;
-	
+	int write_result;
     strcpy(buf, "FINALIZE - - -\n");
     
-    write(im_mad->im_mad_pipe, buf, strlen(buf));
+    write_result = write(im_mad->im_mad_pipe, buf, strlen(buf));
 
     close(im_mad->im_mad_pipe);
     close(im_mad->mad_im_pipe);
@@ -178,7 +177,7 @@ static int gw_im_mad_start(gw_im_mad_t *im_mad)
     char s_host_id[GW_IM_MAX_HOST_ID];
     char result[GW_IM_MAX_RESULT];
     char action[GW_IM_MAX_ACTION];
-    
+    int write_result;
     int im_mad_pipe[2], mad_im_pipe[2];
     int i, rc;
 
@@ -223,7 +222,7 @@ static int gw_im_mad_start(gw_im_mad_t *im_mad)
             fcntl(im_mad->mad_im_pipe, F_SETFD, FD_CLOEXEC);
             
             strcpy(buf, "INIT - - -\n");
-            write(im_mad->im_mad_pipe, buf, strlen(buf));
+            write_result = write(im_mad->im_mad_pipe, buf, strlen(buf));
 
             i = 0;
             

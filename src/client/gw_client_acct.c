@@ -92,7 +92,6 @@ gw_return_code_t gw_client_host_accts(const char *host, gw_acct_t ***host_accts,
 gw_return_code_t gw_client_host_and_user_accts(const char *host, const char *user, gw_acct_t ***accts, int *num_records, time_t from_time)
 {
 	int rc;
-	
 	rc = gw_acct_db_open(GW_FALSE);
 	
 	if ( rc != 0 )
@@ -104,9 +103,9 @@ gw_return_code_t gw_client_host_and_user_accts(const char *host, const char *use
 	}
 	
 	rc = gw_acct_join_search_by_host_and_user(host, user, accts, num_records, from_time);
-	
+
  	gw_acct_db_close();
-	
+
 	if ( rc == 0 )
 		return GW_RC_SUCCESS;	
 	else 

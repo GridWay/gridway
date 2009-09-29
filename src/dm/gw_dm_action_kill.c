@@ -32,7 +32,7 @@ void gw_dm_kill (void *_job_id)
     int          array_id;
     int          task_id;
     gw_array_t * array;
-	char   		 conf_filename[2048];
+	char   		 conf_filename[GW_MSG_STRING_LONG];
 	    
 	/* ----------------------------------------------------------- */  
     /* 0.- Get job pointer                                         */
@@ -148,7 +148,7 @@ void gw_dm_kill_hard (void *_job_id)
     int          array_id;
     int          task_id;
     gw_array_t * array;
-	char   		 conf_filename[2048];
+	char   		 conf_filename[GW_MSG_STRING_LONG];
 	    
 	/* ----------------------------------------------------------- */  
     /* 0.- Get job pointer                                         */

@@ -41,7 +41,7 @@ typedef struct gw_client_s
   char *           proxy_path;
   
   int              gwd_port;
-  char             hostname[256];
+  char             hostname[GW_MSG_STRING_HOST];
   
   gw_boolean_t     initialize;
   

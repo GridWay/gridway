@@ -25,6 +25,7 @@
 #include "gw_common.h"
 #include "gw_conf.h"
 #include "gw_log.h"
+#include "gw_rm_msg.h"
 
 /* Local functions */
 static int gw_host_search_genvar_int(char *name, gw_host_t *host);
@@ -386,13 +387,14 @@ void gw_host_set_var_null(gw_host_var_t var, int index, gw_host_t *host)
 void gw_host_set_genvar_int(char *var, int index, int value, gw_host_t *host)
 {
     int p;
-    char name[500];
+    char name[GW_MSG_STRING_LONG];
     
     if (index == -1)
     {
         /* Scalar variable */
-        strncpy(name, var, sizeof(char) * 499);
-        name[499]='\0';
+		int name_size_minus_one= GW_MSG_STRING_LONG-1;
+        strncpy(name, var, sizeof(char) * name_size_minus_one);
+        name[name_size_minus_one]='\0';
     } 
     else if (index >= GW_HOST_MAX_QUEUES)
     {
@@ -403,7 +405,7 @@ void gw_host_set_genvar_int(char *var, int index, int value, gw_host_t *host)
     else
     {
         /* Array variable */
-        snprintf(name, sizeof(char) * 499, "%s[%i]", var, index);
+        snprintf(name, sizeof(char) * (GW_MSG_STRING_LONG-1), "%s[%i]", var, index);
     }
     
 #ifdef GWHOSTDEBUG    
@@ -433,13 +435,14 @@ void gw_host_set_genvar_int(char *var, int index, int value, gw_host_t *host)
 void gw_host_set_genvar_str(char *var, int index, char *value, gw_host_t *host)
 {
     int p;
-    char name[500];
+    char name[GW_MSG_STRING_LONG];
     
     if (index == -1)
     {
         /* Scalar variable */
-        strncpy(name, var, sizeof(char) * 499);
-        name[499]='\0';        
+		int name_size_minus_one= GW_MSG_STRING_LONG-1;
+        strncpy(name, var, sizeof(char) * name_size_minus_one);
+        name[name_size_minus_one]='\0';        
     }
     else if (index >= GW_HOST_MAX_QUEUES)
     {
@@ -450,7 +453,7 @@ void gw_host_set_genvar_str(char *var, int index, char *value, gw_host_t *host)
     else
     {
         /* Array variable */
-        snprintf(name, sizeof(char) * 499, "%s[%i]", var, index);
+        snprintf(name, sizeof(char) * (GW_MSG_STRING_LONG-1), "%s[%i]", var, index);
     }
 
 #ifdef GWHOSTDEBUG
@@ -483,7 +486,7 @@ void gw_host_set_genvar_str(char *var, int index, char *value, gw_host_t *host)
 void gw_host_set_genvar_null(char *var, int index, gw_host_t *host)
 {
     int i;
-    char name[500];
+    char name[GW_MSG_STRING_LONG];
         
 #ifdef GWHOSTDEBUG
     gw_log_print("IM",'D',"Setting null value for generic variable %s, host %i.\n",    
@@ -493,8 +496,9 @@ void gw_host_set_genvar_null(char *var, int index, gw_host_t *host)
     if (index == -1)
     {
         /* Scalar variable */
-        strncpy(name, var, sizeof(char) * 499);
-        name[499]='\0';
+		int name_size_minus_one= GW_MSG_STRING_LONG-1;
+        strncpy(name, var, sizeof(char) * name_size_minus_one);
+        name[name_size_minus_one]='\0';
     }
     else if (index >= GW_HOST_MAX_QUEUES)
     {
@@ -504,7 +508,7 @@ void gw_host_set_genvar_null(char *var, int index, gw_host_t *host)
     }
     else /* Array variable */
     {        
-        snprintf(name,sizeof(char) * 499,"%s[%i]", var, index);
+        snprintf(name,sizeof(char) * (GW_MSG_STRING_LONG-1),"%s[%i]", var, index);
     }
     
     for (i = 0; i < GW_HOST_MAX_GENVARS; i++)
@@ -670,7 +674,7 @@ int gw_host_get_genvar_int(char *var, int index, gw_host_t *host)
 {
     int  p;
     int  result;
-    char name[500];
+    char name[GW_MSG_STRING_LONG];
     
     if (index >= GW_HOST_MAX_QUEUES)
     {
@@ -680,8 +684,9 @@ int gw_host_get_genvar_int(char *var, int index, gw_host_t *host)
     }
 
     /* Scalar variable */
-    strncpy(name, var, sizeof(char) * 499);
-    name[499]='\0';
+	int name_size_minus_one= GW_MSG_STRING_LONG-1;
+    strncpy(name, var, sizeof(char) * name_size_minus_one);
+    name[name_size_minus_one]='\0';
     
 #ifdef GWHOSTDEBUG
     gw_log_print("IM",'D',"Getting generic integer variable (%s) for host %i.\n",
@@ -698,7 +703,7 @@ int gw_host_get_genvar_int(char *var, int index, gw_host_t *host)
     else /* Not found */
     {
         /* Array variable */
-        snprintf(name, sizeof(char) * 499, "%s[%i]", var, index);
+        snprintf(name, sizeof(char) * (GW_MSG_STRING_LONG-1), "%s[%i]", var, index);
         
         p = gw_host_search_genvar_int(name, host);
 
@@ -726,7 +731,7 @@ char *gw_host_get_genvar_str(char *var, int index, gw_host_t *host)
 {
     int  p;
     char *result;
-    char name[500];
+    char name[GW_MSG_STRING_LONG];
 
     if (index >= GW_HOST_MAX_QUEUES)
     {
@@ -736,8 +741,9 @@ char *gw_host_get_genvar_str(char *var, int index, gw_host_t *host)
     }
 
     /* Scalar variable */
-    strncpy(name, var, sizeof(char) * 499);
-    name[499]='\0';
+	int name_size_minus_one= GW_MSG_STRING_LONG-1;
+    strncpy(name, var, sizeof(char) * name_size_minus_one);
+    name[name_size_minus_one]='\0';
     
 #ifdef GWHOSTDEBUG
     gw_log_print("IM",'D',"Getting generic string variable (%s) for host %i.\n",
@@ -750,11 +756,12 @@ char *gw_host_get_genvar_str(char *var, int index, gw_host_t *host)
     if (p < GW_HOST_MAX_GENVARS && host->genvar_str[p].name != NULL) /* Found */
     {
         result = host->genvar_str[p].value;
+		printf ("My result=%s\n", result);
     }
     else /* Not found */
     {
         /* Array variable */
-        snprintf(name, sizeof(char) * 499, "%s[%i]", var, index);
+	  snprintf(name, sizeof(char) * (GW_MSG_STRING_LONG-1), "%s[%i]", var, index);
         
 #ifdef GWHOSTDEBUG
         gw_log_print("IM",'D',"Getting generic string variable (%s) for host %i.\n",

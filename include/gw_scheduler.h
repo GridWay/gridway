@@ -27,7 +27,7 @@
 typedef struct gw_sch_host_s
 {
 	int  hid;
-	char name[GW_MSG_STRING_SHORT];
+	char name[GW_MSG_STRING_HOST];
 
     int  used_slots;
 	int  running_jobs;

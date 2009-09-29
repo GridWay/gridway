@@ -49,15 +49,15 @@ gw_rm_t* gw_rm_init()
 	int    yes = 1;
 	int    rc;
 	FILE * fd;
-    char   str_buffer[2048];
-    char   hostname[256];
+    char   str_buffer[GW_MSG_STRING_LONG];
+    char   hostname[GW_MSG_STRING_HOST];
     
     /* ----------------------------------------------------------------- */
     /* 1.- Socket Initialization                                         */
     /* ----------------------------------------------------------------- */
     
     
-    rc = gethostname(hostname, 255);
+    rc = gethostname(hostname, GW_MSG_STRING_HOST-1);
     if (rc == -1)
     {
 		perror("[RM]: gethostname()");
@@ -97,7 +97,7 @@ gw_rm_t* gw_rm_init()
 
 	/* ----- Write the port we found in $GW_LOCATION/var/gw.port to let clients know ----- */	
     rc = snprintf(str_buffer,
-                  2047,
+                  GW_MSG_STRING_LONG-1,
                   "%s/" GW_VAR_DIR "/gwd.port",
                   gw_conf.gw_location);
                       

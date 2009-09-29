@@ -360,7 +360,8 @@ int drmaa_init(const char *contact, char *error, size_t error_len)
     if ( contact != NULL ) 
     {
        	snprintf(error,
-       	         error_len,
+		 error_len,
+		 "%s",
        	         drmaa_gw_error_strs[DRMAA_ERRNO_INVALID_CONTACT_STRING]);
     
         pthread_mutex_unlock(&(drmaa_gw_session.mutex));
@@ -371,7 +372,8 @@ int drmaa_init(const char *contact, char *error, size_t error_len)
     if ( drmaa_gw_session.session_id != -1 )
     {
        	snprintf(error,
-       	         error_len,
+		 error_len,
+		 "%s",
        	         drmaa_gw_error_strs[DRMAA_ERRNO_ALREADY_ACTIVE_SESSION]);
        	
    	    pthread_mutex_unlock(&(drmaa_gw_session.mutex));
@@ -389,9 +391,10 @@ int drmaa_init(const char *contact, char *error, size_t error_len)
     
     if (gw_client == NULL)
     {
-       	snprintf(error,
-       	         error_len,
-       	         drmaa_gw_error_strs[DRMAA_ERRNO_DRM_COMMUNICATION_FAILURE]);
+      snprintf(error,
+	       error_len,
+	       "%s",
+	       drmaa_gw_error_strs[DRMAA_ERRNO_DRM_COMMUNICATION_FAILURE]);
        	         
 		drmaa_gw_session.session_id = -1;
 	    
@@ -417,6 +420,7 @@ int drmaa_exit(char *error_diagnosis, size_t error_diag_len)
     {
         snprintf(error_diagnosis,
                  error_diag_len,
+		 "%s",
                  drmaa_gw_error_strs[DRMAA_ERRNO_NO_ACTIVE_SESSION]);
                  
         pthread_mutex_unlock(&(drmaa_gw_session.mutex));
@@ -448,8 +452,9 @@ int drmaa_allocate_job_template(drmaa_job_template_t ** jt,
     if ( drmaa_gw_session.session_id == -1 )
     {
     	if ( error != NULL )
-	       	snprintf(error,
-    	   	         error_len,
+	  snprintf(error,
+			 error_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_NO_ACTIVE_SESSION]);
 	       	         
 	    pthread_mutex_unlock(&(drmaa_gw_session.mutex));
@@ -463,7 +468,8 @@ int drmaa_allocate_job_template(drmaa_job_template_t ** jt,
     {
     	if ( error != NULL )
 	       	snprintf(error,
-	       	         error_len,
+			 error_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_INVALID_ARGUMENT]);
        	         
         return DRMAA_ERRNO_INVALID_ARGUMENT;
@@ -475,7 +481,8 @@ int drmaa_allocate_job_template(drmaa_job_template_t ** jt,
     {
     	if ( error != NULL )    	
 	       	snprintf(error,
-	       	         error_len,
+			 error_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[rc]);
     }
 
@@ -495,7 +502,8 @@ int drmaa_delete_job_template(drmaa_job_template_t * jt,
     {
     	if ( error != NULL )
 	       	snprintf(error,
-    	   	         error_len,
+			 error_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_NO_ACTIVE_SESSION]);
 	       	         
 	    pthread_mutex_unlock(&(drmaa_gw_session.mutex));
@@ -528,7 +536,8 @@ int drmaa_set_attribute(drmaa_job_template_t * jt,
     {
     	if ( error != NULL )
 	       	snprintf(error,
-    	   	         error_len,
+			 error_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_NO_ACTIVE_SESSION]);
 	       	         
 	    pthread_mutex_unlock(&(drmaa_gw_session.mutex));
@@ -542,7 +551,8 @@ int drmaa_set_attribute(drmaa_job_template_t * jt,
     {
     	if ( error != NULL )
 	       	snprintf(error,
-	       	         error_len,
+			 error_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_INVALID_ARGUMENT]);
        	         
         return DRMAA_ERRNO_INVALID_ARGUMENT;
@@ -557,9 +567,10 @@ int drmaa_set_attribute(drmaa_job_template_t * jt,
     if ( rc != DRMAA_ERRNO_SUCCESS )
     {
     	if ( error != NULL )
-	       	snprintf(error,
-	       	         error_len,
-	       	         drmaa_gw_error_strs[rc]);
+	  snprintf(error,
+		   error_len,
+		   "%s",
+		   drmaa_gw_error_strs[rc]);
     }
        	         
     return rc;
@@ -585,7 +596,8 @@ int drmaa_get_attribute(drmaa_job_template_t * jt,
     {
     	if ( error != NULL )
 	       	snprintf(error,
-    	   	         error_len,
+			 error_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_NO_ACTIVE_SESSION]);
 	       	         
 	    pthread_mutex_unlock(&(drmaa_gw_session.mutex));
@@ -599,7 +611,8 @@ int drmaa_get_attribute(drmaa_job_template_t * jt,
     {
     	if ( error != NULL )
 	       	snprintf(error,
-	       	         error_len,
+			 error_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_INVALID_ARGUMENT]);
        	         
         return DRMAA_ERRNO_INVALID_ARGUMENT;
@@ -644,7 +657,8 @@ int drmaa_get_attribute(drmaa_job_template_t * jt,
     {
     	if ( error != NULL )
 	       	snprintf(error,
-    	   	         error_len,
+			 error_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_NO_ACTIVE_SESSION]);
 	       	         
 	    pthread_mutex_unlock(&(drmaa_gw_session.mutex));
@@ -658,7 +672,8 @@ int drmaa_get_attribute(drmaa_job_template_t * jt,
     {
     	if ( error != NULL )    	
 	       	snprintf(error,
-	       	         error_len,
+			 error_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_INVALID_ARGUMENT]);
        	         
         return DRMAA_ERRNO_INVALID_ARGUMENT;
@@ -674,7 +689,8 @@ int drmaa_get_attribute(drmaa_job_template_t * jt,
     {
     	if ( error != NULL )    	
 	       	snprintf(error,
-	       	         error_len,
+			 error_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[rc]);
     }
        	         
@@ -702,6 +718,7 @@ int drmaa_get_vector_attribute(drmaa_job_template_t * jt,
     	if ( error_diagnosis != NULL )
 	       	snprintf(error_diagnosis,
 	       	         error_diag_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_NO_ACTIVE_SESSION]);
 
 		pthread_mutex_unlock(&(drmaa_gw_session.mutex));
@@ -716,6 +733,7 @@ int drmaa_get_vector_attribute(drmaa_job_template_t * jt,
     	if ( error_diagnosis != NULL )    	
 	       	snprintf(error_diagnosis,
 	       	         error_diag_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_INVALID_ARGUMENT]);
        	         
         return DRMAA_ERRNO_INVALID_ARGUMENT;
@@ -728,6 +746,7 @@ int drmaa_get_vector_attribute(drmaa_job_template_t * jt,
 		if ( error_diagnosis != NULL )
 	       	snprintf(error_diagnosis,
 	       	         error_diag_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_NO_MEMORY]);
        	         
         return DRMAA_ERRNO_NO_MEMORY;		
@@ -748,6 +767,7 @@ int drmaa_get_vector_attribute(drmaa_job_template_t * jt,
     	if ( error_diagnosis != NULL )    	
 	       	snprintf(error_diagnosis,
 	       	         error_diag_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_INVALID_ARGUMENT]);
 
 		pthread_mutex_unlock(&(jt->mutex));
@@ -768,6 +788,7 @@ int drmaa_get_vector_attribute(drmaa_job_template_t * jt,
     	if ( error_diagnosis != NULL )    	
 	       	snprintf(error_diagnosis,
 	       	         error_diag_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_INVALID_ARGUMENT]);
 
 		pthread_mutex_unlock(&(jt->mutex));
@@ -805,6 +826,7 @@ int drmaa_get_attribute_names(drmaa_attr_names_t ** values,
     	if ( error_diagnosis != NULL )
 	       	snprintf(error_diagnosis,
 	       	         error_diag_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_NO_ACTIVE_SESSION]);
 
 		pthread_mutex_unlock(&(drmaa_gw_session.mutex));
@@ -819,6 +841,7 @@ int drmaa_get_attribute_names(drmaa_attr_names_t ** values,
     	if ( error_diagnosis != NULL )    	
 	       	snprintf(error_diagnosis,
 	       	         error_diag_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_INVALID_ARGUMENT]);
        	         
         return DRMAA_ERRNO_INVALID_ARGUMENT;
@@ -861,6 +884,7 @@ int drmaa_get_attribute_names(drmaa_attr_names_t ** values,
     	if ( error_diagnosis != NULL )
 	       	snprintf(error_diagnosis,
 	       	         error_diag_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_NO_ACTIVE_SESSION]);
 
 		pthread_mutex_unlock(&(drmaa_gw_session.mutex));
@@ -875,6 +899,7 @@ int drmaa_get_attribute_names(drmaa_attr_names_t ** values,
     	if ( error_diagnosis != NULL )    	
 	       	snprintf(error_diagnosis,
 	       	         error_diag_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_INVALID_ARGUMENT]);
        	         
         return DRMAA_ERRNO_INVALID_ARGUMENT;
@@ -917,7 +942,8 @@ int drmaa_run_job(char *                 job_id,
     {
     	if ( error != NULL )
 	       	snprintf(error,
-	       	         error_len,
+			 error_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_NO_ACTIVE_SESSION]);
 
 		pthread_mutex_unlock(&(drmaa_gw_session.mutex));
@@ -929,7 +955,8 @@ int drmaa_run_job(char *                 job_id,
     {
     	if ( error != NULL )    	    	
 	       	snprintf(error,
-	       	         error_len,
+			 error_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_TRY_LATER]);
 
 		pthread_mutex_unlock(&(drmaa_gw_session.mutex));
@@ -943,7 +970,8 @@ int drmaa_run_job(char *                 job_id,
     {
     	if ( error != NULL )    	
 	       	snprintf(error,
-	       	         error_len,
+			 error_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_INVALID_ARGUMENT]);
        	         
         return DRMAA_ERRNO_INVALID_ARGUMENT;
@@ -957,8 +985,9 @@ int drmaa_run_job(char *                 job_id,
     {
 	   	if ( error != NULL )    	
 	       	snprintf(error,
-	       	         error_len,
-	       	         drmaa_gw_error_strs[rc]);
+			 error_len,
+			 "%s",
+			 drmaa_gw_error_strs[rc]);
 	       	         
        	pthread_mutex_unlock(&(jt->mutex));
        	
@@ -1004,9 +1033,10 @@ int drmaa_run_job(char *                 job_id,
         free(jt_parse);
     
     	if ( error != NULL )    
-	       	snprintf(error,
-	       	         error_len,
-	       	         drmaa_gw_error_strs[DRMAA_ERRNO_DRM_COMMUNICATION_FAILURE]);
+	  snprintf(error,
+		   error_len,
+		   "%s",
+		   drmaa_gw_error_strs[DRMAA_ERRNO_DRM_COMMUNICATION_FAILURE]);
 
         return DRMAA_ERRNO_DRM_COMMUNICATION_FAILURE;    
     }
@@ -1057,7 +1087,8 @@ int drmaa_run_bulk_jobs(drmaa_job_ids_t **     jobids,
     {
     	if ( error != NULL )
 	       	snprintf(error,
-	       	         error_len,
+			 error_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_NO_ACTIVE_SESSION]);
 	       	         
 	    pthread_mutex_unlock(&(drmaa_gw_session.mutex));
@@ -1069,7 +1100,8 @@ int drmaa_run_bulk_jobs(drmaa_job_ids_t **     jobids,
     {
     	if ( error != NULL )    	
 	       	snprintf(error,
-	       	         error_len,
+			 error_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_INVALID_ARGUMENT]);
 
 	    pthread_mutex_unlock(&(drmaa_gw_session.mutex));
@@ -1081,9 +1113,10 @@ int drmaa_run_bulk_jobs(drmaa_job_ids_t **     jobids,
     if ( drmaa_gw_session.number_of_jobs + total_jobs >= DRMAA_GW_SESSION_JOBS )
     {
     	if ( error != NULL )
-	       	snprintf(error,
-	       	         error_len,
-	       	         drmaa_gw_error_strs[DRMAA_ERRNO_TRY_LATER]);
+	  snprintf(error,
+		   error_len,
+		   "%s",
+		   drmaa_gw_error_strs[DRMAA_ERRNO_TRY_LATER]);
 
 	    pthread_mutex_unlock(&(drmaa_gw_session.mutex));
 	    
@@ -1098,7 +1131,8 @@ int drmaa_run_bulk_jobs(drmaa_job_ids_t **     jobids,
     {
     	if ( error != NULL )
 	       	snprintf(error,
-	       	         error_len,
+			 error_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[rc]);
 	       	         
         pthread_mutex_unlock(&(jt->mutex));
@@ -1165,7 +1199,8 @@ int drmaa_run_bulk_jobs(drmaa_job_ids_t **     jobids,
     
     	if ( error != NULL )    	
 	       	snprintf(error,
-	       	         error_len,
+			 error_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[rc]);
 	       	         
         pthread_mutex_unlock(&(drmaa_gw_session.mutex));
@@ -1279,7 +1314,8 @@ int drmaa_control(const char *jobid, int action, char *error, size_t error_len)
     {
     	if ( error != NULL )
 	       	snprintf(error,
-	       	         error_len,
+			 error_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_NO_ACTIVE_SESSION]);
 	       	         
         pthread_mutex_unlock(&(drmaa_gw_session.mutex));
@@ -1293,7 +1329,8 @@ int drmaa_control(const char *jobid, int action, char *error, size_t error_len)
     {
     	if ( error != NULL )    	
 	       	snprintf(error,
-	       	         error_len,
+			 error_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_INVALID_ARGUMENT]);
        	         
         return DRMAA_ERRNO_INVALID_ARGUMENT;
@@ -1346,7 +1383,8 @@ int drmaa_control(const char *jobid, int action, char *error, size_t error_len)
     if ( all_rc != DRMAA_ERRNO_SUCCESS )
 		if ( error != NULL )    
 	       	snprintf(error,
-	       	         error_len,
+			 error_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[all_rc]);
 
     return all_rc;
@@ -1372,7 +1410,8 @@ int drmaa_job_ps(const char * job_id,
     {
     	if ( error != NULL )
 	       	snprintf(error,
-	       	         error_len,
+			 error_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_NO_ACTIVE_SESSION]);
     
 	    pthread_mutex_unlock(&(drmaa_gw_session.mutex));
@@ -1386,7 +1425,8 @@ int drmaa_job_ps(const char * job_id,
     {
     	if ( error != NULL )    	
 	       	snprintf(error,
-	       	         error_len,
+			 error_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_INVALID_ARGUMENT]);
        	         
         return DRMAA_ERRNO_INVALID_ARGUMENT;
@@ -1401,6 +1441,7 @@ int drmaa_job_ps(const char * job_id,
 		if ( error != NULL )    		
 	       	snprintf(error,
 	       	         error_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_DRM_COMMUNICATION_FAILURE]);
     	
         *remote_ps = DRMAA_PS_UNDETERMINED;
@@ -1429,6 +1470,7 @@ int drmaa_job_ps(const char * job_id,
     	{
 	       	snprintf(error,
 	       	         error_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_INVALID_JOB]);
 	       	        
     	
@@ -1518,6 +1560,7 @@ int drmaa_synchronize(const char * job_ids[],
 		if ( error != NULL )    	
 	       	snprintf(error,
 	       	         error_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_NO_ACTIVE_SESSION]);
 	       	         
 	    pthread_mutex_unlock(&(drmaa_gw_session.mutex));
@@ -1532,6 +1575,7 @@ int drmaa_synchronize(const char * job_ids[],
 		if ( error != NULL )    	
 	       	snprintf(error,
 	       	         error_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_INVALID_ARGUMENT]);
        	         
         return DRMAA_ERRNO_INVALID_ARGUMENT;
@@ -1628,6 +1672,7 @@ int drmaa_synchronize(const char * job_ids[],
 	if ((error != NULL) && (rc!=DRMAA_ERRNO_SUCCESS))
        	snprintf(error,
        	         error_len,
+		 "%s",
        	         drmaa_gw_error_strs[rc]);
     free(jids);
         
@@ -1688,6 +1733,7 @@ static int drmaa_wait_any(char *      job_id_out,
     	if ( error != NULL )
 	       	snprintf(error,
 	       	         error_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_INVALID_JOB]);
        	
    		pthread_mutex_unlock(&(drmaa_gw_session.mutex));
@@ -1767,8 +1813,9 @@ static int drmaa_wait_any(char *      job_id_out,
 		
 	if ((error != NULL) && (rc != DRMAA_ERRNO_SUCCESS))
        	snprintf(error,
-   	   	         error_len,
-   		         drmaa_gw_error_strs[rc]);
+		 error_len,
+		 "%s",
+		 drmaa_gw_error_strs[rc]);
 		
 	return rc;
 }
@@ -1876,6 +1923,7 @@ static int drmaa_wait_job(const char * job_id,
 	if ((error != NULL) && (rc != DRMAA_ERRNO_SUCCESS))
 	   	snprintf(error,
 	   	         error_len,
+			 "%s",
 		         drmaa_gw_error_strs[rc]);
 	        
 	return rc;	
@@ -1955,6 +2003,7 @@ int drmaa_wait(const char *           job_id,
     	if (error != NULL)
 	       	snprintf(error,
 	       	         error_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_NO_ACTIVE_SESSION]);
     
     	pthread_mutex_unlock(&(drmaa_gw_session.mutex));
@@ -1969,6 +2018,7 @@ int drmaa_wait(const char *           job_id,
     	if ( error != NULL )
 	       	snprintf(error,
 	       	         error_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_INVALID_ARGUMENT]);
        	         
         return DRMAA_ERRNO_INVALID_ARGUMENT;
@@ -2029,6 +2079,7 @@ int drmaa_wifexited(int *  exited,
     	if (error_diagnosis != NULL)
 	       	snprintf(error_diagnosis,
 	       	         error_diag_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_NO_ACTIVE_SESSION]);
 
 		pthread_mutex_unlock(&(drmaa_gw_session.mutex));
@@ -2043,6 +2094,7 @@ int drmaa_wifexited(int *  exited,
     	if ( error_diagnosis != NULL )
 	       	snprintf(error_diagnosis,
 	       	         error_diag_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_INVALID_ARGUMENT]);
        	         
         return DRMAA_ERRNO_INVALID_ARGUMENT;
@@ -2068,6 +2120,7 @@ int drmaa_wexitstatus(int *  exit_status,
     	if (error_diagnosis != NULL)
 	       	snprintf(error_diagnosis,
 	       	         error_diag_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_NO_ACTIVE_SESSION]);
 	       	         
     	pthread_mutex_unlock(&(drmaa_gw_session.mutex));   	         
@@ -2080,6 +2133,7 @@ int drmaa_wexitstatus(int *  exit_status,
     {
        	snprintf(error_diagnosis,
        	         error_diag_len,
+		 "%s",
        	         drmaa_gw_error_strs[DRMAA_ERRNO_INVALID_ARGUMENT]);
        	         
         return DRMAA_ERRNO_INVALID_ARGUMENT;
@@ -2105,6 +2159,7 @@ int drmaa_wifsignaled(int *  signaled,
     	if ( error_diagnosis != NULL )
 	       	snprintf(error_diagnosis,
 	       	         error_diag_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_NO_ACTIVE_SESSION]);
 
 		pthread_mutex_unlock(&(drmaa_gw_session.mutex));       	         
@@ -2118,6 +2173,7 @@ int drmaa_wifsignaled(int *  signaled,
     	if ( error_diagnosis != NULL )
 	       	snprintf(error_diagnosis,
 	       	         error_diag_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_INVALID_ARGUMENT]);
        	         
         return DRMAA_ERRNO_INVALID_ARGUMENT;
@@ -2144,6 +2200,7 @@ int drmaa_wtermsig(char * signal,
     	if (error_diagnosis != NULL)
 	       	snprintf(error_diagnosis,
 	       	         error_diag_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_NO_ACTIVE_SESSION]);
 	       	         
 		pthread_mutex_unlock(&(drmaa_gw_session.mutex));       	         
@@ -2157,6 +2214,7 @@ int drmaa_wtermsig(char * signal,
     	if ( error_diagnosis != NULL )
 	       	snprintf(error_diagnosis,
 	       	         error_diag_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_INVALID_ARGUMENT]);
        	         
         return DRMAA_ERRNO_INVALID_ARGUMENT;
@@ -2185,6 +2243,7 @@ int drmaa_wcoredump(int *  core_dumped,
     	if (error_diagnosis != NULL)
 	       	snprintf(error_diagnosis,
 	       	         error_diag_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_NO_ACTIVE_SESSION]);
 	       	         
 		pthread_mutex_unlock(&(drmaa_gw_session.mutex));       	         
@@ -2198,6 +2257,7 @@ int drmaa_wcoredump(int *  core_dumped,
     	if ( error_diagnosis != NULL )
 	       	snprintf(error_diagnosis,
 	       	         error_diag_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_INVALID_ARGUMENT]);
        	         
         return DRMAA_ERRNO_INVALID_ARGUMENT;
@@ -2228,6 +2288,7 @@ int drmaa_wifaborted(int *  aborted,
     	if (error_diagnosis != NULL)
 	       	snprintf(error_diagnosis,
 	       	         error_diag_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_NO_ACTIVE_SESSION]);
 	       	         
 		pthread_mutex_unlock(&(drmaa_gw_session.mutex));       	         
@@ -2241,6 +2302,7 @@ int drmaa_wifaborted(int *  aborted,
     	if ( error_diagnosis != NULL )
 	       	snprintf(error_diagnosis,
 	       	         error_diag_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_INVALID_ARGUMENT]);
        	         
         return DRMAA_ERRNO_INVALID_ARGUMENT;
@@ -2278,6 +2340,7 @@ int drmaa_get_contact(char * contact,
     	if ( error_diagnosis != NULL )
 	       	snprintf(error_diagnosis,
 	       	         error_diag_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_INVALID_ARGUMENT]);
        	         
         return DRMAA_ERRNO_INVALID_ARGUMENT;
@@ -2313,6 +2376,7 @@ int drmaa_version(unsigned int * major,
     	if ( error_diagnosis != NULL )
 	       	snprintf(error_diagnosis,
 	       	         error_diag_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_INVALID_ARGUMENT]);
        	         
         return DRMAA_ERRNO_INVALID_ARGUMENT;
@@ -2339,6 +2403,7 @@ int drmaa_get_DRM_system(char * drm_system,
     	if ( error_diagnosis != NULL )
 	       	snprintf(error_diagnosis,
 	       	         error_diag_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_INVALID_ARGUMENT]);
        	         
         return DRMAA_ERRNO_INVALID_ARGUMENT;
@@ -2374,6 +2439,7 @@ int drmaa_get_DRMAA_implementation(char *drmaa_impl, size_t drmaa_impl_len, char
     	if ( error_diagnosis != NULL )
 	       	snprintf(error_diagnosis,
 	       	         error_diag_len,
+			 "%s",
 	       	         drmaa_gw_error_strs[DRMAA_ERRNO_INVALID_ARGUMENT]);
        	         
         return DRMAA_ERRNO_INVALID_ARGUMENT;
@@ -2387,12 +2453,12 @@ int drmaa_get_DRMAA_implementation(char *drmaa_impl, size_t drmaa_impl_len, char
     	
 	if (not_init)
     {
-		snprintf(drmaa_impl, drmaa_impl_len,"%s","DRMAA for "GW_VERSION);	
+		snprintf(drmaa_impl, drmaa_impl_len,"DRMAA for %s",GW_VERSION);	
        	         
         return DRMAA_ERRNO_SUCCESS;
     }
 	
-    snprintf(drmaa_impl, drmaa_impl_len,"%s","DRMAA for "GW_VERSION);
+    snprintf(drmaa_impl, drmaa_impl_len,"DRMAA for %s",GW_VERSION);
 
     return DRMAA_ERRNO_SUCCESS;
 }

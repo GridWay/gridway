@@ -68,6 +68,7 @@ char *gw_print_time2(time_t t, char *the_time)
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
 
+
 char *gw_print_date_and_time(time_t t, char *the_time)
 {
     struct tm *tm_s;
@@ -390,15 +391,17 @@ void gw_client_print_pool_status(char *username, char *hostname, char jobstate, 
  		{
 			/* -----   Show all jobs ----- */ 			
  		 	for (i=0;i<gw_client.number_of_jobs;i++)
-        		if (gw_client.job_pool[i] != NULL) 	
-        			if(gw_check_state(jobstate,gw_client.job_pool[i]->job_state))
+			  if (gw_client.job_pool[i] != NULL){
+			    if(gw_check_state(jobstate,gw_client.job_pool[i]->job_state))
         			{			 			    		 	
 		    			if(array_id == -1)			 			    		 	
 		    				gw_client_print_status(gw_client.job_pool[i],outoption);
-		    			else		 
+		    			else{		 
 		    				if(gw_client.job_pool[i]->array_id==array_id) 
 		    					gw_client_print_status(gw_client.job_pool[i],outoption);
-        			}  		
+						}
+        			}
+			  }
  		}
 	}
 	
@@ -456,51 +459,48 @@ void gw_client_print_status_full(gw_msg_job_t * msg)
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
 
-void gw_client_print_status_xml(gw_msg_job_t * msg, int xml_header_flag, int xml_footer_flag)
+void gw_client_print_status_xml(gw_msg_job_t * msg)
 {
-    char the_time[15];
+     char the_time[15];
 
     the_time[5]='\0';
-	const char command[]="gwps";
-    if (xml_header_flag) gw_print_xml_header(command);
- 
-    printf("\t<JOB JOB_ID=\"%d\">\n",msg->id);
-    printf("\t\t<NAME>%s</NAME>\n",msg->name);
-    printf("\t\t<USER>%s</USER>\n",msg->owner);
-    printf("\t\t<UID>%d</UID>\n",msg->uid);
+
+    printf("  <JOB JOB_ID=\"%d\">\n",msg->id);
+    printf("    <NAME>%s</NAME>\n",msg->name);
+    printf("    <USER>%s</USER>\n",msg->owner);
+    printf("    <UID>%d</UID>\n",msg->uid);
 
     if(msg->array_id != -1)
     {
-	    printf("\t\t<ARRAY_ID>%d</ARRAY_ID>\n",msg->array_id);
-	    printf("\t\t<TASK_ID>%d</TASK_ID>\n",msg->task_id);
+	    printf("    <ARRAY_ID>%d</ARRAY_ID>\n",msg->array_id);
+	    printf("    <TASK_ID>%d</TASK_ID>\n",msg->task_id);
     }
            
     if(strlen(msg->host) > 0)
-	    printf("\t\t<HOST>%s</HOST>\n",msg->host);
+	    printf("    <HOST>%s</HOST>\n",msg->host);
         
-	printf("\t\t<FIXED_PRIORITY>%u</FIXED_PRIORITY>\n",msg->fixed_priority);
-	printf("\t\t<DEADLINE>%s</DEADLINE>\n",gw_template_deadline_string(msg->deadline));
+	printf("    <FIXED_PRIORITY>%u</FIXED_PRIORITY>\n",msg->fixed_priority);
+	printf("    <DEADLINE>%s</DEADLINE>\n",gw_template_deadline_string(msg->deadline));
 
-	printf("\t\t<TYPE>%s</TYPE>\n",gw_template_jobtype_string(msg->type));
-	printf("\t\t<NP>%d</NP>\n",msg->np);
+	printf("    <TYPE>%s</TYPE>\n",gw_template_jobtype_string(msg->type));
+	printf("    <NP>%d</NP>\n",msg->np);
 		
-	printf("\t\t<JOB_STATE>%s</JOB_STATE>\n", gw_job_state_string(msg->job_state));
+	printf("    <JOB_STATE>%s</JOB_STATE>\n", gw_job_state_string(msg->job_state));
     
-	printf("\t\t<EM_STATE>%s</EM_STATE>\n", gw_em_state_string (msg->em_state));
-	printf("\t\t<RESTARTED>%d</RESTARTED>\n",msg->restarted);
-    printf("\t\t<CLIENT_WAITING>%d</CLIENT_WAITING>\n",msg->client_waiting);
-    printf("\t\t<RESCHEDULE>%d</RESCHEDULE>\n",msg->reschedule);
+	printf("    <EM_STATE>%s</EM_STATE>\n", gw_em_state_string (msg->em_state));
+	printf("    <RESTARTED>%d</RESTARTED>\n",msg->restarted);
+    printf("    <CLIENT_WAITING>%d</CLIENT_WAITING>\n",msg->client_waiting);
+    printf("    <RESCHEDULE>%d</RESCHEDULE>\n",msg->reschedule);
 
-	printf("\t\t<START_TIME>%s</START_TIME>\n",gw_print_time2(msg->start_time,the_time));
-	printf("\t\t<EXIT_TIME>%s</EXIT_TIME>\n",gw_print_time2(msg->exit_time,the_time));
-	printf("\t\t<EXEC_TIME>%s</EXEC_TIME>\n",gw_print_time (msg->cpu_time,the_time)); 
-	printf("\t\t<XFR_TIME>%s</XFR_TIME>\n",gw_print_time (msg->xfr_time,the_time)); 
+	printf("    <START_TIME>%s</START_TIME>\n",gw_print_time2(msg->start_time,the_time));
+	printf("    <EXIT_TIME>%s</EXIT_TIME>\n",gw_print_time2(msg->exit_time,the_time));
+	printf("    <EXEC_TIME>%s</EXEC_TIME>\n",gw_print_time(msg->cpu_time,the_time)); 
+	printf("    <XFR_TIME>%s</XFR_TIME>\n",gw_print_time(msg->xfr_time,the_time)); 
 	        
 	if (msg->job_state == GW_JOB_STATE_ZOMBIE)
-	    printf("\t\t<EXIT_CODE>%d</EXIT_CODE>\n",msg->exit_code);
+	    printf("    <EXIT_CODE>%d</EXIT_CODE>\n",msg->exit_code);
     
-	printf("\t</JOB>\n");
-    if (xml_footer_flag) gw_print_xml_footer(command);
+	printf("  </JOB>\n");
 }
 
 /*---------------------------------------------------------------------------*/
@@ -600,96 +600,69 @@ void gw_client_print_pool_status_full(char *username, char *hostname, char jobst
 
 void gw_client_print_pool_status_xml(char *username, char *hostname, char jobstate, int array_id)
 {
-  int i;            
-  int xml_header_flag = 1, xml_footer_flag = 0;
-   const char command[] = "gwps";
-	if ( xml_header_flag ){
-	  gw_print_xml_header(command);
-	  xml_header_flag = 0;
-	}
-  if(username != NULL)
-	{
-	  if(hostname != NULL)
-		{
-		  /* -----   Show jobs for username@hostname ----- */			
-		  for (i=0;i<gw_client.number_of_jobs;i++)
-		 	{
-			  if (gw_client.job_pool[i] != NULL)
-		 		{		 		
-				  if ((strcmp(gw_client.job_pool[i]->owner, username) == 0)
-					  &&  (strstr(gw_client.job_pool[i]->host,hostname))!=NULL) 
-		    		{
-					  if(gw_check_state(jobstate,gw_client.job_pool[i]->job_state))
-		    			{
-						  if(array_id == -1)			 			    		 	
-							gw_client_print_status_xml(gw_client.job_pool[i],xml_header_flag,xml_footer_flag);
-						  else		 
-							if(gw_client.job_pool[i]->array_id==array_id) 
-							  gw_client_print_status_xml(gw_client.job_pool[i],xml_header_flag,xml_footer_flag);
-		    			}
-		    		}
-		 		}
-		 	}
+  int i;
+  if(username != NULL) {
+	if(hostname != NULL)
+	  {
+		/* -----   Show jobs for username@hostname ----- */			
+		for (i=0;i<gw_client.number_of_jobs;i++) {
+		  if (gw_client.job_pool[i] != NULL) {		 		
+			if ((strcmp(gw_client.job_pool[i]->owner, username) == 0)
+				&&  (strstr(gw_client.job_pool[i]->host,hostname))!=NULL) {
+			  if(gw_check_state(jobstate,gw_client.job_pool[i]->job_state)) {
+				if(array_id == -1)	 	
+				  gw_client_print_status_xml(gw_client.job_pool[i]);
+				else		 
+				  if(gw_client.job_pool[i]->array_id==array_id) 
+					gw_client_print_status_xml(gw_client.job_pool[i]);
+			  }
+			}
+		  }
 		}
-	  else 				
-	    {
-		  /* -----   Show jobs for username ----- */
-		  for (i=0;i<gw_client.number_of_jobs;i++)
-			if ((gw_client.job_pool[i] != NULL) 
-	    		&&   (strcmp(gw_client.job_pool[i]->owner, username) == 0))	
-			  if(gw_check_state(jobstate,gw_client.job_pool[i]->job_state))
-				{			 			    		 	
-				  if(array_id == -1)			 			    		 	
-					gw_client_print_status_xml(gw_client.job_pool[i],xml_header_flag,xml_footer_flag);
-				  else		 
-					if(gw_client.job_pool[i]->array_id==array_id) 
-					  gw_client_print_status_xml(gw_client.job_pool[i],xml_header_flag,xml_footer_flag);
-				}
-	  
-	    }
-	  
-	}
-	else
-	{ 
-		if(hostname != NULL)
-		{
-			
-			/* -----   Show jobs for hostname ----- */			
-		 	for (i=0;i<gw_client.number_of_jobs;i++)
-		 	{
-		 		if (gw_client.job_pool[i] != NULL)
-		 		{
-		    		if (strstr(gw_client.job_pool[i]->host,hostname)!=NULL)	    		 	
-		    			if(gw_check_state(jobstate,gw_client.job_pool[i]->job_state))
-		    			{			 			    		 	
-		    				if(array_id == -1)			 			    		 	
-		    					gw_client_print_status_xml(gw_client.job_pool[i],xml_header_flag,xml_footer_flag);
-		    				else		 
-		    					if(gw_client.job_pool[i]->array_id==array_id) 
-		    						gw_client_print_status_xml(gw_client.job_pool[i],xml_header_flag,xml_footer_flag);
-		    			}  		
-
-		 		}
-		 	}			
+	  }
+	else 				
+	  {
+		/* -----   Show jobs for username ----- */
+		for (i=0;i<gw_client.number_of_jobs;i++)
+		  if ((gw_client.job_pool[i] != NULL) 
+			  &&   (strcmp(gw_client.job_pool[i]->owner, username) == 0))	
+			if(gw_check_state(jobstate,gw_client.job_pool[i]->job_state)) {
+			  if(array_id == -1)
+				gw_client_print_status_xml(gw_client.job_pool[i]);
+			  else 
+				if(gw_client.job_pool[i]->array_id==array_id)
+				  gw_client_print_status_xml(gw_client.job_pool[i]);
+			}
+	  }
+  }
+  else { 
+	if(hostname != NULL) {
+	  /* -----   Show jobs for hostname ----- */			
+	  for (i=0;i<gw_client.number_of_jobs;i++){
+		if (gw_client.job_pool[i] != NULL) {
+		  if (strstr(gw_client.job_pool[i]->host,hostname)!=NULL)	    		 	
+			if(gw_check_state(jobstate,gw_client.job_pool[i]->job_state)) {
+			  if(array_id == -1)	 	
+				gw_client_print_status_xml(gw_client.job_pool[i]);
+			  else		 
+				if(gw_client.job_pool[i]->array_id==array_id) 
+				  gw_client_print_status_xml(gw_client.job_pool[i]);
+			}
 		}
- 		else
- 		{
-			/* -----   Show all jobs ----- */ 			
- 		 	for (i=0;i<gw_client.number_of_jobs;i++)
-        		if (gw_client.job_pool[i] != NULL) 	
-        			if(gw_check_state(jobstate,gw_client.job_pool[i]->job_state))
-        			{			 			    		 	
-		    			if(array_id == -1)			 			    		 	
-		    				gw_client_print_status_xml(gw_client.job_pool[i],xml_header_flag,xml_footer_flag);
-		    			else		 
-		    				if(gw_client.job_pool[i]->array_id==array_id) 
-		    					gw_client_print_status_xml(gw_client.job_pool[i],xml_header_flag,xml_footer_flag);
-        			}  		
- 		}
+	  }			
 	}
-  if ( ! xml_footer_flag ){
-	gw_print_xml_footer(command);
-	xml_footer_flag = 1;
+	else {
+	  /* -----   Show all jobs ----- */ 			
+	  for (i=0;i<gw_client.number_of_jobs;i++)
+		if (gw_client.job_pool[i] != NULL) 	
+		  if(gw_check_state(jobstate,gw_client.job_pool[i]->job_state)) {
+			if(array_id == -1) 	
+			  gw_client_print_status_xml(gw_client.job_pool[i]);
+			else
+			  if(gw_client.job_pool[i]->array_id==array_id)
+				gw_client_print_status_xml(gw_client.job_pool[i]);
+		  }  		
+	}
   }
 }
 
@@ -772,17 +745,18 @@ void gw_client_print_history(gw_msg_history_t *msg_history)
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
 
-void gw_client_print_history_xml(gw_msg_history_t * msg_history)
+void gw_client_print_history_xml(gw_msg_history_t * msg_history, int history_id)
 {
 
 	char the_time2[9];
-	char the_time [8];
+	char the_time[8];
+
 	time_t prolog;
 	time_t epilog;
 	time_t wrapper;
 	time_t migration;
 	the_time2[8]='\0';
-	the_time [7]='\0';
+    the_time [7]='\0';    
 	
 	if ((msg_history->prolog_etime != 0) && (msg_history->prolog_stime != 0))
 	  prolog = msg_history->prolog_etime - msg_history->prolog_stime;
@@ -812,18 +786,32 @@ void gw_client_print_history_xml(gw_msg_history_t * msg_history)
 	else
 	  migration = 0;
 	
-	printf("\t<HISTORY HOST_ID=\"%i\">\n", msg_history->host_id);
-	printf("\t\t<START_TIME>%s</START_TIME>\n",gw_print_time2(msg_history->start_time,the_time2));
-	printf("\t\t<EXIT_TIME>%s</EXIT_TIME>\n", gw_print_time2(msg_history->exit_time ,the_time2));
-	printf("\t\t<PROLOG>%s</PROLOG>\n", gw_print_time (prolog ,the_time));
-	printf("\t\t<WRAPPER>%s</WRAPPER>\n", gw_print_time (wrapper ,the_time));
-	printf("\t\t<EPILOG>%s</EPILOG>\n", gw_print_time (epilog ,the_time));
-	printf("\t\t<MIGRATION>%s</MIGRATION>\n",  gw_print_time (migration ,the_time));  
-	printf("\t\t<REASON>%s</REASON>\n", gw_reason_string(msg_history->reason));
-	printf("\t\t<QUEUE>%s</QUEUE>\n",  msg_history->queue);    
-	printf("\t\t<HOST>%s</HOST>\n", msg_history->em_rc);
-	printf("\t</HISTORY>\n");
+	printf("  <HISTORY HISTORY_ID=\"%i\">\n", history_id);
+	printf("    <HID>%i</HID>\n", msg_history->host_id);
+	printf("    <START_TIME>%s</START_TIME>\n",gw_print_time2(msg_history->start_time,the_time2));
+	printf("    <EXIT_TIME>%s</EXIT_TIME>\n", gw_print_time2(msg_history->exit_time ,the_time2));
+	printf("    <PROLOG>%s</PROLOG>\n", gw_print_time(prolog ,the_time));
+	printf("    <WRAPPER>%s</WRAPPER>\n", gw_print_time(wrapper ,the_time));
+	printf("    <EPILOG>%s</EPILOG>\n", gw_print_time(epilog ,the_time));
+	printf("    <MIGRATION>%s</MIGRATION>\n",  gw_print_time(migration ,the_time));
+	printf("    <REASON>%s</REASON>\n", gw_reason_string(msg_history->reason));
+	printf("    <QUEUE>%s</QUEUE>\n",  msg_history->queue);
 
+	/* It could be very useful to split this info, but not yet
+
+	char this_em_rc[GW_MSG_STRING_USER_AT_HOST];
+	strcpy( this_em_rc, msg_history->em_rc);
+	char * splitter = strtok(this_em_rc,"/");
+	char * this_hostname = splitter;
+	splitter = strtok (NULL, "/");
+	if ( splitter != NULL ){
+	  char * this_lrms = splitter;
+	  printf("    <HOSTNAME>%s</HOSTNAME>\n", this_hostname);
+	  printf("    <LRMS>%s</LRMS>\n", this_lrms );
+	}
+	*/
+	printf("    <HOST>%s</HOST>\n",  msg_history->em_rc);
+	printf("  </HISTORY>\n");
 }
 
 /* ------------------------------------------------------------------------- */
@@ -832,10 +820,10 @@ void gw_client_print_history_xml(gw_msg_history_t * msg_history)
 
 void gw_client_print_host_status_header()
 {
-    char head_string[200];
+    char head_string[210];
     
-    sprintf(head_string,"%-3s %-5s %-15s %-5s %4s %4s %9s %13s %12s %-20s %-20s",
-    "HID","PRIO","OS","ARCH","MHZ","%%CPU","MEM(F/T)","DISK(F/T)","N(U/F/T)","LRMS","HOSTNAME");
+    sprintf(head_string,"%-3s %-4s %-15s %-5s %-4s %%%-3s %11s %13s %13s %-18s %-30s",
+    "HID","PRIO","OS","ARCH","MHZ","CPU","MEM(F/T)","DISK(F/T)","N(U/F/T)","LRMS","HOSTNAME");
     
     bold();
     underline(); 
@@ -851,28 +839,29 @@ void gw_client_print_host_status_header()
 
 void gw_client_print_host_status(gw_msg_host_t * msg)
 {
-    char buffer[25];
+    int string_short=GW_MSG_STRING_SHORT;
+    char buffer[string_short];
     char *tmp;
     int freenodecount;
     int i;
     
     printf("%-3i ",msg->host_id);
-    printf("%-5i ",msg->fixed_priority);    
+    printf("%-4i ",msg->fixed_priority);    
     
-    snprintf(buffer,sizeof(char)*25,"%s%s",msg->os_name, msg->os_version);
+    snprintf(buffer,sizeof(char)*string_short,"%s%s",msg->os_name, msg->os_version);
     printf("%-15.15s ",buffer);
     
     printf("%-5.5s ",msg->arch);
     printf("%4i ",msg->cpu_mhz);
     printf("%4i ",msg->cpu_free);
 
-    snprintf(buffer,sizeof(char)*25,"%i/%i",msg->free_mem_mb,msg->size_mem_mb);    
+    snprintf(buffer,sizeof(char)*string_short,"%i/%i",msg->free_mem_mb,msg->size_mem_mb);    
     tmp = buffer;
     while (*tmp ==' ')
         tmp++;
-    printf("%9s ",tmp);
+    printf("%11s ",tmp);
 
-    snprintf(buffer,sizeof(char)*25,"%i/%i",msg->free_disk_mb,msg->size_disk_mb);
+    snprintf(buffer,sizeof(char)*string_short,"%i/%i",msg->free_disk_mb,msg->size_disk_mb);
     tmp = buffer;
     while (*tmp ==' ')
         tmp++;
@@ -885,15 +874,15 @@ void gw_client_print_host_status(gw_msg_host_t * msg)
             freenodecount = msg->queue_freenodecount[i];
     }
     
-    snprintf(buffer,sizeof(char)*25,"%i/%i/%i",msg->used_slots,freenodecount,msg->nodecount);
+    snprintf(buffer,sizeof(char)*string_short,"%i/%i/%i",msg->used_slots,freenodecount,msg->nodecount);
     tmp = buffer;
     while (*tmp ==' ')
         tmp++;
-    printf("%12s ",tmp);
+    printf("%13s ",tmp);
 
-    printf("%-20s ",msg->lrms_name);
+    printf("%-18.18s ",msg->lrms_name);
     
-    printf("%-20s\n",msg->hostname);    
+    printf("%-30s\n",msg->hostname);    
 }
 
 /* ------------------------------------------------------------------------- */
@@ -902,14 +891,15 @@ void gw_client_print_host_status(gw_msg_host_t * msg)
 
 void gw_client_print_host_queues(gw_msg_host_t * msg, gw_boolean_t header)
 {
+    int string_short=GW_MSG_STRING_SHORT;
     char head_string[200];
-    char buffer[25];
+    char buffer[string_short];
     char *tmp;    
     int  i;
     
     sprintf(head_string,"\n%-20s %-7s %-5s %-5s %-5s %-5s %-5s %-8s %-10s %-8s",
-                "QUEUENAME","SL(F/T)","WALLT","CPUT","COUNT","MAXR","MAXQ",
-                "STATUS","DISPATCH","PRIORITY");
+			"QUEUENAME","SL(F/T)","WALLT","CPUT","COUNT","MAXR","MAXQ",
+			"STATUS","DISPATCH","PRIORITY");
     
     bold();
     underline(); 
@@ -974,20 +964,10 @@ void gw_client_print_host_pool_status_full()
 void gw_client_print_host_pool_status_xml()
 {
   int i;
-  int xml_header_flag = 1, xml_footer_flag = 0;
-  const char command[] = "gwhost";
   for (i=0;i<gw_client.number_of_hosts;i++){
-	if ( xml_header_flag ){
-	  gw_print_xml_header(command);
-	  xml_header_flag = 0;
-	}
 	if (gw_client.host_pool[i] != NULL)
-	  gw_client_print_host_status_xml(gw_client.host_pool[i], xml_header_flag, xml_footer_flag);
+	  gw_client_print_host_status_xml(gw_client.host_pool[i]);
   }
-	if ( ! xml_footer_flag ){
-	  gw_print_xml_footer(command);
-	  xml_footer_flag = 1;
-	}
 }
   
 /* ------------------------------------------------------------------------- */
@@ -1056,19 +1036,19 @@ void gw_client_print_host_match_xml(gw_msg_match_t *match_list)
 
 		  // By default, while going through the first queue, info about the host is printed.
 		  if ( is_first_queue_in_host ) {
-			printf("\t<HOST HOST_ID=\"%i\">\n", match_list->host_id);
-			printf("\t\t<HOSTNAME>%s</HOSTNAME>\n", match_list->hostname);            
-			printf("\t\t<FIXED_PRIORITY>%i</FIXED_PRIORITY>\n", match_list->fixed_priority);
+			printf("  <HOST HOST_ID=\"%i\">\n", match_list->host_id);
+			printf("    <HOSTNAME>%s</HOSTNAME>\n", match_list->hostname);            
+			printf("    <FIXED_PRIORITY>%i</FIXED_PRIORITY>\n", match_list->fixed_priority);
 		  }
 		  if ( was_last_queue_in_host ) {
-			printf("\t</HOST>\n");
+			printf("  </HOST>\n");
 		  }
 
-		  printf("\t\t<QUEUE QUEUE_ID=\"%i\">\n", j);
-		  printf("\t\t\t<QUEUE_NAME>%s</QUEUE_NAME>\n", match_list->queue_name[j]);
-		  printf("\t\t\t<RANK>%i</RANK>\n" , match_list->rank[j]);
-		  printf("\t\t\t<SLOTS>%i</SLOTS>\n", match_list->slots[j]);
-		  printf("\t\t</QUEUE>\n");
+		  printf("    <QUEUE QUEUE_ID=\"%i\">\n", j);
+		  printf("      <QUEUE_NAME>%s</QUEUE_NAME>\n", match_list->queue_name[j]);
+		  printf("      <RANK>%i</RANK>\n" , match_list->rank[j]);
+		  printf("      <SLOTS>%i</SLOTS>\n", match_list->slots[j]);
+		  printf("    </QUEUE>\n");
 
 		  is_first_queue_in_host = 0;
 		  was_last_queue_in_host = 0;
@@ -1080,7 +1060,7 @@ void gw_client_print_host_match_xml(gw_msg_match_t *match_list)
 	}
 	was_last_queue_in_host = 1;
 	if ( was_last_queue_in_host && did_it_print_at_least_one_queue ) {
-	  printf("\t</HOST>\n");
+	  printf("  </HOST>\n");
 	}
 }
 
@@ -1155,28 +1135,27 @@ void gw_client_print_host_status_full(gw_msg_host_t * msg)
 /* ------------------------------------------------------------------------- */
 /* ------------------------------------------------------------------------- */
 
-void gw_client_print_host_status_xml(gw_msg_host_t * msg, int xml_header_flag, int xml_footer_flag)
+void gw_client_print_host_status_xml(gw_msg_host_t * msg)
 {
     int freenodecount;
-    int i;
-	const char command[]="gwhost";
-    if (xml_header_flag) gw_print_xml_header(command);
-    printf("\t<HOST HOST_ID=\"%i\">\n",msg->host_id);
-    printf("\t\t<HOSTNAME>%s</HOSTNAME>\n",msg->hostname);
+	int i,j;
 
-    printf("\t\t<FIXED_PRIORITY>%i</FIXED_PRIORITY>\n",msg->fixed_priority);    
-    
-    printf("\t\t<OS_NAME>%s</OS_NAME>\n", msg->os_name);
-    printf("\t\t<OS_VERSION>%s</OS_VERSION>\n",msg->os_version);
-    
-    printf("\t\t<ARCH>%s</ARCH>\n",msg->arch);
-    printf("\t\t<CPU_MHZ>%i</CPU_MHZ>\n",msg->cpu_mhz);
-    printf("\t\t<CPU_FREE>%i</CPU_FREE>\n",msg->cpu_free);
+    printf("  <HOST HOST_ID=\"%i\">\n",msg->host_id);
+    printf("    <HOSTNAME>%s</HOSTNAME>\n",msg->hostname);
 
-    printf("\t\t<FREE_MEM_MB>%d</FREE_MEM_MB>\n", msg->free_mem_mb);
-    printf("\t\t<SIZE_MEM_MB>%d</SIZE_MEM_MB>\n", msg->size_mem_mb);
-    printf("\t\t<FREE_DISK_MB>%d</FREE_DISK_MB>\n", msg->free_disk_mb);
-    printf("\t\t<SIZE_DISK_MB>%d</SIZE_DISK_MB>\n", msg->size_disk_mb);
+    printf("    <FIXED_PRIORITY>%i</FIXED_PRIORITY>\n",msg->fixed_priority);    
+    
+    printf("    <OS_NAME>%s</OS_NAME>\n", msg->os_name);
+    printf("    <OS_VERSION>%s</OS_VERSION>\n",msg->os_version);
+    
+    printf("    <ARCH>%s</ARCH>\n",msg->arch);
+    printf("    <CPU_MHZ>%i</CPU_MHZ>\n",msg->cpu_mhz);
+    printf("    <CPU_FREE>%i</CPU_FREE>\n",msg->cpu_free);
+
+    printf("    <FREE_MEM_MB>%d</FREE_MEM_MB>\n", msg->free_mem_mb);
+    printf("    <SIZE_MEM_MB>%d</SIZE_MEM_MB>\n", msg->size_mem_mb);
+    printf("    <FREE_DISK_MB>%d</FREE_DISK_MB>\n", msg->free_disk_mb);
+    printf("    <SIZE_DISK_MB>%d</SIZE_DISK_MB>\n", msg->size_disk_mb);
 
     freenodecount = 0;
     for (i=0; i<msg->number_of_queues; i++)
@@ -1185,53 +1164,85 @@ void gw_client_print_host_status_xml(gw_msg_host_t * msg, int xml_header_flag, i
             freenodecount = msg->queue_freenodecount[i];
     }
     
-    printf("\t\t<RUNNING_JOBS>%i</RUNNING_JOBS>\n",msg->running_jobs);
-    printf("\t\t<USED_SLOTS>%i</USED_SLOTS>\n",msg->used_slots);
-    printf("\t\t<FREENODECOUNT>%i</FREENODECOUNT>\n",freenodecount);
-    printf("\t\t<NODECOUNT>%i</NODECOUNT>\n",msg->nodecount);
+    printf("    <RUNNING_JOBS>%i</RUNNING_JOBS>\n",msg->running_jobs);
+    printf("    <USED_SLOTS>%i</USED_SLOTS>\n",msg->used_slots);
+    printf("    <FREENODECOUNT>%i</FREENODECOUNT>\n",freenodecount);
+    printf("    <NODECOUNT>%i</NODECOUNT>\n",msg->nodecount);
 
-    printf("\t\t<LRMS_NAME>%s</LRMS_NAME>\n",msg->lrms_name);
-    printf("\t\t<LRMS_TYPE>%s</LRMS_TYPE>\n",msg->lrms_type);
+    printf("    <LRMS_NAME>%s</LRMS_NAME>\n",msg->lrms_name);
+    printf("    <LRMS_TYPE>%s</LRMS_TYPE>\n",msg->lrms_type);
 
-    
+	/*
+	  The following functions are just splitters of the word and the index within brackets if existing
+	  The code can be improved much more
+	*/
+	
+	for (j=0;j<msg->number_of_int_vars;j++) {
+	  char this_gen_var_int_name[GW_MSG_STRING_SHORT];
+	  strcpy( this_gen_var_int_name, msg->gen_var_int_name[j]);
+	  char * splitter = strtok(this_gen_var_int_name,"[]");
+	  char * var_int_name = splitter;
+	  splitter = strtok (NULL, "[]");
+	  if (  splitter == NULL ){
+		printf("      <GENERIC_VAR_INT NAME=\"%s\" VALUE=\"%i\"/>\n", var_int_name, msg->gen_var_int_value[j]);
+	  }
+	}
+	for (j=0;j<msg->number_of_str_vars;j++) {
+	  char this_gen_var_str_name[GW_MSG_STRING_SHORT];
+	  strcpy( this_gen_var_str_name, msg->gen_var_str_name[j]);
+	  char * splitter = strtok(this_gen_var_str_name,"[]");
+	  char * var_str_name = splitter;
+	  splitter = strtok (NULL, "[]");
+	  if ( splitter == NULL ){
+		printf("    <GENERIC_VAR_STR NAME=\"%s\" VALUE=\"%s\"/>\n", var_str_name, msg->gen_var_str_value[j]);
+	  }
+	}
     for (i=0;i<msg->number_of_queues;i++)
 	  {
-		int j;
-		printf("\t\t<QUEUE QUEUE_ID=\"%i\">\n",i);
-        printf("\t\t\t<QUEUE_NAME>%s</QUEUE_NAME>\n",msg->queue_name[i]);
-		printf("\t\t\t<QUEUE_FREENODECOUNT>%i</QUEUE_FREENODECOUNT>\n",msg->queue_freenodecount[i]);
-        printf("\t\t\t<QUEUE_NODECOUNT>%i</QUEUE_NODECOUNT>\n",msg->queue_nodecount[i]);
-        printf("\t\t\t<QUEUE_MAXTIME>%i</QUEUE_MAXTIME>\n",msg->queue_maxtime[i]);
-        printf("\t\t\t<QUEUE_MAXCPUTIME>%i</QUEUE_MAXCPUTIME>\n",msg->queue_maxcputime[i]);
-        printf("\t\t\t<QUEUE_MAXCOUNT>%i</QUEUE_MAXCOUNT>\n",msg->queue_maxcount[i]);
-        printf("\t\t\t<QUEUE_MAXRUNNINGJOBS>%i</QUEUE_MAXRUNNINGJOBS>\n",msg->queue_maxrunningjobs[i]);
-        printf("\t\t\t<QUEUE_MAXJOBSINQUEUE>%i</QUEUE_MAXJOBSINQUEUE>\n",msg->queue_maxjobsinqueue[i]);
-        printf("\t\t\t<QUEUE_STATUS>%s</QUEUE_STATUS>\n",msg->queue_status[i]);
-        printf("\t\t\t<QUEUE_DISPATCHTYPE>%s</QUEUE_DISPATCHTYPE>\n",msg->queue_dispatchtype[i]);
-        printf("\t\t\t<QUEUE_PRIORITY>%s</QUEUE_PRIORITY>\n",msg->queue_priority[i]);
+		printf("    <QUEUE QUEUE_ID=\"%i\">\n",i);
+        printf("      <QUEUE_NAME>%s</QUEUE_NAME>\n",msg->queue_name[i]);
+		printf("      <QUEUE_FREENODECOUNT>%i</QUEUE_FREENODECOUNT>\n",msg->queue_freenodecount[i]);
+        printf("      <QUEUE_NODECOUNT>%i</QUEUE_NODECOUNT>\n",msg->queue_nodecount[i]);
+        printf("      <QUEUE_MAXTIME>%i</QUEUE_MAXTIME>\n",msg->queue_maxtime[i]);
+        printf("      <QUEUE_MAXCPUTIME>%i</QUEUE_MAXCPUTIME>\n",msg->queue_maxcputime[i]);
+        printf("      <QUEUE_MAXCOUNT>%i</QUEUE_MAXCOUNT>\n",msg->queue_maxcount[i]);
+        printf("      <QUEUE_MAXRUNNINGJOBS>%i</QUEUE_MAXRUNNINGJOBS>\n",msg->queue_maxrunningjobs[i]);
+        printf("      <QUEUE_MAXJOBSINQUEUE>%i</QUEUE_MAXJOBSINQUEUE>\n",msg->queue_maxjobsinqueue[i]);
+        printf("      <QUEUE_STATUS>%s</QUEUE_STATUS>\n",msg->queue_status[i]);
+        printf("      <QUEUE_DISPATCHTYPE>%s</QUEUE_DISPATCHTYPE>\n",msg->queue_dispatchtype[i]);
+        printf("      <QUEUE_PRIORITY>%s</QUEUE_PRIORITY>\n",msg->queue_priority[i]);
 		// AL: Apparently we can bring the gen_var_str_name here, getting rid of [],
-		// since the information appearing here is, at the moment, QUEUE_ACCESS
-		for (j=0;j<msg->number_of_str_vars;j++) {
-		  if ( j == i ) {
-			char * beginning_of_bracket = strrchr(msg->gen_var_str_name[j],'[');
-			char var_str_name[beginning_of_bracket-msg->gen_var_str_name[j]];
-			strncpy ( var_str_name,msg->gen_var_str_name[j],beginning_of_bracket-msg->gen_var_str_name[j]);
-			var_str_name[beginning_of_bracket-msg->gen_var_str_name[j]]='\0';
-			//	    printf ("Last occurence of '[' found at %d \n", beginning_of_bracket-msg->gen_var_str_name[j]+1);
-			printf("\t\t\t<%s>%s</%s>\n", var_str_name, msg->gen_var_str_value[j], var_str_name);
+		// since the information appearing here is, at the moment, QUEUE_ACCESS, QUEUE_JOBWAIT
+		// but sometimes the number_of_str_vars is not defined
+		for (j=0;j<msg->number_of_int_vars;j++) {
+		  char this_gen_var_int_name[GW_MSG_STRING_SHORT];
+		  strcpy( this_gen_var_int_name, msg->gen_var_int_name[j]);
+		  char * splitter = strtok(this_gen_var_int_name,"[]");
+		  char * var_int_name = splitter;
+		  splitter = strtok (NULL, "[]");
+		  if ( splitter != NULL ){
+			int var_int_index = atoi(splitter);
+			if ( var_int_index == i ){
+			  printf("      <GENERIC_VAR_INT NAME=\"%s\" VALUE=\"%i\"/>\n", var_int_name, msg->gen_var_int_value[j]);
+			}
 		  }
 		}
-		printf("\t\t</QUEUE>\n");
+		for (j=0;j<msg->number_of_str_vars;j++) {
+		  char this_gen_var_str_name[GW_MSG_STRING_SHORT];
+		  strcpy( this_gen_var_str_name, msg->gen_var_str_name[j]);
+		  char * splitter = strtok(this_gen_var_str_name,"[]");
+		  char * var_str_name = splitter;
+		  splitter = strtok (NULL, "[]");
+		  if ( splitter != NULL ){
+			int var_str_index = atoi(splitter);
+			if ( var_str_index == i ){
+			  printf("      <GENERIC_VAR_STR NAME=\"%s\" VALUE=\"%s\"/>\n", var_str_name, msg->gen_var_str_value[j]);
+			}
+		  }
+		}
+		printf("    </QUEUE>\n");
 	  }
-    /*
-	  for (i=0;i<msg->number_of_int_vars;i++)
-	  printf("\t\t<%s>%i</%s>\n", msg->gen_var_int_name[i],msg->gen_var_int_value[i]);
-	  
-	  for (i=0;i<msg->number_of_str_vars;i++)
-	  printf("\t\t\t<%s>%s</%s>\n", msg->gen_var_str_name[i],msg->gen_var_str_value[i]);
-    */    
-    printf("\t</HOST>\n");
-    if (xml_footer_flag) gw_print_xml_footer(command);
+    printf("  </HOST>\n");
 }
 
 /*---------------------------------------------------------------------------*/
@@ -1300,27 +1311,27 @@ void gw_client_print_user_xml(gw_msg_user_t *msg_user)
 {
     int i;
 	
-    printf("\t<USER USER_ID=\"%i\">\n", msg_user->user_id);
-    printf("\t\t<USERNAME>%s</USERNAME>\n", msg_user->name);
-    printf("\t\t<ACTIVE_JOBS>%i</ACTIVE_JOBS>\n", msg_user->active_jobs);
-    printf("\t\t<RUNNING_JOBS>%i</RUNNING_JOBS>\n", msg_user->running_jobs);
-    printf("\t\t<IDLE>%i</IDLE>\n", (int) msg_user->idle);
-    printf("\t\t<IDENTITY>%s</IDENTITY>\n", msg_user->dn);
+    printf("  <USER USER_ID=\"%i\">\n", msg_user->user_id);
+    printf("    <USERNAME>%s</USERNAME>\n", msg_user->name);
+    printf("    <ACTIVE_JOBS>%i</ACTIVE_JOBS>\n", msg_user->active_jobs);
+    printf("    <RUNNING_JOBS>%i</RUNNING_JOBS>\n", msg_user->running_jobs);
+    printf("    <IDLE>%i</IDLE>\n", (int) msg_user->idle);
+    printf("    <IDENTITY>%s</IDENTITY>\n", msg_user->dn);
     for (i=0;i<msg_user->num_ems;i++)
     {
-	  printf("\t\t<EM_MAD MAD_ID=\"%i\">\n",i);
-	  printf("\t\t\t<NAME>%s</NAME>\n", msg_user->em_name[i]);
-	  printf("\t\t\t<PID>%i</PID>\n", msg_user->em_pid[i]);
-      printf("\t\t</EM_MAD>\n");
+	  printf("    <EM_MAD MAD_ID=\"%i\">\n",i);
+	  printf("      <NAME>%s</NAME>\n", msg_user->em_name[i]);
+	  printf("      <PID>%i</PID>\n", msg_user->em_pid[i]);
+      printf("    </EM_MAD>\n");
     }
     for (i=0;i<msg_user->num_tms;i++)
     {
- 	  printf("\t\t<TM_MAD MAD_ID=\"%i\">\n",i);
-	  printf("\t\t\t<NAME>%s</NAME>\n", msg_user->tm_name[i]);
-	  printf("\t\t\t<PID>%i</PID>\n", msg_user->tm_pid[i]);
-      printf("\t\t</TM_MAD>\n");
+ 	  printf("    <TM_MAD MAD_ID=\"%i\">\n",i);
+	  printf("      <NAME>%s</NAME>\n", msg_user->tm_name[i]);
+	  printf("      <PID>%i</PID>\n", msg_user->tm_pid[i]);
+      printf("    </TM_MAD>\n");
     }
-    printf("\t</USER>\n");
+    printf("  </USER>\n");
 }
 
 /*---------------------------------------------------------------------------*/
@@ -1330,6 +1341,7 @@ void gw_client_print_user_xml(gw_msg_user_t *msg_user)
  void gw_print_xml_header(const char *command)
 {
    printf("<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n");
+   printf("<gridway xmlns=\"http://gridway.org\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://gridway.org gridway.xsd\">\n");
    printf("<%s>\n",command);
 }
 
@@ -1340,6 +1352,7 @@ void gw_client_print_user_xml(gw_msg_user_t *msg_user)
  void gw_print_xml_footer(const char *command)
 {
   printf("</%s>\n",command);
+  printf("</gridway>\n");
 }
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
@@ -1358,12 +1371,12 @@ void gw_client_print_user_accts_header(const char *user, time_t from_time)
 	printf("\n\n");
 
     sprintf(head_string,"%-30s %-8s %-8s %-8s %-4s %-4s %-4s %-4s %-4s %-4s %-4s %-4s %-4s %-4s",
-    "HOST","XFR","EXE","SUSP","TOTS","SUCC","ERR ","KILL","USER","SUSP","DISC","SELF","PERF","S/R ");
+    "HOST","XFR","EXE","SUSP","TOTS","SUCC","ERR ","KILL","USER","SUSP","DISC","SELF","PERF","S-R ");
     		
     bold();
     underline(); 
     printf("%s",head_string);
-    restore();
+     restore();
     printf("\n");
     fflush(stdout);
 }
@@ -1384,7 +1397,7 @@ void gw_client_print_host_accts_header(const char *host, time_t from_time)
 	printf("\n\n");	
 
     sprintf(head_string,"%-30s %-8s %-8s %-8s %-4s %-4s %-4s %-4s %-4s %-4s %-4s %-4s %-4s %-4s",
-    "USER","XFR","EXE","SUSP","TOTS","SUCC","ERR ","KILL","USER","SUSP","DISC","SELF","PERF","S/R ");
+    "USER","XFR","EXE","SUSP","TOTS","SUCC","ERR ","KILL","USER","SUSP","DISC","SELF","PERF","S-R ");
     		
     bold();
     underline(); 
@@ -1410,7 +1423,7 @@ void gw_client_print_host_and_user_accts_header(const char *host, const char *us
 	printf("\n\n");	
 
     sprintf(head_string,"%-30s %-8s %-8s %-8s %-4s %-4s %-4s %-4s %-4s %-4s %-4s %-4s %-4s %-4s",
-    "USER@HOST","XFR","EXE","SUSP","TOTS","SUCC","ERR ","KILL","USER","SUSP","DISC","SELF","PERF","S/R ");
+    "USER@HOST","XFR","EXE","SUSP","TOTS","SUCC","ERR ","KILL","USER","SUSP","DISC","SELF","PERF","S-R ");
     		
     bold();
     underline(); 
@@ -1475,54 +1488,56 @@ void gw_client_print_accts(gw_acct_t **accts, int num)
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
 
-void gw_client_print_accts_xml(gw_acct_t **accts, int num, const int u, const int r)
+void gw_client_print_accts_xml(gw_acct_t **accts, int num, int u, int r)
 {
-	int i;
+    int i;
 	char strtime[15];
 
-	int max_user_or_host_len=24;
-	char user_or_host[max_user_or_host_len];
-	char opposite_to_user_or_host[max_user_or_host_len];
-	char tab[2];
-
+	char user_or_host[5];
+	char opposite_to_user_or_host[5];
+	char tab[3];
 
 	for (i=0; i<num ; i++)
 	{
 	  if ( ( u + r ) == 2 ){
-	    sprintf (tab,"");
+	    sprintf (tab," ");
 	  }
 	  else if ( u == 1 ){
 	    sprintf (user_or_host, "USER");
 	    sprintf (opposite_to_user_or_host, "HOST");
-	    sprintf (tab,"\t");
-	    printf("%s<%s %sNAME=\"%s\">\n", tab, opposite_to_user_or_host, opposite_to_user_or_host, accts[i]->name);
+		sprintf (tab,"  ");
+		printf("%s<%s %sNAME=\"%s\">\n", tab, opposite_to_user_or_host, opposite_to_user_or_host, accts[i]->name);
 	  } 
 	  else if ( r == 1 ){
 	    sprintf (user_or_host, "HOST");
 	    sprintf (opposite_to_user_or_host, "USER");
-	    sprintf (tab,"\t");
-	    printf("%s<%s %sNAME=\"%s\">\n", tab, opposite_to_user_or_host, opposite_to_user_or_host, accts[i]->name);
+		sprintf (tab,"  ");
+		printf("%s<%s %sNAME=\"%s\">\n", tab, opposite_to_user_or_host, opposite_to_user_or_host, accts[i]->name);
+	  } 
+	  else{
+	    printf ("ERROR: Wrong user host combination for gwacct\n");
+	    exit(1);
 	  }
-        
+
 	  gw_client_tohours(accts[i]->transfer, strtime);
-	  printf("%s\t<TRANSFER>%s</TRANSFER>\n", tab, strtime);
+	  printf("%s  <TRANSFER>%s</TRANSFER>\n", tab, strtime);
 	  
 	  gw_client_tohours(accts[i]->execution, strtime);
-	  printf("%s\t<EXECUTION>%s</EXECUTION>\n", tab, strtime);
+	  printf("%s  <EXECUTION>%s</EXECUTION>\n", tab, strtime);
 	  
 	  gw_client_tohours(accts[i]->suspension, strtime);
-	  printf("%s\t<SUSPENSION>%s</SUSPENSION>\n", tab, strtime);
+	  printf("%s  <SUSPENSION>%s</SUSPENSION>\n", tab, strtime);
 	  
-	  printf("%s\t<TOTS>%i<TOTS>\n", tab, accts[i]->tot);
-	  printf("%s\t<SUCC>%i</SUCC>\n", tab, accts[i]->succ);
-	  printf("%s\t<ERR>%i</ERR>\n", tab, accts[i]->err);
-	  printf("%s\t<KILL>%i</KILL>\n", tab, accts[i]->kill);
-	  printf("%s\t<USER>%i</USER>\n", tab, accts[i]->user);
-	  printf("%s\t<SUSP>%i</SUSP>\n", tab, accts[i]->susp);
-	  printf("%s\t<DISC>%i</DISC>\n", tab, accts[i]->disc);
-	  printf("%s\t<SELF>%i</SELF>\n", tab, accts[i]->self);
-	  printf("%s\t<PERF>%i</PERF>\n", tab, accts[i]->perf);
-	  printf("%s\t<S/R>%i</S/R>\n", tab, accts[i]->s_r);
+	  printf("%s  <TOTS>%i</TOTS>\n", tab, accts[i]->tot);
+	  printf("%s  <SUCC>%i</SUCC>\n", tab, accts[i]->succ);
+	  printf("%s  <ERR>%i</ERR>\n", tab, accts[i]->err);
+	  printf("%s  <KILL>%i</KILL>\n", tab, accts[i]->kill);
+	  printf("%s  <USER>%i</USER>\n", tab, accts[i]->user);
+	  printf("%s  <SUSP>%i</SUSP>\n", tab, accts[i]->susp);
+	  printf("%s  <DISC>%i</DISC>\n", tab, accts[i]->disc);
+	  printf("%s  <SELF>%i</SELF>\n", tab, accts[i]->self);
+	  printf("%s  <PERF>%i</PERF>\n", tab, accts[i]->perf);
+	  printf("%s  <S-R>%i</S-R>\n", tab, accts[i]->s_r);
 
 	  if ( ( u + r ) != 2 ){
 	    printf("%s</%s>\n", tab, opposite_to_user_or_host);

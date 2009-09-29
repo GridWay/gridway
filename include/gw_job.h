@@ -29,6 +29,9 @@
 #include "gw_rm_msg.h"
 #include "globus_gram_client.h"
 
+#define GW_PS_COMMAND_XML "gwps"
+// Next size corresponds to the maximum 4+1+USERNAME="..."+1+HOSTNAME="..."
+#define GW_PS_COMMAND_OPEN_SIZE_XML 27+GW_MSG_STRING_USER_AT_HOST
 
 #define GW_RSL_ENVIRONMENT_LENGTH 16386
 

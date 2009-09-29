@@ -138,7 +138,7 @@ void gwd_main()
     /* Close stds, we no longer need them                          */
     /* ----------------------------------------------------------- */
 
-    fd = open("/dev/null", O_RDWR|O_CREAT);
+	fd = open("/dev/null", O_RDWR|O_CREAT, 0666);
     	
     dup2(fd,0);
     dup2(fd,1);    

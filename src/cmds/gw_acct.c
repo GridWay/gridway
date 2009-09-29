@@ -204,13 +204,16 @@ int main(int argc, char **argv)
 	/* ---------------------------------------------------------------- */
 
 #ifdef HAVE_LIBDB
-    if( (u + r) == 2 )
-      rc = gw_client_host_and_user_accts(hostname, username, &accts, &num, from_time);
+    if( (u + r) == 2 ){
+	  printf ("ERROR: -u user -r host joint options not yet implemented.\n");
+	  exit(1);
+	  //      rc = gw_client_host_and_user_accts(hostname, username, &accts, &num, from_time);
+	}
     else {
       if ( u == 1 )
-	rc = gw_client_user_accts(username, &accts, &num, from_time);
+		rc = gw_client_user_accts(username, &accts, &num, from_time);
       else
-	rc = gw_client_host_accts(hostname, &accts, &num, from_time);
+		rc = gw_client_host_accts(hostname, &accts, &num, from_time);
     }
     
    	if (rc == GW_RC_SUCCESS)
@@ -247,30 +250,25 @@ int main(int argc, char **argv)
     	}
     	
 		if (x){
-		  int max_command_open_len=24;
-		  char command[]="gwacct";
+		  char command[]=GW_ACCT_COMMAND_XML;
 		  char user_string[]="USER";
 		  char host_string[]="HOST";
-		  char command_open[max_command_open_len];
+		  char command_open[GW_ACCT_COMMAND_OPEN_SIZE_XML];
  
 		  if ( ( u + r ) == 2 ){
-                    sprintf (command_open, "%s USER@HOSTNAME=\"%s@%s\"", command, username, hostname);
+			sprintf (command_open, "%s %sNAME@%sNAME=\"%s@%s\"", command, user_string, host_string, username, hostname);
 		    gw_print_xml_header(command_open);		  
-		    gw_client_print_accts_xml( accts, num, u, r );
-		    gw_print_xml_footer(command);
 		  } 
 		  else if ( u == 1 ){
 		    sprintf (command_open, "%s %sNAME=\"%s\"", command, user_string, username);
 		    gw_print_xml_header(command_open);		  
-		    gw_client_print_accts_xml( accts, num, u, 0 );
-		    gw_print_xml_footer(command);
 		  } 
 		  else if ( r == 1 ){
 		    sprintf (command_open, "%s %sNAME=\"%s\"", command, host_string, hostname);
 		    gw_print_xml_header(command_open);		  
-		    gw_client_print_accts_xml( accts, num, 0, r );
-		    gw_print_xml_footer(command);		  
 		  }
+		  gw_client_print_accts_xml( accts, num, u, r );
+		  gw_print_xml_footer(command);		  
 		}
 		else {
 		  if (!n)

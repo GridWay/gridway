@@ -46,14 +46,14 @@ int gw_job_recover(gw_job_t *job)
     int    rc;
     int    pinc, pstart;
         
-    char   job_state_name[2048];
-    char   user_name[2048];
-    char   proxy_path[2048];
-    char   job_home[2048];
-    char   history_filename[2048];
-    char   state_filename[2048];
-    char   template_filename[2048];
-    char   conf_filename[2048];
+    char   job_state_name[GW_MSG_STRING_SHORT];
+    char   user_name[GW_MSG_STRING_SHORT];
+    char   proxy_path[GW_MSG_STRING_LONG];
+    char   job_home[GW_MSG_STRING_LONG];
+    char   history_filename[GW_MSG_STRING_LONG];
+    char   state_filename[GW_MSG_STRING_LONG];
+    char   template_filename[GW_MSG_STRING_LONG];
+    char   conf_filename[GW_MSG_STRING_LONG];
     
     FILE * file;
     FILE * state_file;
@@ -76,7 +76,7 @@ int gw_job_recover(gw_job_t *job)
     /*------------------------------------------------------------------------*/
 
     gw_log_print("DM",'I', "Recovering job %d.\n", job->id);
-
+	
     sprintf(template_filename, "%s/job.template", job->directory);
     
     rc = gw_template_init(&template, template_filename);
@@ -580,10 +580,10 @@ int gw_job_recover_last_state_transition(gw_job_t *job,
 int gw_job_recover_history_record(FILE *history_file, gw_job_t *job)
 {
     int rc;
-    char hostname[2048], queue_name[2048];
-    char fork_name[2048], lrms_name[2048], lrms_type[2048];
+    char hostname[GW_MSG_STRING_HOST], queue_name[GW_MSG_STRING_SHORT];
+    char fork_name[GW_MSG_STRING_SHORT], lrms_name[GW_MSG_STRING_SHORT], lrms_type[GW_MSG_STRING_SHORT];
     int rank, priority;
-    char em_mad_name[2048], tm_mad_name[2048], im_mad_name[2048];
+    char em_mad_name[GW_MSG_STRING_SHORT], tm_mad_name[GW_MSG_STRING_SHORT], im_mad_name[GW_MSG_STRING_SHORT];
     int host_id;
     gw_host_t *host;
     
@@ -664,10 +664,10 @@ int gw_job_recover_history_record(FILE *history_file, gw_job_t *job)
 
 int gw_job_recover_job_contact(gw_job_t *job)
 {
-    char filename[2048];
+    char filename[GW_MSG_STRING_LONG];
     FILE *file;
     int rc;
-    char job_contact[2048];
+    char job_contact[GW_MSG_STRING_LONG];
     gw_em_mad_t *em_mad;
     
     sprintf(filename, "%s/job.contact", job->directory);
@@ -713,10 +713,10 @@ int gw_job_recover_job_contact(gw_job_t *job)
 
 char * gw_job_recover_get_contact(gw_job_t *job)
 {
-    char filename[2048];
+    char filename[GW_MSG_STRING_LONG];
     FILE *file;
     int rc;
-    char job_contact[2048];
+    char job_contact[GW_MSG_STRING_LONG];
     char *jc;
     
     jc = NULL;

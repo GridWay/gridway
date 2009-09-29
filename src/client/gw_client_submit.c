@@ -53,16 +53,16 @@ gw_return_code_t gw_client_job_submit(char *         template,
 	{0},{0},{1},{1},{1},{"str"},{"str"},{"str"}};
 	
 	*job_id = -1;
-	 	
+
  	if ( gw_client.initialize == GW_FALSE )
 		return GW_RC_FAILED_INIT;
-		
+	
 		
     if ((fixed_priority != GW_JOB_DEFAULT_PRIORITY) && (
         (fixed_priority < GW_JOB_MIN_PRIORITY) ||
         (fixed_priority > GW_JOB_MAX_PRIORITY)))
 		return GW_RC_FAILED_PERM;
-		
+
     /* ----------------------------------------------------------------- */
     /* 1.- Format msg     	      	      	      	      	      	     */
     /* ----------------------------------------------------------------- */
@@ -77,13 +77,14 @@ gw_return_code_t gw_client_job_submit(char *         template,
   	msg.pstart     = 0;
   	
   	msg.fixed_priority = fixed_priority;
-  	
+
 	rc = gw_template_init(&(msg.jt), template);
 	if ( rc != 0 )
 		return GW_RC_FAILED_JT;
 	
+		
 	rc =  gw_host_client_check_syntax(&host, msg.jt.requirements, msg.jt.rank);
-	
+
 	if ( rc == -2 )
 		return GW_RC_FAILED;
 	else if ( rc == -1 )
@@ -99,11 +100,11 @@ gw_return_code_t gw_client_job_submit(char *         template,
 	}
 
 	pthread_mutex_lock(&(gw_client.mutex));
-	
+
 	strncpy(msg.owner,gw_client.owner,GW_MSG_STRING_SHORT);
 	strncpy(msg.group,gw_client.group,GW_MSG_STRING_SHORT);
 	strncpy(msg.proxy_path,gw_client.proxy_path,GW_MSG_STRING_LONG);
-	
+
 	pthread_mutex_unlock(&(gw_client.mutex));	
 	
 	length = sizeof(gw_msg_t);

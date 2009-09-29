@@ -25,6 +25,8 @@
 #include <sys/times.h>
 #include <stdio.h>
 
+#define GW_HISTORY_COMMAND_XML "gwhistory"
+#define GW_HISTORY_COMMAND_OPEN_SIZE_XML 24
 /* -------------------------------------------------------------------------- */
 /* ---------------------------------------------------------------------------*/
 

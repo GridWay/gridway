@@ -69,12 +69,11 @@ void gw_rm_history_to_msg (gw_history_t *history, gw_msg_history_t *msg)
 	else
 		msg->rdir[0]='\0';
 
- 	if ( history->em_rc != NULL )
- 	{
-	 	strncpy(msg->em_rc,history->em_rc,GW_MSG_STRING_SHORT);
-		if ( strlen(history->em_rc) >= GW_MSG_STRING_SHORT )
-			msg->em_rc[GW_MSG_STRING_SHORT-1] = '\0';
- 	} 	
+ 	if ( history->em_rc != NULL ) {
+	 	strncpy(msg->em_rc,history->em_rc,GW_MSG_STRING_USER_AT_HOST);
+		if ( strlen(history->em_rc) >= GW_MSG_STRING_USER_AT_HOST )
+		  msg->em_rc[GW_MSG_STRING_USER_AT_HOST-1] = '\0';
+ 	}
 	else
 		msg->em_rc[0]='\0';
 		

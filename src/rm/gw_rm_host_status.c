@@ -52,7 +52,7 @@ void gw_rm_host_to_msg (gw_host_t *host, gw_msg_host_t *msg)
 	msg->host_id        = host->host_id;
 	msg->fixed_priority = host->fixed_priority;
 	
-	gw_rm_copy_str_short(host->hostname,msg->hostname);
+	gw_rm_copy_str_host(host->hostname,msg->hostname);
 	gw_rm_copy_str_short(host->arch,msg->arch);
 	gw_rm_copy_str_short(host->os_name,msg->os_name);
 	gw_rm_copy_str_short(host->os_version,msg->os_version);	
@@ -124,7 +124,7 @@ void gw_rm_host_to_msg (gw_host_t *host, gw_msg_host_t *msg)
 		{
 			gw_rm_copy_str_short(host->genvar_str[i].name,
 				msg->gen_var_str_name[number_of_str_vars]);
-			gw_rm_copy_str_short(host->genvar_str[i].value,
+			gw_rm_copy_str_long(host->genvar_str[i].value,
 				msg->gen_var_str_value[number_of_str_vars]);
 			number_of_str_vars++;
 		}
