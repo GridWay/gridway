@@ -17,6 +17,7 @@
 
 SUBDIRS = src
 JAVA_HOME = @java_home@
+PREFIX = @prefix@
 
 if GW_GLOBUS_DIRS
 GW_ETC_DIR   = etc/gridway
@@ -24,12 +25,14 @@ GW_VAR_DIR   = var/gridway
 GW_DOC_DIR   = share/gridway/doc
 GW_SHARE_DIR = share/gridway
 GW_TEST_DIR  = test/gridway
+GW_XML_DIR = share/gridway/xml_schema
 else
 GW_ETC_DIR   = etc
 GW_VAR_DIR   = var
 GW_DOC_DIR   = share/doc
 GW_SHARE_DIR = share
 GW_TEST_DIR  = test
+GW_XML_DIR = xml_schema
 endif
 
 
@@ -47,45 +50,45 @@ endif
 FLAGS=$(DB4_INCLUDE_PATH)
 
 install-exec-hook:
-	@mkdir -p @prefix@/$(GW_SHARE_DIR)
-	@cp -r LICENSE NOTICE @prefix@/$(GW_SHARE_DIR)	
+	@mkdir -p $(PREFIX)/$(GW_SHARE_DIR)
+	@cp -r LICENSE NOTICE $(PREFIX)/$(GW_SHARE_DIR)	
 if DOC
-	@rm -rf @prefix@/$(GW_DOC_DIR)
-	@mkdir -p @prefix@/$(GW_DOC_DIR)
+	@rm -rf $(PREFIX)/$(GW_DOC_DIR)
+	@mkdir -p $(PREFIX)/$(GW_DOC_DIR)
 if DOCHTMLC
 	@cp -r doc/docbook/execution/gridway \
-           @prefix@/$(GW_DOC_DIR)
-	@find @prefix@/$(GW_DOC_DIR) -depth -name '*.xml' -exec rm -rf '{}' \;
-	@find @prefix@/$(GW_DOC_DIR) -depth -name 'Makefile*' -exec rm -rf '{}' \;
-	@find @prefix@/$(GW_DOC_DIR) -depth -name '*.fo' -exec rm -rf '{}' \;
-	@find @prefix@/$(GW_DOC_DIR) -depth -name 'target.db' -exec rm -rf '{}' \;
-	@find @prefix@/$(GW_DOC_DIR) -depth -name 'images' -exec rm -f '{}' \;
+           $(PREFIX)/$(GW_DOC_DIR)
+	@find $(PREFIX)/$(GW_DOC_DIR) -depth -name '*.xml' -exec rm -rf '{}' \;
+	@find $(PREFIX)/$(GW_DOC_DIR) -depth -name 'Makefile*' -exec rm -rf '{}' \;
+	@find $(PREFIX)/$(GW_DOC_DIR) -depth -name '*.fo' -exec rm -rf '{}' \;
+	@find $(PREFIX)/$(GW_DOC_DIR) -depth -name 'target.db' -exec rm -rf '{}' \;
+	@find $(PREFIX)/$(GW_DOC_DIR) -depth -name 'images' -exec rm -f '{}' \;
 
-	@ln -s @prefix@/$(GW_DOC_DIR)/gridway/admin @prefix@/$(GW_DOC_DIR)/gridway/admin/admin
-	@ln -s @prefix@/$(GW_DOC_DIR)/gridway/user @prefix@/$(GW_DOC_DIR)/gridway/user/user
-	@ln -s @prefix@/$(GW_DOC_DIR)/gridway/developer @prefix@/$(GW_DOC_DIR)/gridway/developer/developer
+	@ln -s $(PREFIX)/$(GW_DOC_DIR)/gridway/admin $(PREFIX)/$(GW_DOC_DIR)/gridway/admin/admin
+	@ln -s $(PREFIX)/$(GW_DOC_DIR)/gridway/user $(PREFIX)/$(GW_DOC_DIR)/gridway/user/user
+	@ln -s $(PREFIX)/$(GW_DOC_DIR)/gridway/developer $(PREFIX)/$(GW_DOC_DIR)/gridway/developer/developer
 endif
 
 if DRMAA
 if DOXYGENC
-	@cp -r doc/drmaa_c @prefix@/$(GW_DOC_DIR)
+	@cp -r doc/drmaa_c $(PREFIX)/$(GW_DOC_DIR)
 endif
 if JAVADOCC
-	@cp -r doc/drmaa_java @prefix@/$(GW_DOC_DIR)
+	@cp -r doc/drmaa_java $(PREFIX)/$(GW_DOC_DIR)
 endif		
 endif
 endif
 
-	@rm -rf @prefix@/$(GW_SHARE_DIR)/examples
-	@mkdir -p @prefix@/$(GW_SHARE_DIR)
-	@cp -r examples @prefix@/$(GW_SHARE_DIR)/examples
+	@rm -rf $(PREFIX)/$(GW_SHARE_DIR)/examples
+	@mkdir -p $(PREFIX)/$(GW_SHARE_DIR)
+	@cp -r examples $(PREFIX)/$(GW_SHARE_DIR)/examples
 
 if TESTS
-	@rm -rf @prefix@/$(GW_TEST_DIR)
-	@mkdir -p @prefix@/$(GW_TEST_DIR)
+	@rm -rf $(PREFIX)/$(GW_TEST_DIR)
+	@mkdir -p $(PREFIX)/$(GW_TEST_DIR)
 	@cp -r src/test/gwtest src/test/TEST.pl \
 	       src/test/jt \
-	       @prefix@/$(GW_TEST_DIR)
+	       $(PREFIX)/$(GW_TEST_DIR)
 endif
 
 # ----------------------------
@@ -93,16 +96,16 @@ endif
 # ----------------------------
 
 # -- Dagman Ruby Scripts
-	@mkdir -p @prefix@/libexec/ruby/dagman
-	@mv @prefix@/bin/gw_dagman.rb @prefix@/bin/gwdagman
-	@mv @prefix@/bin/node.rb @prefix@/libexec/ruby/dagman/node.rb
-	@mv @prefix@/bin/parse.rb @prefix@/libexec/ruby/dagman/parse.rb
-	@mv @prefix@/bin/runner.rb @prefix@/libexec/ruby/dagman/runner.rb
-	@mv @prefix@/bin/gridway.rb @prefix@/libexec/ruby/dagman/gridway.rb
+	@mkdir -p $(PREFIX)/libexec/ruby/dagman
+	@mv $(PREFIX)/bin/gw_dagman.rb $(PREFIX)/bin/gwdagman
+	@mv $(PREFIX)/bin/node.rb $(PREFIX)/libexec/ruby/dagman/node.rb
+	@mv $(PREFIX)/bin/parse.rb $(PREFIX)/libexec/ruby/dagman/parse.rb
+	@mv $(PREFIX)/bin/runner.rb $(PREFIX)/libexec/ruby/dagman/runner.rb
+	@mv $(PREFIX)/bin/gridway.rb $(PREFIX)/libexec/ruby/dagman/gridway.rb
 
-	@mv @prefix@/bin/gw_im_mad_static.sh @prefix@/bin/gw_im_mad_static
+	@mv $(PREFIX)/bin/gw_im_mad_static.sh $(PREFIX)/bin/gw_im_mad_static
 if GRIDFTP
-	@mv @prefix@/bin/gw_tm_mad_ftp.sh @prefix@/bin/gw_tm_mad_ftp
+	@mv $(PREFIX)/bin/gw_tm_mad_ftp.sh $(PREFIX)/bin/gw_tm_mad_ftp
 endif
 
 # ----------------------------
@@ -110,9 +113,9 @@ endif
 # ----------------------------
 
 if WS
-	@mv @prefix@/bin/gw_em_mad_ws.sh @prefix@/bin/gw_em_mad_ws
-	@mv @prefix@/bin/gw_im_mad_mds4.sh @prefix@/bin/gw_im_mad_mds4
-	@mv @prefix@/bin/gw_im_mad_mds4_thr.sh @prefix@/bin/gw_im_mad_mds4_thr
+	@mv $(PREFIX)/bin/gw_em_mad_ws.sh $(PREFIX)/bin/gw_em_mad_ws
+	@mv $(PREFIX)/bin/gw_im_mad_mds4.sh $(PREFIX)/bin/gw_im_mad_mds4
+	@mv $(PREFIX)/bin/gw_im_mad_mds4_thr.sh $(PREFIX)/bin/gw_im_mad_mds4_thr
 endif
 
 # ----------------------------
@@ -120,10 +123,10 @@ endif
 # ----------------------------
 
 if PREWS
-	@mv @prefix@/bin/gw_im_mad_mds2.sh @prefix@/bin/gw_im_mad_mds2
-	@mv @prefix@/bin/gw_im_mad_mds2_glue.sh @prefix@/bin/gw_im_mad_mds2_glue
-	@mv @prefix@/bin/gw_tm_mad_dummy.sh @prefix@/bin/gw_tm_mad_dummy
-	@mv @prefix@/bin/gw_em_mad_prews.sh @prefix@/bin/gw_em_mad_prews
+	@mv $(PREFIX)/bin/gw_im_mad_mds2.sh $(PREFIX)/bin/gw_im_mad_mds2
+	@mv $(PREFIX)/bin/gw_im_mad_mds2_glue.sh $(PREFIX)/bin/gw_im_mad_mds2_glue
+	@mv $(PREFIX)/bin/gw_tm_mad_dummy.sh $(PREFIX)/bin/gw_tm_mad_dummy
+	@mv $(PREFIX)/bin/gw_em_mad_prews.sh $(PREFIX)/bin/gw_em_mad_prews
 endif
 
 # ----------------------------
@@ -131,13 +134,22 @@ endif
 # ----------------------------
 
 if NORDUGRID
-	@mv @prefix@/bin/gw_em_mad_nordugrid.sh @prefix@/bin/gw_em_mad_nordugrid
-	@mv @prefix@/bin/gw_tm_mad_nordugrid.sh @prefix@/bin/gw_tm_mad_nordugrid
-	@mkdir -p @prefix@/libexec/python
-	@mv @prefix@/bin/gw_em_mad_nordugrid.py @prefix@/libexec/python/gw_em_mad_nordugrid.py
-	@mv @prefix@/bin/gw_tm_mad_nordugrid.py @prefix@/libexec/python/gw_tm_mad_nordugrid.py
-	@mv @prefix@/bin/em_nordugrid.py @prefix@/libexec/python/em_nordugrid.py
-	@mv @prefix@/bin/tm_nordugrid.py @prefix@/libexec/python/tm_nordugrid.py
+	@mv $(PREFIX)/bin/gw_em_mad_nordugrid.sh $(PREFIX)/bin/gw_em_mad_nordugrid
+	@mv $(PREFIX)/bin/gw_tm_mad_nordugrid.sh $(PREFIX)/bin/gw_tm_mad_nordugrid
+	@mkdir -p $(PREFIX)/libexec/python
+	@mv $(PREFIX)/bin/gw_em_mad_nordugrid.py $(PREFIX)/libexec/python/gw_em_mad_nordugrid.py
+	@mv $(PREFIX)/bin/gw_tm_mad_nordugrid.py $(PREFIX)/libexec/python/gw_tm_mad_nordugrid.py
+	@mv $(PREFIX)/bin/em_nordugrid.py $(PREFIX)/libexec/python/em_nordugrid.py
+	@mv $(PREFIX)/bin/tm_nordugrid.py $(PREFIX)/libexec/python/tm_nordugrid.py
+endif
+
+# ----------------------------
+# -- Script renaming - LDAP
+# ----------------------------
+if LDAP
+	@mkdir -p $(PREFIX)/libexec/perl
+	@mv $(PREFIX)/bin/gw_im_mad_egee_ldap.sh $(PREFIX)/bin/gw_im_mad_egee_ldap
+	@mv $(PREFIX)/bin/gw_im_mad_egee_ldap.pl $(PREFIX)/libexec/perl/gw_im_mad_egee_ldap
 endif
 
 # ----------------------------
@@ -145,7 +157,7 @@ endif
 # ----------------------------
 
 if JSDL
-	@mv @prefix@/bin/jsdl2gw.sh @prefix@/bin/jsdl2gw
+	@mv $(PREFIX)/bin/jsdl2gw.sh $(PREFIX)/bin/jsdl2gw
 endif
 
 # ****************************
@@ -153,62 +165,72 @@ endif
 # ****************************
 
 install-data-hook:
-	mkdir -p @prefix@/$(GW_VAR_DIR)/acct
-	mkdir -p @prefix@/$(GW_ETC_DIR)
-	cp -r $(top_srcdir)/etc/im_examples @prefix@/$(GW_ETC_DIR)/
+	mkdir -p $(PREFIX)/$(GW_VAR_DIR)/acct
+	mkdir -p $(PREFIX)/$(GW_ETC_DIR)
+	mkdir -p $(PREFIX)/$(GW_XML_DIR)
+	cp -r $(top_srcdir)/etc/im_examples $(PREFIX)/$(GW_ETC_DIR)/
 	cp $(top_srcdir)/etc/gwd.conf \
 	   $(top_srcdir)/etc/job_template.default \
 	   $(top_srcdir)/etc/sched.conf \
 	   $(top_srcdir)/etc/gwrc \
-	   @prefix@/$(GW_ETC_DIR)/
+	   $(PREFIX)/$(GW_ETC_DIR)/
+	cp $(top_srcdir)/xml_schema/gridway.xsd $(PREFIX)/$(GW_XML_DIR)
 
 # ----------------------------
 #   Dagman Examples
 # ----------------------------
-	@ln -s A.jt @prefix@/$(GW_SHARE_DIR)/examples/dagman/B.jt
-	@ln -s A.jt @prefix@/$(GW_SHARE_DIR)/examples/dagman/C.jt
-	@ln -s A.jt @prefix@/$(GW_SHARE_DIR)/examples/dagman/D.jt
-	@ln -s A.jt @prefix@/$(GW_SHARE_DIR)/examples/dagman/E.jt
-	@ln -s A.jt @prefix@/$(GW_SHARE_DIR)/examples/dagman/F.jt
-	@ln -s A.jt @prefix@/$(GW_SHARE_DIR)/examples/dagman/G.jt
-	@ln -s A.jt @prefix@/$(GW_SHARE_DIR)/examples/dagman/H.jt
-	@ln -s A.jt @prefix@/$(GW_SHARE_DIR)/examples/dagman/I.jt
-	@ln -s A.jt @prefix@/$(GW_SHARE_DIR)/examples/dagman/J.jt
-	@ln -s A.jt @prefix@/$(GW_SHARE_DIR)/examples/dagman/K.jt
-	
+	@ln -s A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/B.jt
+	@ln -s A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/C.jt
+	@ln -s A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/D.jt
+	@ln -s A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/E.jt
+	@ln -s A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/F.jt
+	@ln -s A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/G.jt
+	@ln -s A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/H.jt
+	@ln -s A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/I.jt
+	@ln -s A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/J.jt
+	@ln -s A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/K.jt
+
 # ----------------------------
 #    remove CVS DIRS
 # ----------------------------
-	@find @prefix@ -depth -name CVS -exec rm -rf '{}' \;
+	@find $(PREFIX) -depth -name CVS -exec rm -rf '{}' \;
 
 # ----------------------------		
 # Copy wrapper, monitor & gw_mad_common.sh
 # ----------------------------
 
-		@mkdir -p @prefix@/libexec
-		@cp $(top_srcdir)/scripts/wrapper.sh @prefix@/libexec/gw_wrapper.sh
-		@cp $(top_srcdir)/scripts/monitor.sh @prefix@/libexec/gw_monitor.sh
-		@mkdir -p @prefix@/bin
-		@cp $(top_srcdir)/scripts/gw_mad_common.sh @prefix@/bin
-
-# TODO: Uninstall nordugrid files
+	@mkdir -p $(PREFIX)/libexec
+	@cp $(top_srcdir)/scripts/wrapper.sh $(PREFIX)/libexec/gw_wrapper.sh
+	@cp $(top_srcdir)/scripts/monitor.sh $(PREFIX)/libexec/gw_monitor.sh
+	@mkdir -p $(PREFIX)/bin
+	@cp $(top_srcdir)/scripts/gw_mad_common.sh $(PREFIX)/bin
 
 uninstall-hook:
-	@rm -f @prefix@/bin/gwdagman
-	@rm @prefix@/bin/gw_im_mad_mds2
-	@rm @prefix@/bin/gw_im_mad_mds4
-	@rm @prefix@/bin/gw_em_mad_ws
-	@rm @prefix@/bin/gw_im_mad_mds2_glue
+	@rm -f $(PREFIX)/bin/gwdagman
+	@rm $(PREFIX)/bin/gw_im_mad_mds2
+	@rm $(PREFIX)/bin/gw_im_mad_mds4
+	@rm $(PREFIX)/bin/gw_em_mad_ws
+	@rm $(PREFIX)/bin/gw_im_mad_mds2_glue
 if GRIDFTP
-	@rm @prefix@/bin/gw_tm_mad_ftp
+	@rm $(PREFIX)/bin/gw_tm_mad_ftp
 endif
-	@rm @prefix@/bin/gw_tm_mad_rft
-	@rm @prefix@/bin/gw_em_mad_prews
-	@rm @prefix@/bin/gw_im_mad_static
-	@rm @prefix@/bin/gw_tm_mad_dummy
-	@rm @prefix@/bin/jsdl2gw
-	@rm -rf @prefix@/lib/ruby/
-	@rm -rf @prefix@/$(GW_VAR_DIR)
+	@rm $(PREFIX)/bin/gw_tm_mad_rft
+	@rm $(PREFIX)/bin/gw_em_mad_prews
+	@rm $(PREFIX)/bin/gw_im_mad_static
+	@rm $(PREFIX)/bin/gw_tm_mad_dummy
+	@rm $(PREFIX)/bin/jsdl2gw
+	@rm -rf $(PREFIX)/lib/ruby/
+	@rm -rf $(PREFIX)/$(GW_VAR_DIR)
+if NORDUGRID
+	@rm -rf $(PREFIX)/libexec/python
+	@rm $(PREFIX)/bin/gw_em_mad_nordugrid
+	@rm $(PREFIX)/bin/gw_tm_mad_nordugrid
+endif
+if LDAP
+	@rm -rf $(PREFIX)/libexec/perl
+	@rm $(PREFIX)/bin/gw_im_mad_egee_ldap
+endif
+	@rm -rf $(PREFIX)/$(GW_XML_DIR)
 
 # *****************************************
 # Dist specifics (see also src/Makefile.am)
@@ -239,4 +261,3 @@ dist-hook:
 #    remove CVS DIRS
 # ----------------------------
 	@find $(distdir) -depth -name CVS -exec rm -rf '{}' \;
-	

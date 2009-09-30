@@ -162,6 +162,7 @@ if test "x$GW_DIR_SCHEME" = "xglobus"; then
 	ws="ws"	
 	gridftp="gridftp"
 	nordugrid=""
+	ldap=""
 	docs="no"
 	tests="no"	
 	drmaa1="no"		
@@ -175,6 +176,7 @@ else
 	ws="ws"	
 	gridftp="gridftp"
 	nordugrid=""
+	ldap=""
 	docs="no"
 	tests="no"
 	drmaa1="no"
@@ -218,6 +220,12 @@ AC_ARG_ENABLE(ws,  AC_HELP_STRING([--disable-ws],\
 AC_ARG_ENABLE(nordugrid,  AC_HELP_STRING([--enable-nordugrid],\
   [Build nordugrid support. Default is disabled.]),\
   [if test $enableval = "yes"; then nordugrid="nordugrid"; else nordugrid=" "; fi], [])
+
+# --- Enable LDAP Drivers ---
+
+AC_ARG_ENABLE(ldap,  AC_HELP_STRING([--enable-ldap],\
+  [Build LDAP support for EGEE. Default is disabled.]),\
+  [if test $enableval = "yes"; then ldap="ldap"; else ldap=" "; fi], [])
 
 # --- Enable GRIDFTP MAD ---
         
@@ -287,6 +295,10 @@ AM_CONDITIONAL(WS, test "x$ws" = "xws")
 
 AM_CONDITIONAL(NORDUGRID, test "x$nordugrid" = "xnordugrid")
 
+# --- Enable LDAP Drivers ---
+
+AM_CONDITIONAL(LDAP, test "x$ldap" = "xldap")
+
 # --- Enable JSDL  ---
 
 AM_CONDITIONAL(JSDL, test "x$jsdl" = "xjsdl")
@@ -350,6 +362,14 @@ if test "x$GW_DIR_SCHEME" = "xglobus"; then
 fi
 
 AM_CONDITIONAL(GW_GLOBUS_DIRS, test "x$GW_DIR_SCHEME" = "xglobus")
+
+
+#------------------------------------------------------------------------------                                                    
+# Checks for LIBTOOL.                                                                                                             
+#------------------------------------------------------------------------------
+
+LT_PREREQ([2.2.6])
+LT_INIT
 
 #------------------------------------------------------------------------------
 # Checks for programs.
