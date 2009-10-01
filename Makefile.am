@@ -149,7 +149,7 @@ endif
 if LDAP
 	@mkdir -p $(PREFIX)/libexec/perl
 	@mv $(PREFIX)/bin/gw_im_mad_egee_ldap.sh $(PREFIX)/bin/gw_im_mad_egee_ldap
-	@mv $(PREFIX)/bin/gw_im_mad_egee_ldap.pl $(PREFIX)/libexec/perl/gw_im_mad_egee_ldap
+	@mv $(PREFIX)/bin/gw_im_mad_egee_ldap.pl $(PREFIX)/libexec/perl/gw_im_mad_egee_ldap.pl
 endif
 
 # ----------------------------
