@@ -51,13 +51,12 @@ FLAGS=$(DB4_INCLUDE_PATH)
 
 install-exec-hook:
 	@mkdir -p $(PREFIX)/$(GW_SHARE_DIR)
-	@cp -r LICENSE NOTICE $(PREFIX)/$(GW_SHARE_DIR)	
+	@cp LICENSE NOTICE $(PREFIX)/$(GW_SHARE_DIR)	
 if DOC
 	@rm -rf $(PREFIX)/$(GW_DOC_DIR)
 	@mkdir -p $(PREFIX)/$(GW_DOC_DIR)
 if DOCHTMLC
-	@cp -r doc/docbook/execution/gridway \
-           $(PREFIX)/$(GW_DOC_DIR)
+	@cp -r doc/docbook/execution/gridway $(PREFIX)/$(GW_DOC_DIR)
 	@find $(PREFIX)/$(GW_DOC_DIR) -depth -name '*.xml' -exec rm -rf '{}' \;
 	@find $(PREFIX)/$(GW_DOC_DIR) -depth -name 'Makefile*' -exec rm -rf '{}' \;
 	@find $(PREFIX)/$(GW_DOC_DIR) -depth -name '*.fo' -exec rm -rf '{}' \;
@@ -191,9 +190,9 @@ install-data-hook:
 	@ln -s A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/K.jt
 
 # ----------------------------
-#    remove CVS DIRS
+#    remove svn DIRS
 # ----------------------------
-	@find $(PREFIX) -depth -name CVS -exec rm -rf '{}' \;
+	@find $(PREFIX) -depth -name .svn -exec rm -rf '{}' \;
 
 # ----------------------------		
 # Copy wrapper, monitor & gw_mad_common.sh
@@ -260,4 +259,4 @@ dist-hook:
 # ----------------------------
 #    remove CVS DIRS
 # ----------------------------
-	@find $(distdir) -depth -name CVS -exec rm -rf '{}' \;
+	@find $(distdir) -depth -name .svn -exec rm -rf '{}' \;

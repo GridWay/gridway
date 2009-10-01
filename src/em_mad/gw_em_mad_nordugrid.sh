@@ -1,5 +1,4 @@
-#!/bin/sh
-
+#!/bin/bash
 # ------------------------------------------------------------------------------
 # Copyright 2002-2006 GridWay Team, Distributed Systems Architecture
 # Group, Universidad Complutense de Madrid

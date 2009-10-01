@@ -681,11 +681,10 @@ uninstall-am:
 
 install-exec-hook:
 	@mkdir -p $(PREFIX)/$(GW_SHARE_DIR)
-	@cp -r LICENSE NOTICE $(PREFIX)/$(GW_SHARE_DIR)	
+	@cp LICENSE NOTICE $(PREFIX)/$(GW_SHARE_DIR)	
 @DOC_TRUE@	@rm -rf $(PREFIX)/$(GW_DOC_DIR)
 @DOC_TRUE@	@mkdir -p $(PREFIX)/$(GW_DOC_DIR)
-@DOCHTMLC_TRUE@@DOC_TRUE@	@cp -r doc/docbook/execution/gridway \
-@DOCHTMLC_TRUE@@DOC_TRUE@           $(PREFIX)/$(GW_DOC_DIR)
+@DOCHTMLC_TRUE@@DOC_TRUE@	@cp -r doc/docbook/execution/gridway $(PREFIX)/$(GW_DOC_DIR)
 @DOCHTMLC_TRUE@@DOC_TRUE@	@find $(PREFIX)/$(GW_DOC_DIR) -depth -name '*.xml' -exec rm -rf '{}' \;
 @DOCHTMLC_TRUE@@DOC_TRUE@	@find $(PREFIX)/$(GW_DOC_DIR) -depth -name 'Makefile*' -exec rm -rf '{}' \;
 @DOCHTMLC_TRUE@@DOC_TRUE@	@find $(PREFIX)/$(GW_DOC_DIR) -depth -name '*.fo' -exec rm -rf '{}' \;
@@ -797,9 +796,9 @@ install-data-hook:
 	@ln -s A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/K.jt
 
 # ----------------------------
-#    remove CVS DIRS
+#    remove svn DIRS
 # ----------------------------
-	@find $(PREFIX) -depth -name CVS -exec rm -rf '{}' \;
+	@find $(PREFIX) -depth -name .svn -exec rm -rf '{}' \;
 
 # ----------------------------		
 # Copy wrapper, monitor & gw_mad_common.sh
@@ -860,7 +859,7 @@ dist-hook:
 # ----------------------------
 #    remove CVS DIRS
 # ----------------------------
-	@find $(distdir) -depth -name CVS -exec rm -rf '{}' \;
+	@find $(distdir) -depth -name .svn -exec rm -rf '{}' \;
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:
