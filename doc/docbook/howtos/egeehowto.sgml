@@ -1,0 +1,362 @@
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V4.1//EN">
+<book lang="en">
+<bookinfo>
+  <title>GridWay 5.4 Documentation: Integration in EGEE</title>
+        <pubdate>July, 2008</pubdate>
+        <copyright>
+            <year>2002-2008</year>
+            <holder>GridWay Team, Distributed Systems Architecture
+                Group (dsa-research.org), Universidad Complutense de Madrid.</holder>
+        </copyright>
+        <legalnotice>
+            <para>
+                Licensed under the Apache License, Version 2.0 (the "License");
+                you may not use this file except in compliance with the License.
+                You may obtain a copy of the License at
+            </para>
+            <para>
+                <ulink url="http://www.apache.org/licenses/LICENSE-2.0">
+                  http://www.apache.org/licenses/LICENSE-2.0</ulink>
+            </para>
+            <para>
+                Unless required by applicable law or agreed to in writing,
+                software distributed under the License is distributed on an
+                "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+                either express or implied. See the License for the specific
+                language governing permissions and limitations under the License.
+            </para>
+            <para>
+             Any academic report, publication, or other academic disclosure of
+             results obtained with the GridWay Metascheduler will acknowledge
+             GridWay's use by an appropriate citation to relevant papers by
+             GridWay team members.
+            </para>
+        </legalnotice>
+    </bookinfo>
+
+<chapter>
+<title>Integration of GridWay within the EGEE Infrastructure</title>
+
+    <para>
+    GridWay is an open-source component for meta-scheduling in the Grid
+    Ecosystem. GridWay gives end users, application developers and managers of
+    Grid infrastructures a <ulink
+    url="http://www.gridway.org/doku.php?id=about:functionality">scheduling
+    functionality</ulink> similar to that found on local DRM  (Distributed
+    Resource Management) systems. </para>
+
+    <para> GridWay is completely
+    functional on EGEE, being able to interface with the computing, file
+    transferring and information services available within the EGEE
+    infrastructure. GridWay does not intend to substitute the resource brokers
+    available in the EGEE distribution (gLite-WMS and LCG-RB), but to provide a
+    meta-scheduling alternative with greater functionality and higher
+    performance for given application profiles. GridWay is being successfully
+    used in the <ulink
+    url="http://grid.bifi.unizar.es/egee/fusion-vo/contact.html">NA4 Fusion
+    activities</ulink>. GridWay is being tested under <ulink
+    url="http://etics.web.cern.ch">ETICS</ulink>, the eInfraestructure for
+    Testing, Integration and Configuration of Software of the EGEE project.
+    </para> <para> This section of the GridWay web page only provides relevant
+    information about installing and configuring GridWay on the EGEE
+    infrastructure. For general information about GridWay, please refer to the
+    <ulink url="http://www.gridway.org">GridWay main page</ulink>.
+    </para>
+
+    <sect1>
+    <title>Scheduling grid infrastructure on EGEE</title>
+
+        <para>
+        The figure shows the integration of GridWay with the EGEE infrastructure
+        services available in the different distributions:
+        </para>
+
+        <para>
+        <itemizedlist>
+            <listitem>
+            <para>
+            LCG2
+            </para>
+            </listitem>
+
+            <listitem>
+            <para>
+            gLite
+            </para>
+            </listitem>
+
+            <listitem>
+            <para>
+            Future gLite
+            </para>
+            </listitem>
+        </itemizedlist>
+        </para>
+
+    <figure>
+      <title>Integration of GridWay with the EGEE services.</title>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="../images/egee.png" format="PNG">
+        </imageobject>
+        <imageobject>
+          <imagedata fileref="../images/egee.jpg" format="JPG">
+        </imageobject>
+      </mediaobject>
+    </figure>
+    </sect1>
+
+    <sect1>
+    <title>Features and benefits on the EGEE infrastructure</title>
+
+        <para>
+        GridWay provides a meta-scheduling alternative to the resource brokers
+        available in the EGEE distribution (gLite-WMS and LCG-RB) for users,
+        application developers and grid managers interested in the following
+        features:
+        </para>
+
+        <table frame='all'>
+        <title>Features and benefits.</title>
+            <tgroup cols='2' align='left' colsep='1' rowsep='1'>
+            <colspec colname='c1'>
+            <colspec colname='c2'>
+            <tbody>
+                <row>
+                <entry><command>Features</command></entry>
+                <entry><command>Benefits</command></entry>
+                </row>
+
+                <row>
+                <entry><command>Support for DRMAA standard (C and JAVA
+                bindings)</command></entry>
+                <entry>Compatibility of applications with DRM systems that
+                implement the standard, such as SGE, Condor, Torque,..</entry>
+                </row>
+
+                <row>
+                <entry><command>DRM Command Line Interface</command></entry>
+                <entry>Command Line Interface similar to that provided by local
+                resource managers to submit, kill, migrate, monitor and
+                synchronize single, array and interdependent jobs)</entry>
+                </row>
+
+                <row>
+                <entry><command>Lightweight middleware</command></entry>
+                <entry>Higher efficiencies for given application profiles as
+                GridWay reduces the number of submission stages and provides
+                mechanisms, such as opportunistic migration and performance
+                slowdown detection, that improve the usage of the underlying
+                resources</entry>
+                </row>
+
+                <row>
+                <entry><command>Site-level accounting and scheduling
+                policies</command></entry>
+                <entry>Analysis of resource utilization, determining trends in
+                usage and monitoring user behavior</entry>
+                </row>
+
+                <row>
+                <entry><command>Installation minimum
+                requirements</command></entry>
+                <entry>Easy and fast deployment and maintenance on a wide
+                variety of platforms</entry>
+                </row>
+
+                <row>
+                <entry><command>Interoperability</command></entry>
+                <entry>Simultaneous access to different infrastructures: GT WS,
+                pre-WS, LCG, gLite...</entry>
+                </row>
+            </tbody>
+            </tgroup>
+        </table>
+
+    </sect1>
+
+</chapter>
+
+<chapter>
+<title>Installation on an EGEE UI</title>
+
+    <para>
+    This installation requires a previous <ulink
+    url="https://www.scientificlinux.org/">Scientific Linux</ulink> installation
+    and the <ulink
+    url="http://glite.web.cern.ch/glite/packages/R3.0/deployment/glite-
+    UI/glite-UI.asp">User Interface configuration</ulink>. GridWay 5.2
+    installation has been tested under ETICS using:
+    </para>
+
+    <itemizedlist>
+        <listitem>
+            <para>Scientific Linux CERN Release 3 and 4</para>
+        </listitem>
+        <listitem>
+            <para>gLite 3.0.2</para>
+        </listitem>
+    </itemizedlist>
+
+    <para>
+    The GridWay <ulink url="http://www.gridway.org/documentation/stable/admin/">
+    System Administrator's guide</ulink> provides complete information
+    about installation of the meta-scheduler. Next steps illustrate specific
+    aspects for installation on an EGEE UI:
+    </para>
+
+    <itemizedlist>
+        <listitem>
+        <para>
+        Before unpacking the distribution, in order to prepare
+        the environment, execute (as root) the following:
+        <screen>
+# ${GPT_LOCATION}/sbin/gpt-build -force -nosrc -builddir=/tmp/globus_core.$$ \
+> gcc32 gcc32pthr gcc32dbg gcc32dbgpthr</screen>
+        </para>
+        <para>
+        This step generates files
+        <filename>globus-build-env-$GLOBUS_FLAVOR_NAME.sh</filename> and
+        <filename>globus_config.h</filename>.
+        </para>
+        </listitem>
+
+        <listitem>
+        <para>
+        When invoking the <command>configure</command> command, make sure you add
+        the option <option>--disable-ws</option>.
+        </para>
+        </listitem>
+
+				<listitem>
+				<para>
+					Compiling GridWay in an EGEE UI had some problems in the past as the gridftp
+					implementation installed in this machines lacked some functions needed by the
+					gridftp transfer mad used by GridWay. It also lacks Globus WS libray support (GT4)
+					so Web Services execution mad can not be built here. Fortunately these mads are not
+					used to interact with EGEE resources as home directories in this clusters are not
+					shared and WN does not necessarily need to have external connection, Pre Web
+					Services execution mad is used to talk to CE's and the dummy transfer mad is used to
+					transfer files. You can now disable gridftp mad building using
+					<option>--disable-gridftp</option> and ws mad with <option>--disable-ws</option> so
+					you can compile GridWay in an EGEE UI and use it to manage EGEE resources. The only
+					caveat is that you can not use gridftp transfer mad with other non EGEE resources or
+					interact with Web Services enabled resources. If you want to have this functionality
+					you have to install GT4 by yourself and use this installation to compile and run
+					GridWay.
+				</para>
+				</listitem>
+
+        <listitem>
+        <para>
+        For a multi-user installation, the <filename>sudoers</filename> file of the
+        <command>sudo</command> command must include also the dummy TM MAD:
+        <screen>
+gwadmin ALL=(GW_USERS) NOPASSWD: $GW_LOCATION/bin/gw_tm_mad_dummy *
+</screen>
+        </para>
+        </listitem>
+    </itemizedlist>
+</chapter>
+
+<chapter>
+<title>Configuration to access to EGEE resources</title>
+
+    <para>
+    The GridWay <ulink url="http://www.gridway.org/documentation/stable/admin/">
+    System Administrator's guide</ulink> provides complete information
+    about configuration of the meta-scheduler. Next steps describe the specific
+    configuration of the access drivers for the EGEE infrastructure services
+    (LCG).
+    </para>
+    <para>
+    In file <filename>$GW_LOCATION/etc/gwd.conf</filename>:
+    <screen width='80'>
+IM_MAD = mds2_glue:gw_im_mad_mds2_glue:-l etc/im_examples/host_glue.list:dummy:prews_nsh
+EM_MAD = prews_nsh:gw_em_mad_prews:rsl_nsh
+TM_MAD = dummy:gw_tm_mad_dummy:-g
+</screen>
+    </para>
+
+    <para>
+    There are two options for the configuration of the TM MAD:
+    </para>
+
+    <itemizedlist>
+        <listitem>
+        <para>
+        <option>-g</option>: starts a GASS server.
+        </para>
+        </listitem>
+
+        <listitem>
+        <para>
+        <option>-u</option>: specifies the URL of a GridFTP server running in
+        the client. For example:
+        <screen>
+TM_MAD = dummy:gw_tm_mad_dummy:-u gsiftp\://cepheus.dacya.ucm.es
+</screen>
+        </para>
+           </listitem>
+    </itemizedlist>
+
+    <para>
+    There are two options for VO management:
+    <itemizedlist>
+        <listitem>
+        <para>
+        It is possible to configure a GridWay instance to only use those queues
+        authorized to your VO by filtering them. This is done with option
+        <option>-q</option> of the IM MAD. For example (in
+        <filename>gwd.conf</filename>):
+        <screen>
+IM_MAD = mds2_glue:gw_im_mad_mds2_glue:-l etc/im_examples/host_glue.list
+-q (GlueCEAccessControlBaseRule=VO\:fusion):dummy:prews_nsh
+</screen>
+        </para>
+        <para>
+        Change "fusion" with the VO you belong to.
+        </para>
+        </listitem>
+        <listitem>
+        <para>
+        The other possibility is to use the parameter QUEUE_ACCESS in the
+        requirement expression of a job. This parameter is set to the list of
+        authorized VOs, each one between colons:
+        <screen>
+            QUEUE_ACCESS = ":fusion::dteam:"
+</screen>
+        For example (in the Job Template or job_template.default):
+            <screen>
+            REQUIREMENTS = QUEUE_ACCESS = "*:fusion:*"</screen>
+        to only use those queues authorized for "fusion" VO, or
+            <screen>
+            REQUIREMENTS = QUEUE_ACCESS = "" | QUEUE_ACCESS = "*:fusion:*"
+</screen>
+        if you also want to use those queues with no access restrictions.
+        </para>
+        <warning>
+        <para>
+        Make sure of using at least one of the above control access alternatives
+        in order to not cause a lot of authorization failures.
+        </para>
+        </warning>
+        </listitem>
+    </itemizedlist>
+    </para>
+</chapter>
+
+<chapter>
+    <title>Using GridWay</title>
+
+    <para>
+    The functionality and interfaces provided by GridWay are independent from
+    the underlying Grid infrastructure. Please refer to the guides (user guide,
+    command reference, programming guide...) available at <ulink
+    url="http://www.gridway.org/doku.php?id=documentation:howto">GridWay's guide web
+    page</ulink>.
+    </para>
+
+</chapter>
+
+</book>

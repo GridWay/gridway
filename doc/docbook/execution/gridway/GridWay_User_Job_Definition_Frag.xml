@@ -1,0 +1,1658 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd"
+[
+
+<!ENTITY % myents SYSTEM "../../entities">
+
+%myents;
+
+]>
+
+<section>
+<section>  
+<title>Job description overview</title>
+
+  <para>
+  Job Templates allow you to configure your job requirements, in terms of
+  needed files, generated files, requirements and ranks of execution hosts, as
+  well as other options.
+  </para>
+
+  <para>
+  Syntax:
+  <screen>
+&lt;VARIABLE&gt; = ["]&lt;VALUE>["]
+# &lt;Comments&gt;</screen>
+  </para>
+
+  <important>
+  <para>
+    Default values for EVERY Job Template are read from
+    <filename>$GW_LOCATION/etc/job_template.default</filename>.
+  </para>
+  </important>
+</section>
+
+  <section>
+  <title>Job Template options</title>
+
+  <table frame='all'>
+	<title>Job Template options.</title>
+    <tgroup cols='2' align='left' colsep='1' rowsep='1'>
+    <tbody>
+      <row>
+      <entry namest="c1" nameend="c2">General</entry>
+      </row>
+
+      <row>
+      <entry>NAME</entry>
+      <entry>Name of the job (filename of the Job Template by default).</entry>
+      </row>
+      <row>
+      <entry namest="c1" nameend="c2">Execution</entry>
+      </row>
+
+      <row>
+      <entry>EXECUTABLE</entry>
+      <entry>The executable file. Example: EXECUTABLE = bin.${ARCH}</entry>
+      </row>
+
+      <row>
+      <entry>ARGUMENTS</entry>
+      <entry>Arguments to the above executable. Example:
+      ARGUMENTS = "${TASK_ID}"</entry>
+      </row>
+
+      <row>
+      <entry>ENVIRONMENT</entry>
+      <entry>User defined, comma-separated, environment variables. Example:
+      ENVIRONMENT = SCRATCH_DIR /tmp, LD_LIBRARY_PATH=/usr/local/lib</entry>
+      </row>
+
+      <row>
+      <entry>TYPE</entry>
+      <entry>Type of job. Possible values are "single" (default), "multiple" and
+      "mpi", with similar behaviour to that of GRAM jobs.</entry>
+      </row>
+
+      <row>
+      <entry>NP</entry>
+      <entry>Number of processors in MPI jobs. For "multiple" and "single" jobs
+      it defines the "count" parameter in the RSL.</entry>
+      </row>
+
+      <row>
+      <entry namest="c1" nameend="c2">I/O files</entry>
+      </row>
+
+      <row>
+      <entry>INPUT_FILES</entry>
+      <entry>A comma-separated pair of "local remote" filenames. If the remote
+      filename is missing, the local filename will be preserved in the
+      execution host. Example: INPUT_FILES = param.${TASK_ID} param,
+      inputfile</entry>
+      </row>
+
+      <row>
+      <entry>OUTPUT_FILES</entry>
+      <entry>A comma-separated pair of remote filename local filename. If the
+      local filename is missing, the remote filename will be preserved in the
+      client host. Example: OUTPUT_FILES = outputfile, binary
+      binary.${ARCH}.${TASK_ID}</entry>
+      </row>
+
+      <row>
+      <entry namest="c1" nameend="c2">Standard streams</entry>
+      </row>
+
+      <row>
+      <entry>STDIN_FILE</entry>
+      <entry>Standard input file. Example: STDIN_FILE = /dev/null</entry>
+      </row>
+
+      <row>
+      <entry>STDOUT_FILE</entry>
+      <entry>Standard output file. Example: STDOUT_FILE =
+      stdout_file.${JOB_ID}</entry>
+      </row>
+
+      <row>
+      <entry>STDERR_FILE</entry>
+      <entry>Standard error file. Example:
+      STDERR_FILE = stderr_file.${JOB_ID}</entry>
+      </row>
+
+      <row>
+      <entry namest="c1" nameend="c2">Checkpointing</entry>
+      </row>
+
+      <row>
+      <entry>RESTART_FILES</entry>
+      <entry>Checkpoint Files. These files are managed by the programmer and
+      should be architecture independent (NO URLS HERE, you can use a
+      checkpoint server using CHECKPOINT_URL). Example: RESTART_FILES =
+      checkpoint</entry>
+      </row>
+
+      <row>
+      <entry>CHECKPOINT_INTERVAL</entry>
+      <entry>How often (seconds) restart files are transferred from the
+      execution host to the checkpointing server.</entry>
+      </row>
+
+      <row>
+      <entry>CHECKPOINT_URL</entry>
+      <entry>GridFTP URL to store/access checkpoint files (Default is log
+	  directory in localhost). Example:
+      CHECKPOINT_URL = gsiftp://hydrus.ucm.es/var/checkpoints/</entry>
+      </row>
+
+      <row>
+      <entry namest="c1" nameend="c2">Resource selection
+      (See <xref linkend="ResSelectExpr"/> for more information)</entry>
+      </row>
+
+      <row>
+      <entry>REQUIREMENTS</entry>
+      <entry>A Boolean expression evaluated for each available host, if the
+      evaluation returns true the host will be considered to submit the job.
+      Example: REQUIREMENTS = ARCH = "i686" &amp; CPU_MHZ > 1000;</entry>
+      </row>
+
+      <row>
+      <entry>RANK</entry>
+      <entry>A numerical expression evaluated for each candidate host (those
+      for which the requirement expression is true). Those candidates with
+      higher ranks are used first to execute your jobs. Example:
+      RANK = (CPU_MHZ * 2) + FREE_MEM_MB;</entry>
+      </row>
+
+      <row>
+      <entry namest="c1" nameend="c2">Scheduling</entry>
+      </row>
+
+      <row>
+      <entry>RESCHEDULING_INTERVAL</entry>
+      <entry>How often GridWay searches the Grid for better resources to run
+      this job. (0 = never)</entry>
+      </row>
+
+      <row>
+      <entry>RESCHEDULING_THRESHOLD</entry>
+      <entry>If a better resource is found and the job has been running less
+      than this threshold (in (seconds), it will migrate to the new
+      host.</entry>
+      </row>
+
+      <row>
+      <entry>DEADLINE</entry>
+      <entry>Deadline (format [[D:]H:]M) to start the job (0 = none).</entry>
+      </row>
+
+      <row>
+      <entry namest="c1" nameend="c2">Performance</entry>
+      </row>
+
+      <row>
+      <entry>SUSPENSION_TIMEOUT</entry>
+      <entry>Maximum suspension time (seconds) in the local job management
+      system. If exceeded the job is migrated to another host.
+      (0 = never)</entry>
+      </row>
+
+      <row>
+      <entry>CPULOAD_THRESHOLD</entry>
+      <entry>If the CPU assigned to your job is less than this given
+      percentage, the job will be migrated</entry>
+      </row>
+
+      <row>
+      <entry>MONITOR</entry>
+      <entry>Optional program to monitor job performance</entry>
+      </row>
+
+      <row>
+      <entry namest="c1" nameend="c2">Fault tolerance</entry>
+      </row>
+
+      <row>
+      <entry>RESCHEDULE_ON_FAILURE</entry>
+      <entry>Behavior in case of failure. Possible values are 'yes' or
+      'no'</entry>
+      </row>
+
+      <row>
+      <entry>NUMBER_OF_RETRIES</entry>
+      <entry>Number of retries in case of failure. GridWay follows a
+      linear backoff strategy for re-trying file transfers and job
+      submissions.</entry>
+      </row>
+
+      <row>
+      <entry namest="c1" nameend="c2">Advanced job execution</entry>
+      </row>
+
+      <row>
+      <entry>WRAPPER</entry>
+      <entry>Script for wrapper. stdout and stderr streams of this program can
+      be found in directory <filename>$GW_LOCATION/var/$GW_JOB_ID</filename>
+      as files <filename>stdout.wrapper.$GW_RESTARTED</filename> and
+      <filename>stderr.wrapper.$GW_RESTARTED</filename></entry>
+      </row>
+
+      <row>
+      <entry>PRE_WRAPPER</entry>
+      <entry>Optional program that is executed before the execution of the job,
+      to perform an additional remote setup (e.g. access a web service). This
+      job is ALWAYS submitted to the FORK job-manager. stdout and stderr streams
+      of this program can be found in directory
+      <filename>$GW_LOCATION/var/$GW_JOB_ID</filename> as files
+      <filename>stdout.pre_wrapper.$GW_RESTARTED</filename> and
+      <filename>stderr.pre_wrapper.$GW_RESTARTED</filename></entry>
+      </row>
+
+      <row>
+      <entry>PRE_WRAPPER_ARGUMENTS</entry>
+      <entry>Arguments to the pre-wrapper program.</entry>
+      </row>
+    </tbody>
+    </tgroup>
+  </table>
+  </section>
+
+  <section>
+  <title>File definition in Job Templates</title>
+
+  <para>
+  Input and output files are in general specified in a comma-separated,
+  source/destination pair.
+  </para>
+  <screen>SRC1 DST1, SRC2 DST2,...</screen>
+  <para>
+  We next describe the available alternatives and protocols that you can use
+  to choose the best staging strategy for your applications.
+  </para>
+
+    <section>
+    <title> Defining input files </title>
+
+    <para>
+      Input files (if staged to the remote host) are always placed in the
+      remote experiment directory. However you can specify the name used for
+      the file in the remote directory with the destination name (DST above).
+      This feature is very useful when your executable always expect a fixed
+      input filename, and you want to process different input files (as is
+      common in parametric computations).
+    </para>
+
+    <important>
+      <para>
+        The destination names for input files MUST be a single name, do not use
+        absolute paths or URLs.
+      </para>
+    </important>
+
+    <para>
+    You can specify the input files using:
+    <itemizedlist>
+      <listitem>
+        <para>
+        <emphasis>Absolute path</emphasis>: In this case no staging is
+        performed. File is assumed to be in that location in the remote host.
+        </para>
+        <para>
+        Example:
+<screen>
+EXECUTABLE  = /bin/ls      #Will use remote ls!</screen>
+        </para>
+      </listitem>
+
+      <listitem>
+        <para>
+        <emphasis>GridFTP URL</emphasis>: The file will be downloaded from the
+        given GridFTP url. If no destination is given the filename in the URL
+        will be used in the remote host.
+        </para>
+        <para>
+        Example, will copy file <filename>input_exp1</filename> from /tmp in
+        machine to the remote host with name <filename>input</filename>.
+        <screen>
+INPUT_FILES  = gsiftp://machine/tmp/input_exp1 input</screen>
+        </para>
+      </listitem>
+
+      <listitem>
+        <para>
+        <emphasis>File URL</emphasis>: The file will copied from an absolute
+        path in the local host. If no destination is given the filename in the
+        URL will be used in the remote host.
+        </para>
+        <para>
+        Example:
+        <screen width='80'>
+INPUT_FILES  = file:///etc/passwd #Will copy local /etc/passwd file to remote dir, with name passwd</screen>
+        </para>
+      </listitem>
+
+      <listitem>
+        <para>
+        <emphasis>Name</emphasis>: Use simple names to stage files in
+        your local experiment directory (directory where the Job Template file
+        is placed). If no destination is given the filename will be preserved.
+        </para>
+        <para>
+        Example:
+        <screen>
+INPUT_FILES  = test_case.bin</screen>
+        </para>
+      </listitem>
+    </itemizedlist>
+    </para>
+    <note>
+    <para>
+    The executable is treated as an input file, so the same remarks are
+    applicable for the <parameter>EXECUTABLE</parameter> Job Template parameter.
+    </para>
+    </note>
+    </section>
+
+    <section>
+      <title> Defining output files </title>
+
+      <para>
+        Output files are always copied FROM the remote experiment directory.
+        However you can specify the destination of the output files of your
+        applications.
+      </para>
+
+      <important>
+        <para>
+          The source names for output files MUST be a single name, do not use
+          absolute paths or URLs.
+        </para>
+      </important>
+
+      <para>
+        You can specify the destination of output files using:
+        <itemizedlist>
+          <listitem>
+            <para>
+            <emphasis>Absolute path</emphasis>: The remote file name will be
+            copied to the absolute path in the local host. Note that you can
+            also use <computeroutput>file:///</computeroutput> protocol.
+            </para>
+            <para>
+            Example, to copy the output file <filename>output.bin</filename>
+            in the <filename>/tmp</filename> directory of the local host with name
+            <filename>outfile</filename>:
+            <screen>
+OUTPUT_FILES  = output.bin /tmp/outfile </screen>
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              <emphasis>GridFTP URL</emphasis>: The file will be copied to the
+              given GridFTP url.
+            </para>
+            <para>
+              Example, you can also use variable substitution in URLs, see next
+              section.
+              <screen>
+OUTPUT_FILES  = out gsiftp://storage_servere/~/output.${TASK_ID}</screen>
+            </para>
+          </listitem>
+
+          <listitem>
+            <para>
+              <emphasis>Name</emphasis>: Use simple names to stage files to
+              your local experiment directory (directory where the Job Template file
+              is placed). If no destination is given the filename will be preserved.
+            </para>
+            <para>
+              Example:
+              <screen>
+OUTPUT_FILES  = test_case.bin</screen>
+            </para>
+            <para>
+              Tip: You can organize your output files in directories in the
+              experiment directory (They MUST exist!), using a relative path
+            <screen width='80'>
+OUTPUT_FILES = outfile Out/file.${JOB_ID} #Directory Out must exist in the experiment directory</screen>
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+  </section>
+
+  <section>
+      <title> Defining standard streams </title>
+      <para>
+        Standard streams includes the standard input for your executable
+        (<parameter>STDIN_FILE</parameter>) and its standard output and error
+        (<parameter>STDOUT_FILE</parameter> and <parameter>STDERR_FILE</parameter>).
+      </para>
+      <para>
+        The STDIN_FILE can be defined using any of the methods described above
+        for the input files. However you <emphasis> can not </emphasis> specified
+        a destination name for the standard input stream, as is internally handled
+        by the system. Note also that <emphasis> only one</emphasis> standard input
+        file can be specified.
+      </para>
+      <para>
+        Example:
+        <screen>
+STDIN_FILE = In/input.${JOB_ID} #Will use input from directory In</screen>
+      </para>
+      <para>
+        The STDOUT_FILE and STDERR_FILE parameters can be defined
+        using any of the methods described above
+        for the output files. However you <emphasis> can not </emphasis> specified
+        a source name (only destination).
+        Note also that <emphasis> only one</emphasis> standard output and error
+        files can be specified.
+      </para>
+      <para>
+        Example:
+        <screen>
+STDOUT_FILE = Out/ofile #Will place stdout in Out directory with name ofile</screen>
+      </para>
+    </section>
+
+    <section>
+    <title> Defining restart files </title>
+
+      <para>
+        Restart files are periodically copied to the job directory
+        (<filename>$GW_LOCATION/var/$JOB_ID/</filename>). Restart files are
+        only specified with its name. Note also that you can defined a
+        checkpointing server with the <parameter>CHECKPOINT_URL</parameter>
+        Job Template parameter.
+      </para>
+      <para>
+        Example:
+        <screen>
+RESTART_FILES = tmp_file</screen>
+      </para>
+    </section>
+  </section>
+
+<section id="VarSub">
+	<title>Variable substitution</title>
+
+  <para>
+	You can use variables in the value string of each option, with the format:
+  <screen>${GW_VARIABLE}</screen>
+  </para>
+
+  <para>
+	These variables are substituted at run time with its corresponding value. For example:
+  </para>
+
+  <screen>STDOUT_FILE = stdout.${JOB_ID}</screen>
+
+  <para>
+	will store the standard output of job 23 in the file <filename>stdout.23</filename>
+  </para>
+
+  <para>
+	The following table lists the variables available to define job options,
+  along with their description.
+  </para>
+
+  <table frame='all'>
+    <title>Substitution variables.</title>
+		<tgroup cols='2' align='left' colsep='1' rowsep='1'>
+		<tbody>
+		  <row>
+			<entry>${JOB_ID}</entry>
+			<entry>The job identifier</entry>
+			</row>
+
+      <row>
+			<entry>${ARRAY_ID}</entry>
+			<entry>The job array identifier (-1 if the job does not belong to any)</entry>
+			</row>
+
+      <row>
+			<entry>${TASK_ID}</entry>
+			<entry>The task identifier within the job array (-1 if the job does not
+      belong to any)</entry>
+			</row>
+
+      <row>
+			<entry>${TOTAL_TASKS}</entry>
+			<entry>The total number of tasks in the job array (-1 if the job does not
+      belong to any)</entry>
+			</row>
+
+      <row>
+			<entry>${ARCH}</entry>
+			<entry>The architecture of the selected execution host</entry>
+			</row>
+       <row>
+			<entry>${PARAM}</entry>
+			<entry>Allows the assignment of arbitrary start and increment values for array jobs
+(start + increment*GW_TASK_ID). Useful to generate file naming patterns or task processing. The values for start and increment
+will  be specified with options -s (for start, with 0 by default) and -i (for
+increment, with 1 by default) of the gwsubmit command.</entry>
+			</row>
+       <row>
+			<entry>${MAX_PARAM}</entry>
+			<entry>Upper bound of the ${PARAM} variable.</entry>
+			</row>
+	  </tbody>
+    </tgroup>
+  </table>
+
+  <important>
+  <para>
+    The above variables can be used in any job option.
+  </para>
+  </important>
+  </section>
+
+  <section id="ResSelectExpr">
+	<title>Resource selection expressions</title>
+
+    <section>
+    <title>Requirement expression syntax</title>
+    <para>
+    The syntax of the requirement expressions is defined as:
+    <screen>
+stmt::= expr';'
+expr::= VARIABLE '=' INTEGER
+        | VARIABLE '>' INTEGER
+        | VARIABLE '&lt;' INTEGER
+        | VARIABLE '=' STRING
+        | expr '&amp;' expr
+        | expr '|' expr
+        | '!' expr
+        | '(' expr ')'</screen>
+		</para>
+
+    <para>
+    Each expression is evaluated to 1 (TRUE) or 0 (FALSE). Only those hosts
+    for which the requirement expression is evaluated to TRUE will be
+    considered to execute the job.
+    </para>
+    <para>
+      Logical operators are as expected ( less '&lt;', greater '&gt;', '&amp;' AND,
+      '|' OR, '!' NOT), '=' means equals with integers. When you use '='
+      operator with strings, it performs a shell wildcard pattern matching.
+    </para>
+    <para>
+    Examples:
+    <screen>
+REQUIREMENTS = LRMS_NAME = "*pbs*"; # Only use pbs like jobmanagers
+REQUIREMENTS = HOSTNAME = "*.es"; #Only hosts in Spain
+REQUIREMENTS = HOSTNAME = "hydrus.dacya.ucm.es"; #Only use hydrus.dacya.ucm.es</screen>
+    </para>
+    </section>
+
+    <section>
+    <title>Rank expression syntax</title>
+
+    <para>
+    The syntax of the rank expressions is defined as:
+    <screen>
+stmt::= expr';'
+expr::= VARIABLE
+        | INTEGER
+        | expr '+' expr
+        | expr '-' expr
+        | expr '*' expr
+        | expr '/' expr
+        | '-' expr
+        | '(' expr ')'</screen>
+    </para>
+
+    <para>
+    Rank expressions are evaluated using each host information. '+', '-', '*',
+    '/' and '-' are arithmetic operators, so only integer values should be used
+    in rank expressions.
+    </para>
+
+    </section>
+
+    <section>
+    <title>Requirement and rank variables</title>
+
+		<para>
+    To set the <emphasis>REQUIREMENTS</emphasis> and <emphasis>RANK</emphasis>
+    parameter values the following extended set of variables, provided by the
+    Information Manager, can be used:
+    </para>
+
+    <table frame='all'>
+	  <title>Variables that can be used to define the job <emphasis>REQUIREMENTS</emphasis> and <emphasis>RANK</emphasis>.</title>
+		  <tgroup cols='2' align='left' colsep='1' rowsep='1'>
+    	<tbody>
+        <row>
+		    <entry>HOSTNAME</entry>
+			  <entry>FQDN (Fully Qualified Domain Name) of the execution host
+        (e.g. "hydrus.dacya.ucm.es")</entry>
+				</row>
+
+        <row>
+				<entry>ARCH</entry>
+				<entry>Architecture of the execution host (e.g. "i686", "alpha")</entry>
+    		</row>
+
+        <row>
+		    <entry>OS_NAME</entry>
+			  <entry>Operating System name of the execution host (e.g. "Linux", "SL")</entry>
+				</row>
+
+        <row>
+				<entry>OS_VERSION</entry>
+				<entry>Operating System version of the execution host (e.g. "2.6.9-1.66", "3")</entry>
+    		</row>
+
+        <row>
+		    <entry>CPU_MODEL</entry>
+			  <entry>CPU model of the execution host (e.g. "Intel(R) Pentium(R) 4 CPU 2", "PIV")</entry>
+				</row>
+
+        <row>
+				<entry>CPU_MHZ</entry>
+				<entry>CPU speed in MHz of the execution host</entry>
+    		</row>
+
+        <row>
+		    <entry>CPU_FREE</entry>
+			  <entry>Percentage of free CPU of the execution host</entry>
+				</row>
+
+        <row>
+				<entry>CPU_SMP</entry>
+				<entry>CPU SMP size of the execution host</entry>
+    		</row>
+
+        <row>
+		    <entry>NODECOUNT</entry>
+			  <entry>Total number of nodes of the execution host</entry>
+				</row>
+
+        <row>
+				<entry>SIZE_MEM_MB</entry>
+				<entry>Total memory size in MB of the execution host</entry>
+    		</row>
+
+        <row>
+		    <entry>FREE_MEM_MB</entry>
+			  <entry>Free memory in MB of the execution hosts</entry>
+				</row>
+
+        <row>
+    		<entry>SIZE_DISK_MB</entry>
+	    	<entry>Total disk space in MB of the execution hosts</entry>
+		    </row>
+
+        <row>
+				<entry>FREE_DISK_MB</entry>
+				<entry>Free disk space in MB of the execution hosts</entry>
+				</row>
+
+        <row>
+	    	<entry>LRMS_NAME</entry>
+		    <entry>Name of local DRM system (job manager) for execution, usually
+        not fork (e.g. "jobmanager-pbs", "PBS", "jobmanager-sge", "SGE")</entry>
+			  </row>
+
+        <row>
+				<entry>LRMS_TYPE</entry>
+				<entry>Type of local DRM system for execution (e.g. "pbs", "sge")</entry>
+    		</row>
+
+        <row>
+		    <entry>QUEUE_NAME</entry>
+			  <entry>Name of the queue (e.g. "default", "short", "dteam")</entry>
+				</row>
+
+        <row>
+        <entry>QUEUE_NODECOUNT</entry>
+        <entry>Total node count of the queue</entry>
+		    </row>
+
+        <row>
+        <entry>QUEUE_FREENODECOUNT</entry>
+        <entry>Free node count of the queue</entry>
+				</row>
+
+        <row>
+	    	<entry>QUEUE_MAXTIME</entry>
+		    <entry>Maximum wall time of jobs in the queue</entry>
+			  </row>
+
+        <row>
+				<entry>QUEUE_MAXCPUTIME</entry>
+				<entry>Maximum CPU time of jobs in the queue</entry>
+    		</row>
+
+        <row>
+		    <entry>QUEUE_MAXCOUNT</entry>
+        <entry>Maximum count of jobs that can be submitted in one request to
+        the queue</entry>
+				</row>
+
+        <row>
+				<entry>QUEUE_MAXRUNNINGJOBS</entry>
+        <entry>Maximum number of running jobs in the queue</entry>
+	    	</row>
+
+        <row>
+			  <entry>QUEUE_MAXJOBSINQUEUE</entry>
+        <entry>Maximum number of queued jobs in the queue</entry>
+				</row>
+
+        <row>
+	    	<entry>QUEUE_DISPATCHTYPE</entry>
+        <entry>Dispatch type of the queue (e.g. "batch", "inmediate")</entry>
+			  </row>
+
+        <row>
+    		<entry>QUEUE_PRIORITY</entry>
+        <entry>Priority of the queue</entry>
+		    </row>
+
+        <row>
+        <entry>QUEUE_STATUS</entry>
+        <entry>Status of the queue  (e.g. "active", "production")</entry>
+		    </row>
+      </tbody>
+	   	</tgroup>
+    </table>
+    </section>
+
+
+	<section>
+	<title>Job environment</title>
+
+  <para>
+  Job environment variables can be easily set with the <parameter>ENVIRONMENT
+  </parameter> parameter of the Job Template. These environment variables are
+  parsed, so you can use the GridWay variables defined in
+  <xref linkend='VarSub'/>, to set the job environment.
+  </para>
+
+  <note>
+  <para>
+  The variables defined in the ENVIRONMENT are "sourced" in a bash shell. In
+  this way you can take advantage of the bash substitution capabilities and
+  built-in functions. For example:
+	</para>
+  <screen>
+ENVIRONMENT = VAR = "`expr ${JOB_ID} + 3`" # will set VAR to JOB_ID + 3</screen>
+  </note>
+
+  <para>
+  In addition to those variables set in the <parameter>ENVIRONMENT
+  </parameter> parameter, GridWay set the following variables, that can be used
+  by your applications:
+    <itemizedlist>
+        <listitem>
+          <para>GW_RESTARTED</para>
+        </listitem>
+        <listitem>
+          <para>GW_EXECUTABLE</para>
+        </listitem>
+        <listitem>
+          <para>GW_HOSTNAME</para>
+        </listitem>
+        <listitem>
+          <para>GW_ARCH</para>
+        </listitem>
+        <listitem>
+          <para>GW_CPU_MHZ</para>
+        </listitem>
+        <listitem>
+          <para>GW_MEM_MB</para>
+        </listitem>
+        <listitem>
+          <para>GW_RESTART_FILES</para>
+        </listitem>
+        <listitem>
+          <para>GW_CPULOAD_THRESHOLD</para>
+        </listitem>
+        <listitem>
+          <para>GW_ARGUMENTS</para>
+        </listitem>
+        <listitem>
+          <para>GW_TASK_ID</para>
+        </listitem>
+        <listitem>
+          <para>GW_CPU_MODEL</para>
+        </listitem>
+        <listitem>
+          <para>GW_ARRAY_ID</para>
+        </listitem>
+        <listitem>
+          <para>GW_TOTAL_TASKS</para>
+        </listitem>
+        <listitem>
+          <para>GW_JOB_ID</para>
+        </listitem>
+        <listitem>
+          <para>GW_OUTPUT_FILES</para>
+        </listitem>
+        <listitem>
+          <para>GW_INPUT_FILES</para>
+        </listitem>
+        <listitem>
+          <para>GW_OS_NAME</para>
+        </listitem>
+        <listitem>
+          <para>GW_USER</para>
+        </listitem>
+        <listitem>
+          <para>GW_DISK_MB</para>
+        </listitem>
+        <listitem>
+          <para>GW_OS_VERSION</para>
+        </listitem>
+    </itemizedlist>
+  </para>
+</section>
+	
+  <section>
+		<title>Monitor and Wrapper Scripts</title>
+		
+		<para>
+			If you want to specify your own monitor or wrapper script you can do it using
+			<envar>WRAPPER</envar> or <envar>MONITOR</envar> variables in your job template (or
+			modifying the default one located in the etc directory of your GW installation). The
+			file you specify must be a full path name of the script or a relative path if it is
+			located inside <filename>$GW_LOCATION</filename>. Here you can not use gsiftp or file
+			url protocol prefixes.
+		</para>
+	</section>
+</section>
+
+
+<section>
+<title>Job Submission Description Language (JSDL)</title>
+  <section>
+  <title>JSDL overview</title>
+  <para>
+    GridWay supports Job Submission Description Language (JSDL). This
+    specification is a language for describing the job requirements for
+    submission to resources. The JSDL language specification is based on XML
+    Schema that facilitate the expression of those requirements as a set of XML
+    elements. More info at <ulink
+    url="http://forge.gridforum.org/sf/projects/jsdl-wg">https://forge.gridforum.org/sf/projects/jsdl-wg
+    </ulink>
+  </para>
+  </section>
+  <section>
+  <title>JSDL document structure</title>
+  <para>
+    The JSDL document structure is as follows:
+  </para>
+<screen>&lt;JobDefinition>
+|-------&lt;JobDescription>
+|---------------&lt;JobIdentification>
+|-----------------------&lt;JobName>?
+|-----------------------&lt;Description>?
+|-----------------------&lt;JobAnnotation>*
+|-----------------------&lt;JobProject>*
+|-----------------------&lt;xsd:any##other>*
+|---------------&lt;/JobIdentification>?
+|---------------&lt;Application>
+|-----------------------&lt;ApplicationName>?
+|-----------------------&lt;ApplicationVersion>?
+|-----------------------&lt;Description>?
+|-----------------------&lt;xsd:any##other>*
+|---------------&lt;/Application>?
+|---------------&lt;Resources>?
+|-----------------------&lt;CandidateHosts>
+|-------------------------------&lt;HostName>+
+|-----------------------&lt;/CandidateHosts>?
+|-----------------------&lt;FileSystem>
+|-------------------------------&lt;Description>?
+|-------------------------------&lt;MountPoint>?
+|-------------------------------&lt;MountSource>?
+|-------------------------------&lt;DiskSpace>?
+|-------------------------------&lt;FileSystemType>?
+|-------------------------------&lt;xsd:any##other>*
+|-----------------------&lt;/FileSystem>*
+|-----------------------&lt;ExclusiveExecution>?
+|-----------------------&lt;OperatingSystem>?
+|-------------------------------&lt;OperatingSystemType>
+|---------------------------------------&lt;OperatingSystemName>
+|---------------------------------------&lt;xsd:any##other>*
+|-------------------------------&lt;/OperatingSystemType>?
+|-------------------------------&lt;OperatingSystemVersion>?
+|-------------------------------&lt;Description>?
+|-------------------------------&lt;xsd:any##other>*
+|-----------------------&lt;/OperatingSystem>?
+|-----------------------&lt;CPUArchitecture>
+|-------------------------------&lt;CPUArchitectureName>
+|-------------------------------&lt;xsd:any##other>*
+|-----------------------&lt;/CPUArchitecture>?
+|-----------------------&lt;IndividualCPUSpeed>?
+|-----------------------&lt;IndividualCPUTime>?
+|-----------------------&lt;IndividualCPUCount>?
+|-----------------------&lt;IndividualNetworkBandwidth>?
+|-----------------------&lt;IndividualPhysicalMemory>?
+|-----------------------&lt;IndividualVirtualMemory>?
+|-----------------------&lt;IndividualDiskSpace>?
+|-----------------------&lt;TOTALCPUTime>?
+|-----------------------&lt;TOTALCPUCount>?
+|-----------------------&lt;TOTALPhysicalMemory>?
+|-----------------------&lt;TOTALVirtualMemory>?
+|-----------------------&lt;TOTALDiskSpace>?
+|-----------------------&lt;TOTALResourceCount>?
+|-----------------------&lt;xsd:any##other>*
+|---------------&lt;/Resources>?
+|---------------&lt;DataStaging>
+|-----------------------&lt;FileName>
+|-----------------------&lt;FileSystemName>?
+|-----------------------&lt;CreationFlag>
+|-----------------------&lt;DeleteOnTermination>?
+|-----------------------&lt;Source>
+|-------------------------------&lt;URI>?
+|-------------------------------&lt;xsd:any##other>*
+|-----------------------&lt;/Source>?
+|-----------------------&lt;Target>
+|-------------------------------&lt;URI>?
+|-------------------------------&lt;xsd:any##other>*
+|-----------------------&lt;/Target>?
+|-----------------------&lt;xsd:any##other>*
+|---------------&lt;/DataStaging>*
+|---------------&lt;xsd:any##other>*
+&lt;/JobDefinition>
+</screen>
+<note>
+  <para>
+  The symbol <emphasis role="bold">"?"</emphasis> denotes zero or one occurrences,
+  <emphasis role="bold">"*"</emphasis> denotes zero or more occurrences and
+  <emphasis role="bold">"+"</emphasis> denotes one or more occurrences.
+  </para>
+</note>
+  </section>  
+  <section>
+    <title>JSDL POSIX application</title>
+    <para>
+      This schema defines the JSDL specification for describing an application executed on a POSIX
+      compliance system. Due to GridWay Job Template specification, this schema MUST be included in the
+      JSDL file. The JSDL POSIX Application Schema is as follow:
+    </para>
+<screen>
+&lt;POSIXApplication name="xsd:NCName"?>
+|-------&lt;Executable>?
+|-------&lt;Argument>*
+|-------&lt;Input>?
+|-------&lt;Output>?
+|-------&lt;Error>?
+|-------&lt;WorkingDirectory>?
+|-------&lt;Environment>*
+|-------&lt;WallTimeLimit>?
+|-------&lt;FileSizeLimit>?
+|-------&lt;CoreDumpLimit>?
+|-------&lt;DataSegmentLimit>?
+|-------&lt;LockedMemoryLimit>?
+|-------&lt;MemoryLimit>?
+|-------&lt;OpenDescriptorsLimit>?
+|-------&lt;PipeSizeLimit>?
+|-------&lt;StackSizeLimit>?
+|-------&lt;CPUTimeLimit>?
+|-------&lt;ProcessCountLimit>?
+|-------&lt;VirtualMemoryLimit>?
+|-------&lt;ThreadCountLimit>?
+|-------&lt;UserName>?
+|-------&lt;GroupName>?
+&lt;/POSIXApplication name="xsd:NCName"?>
+</screen>
+  <para>
+    More details at
+    <ulink url="http://forge.gridforum.org/sf/projects/jsdl-wg">https://forge.gridforum.org/sf/projects/jsdl-wg
+    </ulink>
+  </para>
+  </section>
+  <section>
+    <title>JSDL HPC Profile Application Extension</title>
+    <para>
+      This schema defines the JSDL specification for describing a simple HPC application that is made up of an 
+      executable file running within an operating system process. It shares much in common with the JSDL POSIXApplication.
+      The JSDL HPC Application Schema is as follow:
+    </para>
+<screen>
+&lt;HPCProfileApplication name="xsd:NCName"?>
+|-------&lt;Executable>?
+|-------&lt;Argument>*
+|-------&lt;Input>?
+|-------&lt;Output>?
+|-------&lt;Error>?
+|-------&lt;WorkingDirectory>?
+|-------&lt;Environment>*
+|-------&lt;UserNamet>?
+&lt;/HPCProfileApplication name="xsd:NCName"?>
+</screen>
+  <para>
+    More details at
+    <ulink url="http://forge.gridforum.org/sf/projects/jsdl-wg">https://forge.gridforum.org/sf/projects/jsdl-wg
+    </ulink>
+  </para>
+  </section>
+
+  <section>
+  <title>Job Submission Description Language versus GridWay Job Template</title>
+  <para>
+      Next table compares JSDL and GridWay Job Template schema, and the JSDL elements support by the current GridWay version.
+
+  <table id='TableJSDLvsGWJT' frame='all'> <title>JSDL vs GWJT</title>
+    <tgroup cols='3' align='left' colsep='1' rowsep='1'>
+        <tbody>
+          <row>
+        <entry><emphasis role="bold">JSDL Element</emphasis></entry>
+        <entry><emphasis role="bold">GWJT Attribute</emphasis></entry>
+        <entry><emphasis role="bold">Adoption</emphasis></entry>
+        <!--<entry><emphasis role="bold">Comments</emphasis></entry>-->
+    </row>
+    <row>
+        <entry>JobDefinition</entry>
+        <entry>-</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>JobDescription</entry>
+        <entry>-</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>JobIdentification</entry>
+        <entry>-</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>JobName</entry>
+        <entry>NAME</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>JobAnnotation</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>JobProject</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>Application</entry>
+        <entry>-</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>ApplicationName</entry>
+        <entry>-</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>ApplicationVersion</entry>
+        <entry>-</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>Description</entry>
+        <entry>-</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>Resources</entry>
+        <entry>-</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>CandidateHosts</entry>
+        <entry>-</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>HostName</entry>
+        <entry>HOSTNAME</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>FileSystem</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>MountPoint</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>MountSource</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>DiskSpace</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>FileSystemType</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>ExclusiveExecution</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>OperatingSystem</entry>
+        <entry>-</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>OperatingSystemType</entry>
+        <entry>-</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>OperatingSystemName</entry>
+        <entry>OS_NAME</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>OperatingSystemVersion</entry>
+        <entry>OS_VERSION</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>CPUArchitecture</entry>
+        <entry>-</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>CPUArchitectureName</entry>
+        <entry>ARCH</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>IndividualCPUSpeed</entry>
+        <entry>CPU_MHZ</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>IndividualCPUTime</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>IndividualCPUCount</entry>
+        <entry>NODECOUNT</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>IndividualNetworkBandwidth</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>IndividualPhysicalMemory</entry>
+        <entry>MEM_MB</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>IndividualVirtualMemory</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>IndividualDiskSpace</entry>
+        <entry>SIZE_DISK_MB</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>TOTALCPUTime</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>TOTALCPUCount</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>TOTALPhysicalMemory</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>TOTALVirtualMemory</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>TOTALDiskSpace</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>TOTALResourceCount</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>DataStaging</entry>
+        <entry>-</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>FileName</entry>
+        <entry>-</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>FileSystemName</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>CreationFlag</entry>
+        <entry>-</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>DeleteOnTermination</entry>
+        <entry>-</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>Source</entry>
+        <entry>INPUT_FILES</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>Target</entry>
+        <entry>OUTPUT_FILES</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>URI</entry>
+        <entry>-</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>POSIXApplication</entry>
+        <entry>-</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>Executable</entry>
+        <entry>EXECUTABLE</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>Argument</entry>
+        <entry>ARGUMENTS</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>Input</entry>
+        <entry>STDIN_FILE</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>Output</entry>
+        <entry>STDOUT_FILE</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>Error</entry>
+        <entry>STDERR_FILE</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>WorkingDirectory</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>Environment</entry>
+        <entry>ENVIRONMENT</entry>
+        <entry>Supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>WallTimeLimit</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>FileSizeLimit</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>CoreDumpLimit</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>DataSegmentLimit</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>LockedMemoryLimit</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>MemoryLimit</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>OpenDescriptorsLimit</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>PipeSizeLimit</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>StackSizeLimit</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>CPUTimeLimit</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>ProcessCountLimit</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>VirtualMemoryLimit</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>ThreadCountLimit</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>UserName</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    <row>
+        <entry>GroupName</entry>
+        <entry>-</entry>
+        <entry>Not supported</entry>
+        <!--<entry>-</entry>-->
+    </row>
+    </tbody>
+    </tgroup>
+  </table>
+    </para>
+  </section>
+
+  <section>
+    <title>Examples</title>
+    <section>
+    <title>A simple example</title>
+    <para>
+      This example shows the representation of a simple job in JSDL format and the translator of this
+      example in Gridway Job Template format.
+    </para>
+    <section>
+    <title>JSDL file</title>
+    <para>
+<screen width='80'>
+&lt;?xml version="1.0" encoding="UTF-8"?>
+<!--*
+    * Basic schema of GridWay job
+    *
+    *-->
+&lt;jsdl:JobDefinition xmlns="http://www.example.org/"
+    xmlns:jsdl="http://schemas.ggf.org/jsdl/2005/11/jsdl"
+    xmlns:jsdl-posix="http://schemas.ggf.org/jsdl/2005/11/jsdl-posix"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  &lt;jsdl:JobDescription>
+    &lt;jsdl:JobIdentification>
+      &lt;jsdl:JobName>Simple Application GW Template vs JSDL&lt;/jsdl:JobName>
+      &lt;jsdl:Description> This is a simple example to describe the main
+             differences between GW Template and the JSDL schema.
+      &lt;/jsdl:Description>
+    &lt;/jsdl:JobIdentification>
+    &lt;jsdl:Application>
+      &lt;jsdl:ApplicationName>ls&lt;/jsdl:ApplicationName>
+      &lt;jsdl-posix:POSIXApplication>
+        &lt;jsdl-posix:Executable>/bin/ls&lt;/jsdl-posix:Executable>
+        &lt;jsdl-posix:Argument>-la file.txt&lt;/jsdl-posix:Argument>
+        &lt;jsdl-posix:Environment name="LD_LIBRARY_PATH">/usr/local/lib&lt;/jsdl-posix:Environment>
+        &lt;jsdl-posix:Input>/dev/null&lt;/jsdl-posix:Input>
+        &lt;jsdl-posix:Output>stdout.${JOB_ID}&lt;/jsdl-posix:Output>
+        &lt;jsdl-posix:Error>stderr.${JOB_ID}&lt;/jsdl-posix:Error>
+      &lt;/jsdl-posix:POSIXApplication>
+    &lt;/jsdl:Application>
+    &lt;jsdl:Resources>
+      &lt;jsdl:CandidateHost>
+        &lt;jsdl:HostName>*.dacya.ucm.es&lt;/jsdl:HostName>
+      &lt;/jsdl:CandidateHost>
+      &lt;jsdl:CPUArchitecture>
+        &lt;jsdl:CPUArchitectureName>x86_32&lt;/jsdl:CPUArchitectureName>
+      &lt;/jsdl:CPUArchitecture>
+    &lt;/jsdl:Resources>
+    &lt;jsdl:DataStaging>
+      &lt;jsdl:FileName>file.txt&lt;/jsdl:FileName>
+      &lt;jsdl:CreationFlag>overwrite&lt;/jsdl:CreationFlag>
+      &lt;jsdl:DeleteOnTermination>true&lt;/jsdl:DeleteOnTermination>
+      &lt;jsdl:Source>
+        &lt;jsdl:URI>gsiftp://hydrus.dacya.ucm.es/home/jose/file1.txt&lt;/jsdl:URI>
+      &lt;/jsdl:Source>
+    &lt;/jsdl:DataStaging>
+    &lt;jsdl:DataStaging>
+      &lt;jsdl:FileName>stdout.${JOB_ID}&lt;/jsdl:FileName>
+      &lt;jsdl:CreationFlag>overwrite&lt;/jsdl:CreationFlag>
+      &lt;jsdl:DeleteOnTermination>true&lt;/jsdl:DeleteOnTermination>
+      &lt;jsdl:Target>
+        &lt;jsdl:URI>gsiftp://hydrus.dacya.ucm.es/home/jose/stdout.${JOB_ID}&lt;/jsdl:URI>
+      &lt;/jsdl:Target>
+    &lt;/jsdl:DataStaging>
+    &lt;jsdl:DataStaging>
+      &lt;jsdl:FileName>stderr.${JOB_ID}&lt;/jsdl:FileName>
+      &lt;jsdl:CreationFlag>overwrite&lt;/jsdl:CreationFlag>
+      &lt;jsdl:DeleteOnTermination>true&lt;/jsdl:DeleteOnTermination>
+      &lt;jsdl:Target>
+        &lt;jsdl:URI>gsiftp://hydrus.dacya.ucm.es/home/jose/stderr.${JOB_ID}&lt;/jsdl:URI>
+      &lt;/jsdl:Target>
+    &lt;/jsdl:DataStaging>
+  &lt;/jsdl:JobDescription>
+&lt;/jsdl:JobDefinition>
+</screen>
+</para>
+</section>
+    <section>
+    <title>GridWay Job Template file</title>
+    <para>
+<screen>
+#This file was automatically generated by the JSDL2GWJT parser
+EXECUTABLE=/bin/ls
+ARGUMENTS=-la file.txt
+STDIN_FILE=/dev/null
+STDOUT_FILE=stdout.${JOB_ID}
+STDERR_FILE=stderr.${JOB_ID}
+ENVIRONMENT=LD_LIBRARY_PATH=/usr/local/lib
+REQUIREMENTS=HOSTNAME="*.dacya.ucm.es" &amp; ARCH="x86_32"
+INPUT_FILES=file.txt</screen>
+</para>
+    </section>
+</section>
+<section>
+    <title>A HPC profile example</title>
+    <para>
+      This example shows the representation of a HPC profile job in JSDL format and the translator of this
+      example in Gridway Job Template format.
+    </para>
+    <section>
+    <title>JSDL file</title>
+    <para>
+<screen width='80'>
+&lt;?xml version="1.0" encoding="UTF-8"?>
+<!--*
+    * HPC Profile schema of GridWay job
+    *
+    *-->
+&lt;jsdl:JobDefinition xmlns="http://www.example.org/"
+    xmlns:jsdl="http://schemas.ggf.org/jsdl/2005/11/jsdl"
+    xmlns:jsdl-posix="http://schemas.ggf.org/jsdl/2005/11/jsdl-posix"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  &lt;jsdl:JobDescription>
+    &lt;jsdl:JobIdentification>
+      &lt;jsdl:JobName>Simple Application GW Template vs JSDL&lt;/jsdl:JobName>
+      &lt;jsdl:Description> This is a simple example to describe the main
+             differences between GW Template and the JSDL schema.
+      &lt;/jsdl:Description>
+    &lt;/jsdl:JobIdentification>
+    &lt;jsdl:Application>
+      &lt;jsdl:ApplicationName>ls&lt;/jsdl:ApplicationName>
+      &lt;jsdl-hpcpa:HPCProfileApplication>
+        &lt;jsdl-hpcpa:Executable>/bin/ls&lt;/jsdl-hpcpa:Executable>
+        &lt;jsdl-hpcpa:Argument>-la file.txt&lt;/jsdl-hpcpa:Argument>
+        &lt;jsdl-hpcpa:Environment name="LD_LIBRARY_PATH">/usr/local/lib&lt;/jsdl-hpcpa:Environment>
+        &lt;jsdl-hpcpa:Input>/dev/null&lt;/jsdl-hpcpa:Input>
+        &lt;jsdl-hpcpa:Output>stdout.${JOB_ID}&lt;/jsdl-hpcpa:Output>
+        &lt;jsdl-hpcpa:Error>stderr.${JOB_ID}&lt;/jsdl-hpcpa:Error>
+      &lt;/jsdl-hpcpa:HPCProfileApplication>
+    &lt;/jsdl:Application>
+    &lt;jsdl:Resources>
+      &lt;jsdl:CandidateHost>
+        &lt;jsdl:HostName>*.dacya.ucm.es&lt;/jsdl:HostName>
+      &lt;/jsdl:CandidateHost>
+      &lt;jsdl:CPUArchitecture>
+        &lt;jsdl:CPUArchitectureName>x86_32&lt;/jsdl:CPUArchitectureName>
+      &lt;/jsdl:CPUArchitecture>
+    &lt;/jsdl:Resources>
+    &lt;jsdl:DataStaging>
+      &lt;jsdl:FileName>file.txt&lt;/jsdl:FileName>
+      &lt;jsdl:CreationFlag>overwrite&lt;/jsdl:CreationFlag>
+      &lt;jsdl:DeleteOnTermination>true&lt;/jsdl:DeleteOnTermination>
+      &lt;jsdl:Source>
+        &lt;jsdl:URI>gsiftp://hydrus.dacya.ucm.es/home/jose/file1.txt&lt;/jsdl:URI>
+      &lt;/jsdl:Source>
+    &lt;/jsdl:DataStaging>
+    &lt;jsdl:DataStaging>
+      &lt;jsdl:FileName>stdout.${JOB_ID}&lt;/jsdl:FileName>
+      &lt;jsdl:CreationFlag>overwrite&lt;/jsdl:CreationFlag>
+      &lt;jsdl:DeleteOnTermination>true&lt;/jsdl:DeleteOnTermination>
+      &lt;jsdl:Target>
+        &lt;jsdl:URI>gsiftp://hydrus.dacya.ucm.es/home/jose/stdout.${JOB_ID}&lt;/jsdl:URI>
+      &lt;/jsdl:Target>
+    &lt;/jsdl:DataStaging>
+    &lt;jsdl:DataStaging>
+      &lt;jsdl:FileName>stderr.${JOB_ID}&lt;/jsdl:FileName>
+      &lt;jsdl:CreationFlag>overwrite&lt;/jsdl:CreationFlag>
+      &lt;jsdl:DeleteOnTermination>true&lt;/jsdl:DeleteOnTermination>
+      &lt;jsdl:Target>
+        &lt;jsdl:URI>gsiftp://hydrus.dacya.ucm.es/home/jose/stderr.${JOB_ID}&lt;/jsdl:URI>
+      &lt;/jsdl:Target>
+    &lt;/jsdl:DataStaging>
+  &lt;/jsdl:JobDescription>
+&lt;/jsdl:JobDefinition>
+</screen>
+</para>
+</section>
+    <section>
+    <title>GridWay Job Template file</title>
+    <para>
+<screen>
+#This file was automatically generated by the JSDL2GWJT parser
+EXECUTABLE=/bin/ls
+ARGUMENTS=-la file.txt
+STDIN_FILE=/dev/null
+STDOUT_FILE=stdout.${JOB_ID}
+STDERR_FILE=stderr.${JOB_ID}
+ENVIRONMENT=LD_LIBRARY_PATH=/usr/local/lib
+REQUIREMENTS=HOSTNAME="*.dacya.ucm.es" &amp; ARCH="x86_32"
+INPUT_FILES=file.txt</screen>
+</para>
+    </section>
+  </section>
+</section>
+</section>
+</section>

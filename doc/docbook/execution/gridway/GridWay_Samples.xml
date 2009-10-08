@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd"
+[
+
+<!ENTITY % myents SYSTEM "../../entities">
+
+%myents;
+
+]>
+<section>
+<title> GridWay &shortversion;: Samples</title>
+
+<section id="gridway-samples-drmaa"><title>DRMAA examples</title>
+<para>The following links contain samples demonstrating GridWay's DRMAA bindings:</para>
+<itemizedlist>
+	<listitem><para><ulink url="http://www.gridway.org/files/examples/drmaaC.tgz">DRMAA C Howtos</ulink></para></listitem>
+	<listitem><para><ulink url="http://www.gridway.org/files/examples/drmaaJ.tgz">DRMAA Java Howtos</ulink></para></listitem>
+	<listitem><para><ulink url="http://www.gridway.org/files/examples/drmaa_python.tar.gz">DRMAA Python Howtos</ulink></para></listitem>
+	<listitem><para><ulink url="http://www.gridway.org/files/examples/drmaa_ruby.tar.gz">DRMAA Ruby Howtos</ulink></para></listitem>
+	<listitem><para><ulink url="http://www.gridway.org/files/examples/drmaa_perl.tar.gz">DRMAA Perl Howtos</ulink></para></listitem>
+</itemizedlist>
+</section>
+
+</section>

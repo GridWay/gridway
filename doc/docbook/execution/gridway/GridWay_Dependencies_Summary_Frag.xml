@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd"
+[
+
+<!ENTITY % myents SYSTEM "../../entities">
+
+%myents;
+
+]>
+<section>
+<para>GridWay uses different Globus services to perform the tasks of information gathering, job execution and data transfer.</para>
+<itemizedlist>
+  <listitem><para>GridWay depends on the following GT components for job execution:
+	<itemizedlist>
+	  <listitem><simpara>GRAM: GridWay can interface with both GRAM 2 (pre web services) and GRAM 4 (web services)</simpara></listitem>
+	</itemizedlist>
+  </para></listitem>
+  <listitem><para>GridWay depends on the following GT components for data staging:
+	<itemizedlist>
+	  <listitem><simpara>RFT</simpara></listitem>
+	  <listitem><simpara>GridFTP</simpara></listitem>
+	</itemizedlist>
+  </para></listitem>
+  <listitem><para>GridWay depends on the following GT component for information gathering:
+	<itemizedlist>
+	  <listitem><simpara>MDS</simpara></listitem>
+	</itemizedlist>
+  </para></listitem>
+  <listitem><para>GridWay relies on the Globus basic security infrastructure for authentication and authorization. 
+    On top of that, GridWay can use other Globus services and components to complement this infrastructure:
+	<itemizedlist>
+      <listitem><simpara>Delegation Service</simpara></listitem>
+      <listitem><simpara>MyProxy</simpara></listitem>
+	</itemizedlist>
+  </para></listitem>
+</itemizedlist>
+
+</section>

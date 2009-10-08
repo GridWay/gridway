@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd"
+[
+
+<!ENTITY % myents SYSTEM "../../../entities">
+
+%myents;
+
+]>
+<book id="gridwayAdmin">
+	<bookinfo>
+		<title> GridWay &shortversion;: System Administrator's Guide</title>
+		<titleabbrev>System Administrator's Guide</titleabbrev>
+        <pubdate>July, 2008</pubdate>
+        <copyright>
+            <year>2002-2008</year>
+               <holder>GridWay Team, Distributed Systems Architecture
+            Group (dsa-research.org), Universidad Complutense de Madrid.</holder>
+</copyright>
+        <legalnotice>
+            <para>
+                Licensed under the Apache License, Version 2.0 (the "License");
+                you may not use this file except in compliance with the License.
+                You may obtain a copy of the License at
+            </para>
+            <para>
+                <ulink url="http://www.apache.org/licenses/LICENSE-2.0">
+                  http://www.apache.org/licenses/LICENSE-2.0</ulink>
+            </para>
+            <para>
+                Unless required by applicable law or agreed to in writing,
+                software distributed under the License is distributed on an
+                "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+                either express or implied. See the License for the specific
+                language governing permissions and limitations under the License.
+            </para>
+            <para>
+             Any academic report, publication, or other academic disclosure of
+             results obtained with the GridWay Metascheduler will acknowledge
+             GridWay's use by an appropriate citation to relevant papers by
+             GridWay team members.
+            </para>
+        </legalnotice>
+    </bookinfo>
+
+<chapter id="s-gridway-admin-introduction"><title>Introduction</title>
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+    href="../GridWay_Admin_Introduction_Frag.xml" xpointer="xpointer(/section/*)"/> 
+</chapter>
+
+<chapter id="s-gridway-admin-installing"><title>Building and installing</title>
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+    href="../GridWay_Admin_Building_And_Installing_Frag.xml" xpointer="xpointer(/section/*)"/>
+</chapter>
+
+<chapter id="s-gridway-admin-configuring"><title>Configuration Guide</title>
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+    href="../GridWay_Interface_Config_Frag.xml" xpointer="xpointer(/section/*)"/>
+</chapter>
+
+<!--- <chapter id="s-gridway-admin-deploying"><title>Deploying</title>
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+    href="../GridWay_Admin_Deploy_Frag.xml" xpointer="xpointer(/section/*)"/>
+</chapter> -->
+
+<chapter id="s-gridway-admin-testing"><title>Testing</title>
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+    href="../GridWay_Admin_Testing_Frag.xml" xpointer="xpointer(/section/*)"/>
+</chapter>
+
+<chapter id="s-gridway-admin-security_considerations"><title>Security considerations</title>
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+    href="../GridWay_Security_Considerations_Frag.xml" xpointer="xpointer(/section/*)"/>
+</chapter>
+
+<chapter id="s-gridway-admin-troubleshooting"><title>Troubleshooting</title>
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+    href="../GridWay_Troubleshooting_Frag.xml" xpointer="xpointer(/section/*)"/>
+</chapter>
+
+</book>

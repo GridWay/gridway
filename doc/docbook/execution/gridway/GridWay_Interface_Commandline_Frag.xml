@@ -1,0 +1,1183 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd"
+[
+
+<!ENTITY % myents SYSTEM "../../entities">
+
+%myents;
+
+]>
+<reference>
+<!-- use this block of code for each command -->
+<refentry id="gwsubmit">
+    <refmeta>
+        <refentrytitle>Job and Array Job submission Command</refentrytitle>
+        <manvolnum>1</manvolnum>
+    </refmeta>
+    <refnamediv>
+        <refname>gwsubmit</refname>
+        <refpurpose>job submission utility for the GridWay system</refpurpose>
+    </refnamediv>
+    <refsynopsisdiv>
+        <cmdsynopsis>
+            <command>gwsubmit &lt;-t template&gt; [-n tasks] [-h] [-v] [-o] [-s start] [-i increment]  [-d "id1 id2 ..."]</command>
+        </cmdsynopsis>
+    </refsynopsisdiv>
+    
+    <refsect1 id="gwsubmit-description"><title>Description</title>
+        <para>
+    Submit a job or an array job (if the number of tasks is defined) to gwd
+        </para>
+    </refsect1>
+    
+    <refsect1 id="gwsubmit-commandoptions"><title>Command options</title>
+        
+            <variablelist>
+                <varlistentry><term>-h</term><listitem>
+                    <para>
+                        Prints help.
+                    </para>
+                </listitem>
+                </varlistentry>
+
+                <varlistentry><term>-t &lt;template&gt;</term><listitem>
+                    <para>
+    					The template file describing the job.
+                    </para>
+                </listitem>
+                </varlistentry>
+
+                <varlistentry><term>-n &lt;tasks&gt;</term><listitem>
+                    <para>
+                        Submit an array job with the given number of tasks. All the jobs in the
+					    array will use the same template.
+                    </para>
+                </listitem>
+                </varlistentry>
+
+                <varlistentry><term>-s &lt;start&gt;</term><listitem>
+                    <para>
+                        Start value for custom param in array jobs. Default 0.
+                    </para>
+                </listitem>
+                </varlistentry>
+
+                <varlistentry><term>-i &lt;increment&gt;</term><listitem>
+                    <para>
+    					Increment value for custom param in array jobs. Each task has associated the value PARAM=start + increment * TASK_ID, and MAX_PARM = start+increment*(tasks-1). Default 1.
+                    </para>
+                </listitem>
+            </varlistentry>
+
+                <varlistentry><term>-d &lt;"id1 id2..."&gt;</term><listitem>
+                    <para>
+                        Job dependencies. Submit the job on hold state, and
+					    release it once jobs with id1,id2,.. have
+					    successfully finished.
+                    </para>
+                </listitem>
+                </varlistentry>
+
+                <varlistentry><term>-v</term><listitem>
+                    <para>
+    					Print to stdout the job ids returned by gwd.
+                    </para>
+                </listitem>
+                </varlistentry>
+
+                <varlistentry><term>-o</term><listitem>
+                    <para>
+                        Hold job on submission.
+                    </para>
+                </listitem>
+                </varlistentry>
+
+                <varlistentry><term>-p &lt;priority&gt;</term><listitem>
+                    <para>
+    					Initial priority for the job.
+                    </para>
+                </listitem>
+                </varlistentry>
+
+            </variablelist>
+        
+    </refsect1>
+</refentry>
+
+<refentry id="gwdag">
+    <refmeta>
+        <refentrytitle>DAG Job submission Command</refentrytitle>
+        <manvolnum>1</manvolnum>
+    </refmeta>
+    <refnamediv>
+        <refname>gwdag</refname>
+        <refpurpose>dag job submission utility for the GridWay system</refpurpose>
+    </refnamediv>
+    <refsynopsisdiv>
+        <cmdsynopsis>
+            <command>gwdag [-h] [-d] &lt;DAG description file&gt;</command>
+        </cmdsynopsis>
+    </refsynopsisdiv>
+    
+    <refsect1 id="gwdag-description"><title>Description</title>
+        <para>
+    Submit a dag job to gwd
+        </para>
+    </refsect1>
+    
+    <refsect1 id="gwdag-commandoptions"><title>Command options</title>
+        
+            <variablelist>
+                <varlistentry><term>-h</term><listitem>
+                    <para>
+                        Prints help.
+                    </para>
+                </listitem>
+                </varlistentry>
+
+                <varlistentry><term>-d</term><listitem>
+                    <para>
+    					Writes to STDOUT a DOT description for the specified DAG job.
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+        
+    </refsect1>
+</refentry>
+
+
+
+
+
+
+
+<refentry id="gwps">
+    <refmeta>
+        <refentrytitle>Job Monitoring Command</refentrytitle>
+        <manvolnum>2</manvolnum>
+    </refmeta>
+    <refnamediv>
+        <refname>gwps</refname>
+        <refpurpose>report a snapshot of the current jobs</refpurpose>
+    </refnamediv>
+    <refsynopsisdiv>
+        <cmdsynopsis>
+            <command>gwps [-h] [-u user] [-r host] [-A AID] [-s job_state] [-o output_format] [-c delay] [-n] [job_id]</command>
+
+        </cmdsynopsis>
+    </refsynopsisdiv>
+    
+    <refsect1 id="gwps-description"><title>Description</title>
+        <para>
+			Prints information about all the jobs in the GridWay system (default)
+        </para>
+    </refsect1>
+    
+    <refsect1 id="gwps-commandoptions"><title>Command options</title>
+        
+            <variablelist>
+                <varlistentry><term>-h</term><listitem>
+                    <para>
+                        Prints help.
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+
+            <variablelist>
+                <varlistentry><term>-u user</term><listitem>
+                    <para>
+                        Monitor only jobs owned by user.
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+
+            <variablelist>
+                <varlistentry><term>-r host</term><listitem>
+                    <para>
+                        Monitor only jobs executed in host.
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+
+            <variablelist>
+                <varlistentry><term>-A AID</term><listitem>
+                    <para>
+                         Monitor only jobs part of the array AID.
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+
+            <variablelist>
+                <varlistentry><term>-s job_state</term><listitem>
+                    <para>
+                        Monitor only jobs in states matching that of job_state.
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+
+
+            <variablelist>
+                <varlistentry><term>-o output_format</term><listitem>
+                    <para>
+                       Formats output information, allowing the selection of which
+			           fields to display.
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+
+            <variablelist>
+                <varlistentry><term>-c &lt;delay&gt;</term><listitem>
+                    <para>
+                      This will cause gwps to print job information every &lt;delay&gt;
+			          seconds continuously (similar to top command).
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+
+            <variablelist>
+                <varlistentry><term>-n</term><listitem>
+                    <para>
+          				Do not print the header.
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+
+            <variablelist>
+                <varlistentry><term>job_id</term><listitem>
+                    <para>
+                       Only monitor this job_id.
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+        
+    </refsect1>
+    
+    <refsect1 id="gwps-field-information"><title>Output field description</title>
+        
+    <table>
+    <title>Field options</title>
+    <tgroup cols='3'>
+    <thead>
+      <row>
+        <entry>FIELD NAME</entry>
+        <entry>FIELD OPTION</entry>
+        <entry>DESCRIPTION</entry>
+      </row>
+    </thead>
+    <tbody>
+      <row>
+        <entry>USER</entry>
+        <entry>u</entry>
+        <entry>owner of this job</entry>
+      </row>
+      <row>
+        <entry>JID</entry>
+        <entry>J</entry>
+        <entry>job unique identification assigned by the
+          Gridway system</entry>
+      </row>
+      <row>
+        <entry>AID</entry>
+        <entry>i</entry>
+        <entry>array unique identification, only relevant for
+          array jobs</entry>
+      </row>
+      <row>
+        <entry>TID</entry>
+        <entry>i</entry>
+        <entry>task identification, ranges from 0 to TOTAL_TASKS -1,
+          only relevant for array jobs</entry>
+      </row>
+      <row>
+        <entry>FP</entry>
+        <entry>p</entry>
+        <entry>fixed priority of the job</entry>
+      </row>
+      <row>
+        <entry>TYPE</entry>
+        <entry>y</entry>
+        <entry>type of job (simple, multiple or mpi)</entry>
+      </row>
+      <row>
+        <entry>NP</entry>
+        <entry>n</entry>
+        <entry>number of processors</entry>
+      </row>
+      <row>
+        <entry>DM</entry>
+        <entry>s</entry>
+        <entry>dispatch Manager state, one of: pend, hold, prol, prew,
+          wrap, epil, canl, stop, migr, done, fail</entry>
+      </row>
+      <row>
+        <entry>EM</entry>
+        <entry>e</entry>
+        <entry>execution Manager state (Globus state): pend, susp, actv,
+          fail, done</entry>
+      </row>
+      <row>
+        <entry>RWS</entry>
+        <entry>f</entry>
+        <entrytbl cols='2'>
+          <tbody>
+            <row><entry namest='c1' nameend='c2'>flags:</entry></row>
+            <row>
+              <entry>R</entry>
+              <entry>times this job has been restarted</entry>
+            </row>
+            <row>
+              <entry>W</entry>
+              <entry>number of processes waiting for this job</entry>
+            </row>
+            <row>
+              <entry>S</entry>
+              <entry>re-schedule flag</entry>
+            </row>
+          </tbody>
+        </entrytbl>
+      </row>
+      <row>
+        <entry>START</entry>
+        <entry>t|T</entry>
+        <entry>the time the job entered the system</entry>
+      </row>
+      <row>
+        <entry>END</entry>
+        <entry>t|T</entry>
+        <entry>the time the job reached a final state (fail or done)</entry>
+      </row>
+      <row>
+        <entry>EXEC</entry>
+        <entry>t|T</entry>
+        <entry>total execution time, includes suspension time in the
+            remote queue system</entry>
+      </row>
+      <row>
+        <entry>XFER</entry>
+        <entry>t|T</entry>
+        <entry>total file transfer time, includes stage-in and stage-out
+            phases</entry>
+      </row>
+      <row>
+        <entry>EXIT</entry>
+        <entry>x</entry>
+        <entry>job exit code</entry>
+      </row>
+      <row>
+        <entry>TEMPLATE</entry>
+        <entry>j</entry>
+        <entry>filename of the job template used for this job</entry>
+      </row>
+      <row>
+        <entry>HOST</entry>
+        <entry>h</entry>
+        <entry>hostname where the job is being executed</entry>
+      </row>
+    </tbody>
+    </tgroup>
+    </table>
+
+    </refsect1>
+</refentry>
+
+
+
+<refentry id="gwhistory">
+    <refmeta>
+        <refentrytitle>Job History Command</refentrytitle>
+        <manvolnum>3</manvolnum>
+    </refmeta>
+    <refnamediv>
+        <refname>gwhistory</refname>
+        <refpurpose>shows history of a job</refpurpose>
+    </refnamediv>
+    <refsynopsisdiv>
+        <cmdsynopsis>
+            <command>gwhistory [-h] [-n] &lt;job_id&gt;</command>
+        </cmdsynopsis>
+    </refsynopsisdiv>
+    
+    <refsect1 id="gwhistory-description"><title>Description</title>
+        <para>
+			Prints information about the execution history of a job
+        </para>
+    </refsect1>
+    
+    <refsect1 id="gwhistory-commandoptions"><title>Command options</title>
+        
+            <variablelist>
+                <varlistentry><term>-h</term><listitem>
+                    <para>
+                        Prints help.
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+
+            <variablelist>
+                <varlistentry><term>-n</term><listitem>
+                    <para>
+                      	Do not print the header lines
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+
+            <variablelist>
+                <varlistentry><term>job_id</term><listitem>
+                    <para>
+            			Job identification as provided by gwps.
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+        
+    </refsect1>
+    
+    <refsect1 id="gwhistory-field-information"><title>Output field description</title>
+        
+    <table>
+      <title>Field information</title>
+      <tgroup cols='2'>
+      <thead>
+        <row>
+          <entry>NAME</entry>
+          <entry>DESCRIPTION</entry>
+        </row>
+      </thead>
+      <tbody>
+        <row>
+          <entry>HID</entry>
+          <entry>host unique identification assigned by the Gridway system.</entry>
+        </row>
+        <row>
+          <entry>START</entry>
+          <entry>the time the job start its execution on this host.</entry>
+        </row>
+        <row>
+          <entry>END</entry>
+          <entry>the time the job left this host, because it finished or it was migrated.</entry>
+        </row>
+        <row>
+          <entry>PROLOG</entry>
+          <entry>total prolog (file stage-in phase) time.</entry>
+        </row>
+        <row>
+          <entry>WRAPPER</entry>
+          <entry>total wrapper (execution phase) time.</entry>
+        </row>
+        <row>
+          <entry>EPILOG</entry>
+          <entry>total epilog (file stage-out phase) time.</entry>
+        </row>
+        <row>
+          <entry>MIGR</entry>
+          <entry>total migration time.</entry>
+        </row>
+        <row>
+          <entry>REASON</entry>
+          <entry>the reason why the job left this host.</entry>
+        </row>
+        <row>
+          <entry>QUEUE</entry>
+          <entry>name of the queue.</entry>
+        </row>
+        <row>
+          <entry>HOST</entry>
+          <entry>FQDN of the host.</entry>
+        </row>
+      </tbody>
+      </tgroup>
+    </table>
+
+    </refsect1>
+</refentry>
+
+<refentry id="gwhost">
+    <refmeta>
+        <refentrytitle>Host Monitoring Command</refentrytitle>
+        <manvolnum>4</manvolnum>
+    </refmeta>
+    <refnamediv>
+        <refname>gwhost</refname>
+        <refpurpose>shows hosts information</refpurpose>
+    </refnamediv>
+    <refsynopsisdiv>
+        <cmdsynopsis>
+            <command>gwhost [-h] [-c delay] [-nf] [-m job_id] [host_id]</command>
+        </cmdsynopsis>
+    </refsynopsisdiv>
+    
+    <refsect1 id="gwhost-description"><title>Description</title>
+        <para>
+    	Prints information about all the hosts in the GridWay system (default)
+        </para>
+    </refsect1>
+    
+    <refsect1 id="gwhost-commandoptions"><title>Command options</title>
+        
+            <variablelist>
+                <varlistentry><term>-h</term><listitem>
+                    <para>
+                        Prints help.
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+
+            <variablelist>
+                <varlistentry><term>-c &lt;delay&gt;</term><listitem>
+                    <para>
+                      This will cause gwhost to print job information every &lt;delay&gt;
+				      seconds continuously (similar to top command)
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+
+            <variablelist>
+                <varlistentry><term>-n</term><listitem>
+                    <para>
+                        Do not print the header.
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+
+            <variablelist>
+                <varlistentry><term>-f</term><listitem>
+                    <para>
+                        Full format.
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+
+            <variablelist>
+                <varlistentry><term>-m &lt;job_id&gt;</term><listitem>
+                    <para>
+                        Prints hosts matching the requirements of a given job.
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+
+            <variablelist>
+                <varlistentry><term>host_id</term><listitem>
+                    <para>
+                        Only monitor this host_id, also prints queue information.
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+        
+    </refsect1>
+    
+    <refsect1 id="gwhost-field-information"><title>Output field description</title>
+        
+   <table>
+    <title>Field information</title>
+    <tgroup cols='2'>
+    <thead>
+      <row>
+        <entry>FIELD</entry>
+        <entry>DESCRIPTION</entry>
+      </row>
+    </thead>
+    <tbody>
+      <row>
+        <entry>HID</entry>
+        <entry>host unique identification assigned by the Gridway system</entry>
+      </row>
+      <row>
+        <entry>PRIO</entry>
+        <entry>priority assigned to the host</entry>
+      </row>
+      <row>
+        <entry>OS</entry>
+        <entry>operating system</entry>
+      </row>
+      <row>
+        <entry>ARCH</entry>
+        <entry>architecture</entry>
+      </row>
+      <row>
+        <entry>MHZ</entry>
+        <entry>CPU speed in MHZ</entry>
+      </row>
+      <row>
+        <entry>%CPU</entry>
+        <entry>free CPU ratio</entry>
+      </row>
+      <row>
+        <entry>MEM(F/T)</entry>
+        <entry>system memory: F = Free, T = Total</entry>
+      </row>
+      <row>
+        <entry>DISK(F/T)</entry>
+        <entry>secondary storage: F = Free, T = Total</entry>
+      </row>
+      <row>
+        <entry>N(U/F/T)</entry>
+        <entry>number of slots: U = used by GridWay, F = free, T = total</entry>
+      </row>
+      <row>
+        <entry>LRMS</entry>
+        <entry>local resource management system, the jobmanager name</entry>
+      </row>
+      <row>
+        <entry>HOSTNAME</entry>
+        <entry>FQDN of this host</entry>
+      </row>
+    </tbody>
+    </tgroup>
+    </table>
+
+    <table>
+    <title>Queue field information</title>
+    <tgroup cols='2'>
+    <thead>
+      <row>
+        <entry>FIELD</entry>
+        <entry>DESCRIPTION</entry>
+      </row>
+    </thead>
+    <tbody>
+      <row>
+        <entry>QUEUENAME</entry>
+        <entry>name of this queue</entry>
+      </row>
+      <row>
+        <entry>SL(F/T)</entry>
+        <entry>slots:  F = Free, T = Total</entry>
+      </row>
+      <row>
+        <entry>WALLT</entry>
+        <entry>queue wall time</entry>
+      </row>
+      <row>
+        <entry>CPUT</entry>
+        <entry>queue cpu time</entry>
+      </row>
+      <row>
+        <entry>COUNT</entry>
+        <entry>queue count number</entry>
+      </row>
+      <row>
+        <entry>MAXR</entry>
+        <entry>max. running jobs</entry>
+      </row>
+      <row>
+        <entry>MAXQ</entry>
+        <entry>max. queued jobs</entry>
+      </row>
+      <row>
+        <entry>STATUS</entry>
+        <entry>queue status</entry>
+      </row>
+      <row>
+        <entry>DISPATCH</entry>
+        <entry>queue dispatch type</entry>
+      </row>
+      <row>
+        <entry>PRIORITY</entry>
+        <entry>queue priority</entry>
+      </row>
+    </tbody>
+    </tgroup>
+    </table>
+
+    </refsect1>
+</refentry>
+
+<refentry id="gwkill">
+    <refmeta>
+        <refentrytitle>Job Control Command</refentrytitle>
+        <manvolnum>5</manvolnum>
+    </refmeta>
+    <refnamediv>
+        <refname>gwkill</refname>
+        <refpurpose>controls job execution</refpurpose>
+    </refnamediv>
+    <refsynopsisdiv>
+        <cmdsynopsis>
+            <command>gwkill [-h] [-a] [-k | -t | -o | -s | -r | -l | -9] &lt;job_id [job_id2 ...] | -A array_id&gt;</command>
+        </cmdsynopsis>
+    </refsynopsisdiv>
+    
+    <refsect1 id="gwkill-description"><title>Description</title>
+        <para>
+        Sends a signal to a job or array job
+        </para>
+    </refsect1>
+    
+    <refsect1 id="gwkill-commandoptions"><title>Command options</title>
+        
+            <variablelist>
+                <varlistentry><term>-h</term><listitem>
+                    <para>
+                      Prints help.
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+
+            <variablelist>
+                <varlistentry><term>-a</term><listitem>
+                    <para>
+                        Asynchronous signal, only relevant for KILL and STOP.
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+
+            <variablelist>
+                <varlistentry><term>-k</term><listitem>
+                    <para>
+                         Kill (default, if no signal specified).
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+
+            <variablelist>
+                <varlistentry><term>-t</term><listitem>
+                    <para>
+                        Stop job.
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+
+            <variablelist>
+                <varlistentry><term>-r</term><listitem>
+                    <para>
+                        Resume job.
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+
+            <variablelist>
+                <varlistentry><term>-o</term><listitem>
+                    <para>
+                        Hold job.
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+
+            <variablelist>
+                <varlistentry><term>-l</term><listitem>
+                    <para>
+                        Release job.
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+
+            <variablelist>
+                <varlistentry><term>-s</term><listitem>
+                    <para>
+                        Re-schedule job.
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+
+            <variablelist>
+                <varlistentry><term>-9</term><listitem>
+                    <para>
+                       Hard kill, removes the job from the system without synchronizing remote job execution or cleaning remote host. 
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+
+            <variablelist>
+                <varlistentry><term>job_id [job_id2 ...]</term><listitem>
+                    <para>
+                        Job identification as provided by gwps. You can specify a blank space separated list of job ids.
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+        
+            <variablelist>
+                <varlistentry><term>-A &lt;array_id&gt;</term><listitem>
+                    <para>
+                        Array identification as provided by gwps.
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+
+    </refsect1>
+</refentry>
+
+<refentry id="gwwait">
+    <refmeta>
+        <refentrytitle>Job Synchronization Command</refentrytitle>
+        <manvolnum>6</manvolnum>
+    </refmeta>
+    <refnamediv>
+        <refname>gwwait</refname>
+        <refpurpose>synchronize a job</refpurpose>
+    </refnamediv>
+    <refsynopsisdiv>
+        <cmdsynopsis>
+            <command>gwwait [-h] [-a] [-v] [-k] &lt;job_id ...| -A array_id&gt;</command>
+        </cmdsynopsis>
+    </refsynopsisdiv>
+    
+    <refsect1 id="gwwait-description"><title>Description</title>
+        <para>
+    		Waits for a job or array job
+        </para>
+    </refsect1>
+    
+    <refsect1 id="gwwait-commandoptions"><title>Command options</title>
+        
+            <variablelist>
+                <varlistentry><term>-h</term><listitem>
+                    <para>
+                        Prints help.
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+
+            <variablelist>
+                <varlistentry><term>-a</term><listitem>
+                    <para>
+                        Any, returns when the first job of the list or array finishes.
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+
+            <variablelist>
+                <varlistentry><term>-v</term><listitem>
+                    <para>
+                        Prints job exit code.
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+
+            <variablelist>
+                <varlistentry><term>-k</term><listitem>
+                    <para>
+                      Keep jobs, they remain in fail or done  states in the
+			          GridWay system. By default, jobs are killed and their
+			          resources freed.
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+
+            <variablelist>
+                <varlistentry><term>-A &lt;array_id&gt;</term><listitem>
+                    <para>
+                        Array identification as provided by gwps.
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+
+            <variablelist>
+                <varlistentry><term>job_id ...</term><listitem>
+                    <para>
+                       Job ids list (blank space separated).
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+        
+    </refsect1>
+</refentry>
+
+<refentry id="gwuser">
+    <refmeta>
+        <refentrytitle>User Monitoring Command</refentrytitle>
+        <manvolnum>7</manvolnum>
+    </refmeta>
+    <refnamediv>
+        <refname>gwuser</refname>
+        <refpurpose>monitors users in GridWay</refpurpose>
+    </refnamediv>
+    <refsynopsisdiv>
+        <cmdsynopsis>
+            <command>gwuser [-h] [-n]</command>
+        </cmdsynopsis>
+    </refsynopsisdiv>
+    
+    <refsect1 id="gwuser-description"><title>Description</title>
+        <para>
+			Prints information about users in the GridWay system
+        </para>
+    </refsect1>
+    
+    <refsect1 id="gwuser-commandoptions"><title>Command options</title>
+        
+            <variablelist>
+                <varlistentry><term>-h</term><listitem>
+                    <para>
+                        Prints help.
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+
+            <variablelist>
+                <varlistentry><term>-n</term><listitem>
+                    <para>
+                        Do not print the header.
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+        
+    </refsect1>
+    
+    <refsect1 id="gwuser-field-information"><title>Output field description</title>
+        
+    <table>
+    <title>Field information</title>
+    <tgroup cols='2'>
+    <thead>
+      <row>
+        <entry>FIELD</entry>
+        <entry>DESCRIPTION</entry>
+      </row>
+    </thead>
+    <tbody>
+      <row>
+        <entry>UID</entry>
+        <entry>user unique identification assigned by the Gridway system</entry>
+      </row>
+      <row>
+        <entry>NAME</entry>
+        <entry>name of this user</entry>
+      </row>
+      <row>
+        <entry>JOBS</entry>
+        <entry>number of Jobs in the GridWay system</entry>
+      </row>
+      <row>
+        <entry>RUN</entry>
+        <entry>number of running jobs</entry>
+      </row>
+      <row>
+        <entry>IDLE</entry>
+        <entry>idle time, (time with JOBS = 0)</entry>
+      </row>
+      <row>
+        <entry>EM</entry>
+        <entry>execution manager drivers loaded for this user</entry>
+      </row>
+      <row>
+        <entry>TM</entry>
+        <entry>transfer manager drivers loaded for this user</entry>
+      </row>
+      <row>
+        <entry>PID</entry>
+        <entry>process identification of driver processes</entry>
+      </row>
+    </tbody>
+    </tgroup>
+    </table>
+
+    </refsect1>
+</refentry>
+
+<refentry id="gwacct">
+    <refmeta>
+        <refentrytitle>Accounting Command</refentrytitle>
+        <manvolnum>7</manvolnum>
+    </refmeta>
+    <refnamediv>
+        <refname>gwacct</refname>
+        <refpurpose>prints accounting information</refpurpose>
+    </refnamediv>
+    <refsynopsisdiv>
+        <cmdsynopsis>
+            <command>gwacct [-h] [-n] [&lt;-d n | -w n | -m n | -t s&gt;] &lt;-u user|-r host&gt;</command>
+        </cmdsynopsis>
+    </refsynopsisdiv>
+    
+    <refsect1 id="gwacct-description"><title>Description</title>
+        <para>
+			Prints usage statistics per user or resource. Note: accounting statistics are updated once a job is killed.
+        </para>
+    </refsect1>
+    
+    <refsect1 id="gwacct-commandoptions"><title>Command options</title>
+        
+            <variablelist>
+                <varlistentry><term>-h</term><listitem>
+                    <para>
+                        Prints help.
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+
+            <variablelist>
+                <varlistentry><term>-n</term><listitem>
+                    <para>
+                        Do not print the header.
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+
+            <variablelist>
+                <varlistentry><term>&lt;-d n | -w n | -m n | -t s&gt;</term><listitem>
+                    <para>
+                        Take into account jobs submitted after certain date, specified in number
+				      of days (-d), weeks (-w), months (-m) or an epoch (-t).
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+
+            <variablelist>
+                <varlistentry><term>-u user</term><listitem>
+                    <para>
+                        Print usage statistics for user.
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+
+            <variablelist>
+                <varlistentry><term>-r hostname</term><listitem>
+                    <para>
+                        Print usage statistics for host.
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+        
+    </refsect1>
+    
+    <refsect1 id="gwacct-field-information"><title>Output field description</title>
+        
+ <table>
+  <title>Field information</title>
+  <tgroup cols='2'>
+  <thead>
+    <row>
+      <entry>FIELD</entry>
+      <entry>DESCRIPTION</entry>
+    </row>
+  </thead>
+  <tbody>
+    <row>
+      <entry>HOST/USER</entry>
+      <entry>host/user usage summary for this user/host</entry>
+    </row>
+    <row>
+      <entry>XFR</entry>
+      <entry>total transfer time on this host (for this user)</entry>
+    </row>
+    <row>
+      <entry>EXE</entry>
+      <entry>total execution time on this host (for this user), without
+                suspension time</entry>
+              </row>
+    <row>
+      <entry>SUSP</entry>
+      <entry>total suspension (queue) time on this host (for this user)</entry>
+    </row>
+    <row>
+      <entry>TOTS</entry>
+      <entry><para>total executions on this host (for this user). Termination reasons:</para><para>
+        <itemizedlist>
+          <listitem><para>SUCC  success</para></listitem>
+          <listitem><para>ERR   error</para></listitem>
+          <listitem><para>KILL  kill</para></listitem>
+          <listitem><para>USER  user requested</para></listitem>
+          <listitem><para>SUSP  suspension timeout</para></listitem>
+          <listitem><para>DISC  discovery timeout</para></listitem>
+          <listitem><para>SELF  self migration</para></listitem>
+          <listitem><para>PERF  performance degradation</para></listitem>
+          <listitem><para>S/R   stop/resume</para></listitem></itemizedlist></para></entry>
+        </row>
+
+  </tbody>
+  </tgroup>
+  </table>
+
+    </refsect1>
+</refentry>
+
+<refentry id="jsdl2gw">
+    <refmeta>
+        <refentrytitle>JSDL To GridWay Job Template Parser Command</refentrytitle>
+        <manvolnum>8</manvolnum>
+    </refmeta>
+    <refnamediv>
+        <refname>jsdl2gw</refname>
+        <refpurpose>parser to translate JSDL file into GridWay Job Template file</refpurpose>
+    </refnamediv>
+    <refsynopsisdiv>
+        <cmdsynopsis>
+            <command>jsdl2gw [-h] input_jsdl [output_gwjt]</command>
+        </cmdsynopsis>
+    </refsynopsisdiv>
+    
+    <refsect1 id="jsdl2gw-description"><title>Description</title>
+	    <para>
+	   Converts a jsdl document into a gridway job template.
+	   If no output file is defined, it defaults to the standard output.
+	   This enables the use of pipes with gwsubmit in the following fashion:
+	   </para>
+	   <screen>jsdl2gw jsdl-job.xml | gwsubmit</screen>
+    </refsect1>
+    
+    <refsect1 id="jsdl2gw-commandoptions"><title>Command options</title>
+        
+            <variablelist>
+                <varlistentry><term>-h</term><listitem>
+                    <para>
+                        Prints help.
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+
+            <variablelist>
+                <varlistentry><term>input_jsdl</term><listitem>
+                    <para>
+                       Reads the jsdl document from the input_jsdl
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+
+            <variablelist>
+                <varlistentry><term>output_gwjt</term><listitem>
+                    <para>
+                        Stores the GridWay Job Template specification in the output_gwjt.jt file
+                    </para>
+                </listitem>
+                </varlistentry>
+            </variablelist>
+        
+    </refsect1>
+</refentry>
+
+</reference>

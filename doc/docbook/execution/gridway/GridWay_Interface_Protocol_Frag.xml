@@ -1,0 +1,492 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd"
+[
+
+<!ENTITY % myents SYSTEM "../../entities">
+
+%myents;
+
+]>
+<section>
+<section>	
+<title>Information manager MAD</title>
+        <para>
+            In order to provide an abstraction with the monitoring and discovery middleware layer (or Grid Information System), GridWay uses a Middleware Access Driver (MAD) module to discover and monitor hosts. This module provides basic operations with the monitoring and discovery middleware.
+        </para>
+        <para>
+            The format to send a request to the Execution MAD, through its standard input, is:
+            <screen>OPERATION HID HOST -</screen>
+        </para>
+        <para>
+            Where:
+            <itemizedlist>
+                <listitem>
+                    <para>
+                        OPERATION: Can be one of the following:
+                        <itemizedlist>
+                            <listitem>
+                                <para>
+                                    INIT: Initializes the MAD.
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                    DISCOVER: Discovers hosts.
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                    MONITOR: Monitors a host.
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para>
+                                    FINALIZE: Finalizes the MAD.
+                                </para>
+                            </listitem>
+                        </itemizedlist>
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        HID: If the operation is MONITOR, it is a host identifier, chosen by GridWay. Otherwise it is ignored.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        HOST: If the operation is MONITOR it specifies the host to monitor. Otherwise it is ignored.
+                    </para>
+                </listitem>
+            </itemizedlist>
+        </para>
+        <para>
+            On the other side, the format to receive a response from the MAD, through its standard output, is:
+        </para>
+        <screen>OPERATION HID RESULT INFO</screen>
+        <para>
+            Where:
+            <itemizedlist>
+                <listitem>
+                    <para>
+                        OPERATION: Is the operation specified in the request that originated the response.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        HID: It is the host identifier, as provided in the submission request.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        RESULT: It is the result of the operation. Could be SUCCESS or FAILURE.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        INFO: If RESULT is FAILURE, it contains the cause of failure. Otherwise, if OPERATION is DISCOVER, it contains a list of discovered host, or if OPERATION is MONITOR, it contains a list of host attributes.
+                    </para>
+                </listitem>
+            </itemizedlist>
+        </para>
+    			<table frame='all'>
+	    			<title>Attributes that should be defined by the Information MADs.</title>
+		    		<tgroup cols='2' align='left' colsep='1' rowsep='1'>
+			    	<colspec colname='c1'/>
+				    <colspec colname='c2'/>
+    					<tbody>
+	    					<row>
+		    					<entry>HOSTNAME</entry>
+			    				<entry>FQDN (Fully Qualified Domain Name) of the execution host (e.g. "hydrus.dacya.ucm.es")</entry>
+				    		</row>
+					    	<row>
+						    	<entry>ARCH</entry>
+							    <entry>Architecture of the execution host (e.g. "i686", "alpha")</entry>
+    						</row>
+	    					<row>
+		    					<entry>OS_NAME</entry>
+			    				<entry>Operating System name of the execution host (e.g. "Linux", "SL")</entry>
+				    		</row>
+					    	<row>
+						    	<entry>OS_VERSION</entry>
+							    <entry>Operating System version of the execution host (e.g. "2.6.9-1.66", "3")</entry>
+    						</row>
+	    					<row>
+		    					<entry>CPU_MODEL</entry>
+			    				<entry>CPU model of the execution host (e.g. "Intel(R) Pentium(R) 4 CPU 2", "PIV")</entry>
+				    		</row>
+					    	<row>
+						    	<entry>CPU_MHZ</entry>
+							    <entry>CPU speed in MHz of the execution host</entry>
+    						</row>
+	    					<row>
+		    					<entry>CPU_FREE</entry>
+			    				<entry>Percentage of free CPU of the execution host</entry>
+				    		</row>
+					    	<row>
+						    	<entry>CPU_SMP</entry>
+							    <entry>CPU SMP size of the execution host</entry>
+    						</row>
+	    					<row>
+		    					<entry>NODECOUNT</entry>
+			    				<entry>Total number of nodes of the execution host</entry>
+				    		</row>
+					    	<row>
+						    	<entry>SIZE_MEM_MB</entry>
+							    <entry>Total memory size in MB of the execution host</entry>
+    						</row>
+	    					<row>
+		    					<entry>FREE_MEM_MB</entry>
+			    				<entry>Free memory in MB of the execution hosts</entry>
+				    		</row>
+					    	<row>
+    							<entry>SIZE_DISK_MB</entry>
+	    						<entry>Total disk space in MB of the execution hosts</entry>
+		    				</row>
+			    			<row>
+				    			<entry>FREE_DISK_MB</entry>
+					    		<entry>Free disk space in MB of the execution hosts</entry>
+						    </row>
+    						<row>
+	    						<entry>LRMS_NAME</entry>
+		    					<entry>Name of local DRM system (job manager) for execution, usually not fork (e.g. "jobmanager-pbs", "Pbs", "jobmanager-sge", "SGE")</entry>
+			    			</row>
+				    		<row>
+					    		<entry>LRMS_TYPE</entry>
+						    	<entry>Type of local DRM system for execution (e.g. "PBS", "SGE")</entry>
+    						</row>
+	    					<row>
+		    					<entry>QUEUE_NAME[i]</entry>
+			    				<entry>Name of queue i (e.g. "default", "short", "dteam")</entry>
+				    		</row>
+					    	<row>
+                                <entry>QUEUE_NODECOUNT[i]</entry>
+                                <entry>Total node count of queue i</entry>
+		    				</row>
+			    			<row>
+                                <entry>QUEUE_FREENODECOUNT[i]</entry>
+                                <entry>Free node count of queue i</entry>
+						    </row>
+    						<row>
+	    						<entry>QUEUE_MAXTIME[i]</entry>
+		    					<entry>Maximum wall time of jobs in queue i</entry>
+			    			</row>
+				    		<row>
+					    		<entry>QUEUE_MAXCPUTIME[i]</entry>
+						    	<entry>Maximum CPU time of jobs in queue i</entry>
+    						</row>
+	    					<row>
+		    					<entry>QUEUE_MAXCOUNT[i]</entry>
+                                <entry>Maximum count of jobs that can be submitted in one request to queue i</entry>
+				    		</row>
+					    	<row>
+						    	<entry>QUEUE_MAXRUNNINGJOBS[i]</entry>
+                                <entry>Maximum number of running jobs in queue i</entry>
+	    					</row>
+		    				<row>
+			    				<entry>QUEUE_MAXJOBSINQUEUE[i]</entry>
+                                <entry>Maximum number of queued jobs in queue i</entry>
+					    	</row>
+    						<row>
+	    						<entry>QUEUE_DISPATCHTYPE[i]</entry>
+                                <entry>Dispatch type of queue i (e.g. "batch", "inmediate")</entry>
+			    			</row>
+				    		<row>
+    							<entry>QUEUE_PRIORITY[i]</entry>
+                                <entry>Priority of queue i</entry>
+		    				</row>
+			    			<row>
+        			    		<entry>QUEUE_STATUS[i]</entry>
+                                <entry>Status of queue i (e.g. "active", "production")</entry>
+		        			</row>
+	    	    		</tbody>
+	   			    </tgroup>
+        		</table>
+<para>
+The information drivers interface to the grid information services to collect the resource attributes. These attributes can be used by the end-user to set requirement and rank expressions (job template), for filtering, prioritizing and selecting the candidate hosts. GridWay can simultaneously use as many Information drivers as needed. For example, GridWay allows you to simultaneously use MDS2 and MDS4 services, so you can also use resources from different Grids at the same time. Drivers for MDS 2 and MDS 4 provide the variables described in Table 2-1. However, the information manager is able to receive from the driver other parameters. The GridWay team has used other information parameters that could be very important to improve application efficiency (HTC apps) and for job migration: BANDWIDTH, LATENCY, SPEC_INT, SPEC_FLOAT...
+</para>
+</section>
+
+<section>
+<title>Execution manager MAD</title>
+<para>
+    In order to provide an abstraction with the resource management middleware layer, GridWay uses a Middleware Access Driver (MAD) module to submit, control and monitor the execution of jobs. This module provides basic operations with the resource management middleware.
+</para>
+<para>
+    The format to send a request to the Execution MAD, through its standard input, is:
+    <screen>OPERATION JID HOST/JM RSL</screen>
+</para>
+<para>
+    Where:
+    <itemizedlist>
+        <listitem>
+            <para>
+                OPERATION: Can be one of the following:
+                <itemizedlist>
+                    <listitem>
+                        <para>
+                            INIT: Initializes the MAD.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            SUBMIT: Submits a job.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            POLL: Polls a job to obtain its state.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            CANCEL: Cancels a job.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            FINALIZE: Finalizes the MAD.
+                        </para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+        </listitem>
+        <listitem>
+            <para>
+                JID: Is a job identifier, chosen by GridWay.
+            </para>
+        </listitem>
+        <listitem>
+            <para>
+                HOST: If the operation is SUBMIT, it specifies the resource contact to submit the job. Otherwise it is ignored.
+            </para>
+        </listitem>
+        <listitem>
+            <para>
+                JM: If the operation is SUBMIT, it specifies the job manager to submit the job. Otherwise it is ignored.
+            </para>
+        </listitem>
+        <listitem>
+            <para>
+                RSL: If the operation is SUBMIT, it specifies the resource specification to submit the job. Otherwise it is ignored.
+            </para>
+        </listitem>
+    </itemizedlist>
+</para>
+<para>
+    On the other side, the format to receive a response from the MAD, through its standard output, is:
+</para>
+<screen>OPERATION JID RESULT INFO</screen>
+<para>
+    Where:
+</para>
+<itemizedlist>
+    <listitem>
+        <para>
+            OPERATION: Is the operation specified in the request that originated the response or CALLBACK, in the
+            case of an asynchronous notification of a state change.
+        </para>
+    </listitem>
+    <listitem>
+        <para>
+            JID: It is the job identifier, as provided in the submission request.
+        </para>
+    </listitem>
+    <listitem>
+        <para>
+            RESULT: It is the result of the operation. Could be SUCCESS or FAILURE.
+        </para>
+    </listitem>
+    <listitem>
+        <para>
+            INFO: If RESULT is FAILURE, it contains the cause of failure. Otherwise, if OPERATION is POLL or
+            CALLBACK, it contains the state of the job.
+        </para>
+    </listitem>
+</itemizedlist>
+
+</section>
+<section>
+<title>Transfer manager MAD</title>
+<para>
+  In order to provide an abstraction with the file transfer management middleware layer, GridWay
+  uses a Middleware Access Driver (MAD) module to transfer job files. This module provides basic
+  operations with the file transfer middleware.
+</para>
+<para>
+  The format to send a request to the Transfer MAD, through its standard input, is:
+</para>
+  <screen>OPERATION JID TID EXE_MODE SRC_URL DST_URL</screen>
+  <para>
+    Where:
+    <itemizedlist>
+      <listitem>
+        <para>
+          OPERATION: Can be one of the following:
+          <itemizedlist>
+            <listitem>
+              <para>
+                INIT: Initializes the MAD, JID should be max number of jobs.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                START: Init transfer associated with job JID
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                END: Finish transfer associated with job JID
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                MKDIR: Creates directory SRC_URL
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                RMDIR: Removes directory SRC_URL
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                CP: start a copy of SRC_URL to DST_URL, with identification TID,
+                and associated with job JID.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                FINALIZE: Finalizes the MAD.
+              </para>
+            </listitem>
+          </itemizedlist>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          JID: Is a job identifier, chosen by GridWay.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          TID: Transfer identifier, only relevant for command CP.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          EXE_MODE: If equal to 'X' file will be given execution
+          permissions, only relevant for command CP.
+        </para>
+      </listitem>
+    </itemizedlist>
+  </para>
+<para>
+  On the other side, the format to receive a response from the MAD, through its standard output, is:
+<screen>OPERATION JID TID RESULT INFO</screen>
+</para>
+<para>
+  Where:
+</para>
+<itemizedlist>
+  <listitem>
+    <para>
+      OPERATION: Is the operation specified in the request that originated the response or CALLBACK, in the
+      case of an asynchronous notification of a state change.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      JID: It is the job identifier, as provided in the START request.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      TID: It is the transfer identifier, as provided in the CP request.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+      RESULT: It is the result of the operation. Could be SUCCESS or FAILURE.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      INFO: If RESULT is FAILURE, it contains the cause of failure.
+    </para>
+  </listitem>
+</itemizedlist>
+</section>
+
+<section>
+<title>Dispatch manager Scheduler</title>
+<para>
+    In order to decouple the scheduling process, GridWay uses a Scheduler module to schedule
+    jobs.
+</para>
+<para>
+    The format to send a scheduling request to the Scheduler, through its standard input, is:
+    <screen>SCHEDULE - - -</screen>
+</para>
+<para>
+    On the other side, the format to receive a response from the Scheduler, through its
+    standard output, is:
+</para>
+<screen>OPERATION JID RESULT INFO</screen>
+<para>
+    Where:
+    <itemizedlist>
+        <listitem>
+            <para>
+                OPERATION: Is the operation requested to the Dispatch Manager.
+                The Dispatch Manager only supports the SCHEDULE_JOB operation.
+            </para>
+        </listitem>
+        <listitem>
+            <para>
+                JID: It is a job identifier.
+            </para>
+        </listitem>
+        <listitem>
+            <para>
+                RESULT: It is the result of the operation. Could be SUCCESS or FAILURE.
+            </para>
+        </listitem>
+        <listitem>
+            <para>
+                INFO: If RESULT is FAILURE, it contains the cause of failure. Otherwise, if
+                OPERATION is SCHEDULE_JOB it contains a resource specification in the form
+                HID:QNAME:RANK, where:
+                <itemizedlist>
+                    <listitem>
+                        <para>
+                            HID: It is the host identifier, as provided by
+                            <command>gwhosts</command> command.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            QNAME: It is the queue name.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                            RANK: It is the rank of the host.
+                        </para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+        </listitem>
+    </itemizedlist>
+</para>
+<para>
+GridWay 5 includes a scheduler template
+(<filename>gw_scheduler_skel.c</filename>) to develop custom schedulers.
+As an example a Round-Robin/Flooding scheduler can be found in the
+GridWay distribution (<filename>gw_flood_scheduler.c</filename>, in
+<filename>$GW_LOCATION/src/sched/</filename>). This is a very  simple
+scheduling algorithm, which maximizes the number of jobs submitted to the Grid.
+</para>
+</section>
+</section>

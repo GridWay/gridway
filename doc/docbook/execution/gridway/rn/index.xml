@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd"
+[
+
+<!ENTITY % myents SYSTEM "../../../entities">
+
+%myents;
+
+]>
+<article id="gridwayRN">
+    <title> GridWay 5.4: Release Notes</title>
+    <titleabbrev> Release Notes</titleabbrev>
+
+    <section id="s-gridway-Release_Notes-overview">
+        <title>Component Overview</title>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+            href="../GridWay_Overview_Brief_Frag.xml" xpointer="xpointer(/section/*)"/>
+    </section>
+    <section id="s-gridway-Release_Notes-featuresummary">
+        <title>Feature Summary</title>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+            href="../GridWay_Feature_Summary_Frag.xml" xpointer="xpointer(/section/*)"/>
+    </section>
+    <section id="s-gridway-Release_Notes-techdependencies">
+        <title>Technology Dependencies</title>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+            href="../GridWay_Dependencies_Summary_Frag.xml" xpointer="xpointer(/section/*)"/>
+    </section>
+    <section id="s-gridway-Release_Notes-supportedplatforms">
+        <title>Supported Platforms</title>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+            href="../GridWay_Platform_Summary_Frag.xml" xpointer="xpointer(/section/*)"/>
+    </section>
+    <section id="s-gridway-Release_Notes-compatibilitysummary">
+        <title>Backward Compatibility Summary</title>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+            href="../GridWay_Compatibility_Summary_Frag.xml" xpointer="xpointer(/section/*)"/>
+    </section>
+    <section id="s-gridway-Release_Notes_413-changes">
+        <title>Changes Summary</title>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+            href="../GridWay_Change_Summary_Frag.xml" xpointer="xpointer(/section/*)"/>
+    </section>
+    <section id="s-gridway-Release_Notes_413-bugfixes">
+        <title>Bug Fixes</title>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="../GridWay_Fixed_Bugs_Frag.xml"
+            xpointer="xpointer(/section/*)"/>
+    </section>
+    <section id="s-gridway-Release_Notes_413-knownproblems">
+        <title>Known Problems</title>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+            href="../GridWay_Known_Problems_Frag.xml" xpointer="xpointer(/section/*)"/>
+    </section>
+    <section id="s-gridway-Release_Notes_413-formoreinfo">
+        <title>For More Information </title>
+        <para>Click <ulink url="http://www.gridway.org">here</ulink> for more information about this
+            component. </para>
+    </section>
+</article>

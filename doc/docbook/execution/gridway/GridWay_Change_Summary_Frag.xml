@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd"
+[
+
+<!ENTITY % myents SYSTEM "../../entities">
+
+%myents;
+
+]>
+<section>
+<para>Since GridWay 5.2, development activities have been focused on easing the
+integration of GridWay with major Grid infrastructures: EGEE, TeraGrid and
+OSG. In this new release, GridWay 5.4, support to access the NorduGrid infrastructure is also included. Also, new bindings for DRMAA and support for DAGMAN workflows are included.</para>
+
+
+
+<para>New to GridWay 5.4:</para>
+
+<variablelist>
+<varlistentry>
+  <term>Integration with major Grid Infrastructures</term>
+  <listitem>
+    <para>Following the trend from previous releases, GridWay 5.4 is capable of integrate with another major infrastructure: NorduGrid. Drivers for Execution and Transfer are included in this release.</para>
+  </listitem>
+</varlistentry>
+
+<varlistentry>
+  <term>New DRMAA bindings for scripting languages</term>
+  <listitem>
+    <para>Previous GridWay releases come with support for C and Java bindings implementing the DRMAA standard. Scripting languages are interesting from the point of view of rapid application prototyping among others. From dsa-research.org we believe this to be an interesting aspect, and that is why GridWay 5.4 includes bindings to access the DRMAA standard from scripting languages such as Perl, Ruby and Python.</para>
+  </listitem>
+</varlistentry>
+
+<varlistentry>
+  <term>New Java DRMAA binding : 1.0</term>
+  <listitem>
+    <para>GridWay now supports the 1.0 binding of DRMAA Java, as well as the previous 0.6 version.</para>
+  </listitem>
+</varlistentry>
+
+<varlistentry>
+  <term>Support for DAGMAN workflows</term>
+  <listitem>
+    <para>There is an increasing interest from the scientific community to be able to run complex workflows on a Grid environment. An almost de-facto standard to represent DAG workflows is Condor DAGMAN. In this development release GridWay includes a new workflow launcher (gwdag) that handles this kind of workflows.</para>
+  </listitem>
+</varlistentry>
+
+</variablelist>
+</section>

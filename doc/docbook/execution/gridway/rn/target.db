@@ -1,0 +1,40 @@
+<div element="article" href="#gridwayRN" number="" targetptr="gridwayRN">
+  <ttl> GridWay 5.4: Release Notes</ttl>
+  <xreftext> Release Notes</xreftext>
+  <div element="section" href="#s-gridway-Release_Notes-overview" number="1" targetptr="s-gridway-Release_Notes-overview">
+    <ttl>Component Overview</ttl>
+    <xreftext>Section 1, “Component Overview”</xreftext>
+  </div>
+  <div element="section" href="#s-gridway-Release_Notes-featuresummary" number="2" targetptr="s-gridway-Release_Notes-featuresummary">
+    <ttl>Feature Summary</ttl>
+    <xreftext>Section 2, “Feature Summary”</xreftext>
+  </div>
+  <div element="section" href="#s-gridway-Release_Notes-techdependencies" number="3" targetptr="s-gridway-Release_Notes-techdependencies">
+    <ttl>Technology Dependencies</ttl>
+    <xreftext>Section 3, “Technology Dependencies”</xreftext>
+  </div>
+  <div element="section" href="#s-gridway-Release_Notes-supportedplatforms" number="4" targetptr="s-gridway-Release_Notes-supportedplatforms">
+    <ttl>Supported Platforms</ttl>
+    <xreftext>Section 4, “Supported Platforms”</xreftext>
+  </div>
+  <div element="section" href="#s-gridway-Release_Notes-compatibilitysummary" number="5" targetptr="s-gridway-Release_Notes-compatibilitysummary">
+    <ttl>Backward Compatibility Summary</ttl>
+    <xreftext>Section 5, “Backward Compatibility Summary”</xreftext>
+  </div>
+  <div element="section" href="#s-gridway-Release_Notes_413-changes" number="6" targetptr="s-gridway-Release_Notes_413-changes">
+    <ttl>Changes Summary</ttl>
+    <xreftext>Section 6, “Changes Summary”</xreftext>
+  </div>
+  <div element="section" href="#s-gridway-Release_Notes_413-bugfixes" number="7" targetptr="s-gridway-Release_Notes_413-bugfixes">
+    <ttl>Bug Fixes</ttl>
+    <xreftext>Section 7, “Bug Fixes”</xreftext>
+  </div>
+  <div element="section" href="#s-gridway-Release_Notes_413-knownproblems" number="8" targetptr="s-gridway-Release_Notes_413-knownproblems">
+    <ttl>Known Problems</ttl>
+    <xreftext>Section 8, “Known Problems”</xreftext>
+  </div>
+  <div element="section" href="#s-gridway-Release_Notes_413-formoreinfo" number="9" targetptr="s-gridway-Release_Notes_413-formoreinfo">
+    <ttl>For More Information </ttl>
+    <xreftext>Section 9, “For More Information ”</xreftext>
+  </div>
+</div>

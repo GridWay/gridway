@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd"
+[
+
+<!ENTITY % myents SYSTEM "../../entities">
+
+%myents;
+
+]>
+<section>
+<para>Tested platforms for GridWay:</para>
+<itemizedlist>
+  <listitem><para>GridWay builds successfully for the following platforms:
+      <itemizedlist>
+        <listitem><simpara>Linux</simpara></listitem>
+        <listitem><simpara>Tru64</simpara></listitem>
+        <listitem><simpara>Mac OS X</simpara></listitem>
+        <listitem><simpara>Solaris</simpara></listitem>
+        <listitem><simpara>Aix</simpara></listitem>
+      </itemizedlist>
+  </para></listitem>
+</itemizedlist>
+<para>In addition, GridWay has been tested with the major Grid infrastructures. Click the following links to find more information on how to use GridWay with <ulink url="http://www.gridway.org/documentation/stable/egeehowto">EGEE</ulink>,<ulink url="http://www.gridway.org/documentation/stable/tghowto/">TeraGrid</ulink>,<ulink url="http://www.gridway.org/documentation/stable/osghowto/">OSG</ulink> and <ulink url="http://www.gridway.org/documentation/stable/nghowtoo/">NorduGrid</ulink>.</para>
+</section>

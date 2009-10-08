@@ -1,0 +1,396 @@
+<div element="book" href="#gridwayUser" number="" targetptr="gridwayUser">
+  <ttl> GridWay 5.4: User's Guide</ttl>
+  <xreftext> GridWay 5.4: User's Guide</xreftext>
+  <div element="chapter" href="#gridway-user-introduction" number="1" targetptr="gridway-user-introduction">
+    <ttl>Introduction</ttl>
+    <xreftext>Chapter 1, <fo:inline xmlns:fo="http://www.w3.org/1999/XSL/Format" font-style="italic">Introduction</fo:inline></xreftext>
+    <div element="section" href="#id302935" number="1">
+      <ttl>Benefits for the end user </ttl>
+      <xreftext>Section 1, “Benefits for the end user ”</xreftext>
+    </div>
+    <div element="section" href="#id341440" number="2">
+      <ttl>How GridWay operates</ttl>
+      <xreftext>Section 2, “How GridWay operates”</xreftext>
+    </div>
+    <div element="section" href="#id286211" number="3">
+      <ttl>Job life-cycle in GridWay</ttl>
+      <xreftext>Section 3, “Job life-cycle in GridWay”</xreftext>
+      <obj element="figure" href="#id328125" number="1.1">
+        <ttl>Simplified state machine of the GridWay Metascheduler.</ttl>
+        <xreftext>Figure 1.1, “Simplified state machine of the GridWay Metascheduler.”</xreftext>
+      </obj>
+    </div>
+    <div element="section" href="#id328265" number="4">
+      <ttl>A grid-aware application model</ttl>
+      <xreftext>Section 4, “A grid-aware application model”</xreftext>
+    </div>
+  </div>
+  <div element="chapter" href="#gridway-user-env-vars" number="2" targetptr="gridway-user-env-vars">
+    <ttl>User environment configuration</ttl>
+    <xreftext>Chapter 2, <fo:inline xmlns:fo="http://www.w3.org/1999/XSL/Format" font-style="italic">User environment configuration</fo:inline></xreftext>
+  </div>
+  <div element="chapter" href="#gridway-user-functionality" number="3" targetptr="gridway-user-functionality">
+    <ttl>Functionality</ttl>
+    <xreftext>Chapter 3, <fo:inline xmlns:fo="http://www.w3.org/1999/XSL/Format" font-style="italic">Functionality</fo:inline></xreftext>
+    <div element="section" href="#id54816" number="1">
+      <ttl>Job description overview</ttl>
+      <xreftext>Section 1, “Job description overview”</xreftext>
+    </div>
+    <div element="section" href="#id345048" number="2">
+      <ttl>Job Template options</ttl>
+      <xreftext>Section 2, “Job Template options”</xreftext>
+      <obj element="table" href="#id291302" number="3.1">
+        <ttl>Job Template options.</ttl>
+        <xreftext>Table 3.1, “Job Template options.”</xreftext>
+      </obj>
+    </div>
+    <div element="section" href="#id333601" number="3">
+      <ttl>File definition in Job Templates</ttl>
+      <xreftext>Section 3, “File definition in Job Templates”</xreftext>
+      <div element="section" href="#id333623" number="3.1">
+        <ttl> Defining input files </ttl>
+        <xreftext>Section 3.1, “ Defining input files ”</xreftext>
+      </div>
+      <div element="section" href="#id359461" number="3.2">
+        <ttl> Defining output files </ttl>
+        <xreftext>Section 3.2, “ Defining output files ”</xreftext>
+      </div>
+      <div element="section" href="#id359579" number="3.3">
+        <ttl> Defining standard streams </ttl>
+        <xreftext>Section 3.3, “ Defining standard streams ”</xreftext>
+      </div>
+      <div element="section" href="#id359646" number="3.4">
+        <ttl> Defining restart files </ttl>
+        <xreftext>Section 3.4, “ Defining restart files ”</xreftext>
+      </div>
+    </div>
+    <div element="section" href="#VarSub" number="4" targetptr="VarSub">
+      <ttl>Variable substitution</ttl>
+      <xreftext>Section 4, “Variable substitution”</xreftext>
+      <obj element="table" href="#id359715" number="3.2">
+        <ttl>Substitution variables.</ttl>
+        <xreftext>Table 3.2, “Substitution variables.”</xreftext>
+      </obj>
+    </div>
+    <div element="section" href="#ResSelectExpr" number="5" targetptr="ResSelectExpr">
+      <ttl>Resource selection expressions</ttl>
+      <xreftext>Section 5, “Resource selection expressions”</xreftext>
+      <div element="section" href="#id359823" number="5.1">
+        <ttl>Requirement expression syntax</ttl>
+        <xreftext>Section 5.1, “Requirement expression syntax”</xreftext>
+      </div>
+      <div element="section" href="#id359860" number="5.2">
+        <ttl>Rank expression syntax</ttl>
+        <xreftext>Section 5.2, “Rank expression syntax”</xreftext>
+      </div>
+      <div element="section" href="#id359882" number="5.3">
+        <ttl>Requirement and rank variables</ttl>
+        <xreftext>Section 5.3, “Requirement and rank variables”</xreftext>
+        <obj element="table" href="#id359898" number="3.3">
+          <ttl>Variables that can be used to define the job <fo:inline xmlns:fo="http://www.w3.org/1999/XSL/Format" font-style="italic">REQUIREMENTS</fo:inline> and <fo:inline xmlns:fo="http://www.w3.org/1999/XSL/Format" font-style="italic">RANK</fo:inline>.</ttl>
+          <xreftext>Table 3.3, “Variables that can be used to define the job <fo:inline xmlns:fo="http://www.w3.org/1999/XSL/Format" font-style="italic">REQUIREMENTS</fo:inline> and <fo:inline xmlns:fo="http://www.w3.org/1999/XSL/Format" font-style="italic">RANK</fo:inline>.”</xreftext>
+        </obj>
+      </div>
+      <div element="section" href="#id360184" number="5.4">
+        <ttl>Job environment</ttl>
+        <xreftext>Section 5.4, “Job environment”</xreftext>
+      </div>
+      <div element="section" href="#id360359" number="5.5">
+        <ttl>Monitor and Wrapper Scripts</ttl>
+        <xreftext>Section 5.5, “Monitor and Wrapper Scripts”</xreftext>
+      </div>
+    </div>
+    <div element="section" href="#id360384" number="6">
+      <ttl>Job Submission Description Language (JSDL)</ttl>
+      <xreftext>Section 6, “Job Submission Description Language (JSDL)”</xreftext>
+      <div element="section" href="#id360389" number="6.1">
+        <ttl>JSDL overview</ttl>
+        <xreftext>Section 6.1, “JSDL overview”</xreftext>
+      </div>
+      <div element="section" href="#id360407" number="6.2">
+        <ttl>JSDL document structure</ttl>
+        <xreftext>Section 6.2, “JSDL document structure”</xreftext>
+      </div>
+      <div element="section" href="#id360469" number="6.3">
+        <ttl>JSDL POSIX application</ttl>
+        <xreftext>Section 6.3, “JSDL POSIX application”</xreftext>
+      </div>
+      <div element="section" href="#id360500" number="6.4">
+        <ttl>JSDL HPC Profile Application Extension</ttl>
+        <xreftext>Section 6.4, “JSDL HPC Profile Application Extension”</xreftext>
+      </div>
+      <div element="section" href="#id360528" number="6.5">
+        <ttl>Job Submission Description Language versus GridWay Job Template</ttl>
+        <xreftext>Section 6.5, “Job Submission Description Language versus GridWay Job Template”</xreftext>
+        <obj element="table" href="#TableJSDLvsGWJT" number="3.4" targetptr="TableJSDLvsGWJT">
+          <ttl>JSDL vs GWJT</ttl>
+          <xreftext>Table 3.4, “JSDL vs GWJT”</xreftext>
+        </obj>
+      </div>
+      <div element="section" href="#id361620" number="6.6">
+        <ttl>Examples</ttl>
+        <xreftext>Section 6.6, “Examples”</xreftext>
+        <div element="section" href="#id361625" number="6.6.1">
+          <ttl>A simple example</ttl>
+          <xreftext>Section 6.6.1, “A simple example”</xreftext>
+          <div element="section" href="#id361635" number="6.6.1.1">
+            <ttl>JSDL file</ttl>
+            <xreftext>Section 6.6.1.1, “JSDL file”</xreftext>
+          </div>
+          <div element="section" href="#id361675" number="6.6.1.2">
+            <ttl>GridWay Job Template file</ttl>
+            <xreftext>Section 6.6.1.2, “GridWay Job Template file”</xreftext>
+          </div>
+        </div>
+        <div element="section" href="#id361693" number="6.6.2">
+          <ttl>A HPC profile example</ttl>
+          <xreftext>Section 6.6.2, “A HPC profile example”</xreftext>
+          <div element="section" href="#id361703" number="6.6.2.1">
+            <ttl>JSDL file</ttl>
+            <xreftext>Section 6.6.2.1, “JSDL file”</xreftext>
+          </div>
+          <div element="section" href="#id361743" number="6.6.2.2">
+            <ttl>GridWay Job Template file</ttl>
+            <xreftext>Section 6.6.2.2, “GridWay Job Template file”</xreftext>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div element="chapter" href="#gridway-user-usagescenarios" number="4" targetptr="gridway-user-usagescenarios">
+    <ttl>Usage Scenarios</ttl>
+    <xreftext>Chapter 4, <fo:inline xmlns:fo="http://www.w3.org/1999/XSL/Format" font-style="italic">Usage Scenarios</fo:inline></xreftext>
+    <div element="section" href="#id340182" number="1">
+      <ttl>Single jobs: Submitting and monitoring the simplest job</ttl>
+      <xreftext>Section 1, “Single jobs: Submitting and monitoring the simplest job”</xreftext>
+    </div>
+    <div element="section" href="#id324592" number="2">
+      <ttl>Array jobs: Calculating the π number</ttl>
+      <xreftext>Section 2, “Array jobs: Calculating the π number”</xreftext>
+      <div element="section" href="#id324598" number="2.1">
+        <ttl>Defining the problem</ttl>
+        <xreftext>Section 2.1, “Defining the problem”</xreftext>
+      </div>
+      <div element="section" href="#id336702" number="2.2">
+        <ttl>The coding part</ttl>
+        <xreftext>Section 2.2, “The coding part”</xreftext>
+      </div>
+      <div element="section" href="#id356569" number="2.3">
+        <ttl>Defining the job</ttl>
+        <xreftext>Section 2.3, “Defining the job”</xreftext>
+      </div>
+      <div element="section" href="#id356594" number="2.4">
+        <ttl>Submitting the jobs</ttl>
+        <xreftext>Section 2.4, “Submitting the jobs”</xreftext>
+      </div>
+      <div element="section" href="#id356662" number="2.5">
+        <ttl>Result post-processing</ttl>
+        <xreftext>Section 2.5, “Result post-processing”</xreftext>
+      </div>
+    </div>
+    <div element="section" href="#id356718" number="3">
+      <ttl>MPI jobs: Calculating the π number again</ttl>
+      <xreftext>Section 3, “MPI jobs: Calculating the π number again”</xreftext>
+    </div>
+    <div element="section" href="#id325262" number="4">
+      <ttl>Workflows</ttl>
+      <xreftext>Section 4, “Workflows”</xreftext>
+      <div element="section" href="#id325333" number="4.1">
+        <ttl>A sample of DAG workflow</ttl>
+        <xreftext>Section 4.1, “A sample of DAG workflow”</xreftext>
+        <obj element="figure" href="#id325345" number="4.1">
+          <ttl>Workflow example.</ttl>
+          <xreftext>Figure 4.1, “Workflow example.”</xreftext>
+        </obj>
+        <div element="section" href="#id325474" number="4.1.1">
+          <ttl>Using gwdag tool</ttl>
+          <xreftext>Section 4.1.1, “Using gwdag tool”</xreftext>
+          <obj element="figure" href="#id325514" number="4.2">
+            <ttl>Dag graph generated by the gwdag tool.</ttl>
+            <xreftext>Figure 4.2, “Dag graph generated by the gwdag tool.”</xreftext>
+          </obj>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div element="chapter" href="#gridway-user-commandline" number="5" targetptr="gridway-user-commandline">
+    <ttl>Command-line tools</ttl>
+    <xreftext>Chapter 5, <fo:inline xmlns:fo="http://www.w3.org/1999/XSL/Format" font-style="italic">Command-line tools</fo:inline></xreftext>
+    <div element="refentry" href="#gwsubmit" number="" targetptr="gwsubmit">
+      <ttl>Job and Array Job submission Command</ttl>
+      <xreftext>Job and Array Job submission Command(1)</xreftext>
+      <div element="refsect1" href="#gwsubmit-description" number="1" targetptr="gwsubmit-description">
+        <ttl>Description</ttl>
+        <xreftext>the section called “Description”</xreftext>
+      </div>
+      <div element="refsect1" href="#gwsubmit-commandoptions" number="2" targetptr="gwsubmit-commandoptions">
+        <ttl>Command options</ttl>
+        <xreftext>the section called “Command options”</xreftext>
+      </div>
+    </div>
+    <div element="refentry" href="#gwdag" number="" targetptr="gwdag">
+      <ttl>DAG Job submission Command</ttl>
+      <xreftext>DAG Job submission Command(1)</xreftext>
+      <div element="refsect1" href="#gwdag-description" number="1" targetptr="gwdag-description">
+        <ttl>Description</ttl>
+        <xreftext>the section called “Description”</xreftext>
+      </div>
+      <div element="refsect1" href="#gwdag-commandoptions" number="2" targetptr="gwdag-commandoptions">
+        <ttl>Command options</ttl>
+        <xreftext>the section called “Command options”</xreftext>
+      </div>
+    </div>
+    <div element="refentry" href="#gwps" number="" targetptr="gwps">
+      <ttl>Job Monitoring Command</ttl>
+      <xreftext>Job Monitoring Command(2)</xreftext>
+      <div element="refsect1" href="#gwps-description" number="1" targetptr="gwps-description">
+        <ttl>Description</ttl>
+        <xreftext>the section called “Description”</xreftext>
+      </div>
+      <div element="refsect1" href="#gwps-commandoptions" number="2" targetptr="gwps-commandoptions">
+        <ttl>Command options</ttl>
+        <xreftext>the section called “Command options”</xreftext>
+      </div>
+      <div element="refsect1" href="#gwps-field-information" number="3" targetptr="gwps-field-information">
+        <ttl>Output field description</ttl>
+        <xreftext>the section called “Output field description”</xreftext>
+        <obj element="table" href="#id329594" number="5.1">
+          <ttl>Field options</ttl>
+          <xreftext>Table 5.1, “Field options”</xreftext>
+        </obj>
+      </div>
+    </div>
+    <div element="refentry" href="#gwhistory" number="" targetptr="gwhistory">
+      <ttl>Job History Command</ttl>
+      <xreftext>Job History Command(3)</xreftext>
+      <div element="refsect1" href="#gwhistory-description" number="1" targetptr="gwhistory-description">
+        <ttl>Description</ttl>
+        <xreftext>the section called “Description”</xreftext>
+      </div>
+      <div element="refsect1" href="#gwhistory-commandoptions" number="2" targetptr="gwhistory-commandoptions">
+        <ttl>Command options</ttl>
+        <xreftext>the section called “Command options”</xreftext>
+      </div>
+      <div element="refsect1" href="#gwhistory-field-information" number="3" targetptr="gwhistory-field-information">
+        <ttl>Output field description</ttl>
+        <xreftext>the section called “Output field description”</xreftext>
+        <obj element="table" href="#id363305" number="5.2">
+          <ttl>Field information</ttl>
+          <xreftext>Table 5.2, “Field information”</xreftext>
+        </obj>
+      </div>
+    </div>
+    <div element="refentry" href="#gwhost" number="" targetptr="gwhost">
+      <ttl>Host Monitoring Command</ttl>
+      <xreftext>Host Monitoring Command(4)</xreftext>
+      <div element="refsect1" href="#gwhost-description" number="1" targetptr="gwhost-description">
+        <ttl>Description</ttl>
+        <xreftext>the section called “Description”</xreftext>
+      </div>
+      <div element="refsect1" href="#gwhost-commandoptions" number="2" targetptr="gwhost-commandoptions">
+        <ttl>Command options</ttl>
+        <xreftext>the section called “Command options”</xreftext>
+      </div>
+      <div element="refsect1" href="#gwhost-field-information" number="3" targetptr="gwhost-field-information">
+        <ttl>Output field description</ttl>
+        <xreftext>the section called “Output field description”</xreftext>
+        <obj element="table" href="#id363580" number="5.3">
+          <ttl>Field information</ttl>
+          <xreftext>Table 5.3, “Field information”</xreftext>
+        </obj>
+        <obj element="table" href="#id363715" number="5.4">
+          <ttl>Queue field information</ttl>
+          <xreftext>Table 5.4, “Queue field information”</xreftext>
+        </obj>
+      </div>
+    </div>
+    <div element="refentry" href="#gwkill" number="" targetptr="gwkill">
+      <ttl>Job Control Command</ttl>
+      <xreftext>Job Control Command(5)</xreftext>
+      <div element="refsect1" href="#gwkill-description" number="1" targetptr="gwkill-description">
+        <ttl>Description</ttl>
+        <xreftext>the section called “Description”</xreftext>
+      </div>
+      <div element="refsect1" href="#gwkill-commandoptions" number="2" targetptr="gwkill-commandoptions">
+        <ttl>Command options</ttl>
+        <xreftext>the section called “Command options”</xreftext>
+      </div>
+    </div>
+    <div element="refentry" href="#gwwait" number="" targetptr="gwwait">
+      <ttl>Job Synchronization Command</ttl>
+      <xreftext>Job Synchronization Command(6)</xreftext>
+      <div element="refsect1" href="#gwwait-description" number="1" targetptr="gwwait-description">
+        <ttl>Description</ttl>
+        <xreftext>the section called “Description”</xreftext>
+      </div>
+      <div element="refsect1" href="#gwwait-commandoptions" number="2" targetptr="gwwait-commandoptions">
+        <ttl>Command options</ttl>
+        <xreftext>the section called “Command options”</xreftext>
+      </div>
+    </div>
+    <div element="refentry" href="#gwuser" number="" targetptr="gwuser">
+      <ttl>User Monitoring Command</ttl>
+      <xreftext>User Monitoring Command(7)</xreftext>
+      <div element="refsect1" href="#gwuser-description" number="1" targetptr="gwuser-description">
+        <ttl>Description</ttl>
+        <xreftext>the section called “Description”</xreftext>
+      </div>
+      <div element="refsect1" href="#gwuser-commandoptions" number="2" targetptr="gwuser-commandoptions">
+        <ttl>Command options</ttl>
+        <xreftext>the section called “Command options”</xreftext>
+      </div>
+      <div element="refsect1" href="#gwuser-field-information" number="3" targetptr="gwuser-field-information">
+        <ttl>Output field description</ttl>
+        <xreftext>the section called “Output field description”</xreftext>
+        <obj element="table" href="#id364290" number="5.5">
+          <ttl>Field information</ttl>
+          <xreftext>Table 5.5, “Field information”</xreftext>
+        </obj>
+      </div>
+    </div>
+    <div element="refentry" href="#gwacct" number="" targetptr="gwacct">
+      <ttl>Accounting Command</ttl>
+      <xreftext>Accounting Command(7)</xreftext>
+      <div element="refsect1" href="#gwacct-description" number="1" targetptr="gwacct-description">
+        <ttl>Description</ttl>
+        <xreftext>the section called “Description”</xreftext>
+      </div>
+      <div element="refsect1" href="#gwacct-commandoptions" number="2" targetptr="gwacct-commandoptions">
+        <ttl>Command options</ttl>
+        <xreftext>the section called “Command options”</xreftext>
+      </div>
+      <div element="refsect1" href="#gwacct-field-information" number="3" targetptr="gwacct-field-information">
+        <ttl>Output field description</ttl>
+        <xreftext>the section called “Output field description”</xreftext>
+        <obj element="table" href="#id364534" number="5.6">
+          <ttl>Field information</ttl>
+          <xreftext>Table 5.6, “Field information”</xreftext>
+        </obj>
+      </div>
+    </div>
+    <div element="refentry" href="#jsdl2gw" number="" targetptr="jsdl2gw">
+      <ttl>JSDL To GridWay Job Template Parser Command</ttl>
+      <xreftext>JSDL To GridWay Job Template Parser Command(8)</xreftext>
+      <div element="refsect1" href="#jsdl2gw-description" number="1" targetptr="jsdl2gw-description">
+        <ttl>Description</ttl>
+        <xreftext>the section called “Description”</xreftext>
+      </div>
+      <div element="refsect1" href="#jsdl2gw-commandoptions" number="2" targetptr="jsdl2gw-commandoptions">
+        <ttl>Command options</ttl>
+        <xreftext>the section called “Command options”</xreftext>
+      </div>
+    </div>
+  </div>
+  <div element="chapter" href="#gridway-user-troubleshooting" number="6" targetptr="gridway-user-troubleshooting">
+    <ttl>Troubleshooting</ttl>
+    <xreftext>Chapter 6, <fo:inline xmlns:fo="http://www.w3.org/1999/XSL/Format" font-style="italic">Troubleshooting</fo:inline></xreftext>
+    <div element="section" href="#id341859" number="1">
+      <ttl>Debugging job execution</ttl>
+      <xreftext>Section 1, “Debugging job execution”</xreftext>
+    </div>
+    <div element="section" href="#id346125" number="2">
+      <ttl>Frequent problems</ttl>
+      <xreftext>Section 2, “Frequent problems”</xreftext>
+    </div>
+  </div>
+</div>

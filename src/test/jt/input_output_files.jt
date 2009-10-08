@@ -1,0 +1,8 @@
+EXECUTABLE=/bin/sleep
+
+INPUT_FILES= test.txt test.txt.in, file:///etc/passwd, gsiftp://draco.dacya.ucm.es/etc/passwd passwd.gsi
+OUTPUT_FILES= test.txt.in /tmp/test.txt.out, passwd passwd.out, passwd.gsi gsiftp://draco.dacya.ucm.es/tmp/passwd.gsi
+RESCHEDULE_ON_FAILURE=no
+NUMBER_OF_RETRIES=3 
+
+

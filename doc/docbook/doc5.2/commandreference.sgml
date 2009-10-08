@@ -1,0 +1,1105 @@
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V4.1//EN">
+<book lang="en">
+	<bookinfo>
+		<title>
+            GridWay 5.2 Documentation: Command Reference Guide
+        </title>
+        <pubdate>February, 2007</pubdate>
+        <copyright>
+            <year>2002-2007</year>
+            <holder>GridWay Team, Distributed Systems Architecture
+                Group, Universidad Complutense de Madrid.</holder>
+        </copyright>
+        <legalnotice>
+            <para>
+                Licensed under the Apache License, Version 2.0 (the "License");
+                you may not use this file except in compliance with the License.
+                You may obtain a copy of the License at
+            </para>
+            <para>
+                <ulink url="http://www.apache.org/licenses/LICENSE-2.0">
+                  http://www.apache.org/licenses/LICENSE-2.0</ulink>
+            </para>
+            <para>
+                Unless required by applicable law or agreed to in writing,
+                software distributed under the License is distributed on an
+                "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+                either express or implied. See the License for the specific
+                language governing permissions and limitations under the License.
+            </para>
+            <para>
+             Any academic report, publication, or other academic disclosure of
+             results obtained with the GridWay Metascheduler will acknowledge
+             GridWay's use by an appropriate citation to relevant papers by
+             GridWay team members.
+            </para>
+        </legalnotice>
+    </bookinfo>
+
+<chapter>
+<title> Job and Array Job submission Command</title>
+  <sect1>
+  <title>gwsubmit</title>
+  <sect2>
+  <title>NAME</title>
+  <para>
+    gwsubmit - job submission utility for the GridWay system
+  </para>
+  </sect2>
+
+  <sect2>
+  <title>SYNOPSIS</title>
+  <para>
+   gwsubmit <-t template> [-n tasks] [-h] [-v] [-o] [-s start] [-i increment]  [-d "id1 id2 ..."]
+  </para>
+  </sect2>
+
+  <sect2>
+    <title>DESCRIPTION</title>
+    <para>
+    Submit a job or an array job (if the number of tasks is defined) to gwd
+    </para>
+  </sect2>
+
+  <sect2>
+  <title>OPTIONS</title>
+  <simplesect>
+    <title>-h</title>
+    <para>
+    Prints help.
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-t &lt;template></title>
+    <para>
+    The template file describing the job.
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-n &lt;tasks></title>
+    <para>
+    Submit an array job with the given number of tasks. All the jobs in the
+    array will use the same template.
+    </para>
+  </simplesect>
+  <simplesect>
+    <title>-s &lt;start></title>
+    <para>
+    Start value for custom param in array jobs. Default 0.
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-i &lt;increment></title>
+    <para>
+    Increment value for custom param in array jobs. Each task has associated the value PARAM=start + increment * TASK_ID, and MAX_PARM = start+increment*(tasks-1). Default 1.
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-d &lt;"id1 id2..."></title>
+    <para>
+    Job dependencies. Submit the job on hold state, and
+    release it once jobs with id1,id2,.. have
+    successfully finished.
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-v</title>
+    <para>
+    Print to stdout the job ids returned by gwd.
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-o</title>
+    <para>
+    Hold job on submission.
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-p &lt;priority&gt;</title>
+    <para>
+    Initial priority for the job.
+    </para>
+  </simplesect>
+
+</sect2>
+</sect1>
+</chapter>
+
+<chapter>
+  <title> Job Monitoring Commands</title>
+
+  <sect1>
+  <title>gwps</title>
+
+  <sect2>
+    <title>NAME</title>
+    <para>
+      gwps - report a snapshot of the current jobs
+    </para>
+  </sect2>
+
+  <sect2>
+    <title>SYNOPSIS</title>
+    <para>
+      gwps [-h] [-u user] [-r host] [-A AID] [-s job_state] [-o output_format] [-c delay] [-n] [job_id]
+    </para>
+  </sect2>
+
+    <sect2>
+      <title>DESCRIPTION</title>
+      <para>
+        Prints information about all the jobs in the GridWay system (default)
+      </para>
+    </sect2>
+    <sect2>
+      <title>OPTIONS</title>
+      <simplesect>
+        <title>-h</title>
+        <para>
+          Prints help.
+        </para>
+      </simplesect>
+
+      <simplesect>
+        <title>-u user</title>
+        <para>
+          Monitor only jobs owned by user.
+        </para>
+      </simplesect>
+
+      <simplesect>
+        <title>-r host</title>
+        <para>
+          Monitor only jobs executed in host.
+        </para>
+      </simplesect>
+
+      <simplesect>
+        <title>-A AID</title>
+        <para>
+          Monitor only jobs part of the array AID.
+        </para>
+      </simplesect>
+
+      <simplesect>
+        <title>-s job_state</title>
+        <para>
+          Monitor only jobs in states matching that of job_state.
+        </para>
+      </simplesect>
+
+      <simplesect>
+        <title>-o output_format </title>
+        <para>
+           Formats output information, allowing the selection of which
+           fields to display.
+
+           Fields available:
+        </para>
+        <table>
+        <title>Field options</title>
+        <tgroup cols='3'>
+        <thead>
+          <row>
+            <entry>FIELD NAME</entry>
+            <entry>FIELD OPTION</entry>
+            <entry>DESCRIPTION</entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry>USER</entry>
+            <entry>u</entry>
+            <entry>owner of this job</entry>
+          </row>
+          <row>
+            <entry>JID</entry>
+            <entry>J</entry>
+            <entry>job unique identification assigned by the
+              Gridway system</entry>
+          </row>
+          <row>
+            <entry>AID</entry>
+            <entry>i</entry>
+            <entry>array unique identification, only relevant for
+              array jobs</entry>
+          </row>
+          <row>
+            <entry>TID</entry>
+            <entry>i</entry>
+            <entry>task identification, ranges from 0 to TOTAL_TASKS -1,
+              only relevant for array jobs</entry>
+          </row>
+          <row>
+            <entry>FP</entry>
+            <entry>p</entry>
+            <entry>fixed priority of the job</entry>
+          </row>
+          <row>
+            <entry>TYPE</entry>
+            <entry>y</entry>
+            <entry>type of job (simple, multiple or mpi)</entry>
+          </row>
+          <row>
+            <entry>NP</entry>
+            <entry>n</entry>
+            <entry>number of processors</entry>
+          </row>
+          <row>
+            <entry>DM</entry>
+            <entry>s</entry>
+            <entry>dispatch Manager state, one of: pend, hold, prol, prew,
+              wrap, epil, canl, stop, migr, done, fail</entry>
+          </row>
+          <row>
+            <entry>EM</entry>
+            <entry>e</entry>
+            <entry>execution Manager state (Globus state): pend, susp, actv,
+              fail, done</entry>
+          </row>
+          <row>
+            <entry>RWS</entry>
+            <entry>f</entry>
+            <entrytbl cols='2'>
+              <colspec colname='c1'>
+              <colspec colname='c2'>
+              <tbody>
+                <row><entry namest='c1' nameend='c2'>flags:</entry></row>
+                <row>
+                  <entry>R</entry>
+                  <entry>times this job has been restarted</entry>
+                </row>
+                <row>
+                  <entry>W</entry>
+                  <entry>number of processes waiting for this job</entry>
+                </row>
+                <row>
+                  <entry>S</entry>
+                  <entry>re-schedule flag</entry>
+                </row>
+              </tbody>
+            </entrytbl>
+          </row>
+          <row>
+            <entry>START</entry>
+            <entry>t|T</entry>
+            <entry>the time the job entered the system</entry>
+          </row>
+          <row>
+            <entry>END</entry>
+            <entry>t|T</entry>
+            <entry>the time the job reached a final state (fail or done)</entry>
+          </row>
+          <row>
+            <entry>EXEC</entry>
+            <entry>t|T</entry>
+            <entry>total execution time, includes suspension time in the
+                remote queue system</entry>
+          </row>
+          <row>
+            <entry>XFER</entry>
+            <entry>t|T</entry>
+            <entry>total file transfer time, includes stage-in and stage-out
+                phases</entry>
+          </row>
+          <row>
+            <entry>EXIT</entry>
+            <entry>x</entry>
+            <entry>job exit code</entry>
+          </row>
+          <row>
+            <entry>TEMPLATE</entry>
+            <entry>j</entry>
+            <entry>filename of the job template used for this job</entry>
+          </row>
+          <row>
+            <entry>HOST</entry>
+            <entry>h</entry>
+            <entry>hostname where the job is being executed</entry>
+          </row>
+        </tbody>
+        </tgroup>
+        </table>
+      </simplesect>
+
+      <simplesect>
+        <title>-c &lt;delay></title>
+        <para>
+          This will cause gwps to print job information every &lt;delay>
+          seconds continuously (similar to top command).
+        </para>
+      </simplesect>
+
+      <simplesect>
+        <title>-n</title>
+        <para>
+          Do not print the header.
+        </para>
+      </simplesect>
+
+
+      <simplesect>
+        <title>job_id</title>
+        <para>
+          Only monitor this job_id.
+        </para>
+      </simplesect>
+
+    </sect2>
+    </sect1>
+    <sect1>
+      <title>gwhistory</title>
+
+      <sect2>
+        <title>NAME</title>
+        <para>
+          gwhistory - shows the history of a job
+        </para>
+      </sect2>
+
+      <sect2>
+        <title>SYNOPSIS</title>
+        <para>
+          gwhistory [-h] [-n] &lt;job_id>
+        </para>
+      </sect2>
+
+      <sect2>
+        <title>DESCRIPTION</title>
+        <para>
+          Prints information about the execution history of a job
+        </para>
+      </sect2>
+      <sect2>
+        <title>OPTIONS</title>
+        <simplesect>
+          <title>-h</title>
+          <para>
+            Prints help.
+          </para>
+        </simplesect>
+
+        <simplesect>
+          <title>-n</title>
+          <para>
+            Do not print the header lines.
+          </para>
+        </simplesect>
+
+        <simplesect>
+          <title>job_id</title>
+          <para>
+            Job identification as provided by gwps.
+          </para>
+        </simplesect>
+      </sect2>
+
+      <sect2>
+      <title>INFORMATION</title>
+
+        <table>
+          <title>Field information</title>
+          <tgroup cols='2'>
+          <thead>
+            <row>
+              <entry>NAME</entry>
+              <entry>DESCRIPTION</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>HID</entry>
+              <entry>host unique identification assigned by the Gridway system.</entry>
+            </row>
+            <row>
+              <entry>START</entry>
+              <entry>the time the job start its execution on this host.</entry>
+            </row>
+            <row>
+              <entry>END</entry>
+              <entry>the time the job left this host, because it finished or it was migrated.</entry>
+            </row>
+            <row>
+              <entry>PROLOG</entry>
+              <entry>total prolog (file stage-in phase) time.</entry>
+            </row>
+            <row>
+              <entry>WRAPPER</entry>
+              <entry>total wrapper (execution phase) time.</entry>
+            </row>
+            <row>
+              <entry>EPILOG</entry>
+              <entry>total epilog (file stage-out phase) time.</entry>
+            </row>
+            <row>
+              <entry>MIGR</entry>
+              <entry>total migration time.</entry>
+            </row>
+            <row>
+              <entry>REASON</entry>
+              <entry>the reason why the job left this host.</entry>
+            </row>
+            <row>
+              <entry>QUEUE</entry>
+              <entry>name of the queue.</entry>
+            </row>
+            <row>
+              <entry>HOST</entry>
+              <entry>FQDN of the host.</entry>
+            </row>
+          </tbody>
+          </tgroup>
+        </table>
+
+      </sect2>
+
+    </sect1>
+    </chapter>
+
+<chapter>
+  <title> Host Monitoring Command</title>
+  <sect1>
+  <title>gwhost</title>
+  <sect2>
+  <title>NAME</title>
+  <para>
+    gwhost - shows hosts information
+  </para>
+  </sect2>
+
+  <sect2>
+  <title>SYNOPSIS</title>
+  <para>
+    gwhost [-h] [-c delay] [-nf] [-m job_id] [host_id]
+
+  </para>
+  </sect2>
+
+  <sect2>
+    <title>DESCRIPTION</title>
+    <para>
+      Prints information about all the hosts in the GridWay system (default)
+    </para>
+  </sect2>
+
+  <sect2>
+  <title>OPTIONS</title>
+  <simplesect>
+    <title>-h</title>
+    <para>
+    Prints help.
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-c &lt;delay></title>
+    <para>
+      This will cause gwhost to print job information every &lt;delay>
+      seconds continuously (similar to top command).
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-n</title>
+    <para>
+      Do not print the header.
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-f</title>
+    <para>
+      Full format.
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-m &lt;job_id&gt;</title>
+    <para>
+      Prints hosts matching the requirements of a given job.
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>host_id</title>
+    <para>
+      Only monitor this host_id, also prints queue information.
+    </para>
+  </simplesect>
+
+  </sect2>
+
+  <sect2>
+  <title>INFORMATION</title>
+
+    <table>
+    <title>Field information</title>
+    <tgroup cols='2'>
+    <thead>
+      <row>
+        <entry>FIELD</entry>
+        <entry>DESCRIPTION</entry>
+      </row>
+    </thead>
+    <tbody>
+      <row>
+        <entry>HID</entry>
+        <entry>host unique identification assigned by the Gridway system</entry>
+      </row>
+      <row>
+        <entry>PRIO</entry>
+        <entry>priority assigned to the host</entry>
+      </row>
+      <row>
+        <entry>OS</entry>
+        <entry>operating system</entry>
+      </row>
+      <row>
+        <entry>ARCH</entry>
+        <entry>architecture</entry>
+      </row>
+      <row>
+        <entry>MHZ</entry>
+        <entry>CPU speed in MHZ</entry>
+      </row>
+      <row>
+        <entry>%CPU</entry>
+        <entry>free CPU ratio</entry>
+      </row>
+      <row>
+        <entry>MEM(F/T)</entry>
+        <entry>system memory: F = Free, T = Total</entry>
+      </row>
+      <row>
+        <entry>DISK(F/T)</entry>
+        <entry>secondary storage: F = Free, T = Total</entry>
+      </row>
+      <row>
+        <entry>N(U/F/T)</entry>
+        <entry>number of slots: U = used by GridWay, F = free, T = total</entry>
+      </row>
+      <row>
+        <entry>LRMS</entry>
+        <entry>local resource management system, the jobmanager name</entry>
+      </row>
+      <row>
+        <entry>HOSTNAME</entry>
+        <entry>FQDN of this host</entry>
+      </row>
+    </tbody>
+    </tgroup>
+    </table>
+
+    <table>
+    <title>Queue field information</title>
+    <tgroup cols='2'>
+    <thead>
+      <row>
+        <entry>FIELD</entry>
+        <entry>DESCRIPTION</entry>
+      </row>
+    </thead>
+    <tbody>
+      <row>
+        <entry>QUEUENAME</entry>
+        <entry>name of this queue</entry>
+      </row>
+      <row>
+        <entry>SL(F/T)</entry>
+        <entry>slots:  F = Free, T = Total</entry>
+      </row>
+      <row>
+        <entry>WALLT</entry>
+        <entry>queue wall time</entry>
+      </row>
+      <row>
+        <entry>CPUT</entry>
+        <entry>queue cpu time</entry>
+      </row>
+      <row>
+        <entry>COUNT</entry>
+        <entry>queue count number</entry>
+      </row>
+      <row>
+        <entry>MAXR</entry>
+        <entry>max. running jobs</entry>
+      </row>
+      <row>
+        <entry>MAXQ</entry>
+        <entry>max. queued jobs</entry>
+      </row>
+      <row>
+        <entry>STATUS</entry>
+        <entry>queue status</entry>
+      </row>
+      <row>
+        <entry>DISPATCH</entry>
+        <entry>queue dispatch type</entry>
+      </row>
+      <row>
+        <entry>PRIORITY</entry>
+        <entry>queue priority</entry>
+      </row>
+    </tbody>
+    </tgroup>
+    </table>
+
+  </sect2>
+</sect1>
+</chapter>
+
+<chapter>
+  <title> Job Control Command</title>
+  <sect1>
+  <title>gwkill</title>
+  <sect2>
+  <title>NAME</title>
+  <para>
+    gwkill - controls job execution
+  </para>
+  </sect2>
+
+  <sect2>
+  <title>SYNOPSIS</title>
+  <para>
+    gwkill [-h] [-a] [-k | -t | -o | -s | -r | -l | -9] &lt;job_id [job_id2 ...] | -A array_id>
+  </para>
+  </sect2>
+
+  <sect2>
+    <title>DESCRIPTION</title>
+    <para>
+      Sends a signal to a job or array job
+    </para>
+  </sect2>
+
+  <sect2>
+  <title>OPTIONS</title>
+  <simplesect>
+    <title>-h</title>
+    <para>
+    Prints help.
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-a</title>
+    <para>
+      Asynchronous signal, only relevant for KILL and STOP.
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-k</title>
+    <para>
+      Kill (default, if no signal specified).
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-t</title>
+    <para>
+      Stop job.
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-r</title>
+    <para>
+      Resume job.
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-o</title>
+    <para>
+      Hold job.
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-l</title>
+    <para>
+      Release job.
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-s</title>
+    <para>
+      Re-schedule job.
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-9</title>
+    <para>
+      Hard kill, removes the job from the system without synchronizing remote job execution or cleaning remote host.
+    </para>
+  </simplesect>
+
+
+  <simplesect>
+    <title>job_id [job_id2 ...] </title>
+    <para>
+      Job identification as provided by gwps. You can specify a blank space separated list of job ids.
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-A &lt;array_id></title>
+    <para>
+      Array identification as provided by gwps.
+    </para>
+  </simplesect>
+
+  </sect2>
+</sect1>
+</chapter>
+
+<chapter>
+  <title> Job Synchronization Command</title>
+  <sect1>
+    <title>gwwait</title>
+    <sect2>
+      <title>NAME</title>
+      <para>
+        gwwait - synchronize a job
+      </para>
+    </sect2>
+
+    <sect2>
+      <title>SYNOPSIS</title>
+      <para>
+        gwwait [-h] [-a] [-v] [-k] &lt;job_id ...| -A array_id>
+      </para>
+    </sect2>
+
+    <sect2>
+      <title>DESCRIPTION</title>
+      <para>
+        Waits for a job or array job
+      </para>
+    </sect2>
+
+    <sect2>
+      <title>OPTIONS</title>
+      <simplesect>
+        <title>-h</title>
+        <para>
+          Prints help.
+        </para>
+      </simplesect>
+
+      <simplesect>
+        <title>-a</title>
+        <para>
+          Any, returns when the first job of the list or array finishes.
+        </para>
+      </simplesect>
+
+      <simplesect>
+        <title>-v</title>
+        <para>
+          Prints job exit code.
+        </para>
+      </simplesect>
+
+      <simplesect>
+        <title>-k</title>
+        <para>
+          Keep jobs, they remain in fail or done  states in the
+          GridWay system. By default, jobs are killed and their
+          resources freed.
+        </para>
+      </simplesect>
+
+      <simplesect>
+        <title>-A &lt;array_id></title>
+        <para>
+          Array identification as provided by gwps.
+        </para>
+      </simplesect>
+
+      <simplesect>
+        <title>job_id ...</title>
+        <para>
+          Job ids list (blank space separated).
+        </para>
+      </simplesect>
+
+    </sect2>
+  </sect1>
+</chapter>
+
+<chapter>
+  <title> User Monitoring Command</title>
+  <sect1>
+  <title>gwuser</title>
+  <sect2>
+  <title>NAME</title>
+  <para>
+    gwuser - monitors users in GridWay
+  </para>
+  </sect2>
+
+  <sect2>
+  <title>SYNOPSIS</title>
+  <para>
+    gwuser [-h] [-n]
+  </para>
+  </sect2>
+
+  <sect2>
+    <title>DESCRIPTION</title>
+    <para>
+        Prints information about users in the GridWay system
+    </para>
+  </sect2>
+
+  <sect2>
+  <title>OPTIONS</title>
+  <simplesect>
+    <title>-h</title>
+    <para>
+      Prints help.
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-n</title>
+    <para>
+      Do not print the header.
+    </para>
+  </simplesect>
+  </sect2>
+
+  <sect2>
+  <title>INFORMATION</title>
+
+    <table>
+    <title>Field information</title>
+    <tgroup cols='2'>
+    <thead>
+      <row>
+        <entry>FIELD</entry>
+        <entry>DESCRIPTION</entry>
+      </row>
+    </thead>
+    <tbody>
+      <row>
+        <entry>UID</entry>
+        <entry>user unique identification assigned by the Gridway system</entry>
+      </row>
+      <row>
+        <entry>NAME</entry>
+        <entry>name of this user</entry>
+      </row>
+      <row>
+        <entry>JOBS</entry>
+        <entry>number of Jobs in the GridWay system</entry>
+      </row>
+      <row>
+        <entry>RUN</entry>
+        <entry>number of running jobs</entry>
+      </row>
+      <row>
+        <entry>IDLE</entry>
+        <entry>idle time, (time with JOBS = 0)</entry>
+      </row>
+      <row>
+        <entry>EM</entry>
+        <entry>execution manager drivers loaded for this user</entry>
+      </row>
+      <row>
+        <entry>TM</entry>
+        <entry>transfer manager drivers loaded for this user</entry>
+      </row>
+      <row>
+        <entry>PID</entry>
+        <entry>process identification of driver processes</entry>
+      </row>
+    </tbody>
+    </tgroup>
+    </table>
+
+  </sect2>
+</sect1>
+
+</chapter>
+
+<chapter>
+<title>Accounting Command</title>
+
+<sect1>
+  <title>gwacct</title>
+  <sect2>
+  <title>NAME</title>
+  <para>
+    gwacct - prints accounting information
+  </para>
+  </sect2>
+
+  <sect2>
+  <title>SYNOPSIS</title>
+  <para>
+    gwacct [-h] [-n] [<-d n | -w n | -m n | -t s>] <-u user|-r host>
+  </para>
+  </sect2>
+
+  <sect2>
+    <title>DESCRIPTION</title>
+    <para>
+        Prints usage statistics per user or resource. Note: accounting statistics are updated once a job is killed.
+    </para>
+  </sect2>
+
+  <sect2>
+  <title>OPTIONS</title>
+  <simplesect>
+    <title>-h</title>
+    <para>
+    Prints help.
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-n</title>
+    <para>
+      Do not print the header.
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>&lt;-d n | -w n | -m n | -t s&gt;</title>
+    <para>
+      Take into account jobs submitted after certain date, specified in number
+      of days (-d), weeks (-w), months (-m) or an epoch (-t).
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-u user</title>
+    <para>
+      Print usage statistics for user.
+    </para>
+  </simplesect>
+
+  <simplesect>
+    <title>-r hostname</title>
+    <para>
+      Print usage statistics for host.
+    </para>
+  </simplesect>
+
+  </sect2>
+
+  <sect2>
+  <title>INFORMATION</title>
+
+  <table>
+  <title>Field information</title>
+  <tgroup cols='2'>
+  <thead>
+    <row>
+      <entry>FIELD</entry>
+      <entry>DESCRIPTION</entry>
+    </row>
+  </thead>
+  <tbody>
+    <row>
+      <entry>HOST/USER</entry>
+      <entry>host/user usage summary for this user/host</entry>
+    </row>
+    <row>
+      <entry>XFR</entry>
+      <entry>total transfer time on this host (for this user)</entry>
+    </row>
+    <row>
+      <entry>EXE</entry>
+      <entry>total execution time on this host (for this user), without
+                suspension time</entry>
+              </row>
+    <row>
+      <entry>SUSP</entry>
+      <entry>total suspension (queue) time on this host (for this user)</entry>
+    </row>
+    <row>
+      <entry>TOTS</entry>
+      <entry><para>total executions on this host (for this user). Termination reasons:</para><para>
+        <itemizedlist>
+          <listitem><para>SUCC  success</para></listitem>
+          <listitem><para>ERR   error</para></listitem>
+          <listitem><para>KILL  kill</para></listitem>
+          <listitem><para>USER  user requested</para></listitem>
+          <listitem><para>SUSP  suspension timeout</para></listitem>
+          <listitem><para>DISC  discovery timeout</para></listitem>
+          <listitem><para>SELF  self migration</para></listitem>
+          <listitem><para>PERF  performance degradation</para></listitem>
+          <listitem><para>S/R   stop/resume</para></listitem></itemizedlist></para></entry>
+        </row>
+
+  </tbody>
+  </tgroup>
+  </table>
+
+  </sect2>
+
+</sect1>
+
+</chapter>
+
+<chapter>
+<title> JSDL To GridWay Job Template Parser Command</title>
+  <sect1>
+  <title>jsdl2gw</title>
+  <sect2>
+  <title>NAME</title>
+  <para>
+    jsdl2gw - parser to translate JSDL file into GridWay Job Template file
+  </para>
+  </sect2>
+
+  <sect2>
+  <title>SYNOPSIS</title>
+  <para>
+     jsdl2gw [-h] input_jsdl [output_gwjt]
+  </para>
+  </sect2>
+
+  <sect2>
+    <title>DESCRIPTION</title>
+    <para>
+   Converts a jsdl document into a gridway job template.
+   If no output file is defined, it defaults to the standard output.
+   This enables the use of pipes with gwsubmit in the following fashion:
+   </para>
+   <screen>jsdl2gw jsdl-job.xml | gwsubmit</screen>
+  </sect2>
+
+  <sect2>
+  <title>OPTIONS</title>
+  <simplesect>
+    <title>-h</title>
+    <para>
+    Shows this help.
+    </para>
+  </simplesect>
+  <simplesect>
+    <title>gwjtFile.jt</title>
+    <para>
+    stores the GridWay Job Template specification in the gwjtFile.jt file
+    </para>
+  </simplesect>
+  </sect2>
+</sect1>
+</chapter>
+
+</book>

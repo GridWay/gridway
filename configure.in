@@ -1,0 +1,497 @@
+# ------------------------------------------------------------------------------
+# Copyright 2002-2008 GridWay Team, Distributed Systems Architecture
+# Group, Universidad Complutense de Madrid
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may
+# not use this file except in compliance with the License. You may obtain
+# a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ------------------------------------------------------------------------------
+
+AC_PREREQ(2.61)
+AC_INIT([GridWay], [5.4.0], [gridway-user@globus.org])
+AC_CONFIG_AUX_DIR(config)
+AC_CONFIG_SRCDIR([src/dm/gw_dm_action_dispatch.c])
+
+AC_PREFIX_DEFAULT("/usr/local/gw")
+
+#-------------------------------------------------------------------------------
+# --- Globus Directory Scheme --- Need to be checked first
+#-------------------------------------------------------------------------------
+
+GW_DIR_SCHEME=" "
+
+AC_ARG_ENABLE(globus-scheme,  AC_HELP_STRING([--enable-globus-scheme],\
+  [Adjusts directory layout to install GridWay in GLOBUS_LOCATION. Default is disabled.]),\
+  [if test $enableval = "yes"; then GW_DIR_SCHEME="globus"; else \
+  GW_DIR_SCHEME=" "; fi ], [])
+  
+#-------------------------------------------------------------------------------
+# Globus Location and Flavor
+#-------------------------------------------------------------------------------
+   
+echo -n "checking for Globus Toolkit..."
+  
+if test -z "$GLOBUS_LOCATION" ; then
+   echo "GLOBUS_LOCATION is not defined..."
+   exit -1
+else
+   echo "ok"
+fi
+
+AC_ARG_WITH(flavor,  AC_HELP_STRING([--with-flavor],\
+   [Specify globus build flavor (eg. gcc32dbg)]),\
+   [FLAVOR=$withval], [])
+
+if test -z "$FLAVOR" ; then
+
+   if test -d $GLOBUS_LOCATION/include/gcc32dbg ; then
+      FLAVOR=gcc32dbg
+   elif test -d $GLOBUS_LOCATION/include/gcc32 ; then
+      FLAVOR=gcc32
+   elif test -d $GLOBUS_LOCATION/include/gcc64dbg ; then
+      FLAVOR=gcc64dbg
+   elif test -d $GLOBUS_LOCATION/include/gcc64 ; then
+      FLAVOR=gcc64
+   elif test -d $GLOBUS_LOCATION/include/vendorcc32dbg ; then
+      FLAVOR=vendorcc32dbg
+   elif test -d $GLOBUS_LOCATION/include/vendorcc32 ; then
+      FLAVOR=vendorcc32
+   elif test -d $GLOBUS_LOCATION/include/vendorcc64dbg ; then
+      FLAVOR=vendorcc64dbg
+   elif test -d $GLOBUS_LOCATION/include/vendorcc64 ; then
+      FLAVOR=vendorcc64
+   else
+      echo "use --with-flavor"
+      exit -1
+   fi
+fi
+
+#-------------------------------------------------------------------------------
+# Makefile-header setup (handled by GPT or globus-makefile-header)
+#-------------------------------------------------------------------------------
+
+echo -n "configuring Globus build env..."
+
+if test "x$GW_DIR_SCHEME" = "xglobus"; then
+   if test -z "$GPT_LOCATION" ; then 
+      HEADER_COMMAND=$GLOBUS_LOCATION/sbin/gpt_build_config
+   else
+      HEADER_COMMAND=$GPT_LOCATION/sbin/gpt_build_config
+   fi
+else
+   source $GLOBUS_LOCATION/etc/globus-user-env.sh  > /dev/null 2>&1
+
+   HEADER_COMMAND=$GLOBUS_LOCATION/bin/globus-makefile-header
+fi
+
+if test -x $HEADER_COMMAND; then
+
+   if test "x$GW_DIR_SCHEME" = "xglobus"; then   
+      $HEADER_COMMAND -src=pkgdata/pkg_data_src.gpt -flavor=$FLAVOR -link=shared
+      export GLOBUS_FLAVOR_NAME=$FLAVOR
+      source ./gpt_build_temp.sh
+      AC_SUBST(globus_pkg_libs,"$GPT_CONFIG_PKG_LIBS $GPT_CONFIG_LIBS")            
+   else
+   
+      $HEADER_COMMAND -flavor $FLAVOR globus_gram_client globus_ftp_client \
+            globus_gass_copy > makefile-header
+      AC_SUBST(incgtmk,"include $PWD/makefile-header")
+   fi
+   
+   if test $? -ne 0 ; then
+      echo "failed"
+      exit -1
+   else
+      echo "ok"   
+   fi
+      
+else
+   echo "falied. $HEADER_COMMAND not found!"
+   exit -1
+fi
+
+AC_SUBST(GLOBUS_FLAVOR_NAME,$FLAVOR)
+#-------------------------------------------------------------------------------
+# Check target system
+#-------------------------------------------------------------------------------
+
+AC_CANONICAL_BUILD
+
+case "$build_os" in
+   *linux*)
+      system=linux
+   ;;
+   *solaris*)
+      system=solaris
+      CFLAGS="$CFLAGS -DGWSOLARIS"
+      LDFLAGS="$LDFLAGS -lsocket -lnsl"
+   ;;
+   *darwin*)
+      JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Home
+   ;;
+   
+   *osf5.1* | *tru64*)
+		system=alpha
+		CFLAGS="$CFLAGS -pthread -D_POSIX_PII_SOCKET"
+    ;;
+    *aix*)
+    	system=
+    ;;
+esac
+
+AC_SUBST(system, $system)
+AC_SUBST(java_home, $JAVA_HOME)
+
+#------------------------------------------------------------------------------
+# Argument Definition for configure 
+#------------------------------------------------------------------------------
+
+if test "x$GW_DIR_SCHEME" = "xglobus"; then
+#Default options for Globus builds
+	drmaa="drmaa"
+	drmaa_ruby=""
+	prews=""	
+	ws="ws"	
+	gridftp="gridftp"
+	nordugrid=""
+	docs="no"
+	tests="no"	
+	drmaa1="no"		
+
+	jsdl=""		
+	db=""
+else
+	drmaa="drmaa"	
+	drmaa_ruby=""
+	prews=""
+	ws="ws"	
+	gridftp="gridftp"
+	nordugrid=""
+	docs="no"
+	tests="no"
+	drmaa1="no"
+		
+	jsdl="jsdl"	
+	db="db"
+fi
+
+# --- Enable DRMAA library ---
+
+AC_ARG_ENABLE(drmaa,  AC_HELP_STRING([--disable-drmaa],\
+  [Don't build drmaa support. Default is enabled.]),\
+  [if test $enableval = "yes"; then drmaa="drmaa"; else drmaa=" "; fi], [])
+
+# --- Enable DRMAA 1.0 JAVA library ---
+
+AC_ARG_ENABLE(drmaa1,  AC_HELP_STRING([--enable-drmaa1],\
+  [Build drmaa 1.0 specification for the JAVA Bindings. Default is disabled.]),\
+  [if test $enableval = "yes"; then drmaa1="drmaa1";drmaa="drmaa"; else drmaa1=" "; drmaa=" "; fi], [])
+  
+# --- Enable DRMAA RUBY library ---
+
+AC_ARG_ENABLE(drmaa_ruby,  AC_HELP_STRING([--enable-drmaa-ruby],\
+  [Build ruby drmaa support. Default is disabled.]),\
+  [if test $enableval = "yes"; then drmaa_ruby="drmaa_ruby"; else drmaa_ruby=" "; fi], [])
+
+# --- Enable preWS Drivers ---
+
+AC_ARG_ENABLE(prews,  AC_HELP_STRING([--enable-prews],\
+  [Build pre-webservices support. Default is disabled.]),\
+  [if test $enableval = "yes"; then prews="prews"; else prews=" "; fi], [])
+  
+# --- Enable WS Drivers ---
+
+AC_ARG_ENABLE(ws,  AC_HELP_STRING([--disable-ws],\
+  [Don't build web-services support. Default is enabled.]),\
+  [if test $enableval = "yes"; then ws="ws"; else ws=" "; fi], [])
+
+# --- Enable NORDUGRID Drivers ---
+
+AC_ARG_ENABLE(nordugrid,  AC_HELP_STRING([--enable-nordugrid],\
+  [Build nordugrid support. Default is disabled.]),\
+  [if test $enableval = "yes"; then nordugrid="nordugrid"; else nordugrid=" "; fi], [])
+
+# --- Enable GRIDFTP MAD ---
+        
+AC_ARG_ENABLE(gridftp,  AC_HELP_STRING([--disable-gridftp],\
+  [Don't build gridftp support. Default is enabled. \
+   Useful to compile in an EGEE UI.]),\
+  [if test $enableval = "yes"; then gridftp="gridftp"; else gridftp=" "; fi],[])
+
+# --- Enable JSDL  ---
+
+AC_ARG_ENABLE(jsdl,  AC_HELP_STRING([--enable-jsdl],\
+  [Build jsdl support. Disabled for GT builds.]),\
+  [if test $enableval = "yes"; then jsdl="jsdl"; else jsdl=" "; fi], [])
+
+# --- Enable Debug ---
+
+AC_ARG_ENABLE(debug,  AC_HELP_STRING([--enable-debug],\
+  [Enable debug info in GW logs. Default is disabled.]),\
+  [CFLAGS="$CFLAGS -Wall -g -DGWIMDEBUG -DGWJOBDEBUG -DGWHOSTDEBUG -DGWEMDEBUG -DGWDMDEBUG  -DGWTMDEBUG -DGWUSERDEBUG -DGWSCHEDDEBUG";], [])
+
+# --- With documents ---  
+
+AC_ARG_WITH(docs,  AC_HELP_STRING([--with-docs],\
+        [Build documentation. Default is disbaled.]),\
+        [if test $withval = "yes"; then docs="yes"; else docs="no"; fi], [])
+        
+# --- With DB ---      
+
+AC_ARG_WITH(db,  AC_HELP_STRING([--with-db=<no|path_to_db>],\
+       [Build db support for accounting. Disabled for GT builds.]),\
+       [if test $withval = "no";  then  db=" "; else \       
+        if test $withval = "yes"; then  db="db"; db_path=" "; fi; \
+        if test $withval != "yes"; then db="db"; db_path="$withval"; fi; \
+        fi], [])        
+
+# --- With GridWay tests ---
+
+AC_ARG_WITH(tests,  AC_HELP_STRING([--with-tests],\
+        [Build GridWay test suite. Default is disabled.]),\
+        [if test $withval = "yes"; then tests="yes"; else tests="no"; fi], [])
+          
+#------------------------------------------------------------------------------
+# Argument check
+#------------------------------------------------------------------------------
+
+# --- Enable DRMAA library ---
+
+AM_CONDITIONAL(DRMAA, test "x$drmaa" = "xdrmaa")
+AM_CONDITIONAL(DRMAA1, test "x$drmaa1" = "xdrmaa1")
+AM_CONDITIONAL(DRMAA_RUBY, test "x$drmaa_ruby" = "xdrmaa_ruby")
+
+if test "x$drmaa_ruby" = "xdrmaa_ruby"; then
+    (GW_SRC=$PWD;cd src/drmaa/ruby;
+    ruby extconf.rb -g $GW_SRC -r $prefix/lib/ruby;
+    echo -e "\n\ndistdir:\n" >> Makefile)
+fi
+
+# --- Enable preWS Drivers ---
+
+AM_CONDITIONAL(PREWS, test "x$prews" = "xprews")
+
+# --- Enable WS Drivers ---
+
+AM_CONDITIONAL(WS, test "x$ws" = "xws")
+
+# --- Enable Nordugrid Drivers ---
+
+AM_CONDITIONAL(NORDUGRID, test "x$nordugrid" = "xnordugrid")
+
+# --- Enable JSDL  ---
+
+AM_CONDITIONAL(JSDL, test "x$jsdl" = "xjsdl")
+
+# --- With DB ---
+
+if test "x$db" = "xdb" ; then
+	if test "x$db_path"="x " ; then
+		LDFLAGS="${LDFLAGS} -L/usr/lib";
+		DB4_INCLUDE_PATH="-I /usr/include";	
+	else
+    	LDFLAGS="${LDFLAGS_SAVED} -L${db_path}/lib";
+        DB4_INCLUDE_PATH="-I ${db_path}/include";	
+	fi
+else
+	DB4_INCLUDE_PATH=" ";
+fi
+
+AM_CONDITIONAL(DB,test "x$db" = "xdb")
+
+# --- With documents ---
+
+if test "x$docs" = "xyes" ; then     
+     AC_PATH_PROG(XMLLINT, xmllint)
+     AM_CONDITIONAL(XMLLINTC, test -n "$XMLLINT")
+  
+     AC_PATH_PROG(DOCHTMLC, xsltproc)
+     AM_CONDITIONAL(DOCHTMLC, test -n "$DOCHTMLC")
+
+     AC_PATH_PROG(XEP, xep)
+     AM_CONDITIONAL(DOCPDFC, test -n "$XEP" -a -n "$DOCHTMLC")
+     
+     AC_PATH_PROG(JAVADOC, javadoc)
+     AM_CONDITIONAL(JAVADOCC, test -n "$JAVADOC")
+          
+     AC_PATH_PROG(DOXYGEN, doxygen)
+     AM_CONDITIONAL(DOXYGENC, test -n "$DOXYGEN")     
+     
+     AM_CONDITIONAL(DOC, true)
+else
+     AM_CONDITIONAL(XMLLINTC, false)
+     AM_CONDITIONAL(DOCHTMLC, false)
+     AM_CONDITIONAL(DOCPDFC, false)     
+     AM_CONDITIONAL(JAVADOCC, false)
+     AM_CONDITIONAL(DOXYGENC, false)          
+     AM_CONDITIONAL(DOC, false)
+fi
+
+# --- With GridWay tests ---
+
+AM_CONDITIONAL(TESTS, test "x$tests" = "xyes")
+
+# --- Enable GRIDFTP TM Mad ---
+
+AM_CONDITIONAL(GRIDFTP, test "x$gridftp" = "xgridftp")
+
+# --- Globus Directory Scheme ---
+
+if test "x$GW_DIR_SCHEME" = "xglobus"; then
+	CFLAGS="$CFLAGS -DGW_GLOBUS_DIRS"
+fi
+
+AM_CONDITIONAL(GW_GLOBUS_DIRS, test "x$GW_DIR_SCHEME" = "xglobus")
+
+#------------------------------------------------------------------------------
+# Checks for programs.
+#------------------------------------------------------------------------------
+
+AC_PROG_AWK
+AC_PROG_YACC
+AC_PROG_CC
+AC_PROG_LN_S
+AC_PROG_LIBTOOL
+AC_PROG_MAKE_SET
+
+AC_PATH_PROG(JAVAC_PATH, javac)
+	
+if test "x$JAVAC_PATH" = "x"; then
+   	AC_MSG_WARN("A Java compiler is needed for GridWay's WS Drivers & DRMAA JAVA")
+fi
+    
+if test "x$JAVA_HOME" = "x"; then
+   	AC_MSG_WARN("JAVA_HOME is not set, some Java versions will not work (eg. Mac OS X)")     
+fi
+
+###########################
+# CHECKING GLOBUS VERSION #
+###########################
+ 
+if test -f $GLOBUS_LOCATION/lib/addressing-1.0.jar; then
+# GT4.0
+        if test -f src/em_mad/GW_mad_ws.java; then
+            rm -f src/em_mad/GW_mad_ws.java;
+        fi
+        (cd src/em_mad ; ln -s GW_mad_ws.GT4.0.java GW_mad_ws.java);
+     
+        if test -f src/im_mad/QueryClient.java; then
+            rm -f src/im_mad/QueryClient.java;
+        fi
+        (cd src/im_mad ; ln -s QueryClient.GT4.0.java QueryClient.java);
+        
+        if test -f src/im_mad/Mds4QueryParser.java; then
+            rm -f src/im_mad/Mds4QueryParser.java;
+        fi        
+        (cd src/im_mad ; ln -s Mds4QueryParser.GT4.0.java Mds4QueryParser.java);
+
+        CLASSPATH=$GLOBUS_LOCATION/lib/addressing-1.0.jar:$GLOBUS_LOCATION/lib/axis.jar:$GLOBUS_LOCATION/lib/cog-jglobus.jar:$GLOBUS_LOCATION/lib/globus_delegation_service.jar:$GLOBUS_LOCATION/lib/globus_wsrf_rft.jar:$GLOBUS_LOCATION/lib/globus_wsrf_rft_client.jar:$GLOBUS_LOCATION/lib/globus_wsrf_rft_stubs.jar:$GLOBUS_LOCATION/lib/gram-client.jar:$GLOBUS_LOCATION/lib/gram-stubs.jar:$GLOBUS_LOCATION/lib/gram-utils.jar:$GLOBUS_LOCATION/lib/jgss.jar:$GLOBUS_LOCATION/lib/wsrf_core.jar:$GLOBUS_LOCATION/lib/wsrf_core_stubs.jar:$GLOBUS_LOCATION/lib/jaxrpc.jar:$GLOBUS_LOCATION/lib/cog-axis.jar:$GLOBUS_LOCATION/lib/saaj.jar
+
+else
+# GT4.2
+        if test -f src/em_mad/GW_mad_ws.java; then
+            rm -f src/em_mad/GW_mad_ws.java;
+        fi
+        (cd src/em_mad ; ln -s GW_mad_ws.GT4.2.java GW_mad_ws.java);
+
+        if test -f src/im_mad/QueryClient.java; then
+            rm -f src/im_mad/QueryClient.java;
+        fi
+        (cd src/im_mad ; ln -s QueryClient.GT4.2.java QueryClient.java);
+    
+        if test -f src/im_mad/Mds4QueryParser.java; then
+            rm -f src/im_mad/Mds4QueryParser.java;
+        fi
+        (cd src/im_mad ; ln -s Mds4QueryParser.GT4.2.java Mds4QueryParser.java);
+
+        CLASSPATH=$GLOBUS_LOCATION/lib/globus_wsrf_gram_client.jar:$GLOBUS_LOCATION/lib/globus_wsrf_gram_common.jar:$GLOBUS_LOCATION/lib/globus_wsrf_gram_utils.jar:$GLOBUS_LOCATION/lib/globus_delegation_service.jar:$GLOBUS_LOCATION/lib/globus_wsrf_rft.jar:$GLOBUS_LOCATION/lib/globus_wsrf_rft_client.jar:$GLOBUS_LOCATION/lib/globus_wsrf_rft_stubs.jar
+
+        for i in `ls $GLOBUS_LOCATION/lib/common/*.jar`; do
+            CLASSPATH=$CLASSPATH:$i;
+        done
+
+fi
+
+AC_SUBST(classpath,$CLASSPATH)
+
+#------------------------------------------------------------------------------
+# Automake Directives
+#------------------------------------------------------------------------------
+
+AM_INIT_AUTOMAKE(gw,5.4.0)
+AM_PROG_CC_C_O
+AM_PROG_LEX
+
+#------------------------------------------------------------------------------
+# Checks for libraries
+#------------------------------------------------------------------------------
+
+AC_CHECK_LIB([pthread], [pthread_cond_wait])
+
+if test "x$db" = "xdb"; then
+AC_CHECK_LIB([db], [db_env_create])
+fi
+
+
+#------------------------------------------------------------------------------
+# Checks for header files.
+#------------------------------------------------------------------------------
+
+AC_FUNC_ALLOCA
+AC_HEADER_DIRENT
+AC_HEADER_STDC
+AC_HEADER_SYS_WAIT
+AC_CHECK_HEADERS([arpa/inet.h fcntl.h inttypes.h libintl.h limits.h netdb.h netinet/in.h stddef.h stdlib.h string.h sys/socket.h unistd.h])
+
+#------------------------------------------------------------------------------
+# Checks for typedefs, structures, and compiler characteristics.
+#------------------------------------------------------------------------------
+
+AC_C_CONST
+AC_C_INLINE
+AC_TYPE_MODE_T
+AC_TYPE_PID_T
+AC_TYPE_SIZE_T
+AC_TYPE_SSIZE_T
+AC_HEADER_TIME
+AC_STRUCT_TM
+
+AC_TYPE_INT16_T
+AC_TYPE_INT32_T
+AC_TYPE_INT8_T
+AC_TYPE_UINT16_T
+AC_TYPE_UINT32_T
+AC_TYPE_UINT8_T
+
+#------------------------------------------------------------------------------
+# Checks for library functions.
+#------------------------------------------------------------------------------
+
+AC_REPLACE_FNMATCH
+AC_FUNC_FORK
+#AC_FUNC_MALLOC
+#AC_FUNC_REALLOC
+AC_FUNC_SELECT_ARGTYPES
+AC_FUNC_STAT
+AC_FUNC_VPRINTF
+AC_CHECK_FUNCS([dup2 getcwd gethostbyname gethostname gettimeofday memset realpath select socket strcasecmp strchr strdup strerror strrchr strstr])
+
+#------------------------------------------------------------------------------
+# Config Files
+#------------------------------------------------------------------------------
+
+AC_CONFIG_FILES([Makefile
+                  src/Makefile
+                  doc/Makefile
+                  doc/docbook/execution/gridway/Makefile])
+                  
+AC_OUTPUT(
+                  pkgdata/pkg_data_src.gpt)

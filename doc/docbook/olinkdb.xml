@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<!DOCTYPE targetset 
+       SYSTEM "file:////usr/share/xml/docbook/stylesheet/nwalsh/common/targetdatabase.dtd" [
+       <!ENTITY % myents SYSTEM "entities">
+       
+       %myents;
+       
+       ]>
+<targetset>
+    <!-- Site map for generating relative paths between documents -->
+    <sitemap>
+        <dir name="docroot">
+            <!-- need to figure out top level guides: user, rp, migration, commands, error codes/troubleshooting, dev? - new dirs ala admin?
+            <document targetdoc="userGuide"> &userTarget; </document>
+            -->
+          
+                <dir name="gridway">
+                    <document targetdoc="gridway"> &gridwayTarget; </document>
+                    <dir name="admin">
+                        <document targetdoc="gridwayAdmin"> &gridwayAdminTarget; </document>
+                    </dir>
+                    <dir name="developer">
+                        <document targetdoc="gridwayDeveloper"> &gridwayDeveloperTarget;
+                        </document>
+                    </dir>
+                    <dir name="pi">
+                        <document targetdoc="gridwayPI"> &gridwayPITarget; </document>
+                    </dir>
+                    <dir name="qp">
+                        <document targetdoc="gridwayQP"> &gridwayQPTarget; </document>
+                    </dir>
+                    <dir name="rn">
+                        <document targetdoc="gridwayRN"> &gridwayRNTarget; </document>
+                    </dir>
+                    <dir name="user">
+                        <document targetdoc="gridwayUser"> &gridwayUserTarget; </document>
+                    </dir>
+                </dir>
+       
+        </dir>
+    </sitemap>
+</targetset>

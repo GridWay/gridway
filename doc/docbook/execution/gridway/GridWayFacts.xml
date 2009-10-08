@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd"
+[
+
+<!ENTITY % myents SYSTEM "../../entities">
+
+%myents;
+
+]>
+<section>
+<title>GT 4.0.5+ Component Fact Sheet: GridWay (Contribution)</title>
+<titleabbrev>Fact Sheet</titleabbrev>
+
+<section id="s-gridway-GridWayFacts-indexoverview"><title>Brief component overview </title>
+&GridWay_Overview_Brief_Frag;
+</section>
+
+<section id="s-gridway-GridWayFacts-indexfeatures"><title>Summary of features </title>
+&GridWay_Feature_Summary_Frag;
+</section>
+
+<section id="s-gridway-GridWayFacts-indexcompatibility"><title>Backward compatibility summary </title>
+&GridWay_Compatibility_Summary_Frag;
+</section>
+
+<section id="s-gridway-GridWayFacts-indexdependencies"><title>Technology dependencies </title>
+&GridWay_Dependencies_Summary_Frag;
+</section>
+
+<section id="s-gridway-GridWayFacts-indextestedplatforms"><title>Tested platforms</title>
+&GridWay_Platform_Summary_Frag;
+</section>
+
+<section id="s-gridway-GridWayFacts-associatedstandards"><title>Associated standards</title>
+&GridWay_Associated_Standards_Frag;
+</section>
+
+<section id="s-gridway-GridWayFacts-formoreinfo"><title>For More Information </title>
+<para>Click <ulink url="http://www.gridway.org">here</ulink> for more information about this component. </para>
+
+</section>
+</section>

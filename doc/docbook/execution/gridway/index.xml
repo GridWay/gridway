@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd"
+[
+
+<!ENTITY % myents SYSTEM "../../entities">
+
+%myents;
+
+]>
+<article id="gridway">
+<title>GridWay 5.4</title>
+    <titleabbrev>GridWay</titleabbrev>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="GridWay_Overview_Brief_Frag.xml"
+        xpointer="xpointer(/section/*)"/>
+    <informaltable frame="none">
+        <tgroup cols="2">
+            <colspec colname="c1"/>
+            <colspec colname="c2"/>
+            <tbody>
+                <row>
+                    <entry namest="c1" nameend="c2">The following guides are available for this
+                        component:</entry>
+                </row>
+                <row>
+                    <entry>
+                        
+                            <emphasis role="strong">
+                                <olink targetdoc="executionKey">Execution (Jobs) Management Key Concepts</olink>
+                            </emphasis>
+                        
+                    </entry>
+                    <entry>For important general concepts.</entry>
+                </row>
+                <row>
+                    <entry>
+                        <emphasis role="strong">
+                            <olink targetdoc="gridwayAdmin">Admin Guide</olink>
+                        </emphasis>
+                    </entry>
+                    <entry>For system administrators and those installing, building and deploying GT. You should already have read the <olink targetdoc="gtadmin">Installation Guide</olink> and <olink targetdoc="quickstart">Quickstart</olink>.</entry>
+                </row>
+                <row>
+                    <entry>
+                        <emphasis role="strong">
+                            <olink targetdoc="gridwayUser">User's Guide</olink>
+                        </emphasis>
+                    </entry>
+                    <entry>Describes how end-users typically interact with this component. Be sure to also read the <ulink url="admin/admin/admin/docbook/">GT 4.2 System Administrator's Guide</ulink> for important general information for end-users.</entry>
+                </row>
+                <row>
+                    <entry>
+                        <emphasis role="strong">
+                            <olink targetdoc="gridwayDeveloper">Developer's Guide</olink>
+                        </emphasis>
+                    </entry>
+                    <entry>Reference and usage scenarios for developers.</entry>
+                </row>
+                <row>
+                    <entry namest="c1" nameend="c2">Other information available for this component
+                        are:</entry>
+                </row>
+                <row>
+                    <entry>
+                        <emphasis role="strong">
+                            <olink targetdoc="gridwayRN">Release Notes</olink>
+                        </emphasis>
+                    </entry>
+                    <entry>What's new with the 5.4 release for this component.</entry>
+                </row>
+                <row>
+                    <entry>
+                        <emphasis role="strong">
+                            <olink targetdoc="gridwayPI">Public Interface Guide</olink>
+                        </emphasis>
+                    </entry>
+                    <entry>Information for all public interfaces (including APIs, commands, WSDL, etc). Please
+                        note this is a subset of information in the <olink targetdoc="gridwayDeveloper"
+                            >Developer's Guide</olink>.</entry>
+                </row>
+                <row>
+                    <entry>
+                        <emphasis role="strong">
+                            <olink targetdoc="gridwayQP">Quality Profile</olink>
+                        </emphasis>
+                    </entry>
+                    <entry>Information about test coverage reports, etc.</entry>
+                </row>
+                <!-- 
+                <row>
+                    <entry>
+                        <emphasis role="strong">
+                            <olink targetdoc="gridwayMig">Migrating Guide</olink>
+                        </emphasis>
+                    </entry>
+                    <entry>Information for migrating to this version if you were using a previous version of
+                        GT.</entry>
+                </row>
+                -->
+            </tbody>
+        </tgroup>
+    </informaltable>
+</article>

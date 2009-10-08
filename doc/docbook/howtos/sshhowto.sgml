@@ -1,0 +1,176 @@
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V4.1//EN">
+<book lang="en">
+<bookinfo>
+  <title>GridWay 5.4 Documentation: Creating MADs: SSH Example</title>
+        <pubdate>July, 2008</pubdate>
+        <copyright>
+            <year>2002-2008</year>
+            <holder>GridWay Team, Distributed Systems Architecture
+                Group (dsa-research.org), Universidad Complutense de Madrid.</holder>
+        </copyright>
+        <legalnotice>
+            <para>
+                Licensed under the Apache License, Version 2.0 (the "License");
+                you may not use this file except in compliance with the License.
+                You may obtain a copy of the License at
+            </para>
+            <para>
+                <ulink url="http://www.apache.org/licenses/LICENSE-2.0">
+                  http://www.apache.org/licenses/LICENSE-2.0</ulink>
+            </para>
+            <para>
+                Unless required by applicable law or agreed to in writing,
+                software distributed under the License is distributed on an
+                "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+                either express or implied. See the License for the specific
+                language governing permissions and limitations under the License.
+            </para>
+            <para>
+             Any academic report, publication, or other academic disclosure of
+             results obtained with the GridWay Metascheduler will acknowledge
+             GridWay's use by an appropriate citation to relevant papers by
+             GridWay team members.
+            </para>
+        </legalnotice>
+    </bookinfo>
+
+<chapter>
+<title>Create MADs to access resources from GridWay, SSH Example</title>
+
+	<para>
+		In this document we present as an example a transfer and execution mads that use SSH mechanism to interact with resources. This mads also contain some code than can be reused to create another MAD so you can interact with other type of resources.
+	</para>
+
+	<para>
+		There are two helper libraries, located in $GW_LOCATION/libexec/ruby:
+	</para>
+	
+	<itemizedlist>
+		<listitem>
+			<para>
+			gwmad.rb, helper library to deal with messages to and from gridway.
+			</para>
+		</listitem>
+		
+		<listitem>
+			<para>
+			rslparser.rb, parses an RSL2 file, useful to get information from gridway rsl2 generated job templates.
+			</para>
+		</listitem>
+	</itemizedlist>
+
+</chapter>
+
+<chapter>
+<title>Installation of GridWay with SSH drivers</title>
+
+    <para>
+	These drivers depend on <ulink url="http://www.ruby-lang.org">ruby</ulink>
+	and <ulink url="http://net-ssh.rubyforge.org/">net-ssh</ulink> libraries
+	for this language.
+    </para>
+
+	<para> Nowadays ruby usually comes with all major linux distributions in
+prepackaged form. You need at least version 1.8.2 of the interpreter. A ruby
+version that is already compatible is prepackaged with MacOS X version 10.4.
+</para>
+
+ <para> The easier way to install net-ssh libraries is to use <ulink
+url="http://docs.rubygems.org/">RubyGems</ulink> packages. If you do not have
+RubyGems installed you are encouraged to do so. The procedure to install
+net-ssh and its dependencies using it is this: </para>
+
+ <screen> # gem install net-ssh</screen>
+
+    <para>
+    The GridWay<ulink url="http://www.gridway.org/documentation/stable/admin/">
+    System Administrator's guide</ulink> provides complete information
+    about installation of the meta-scheduler. Next steps illustrate specific
+    aspects for installation of GridWay alongside SSH drivers:
+    </para>
+
+    <itemizedlist>
+	
+        <listitem>
+	
+        <para>
+        You have to copy the directories located in
+		$GW_LOCATION/share/examples/ssh to $GW_LOCATION. You can also use the
+		script located in that directory (install.sh).
+        </para>
+
+        </listitem>
+
+        <listitem>
+        <para>
+        For a multi-user installation, the <filename>sudoers</filename> file of the
+        <command>sudo</command> command must include also SSH drivers:
+        <screen>
+gwadmin ALL=(GW_USERS) NOPASSWD: $GW_LOCATION/bin/gw_em_mad_ssh *
+gwadmin ALL=(GW_USERS) NOPASSWD: $GW_LOCATION/bin/gw_tm_mad_ssh *</screen>
+        </para>
+        </listitem>
+    </itemizedlist>
+</chapter>
+
+<chapter>
+<title>Configuration to access to SSH resources</title>
+
+    <para>
+    The GridWay <ulink url="http://www.gridway.org/documentation/stable/admin/">
+    System Administrator's guide</ulink> provides complete information
+    about configuration of the meta-scheduler. Next steps describe the specific
+    configuration of the SSH access drivers.
+   </para>
+
+    <para>
+    In file <filename>$GW_LOCATION/etc/gwd.conf</filename>:
+    <screen width='80'>
+IM_MAD = static:gw_im_mad_static:-l etc/host.list:ssh_tm:ssh
+EM_MAD = ssh:gw_em_mad_ssh::rsl2
+TM_MAD = ssh_tm:gw_tm_mad_ssh:</screen>
+    </para>
+
+	<para> Nodes list (etc/host.list) is a list of nodes and files with
+static information of each node, this is an example: </para>
+
+	<screen>
+&lt;hostname1&gt; etc/&lt;hostname1&gt;.machine
+&lt;hostname2&gt; etc/&lt;hostname2&gt;.machine
+&lt;hostname3&gt; etc/&lt;hostname3&gt;.machine
+...</screen>
+
+	<para>The files etc/&lt;hostname&gt;.machine contain static information about each node where you want to send jobs.</para>
+	
+	<screen>
+HOSTNAME="&lt;hostname&gt;" ARCH="i686" OS_NAME="Linux" OS_VERSION="2.6.12.6-xen" CPU_MODEL="Intel(R) Pentium(R) 4 CPU 3" CPU_MHZ=3201 CPU_FREE=100 CPU_SMP=1
+NODECOUNT=1 SIZE_MEM_MB=431 FREE_MEM_MB=180 SIZE_DISK_MB=74312 FREE_DISK_MB=40461 FORK_NAME="jobmanager-ssh" LRMS_NAME="jobmanager-ssh" LRMS_TYPE="ssh"
+
+QUEUE_NAME[0]="default" QUEUE_NODECOUNT[0]=1 QUEUE_FREENODECOUNT[0]=1 QUEUE_MAXTIME[0]=0 QUEUE_MAXCPUTIME[0]=0 QUEUE_MAXCOUNT[0]=0
+QUEUE_MAXRUNNINGJOBS[0]=0 QUEUE_MAXJOBSINQUEUE[0]=0 QUEUE_STATUS[0]="0" QUEUE_DISPATCHTYPE[0]="Immediate" QUEUE_PRIORITY[0]="NULL"</screen>
+
+	<para> The file contains just two lines but it is written like this to
+improve readability. You have to change hostname for each of hosts, adjust
+memory and slots. </para>
+
+	<para> You also need to setup automatic logging with SSH using key pairs.
+This is explained in this <ulink
+url="http://www.sshkeychain.org/mirrors/SSH-with-Keys-HOWTO/SSH-with-Keys-HOWTO-4.html">howto</ulink>.
+</para>
+
+</chapter>
+
+<chapter>
+    <title>Using GridWay</title>
+
+    <para>
+    The functionality and interfaces provided by GridWay are independent from
+    the underlying Grid infrastructure. Please refer to the guides (user guide,
+    command reference, programming guide...) available at <ulink
+    url="http://www.gridway.org/doku.php?id=documentation:howto">GridWay's guide web
+    page</ulink>.
+    </para>
+
+</chapter>
+
+</book>

@@ -1,0 +1,159 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd"
+[
+
+<!ENTITY % myents SYSTEM "../../../entities">
+
+%myents;
+
+]>
+<book id="gridwayDeveloper">
+
+<bookinfo>
+	<title> GridWay &shortversion;: Developer's Guide</title>
+	<titleabbrev> Developer's Guide</titleabbrev> 
+    <pubdate>July, 2008</pubdate>
+    <copyright>
+        <year>2002-2008</year>
+           <holder>GridWay Team, Distributed Systems Architecture
+            Group (dsa-research.org), Universidad Complutense de Madrid.</holder>
+</copyright>
+    <legalnotice>
+        <para>
+            Licensed under the Apache License, Version 2.0 (the "License");
+            you may not use this file except in compliance with the License.
+            You may obtain a copy of the License at
+        </para>
+        <para>
+            <ulink url="http://www.apache.org/licenses/LICENSE-2.0">
+              http://www.apache.org/licenses/LICENSE-2.0</ulink>
+        </para>
+        <para>
+            Unless required by applicable law or agreed to in writing,
+            software distributed under the License is distributed on an
+            "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+            either express or implied. See the License for the specific
+            language governing permissions and limitations under the License.
+        </para>
+        <para>
+         Any academic report, publication, or other academic disclosure of
+         results obtained with the GridWay Metascheduler will acknowledge
+         GridWay's use by an appropriate citation to relevant papers by
+         GridWay team members.
+        </para>
+    </legalnotice>
+	<abstract><title>Introduction</title>
+	<para>
+	  This guide is intended to help a developer interested in extending GridWay's functionality to understand its architecture, mainly to show how to develop new Middleware Access Drivers (MADs). It is also a good start point and reference for anyone interested in programming applications using GridWay's implementation of the DRMAA library (C, Java, Perl, Python and Ruby bindings).</para></abstract>
+</bookinfo>
+
+<chapter id="gridway-developer-beforeyoubegin">
+  <title>Before you begin</title>
+  <section id="gridway-developer-features"><title>Feature summary</title>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../GridWay_Feature_Summary_Frag.xml" xpointer="xpointer(/section/*)"/>
+  </section>
+  
+  <section id="gridway-developer-platforms"><title>Tested platforms</title>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../GridWay_Platform_Summary_Frag.xml" xpointer="xpointer(/section/*)"/>
+  </section>
+  
+  <section id="gridway-developer-compatibility"><title>Backward compatibility summary</title>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../GridWay_Compatibility_Summary_Frag.xml" xpointer="xpointer(/section/*)"/>
+  </section>
+  
+  <section id="gridway-developer-dependencies"><title>Technology dependencies</title>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../GridWay_Dependencies_Summary_Frag.xml" xpointer="xpointer(/section/*)"/>
+  </section>
+  
+  <section id="gridway-developer-security_considerations"><title>Security considerations </title>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../GridWay_Security_Considerations_Frag.xml" xpointer="xpointer(/section/*)"/>
+  </section>
+  
+  </chapter>
+
+  
+  <chapter id="gridway-developer-scenarios"><title>Usage scenarios</title>
+  <!--- <section id="gridway-developer-simple-applications-scenario"> -->
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../GridWay_Dev_Simple_Apps_Frag.xml" xpointer="xpointer(/section/*)"/>
+  <!--- </section>   -->
+  </chapter>
+  
+  <chapter id="gridway-developer-tutorials">
+	<title>Tutorials</title>
+	<para>
+	  This chapter is a tutorial for getting started programming DRMAA applications
+	  with GridWay. Although is not necessary that you already know how GridWay
+	  works, prior experience submitting and controlling jobs with GridWay will come
+	  in handy. This tutorial shows the use of the most important functions in the
+	  DRMAA standard, and gives you some hints to use the GridWay DRMAA
+	  library.
+	  </para>
+	  <para>
+	  The source code for the following examples can be found in
+	  the <filename>$GW_LOCATION/examples</filename> directory.
+	  </para>
+	
+	  <section id="gridway-developer-tutorials-compiling_drmaa"><title>DRMAA Program Structure and Compilation</title>
+	    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+	      href="../GridWay_Dev_DRMAA_Structure_Frag.xml" xpointer="xpointer(/section/*)"/>
+	  </section>
+	
+	  <section id="gridway-developer-tutorials-programming-drmaa"><title>DRMAA Programming Howto</title>
+	    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+	      href="../GridWay_Dev_DRMAA_Programming_Frag.xml" xpointer="xpointer(/section/*)"/>
+	 </section>
+
+     <section>
+	<title>External Tutorials and Material</title>
+    <itemizedlist>		  
+      <listitem><simpara><ulink url="http://www.gridway.org/documentation/tutorials.php">GridWay Tutorial</ulink> </simpara></listitem>
+      <listitem><simpara><ulink url="https://forge.gridforum.org/sf/docman/do/listDocuments/projects.drmaa-wg/docman.root.ggf_13_drmaa_tutorial">Tutorial from drmaa.org</ulink> </simpara></listitem>
+    </itemizedlist>
+	 </section>
+  </chapter>
+  
+<chapter id="gridway-developer-archdes"><title>Architecture and design overview</title>
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+	  href="../GridWay_Dev_Architecture_Frag.xml" xpointer="xpointer(/section/*)"/>
+</chapter>
+
+<!-- the following chapters using _Interface_... files are reused modules that are also pulled into the public interfaces guide. if something does not apply to your project - 
+  (for example, there is no GUI for GridWay) - go ahead and fill out the Frag file and doc coordinator will comment out of documentation. -->
+  <chapter id="gridway-developer-apis"><title>APIs</title>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../GridWay_Interface_API_Frag.xml" xpointer="xpointer(/section/*)"/>
+  </chapter>
+  
+  <chapter id="gridway-developer-protocols"><title>Semantics and syntax of non-WSDL protocols</title>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../GridWay_Interface_Protocol_Frag.xml" xpointer="xpointer(/section/*)"/>
+  </chapter>
+  
+  <chapter id="gridway-developer-cmd"><title>Command-line tools</title>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../GridWay_Interface_Commandline_Frag.xml" xpointer="xpointer(/reference/*)"/>
+  </chapter>
+
+<chapter id="gridway-developer-debugging"><title>Debugging</title>
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+    href="../GridWay_Debugging_Frag.xml" xpointer="xpointer(/para/*)"/>
+</chapter> 
+
+<chapter id="gridway-developer-troubleshooting"><title>Troubleshooting</title>
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+    href="../GridWay_Troubleshooting_Frag.xml" xpointer="xpointer(/section/*)"/>
+</chapter>
+
+<chapter id="gridway-developer-samples">
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+      href="../GridWay_Samples.xml" xpointer="xpointer(/section/*)"/>
+  </chapter>
+
+</book>

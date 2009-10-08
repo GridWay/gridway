@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<!DOCTYPE targetset 
+       SYSTEM "file:///usr/share/xml/docbook/stylesheet/nwalsh/common/targetdatabase.dtd" [
+       <!ENTITY % myents SYSTEM "entities">
+       
+       %myents;
+       
+       ]>
+<targetset>
+    <!-- Site map for generating relative paths between documents 
+    
+    can i combine whole components into larger pdfs?
+    -->
+    <sitemap>
+        <dir name="documentation">
+            <dir name="execution">
+                <dir name="gridway">
+                    <document targetdoc="gridway" baseuri="file:gridway.pdf"> &gridwayTarget; </document>
+                    <dir name="admin">
+                        <document targetdoc="gridwayAdmin" baseuri="file:gridwayAdmin.pdf"> &gridwayAdminTarget; </document>
+                    </dir>
+                    <dir name="developer">
+                        <document targetdoc="gridwayDeveloper" baseuri="file:gridwayDeveloper.pdf"> &gridwayDeveloperTarget;
+                        </document>
+                    </dir>
+                    <dir name="pi">
+                        <document targetdoc="gridwayPI" baseuri="file:gridwayPI.pdf"> &gridwayPITarget; </document>
+                    </dir>
+                    <dir name="qp">
+                        <document targetdoc="gridwayQP" baseuri="file:gridwayQP.pdf"> &gridwayQPTarget; </document>
+                    </dir>
+                    <dir name="rn">
+                        <document targetdoc="gridwayRN" baseuri="file:gridwayRN.pdf"> &gridwayRNTarget; </document>
+                    </dir>
+                    <dir name="user">
+                        <document targetdoc="gridwayUser" baseuri="file:gridwayUser.pdf"> &gridwayUserTarget; </document>
+                    </dir>
+                </dir>
+			 </dir>
+        </dir>
+    </sitemap>
+</targetset>

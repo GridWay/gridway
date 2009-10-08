@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd"
+[
+
+<!ENTITY % myents SYSTEM "../../../entities">
+
+%myents;
+
+]>
+<article id="gridwayQP">
+    <title> GridWay 5.4: Quality Profile</title>
+    <titleabbrev> Quality Profile</titleabbrev>
+    <section id="gridway-qp-oustanding">
+        <title>Outstanding bugs</title>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="../GridWay_Known_Problems_Frag.xml"
+            xpointer="xpointer(/section/*)"/>
+    </section>
+    <section id="gridway-qp-fixed">
+        <title>Bug Fixes</title>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="../GridWay_Fixed_Bugs_Frag.xml"
+            xpointer="xpointer(/section/*)"/>
+    </section>
+    <section id="gridway-qp-performance">
+        <title>Performance reports </title>
+        <itemizedlist>
+            <listitem>
+                <simpara>
+                    <ulink url="http://www.gridway.org/documentation/files/GridWay_Internal_Report_Scalability.pdf">GridWay Report: Scalability</ulink>
+                </simpara>
+            </listitem>
+        </itemizedlist>
+    </section>
+</article>
