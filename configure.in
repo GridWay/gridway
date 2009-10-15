@@ -16,7 +16,7 @@
 # ------------------------------------------------------------------------------
 
 AC_PREREQ(2.61)
-AC_INIT([GridWay], [5.6.0_beta], [contact@gridway.org])
+AC_INIT([GridWay], [5.5], [contact@gridway.org])
 AC_CONFIG_AUX_DIR(config)
 AC_CONFIG_SRCDIR([src/dm/gw_dm_action_dispatch.c])
 
@@ -246,12 +246,6 @@ AC_ARG_ENABLE(debug,  AC_HELP_STRING([--enable-debug],\
   [Enable debug info in GW logs. Default is disabled.]),\
   [CFLAGS="$CFLAGS -Wall -g -DGWIMDEBUG -DGWJOBDEBUG -DGWHOSTDEBUG -DGWEMDEBUG -DGWDMDEBUG  -DGWTMDEBUG -DGWUSERDEBUG -DGWSCHEDDEBUG";], [])
 
-# --- With documents ---  
-
-AC_ARG_WITH(docs,  AC_HELP_STRING([--with-docs],\
-        [Build documentation. Default is disbaled.]),\
-        [if test $withval = "yes"; then docs="yes"; else docs="no"; fi], [])
-        
 # --- With DB ---      
 
 AC_ARG_WITH(db,  AC_HELP_STRING([--with-db=<no|path_to_db>],\
@@ -275,12 +269,44 @@ AC_ARG_WITH(tests,  AC_HELP_STRING([--with-tests],\
 
 AM_CONDITIONAL(DRMAA, test "x$drmaa" = "xdrmaa")
 AM_CONDITIONAL(DRMAA1, test "x$drmaa1" = "xdrmaa1")
-AM_CONDITIONAL(DRMAA_RUBY, test "x$drmaa_ruby" = "xdrmaa_ruby")
 
+## Checking the ruby and ruby-dev
+AM_CONDITIONAL(DRMAA_RUBY, test "x$drmaa_ruby" = "xdrmaa_ruby")
 if test "x$drmaa_ruby" = "xdrmaa_ruby"; then
-    (GW_SRC=$PWD;cd src/drmaa/ruby;
-    ruby extconf.rb -g $GW_SRC -r $prefix/lib/ruby;
-    echo -e "\n\ndistdir:\n" >> Makefile)
+ AC_CHECK_PROGS([RUBY],[ruby],[no])
+ if [[ "$RUBY" = "no" ]] ; then
+  RUBY_ERROR="ruby not found in your system. Install it!"
+  RUBY_TEST="no"
+  AC_MSG_ERROR([$RUBY_ERROR])
+ else
+  AC_MSG_CHECKING([whether $RUBY installation includes the ruby-dev package])
+## Next is kind of conftest for ruby
+  cat >> conftest.rb << EOF
+#!/usr/bin/env ruby
+begin
+    require 'mkmf'
+    exit 0
+rescue LoadError
+    STDERR.puts 'Las vacas mejor en el prado, pichón!'
+    exit -1
+end
+EOF
+  $RUBY conftest.rb 2>/dev/null
+  if test $? -eq 0; then
+    rm conftest.rb
+    RUBY_TEST="yes"
+    AC_MSG_RESULT([$RUBY_TEST])
+  else
+    rm conftest.rb
+    RUBY_TEST="no"
+    AC_MSG_RESULT([$RUBY_TEST])
+    RUBY_ERROR="ruby-dev not installed (mkmf not found) Please remove --enable-drmaa-ruby or install it!"
+    AC_MSG_ERROR([$RUBY_ERROR])
+  fi
+  (GW_SRC=$PWD;cd src/drmaa/ruby;
+  ruby extconf.rb -g $GW_SRC -r $prefix/lib/ruby;
+  echo -e "\n\ndistdir:\n" >> Makefile)
+ fi
 fi
 
 # --- Enable preWS Drivers ---
@@ -298,6 +324,33 @@ AM_CONDITIONAL(NORDUGRID, test "x$nordugrid" = "xnordugrid")
 # --- Enable LDAP Drivers ---
 
 AM_CONDITIONAL(LDAP, test "x$ldap" = "xldap")
+if test "x$ldap" = "xldap"; then
+ AC_CHECK_PROGS([PERL],[perl],[no])
+ if [[ "$PERL" = "no" ]] ; then
+  PERL_ERROR="perl not found in your system. Install it!"
+  PERL_TEST="no"
+  AC_MSG_ERROR([$PERL_ERROR])
+ else
+  AC_MSG_CHECKING([whether $PERL installation includes the libnet-ldap-perl package])
+## Next is kind of conftest for perl
+  cat >> conftest.pl << EOF
+#!/usr/bin/perl
+use Net::LDAP;
+EOF
+  $PERL conftest.pl 2>/dev/null
+  if test $? -eq 0; then
+    rm conftest.pl
+    PERL_TEST="yes"
+    AC_MSG_RESULT([$PERL_TEST])
+  else
+    rm conftest.pl
+    PERL_TEST="no"
+    AC_MSG_RESULT([$PERL_TEST])
+    PERL_ERROR="libnet-ldap-perl not installed (Net::LDAP not found) Please remove --enable-ldap or install it!"
+    AC_MSG_ERROR([$PERL_ERROR])
+  fi
+ fi
+fi
 
 # --- Enable JSDL  ---
 
@@ -318,34 +371,6 @@ else
 fi
 
 AM_CONDITIONAL(DB,test "x$db" = "xdb")
-
-# --- With documents ---
-
-if test "x$docs" = "xyes" ; then     
-     AC_PATH_PROG(XMLLINT, xmllint)
-     AM_CONDITIONAL(XMLLINTC, test -n "$XMLLINT")
-  
-     AC_PATH_PROG(DOCHTMLC, xsltproc)
-     AM_CONDITIONAL(DOCHTMLC, test -n "$DOCHTMLC")
-
-     AC_PATH_PROG(XEP, xep)
-     AM_CONDITIONAL(DOCPDFC, test -n "$XEP" -a -n "$DOCHTMLC")
-     
-     AC_PATH_PROG(JAVADOC, javadoc)
-     AM_CONDITIONAL(JAVADOCC, test -n "$JAVADOC")
-          
-     AC_PATH_PROG(DOXYGEN, doxygen)
-     AM_CONDITIONAL(DOXYGENC, test -n "$DOXYGEN")     
-     
-     AM_CONDITIONAL(DOC, true)
-else
-     AM_CONDITIONAL(XMLLINTC, false)
-     AM_CONDITIONAL(DOCHTMLC, false)
-     AM_CONDITIONAL(DOCPDFC, false)     
-     AM_CONDITIONAL(JAVADOCC, false)
-     AM_CONDITIONAL(DOXYGENC, false)          
-     AM_CONDITIONAL(DOC, false)
-fi
 
 # --- With GridWay tests ---
 
@@ -509,9 +534,7 @@ AC_CHECK_FUNCS([dup2 getcwd gethostbyname gethostname gettimeofday memset realpa
 #------------------------------------------------------------------------------
 
 AC_CONFIG_FILES([Makefile
-                  src/Makefile
-                  doc/Makefile
-                  doc/docbook/execution/gridway/Makefile])
+                  src/Makefile])
                   
 AC_OUTPUT(
                   pkgdata/pkg_data_src.gpt)

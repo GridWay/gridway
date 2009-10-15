@@ -145,9 +145,9 @@ CMDS_RB_SRC=$(CMDS)/gw_dagman.rb \
             $(CMDS)/dagman/runner.rb \
             $(CMDS)/dagman/parse.rb \
 	    $(CMDS)/dagman/gridway.rb
- 
+
 # NORDUGRID MADS
- 
+
 NORDUGRID_MAD_SRC=\
 	$(EM_MAD)/gw_em_mad_nordugrid.sh \
 	$(EM_MAD)/gw_em_mad_nordugrid.py \
@@ -155,7 +155,7 @@ NORDUGRID_MAD_SRC=\
 	$(TM_MAD)/gw_tm_mad_nordugrid.sh \
 	$(TM_MAD)/gw_tm_mad_nordugrid.py \
 	$(TM_MAD)/tm_nordugrid.py
-        
+
 JSDL_SRC = $(CMDS)/GWJTElement.java \
         $(CMDS)/GWJT.java  \
         $(CMDS)/GWJTWriter.java  \
@@ -172,7 +172,7 @@ EM_SRC = $(EM)/gw_em_actions.c \
         $(EM)/gw_em_rsl2.c \
         $(EM)/gw_em_rsl.c \
         $(EM)/gw_em_state.c
-        
+
 TM_SRC = $(TM)/gw_tm_actions.c \
         $(TM)/gw_tm.c \
         $(TM)/gw_tm_checkpoint.c \
@@ -258,7 +258,6 @@ IM_MAD_MDS4_SRC = $(IM_MAD)/Host.java \
         $(IM_MAD)/QueryClient.java \
         $(IM_MAD)/GW_im_mad_mds4.java \
         $(IM_MAD)/ServiceIM.java
-		
 
 TM_MAD_RFT_SRC = $(TM_MAD)/GWRftClient.java \
         $(TM_MAD)/GWRftProcessor.java \
@@ -322,7 +321,7 @@ else
         $(DRMAA_PACK)/SessionImpl.java \
         $(DRMAA_PACK)/SessionFactoryImpl.java        
 endif        
-        
+
 # -----------------------------
 # -- Includes and Headers
 # -----------------------------
@@ -331,7 +330,7 @@ INCLUDES = -I$(top_srcdir)/include \
              $(DB4_INCLUDE_PATH) \
            -I${JAVA_HOME}/include \
            -I${JAVA_HOME}/include/$(SYSTEM)
-           
+
 if GW_GLOBUS_DIRS
 SYSTEM=@system@
 flavorincludedir = $(GLOBUS_LOCATION)/include/@GLOBUS_FLAVOR_NAME@
@@ -400,7 +399,7 @@ __srcdir__gwd_gwd_SOURCES = $(EM_SRC) \
         $(GWD_SRC) \
         $(UM_SRC)  \
         $(DB_SRC)
-  
+
 bin_SCRIPTS   =
 dist_bin_SCRIPTS =
 CLEANFILES =
@@ -458,7 +457,7 @@ __srcdir__cmds_gwacct_SOURCES = $(CMDS)/gw_acct.c \
         $(DB_SRC) \
         $(CLIENT_ACCT_SRC) \
         $(COMMON_SRC)
-        
+
 dist_bin_SCRIPTS += $(CMDS_RB_SRC) 
 
 # ----------------------------
@@ -499,7 +498,7 @@ __srcdir__scheduler_gw_flood_scheduler_SOURCES = \
         $(GWD)/gw_sch_conf.c \
         $(GWD)/gw_sch_conf_syntax.y \
         $(GWD)/gw_sch_conf_parser.l
-        
+
 __srcdir__scheduler_gw_flood_scheduler_LDFLAGS = -lm
 
 bin_PROGRAMS += $(srcdir)/scheduler/gw_sched
@@ -639,6 +638,10 @@ dist_bin_SCRIPTS  += $(IM_MAD)/gw_im_mad_mds2.sh
 dist_bin_SCRIPTS  += $(IM_MAD)/gw_im_mad_mds2_glue.sh
 endif
 
+if LDAP
+dist_bin_SCRIPTS  += $(IM_MAD)/gw_im_mad_egee_ldap.sh
+dist_bin_SCRIPTS  += $(IM_MAD)/gw_im_mad_egee_ldap.pl
+endif
 # --------------------------------
 # WS Middleware Access Drivers
 # --------------------------------

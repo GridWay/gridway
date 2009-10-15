@@ -158,11 +158,12 @@ int main (int argc, char **argv )
 
                         default:    /* Parent */
                             /* Read stdout */
+		            int fscanf_result;
                             close(pipes[1]);
                             file = fdopen(pipes[0], "r");
                             if (file == NULL)
                                 perror("opening stdout");
-                            fscanf(file, "%s", buffer);
+                            fscanf_result = fscanf(file, "%s", buffer);
                             stg_url = strdup(buffer);
                             rc = 0;
                         }
@@ -196,14 +197,15 @@ int main (int argc, char **argv )
 
                         default:    /* Parent */
                             /* Read stdout */
+			    int fscanf_result;
                             close(pipes[1]);
                             file = fdopen(pipes[0], "r");
                             if (file == NULL)
                                 perror("opening stdout");
-                            fscanf(file, "%s", buffer);
-                            fscanf(file, "%s", buffer);
-                            fscanf(file, "%s", buffer);
-                            fscanf(file, "%s", buffer);
+                            fscanf_result = fscanf(file, "%s", buffer);
+                            fscanf_result = fscanf(file, "%s", buffer);
+                            fscanf_result = fscanf(file, "%s", buffer);
+                            fscanf_result = fscanf(file, "%s", buffer);
                             sprintf(str, "gsiftp://%s", buffer);
                             stg_url = strdup(str);
                             rc = 0;

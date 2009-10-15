@@ -22,25 +22,15 @@ PREFIX = @prefix@
 if GW_GLOBUS_DIRS
 GW_ETC_DIR   = etc/gridway
 GW_VAR_DIR   = var/gridway
-GW_DOC_DIR   = share/gridway/doc
 GW_SHARE_DIR = share/gridway
 GW_TEST_DIR  = test/gridway
 GW_XML_DIR = share/gridway/xml_schema
 else
 GW_ETC_DIR   = etc
 GW_VAR_DIR   = var
-GW_DOC_DIR   = share/doc
 GW_SHARE_DIR = share
 GW_TEST_DIR  = test
 GW_XML_DIR = xml_schema
-endif
-
-
-if DOC
-SUBDIRS += doc/docbook/execution/gridway
-if DRMAA
-SUBDIRS += doc
-endif
 endif
 
 if DRMAA_RUBY
@@ -51,32 +41,7 @@ FLAGS=$(DB4_INCLUDE_PATH)
 
 install-exec-hook:
 	@mkdir -p $(PREFIX)/$(GW_SHARE_DIR)
-	@cp LICENSE NOTICE $(PREFIX)/$(GW_SHARE_DIR)	
-if DOC
-	@rm -rf $(PREFIX)/$(GW_DOC_DIR)
-	@mkdir -p $(PREFIX)/$(GW_DOC_DIR)
-if DOCHTMLC
-	@cp -r doc/docbook/execution/gridway $(PREFIX)/$(GW_DOC_DIR)
-	@find $(PREFIX)/$(GW_DOC_DIR) -depth -name '*.xml' -exec rm -rf '{}' \;
-	@find $(PREFIX)/$(GW_DOC_DIR) -depth -name 'Makefile*' -exec rm -rf '{}' \;
-	@find $(PREFIX)/$(GW_DOC_DIR) -depth -name '*.fo' -exec rm -rf '{}' \;
-	@find $(PREFIX)/$(GW_DOC_DIR) -depth -name 'target.db' -exec rm -rf '{}' \;
-	@find $(PREFIX)/$(GW_DOC_DIR) -depth -name 'images' -exec rm -f '{}' \;
-
-	@ln -s $(PREFIX)/$(GW_DOC_DIR)/gridway/admin $(PREFIX)/$(GW_DOC_DIR)/gridway/admin/admin
-	@ln -s $(PREFIX)/$(GW_DOC_DIR)/gridway/user $(PREFIX)/$(GW_DOC_DIR)/gridway/user/user
-	@ln -s $(PREFIX)/$(GW_DOC_DIR)/gridway/developer $(PREFIX)/$(GW_DOC_DIR)/gridway/developer/developer
-endif
-
-if DRMAA
-if DOXYGENC
-	@cp -r doc/drmaa_c $(PREFIX)/$(GW_DOC_DIR)
-endif
-if JAVADOCC
-	@cp -r doc/drmaa_java $(PREFIX)/$(GW_DOC_DIR)
-endif		
-endif
-endif
+	@cp LICENSE NOTICE $(PREFIX)/$(GW_SHARE_DIR)
 
 	@rm -rf $(PREFIX)/$(GW_SHARE_DIR)/examples
 	@mkdir -p $(PREFIX)/$(GW_SHARE_DIR)
@@ -85,9 +50,7 @@ endif
 if TESTS
 	@rm -rf $(PREFIX)/$(GW_TEST_DIR)
 	@mkdir -p $(PREFIX)/$(GW_TEST_DIR)
-	@cp -r src/test/gwtest src/test/TEST.pl \
-	       src/test/jt \
-	       $(PREFIX)/$(GW_TEST_DIR)
+	@cp -r src/test/gwtest src/test/TEST.pl src/test/jt $(PREFIX)/$(GW_TEST_DIR)
 endif
 
 # ----------------------------
@@ -101,8 +64,8 @@ endif
 	@mv $(PREFIX)/bin/parse.rb $(PREFIX)/libexec/ruby/dagman/parse.rb
 	@mv $(PREFIX)/bin/runner.rb $(PREFIX)/libexec/ruby/dagman/runner.rb
 	@mv $(PREFIX)/bin/gridway.rb $(PREFIX)/libexec/ruby/dagman/gridway.rb
-
 	@mv $(PREFIX)/bin/gw_im_mad_static.sh $(PREFIX)/bin/gw_im_mad_static
+
 if GRIDFTP
 	@mv $(PREFIX)/bin/gw_tm_mad_ftp.sh $(PREFIX)/bin/gw_tm_mad_ftp
 endif
@@ -240,10 +203,6 @@ dist-hook:
 	@rm -rf $(distdir)/src/$(DRMAA_SRC_DIR)/org/ggf/drmaa/.libs
 	@rm -f $(distdir)/src/$(DRMAA_SRC_DIR)/org/ggf/drmaa/DrmaaJNI.lo
 	@rm -f $(distdir)/src/$(DRMAA_SRC_DIR)/org/ggf/drmaa/DrmaaJNI.o
-	@mkdir -p $(distdir)/doc/docbook
-	@cp -r doc/images $(distdir)/doc
-	@cp -r doc/drmaa_c $(distdir)/doc
-	@cp -r doc/docbook $(distdir)/doc/
 	@cp -r examples $(distdir)
 	@cp -r etc $(distdir)
 	@cp -r src/test/jt $(distdir)/src/test
