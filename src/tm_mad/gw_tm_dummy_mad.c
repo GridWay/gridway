@@ -142,6 +142,7 @@ int main (int argc, char **argv )
                     }
                     else
                     {
+		        int fscanf_result;
                         server_pid = fork();
 
                         switch (server_pid)
@@ -158,7 +159,6 @@ int main (int argc, char **argv )
 
                         default:    /* Parent */
                             /* Read stdout */
-		            int fscanf_result;
                             close(pipes[1]);
                             file = fdopen(pipes[0], "r");
                             if (file == NULL)
@@ -181,6 +181,7 @@ int main (int argc, char **argv )
                     }
                     else
                     {
+		        int fscanf_result;
                         server_pid = fork();
 
                         switch (server_pid)
@@ -197,7 +198,6 @@ int main (int argc, char **argv )
 
                         default:    /* Parent */
                             /* Read stdout */
-			    int fscanf_result;
                             close(pipes[1]);
                             file = fdopen(pipes[0], "r");
                             if (file == NULL)
