@@ -1,0 +1,60 @@
+------------------------------------------------------------------------------
+Copyright 2002-2009 GridWay Team, Distributed Systems Architecture Group, 
+Universidad Complutense de Madrid
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may
+not use this file except in compliance with the License. You may obtain
+a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+------------------------------------------------------------------------------
+
+===== WELCOME =====
+
+The GridWay Metascheduler enables large-scale, reliable and efficient sharing of computing resources: clusters, supercomputers, stand-alone servers... It supports different LRM systems (PBS, SGE, LSF, Condor, etc.) within a single organization or scattered across several administrative domains. GridWay provides a single point of access to all resources in your organization, from in-house systems to Grid infrastructures and Cloud providers.
+
+GridWay supports most of existing Grid middlewares (Globus WS and pre-WS, LCG, CREAM, ARC...), is being used on main production Grid infrastructures (EGEE, OSG, TeraGrid...) and can dynamically access to Cloud resources (Amazon EC2...).
+
+
+===== DOCUMENTATION =====
+
+Since version 5.5, the documentation is completely online at
+
+http://gridway.org/doku.php?id=documentation
+
+
+===== INSTALL =====
+
+Check the Installation Guide and/or the Quick Installation guide for more details (http://gridway.org/doku.php?id=documentation:release_5.5:ig). Depending on whether you need a single-user or multi-user, it gets slightly more complex due to the role of gridway administrator.
+
+In any case, it summarizes in ten steps:
+
+0) Make sure you have installed and running a working Globus Toolkit (recommended the latest 4.2).
+1) Pre-install a set of packages (make, gcc, java, libssl-dev [openssl-devel], perl, libnet-ldap-perl [perl-LDAP], ruby, ruby-dev [ruby-devel]).
+2) Set up the gwuser (also the gwadmin for administratio of multi-user) and the environmental variables $GW_LOCATION, $GLOBUS_LOCATION, $JAVA_HOME, $PATH, $LD_LIBRARY_PATH
+3) Enter the downloaded directory, either after uncompression or svn check out.
+4) ./configure
+5) make
+6) make install
+7) Configure GridWay (check http://gridway.org/doku.php?id=documentation:release_5.5:cg) through the files $GW_LOCATION/etc/gwd.conf y $GW_LOCATION/etc/sched.conf
+8) Launch the gridway daemon from $GW_LOCATION/bin/gwd.
+9) Test it and enjoy!
+
+
+===== TROUBLESHOOTING =====
+
+Sometimes problems arise. The GridWay community provides free support (check http://gridway.org/doku.php?id=support).
+
+Alternatively, you might access and register to the GridWay development portal for bug filling and technical project overview (check http://dev.gridway.org).
+
+
+===== CREDITS =====
+
+The GridWay team.
+http://gridway.org, http://dsa-research.org.
