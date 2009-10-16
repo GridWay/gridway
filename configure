@@ -3036,7 +3036,7 @@ begin
     require 'mkmf'
     exit 0
 rescue LoadError
-    STDERR.puts 'Las vacas mejor en el prado, pichón!'
+    STDERR.puts 'Las vacas mejor en el prado, pichon!'
     exit -1
 end
 EOF
@@ -3051,7 +3051,7 @@ $as_echo "$RUBY_TEST" >&6; }
     RUBY_TEST="no"
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $RUBY_TEST" >&5
 $as_echo "$RUBY_TEST" >&6; }
-    RUBY_ERROR="ruby-dev not installed (mkmf not found) Please remove --enable-drmaa-ruby or install it!"
+    RUBY_ERROR="ruby-dev not installed (mkmf not found). Please install it or remove --enable-drmaa-ruby!"
     as_fn_error "$RUBY_ERROR" "$LINENO" 5
   fi
   (GW_SRC=$PWD;cd src/drmaa/ruby;
@@ -3170,7 +3170,7 @@ $as_echo "$PERL_TEST" >&6; }
     PERL_TEST="no"
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $PERL_TEST" >&5
 $as_echo "$PERL_TEST" >&6; }
-    PERL_ERROR="libnet-ldap-perl not installed (Net::LDAP not found) Please remove --enable-ldap or install it!"
+    PERL_ERROR="libnet-ldap-perl not installed (Net::LDAP not found). Please install it or remove --enable-ldap!"
     as_fn_error "$PERL_ERROR" "$LINENO" 5
   fi
  fi
