@@ -41,7 +41,7 @@ FLAGS=$(DB4_INCLUDE_PATH)
 
 install-exec-hook:
 	@mkdir -p $(PREFIX)/$(GW_SHARE_DIR)
-	@cp LICENSE NOTICE $(PREFIX)/$(GW_SHARE_DIR)
+	@cp LICENSE README $(PREFIX)/$(GW_SHARE_DIR)
 
 	@rm -rf $(PREFIX)/$(GW_SHARE_DIR)/examples
 	@mkdir -p $(PREFIX)/$(GW_SHARE_DIR)
@@ -213,7 +213,7 @@ dist-hook:
 	@cp src/drmaa/ruby/drmaa_r_wrap.c $(distdir)/src/drmaa/ruby
 	@cp -r scripts $(distdir)
 	@cp pkg_data_src.gpt  $(distdir)/pkg_data_src.gpt
-	@cp -r LICENSE NOTICE $(distdir)
+	@cp -r LICENSE README $(distdir)
 
 # ----------------------------
 #    remove CVS DIRS
