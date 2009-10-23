@@ -83,7 +83,8 @@ class SSHResource
 					self.process_monitor_line(line)				
 				}
 			}
-			chan.exec("tail -f ~/.gw_ssh_status")
+			chan.exec("touch ~/.gw_ssh_status && " <<
+				"tail -f ~/.gw_ssh_status")
 		}
 	end
 	

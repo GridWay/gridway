@@ -66,8 +66,8 @@ class GWEMMadSSH < GWMad
 			@resources[host]=resource
 		end
 		
-		resource.submit(job)
 		resource.start_loop
+		resource.submit(job)
 		
 		send_message("SUBMIT", args[1], "SUCCESS", "ssh://#{user}@#{host}/#{job.hash}")
 	end
