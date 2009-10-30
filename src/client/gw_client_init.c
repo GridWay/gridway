@@ -86,9 +86,9 @@ gw_client_t* gw_client_init()
 
         proxy_path = getenv("X509_USER_PROXY");
         if (proxy_path == NULL)
-            gw_client.proxy_path = strdup("");
+	  gw_client.proxy_path = strdup("");
         else
-            gw_client.proxy_path = strdup(proxy_path);
+	  gw_client.proxy_path = strdup(proxy_path);
 	
 	/* ---------------------------------------------- */
 	/* Open gwd.conf to get number of jobs & hosts    */
@@ -204,7 +204,7 @@ void gw_client_finalize()
     if ( gw_client.group !=  NULL )
         free(gw_client.group);
 
-    if ( gw_client.proxy_path !=  strdup("") )
+    if ( strncmp(gw_client.proxy_path, strdup(""), GW_MSG_STRING_LONG) != 0 )
         free(gw_client.proxy_path);
 			
     for (i = 0 ; i < gw_client.number_of_jobs; i++)
