@@ -16,7 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # --------------------------------------------------------------------------
-LOCKDIR=".gw_im_mad_ldap.lock"
+LOCKDIR=".gw_im_mad_egee_ldap.lock"
 
 lock_stdout ()
 {
@@ -27,15 +27,15 @@ lock_stdout ()
             sleep 0.01
             ((i++))
 	    if [ $i -eq 1000 ]; then
-                echo "Error: Lock failed, exit\n" 1>&2 
-		touch $LOCKDIR.error
+                echo "`date` [Error]: Lock $1 waited over 10 seconds, exiting...\n" >> $LOCKDIR.info
+		touch $LOCKDIR.info
                 exit 1
 	    fi
         done
-	if ! [ -d $LOCKDIR.released ]; then
-	    mkdir $LOCKDIR.released
+	if ! [ -e $LOCKDIR.info ]; then
+	    touch $LOCKDIR.info
 	fi
-	printf "Warning: Lock finally released after waiting $i steps\n" > $LOCKDIR.released/$1
+	printf "`date` [Warning]: Lock $1 released after $i centiseconds\n" >> $LOCKDIR.info
     fi
 }
 

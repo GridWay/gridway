@@ -204,7 +204,7 @@ void gw_client_finalize()
     if ( gw_client.group !=  NULL )
         free(gw_client.group);
 
-    if ( strncmp(gw_client.proxy_path, strdup(""), GW_MSG_STRING_LONG) != 0 )
+    if ( gw_client.proxy_path[0] != '\0' )
         free(gw_client.proxy_path);
 			
     for (i = 0 ; i < gw_client.number_of_jobs; i++)
