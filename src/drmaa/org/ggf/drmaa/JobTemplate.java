@@ -145,7 +145,7 @@ public abstract class JobTemplate
          *  working directory of the job on the execution host.
          */ 
 	protected java.lang.String					drmaa_wd;
-	
+
 	/** Not relevant for the current GridWay implementation, will be ignored
  	*/
 	protected FileTransferMode			drmaa_transfer_files;
@@ -453,7 +453,7 @@ public abstract class JobTemplate
 		else
 			this.drmaa_deadline_time = deadline;		
 	}
-	
+
 	/** This method set the attribute {@link #drmaa_wct_hlimit}. 
  	 * 
 	 *  @param limit The hard wall clock time limit to set
@@ -671,7 +671,7 @@ public abstract class JobTemplate
 	{
 		return this.drmaa_deadline_time;
 	}
-	
+
 	/** This method get the attribute {@link #drmaa_wct_hlimit}. 
  	 * 
 	 *  @return A long with the drmaa_wct_hlimit value
@@ -824,7 +824,13 @@ public abstract class JobTemplate
  	 */	
 	public  abstract void setRequirements(String requirements)
 		throws DrmaaException;
-					
+
+        public  abstract void setPriority(String priority)
+                throws DrmaaException;
+        public  abstract void setType(String type)
+                throws DrmaaException;
+        public  abstract void setNp(String np)
+                throws DrmaaException;
 	
 	/** This method get the attribute {@link JobTemplateImpl}.drmaa_v_gw_input_files. 
 	 *  This attribute is an array of strings to refer to the input files of {@link #drmaa_remote_command}.  
@@ -892,6 +898,7 @@ public abstract class JobTemplate
  	 *
  	 */
 	public  abstract String getRank();
+
 	/** This method get the attribute {@link JobTemplateImpl}.drmaa_gw_requirements. 
  	 *  This attribute is a String to refer to the RANK job template parameter.
  	 *  The RANK is a mathematical expression evaluated for each
@@ -903,6 +910,10 @@ public abstract class JobTemplate
  	 *
  	 */
 	public  abstract String getRequirements();
+
+	public  abstract String getPriority();
+	public  abstract String getType();
+	public  abstract String getNp();
 	
 	public java.lang.String toString()
 	{

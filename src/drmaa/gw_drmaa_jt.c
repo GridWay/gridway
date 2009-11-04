@@ -16,6 +16,7 @@
 /* -------------------------------------------------------------------------- */
 
 #include "gw_drmaa_jt.h"
+#include "gw_job.h"
 
 #include <unistd.h>
 #include <stdio.h>
@@ -56,7 +57,7 @@ static gw_short_string_t drmaa_gw_template_strs[] = {
                           
 int drmaa_gw_jt_init   (drmaa_job_template_t **jt)
 {
-    char cwd[PATH_MAX+1];
+    char buf[PATH_MAX+1];
     
     
 	*jt = (drmaa_job_template_t *) malloc (sizeof(drmaa_job_template_t));
@@ -96,17 +97,19 @@ int drmaa_gw_jt_init   (drmaa_job_template_t **jt)
 
 	(*jt)->job_name = strdup("job_template");
 
-	if ( getcwd(cwd, PATH_MAX) == NULL )
+	if ( getcwd(buf, PATH_MAX) == NULL )
 	{
 		pthread_mutex_unlock(&((*jt)->mutex));
         return DRMAA_ERRNO_INTERNAL_ERROR;
 	}
 	
-	(*jt)->job_wd   = strdup(cwd);
+	(*jt)->job_wd   = strdup(buf);
 
 	(*jt)->js_state = strdup(DRMAA_SUBMISSION_STATE_ACTIVE);
     
     (*jt)->deadline_time = strdup("00");
+
+    (*jt)->priority = NULL;
     
     (*jt)->type = strdup(DRMAA_GW_TYPE_SINGLE);
     (*jt)->np   = strdup("1");
@@ -211,6 +214,9 @@ void drmaa_gw_jt_destroy(drmaa_job_template_t *jt)
         
     if ( jt->deadline_time != NULL) 
         free( jt->deadline_time);
+
+    if ( jt->priority != NULL)
+        free( jt->priority);
         
     if ( jt->type != NULL) 
         free( jt->type);
@@ -333,7 +339,11 @@ void drmaa_gw_jt_get_ptr (drmaa_job_template_t * jt,
     else if (strcmp(name, DRMAA_DEADLINE_TIME) == 0)
     {
         *val = (void * ) &(jt->deadline_time);
-    }   
+    }
+    else if (strcmp(name, DRMAA_GW_PRIORITY) == 0)
+    {
+        *val = (void * ) &(jt->priority);
+    }
     else if (strcmp(name, DRMAA_GW_TYPE) == 0)
     {
         *val = (void * ) &(jt->type);

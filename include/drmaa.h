@@ -594,6 +594,11 @@ typedef struct drmaa_job_ids_s      	drmaa_job_ids_t;
  */
 #define DRMAA_GW_NP "NP"
 
+/** Pre-defined string to refer to the priority of the job
+ */
+#define DRMAA_GW_PRIORITY "PRIORITY"
+
+
 
  /*@}*/
  

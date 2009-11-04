@@ -70,6 +70,7 @@ struct drmaa_job_template_s
   	char * js_state;
     
     char * deadline_time;
+    char * priority;
     
     char * type;
     char * np;

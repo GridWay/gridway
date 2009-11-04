@@ -40,6 +40,8 @@ public class JobTemplateImpl extends JobTemplate
 	private String 		drmaa_gw_rank;
 
 	private String 		drmaa_gw_requirements;
+
+	private String 		drmaa_gw_priority;
 	
 	private String		drmaa_gw_type = SessionImpl.DRMAA_GW_TYPE_SINGLE;
 	
@@ -70,8 +72,9 @@ public class JobTemplateImpl extends JobTemplate
 		optAttrNames.add("drmaa_gw_number_of_retries");
 		optAttrNames.add("drmaa_gw_rank");
 		optAttrNames.add("drmaa_gw_requirements");
-		optAttrNames.add("gw_type");
-		optAttrNames.add("gw_np");	
+		optAttrNames.add("drmaa_gw_priority");
+		optAttrNames.add("drmaa_gw_type");
+		optAttrNames.add("drmaa_gw_np");	
 				
 		attrNames.addAll(optAttrNames);
 	}
@@ -176,7 +179,15 @@ public class JobTemplateImpl extends JobTemplate
 			this.drmaa_gw_requirements = new String(requirements);	
 	}
 	
-	
+        public  void setPriority(String priority)
+                throws DrmaaException
+        {
+                if (priority == null)
+                        throw new InvalidAttributeValueException("The priority attribute is NULL");
+                else
+                        this.drmaa_gw_priority = new String(priority);
+        }
+
 	public  void setType(String type)
 		throws DrmaaException
 	{
@@ -248,13 +259,17 @@ public class JobTemplateImpl extends JobTemplate
 		return this.drmaa_gw_requirements;	
 	}
 	
+        public  String  getPriority()
+        {
+                return  this.drmaa_gw_priority;
+        }
+
 	public  String  getType()
 	{
 		return	this.drmaa_gw_type;	
 	}
 	
 	public  String getNp()
-		throws DrmaaException
 	{
 		return 	this.drmaa_gw_np;	
 	}	

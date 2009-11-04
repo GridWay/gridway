@@ -934,6 +934,7 @@ int drmaa_run_job(char *                 job_id,
     char *jt_parse;
     int  rc;
     int  jid;
+    int  prio;
     gw_return_code_t grc;
 
 	pthread_mutex_lock(&(drmaa_gw_session.mutex));
@@ -1012,18 +1013,23 @@ int drmaa_run_job(char *                 job_id,
         return DRMAA_ERRNO_INTERNAL_ERROR; 
     }
         
+    if (jt->priority != NULL)
+        prio = atoi(jt->priority);
+    else
+        prio = GW_JOB_DEFAULT_PRIORITY;
+
     if (strcmp(jt->js_state,DRMAA_SUBMISSION_STATE_HOLD) == 0)
 	    grc = gw_client_job_submit(jt_parse,
 	                               GW_JOB_STATE_HOLD, 
 	                               &jid,
 	                               NULL,
-	                               GW_JOB_DEFAULT_PRIORITY);
+	                               prio);
 	else
 	    grc = gw_client_job_submit(jt_parse,
 	                               GW_JOB_STATE_PENDING,
 	                               &jid,
 	                               NULL,
-	                               GW_JOB_DEFAULT_PRIORITY);
+	                               prio);
 	    
 	pthread_mutex_unlock(&(jt->mutex));
 	
@@ -1173,7 +1179,7 @@ int drmaa_run_bulk_jobs(drmaa_job_ids_t **     jobids,
 	                                 NULL,
 	                                 start,
 	                                 incr,
-	                                 GW_JOB_DEFAULT_PRIORITY);
+	                                 atoi(jt->priority));
 	else
 	    grc = gw_client_array_submit(jt_parse,
 	                                 total_jobs,
@@ -1183,7 +1189,7 @@ int drmaa_run_bulk_jobs(drmaa_job_ids_t **     jobids,
 	                                 NULL,
 	                                 start,
 	                                 incr,
-	                                 GW_JOB_DEFAULT_PRIORITY);
+	                                 atoi(jt->priority));
 	                                 
 	pthread_mutex_unlock(&(jt->mutex));
 	                                     	    
