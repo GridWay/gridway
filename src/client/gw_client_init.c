@@ -45,7 +45,7 @@ gw_client_t* gw_client_init()
     int             rc; 
     int             i;
     FILE *          fd;
-	int fscanf_result;
+    int fscanf_result;
     struct passwd * pw_ent;
     struct group *  gr_ent;
 	
@@ -86,9 +86,9 @@ gw_client_t* gw_client_init()
 
         proxy_path = getenv("X509_USER_PROXY");
         if (proxy_path == NULL)
-	  gw_client.proxy_path = strdup("");
+            gw_client.proxy_path = NULL;
         else
-	  gw_client.proxy_path = strdup(proxy_path);
+            gw_client.proxy_path = strdup(proxy_path);
 	
 	/* ---------------------------------------------- */
 	/* Open gwd.conf to get number of jobs & hosts    */
@@ -110,24 +110,24 @@ gw_client_t* gw_client_init()
     sprintf(conf_file,"%s/" GW_ETC_DIR "/gwd.conf",GW_LOCATION);
     sprintf(port_file,"%s/" GW_VAR_DIR "/gwd.port",GW_LOCATION);
 
-	/* ------------- TCP PORT ------------- */
+    /* ------------- TCP PORT ------------- */
 	
-	fd = fopen(port_file,"r");
-	if (fd == NULL)
-	{
-    	fprintf(stderr,"Error openning gwd.port file (%s)\n",port_file);
-    	free(conf_file);
-    	free(port_file);
+    fd = fopen(port_file,"r");
+    if (fd == NULL)
+    {
+        fprintf(stderr,"Error openning gwd.port file (%s)\n",port_file);
+        free(conf_file);
+        free(port_file);
     	
     	pthread_mutex_unlock(&gw_client.mutex);
         return NULL;		
-	} 
-	fscanf_result = fscanf(fd,"%s %i",gw_client.hostname, &gw_client.gwd_port);
-	fclose(fd);
+    } 
+    fscanf_result = fscanf(fd,"%s %i",gw_client.hostname, &gw_client.gwd_port);
+    fclose(fd);
 	
-	free(port_file);
+    free(port_file);
 
-	/* ------------- Number of jobs ------------- */
+    /* ------------- Number of jobs ------------- */
 	     
     rc = gw_parse_file(conf_file,"NUMBER_OF_JOBS",&number_of_jobs_s);
 
@@ -150,15 +150,15 @@ gw_client_t* gw_client_init()
     
     free(number_of_jobs_s);
 
-	/* ------------- Number of hosts ------------- */
+    /* ------------- Number of hosts ------------- */
 	     
     rc = gw_parse_file(conf_file,"NUMBER_OF_HOSTS",&number_of_hosts_s);
 
     if ( (rc != -1) && (number_of_hosts_s != NULL) )
     {
     	gw_client.number_of_hosts = atoi(number_of_hosts_s);
-    	gw_client.host_pool = (gw_msg_host_t **) malloc( sizeof(gw_msg_host_t *) *
-    	                                             gw_client.number_of_hosts);
+    	gw_client.host_pool = (gw_msg_host_t **) malloc( sizeof(gw_msg_host_t *)
+    	        * gw_client.number_of_hosts);
     	                                             
         for (i = 0 ; i < gw_client.number_of_hosts; i++)
         	gw_client.host_pool[i] = NULL;
@@ -177,7 +177,7 @@ gw_client_t* gw_client_init()
 		    
     gw_client.initialize = GW_TRUE;
     
-	pthread_mutex_unlock(&gw_client.mutex);
+    pthread_mutex_unlock(&gw_client.mutex);
 	    
     return &(gw_client);    
 }
@@ -204,7 +204,7 @@ void gw_client_finalize()
     if ( gw_client.group !=  NULL )
         free(gw_client.group);
 
-    if ( gw_client.proxy_path[0] != '\0' )
+    if ( gw_client.proxy_path !=  NULL )
         free(gw_client.proxy_path);
 			
     for (i = 0 ; i < gw_client.number_of_jobs; i++)
@@ -228,12 +228,12 @@ void gw_client_finalize()
 
 int gw_client_connect()
 {
-	int                fd;
+    int                fd;
     struct sockaddr_in gw_addr;
-	struct hostent *   host;
-	int                rc;
+    struct hostent *   host;
+    int                rc;
 
-	pthread_mutex_lock(&gw_client.mutex);
+    pthread_mutex_lock(&gw_client.mutex);
 	
 	/* ---------------------------------------------- */
 	/*                Connect to gwd                  */

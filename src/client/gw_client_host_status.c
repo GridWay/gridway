@@ -55,7 +55,8 @@ gw_return_code_t gw_client_host_status(int host_id, gw_msg_host_t *host_status)
 	
 	strncpy(msg.owner,gw_client.owner,GW_MSG_STRING_SHORT);	
 	strncpy(msg.group,gw_client.group,GW_MSG_STRING_SHORT);
-	
+        msg.proxy_path[0] = '\0';
+
 	pthread_mutex_unlock(&(gw_client.mutex));
 		
     length = sizeof(gw_msg_t);
@@ -143,7 +144,8 @@ gw_return_code_t gw_client_host_status_all( )
 	
 	strncpy(msg.owner,gw_client.owner,GW_MSG_STRING_SHORT);	
 	strncpy(msg.group,gw_client.group,GW_MSG_STRING_SHORT);
-		
+        msg.proxy_path[0] = '\0';
+
 	pthread_mutex_unlock(&(gw_client.mutex));
 	
     /* ----------------------------------------------------------------- */

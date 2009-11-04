@@ -30,15 +30,10 @@ int gw_user_init(gw_user_t *user, const char *name, const char *proxy_path)
 
     int i,j;
     int rc;
-	int proxy_var;
+    int proxy_var;
     FILE *file;
-	char proxy_command[GW_MSG_STRING_LONG];
+    char proxy_command[GW_MSG_STRING_LONG];
     char dn[GW_MSG_STRING_LONG], *pline;
-    /*gss_cred_id_t gss_cred = GSS_C_NO_CREDENTIAL;
-    OM_uint32 major_status;
-    OM_uint32 minor_status;
-    gss_name_t gss_name;
-    gss_buffer_desc gss_buffer = GSS_C_EMPTY_BUFFER;*/
  
     if ( user == NULL)
         return -1;
@@ -63,74 +58,66 @@ int gw_user_init(gw_user_t *user, const char *name, const char *proxy_path)
         gw_log_print("UM",'I',"Setting X509_USER_PROXY variable to %s.\n",
                 proxy_path);
 #endif
-		proxy_var=1;
+        proxy_var=1;
         setenv("X509_USER_PROXY", proxy_path, 1);
     }
 
     user->proxy_path = strdup(proxy_path);
 
-    /* Adquire credentials */
-    /*globus_module_activate(GLOBUS_GSI_GSS_ASSIST_MODULE);
-    major_status = globus_gss_assist_acquire_cred(&minor_status,
-            GSS_C_INITIATE, &gss_cred);
+    if (gw_conf.multiuser == GW_TRUE)
+        sprintf(proxy_command, "sudo -H -u %s grid-proxy-info -exists", name);
+    else
+        sprintf(proxy_command, "grid-proxy-info -exists");
 
-    if (major_status != GSS_S_COMPLETE)
+    if (system(proxy_command) == 0)
     {
-        gw_log_print("UM",'I',"Error loading credentials for user %s (%d).\n",
-                GWNSTR(name), minor_status);
-        return -1;
+        if (gw_conf.multiuser == GW_TRUE)
+            sprintf(proxy_command, "sudo -H -u %s grid-proxy-info -identity", name);
+        else
+            sprintf(proxy_command, "grid-proxy-info -identity");
+
+        gw_log_print("UM",'I',"Executing command %s\n", proxy_command);
+
+        file = popen(proxy_command, "r");
+
+        if (file != NULL)
+        {
+            while( fgets(dn, sizeof(dn), file) != NULL )
+            {
+                // Keep looping even if we just expect one line
+            }
+		
+            pclose(file);
+	  
+            if (dn != NULL){
+                pline =  strchr(dn, '\n');
+            if (pline != NULL)
+                *pline = '\0';
+
+            user->dn = strdup(dn);
+            gw_log_print("UM",'I',"User proxy info, %s\n", user->dn);
+            }
+            else
+            {
+                 gw_log_print("UM",'I',"Error getting identity of user %s.\n",
+                         GWNSTR(name));
+                user->dn = strdup("Unknown");
+            }
+        }
+        else
+        {
+            gw_log_print("UM",'I',"Error executing grid-proxy-info -identity for user %s.\n",
+                    GWNSTR(name));
+            user->dn = strdup("Unknown");
+        }
+    }
+    else
+    {
+        gw_log_print("UM",'E',"Error executing grid-proxy-info for user %s. Check sudoers.\n",
+                GWNSTR(name));
+        user->dn = strdup("Unknown"); 
     }
 
-    gss_inquire_cred(&minor_status, gss_cred, &gss_name, NULL, NULL, NULL);
-
-    gss_display_name(&minor_status, gss_name, &gss_buffer, NULL);
-
-    user->dn = strdup(gss_buffer.value);
-
-    gss_release_name(&minor_status, &gss_name);
-    gss_release_buffer(&minor_status, &gss_buffer);*/
-
-	sprintf(proxy_command, "grid-proxy-info -exists");
-	if (system(proxy_command) == 0){
-	  /* Here the code relies on the ability of the GridWay daemon to run grid-proxy-info as user
-		 so it will fail on a multi-user instance */
-	  sprintf(proxy_command, "grid-proxy-info -identity");
-	  gw_log_print("UM",'I',"Executing command %s\n", proxy_command);
-	  file = popen(proxy_command, "r");
-	  if (file != NULL){
-		while( fgets(dn, sizeof(dn), file) != NULL ){
-		  // Keep looping even if we just expect one line
-		}
-		
-		pclose(file);
-	  
-	  if (dn != NULL){
-		pline =  strchr(dn, '\n');
-		if (pline != NULL)
-		  *pline = '\0';
-		
-		user->dn = strdup(dn);
-		gw_log_print("UM",'I',"User proxy info, %s\n", user->dn);
-		
-	  }
-	  else{
-		gw_log_print("UM",'I',"Error getting identity of user %s.\n",
-					 GWNSTR(name));
-		user->dn = strdup("Unknown");
-	  }
-	  }
-	  else {
-		gw_log_print("UM",'I',"Error executing grid-proxy-info -identity for user %s.\n",
-					 GWNSTR(name));
-		user->dn = strdup("Unknown");
-	  }
-	}
-	else {
-	  gw_log_print("UM",'I',"Not executing grid-proxy-info for user %s.\n",
-				   GWNSTR(name));
-	  user->dn = strdup("Unknown"); 
-	}
-	
     user->active_jobs  = 0;
     user->running_jobs = 0;
     user->idle         = 0;
@@ -235,7 +222,7 @@ void gw_user_destroy(gw_user_t *user)
     if (user->proxy_path != NULL )
         free(user->proxy_path);
 
-    if (user->dn!= NULL )
+    if (user->dn != NULL )
         free(user->dn);
 
     for (i = 0; i< user->em_mads; i++)
