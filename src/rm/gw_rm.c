@@ -452,6 +452,9 @@ static inline gw_boolean_t gw_rm_auth_user(int job_id, const char *owner,
 	if (strncmp(owner, gw_conf.gwadmin,GW_MSG_STRING_SHORT) == 0)
 		return GW_TRUE;
 	
+        gw_log_print("RM", 'I', "Authorizing user %s, with proxy path \"%s\".\n",
+                owner, proxy_path);
+
 	user_exists = gw_user_pool_exists (owner, proxy_path, &user_id);
 	
 	if (user_exists == GW_TRUE)

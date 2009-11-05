@@ -36,28 +36,28 @@ void gw_client_disconnect(int socket);
 
 gw_return_code_t gw_client_host_status(int host_id, gw_msg_host_t *host_status)
 {   
-	int      length;
-	int      rc;
-	gw_msg_t msg;
-	int      fd;
+    int      length;
+    int      rc;
+    gw_msg_t msg;
+    int      fd;
 		
-	if ( gw_client.initialize == GW_FALSE )
-		return GW_RC_FAILED_INIT;
+    if ( gw_client.initialize == GW_FALSE )
+        return GW_RC_FAILED_INIT;
  	
     /* ----------------------------------------------------------------- */
     /* 1.- Format msg     	      	      	      	      	      	     */
     /* ----------------------------------------------------------------- */
 
-	msg.msg_type   = GW_MSG_HOST_STATUS;
-	msg.job_id     = host_id;
+    msg.msg_type   = GW_MSG_HOST_STATUS;
+    msg.job_id     = host_id;
 	
-	pthread_mutex_lock(&(gw_client.mutex));
+    pthread_mutex_lock(&(gw_client.mutex));
 	
-	strncpy(msg.owner,gw_client.owner,GW_MSG_STRING_SHORT);	
-	strncpy(msg.group,gw_client.group,GW_MSG_STRING_SHORT);
-        msg.proxy_path[0] = '\0';
+    strncpy(msg.owner, gw_client.owner, GW_MSG_STRING_SHORT);	
+    strncpy(msg.group, gw_client.group, GW_MSG_STRING_SHORT);
+    strncpy(msg.proxy_path, gw_client.proxy_path, GW_MSG_STRING_SHORT);
 
-	pthread_mutex_unlock(&(gw_client.mutex));
+    pthread_mutex_unlock(&(gw_client.mutex));
 		
     length = sizeof(gw_msg_t);
     
@@ -124,29 +124,30 @@ gw_return_code_t gw_client_host_status(int host_id, gw_msg_host_t *host_status)
 gw_return_code_t gw_client_host_status_all( )
 {
     gw_msg_t        msg;
-	gw_msg_host_t * host_msg;
-	int             length;
-	int             i;
-	int             rc;
-	int             fd;
+    gw_msg_host_t * host_msg;
+    int             length;
+    int             i;
+    int             rc;
+    int             fd;
 	
-	if ( gw_client.initialize == GW_FALSE )
-		return GW_RC_FAILED_INIT;
+    if ( gw_client.initialize == GW_FALSE )
+        return GW_RC_FAILED_INIT;
 	   
     /* ----------------------------------------------------------------- */
     /* 1.- Format message     	      	      	      	      	      	 */
     /* ----------------------------------------------------------------- */
 
     msg.msg_type = GW_MSG_HOST_POOL_STATUS;
-	length       = sizeof(gw_msg_t);
+    length       = sizeof(gw_msg_t);
 	
-	pthread_mutex_lock(&(gw_client.mutex));
+    pthread_mutex_lock(&(gw_client.mutex));
 	
-	strncpy(msg.owner,gw_client.owner,GW_MSG_STRING_SHORT);	
-	strncpy(msg.group,gw_client.group,GW_MSG_STRING_SHORT);
-        msg.proxy_path[0] = '\0';
+    strncpy(msg.owner,gw_client.owner,GW_MSG_STRING_SHORT);	
+    strncpy(msg.group,gw_client.group,GW_MSG_STRING_SHORT);
+    strncpy(msg.proxy_path, gw_client.proxy_path, GW_MSG_STRING_SHORT);
 
-	pthread_mutex_unlock(&(gw_client.mutex));
+
+    pthread_mutex_unlock(&(gw_client.mutex));
 	
     /* ----------------------------------------------------------------- */
     /* 2.- Send pool status request    	      	      	      	      	 */

@@ -86,7 +86,7 @@ gw_client_t* gw_client_init()
 
         proxy_path = getenv("X509_USER_PROXY");
         if (proxy_path == NULL)
-            gw_client.proxy_path = NULL;
+            gw_client.proxy_path = strdup("");
         else
             gw_client.proxy_path = strdup(proxy_path);
 	

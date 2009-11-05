@@ -78,9 +78,9 @@ gw_return_code_t gw_client_wait(int job_id, int *exit_code, signed long timeout)
 	  	
   	pthread_mutex_lock(&(gw_client.mutex));
   	
-	strncpy(msg.owner,gw_client.owner,GW_MSG_STRING_SHORT);  	
-	strncpy(msg.group,gw_client.group,GW_MSG_STRING_SHORT);
-        msg.proxy_path[0] = '\0';
+	strncpy(msg.owner, gw_client.owner, GW_MSG_STRING_SHORT);  	
+	strncpy(msg.group, gw_client.group, GW_MSG_STRING_SHORT);
+	strncpy(msg.proxy_path, gw_client.proxy_path, GW_MSG_STRING_SHORT);
 	
   	pthread_mutex_unlock(&(gw_client.mutex));	
   	
@@ -274,9 +274,9 @@ gw_return_code_t gw_client_wait_set(int *        job_ids,
 	
 	pthread_mutex_lock(&(gw_client.mutex));
 	
-	strncpy(msg.owner,gw_client.owner,GW_MSG_STRING_SHORT);	
-	strncpy(msg.group,gw_client.group,GW_MSG_STRING_SHORT);
-        msg.proxy_path[0] = '\0';
+	strncpy(msg.owner, gw_client.owner, GW_MSG_STRING_SHORT);	
+	strncpy(msg.group, gw_client.group, GW_MSG_STRING_SHORT);
+        strncpy(msg.proxy_path, gw_client.proxy_path, GW_MSG_STRING_SHORT);
 
 	pthread_mutex_unlock(&(gw_client.mutex));
 	
