@@ -32,7 +32,7 @@ int gw_user_init(gw_user_t *user, const char *name, const char *proxy_path)
     int rc;
     int proxy_var;
     FILE *file;
-    char proxy_command[GW_MSG_STRING_LONG];
+    char proxy_command[GW_MSG_STRING_LONG], *globus_location;
     char dn[GW_MSG_STRING_LONG], *pline;
  
     if ( user == NULL)
@@ -63,16 +63,17 @@ int gw_user_init(gw_user_t *user, const char *name, const char *proxy_path)
     }
 
     user->proxy_path = strdup(proxy_path);
+    globus_location = getenv("GLOBUS_LOCATION");
 
     if (gw_conf.multiuser == GW_TRUE)
-        sprintf(proxy_command, "sudo -H -u %s grid-proxy-info -exists", name);
+        sprintf(proxy_command, "sudo -H -u %s %s/bin/grid-proxy-info -exists", name, globus_location);
     else
         sprintf(proxy_command, "grid-proxy-info -exists");
 
     if (system(proxy_command) == 0)
     {
         if (gw_conf.multiuser == GW_TRUE)
-            sprintf(proxy_command, "sudo -H -u %s grid-proxy-info -identity", name);
+            sprintf(proxy_command, "sudo -H -u %s %s/bin/grid-proxy-info -identity", name, globus_location);
         else
             sprintf(proxy_command, "grid-proxy-info -identity");
 
