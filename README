@@ -1,19 +1,20 @@
----------------------------------------------------------------------------
- Copyright 2002-2009 GridWay Team, Distributed Systems Architecture Group, 
- Universidad Complutense de Madrid
+===== LICENSE =====
 
- Licensed under the Apache License, Version 2.0 (the "License"); you may
- not use this file except in compliance with the License. You may obtain
- a copy of the License at
+Copyright 2002-2009 GridWay Team, Distributed Systems Architecture Group, 
+Universidad Complutense de Madrid
 
- http://www.apache.org/licenses/LICENSE-2.0
+Licensed under the Apache License, Version 2.0 (the "License"); you may
+not use this file except in compliance with the License. You may obtain
+a copy of the License at
 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
----------------------------------------------------------------------------
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
 
 ===== WELCOME =====
 
@@ -54,7 +55,7 @@ variables $GW_LOCATION, $GLOBUS_LOCATION, $JAVA_HOME, $PATH, $LD_LIBRARY_PATH
 5) make
 6) make install
 7) Configure GridWay (http://gridway.org/doku.php?id=documentation:release_5.5:cg)
-through the files $GW_LOCATION/etc/gwd.conf y $GW_LOCATION/etc/sched.conf .
+through the files $GW_LOCATION/etc/gwd.conf y $GW_LOCATION/etc/sched.conf.
 8) Launch the gridway daemon from $GW_LOCATION/bin/gwd.
 9) Test it and enjoy!
 
@@ -62,14 +63,13 @@ through the files $GW_LOCATION/etc/gwd.conf y $GW_LOCATION/etc/sched.conf .
 ===== TROUBLESHOOTING =====
 
 Sometimes problems arise. The GridWay community provides free support 
-http://gridway.org/doku.php?id=support .
+http://gridway.org/doku.php?id=support.
 
 Alternatively, you might access and register to the GridWay development portal for 
-bug filling and technical project overview 
-http://dev.gridway.org/ .
+bug filling and technical project overview (http://dev.gridway.org).
 
 
 ===== CREDITS =====
 
 The GridWay team.
-http://gridway.org , http://dsa-research.org .
+http://gridway.org, http://dsa-research.org.
