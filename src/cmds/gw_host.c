@@ -1,5 +1,5 @@
 /* -------------------------------------------------------------------------- */
-/* Copyright 2002-2006 GridWay Team, Distributed Systems Architecture         */
+/* Copyright 2002-2009 GridWay Team, Distributed Systems Architecture         */
 /* Group, Universidad Complutense de Madrid                                   */
 /*                                                                            */
 /* Licensed under the Apache License, Version 2.0 (the "License"); you may    */
@@ -34,16 +34,15 @@ const char * usage =
 "SYNOPSIS\n"
 "  Prints information about all the hosts in the GridWay system (default)\n\n"
 "OPTIONS\n"
-"  -h           prints this help\n"
-"  -c <delay>   this will cause gwhost to print job information every <delay>\n"
-"               seconds continuously (similar to top command)\n"
+"  -h           print this help\n"
+"  -c <delay>   refresh host information every <delay> seconds\n"
 "  -n           do not print the header\n"
 "  -f           full format\n"
 "  -x           xml format\n"
-"  -m <job_id>  prints hosts matching the requirements of a given job\n"
-"  host_id      only monitor this host_id, also prints queue information\n\n"
+"  -m <job_id>  print hosts matching the requirements of a given job\n"
+"  host_id      only monitor this host_id, printing also queue information\n\n"
 "FIELD INFORMATION\n"
-"  HID          host unique identification assigned by the Gridway system\n"
+"  HID          host unique identification assigned by the GridWay system\n"
 "  PRIO         priority assigned to the host\n"
 "  OS           operating system\n"
 "  ARCH         architecture\n"

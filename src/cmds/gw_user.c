@@ -1,5 +1,5 @@
 /* -------------------------------------------------------------------------- */
-/* Copyright 2002-2006 GridWay Team, Distributed Systems Architecture         */
+/* Copyright 2002-2009 GridWay Team, Distributed Systems Architecture         */
 /* Group, Universidad Complutense de Madrid                                   */
 /*                                                                            */
 /* Licensed under the Apache License, Version 2.0 (the "License"); you may    */
@@ -33,7 +33,7 @@ const char * usage =
 "SYNOPSIS\n"
 "  Prints information about users in the GridWay system\n\n"
 "OPTIONS\n"
-"  -h    prints this help\n"
+"  -h    print this help\n"
 "  -n    do not print the header lines\n\n"
 "  -x    xml format\n"
 "FIELD INFORMATION\n"

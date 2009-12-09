@@ -1,5 +1,5 @@
 /* -------------------------------------------------------------------------- */
-/* Copyright 2002-2006 GridWay Team, Distributed Systems Architecture         */
+/* Copyright 2002-2009 GridWay Team, Distributed Systems Architecture         */
 /* Group, Universidad Complutense de Madrid                                   */
 /*                                                                            */
 /* Licensed under the Apache License, Version 2.0 (the "License"); you may    */
@@ -33,14 +33,13 @@ const char * usage =
 "SYNOPSIS\n"
 "  Prints information about all the jobs in the GridWay system (default)\n\n"
 "OPTIONS\n"
-"  -h               prints this help\n"
+"  -h               print this help\n"
 "  -u user          monitor only jobs owned by user\n"
 "  -r host          monitor only jobs executed in host\n"
 "  -A AID           monitor only jobs part of the array AID\n"
 "  -s job_state     monitor only jobs in state job_state (see JOB STATES)\n"
 "  -o output_format define output information (see FIELD INFORMATION)\n" 
-"  -c <delay>       this will cause gwps to print job information every <delay>\n"
-"                   seconds continuously (similar to top command)\n"
+"  -c <delay>       refresh job information every <delay> seconds\n"
 "  -n               do not print the header\n"
 "  -f               full format\n"
 "  -x               xml format\n"

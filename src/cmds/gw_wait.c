@@ -1,5 +1,5 @@
 /* -------------------------------------------------------------------------- */
-/* Copyright 2002-2006 GridWay Team, Distributed Systems Architecture         */
+/* Copyright 2002-2009 GridWay Team, Distributed Systems Architecture         */
 /* Group, Universidad Complutense de Madrid                                   */
 /*                                                                            */
 /* Licensed under the Apache License, Version 2.0 (the "License"); you may    */
@@ -33,17 +33,16 @@ const char * usage =
 "SYNOPSIS\n"
 "  Waits for a job\n\n"
 "OPTIONS\n"
-"  -h             prints this help.\n"
+"  -h             print this help\n"
 "  -a             any, returns when the first job of the list or array finishes\n"
-"  -v             prints job exit code\n"
-"  -t             timeout no wait more then timeout seconds. A negative value\n"
-"                 means an undetermined amount of time (i.e. wait forever,\n"
-"                 default)\n"
-"  -k             keep jobs, they remain in fail or done  states in the\n"
+"  -v             print job exit code\n"
+"  -t <timeout>   do not wait more than <timeout> seconds. A negative value\n"
+"                 means waiting for ever (default)\n"
+"  -k             keep jobs. They remain in fail or done states in the\n"
 "                 GridWay system.\n"
-"                 By default, jobs are killed and their resources freed.\n"
-"  -A <array_id>  array identification as provided by gwps.\n"
-"  job_id ...     job ids list as provided by gwps.\n";
+"                 By default, jobs are killed and their resources freed\n"
+"  -A <array_id>  array identification as provided by gwps\n"
+"  job_id ...     list of job ids as provided by gwps\n";
 
 
 const char * susage =

@@ -1,5 +1,5 @@
 /* -------------------------------------------------------------------------- */
-/* Copyright 2002-2006 GridWay Team, Distributed Systems Architecture         */
+/* Copyright 2002-2009 GridWay Team, Distributed Systems Architecture         */
 /* Group, Universidad Complutense de Madrid                                   */
 /*                                                                            */
 /* Licensed under the Apache License, Version 2.0 (the "License"); you may    */
@@ -30,14 +30,14 @@
 const char * usage =
 "\n gwsubmit <[-t] template> [-n tasks] [-h] [-v] [-o] [-d \"id1 id2 ...\"] [-p priotity]\n\n"
 "SYNOPSIS\n"
-"  Submit a job or an array job (if the number of tasks is defined) to gwd\n\n"
+"  Submits a job or an array job (if the number of tasks is defined) to gwd\n\n"
 "OPTIONS\n"
-"  -h                  prints this help\n"
+"  -h                  print this help\n"
 "  [-t] <template>     the template file describing the job\n"
 "  -n   <tasks>        submit an array job with the given number of tasks\n"
 "                      all the jobs in the array will use the same template\n"
-"  -v                  print to stdout the job ids returned by gwd.\n" 
-"  -o                  hold job on submission.\n" 
+"  -v                  print to stdout the job ids returned by gwd\n" 
+"  -o                  hold job on submission\n" 
 "  -d   \"id1 id2...\" job dependencies. Submit the job on hold state, and\n"
 "                      release it once jobs with id1,id2,.. have finished\n"
 "  -s   <start>        start value for custom param in array jobs. Default 0\n"

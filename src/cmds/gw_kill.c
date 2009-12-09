@@ -1,5 +1,5 @@
 /* -------------------------------------------------------------------------- */
-/* Copyright 2002-2006 GridWay Team, Distributed Systems Architecture         */
+/* Copyright 2002-2009 GridWay Team, Distributed Systems Architecture         */
 /* Group, Universidad Complutense de Madrid                                   */
 /*                                                                            */
 /* Licensed under the Apache License, Version 2.0 (the "License"); you may    */
@@ -33,8 +33,8 @@ const char * usage =
 "SYNOPSIS\n"
 "  Sends a signal to a job\n\n"
 "OPTIONS\n"
-"  -h            prints this help.\n"
-"  -a            asynchronous signal, only relevant for KILL and STOP.\n"
+"  -h            print this help\n"
+"  -a            asynchronous signal, only relevant for KILL and STOP\n"
 "  -k            kill (default, if no signal specified)\n"
 "  -t            stop\n"
 "  -r            resume\n"
@@ -42,8 +42,8 @@ const char * usage =
 "  -l            release\n"
 "  -s            re-schedule\n"
 "  -9            hard kill\n"
-"  job_id        job identification as provided by gwps.\n"
-" -A <array_id>  array identification as provided by gwps.\n";
+"  job_id        job identification as provided by gwps\n"
+" -A <array_id>  array identification as provided by gwps\n";
 
 const char * susage =
 "usage: gwkill [-h] [-a] [-k | -t | -o | -s | -r | -l | -9] <job_id | -A array_id>\n";

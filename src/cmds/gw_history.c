@@ -1,5 +1,5 @@
 /* -------------------------------------------------------------------------- */
-/* Copyright 2002-2006 GridWay Team, Distributed Systems Architecture         */
+/* Copyright 2002-2009 GridWay Team, Distributed Systems Architecture         */
 /* Group, Universidad Complutense de Madrid                                   */
 /*                                                                            */
 /* Licensed under the Apache License, Version 2.0 (the "License"); you may    */
@@ -33,22 +33,22 @@ const char * usage =
 "SYNOPSIS\n"
 "  Prints information about the execution history of a job\n\n"
 "OPTIONS\n"
-"  -h        prints this help.\n"
-"  -n        do not print the header lines.\n"
-"  -x        xml format.\n"
-"  job_id    job identification as provided by gwps.\n\n"
+"  -h        print this help\n"
+"  -n        do not print the header lines\n"
+"  -x        xml format\n"
+"  job_id    job identification as provided by gwps\n\n"
 "FIELD INFORMATION\n"
-"  HID       host unique identification assigned by the Gridway system.\n"
-"  START     the time the job start its execution on this host.\n"
+"  HID       host unique identification assigned by the Gridway system\n"
+"  START     the time the job start its execution on this host\n"
 "  END       the time the job left this host, because it finished or it\n"
-"            was migrated.\n"
-"  PROLOG    total prolog (file stage-in phase) time.\n"
-"  WRAPPER   total wrapper (execution phase) time.\n"
-"  EPILOG    total epilog (file stage-out phase) time.\n"
-"  MIGR      total migration time.\n"
-"  REASON    the reason why the job left this host.\n"
-"  QUEUE     name of the queue.\n"
-"  HOST      FQDN/LRMS of the resource.\n";
+"            was migrated\n"
+"  PROLOG    total prolog (file stage-in phase) time\n"
+"  WRAPPER   total wrapper (execution phase) time\n"
+"  EPILOG    total epilog (file stage-out phase) time\n"
+"  MIGR      total migration time\n"
+"  REASON    the reason why the job left this host\n"
+"  QUEUE     name of the queue\n"
+"  HOST      FQDN/LRMS of the resource\n";
 
 const char * susage =
 "usage: gwhistory [-h] [-nx] <job_id>\n";

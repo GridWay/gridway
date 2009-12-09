@@ -1,5 +1,5 @@
 /* -------------------------------------------------------------------------- */
-/* Copyright 2002-2006 GridWay Team, Distributed Systems Architecture         */
+/* Copyright 2002-2009 GridWay Team, Distributed Systems Architecture         */
 /* Group, Universidad Complutense de Madrid                                   */
 /*                                                                            */
 /* Licensed under the Apache License, Version 2.0 (the "License"); you may    */
@@ -31,18 +31,18 @@
 const char * usage =
 "\n gwacct [-h] [-nx] [<-d n | -w n | -m n | -t s>] <-u user|-r host>\n\n"
 "SYNOPSIS\n"
-"  Prints accounting information about users or hosts in the GridWay system\n\n"
+"  Print accounting information about users or hosts in the GridWay system\n\n"
 "OPTIONS\n"
-"  -h        prints this help\n"
+"  -h        print this help\n"
 "  -n        do not print the header lines\n"
 "  -x        xml format\n"
 "  -d n      print accounting information from n days ago  (ex: -d 1)\n"
 "  -w n      print accounting information from n weeks ago (ex: -w 1)\n"
-"  -m n      print accounting information from n months ago(ex: -m 1)\n"
+"  -m n      print accounting information from n months ago (ex: -m 1)\n"
 "  -t s      print accounting information from s seconds, where s is an\n"
 "            epoch (ex: -t 1159809792)\n"
-"  -r host   print accounting information for host\n"
 "  -u user   print accounting information for user\n\n"
+"  -r host   print accounting information for host\n"
 "FIELD INFORMATION\n"
 "  HOST/USER host/user usage summary for this user/host\n"
 "  XFR       total transfer time on this host (for this user)\n"
@@ -104,7 +104,7 @@ int main(int argc, char **argv)
     opterr = 0;
     optind = 1;
 	
-    while((opt = getopt(argc,argv,":nxh:u:r:d:w:m:t:"))!= -1)
+    while((opt = getopt(argc,argv,":hnxu:r:d:w:m:t:"))!= -1)
         switch(opt)
         {
             case 'n': n  = 1;
