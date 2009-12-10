@@ -29,7 +29,7 @@
 /* ------------------------------------------------------------------------- */
 
 const char * usage =
-"\n gwps [-h] [-u user] [-r host] [-A AID] [-s job_state] [-o output_format] [-c delay] [-nfx] [job_id]\n\n"
+"USAGE\n gwps [-h] [-u user] [-r host] [-A AID] [-s job_state] [-o output_format] [-c delay] [-nfx] [job_id]\n\n"
 "SYNOPSIS\n"
 "  Prints information about all the jobs in the GridWay system (default)\n\n"
 "OPTIONS\n"
@@ -39,7 +39,7 @@ const char * usage =
 "  -A AID           monitor only jobs part of the array AID\n"
 "  -s job_state     monitor only jobs in state job_state (see JOB STATES)\n"
 "  -o output_format define output information (see FIELD INFORMATION)\n" 
-"  -c <delay>       refresh job information every <delay> seconds\n"
+"  -c delay         refresh job information every delay seconds\n"
 "  -n               do not print the header\n"
 "  -f               full format\n"
 "  -x               xml format\n"

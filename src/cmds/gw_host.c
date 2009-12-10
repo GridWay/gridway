@@ -30,16 +30,16 @@
 /* ------------------------------------------------------------------------- */
 
 const char * usage =
-"\n gwhost [-h] [-c delay] [-nfx] [-m job_id] [host_id]\n\n"
+"USAGE\n gwhost [-h] [-c delay] [-nfx] [-m job_id] [host_id]\n\n"
 "SYNOPSIS\n"
 "  Prints information about all the hosts in the GridWay system (default)\n\n"
 "OPTIONS\n"
 "  -h           print this help\n"
-"  -c <delay>   refresh host information every <delay> seconds\n"
+"  -c delay     refresh host information every delay seconds\n"
 "  -n           do not print the header\n"
 "  -f           full format\n"
 "  -x           xml format\n"
-"  -m <job_id>  print hosts matching the requirements of a given job\n"
+"  -m job_id    print hosts matching the requirements of a given job\n"
 "  host_id      only monitor this host_id, printing also queue information\n\n"
 "FIELD INFORMATION\n"
 "  HID          host unique identification assigned by the GridWay system\n"

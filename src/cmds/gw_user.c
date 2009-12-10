@@ -29,15 +29,15 @@
 /* ------------------------------------------------------------------------- */
 
 const char * usage =
-"\n gwuser [-h] [-nx]\n\n"
+"USAGE\n gwuser [-h] [-nx]\n\n"
 "SYNOPSIS\n"
 "  Prints information about users in the GridWay system\n\n"
 "OPTIONS\n"
 "  -h    print this help\n"
-"  -n    do not print the header lines\n\n"
-"  -x    xml format\n"
+"  -n    do not print the header lines\n"
+"  -x    xml format\n\n"
 "FIELD INFORMATION\n"
-"  UID      user unique identification assigned by the Gridway system\n"
+"  UID      user unique identification assigned by the GridWay system\n"
 "  NAME     name of this user\n"
 "  JOBS     number of Jobs in the GridWay system\n"
 "  RUN      number of running jobs\n"

@@ -29,20 +29,21 @@
 /* ------------------------------------------------------------------------- */
 
 const char * usage =
-"\n gwwait [-h] [-a] [-v] [-k] [-t timeout] <job_id ...| -A array_id>\n\n"
+"USAGE\n gwwait [-h] [-a] [-v] [-k] [-t timeout] <job_id [job_id2 ...]|-A array_id>\n\n"
 "SYNOPSIS\n"
 "  Waits for a job\n\n"
 "OPTIONS\n"
 "  -h             print this help\n"
-"  -a             any, returns when the first job of the list or array finishes\n"
+"  -a             any. Return when the first job of the list or array finishes\n"
 "  -v             print job exit code\n"
-"  -t <timeout>   do not wait more than <timeout> seconds. A negative value\n"
-"                 means waiting for ever (default)\n"
 "  -k             keep jobs. They remain in fail or done states in the\n"
 "                 GridWay system.\n"
 "                 By default, jobs are killed and their resources freed\n"
-"  -A <array_id>  array identification as provided by gwps\n"
-"  job_id ...     list of job ids as provided by gwps\n";
+"  -t timeout     do not wait more than timeout seconds. A negative value\n"
+"                 means waiting for ever (default)\n"
+"                 By default, jobs are killed and their resources freed\n"
+"  job_id [job_id2 ...] job identification or list of jobs ids as provided by gwps\n"
+"  -A array_id    array identification as provided by gwps\n";
 
 
 const char * susage =

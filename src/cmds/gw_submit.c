@@ -28,24 +28,24 @@
 /* ------------------------------------------------------------------------- */
 
 const char * usage =
-"\n gwsubmit <[-t] template> [-n tasks] [-h] [-v] [-o] [-d \"id1 id2 ...\"] [-p priotity]\n\n"
+"USAGE\n gwsubmit [-h] [-v] [-o] [-d \"id1 id2 ...\"] [-p priotity] [-n tasks [-s start] [-i increment]] <[-t] template>\n\n"
 "SYNOPSIS\n"
 "  Submits a job or an array job (if the number of tasks is defined) to gwd\n\n"
 "OPTIONS\n"
 "  -h                  print this help\n"
-"  [-t] <template>     the template file describing the job\n"
+"  -v                  print to stdout the job ids returned by gwd\n"
+"  -o                  hold job on submission\n"
+"  -d  \"id1 id2 ...\" job dependencies. Submit the job on hold state, and\n"
+"                      release it once the jobs with id1, id2, ... have finished\n"
+"  -p   <priority>     initial priority for the job\n" 
 "  -n   <tasks>        submit an array job with the given number of tasks\n"
 "                      all the jobs in the array will use the same template\n"
-"  -v                  print to stdout the job ids returned by gwd\n" 
-"  -o                  hold job on submission\n" 
-"  -d   \"id1 id2...\" job dependencies. Submit the job on hold state, and\n"
-"                      release it once jobs with id1,id2,.. have finished\n"
 "  -s   <start>        start value for custom param in array jobs. Default 0\n"
 "  -i   <increment>    increment value for custom param in array jobs.\n"
 "                      Each task has associated the value\n"
-"                      PARAM=<start> + <increment> * TASK_ID, and\n"
-"                      MAX_PARM = <start>+<increment>*(<tasks>-1). Default 1\n"
-"  -p   <priority>     initial priority for the job\n\n";
+"                      PARAM = <start> + <increment> * TASK_ID, and\n"
+"                      MAX_PARM = <start> + <increment> * (<tasks> - 1). Default 1\n"
+"  -t   <template>     template file describing the job\n\n";
 
 const char * susage =
 "usage: gwsubmit <[-t] template> [-n tasks] [-h] [-v] [-o] [-d \"id1 id2 ...\"] [-p priotity]\n";

@@ -23,15 +23,20 @@ if [ -z "${GW_LOCATION}" ]; then
 fi
 
 if [ "x$1" = "x-h" ]; then
-  echo "jsdl2gw [-h] input_jsdl [output_gwjt]"
+  echo "USAGE"
+  echo " jsdl2gw [-h] input_jsdl [output_gwjt]"
   echo
   echo "SYNOPSIS"
-  echo "   Converts a jsdl document into a gridway job template"
-  echo "   If no output file is defined, it defaults to the standard output"
+  echo "   Converts a jsdl document into a GridWay job template."
+  echo "   If no output file is defined, it defaults to the standard output."
   echo "   This enables the use of pipes with gwsubmit in the following fashion:"
   echo
   echo "          jsdl2gw jsdl-job.xml | gwsubmit"
   echo
+  echo "OPTIONS"
+  echo "    -h           print this help"
+  echo "    input_jsdl   read the jsdl document from the input_jsdl"
+  echo "    output_gwjt  store the GridWay Job Template specification in the output_gwjt.jt file"
   exit 0
 fi
 

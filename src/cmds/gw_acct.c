@@ -29,9 +29,9 @@
 /* ------------------------------------------------------------------------- */
 
 const char * usage =
-"\n gwacct [-h] [-nx] [<-d n | -w n | -m n | -t s>] <-u user|-r host>\n\n"
+"\n gwacct [-h] [-nx] [-d n|-w n|-m n|-t s] <-u user|-r host>\n\n"
 "SYNOPSIS\n"
-"  Print accounting information about users or hosts in the GridWay system\n\n"
+"  Prints accounting information about users or hosts in the GridWay system\n\n"
 "OPTIONS\n"
 "  -h        print this help\n"
 "  -n        do not print the header lines\n"
@@ -40,7 +40,7 @@ const char * usage =
 "  -w n      print accounting information from n weeks ago (ex: -w 1)\n"
 "  -m n      print accounting information from n months ago (ex: -m 1)\n"
 "  -t s      print accounting information from s seconds, where s is an\n"
-"            epoch (ex: -t 1159809792)\n"
+"            epoch (i.e. -t 1159809792)\n"
 "  -u user   print accounting information for user\n\n"
 "  -r host   print accounting information for host\n"
 "FIELD INFORMATION\n"
@@ -62,7 +62,7 @@ const char * usage =
 
 
 const char * susage =
-"usage: gwacct [-h] [-nx] [<-d n | -w n | -m n | -t s>] <-u user|-r host>\n";
+"usage: gwacct [-h] [-nx] [-d n|-w n|-m n|-t s] <-u user|-r host>\n";
 
 extern char *optarg;
 extern int   optind, opterr, optopt;

@@ -29,7 +29,7 @@
 /* ------------------------------------------------------------------------- */
 
 const char * usage =
-"\n gwhistory [-h] [-nx] <job_id>\n\n"
+"USAGE\n gwhistory [-h] [-nx] <job_id>\n\n"
 "SYNOPSIS\n"
 "  Prints information about the execution history of a job\n\n"
 "OPTIONS\n"
@@ -38,7 +38,7 @@ const char * usage =
 "  -x        xml format\n"
 "  job_id    job identification as provided by gwps\n\n"
 "FIELD INFORMATION\n"
-"  HID       host unique identification assigned by the Gridway system\n"
+"  HID       host unique identification assigned by the GridWay system\n"
 "  START     the time the job start its execution on this host\n"
 "  END       the time the job left this host, because it finished or it\n"
 "            was migrated\n"
