@@ -375,9 +375,9 @@ if test "x$ssh" = "xssh"; then
   cat >> conftest.rb << EOF
 #!/usr/bin/env ruby
 begin
-	require 'rubygems'
-	gem 'net-ssh', '< 2.0.0'
-	gem 'net-sftp', '< 2.0.0'
+#	require 'rubygems'
+#	gem 'net-ssh', '< 2.0.0'
+#	gem 'net-sftp', '< 2.0.0'
 	require 'net/ssh'
 	require 'net/sftp'
     exit 0

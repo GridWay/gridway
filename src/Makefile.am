@@ -267,7 +267,9 @@ TM_MAD_RFT_SRC = $(TM_MAD)/GWRftClient.java \
         $(TM_MAD)/GWRftResource.java \
         $(TM_MAD)/GWRftUtil.java
 
-SSH_SRC = $(SSH)/ssh_wrapper.sh \
+SSH_SRC = $(EM_MAD)/gw_em_mad_ssh.sh \
+        $(TM_MAD)/gw_tm_mad_ssh.sh \
+        $(SSH)/ssh_wrapper.sh \
         $(SSH)/ruby/gw_em_mad_ssh.rb \
         $(SSH)/ruby/gwmad.rb \
         $(SSH)/ruby/gw_tm_mad_ssh.rb \
