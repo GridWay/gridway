@@ -11,7 +11,4 @@ setup_globus
 cd_var
 mad_debug
 
-
-ruby $GW_LOCATION/libexec/ruby/gw_tm_mad_ssh.rb 2>/tmp/tm_ssh.err.log
-
-
+ruby $GW_LOCATION/libexec/ruby/gw_em_mad_ssh.rb 2>$GW_LOCATION/var/gw_em_mad_ssh.err.log

@@ -78,8 +78,11 @@ else
 DRMAA_SRC_DIR=drmaa
 endif
 
-DRMAA= $(srcdir)/drmaa
-DRMAA_PACK =$(srcdir)/$(DRMAA_SRC_DIR)/org/ggf/drmaa
+DRMAA = $(srcdir)/drmaa
+DRMAA_PACK = $(srcdir)/$(DRMAA_SRC_DIR)/org/ggf/drmaa
+
+SSH = $(srcdir)/ssh
+
 
 JAVA_HOME = @java_home@
 
@@ -263,6 +266,14 @@ TM_MAD_RFT_SRC = $(TM_MAD)/GWRftClient.java \
         $(TM_MAD)/GWRftProcessor.java \
         $(TM_MAD)/GWRftResource.java \
         $(TM_MAD)/GWRftUtil.java
+
+SSH_SRC = $(SSH)/ssh_wrapper.sh \
+        $(SSH)/ruby/gw_em_mad_ssh.rb \
+        $(SSH)/ruby/gwmad.rb \
+        $(SSH)/ruby/gw_tm_mad_ssh.rb \
+        $(SSH)/ruby/rslparser.rb \
+        $(SSH)/ruby/sshjob.rb \
+        $(SSH)/ruby/sshresource.rb
 
 DRMAA_SRC = $(COMMON)/gw_file_parser.c $(CLIENT_SRC) \
         $(DRMAA)/gw_drmaa.c $(DRMAA)/gw_drmaa_jt.c \
@@ -691,6 +702,13 @@ endif
 
 if NORDUGRID
 dist_bin_SCRIPTS += $(NORDUGRID_MAD_SRC)
+endif
+
+# --------------------------------
+# SSH Middleware Access Drivers
+# --------------------------------
+if SSH
+dist_bin_SCRIPTS += $(SSH_SRC)
 endif
 
 # ----------------------------

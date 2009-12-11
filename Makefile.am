@@ -115,6 +115,23 @@ if LDAP
 endif
 
 # ----------------------------
+# -- Script renaming - SSH
+# ----------------------------
+if SSH
+	@mkdir -p $(PREFIX)/libexec/ruby
+	@mv $(PREFIX)/bin/gw_em_mad_ssh.sh $(PREFIX)/bin/gw_em_mad_ssh
+	@mv $(PREFIX)/bin/gw_tm_mad_ssh.sh $(PREFIX)/bin/gw_tm_mad_ssh
+	@mv $(PREFIX)/bin/ssh_wrapper.sh $(PREFIX)/libexec
+	@mv $(PREFIX)/bin/gw_em_mad_ssh.rb \
+	$(PREFIX)/bin/gwmad.rb \
+	$(PREFIX)/bin/gw_tm_mad_ssh.rb \
+	$(PREFIX)/bin/rslparser.rb \
+	$(PREFIX)/bin/sshjob.rb \
+	$(PREFIX)/bin/sshresource.rb \
+	$(PREFIX)/libexec/ruby
+endif
+
+# ----------------------------
 # -- Script renaming - JSDL
 # ----------------------------
 

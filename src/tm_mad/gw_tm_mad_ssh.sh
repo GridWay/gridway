@@ -16,7 +16,6 @@
 # limitations under the License.
 # ------------------------------------------------------------------------------
 
-# Common initialization
 if [ -z "${GW_LOCATION}" ]; then
     echo "Please, set GW_LOCATION variable."
     exit -1
@@ -27,6 +26,5 @@ fi
 setup_globus
 cd_var
 mad_debug
-check_proxy
 
-exec nice -n $PRIORITY $GW_LOCATION/bin/gw_tm_mad_dummy.bin $*
+ruby $GW_LOCATION/libexec/ruby/gw_tm_mad_ssh.rb 2>$GW_LOCATION/var/gw_tm_mad_ssh.err.log

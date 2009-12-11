@@ -16,7 +16,7 @@
 # ------------------------------------------------------------------------------
 
 AC_PREREQ(2.61)
-AC_INIT([GridWay], [5.5], [contact@gridway.org])
+AC_INIT([GridWay], [5.6], [contact@gridway.org])
 AC_CONFIG_AUX_DIR(config)
 AC_CONFIG_SRCDIR([src/dm/gw_dm_action_dispatch.c])
 
@@ -163,10 +163,10 @@ if test "x$GW_DIR_SCHEME" = "xglobus"; then
 	gridftp="gridftp"
 	nordugrid=""
 	ldap=""
+	ssh=""
 	docs="no"
 	tests="no"	
 	drmaa1="no"		
-
 	jsdl=""		
 	db=""
 else
@@ -177,10 +177,10 @@ else
 	gridftp="gridftp"
 	nordugrid=""
 	ldap=""
+	ssh=""
 	docs="no"
 	tests="no"
 	drmaa1="no"
-		
 	jsdl="jsdl"	
 	db="db"
 fi
@@ -226,6 +226,13 @@ AC_ARG_ENABLE(nordugrid,  AC_HELP_STRING([--enable-nordugrid],\
 AC_ARG_ENABLE(ldap,  AC_HELP_STRING([--enable-ldap],\
   [Build LDAP support for EGEE. Default is disabled.]),\
   [if test $enableval = "yes"; then ldap="ldap"; else ldap=" "; fi], [])
+
+# --- Enable SSH Drivers ---
+
+AC_ARG_ENABLE(ssh,  AC_HELP_STRING([--enable-ssh],\
+  [Build SSH support for EGEE. Default is disabled.]),\
+  [if test $enableval = "yes"; then ssh="ssh"; else ssh=" "; fi], [])
+
 
 # --- Enable GRIDFTP MAD ---
         
@@ -351,6 +358,49 @@ EOF
   fi
  fi
 fi
+
+# --- Enable SSH Drivers ---
+
+## Checking the ruby and ruby-dev
+AM_CONDITIONAL(SSH, test "x$ssh" = "xssh")
+if test "x$ssh" = "xssh"; then
+ AC_CHECK_PROGS([RUBY],[ruby],[no])
+ if [[ "$RUBY" = "no" ]] ; then
+  RUBY_SSH_ERROR="ruby not found in your system. Install it!"
+  RUBY_SSH_TEST="no"
+  AC_MSG_ERROR([$RUBY_SSH_ERROR])
+ else
+  AC_MSG_CHECKING([whether $RUBY installation includes the openssl package])
+## Next is kind of conftest for ruby
+  cat >> conftest.rb << EOF
+#!/usr/bin/env ruby
+begin
+	require 'rubygems'
+	gem 'net-ssh', '< 2.0.0'
+	gem 'net-sftp', '< 2.0.0'
+	require 'net/ssh'
+	require 'net/sftp'
+    exit 0
+rescue LoadError
+    STDERR.puts 'Las vacas mejor en el prado, pichon!'
+    exit -1
+end
+EOF
+  $RUBY conftest.rb 2>/dev/null
+  if test $? -eq 0; then
+    rm conftest.rb
+    RUBY_SSH_TEST="yes"
+    AC_MSG_RESULT([$RUBY_SSH_TEST])
+  else
+    rm conftest.rb
+    RUBY_SSH_TEST="no"
+    AC_MSG_RESULT([$RUBY_SSH_TEST])
+    RUBY_SSH_ERROR="ruby ssh support not installed (net-ssh and net-sftp should be installed and below 2.0.0 version). Please install it or remove --enable-ssh!"
+    AC_MSG_ERROR([$RUBY_SSH_ERROR])
+  fi
+ fi
+fi
+
 
 # --- Enable JSDL  ---
 
