@@ -100,7 +100,7 @@ void print_license()
 {
   printf(GW_VERSION"\n");
   printf("Copyright 2002-2009 GridWay Team,\n");
-  printf("Distributed Systems Architecture Group (http://dsa-research.org),\n")
+  printf("Distributed Systems Architecture Group (http://dsa-research.org),\n");
   printf("Universidad Complutense de Madrid\n\n");
   printf("GridWay is distributed and licensed for use under the terms of the\n"); 
   printf("Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0).\n");
