@@ -2,4 +2,3 @@ EXECUTABLE=/usr/bin/expr
 ARGUMENTS="`cat out.A`" + 1
 INPUT_FILES=out.A
 STDOUT_FILE=out.C
-REQUIREMENTS = HOSTNAME = "*.dacya.ucm.es"
