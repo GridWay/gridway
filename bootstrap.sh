@@ -58,7 +58,8 @@ if [ ! -d config ] ; then
     autoscan
 fi    
 
-libtoolize --force \
-&& aclocal  \
-&& automake -i --foreign --copy --add-missing \
-&& autoconf 
+libtoolize --force 
+aclocal
+autoscan
+automake -i --foreign --copy --add-missing
+autoconf 

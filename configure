@@ -701,7 +701,7 @@ PACKAGE_TARNAME='gridway'
 PACKAGE_VERSION='5.6.0'
 PACKAGE_STRING='GridWay 5.6.0'
 PACKAGE_BUGREPORT='contact@gridway.org'
-PACKAGE_URL=''
+PACKAGE_URL='http://gridway.org'
 
 ac_unique_file="src/dm/gw_dm_action_dispatch.c"
 ac_default_prefix=/opt/gridway/5.6.0
@@ -1616,6 +1616,7 @@ Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
 
 Report bugs to <contact@gridway.org>.
+GridWay home page: <http://gridway.org>.
 _ACEOF
 ac_status=$?
 fi
@@ -2731,7 +2732,6 @@ ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
 
 
 ac_aux_dir=
@@ -18562,7 +18562,8 @@ $config_links
 Configuration commands:
 $config_commands
 
-Report bugs to <contact@gridway.org>."
+Report bugs to <contact@gridway.org>.
+GridWay home page: <http://gridway.org>."
 
 _ACEOF
 cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1

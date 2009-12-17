@@ -16,12 +16,11 @@
 # ------------------------------------------------------------------------------
 
 AC_PREREQ(2.61)
-AC_INIT([GridWay], [5.6.0], [contact@gridway.org])
-AC_PACKAGE_URL([http://gridway.org])
+AC_INIT([GridWay], [5.6.0], [contact@gridway.org], [gridway], [http://gridway.org])
 AC_CONFIG_AUX_DIR(config)
 AC_CONFIG_SRCDIR([src/dm/gw_dm_action_dispatch.c])
 
-AC_PREFIX_DEFAULT([/opt/gridway/AC_PACKAGE_VERSION])
+AC_PREFIX_DEFAULT([/opt/AC_PACKAGE_TARNAME/AC_PACKAGE_VERSION])
 
 #-------------------------------------------------------------------------------
 # --- Globus Directory Scheme --- Need to be checked first
