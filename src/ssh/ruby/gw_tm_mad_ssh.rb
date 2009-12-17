@@ -17,10 +17,6 @@
 
 $:<<(ENV['GW_LOCATION']+'/libexec/ruby')
 
-begin
-	require "rubygems"
-end
-
 require 'pp'
 require 'gwmad'
 require 'net/ssh'
