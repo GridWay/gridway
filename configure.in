@@ -287,6 +287,7 @@ if test "x$drmaa_ruby" = "xdrmaa_ruby"; then
   RUBY_TEST="no"
   AC_MSG_ERROR([$RUBY_ERROR])
  else
+  AC_CHECK_HEADERS([sys/time.h])
   AC_MSG_CHECKING([whether $RUBY installation includes the ruby-dev package])
 ## Next is kind of conftest for ruby
   cat >> conftest.rb << EOF
@@ -454,8 +455,10 @@ LT_INIT
 AC_PROG_AWK
 AC_PROG_YACC
 AC_PROG_CC
+AC_PROG_CXX
 AC_PROG_LN_S
 AC_PROG_LIBTOOL
+AC_PROG_RANLIB
 AC_PROG_MAKE_SET
 
 AC_PATH_PROG(JAVAC_PATH, javac)
@@ -545,7 +548,7 @@ AC_FUNC_ALLOCA
 AC_HEADER_DIRENT
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
-AC_CHECK_HEADERS([arpa/inet.h fcntl.h inttypes.h libintl.h limits.h netdb.h netinet/in.h stddef.h stdlib.h string.h sys/socket.h unistd.h])
+AC_CHECK_HEADERS([arpa/inet.h fcntl.h inttypes.h libintl.h limits.h netdb.h netinet/in.h stddef.h stdlib.h string.h sys/socket.h unistd.h float.h malloc.h])
 
 #------------------------------------------------------------------------------
 # Checks for typedefs, structures, and compiler characteristics.
@@ -573,12 +576,12 @@ AC_TYPE_UINT8_T
 
 AC_REPLACE_FNMATCH
 AC_FUNC_FORK
-#AC_FUNC_MALLOC
-#AC_FUNC_REALLOC
+AC_FUNC_MALLOC
+AC_FUNC_REALLOC
 AC_FUNC_SELECT_ARGTYPES
 AC_FUNC_STAT
 AC_FUNC_VPRINTF
-AC_CHECK_FUNCS([dup2 getcwd gethostbyname gethostname gettimeofday memset realpath select socket strcasecmp strchr strdup strerror strrchr strstr])
+AC_CHECK_FUNCS([dup2 getcwd gethostbyname gethostname gettimeofday memset realpath select socket strcasecmp strchr strdup strerror strrchr strstr rmdir setenv])
 
 #------------------------------------------------------------------------------
 # Config Files
