@@ -305,7 +305,7 @@ int main(int argc, char **argv)
         return -1;
     }  
 #else
-	fprintf(stderr,"FAILED: Berkley Database support not compiled in GridWay\n");
+	fprintf(stderr,"FAILED: Berkeley Database support not compiled in GridWay\n");
 #endif
 
 	if( (u + r) == 2 )	
