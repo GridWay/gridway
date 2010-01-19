@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------
-# Copyright 2002-2009 GridWay Team, Distributed Systems Architecture
+# Copyright 2002-2010 GridWay Team, Distributed Systems Architecture
 # Group, Universidad Complutense de Madrid
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
@@ -15,8 +15,8 @@
 # limitations under the License.
 # ------------------------------------------------------------------------------
 
-AC_PREREQ(2.61)
-AC_INIT([GridWay], [5.6.0], [contact@gridway.org], [gridway], [http://gridway.org])
+AC_PREREQ(2.59)
+AC_INIT([GridWay],[5.6.1],[contact@gridway.org],[gridway],[http://gridway.org])
 AC_CONFIG_AUX_DIR(config)
 AC_CONFIG_SRCDIR([src/dm/gw_dm_action_dispatch.c])
 
@@ -28,8 +28,8 @@ AC_PREFIX_DEFAULT([/opt/AC_PACKAGE_TARNAME/AC_PACKAGE_VERSION])
 
 GW_DIR_SCHEME=" "
 
-AC_ARG_ENABLE(globus-scheme,  AC_HELP_STRING([--enable-globus-scheme],\
-  [Adjusts directory layout to install GridWay in GLOBUS_LOCATION. Default is disabled.]),\
+AC_ARG_ENABLE(globus-scheme,  AS_HELP_STRING(--enable-globus-scheme,\
+  Adjusts directory layout to install GridWay in GLOBUS_LOCATION. Default is disabled.),\
   [if test $enableval = "yes"; then GW_DIR_SCHEME="globus"; else \
   GW_DIR_SCHEME=" "; fi ], [])
   
@@ -46,8 +46,8 @@ else
    echo "ok"
 fi
 
-AC_ARG_WITH(flavor,  AC_HELP_STRING([--with-flavor],\
-   [Specify globus build flavor (eg. gcc32dbg)]),\
+AC_ARG_WITH(flavor,  AS_HELP_STRING(--with-flavor,\
+   Specify globus build flavor (eg. gcc32dbg)),\
    [FLAVOR=$withval], [])
 
 if test -z "$FLAVOR" ; then
@@ -187,76 +187,76 @@ fi
 
 # --- Enable DRMAA library ---
 
-AC_ARG_ENABLE(drmaa,  AC_HELP_STRING([--disable-drmaa],\
-  [Do not build drmaa support. Default is enabled.]),\
+AC_ARG_ENABLE(drmaa,  AS_HELP_STRING(--disable-drmaa,\
+  Do not build drmaa support. Default is enabled.),\
   [if test $enableval = "yes"; then drmaa="drmaa"; else drmaa=" "; fi], [])
 
 # --- Enable DRMAA 1.0 JAVA library ---
 
-AC_ARG_ENABLE(drmaa1,  AC_HELP_STRING([--enable-drmaa1],\
-  [Build drmaa 1.0 specification for the JAVA Bindings. Default is disabled.]),\
+AC_ARG_ENABLE(drmaa1,  AS_HELP_STRING(--enable-drmaa1,\
+  Build drmaa 1.0 specification for the JAVA Bindings. Default is disabled.),\
   [if test $enableval = "yes"; then drmaa1="drmaa1";drmaa="drmaa"; else drmaa1=" "; drmaa=" "; fi], [])
   
 # --- Enable DRMAA RUBY library ---
 
-AC_ARG_ENABLE(drmaa_ruby,  AC_HELP_STRING([--enable-drmaa-ruby],\
-  [Build ruby drmaa support. Default is disabled.]),\
+AC_ARG_ENABLE(drmaa_ruby,  AS_HELP_STRING(--enable-drmaa-ruby,\
+  Build ruby drmaa support. Default is disabled.),\
   [if test $enableval = "yes"; then drmaa_ruby="drmaa_ruby"; else drmaa_ruby=" "; fi], [])
 
 # --- Enable preWS Drivers ---
 
-AC_ARG_ENABLE(prews,  AC_HELP_STRING([--enable-prews],\
-  [Build pre-webservices support. Default is disabled.]),\
+AC_ARG_ENABLE(prews,  AS_HELP_STRING(--enable-prews,\
+  Build pre-webservices support. Default is disabled.),\
   [if test $enableval = "yes"; then prews="prews"; else prews=" "; fi], [])
   
 # --- Enable WS Drivers ---
 
-AC_ARG_ENABLE(ws,  AC_HELP_STRING([--disable-ws],\
-  [Do not build web-services support. Default is enabled.]),\
+AC_ARG_ENABLE(ws,  AS_HELP_STRING(--disable-ws,\
+  Do not build web-services support. Default is enabled.),\
   [if test $enableval = "yes"; then ws="ws"; else ws=" "; fi], [])
 
 # --- Enable NORDUGRID Drivers ---
 
-AC_ARG_ENABLE(nordugrid,  AC_HELP_STRING([--enable-nordugrid],\
-  [Build nordugrid support. Default is disabled.]),\
+AC_ARG_ENABLE(nordugrid,  AS_HELP_STRING(--enable-nordugrid,\
+  Build nordugrid support. Default is disabled.),\
   [if test $enableval = "yes"; then nordugrid="nordugrid"; else nordugrid=" "; fi], [])
 
 # --- Enable LDAP Drivers ---
 
-AC_ARG_ENABLE(ldap,  AC_HELP_STRING([--enable-ldap],\
-  [Build LDAP support for EGEE. Default is disabled.]),\
+AC_ARG_ENABLE(ldap,  AS_HELP_STRING(--enable-ldap,\
+  Build LDAP support for EGEE. Default is disabled.),\
   [if test $enableval = "yes"; then ldap="ldap"; else ldap=" "; fi], [])
 
 # --- Enable SSH Drivers ---
 
-AC_ARG_ENABLE(ssh,  AC_HELP_STRING([--enable-ssh],\
-  [Build SSH support for EGEE. Default is disabled.]),\
+AC_ARG_ENABLE(ssh,  AS_HELP_STRING(--enable-ssh,\
+  Build SSH support for EGEE. Default is disabled.),\
   [if test $enableval = "yes"; then ssh="ssh"; else ssh=" "; fi], [])
 
 
 # --- Enable GRIDFTP MAD ---
         
-AC_ARG_ENABLE(gridftp,  AC_HELP_STRING([--disable-gridftp],\
-  [Do not build gridftp support. Default is enabled. \
-   Useful to compile in an EGEE UI.]),\
+AC_ARG_ENABLE(gridftp,  AS_HELP_STRING(--disable-gridftp,\
+  Do not build gridftp support. Default is enabled. \
+   Useful to compile in an EGEE UI.),\
   [if test $enableval = "yes"; then gridftp="gridftp"; else gridftp=" "; fi],[])
 
 # --- Enable JSDL  ---
 
-AC_ARG_ENABLE(jsdl,  AC_HELP_STRING([--enable-jsdl],\
-  [Build jsdl support. Disabled for GT builds.]),\
+AC_ARG_ENABLE(jsdl,  AS_HELP_STRING(--enable-jsdl,\
+  Build jsdl support. Disabled for GT builds.),\
   [if test $enableval = "yes"; then jsdl="jsdl"; else jsdl=" "; fi], [])
 
 # --- Enable Debug ---
 
-AC_ARG_ENABLE(debug,  AC_HELP_STRING([--enable-debug],\
-  [Enable debug info in GW logs. Default is disabled.]),\
+AC_ARG_ENABLE(debug,  AS_HELP_STRING(--enable-debug,\
+  Enable debug info in GW logs. Default is disabled.),\
   [CFLAGS="$CFLAGS -Wall -g -DGWIMDEBUG -DGWJOBDEBUG -DGWHOSTDEBUG -DGWEMDEBUG -DGWDMDEBUG  -DGWTMDEBUG -DGWUSERDEBUG -DGWSCHEDDEBUG";], [])
 
 # --- With DB ---      
 
-AC_ARG_WITH(db,  AC_HELP_STRING([--with-db=<no|path_to_db>],\
-       [Build db support for accounting. Disabled for GT builds.]),\
+AC_ARG_WITH(db,  AS_HELP_STRING(--with-db=<no|path_to_db>,\
+       Build db support for accounting. Disabled for GT builds.),\
        [if test $withval = "no";  then  db=" "; else \       
         if test $withval = "yes"; then  db="db"; db_path=" "; fi; \
         if test $withval != "yes"; then db="db"; db_path="$withval"; fi; \
@@ -264,8 +264,8 @@ AC_ARG_WITH(db,  AC_HELP_STRING([--with-db=<no|path_to_db>],\
 
 # --- With GridWay tests ---
 
-AC_ARG_WITH(tests,  AC_HELP_STRING([--with-tests],\
-        [Build GridWay test suite. Default is disabled.]),\
+AC_ARG_WITH(tests,  AS_HELP_STRING(--with-tests,\
+        Build GridWay test suite. Default is disabled.),\
         [if test $withval = "yes"; then tests="yes"; else tests="no"; fi], [])
           
 #------------------------------------------------------------------------------
@@ -286,7 +286,7 @@ if test "x$drmaa_ruby" = "xdrmaa_ruby"; then
   RUBY_TEST="no"
   AC_MSG_ERROR([$RUBY_ERROR])
  else
-  AC_CHECK_HEADERS([sys/time.h])
+#  AC_CHECK_HEADERS([sys/time.h])
   AC_MSG_CHECKING([whether $RUBY installation includes the ruby-dev package])
 ## Next is kind of conftest for ruby
   cat >> conftest.rb << EOF
@@ -439,25 +439,14 @@ fi
 
 AM_CONDITIONAL(GW_GLOBUS_DIRS, test "x$GW_DIR_SCHEME" = "xglobus")
 
-
-#------------------------------------------------------------------------------                                                    
-# Checks for LIBTOOL.                                                                                                             
-#------------------------------------------------------------------------------
-
-LT_PREREQ([2.2.6])
-LT_INIT
-
 #------------------------------------------------------------------------------
 # Checks for programs.
 #------------------------------------------------------------------------------
-
 AC_PROG_AWK
 AC_PROG_YACC
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_LN_S
-AC_PROG_LIBTOOL
-AC_PROG_RANLIB
 AC_PROG_MAKE_SET
 
 AC_PATH_PROG(JAVAC_PATH, javac)
@@ -543,11 +532,12 @@ fi
 # Checks for header files.
 #------------------------------------------------------------------------------
 
-AC_FUNC_ALLOCA
 AC_HEADER_DIRENT
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
+# Even if it is suggested by autoscan, it is better to leave malloc.h off
 AC_CHECK_HEADERS([arpa/inet.h fcntl.h inttypes.h libintl.h limits.h netdb.h netinet/in.h stddef.h stdlib.h string.h sys/socket.h unistd.h float.h malloc.h])
+#AC_CHECK_HEADERS([arpa/inet.h fcntl.h inttypes.h libintl.h limits.h netdb.h netinet/in.h stddef.h stdlib.h string.h sys/socket.h unistd.h])
 
 #------------------------------------------------------------------------------
 # Checks for typedefs, structures, and compiler characteristics.
@@ -558,16 +548,8 @@ AC_C_INLINE
 AC_TYPE_MODE_T
 AC_TYPE_PID_T
 AC_TYPE_SIZE_T
-AC_TYPE_SSIZE_T
 AC_HEADER_TIME
 AC_STRUCT_TM
-
-AC_TYPE_INT16_T
-AC_TYPE_INT32_T
-AC_TYPE_INT8_T
-AC_TYPE_UINT16_T
-AC_TYPE_UINT32_T
-AC_TYPE_UINT8_T
 
 #------------------------------------------------------------------------------
 # Checks for library functions.
@@ -580,14 +562,17 @@ AC_FUNC_REALLOC
 AC_FUNC_SELECT_ARGTYPES
 AC_FUNC_STAT
 AC_FUNC_VPRINTF
+AC_FUNC_CLOSEDIR_VOID
 AC_CHECK_FUNCS([dup2 getcwd gethostbyname gethostname gettimeofday memset realpath select socket strcasecmp strchr strdup strerror strrchr strstr rmdir setenv])
+
+# Libtool support
+AC_PROG_LIBTOOL
 
 #------------------------------------------------------------------------------
 # Config Files
 #------------------------------------------------------------------------------
 
-AC_CONFIG_FILES([Makefile
-                  src/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile])
                   
-AC_OUTPUT(
-                  pkgdata/pkg_data_src.gpt)
+AC_CONFIG_FILES([pkgdata/pkg_data_src.gpt])
+AC_OUTPUT
