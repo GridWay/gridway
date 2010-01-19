@@ -30,24 +30,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # --------------------------------------------------------------------------
-
-# -----------------------------
-# Automake Options
-# -----------------------------
-
-
-
-
-
-SOURCES = $(__srcdir__drmaa_libDrmaaJNI_la_SOURCES) $(__srcdir__drmaa_libDrmaaJNI___GLOBUS_FLAVOR_NAME__la_SOURCES) $(__srcdir__drmaa_libdrmaa_la_SOURCES) $(__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_SOURCES) $(__srcdir__cmds_gwacct_SOURCES) $(__srcdir__cmds_gwhistory_SOURCES) $(__srcdir__cmds_gwhost_SOURCES) $(__srcdir__cmds_gwkill_SOURCES) $(__srcdir__cmds_gwps_SOURCES) $(__srcdir__cmds_gwsubmit_SOURCES) $(__srcdir__cmds_gwuser_SOURCES) $(__srcdir__cmds_gwwait_SOURCES) $(__srcdir__em_mad_gw_em_mad_prews_bin_SOURCES) $(__srcdir__gwd_gwd_SOURCES) $(__srcdir__scheduler_gw_flood_scheduler_SOURCES) $(__srcdir__scheduler_gw_sched_SOURCES) $(__srcdir__test_gwtest_SOURCES) $(__srcdir__tm_mad_gw_tm_mad_dummy_bin_SOURCES) $(__srcdir__tm_mad_gw_tm_mad_ftp_bin_SOURCES)
-
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
-top_builddir = ..
+top_builddir = .
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 INSTALL = @INSTALL@
 install_sh_DATA = $(install_sh) -c -m 644
@@ -63,494 +52,45 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-@DRMAA1_TRUE@am__append_1 = $(DRMAA_PACK)/GridWayJobInfo.java \
-@DRMAA1_TRUE@        $(DRMAA_PACK)/GridWayJobTemplate.java \
-@DRMAA1_TRUE@        $(DRMAA_PACK)/GridWaySessionFactory.java \
-@DRMAA1_TRUE@        $(DRMAA_PACK)/GridWaySession.java \
-@DRMAA1_TRUE@        $(DRMAA_PACK)/SimpleJobTemplate.java
-
-@DRMAA1_FALSE@am__append_2 = $(DRMAA_PACK)/DrmaaRuntimeException.java \
-@DRMAA1_FALSE@        $(DRMAA_PACK)/InvalidAttributeException.java \
-@DRMAA1_FALSE@        $(DRMAA_PACK)/JobTemplateImpl.java \
-@DRMAA1_FALSE@        $(DRMAA_PACK)/JobInfoImpl.java \
-@DRMAA1_FALSE@        $(DRMAA_PACK)/NoResourceUsageException.java \
-@DRMAA1_FALSE@        $(DRMAA_PACK)/SessionException.java \
-@DRMAA1_FALSE@        $(DRMAA_PACK)/SessionImpl.java \
-@DRMAA1_FALSE@        $(DRMAA_PACK)/SessionFactoryImpl.java        
-
-@GW_GLOBUS_DIRS_FALSE@am__append_3 = $(GLOBUS_INCLUDES)
-bin_PROGRAMS = $(srcdir)/gwd/gwd$(EXEEXT) $(srcdir)/cmds/gwps$(EXEEXT) \
-	$(srcdir)/cmds/gwsubmit$(EXEEXT) \
-	$(srcdir)/cmds/gwhistory$(EXEEXT) \
-	$(srcdir)/cmds/gwkill$(EXEEXT) $(srcdir)/cmds/gwhost$(EXEEXT) \
-	$(srcdir)/cmds/gwwait$(EXEEXT) $(srcdir)/cmds/gwuser$(EXEEXT) \
-	$(srcdir)/cmds/gwacct$(EXEEXT) \
-	$(srcdir)/scheduler/gw_flood_scheduler$(EXEEXT) \
-	$(srcdir)/scheduler/gw_sched$(EXEEXT) $(am__EXEEXT_1) \
-	$(am__EXEEXT_2)
-
-# ----------------------------
-# JSDL Support
-# ----------------------------
-@JSDL_TRUE@am__append_4 = $(CMDS)/jsdl2gw.sh
-@JSDL_TRUE@am__append_5 = $(srcdir)/cmds/gw_jsdl.jar
-@DRMAA_TRUE@@GW_GLOBUS_DIRS_TRUE@am__append_6 = $(srcdir)/drmaa/libdrmaa_$(GLOBUS_FLAVOR_NAME).la \
-@DRMAA_TRUE@@GW_GLOBUS_DIRS_TRUE@	$(srcdir)/drmaa/libDrmaaJNI_$(GLOBUS_FLAVOR_NAME).la
-@DRMAA_TRUE@@GW_GLOBUS_DIRS_FALSE@am__append_7 =  \
-@DRMAA_TRUE@@GW_GLOBUS_DIRS_FALSE@	$(srcdir)/drmaa/libdrmaa.la \
-@DRMAA_TRUE@@GW_GLOBUS_DIRS_FALSE@	$(srcdir)/drmaa/libDrmaaJNI.la
-
-# --------------------------------
-# Pre-WS Middleware Access Drivers
-# --------------------------------
-
-# ---------------------- EM MADS ------------------------
-
-# ---------------------- TM MADS ------------------------
-@PREWS_TRUE@am__append_8 = $(srcdir)/em_mad/gw_em_mad_prews.bin \
-@PREWS_TRUE@	$(srcdir)/tm_mad/gw_tm_mad_dummy.bin
-@PREWS_TRUE@am__append_9 = $(EM_MAD)/gw_em_mad_prews.sh \
-@PREWS_TRUE@	$(TM_MAD)/gw_tm_mad_dummy.sh \
-@PREWS_TRUE@	$(IM_MAD)/gw_im_mad_mds2.sh \
-@PREWS_TRUE@	$(IM_MAD)/gw_im_mad_mds2_glue.sh
-@GW_GLOBUS_DIRS_TRUE@am__append_10 =
-@GRIDFTP_TRUE@am__append_11 = $(srcdir)/tm_mad/gw_tm_mad_ftp.bin
-@GRIDFTP_TRUE@am__append_12 = $(TM_MAD)/gw_tm_mad_ftp.sh
-@GRIDFTP_TRUE@@GW_GLOBUS_DIRS_TRUE@am__append_13 = 
-@LDAP_TRUE@am__append_14 = $(IM_MAD)/gw_im_mad_egee_ldap.sh \
-@LDAP_TRUE@	$(IM_MAD)/gw_im_mad_egee_ldap.pl
-@WS_TRUE@am__append_15 = $(IM_MAD)/gw_im_mad_mds4.sh \
-@WS_TRUE@	$(IM_MAD)/gw_im_mad_mds4_thr.sh \
-@WS_TRUE@	$(EM_MAD)/gw_em_mad_ws.sh
-@WS_TRUE@am__append_16 = $(srcdir)/im_mad/gw_im_mad_ws.jar \
-@WS_TRUE@	$(srcdir)/em_mad/gw_em_mad_ws.jar
-
-# --------------------------------
-# NORDUGRID Middleware Access Drivers
-# --------------------------------
-@NORDUGRID_TRUE@am__append_17 = $(NORDUGRID_MAD_SRC)
-
-# --------------------------------
-# SSH Middleware Access Drivers
-# --------------------------------
-@SSH_TRUE@am__append_18 = $(SSH_SRC)
-@TESTS_TRUE@test_PROGRAMS = $(srcdir)/test/gwtest$(EXEEXT)
-subdir = src
-DIST_COMMON = $(COMMON)/gw_template_parser.c $(GWD)/gw_conf_parser.c \
-	$(GWD)/gw_sch_conf_parser.c $(GWD)/gw_sch_conf_syntax.c \
-	$(GWD)/gw_sch_conf_syntax.h $(HOST)/gw_host_attr_parser.c \
-	$(HOST)/gw_host_rank_syntax.c $(HOST)/gw_host_rank_syntax.h \
-	$(HOST)/gw_host_reqs_syntax.c $(HOST)/gw_host_reqs_syntax.h \
-	$(HOST)/gw_host_update_syntax.c \
-	$(HOST)/gw_host_update_syntax.h \
-	$(JOB)/gw_job_template_var_parser.c \
-	$(am__dist_bin_SCRIPTS_DIST) $(flavorinclude_HEADERS) \
-	$(srcdir)/Makefile.am $(srcdir)/Makefile.in
+@DRMAA_RUBY_TRUE@am__append_1 = src/drmaa/ruby
+DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
+	$(srcdir)/Makefile.in $(top_srcdir)/configure \
+	$(top_srcdir)/pkgdata/pkg_data_src.gpt.in config/compile \
+	config/config.guess config/config.sub config/install-sh \
+	config/ltmain.sh config/missing config/ylwrap
+subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.in
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
+am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
+ configure.lineno configure.status.lineno
 mkinstalldirs = $(install_sh) -d
-CONFIG_CLEAN_FILES =
-am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
-am__vpath_adj = case $$p in \
-    $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
-    *) f=$$p;; \
-  esac;
-am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
-am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(bindir)" \
-	"$(DESTDIR)$(testdir)" "$(DESTDIR)$(bindir)" \
-	"$(DESTDIR)$(bindir)" "$(DESTDIR)$(em_ws_jardir)" \
-	"$(DESTDIR)$(im_ws_jardir)" "$(DESTDIR)$(jardir)" \
-	"$(DESTDIR)$(jsdl_jardir)" "$(DESTDIR)$(flavorincludedir)"
-libLTLIBRARIES_INSTALL = $(INSTALL)
-LTLIBRARIES = $(lib_LTLIBRARIES)
-@GW_GLOBUS_DIRS_FALSE@__srcdir__drmaa_libDrmaaJNI_la_DEPENDENCIES =  \
-@GW_GLOBUS_DIRS_FALSE@	$(srcdir)/drmaa/libdrmaa.la
-am____srcdir__drmaa_libDrmaaJNI_la_SOURCES_DIST =  \
-	$(DRMAA_PACK)/DrmaaJNI.c
-am__dirstamp = $(am__leading_dot)dirstamp
-am__objects_1 = $(DRMAA_PACK)/DrmaaJNI.lo
-@GW_GLOBUS_DIRS_FALSE@am___srcdir__drmaa_libDrmaaJNI_la_OBJECTS =  \
-@GW_GLOBUS_DIRS_FALSE@	$(am__objects_1)
-__srcdir__drmaa_libDrmaaJNI_la_OBJECTS =  \
-	$(am___srcdir__drmaa_libDrmaaJNI_la_OBJECTS)
-@DRMAA_TRUE@@GW_GLOBUS_DIRS_FALSE@am___srcdir__drmaa_libDrmaaJNI_la_rpath =  \
-@DRMAA_TRUE@@GW_GLOBUS_DIRS_FALSE@	-rpath $(libdir)
-@GW_GLOBUS_DIRS_TRUE@__srcdir__drmaa_libDrmaaJNI___GLOBUS_FLAVOR_NAME__la_DEPENDENCIES = $(srcdir)/drmaa/libdrmaa_$(GLOBUS_FLAVOR_NAME).la
-am____srcdir__drmaa_libDrmaaJNI___GLOBUS_FLAVOR_NAME__la_SOURCES_DIST =  \
-	$(DRMAA_PACK)/DrmaaJNI.c
-@GW_GLOBUS_DIRS_TRUE@am___srcdir__drmaa_libDrmaaJNI___GLOBUS_FLAVOR_NAME__la_OBJECTS =  \
-@GW_GLOBUS_DIRS_TRUE@	$(am__objects_1)
-__srcdir__drmaa_libDrmaaJNI___GLOBUS_FLAVOR_NAME__la_OBJECTS = $(am___srcdir__drmaa_libDrmaaJNI___GLOBUS_FLAVOR_NAME__la_OBJECTS)
-@DRMAA_TRUE@@GW_GLOBUS_DIRS_TRUE@am___srcdir__drmaa_libDrmaaJNI___GLOBUS_FLAVOR_NAME__la_rpath =  \
-@DRMAA_TRUE@@GW_GLOBUS_DIRS_TRUE@	-rpath $(libdir)
-__srcdir__drmaa_libdrmaa_la_LIBADD =
-am____srcdir__drmaa_libdrmaa_la_SOURCES_DIST =  \
-	$(COMMON)/gw_file_parser.c $(CLIENT)/gw_client_job_match.c \
-	$(CLIENT)/gw_client_submit.c $(CLIENT)/gw_client_host_status.c \
-	$(CLIENT)/gw_client_job_status.c \
-	$(CLIENT)/gw_client_user_status.c $(CLIENT)/gw_client_init.c \
-	$(CLIENT)/gw_client_signal.c $(CLIENT)/gw_client_wait.c \
-	$(HOST)/gw_host_rank_syntax.c $(HOST)/gw_host_reqs_syntax.c \
-	$(HOST)/gw_host_attr_parser.c $(HOST)/gw_host_update_syntax.c \
-	$(HOST)/gw_host_var.c $(DRMAA)/gw_drmaa.c \
-	$(DRMAA)/gw_drmaa_jt.c $(COMMON)/gw_template_parser.l \
-	$(COMMON)/gw_template.c $(COMMON)/gw_log.c
-am__objects_2 =  \
-	$(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_job_match.lo \
-	$(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_submit.lo \
-	$(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_host_status.lo \
-	$(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_job_status.lo \
-	$(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_user_status.lo \
-	$(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_init.lo \
-	$(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_signal.lo \
-	$(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_wait.lo \
-	$(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_rank_syntax.lo \
-	$(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_reqs_syntax.lo \
-	$(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_attr_parser.lo \
-	$(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_update_syntax.lo \
-	$(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_var.lo
-am__objects_3 =  \
-	$(COMMON)/__srcdir__drmaa_libdrmaa_la-gw_file_parser.lo \
-	$(am__objects_2) \
-	$(DRMAA)/__srcdir__drmaa_libdrmaa_la-gw_drmaa.lo \
-	$(DRMAA)/__srcdir__drmaa_libdrmaa_la-gw_drmaa_jt.lo \
-	$(COMMON)/__srcdir__drmaa_libdrmaa_la-gw_template_parser.lo \
-	$(COMMON)/__srcdir__drmaa_libdrmaa_la-gw_template.lo \
-	$(COMMON)/__srcdir__drmaa_libdrmaa_la-gw_log.lo
-@GW_GLOBUS_DIRS_FALSE@am___srcdir__drmaa_libdrmaa_la_OBJECTS =  \
-@GW_GLOBUS_DIRS_FALSE@	$(am__objects_3)
-__srcdir__drmaa_libdrmaa_la_OBJECTS =  \
-	$(am___srcdir__drmaa_libdrmaa_la_OBJECTS)
-@DRMAA_TRUE@@GW_GLOBUS_DIRS_FALSE@am___srcdir__drmaa_libdrmaa_la_rpath =  \
-@DRMAA_TRUE@@GW_GLOBUS_DIRS_FALSE@	-rpath $(libdir)
-__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_LIBADD =
-am____srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_SOURCES_DIST =  \
-	$(COMMON)/gw_file_parser.c $(CLIENT)/gw_client_job_match.c \
-	$(CLIENT)/gw_client_submit.c $(CLIENT)/gw_client_host_status.c \
-	$(CLIENT)/gw_client_job_status.c \
-	$(CLIENT)/gw_client_user_status.c $(CLIENT)/gw_client_init.c \
-	$(CLIENT)/gw_client_signal.c $(CLIENT)/gw_client_wait.c \
-	$(HOST)/gw_host_rank_syntax.c $(HOST)/gw_host_reqs_syntax.c \
-	$(HOST)/gw_host_attr_parser.c $(HOST)/gw_host_update_syntax.c \
-	$(HOST)/gw_host_var.c $(DRMAA)/gw_drmaa.c \
-	$(DRMAA)/gw_drmaa_jt.c $(COMMON)/gw_template_parser.l \
-	$(COMMON)/gw_template.c $(COMMON)/gw_log.c
-am__objects_4 = $(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_job_match.lo \
-	$(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_submit.lo \
-	$(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_host_status.lo \
-	$(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_job_status.lo \
-	$(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_user_status.lo \
-	$(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_init.lo \
-	$(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_signal.lo \
-	$(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_wait.lo \
-	$(HOST)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_host_rank_syntax.lo \
-	$(HOST)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_host_reqs_syntax.lo \
-	$(HOST)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_host_attr_parser.lo \
-	$(HOST)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_host_update_syntax.lo \
-	$(HOST)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_host_var.lo
-am__objects_5 = $(COMMON)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_file_parser.lo \
-	$(am__objects_4) \
-	$(DRMAA)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_drmaa.lo \
-	$(DRMAA)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_drmaa_jt.lo \
-	$(COMMON)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_template_parser.lo \
-	$(COMMON)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_template.lo \
-	$(COMMON)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_log.lo
-@GW_GLOBUS_DIRS_TRUE@am___srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_OBJECTS =  \
-@GW_GLOBUS_DIRS_TRUE@	$(am__objects_5)
-__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_OBJECTS = $(am___srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_OBJECTS)
-@DRMAA_TRUE@@GW_GLOBUS_DIRS_TRUE@am___srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_rpath =  \
-@DRMAA_TRUE@@GW_GLOBUS_DIRS_TRUE@	-rpath $(libdir)
-@PREWS_TRUE@am__EXEEXT_1 =  \
-@PREWS_TRUE@	$(srcdir)/em_mad/gw_em_mad_prews.bin$(EXEEXT) \
-@PREWS_TRUE@	$(srcdir)/tm_mad/gw_tm_mad_dummy.bin$(EXEEXT)
-@GRIDFTP_TRUE@am__EXEEXT_2 =  \
-@GRIDFTP_TRUE@	$(srcdir)/tm_mad/gw_tm_mad_ftp.bin$(EXEEXT)
-binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
-testPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
-PROGRAMS = $(bin_PROGRAMS) $(test_PROGRAMS)
-am__objects_6 = $(DB)/gw_acct.$(OBJEXT)
-am__objects_7 = $(CLIENT)/gw_client_acct.$(OBJEXT)
-am__objects_8 = $(COMMON)/gw_action.$(OBJEXT) \
-	$(COMMON)/gw_common.$(OBJEXT) \
-	$(COMMON)/gw_file_parser.$(OBJEXT) $(COMMON)/gw_log.$(OBJEXT) \
-	$(COMMON)/gw_template.$(OBJEXT) \
-	$(COMMON)/gw_template_parser.$(OBJEXT)
-am___srcdir__cmds_gwacct_OBJECTS = $(CMDS)/gw_acct.$(OBJEXT) \
-	$(CMDS)/gw_cmds_common.$(OBJEXT) \
-	$(CLIENT)/gw_client_init.$(OBJEXT) $(am__objects_6) \
-	$(am__objects_7) $(am__objects_8)
-__srcdir__cmds_gwacct_OBJECTS = $(am___srcdir__cmds_gwacct_OBJECTS)
-__srcdir__cmds_gwacct_LDADD = $(LDADD)
-am__objects_9 = $(CLIENT)/gw_client_job_match.$(OBJEXT) \
-	$(CLIENT)/gw_client_submit.$(OBJEXT) \
-	$(CLIENT)/gw_client_host_status.$(OBJEXT) \
-	$(CLIENT)/gw_client_job_status.$(OBJEXT) \
-	$(CLIENT)/gw_client_user_status.$(OBJEXT) \
-	$(CLIENT)/gw_client_init.$(OBJEXT) \
-	$(CLIENT)/gw_client_signal.$(OBJEXT) \
-	$(CLIENT)/gw_client_wait.$(OBJEXT) \
-	$(HOST)/gw_host_rank_syntax.$(OBJEXT) \
-	$(HOST)/gw_host_reqs_syntax.$(OBJEXT) \
-	$(HOST)/gw_host_attr_parser.$(OBJEXT) \
-	$(HOST)/gw_host_update_syntax.$(OBJEXT) \
-	$(HOST)/gw_host_var.$(OBJEXT)
-am___srcdir__cmds_gwhistory_OBJECTS = $(CMDS)/gw_history.$(OBJEXT) \
-	$(CMDS)/gw_cmds_common.$(OBJEXT) $(am__objects_9) \
-	$(am__objects_8)
-__srcdir__cmds_gwhistory_OBJECTS =  \
-	$(am___srcdir__cmds_gwhistory_OBJECTS)
-__srcdir__cmds_gwhistory_LDADD = $(LDADD)
-am___srcdir__cmds_gwhost_OBJECTS = $(CMDS)/gw_host.$(OBJEXT) \
-	$(CMDS)/gw_cmds_common.$(OBJEXT) $(am__objects_9) \
-	$(am__objects_8)
-__srcdir__cmds_gwhost_OBJECTS = $(am___srcdir__cmds_gwhost_OBJECTS)
-__srcdir__cmds_gwhost_LDADD = $(LDADD)
-am___srcdir__cmds_gwkill_OBJECTS = $(CMDS)/gw_kill.$(OBJEXT) \
-	$(CMDS)/gw_cmds_common.$(OBJEXT) $(am__objects_9) \
-	$(am__objects_8)
-__srcdir__cmds_gwkill_OBJECTS = $(am___srcdir__cmds_gwkill_OBJECTS)
-__srcdir__cmds_gwkill_LDADD = $(LDADD)
-am___srcdir__cmds_gwps_OBJECTS = $(CMDS)/gw_ps.$(OBJEXT) \
-	$(CMDS)/gw_cmds_common.$(OBJEXT) $(am__objects_9) \
-	$(am__objects_8)
-__srcdir__cmds_gwps_OBJECTS = $(am___srcdir__cmds_gwps_OBJECTS)
-__srcdir__cmds_gwps_LDADD = $(LDADD)
-am___srcdir__cmds_gwsubmit_OBJECTS = $(CMDS)/gw_submit.$(OBJEXT) \
-	$(CMDS)/gw_cmds_common.$(OBJEXT) $(am__objects_9) \
-	$(am__objects_8)
-__srcdir__cmds_gwsubmit_OBJECTS =  \
-	$(am___srcdir__cmds_gwsubmit_OBJECTS)
-__srcdir__cmds_gwsubmit_LDADD = $(LDADD)
-am___srcdir__cmds_gwuser_OBJECTS = $(CMDS)/gw_user.$(OBJEXT) \
-	$(CMDS)/gw_cmds_common.$(OBJEXT) $(am__objects_9) \
-	$(am__objects_8)
-__srcdir__cmds_gwuser_OBJECTS = $(am___srcdir__cmds_gwuser_OBJECTS)
-__srcdir__cmds_gwuser_LDADD = $(LDADD)
-am___srcdir__cmds_gwwait_OBJECTS = $(CMDS)/gw_wait.$(OBJEXT) \
-	$(CMDS)/gw_cmds_common.$(OBJEXT) $(am__objects_9) \
-	$(am__objects_8)
-__srcdir__cmds_gwwait_OBJECTS = $(am___srcdir__cmds_gwwait_OBJECTS)
-__srcdir__cmds_gwwait_LDADD = $(LDADD)
-am__objects_10 = $(EM_MAD)/__srcdir__em_mad_gw_em_mad_prews_bin-gw_em_mad_prews_actions.$(OBJEXT) \
-	$(EM_MAD)/__srcdir__em_mad_gw_em_mad_prews_bin-gw_em_mad_prews.$(OBJEXT) \
-	$(EM_MAD)/__srcdir__em_mad_gw_em_mad_prews_bin-gw_em_mad_prews_pool.$(OBJEXT)
-am___srcdir__em_mad_gw_em_mad_prews_bin_OBJECTS = $(am__objects_10)
-__srcdir__em_mad_gw_em_mad_prews_bin_OBJECTS =  \
-	$(am___srcdir__em_mad_gw_em_mad_prews_bin_OBJECTS)
-am__DEPENDENCIES_1 =
-__srcdir__em_mad_gw_em_mad_prews_bin_DEPENDENCIES =  \
-	$(am__DEPENDENCIES_1)
-am__objects_11 = $(EM)/gw_em_actions.$(OBJEXT) $(EM)/gw_em.$(OBJEXT) \
-	$(EM)/gw_em_listener.$(OBJEXT) $(EM)/gw_em_mad.$(OBJEXT) \
-	$(EM)/gw_em_rsl2.$(OBJEXT) $(EM)/gw_em_rsl.$(OBJEXT) \
-	$(EM)/gw_em_state.$(OBJEXT)
-am__objects_12 = $(TM)/gw_tm_actions.$(OBJEXT) $(TM)/gw_tm.$(OBJEXT) \
-	$(TM)/gw_tm_checkpoint.$(OBJEXT) $(TM)/gw_tm_epilog.$(OBJEXT) \
-	$(TM)/gw_tm_listener.$(OBJEXT) $(TM)/gw_tm_mad.$(OBJEXT) \
-	$(TM)/gw_tm_prolog.$(OBJEXT)
-am__objects_13 = $(IM)/gw_im_actions.$(OBJEXT) $(IM)/gw_im.$(OBJEXT) \
-	$(IM)/gw_im_listener.$(OBJEXT) $(IM)/gw_im_mad.$(OBJEXT)
-am__objects_14 = $(JOB)/gw_history.$(OBJEXT) $(JOB)/gw_job.$(OBJEXT) \
-	$(JOB)/gw_job_environment.$(OBJEXT) \
-	$(JOB)/gw_job_pool.$(OBJEXT) $(JOB)/gw_job_recover.$(OBJEXT) \
-	$(JOB)/gw_job_template.$(OBJEXT) \
-	$(JOB)/gw_job_template_var_parser.$(OBJEXT) \
-	$(JOB)/gw_xfr_files.$(OBJEXT)
-am__objects_15 = $(HOST)/gw_host.$(OBJEXT) \
-	$(HOST)/gw_host_var.$(OBJEXT) $(HOST)/gw_host_pool.$(OBJEXT) \
-	$(HOST)/gw_host_rank_syntax.$(OBJEXT) \
-	$(HOST)/gw_host_reqs_syntax.$(OBJEXT) \
-	$(HOST)/gw_host_update_syntax.$(OBJEXT) \
-	$(HOST)/gw_host_attr_parser.$(OBJEXT)
-am__objects_16 = $(ARRAY)/gw_array.$(OBJEXT) \
-	$(ARRAY)/gw_array_pool.$(OBJEXT)
-am__objects_17 = $(DM)/gw_dm_action_allocate.$(OBJEXT) \
-	$(DM)/gw_dm_action_dispatch.$(OBJEXT) \
-	$(DM)/gw_dm_action_hold_release.$(OBJEXT) \
-	$(DM)/gw_dm_action_kill.$(OBJEXT) \
-	$(DM)/gw_dm_action_reschedule.$(OBJEXT) \
-	$(DM)/gw_dm_action_schedule.$(OBJEXT) \
-	$(DM)/gw_dm_action_stop_resume.$(OBJEXT) \
-	$(DM)/gw_dm_action_wait.$(OBJEXT) $(DM)/gw_dm.$(OBJEXT) \
-	$(DM)/gw_dm_listener.$(OBJEXT) $(DM)/gw_dm_mad.$(OBJEXT) \
-	$(DM)/gw_dm_state_epilogs.$(OBJEXT) \
-	$(DM)/gw_dm_state_failed.$(OBJEXT) \
-	$(DM)/gw_dm_state_migrate.$(OBJEXT) \
-	$(DM)/gw_dm_state_pending.$(OBJEXT) \
-	$(DM)/gw_dm_state_prologs.$(OBJEXT) \
-	$(DM)/gw_dm_state_stopped.$(OBJEXT) \
-	$(DM)/gw_dm_state_wrappers.$(OBJEXT) \
-	$(DM)/gw_dm_state_zombie.$(OBJEXT)
-am__objects_18 = $(RM)/gw_rm.$(OBJEXT) \
-	$(RM)/gw_rm_connection_list.$(OBJEXT) \
-	$(RM)/gw_rm_hold_release.$(OBJEXT) \
-	$(RM)/gw_rm_host_match.$(OBJEXT) \
-	$(RM)/gw_rm_host_status.$(OBJEXT) \
-	$(RM)/gw_rm_job_history.$(OBJEXT) \
-	$(RM)/gw_rm_job_status.$(OBJEXT) $(RM)/gw_rm_kill.$(OBJEXT) \
-	$(RM)/gw_rm_reschedule.$(OBJEXT) \
-	$(RM)/gw_rm_stop_resume.$(OBJEXT) $(RM)/gw_rm_submit.$(OBJEXT) \
-	$(RM)/gw_rm_user_status.$(OBJEXT) $(RM)/gw_rm_wait.$(OBJEXT)
-am__objects_19 = $(GWD)/gw_conf.$(OBJEXT) \
-	$(GWD)/gw_conf_parser.$(OBJEXT) $(GWD)/gwd.$(OBJEXT) \
-	$(GWD)/gw_sch_conf_syntax.$(OBJEXT) \
-	$(GWD)/gw_sch_conf_parser.$(OBJEXT) \
-	$(GWD)/gw_sch_conf.$(OBJEXT)
-am__objects_20 = $(UM)/gw_um.$(OBJEXT) $(UM)/gw_user.$(OBJEXT) \
-	$(UM)/gw_user_pool.$(OBJEXT)
-am___srcdir__gwd_gwd_OBJECTS = $(am__objects_11) $(am__objects_12) \
-	$(am__objects_13) $(am__objects_14) $(am__objects_15) \
-	$(am__objects_8) $(am__objects_16) $(am__objects_17) \
-	$(am__objects_18) $(am__objects_19) $(am__objects_20) \
-	$(am__objects_6)
-__srcdir__gwd_gwd_OBJECTS = $(am___srcdir__gwd_gwd_OBJECTS)
-__srcdir__gwd_gwd_LDADD = $(LDADD)
-am__objects_21 = $(SCHED)/gw_scheduler_common.$(OBJEXT) \
-	$(SCHED)/gw_scheduler_hosts.$(OBJEXT) \
-	$(SCHED)/gw_scheduler_jobs.$(OBJEXT) \
-	$(SCHED)/gw_scheduler_users.$(OBJEXT)
-am___srcdir__scheduler_gw_flood_scheduler_OBJECTS =  \
-	$(SCHED)/gw_flood_scheduler.$(OBJEXT) $(am__objects_8) \
-	$(am__objects_9) $(am__objects_6) $(am__objects_21) \
-	$(GWD)/gw_sch_conf.$(OBJEXT) \
-	$(GWD)/gw_sch_conf_syntax.$(OBJEXT) \
-	$(GWD)/gw_sch_conf_parser.$(OBJEXT)
-__srcdir__scheduler_gw_flood_scheduler_OBJECTS =  \
-	$(am___srcdir__scheduler_gw_flood_scheduler_OBJECTS)
-__srcdir__scheduler_gw_flood_scheduler_LDADD = $(LDADD)
-am___srcdir__scheduler_gw_sched_OBJECTS =  \
-	$(SCHED)/gw_scheduler.$(OBJEXT) $(am__objects_8) \
-	$(am__objects_9) $(am__objects_6) $(am__objects_21) \
-	$(GWD)/gw_sch_conf.$(OBJEXT) \
-	$(GWD)/gw_sch_conf_syntax.$(OBJEXT) \
-	$(GWD)/gw_sch_conf_parser.$(OBJEXT)
-__srcdir__scheduler_gw_sched_OBJECTS =  \
-	$(am___srcdir__scheduler_gw_sched_OBJECTS)
-__srcdir__scheduler_gw_sched_LDADD = $(LDADD)
-am____srcdir__test_gwtest_SOURCES_DIST = test/gw_test.c \
-	$(CMDS)/gw_cmds_common.c $(CLIENT)/gw_client_job_match.c \
-	$(CLIENT)/gw_client_submit.c $(CLIENT)/gw_client_host_status.c \
-	$(CLIENT)/gw_client_job_status.c \
-	$(CLIENT)/gw_client_user_status.c $(CLIENT)/gw_client_init.c \
-	$(CLIENT)/gw_client_signal.c $(CLIENT)/gw_client_wait.c \
-	$(HOST)/gw_host_rank_syntax.c $(HOST)/gw_host_reqs_syntax.c \
-	$(HOST)/gw_host_attr_parser.c $(HOST)/gw_host_update_syntax.c \
-	$(HOST)/gw_host_var.c $(COMMON)/gw_action.c \
-	$(COMMON)/gw_common.c $(COMMON)/gw_file_parser.c \
-	$(COMMON)/gw_log.c $(COMMON)/gw_template.c \
-	$(COMMON)/gw_template_parser.l
-@TESTS_TRUE@am___srcdir__test_gwtest_OBJECTS = test/gw_test.$(OBJEXT) \
-@TESTS_TRUE@	$(CMDS)/gw_cmds_common.$(OBJEXT) $(am__objects_9) \
-@TESTS_TRUE@	$(am__objects_8)
-__srcdir__test_gwtest_OBJECTS = $(am___srcdir__test_gwtest_OBJECTS)
-__srcdir__test_gwtest_LDADD = $(LDADD)
-am__objects_22 = $(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_dummy_bin-gw_tm_dummy_mad.$(OBJEXT)
-am___srcdir__tm_mad_gw_tm_mad_dummy_bin_OBJECTS = $(am__objects_22)
-__srcdir__tm_mad_gw_tm_mad_dummy_bin_OBJECTS =  \
-	$(am___srcdir__tm_mad_gw_tm_mad_dummy_bin_OBJECTS)
-__srcdir__tm_mad_gw_tm_mad_dummy_bin_DEPENDENCIES =  \
-	$(am__DEPENDENCIES_1)
-am____srcdir__tm_mad_gw_tm_mad_ftp_bin_SOURCES_DIST =  \
-	$(TM_MAD)/gw_tm_ftp_mad.c $(TM_MAD)/gw_tm_ftp_queue.c \
-	$(TM_MAD)/gw_tm_ftp_stack.c $(TM_MAD)/gw_tm_ftp_transfer.c \
-	$(TM_MAD)/gw_tm_ftp_xfr_pool.c
-am__objects_23 = $(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_mad.$(OBJEXT) \
-	$(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_queue.$(OBJEXT) \
-	$(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_stack.$(OBJEXT) \
-	$(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_transfer.$(OBJEXT) \
-	$(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_xfr_pool.$(OBJEXT)
-@GRIDFTP_TRUE@am___srcdir__tm_mad_gw_tm_mad_ftp_bin_OBJECTS =  \
-@GRIDFTP_TRUE@	$(am__objects_23)
-__srcdir__tm_mad_gw_tm_mad_ftp_bin_OBJECTS =  \
-	$(am___srcdir__tm_mad_gw_tm_mad_ftp_bin_OBJECTS)
-@GRIDFTP_TRUE@__srcdir__tm_mad_gw_tm_mad_ftp_bin_DEPENDENCIES =  \
-@GRIDFTP_TRUE@	$(am__DEPENDENCIES_1)
-binSCRIPT_INSTALL = $(INSTALL_SCRIPT)
-am__dist_bin_SCRIPTS_DIST = $(CMDS)/gw_dagman.rb \
-	$(CMDS)/dagman/node.rb $(CMDS)/dagman/runner.rb \
-	$(CMDS)/dagman/parse.rb $(CMDS)/dagman/gridway.rb \
-	$(CMDS)/jsdl2gw.sh $(EM_MAD)/gw_em_mad_prews.sh \
-	$(TM_MAD)/gw_tm_mad_dummy.sh $(IM_MAD)/gw_im_mad_mds2.sh \
-	$(IM_MAD)/gw_im_mad_mds2_glue.sh $(TM_MAD)/gw_tm_mad_ftp.sh \
-	$(IM_MAD)/gw_im_mad_common.sh $(IM_MAD)/gw_im_mad_static.sh \
-	$(IM_MAD)/gw_im_mad_egee_ldap.sh \
-	$(IM_MAD)/gw_im_mad_egee_ldap.pl $(IM_MAD)/gw_im_mad_mds4.sh \
-	$(IM_MAD)/gw_im_mad_mds4_thr.sh $(EM_MAD)/gw_em_mad_ws.sh \
-	$(EM_MAD)/gw_em_mad_nordugrid.sh \
-	$(EM_MAD)/gw_em_mad_nordugrid.py $(EM_MAD)/em_nordugrid.py \
-	$(TM_MAD)/gw_tm_mad_nordugrid.sh \
-	$(TM_MAD)/gw_tm_mad_nordugrid.py $(TM_MAD)/tm_nordugrid.py \
-	$(EM_MAD)/gw_em_mad_ssh.sh $(TM_MAD)/gw_tm_mad_ssh.sh \
-	$(SSH)/ssh_wrapper.sh $(SSH)/ruby/gw_em_mad_ssh.rb \
-	$(SSH)/ruby/gwmad.rb $(SSH)/ruby/gw_tm_mad_ssh.rb \
-	$(SSH)/ruby/rslparser.rb $(SSH)/ruby/sshjob.rb \
-	$(SSH)/ruby/sshresource.rb
-dist_binSCRIPT_INSTALL = $(INSTALL_SCRIPT)
-SCRIPTS = $(bin_SCRIPTS) $(dist_bin_SCRIPTS)
-DEFAULT_INCLUDES = -I. -I$(srcdir)
+CONFIG_CLEAN_FILES = pkgdata/pkg_data_src.gpt
 depcomp =
 am__depfiles_maybe =
-LTCOMPILE = $(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) \
-	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
-	$(AM_CFLAGS) $(CFLAGS)
-CCLD = $(CC)
-LEXCOMPILE = $(LEX) $(LFLAGS) $(AM_LFLAGS)
-LTLEXCOMPILE = $(LIBTOOL) --mode=compile $(LEX) $(LFLAGS) $(AM_LFLAGS)
-YLWRAP = $(top_srcdir)/config/ylwrap
-YACCCOMPILE = $(YACC) $(YFLAGS) $(AM_YFLAGS)
-LTYACCCOMPILE = $(LIBTOOL) --mode=compile $(YACC) $(YFLAGS) \
-	$(AM_YFLAGS)
-SOURCES = $(__srcdir__drmaa_libDrmaaJNI_la_SOURCES) \
-	$(__srcdir__drmaa_libDrmaaJNI___GLOBUS_FLAVOR_NAME__la_SOURCES) \
-	$(__srcdir__drmaa_libdrmaa_la_SOURCES) \
-	$(__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_SOURCES) \
-	$(__srcdir__cmds_gwacct_SOURCES) \
-	$(__srcdir__cmds_gwhistory_SOURCES) \
-	$(__srcdir__cmds_gwhost_SOURCES) \
-	$(__srcdir__cmds_gwkill_SOURCES) \
-	$(__srcdir__cmds_gwps_SOURCES) \
-	$(__srcdir__cmds_gwsubmit_SOURCES) \
-	$(__srcdir__cmds_gwuser_SOURCES) \
-	$(__srcdir__cmds_gwwait_SOURCES) \
-	$(__srcdir__em_mad_gw_em_mad_prews_bin_SOURCES) \
-	$(__srcdir__gwd_gwd_SOURCES) \
-	$(__srcdir__scheduler_gw_flood_scheduler_SOURCES) \
-	$(__srcdir__scheduler_gw_sched_SOURCES) \
-	$(__srcdir__test_gwtest_SOURCES) \
-	$(__srcdir__tm_mad_gw_tm_mad_dummy_bin_SOURCES) \
-	$(__srcdir__tm_mad_gw_tm_mad_ftp_bin_SOURCES)
-DIST_SOURCES = $(am____srcdir__drmaa_libDrmaaJNI_la_SOURCES_DIST) \
-	$(am____srcdir__drmaa_libDrmaaJNI___GLOBUS_FLAVOR_NAME__la_SOURCES_DIST) \
-	$(am____srcdir__drmaa_libdrmaa_la_SOURCES_DIST) \
-	$(am____srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_SOURCES_DIST) \
-	$(__srcdir__cmds_gwacct_SOURCES) \
-	$(__srcdir__cmds_gwhistory_SOURCES) \
-	$(__srcdir__cmds_gwhost_SOURCES) \
-	$(__srcdir__cmds_gwkill_SOURCES) \
-	$(__srcdir__cmds_gwps_SOURCES) \
-	$(__srcdir__cmds_gwsubmit_SOURCES) \
-	$(__srcdir__cmds_gwuser_SOURCES) \
-	$(__srcdir__cmds_gwwait_SOURCES) \
-	$(__srcdir__em_mad_gw_em_mad_prews_bin_SOURCES) \
-	$(__srcdir__gwd_gwd_SOURCES) \
-	$(__srcdir__scheduler_gw_flood_scheduler_SOURCES) \
-	$(__srcdir__scheduler_gw_sched_SOURCES) \
-	$(am____srcdir__test_gwtest_SOURCES_DIST) \
-	$(__srcdir__tm_mad_gw_tm_mad_dummy_bin_SOURCES) \
-	$(am____srcdir__tm_mad_gw_tm_mad_ftp_bin_SOURCES_DIST)
-em_ws_jarDATA_INSTALL = $(INSTALL_DATA)
-im_ws_jarDATA_INSTALL = $(INSTALL_DATA)
-jarDATA_INSTALL = $(INSTALL_DATA)
-jsdl_jarDATA_INSTALL = $(INSTALL_DATA)
-DATA = $(em_ws_jar_DATA) $(im_ws_jar_DATA) $(jar_DATA) \
-	$(jsdl_jar_DATA)
-flavorincludeHEADERS_INSTALL = $(INSTALL_HEADER)
-HEADERS = $(flavorinclude_HEADERS)
+SOURCES =
+DIST_SOURCES =
+RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
+	html-recursive info-recursive install-data-recursive \
+	install-exec-recursive install-info-recursive \
+	install-recursive installcheck-recursive installdirs-recursive \
+	pdf-recursive ps-recursive uninstall-info-recursive \
+	uninstall-recursive
 ETAGS = etags
 CTAGS = ctags
+DIST_SUBDIRS = src src/drmaa/ruby
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
+distdir = $(PACKAGE)-$(VERSION)
+top_distdir = $(distdir)
+am__remove_distdir = \
+  { test ! -d $(distdir) \
+    || { find $(distdir) -type d ! -perm -200 -exec chmod u+w {} ';' \
+         && rm -fr $(distdir); }; }
+DIST_ARCHIVES = $(distdir).tar.gz
+GZIP_ENV = --best
+distuninstallcheck_listfiles = find . -type f -print
+distcleancheck_listfiles = find . -type f -print
 ACLOCAL = @ACLOCAL@
 ALLOCA = @ALLOCA@
 AMDEP_FALSE = @AMDEP_FALSE@
@@ -687,1492 +227,126 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 system = @system@
 target_alias = @target_alias@
-AUTOMAKE_OPTIONS = subdir-objects no-dependencies
-AM_YFLAGS = -d
-@GW_GLOBUS_DIRS_FALSE@LINK_PROG = $(GLOBUS_LD)
-
-# Get rid of libtool by default & make use of globus compiler/linker
-@GW_GLOBUS_DIRS_TRUE@LINK_PROG = $(CCLD)
-@GW_GLOBUS_DIRS_FALSE@COMPILE_PROG = $(GLOBUS_CC)
-@GW_GLOBUS_DIRS_TRUE@COMPILE_PROG = $(CC)
-LINK_OPTS = $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-COMPILE_OPTS = $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-			   $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-
-LINK = $(LINK_PROG) $(LINK_OPTS)
-COMPILE = $(COMPILE_PROG) $(COMPILE_OPTS)
-@GW_GLOBUS_DIRS_FALSE@GT_PKG_LIBS = $(GLOBUS_LIBS) $(GLOBUS_PKG_LIBS)
-@GW_GLOBUS_DIRS_TRUE@GT_PKG_LIBS = @globus_pkg_libs@
-
-# to handle else, not very smart 
-NOP = $(am__append_10) $(am__append_13)
-# -----------------------------
-# Directory definitions
-# -----------------------------
-JOB = $(srcdir)/job
-HOST = $(srcdir)/host
-ARRAY = $(srcdir)/array
-COMMON = $(srcdir)/common
-SCHED = $(srcdir)/scheduler
-EM_MAD = $(srcdir)/em_mad
-TM_MAD = $(srcdir)/tm_mad
-IM_MAD = $(srcdir)/im_mad
-CMDS = $(srcdir)/cmds
-GWD = $(srcdir)/gwd
-CLIENT = $(srcdir)/client
-EM = $(srcdir)/em
-TM = $(srcdir)/tm
-IM = $(srcdir)/im
-DM = $(srcdir)/dm
-RM = $(srcdir)/rm
-UM = $(srcdir)/um
-DB = $(srcdir)/acct
-@DRMAA1_FALSE@DRMAA_SRC_DIR = drmaa
-@DRMAA1_TRUE@DRMAA_SRC_DIR = drmaa/drmaa1.0
-DRMAA = $(srcdir)/drmaa
-DRMAA_PACK = $(srcdir)/$(DRMAA_SRC_DIR)/org/ggf/drmaa
-SSH = $(srcdir)/ssh
+SUBDIRS = src $(am__append_1)
 JAVA_HOME = @java_home@
-
-# --------------------------------
-# Object Dependencies
-# --------------------------------
-COMMON_SRC = $(COMMON)/gw_action.c \
-        $(COMMON)/gw_common.c \
-        $(COMMON)/gw_file_parser.c \
-        $(COMMON)/gw_log.c \
-        $(COMMON)/gw_template.c \
-        $(COMMON)/gw_template_parser.l
-
-JOB_SRC = $(JOB)/gw_history.c \
-        $(JOB)/gw_job.c \
-        $(JOB)/gw_job_environment.c \
-        $(JOB)/gw_job_pool.c \
-        $(JOB)/gw_job_recover.c \
-        $(JOB)/gw_job_template.c \
-        $(JOB)/gw_job_template_var_parser.l \
-        $(JOB)/gw_xfr_files.c
-
-HOST_SRC = $(HOST)/gw_host.c \
-        $(HOST)/gw_host_var.c \
-        $(HOST)/gw_host_pool.c \
-        $(HOST)/gw_host_rank_syntax.y \
-        $(HOST)/gw_host_reqs_syntax.y \
-        $(HOST)/gw_host_update_syntax.y \
-        $(HOST)/gw_host_attr_parser.l
-
-ARRAY_SRC = $(ARRAY)/gw_array.c \
-        $(ARRAY)/gw_array_pool.c
-
-CLIENT_SRC = $(CLIENT)/gw_client_job_match.c \
-        $(CLIENT)/gw_client_submit.c \
-        $(CLIENT)/gw_client_host_status.c \
-        $(CLIENT)/gw_client_job_status.c \
-        $(CLIENT)/gw_client_user_status.c \
-        $(CLIENT)/gw_client_init.c \
-        $(CLIENT)/gw_client_signal.c \
-        $(CLIENT)/gw_client_wait.c \
-        $(HOST)/gw_host_rank_syntax.c \
-        $(HOST)/gw_host_reqs_syntax.c \
-        $(HOST)/gw_host_attr_parser.c \
-        $(HOST)/gw_host_update_syntax.c \
-        $(HOST)/gw_host_var.c
-
-CLIENT_ACCT_SRC = $(CLIENT)/gw_client_acct.c
-CMDS_SRC = $(CMDS)/gw_acct.c \
-        $(CMDS)/gw_history.c \
-        $(CMDS)/gw_kill.c \
-        $(CMDS)/gw_submit.c \
-        $(CMDS)/gw_wait.c \
-        $(CMDS)/gw_cmds_common.c \
-        $(CMDS)/gw_host.c \
-        $(CMDS)/gw_ps.c \
-        $(CMDS)/gw_user.c
-
-CMDS_RB_SRC = $(CMDS)/gw_dagman.rb \
-            $(CMDS)/dagman/node.rb \
-            $(CMDS)/dagman/runner.rb \
-            $(CMDS)/dagman/parse.rb \
-	    $(CMDS)/dagman/gridway.rb
-
-
-# NORDUGRID MADS
-NORDUGRID_MAD_SRC = \
-	$(EM_MAD)/gw_em_mad_nordugrid.sh \
-	$(EM_MAD)/gw_em_mad_nordugrid.py \
-	$(EM_MAD)/em_nordugrid.py \
-	$(TM_MAD)/gw_tm_mad_nordugrid.sh \
-	$(TM_MAD)/gw_tm_mad_nordugrid.py \
-	$(TM_MAD)/tm_nordugrid.py
-
-JSDL_SRC = $(CMDS)/GWJTElement.java \
-        $(CMDS)/GWJT.java  \
-        $(CMDS)/GWJTWriter.java  \
-        $(CMDS)/JSDLElement.java  \
-        $(CMDS)/JSDL.java  \
-        $(CMDS)/JSDLReader.java  \
-        $(CMDS)/JSDLParser.java  \
-        $(CMDS)/JSDLTranslator.java
-
-EM_SRC = $(EM)/gw_em_actions.c \
-        $(EM)/gw_em.c \
-        $(EM)/gw_em_listener.c \
-        $(EM)/gw_em_mad.c \
-        $(EM)/gw_em_rsl2.c \
-        $(EM)/gw_em_rsl.c \
-        $(EM)/gw_em_state.c
-
-TM_SRC = $(TM)/gw_tm_actions.c \
-        $(TM)/gw_tm.c \
-        $(TM)/gw_tm_checkpoint.c \
-        $(TM)/gw_tm_epilog.c \
-        $(TM)/gw_tm_listener.c \
-        $(TM)/gw_tm_mad.c \
-        $(TM)/gw_tm_prolog.c
-
-IM_SRC = $(IM)/gw_im_actions.c \
-        $(IM)/gw_im.c \
-        $(IM)/gw_im_listener.c \
-        $(IM)/gw_im_mad.c
-
-DM_SRC = $(DM)/gw_dm_action_allocate.c \
-        $(DM)/gw_dm_action_dispatch.c \
-        $(DM)/gw_dm_action_hold_release.c \
-        $(DM)/gw_dm_action_kill.c \
-        $(DM)/gw_dm_action_reschedule.c \
-        $(DM)/gw_dm_action_schedule.c \
-        $(DM)/gw_dm_action_stop_resume.c \
-        $(DM)/gw_dm_action_wait.c \
-        $(DM)/gw_dm.c \
-        $(DM)/gw_dm_listener.c \
-        $(DM)/gw_dm_mad.c \
-        $(DM)/gw_dm_state_epilogs.c \
-        $(DM)/gw_dm_state_failed.c \
-        $(DM)/gw_dm_state_migrate.c \
-        $(DM)/gw_dm_state_pending.c \
-        $(DM)/gw_dm_state_prologs.c \
-        $(DM)/gw_dm_state_stopped.c \
-        $(DM)/gw_dm_state_wrappers.c \
-        $(DM)/gw_dm_state_zombie.c
-
-RM_SRC = $(RM)/gw_rm.c \
-        $(RM)/gw_rm_connection_list.c \
-        $(RM)/gw_rm_hold_release.c \
-        $(RM)/gw_rm_host_match.c \
-        $(RM)/gw_rm_host_status.c \
-        $(RM)/gw_rm_job_history.c \
-        $(RM)/gw_rm_job_status.c \
-        $(RM)/gw_rm_kill.c \
-        $(RM)/gw_rm_reschedule.c \
-        $(RM)/gw_rm_stop_resume.c \
-        $(RM)/gw_rm_submit.c \
-        $(RM)/gw_rm_user_status.c \
-        $(RM)/gw_rm_wait.c
-
-UM_SRC = $(UM)/gw_um.c \
-        $(UM)/gw_user.c \
-        $(UM)/gw_user_pool.c
-
-SCHED_SRC = $(SCHED)/gw_scheduler_common.c \
-        $(SCHED)/gw_scheduler_hosts.c \
-        $(SCHED)/gw_scheduler_jobs.c \
-        $(SCHED)/gw_scheduler_users.c
-
-DB_SRC = $(DB)/gw_acct.c
-GWD_SRC = $(GWD)/gw_conf.c \
-        $(GWD)/gw_conf_parser.l \
-        $(GWD)/gwd.c \
-        $(GWD)/gw_sch_conf_syntax.y \
-        $(GWD)/gw_sch_conf_parser.l \
-        $(GWD)/gw_sch_conf.c        
-
-EM_MAD_PREWS_SRC = $(EM_MAD)/gw_em_mad_prews_actions.c \
-        $(EM_MAD)/gw_em_mad_prews.c \
-        $(EM_MAD)/gw_em_mad_prews_pool.c
-
-EM_MAD_WS_SRC = $(EM_MAD)/GW_mad_ws.java
-TM_MAD_SRC = $(TM_MAD)/gw_tm_ftp_mad.c \
-        $(TM_MAD)/gw_tm_ftp_queue.c \
-        $(TM_MAD)/gw_tm_ftp_stack.c \
-        $(TM_MAD)/gw_tm_ftp_transfer.c \
-        $(TM_MAD)/gw_tm_ftp_xfr_pool.c
-
-TM_MAD_DUMMY_SRC = $(TM_MAD)/gw_tm_dummy_mad.c
-IM_MAD_MDS4_SRC = $(IM_MAD)/Host.java \
-        $(IM_MAD)/Mds4QueryParser.java \
-        $(IM_MAD)/Queue.java \
-        $(IM_MAD)/QueryClient.java \
-        $(IM_MAD)/GW_im_mad_mds4.java \
-        $(IM_MAD)/ServiceIM.java
-
-TM_MAD_RFT_SRC = $(TM_MAD)/GWRftClient.java \
-        $(TM_MAD)/GWRftProcessor.java \
-        $(TM_MAD)/GWRftResource.java \
-        $(TM_MAD)/GWRftUtil.java
-
-SSH_SRC = $(EM_MAD)/gw_em_mad_ssh.sh \
-        $(TM_MAD)/gw_tm_mad_ssh.sh \
-        $(SSH)/ssh_wrapper.sh \
-        $(SSH)/ruby/gw_em_mad_ssh.rb \
-        $(SSH)/ruby/gwmad.rb \
-        $(SSH)/ruby/gw_tm_mad_ssh.rb \
-        $(SSH)/ruby/rslparser.rb \
-        $(SSH)/ruby/sshjob.rb \
-        $(SSH)/ruby/sshresource.rb
-
-DRMAA_SRC = $(COMMON)/gw_file_parser.c $(CLIENT_SRC) \
-        $(DRMAA)/gw_drmaa.c $(DRMAA)/gw_drmaa_jt.c \
-        $(COMMON)/gw_template_parser.l \
-        $(COMMON)/gw_template.c $(COMMON)/gw_log.c
-
-DRMAAJNI_SRC = $(DRMAA_PACK)/DrmaaJNI.c
-DRMAA_JAVA_SRC = $(DRMAA_PACK)/AlreadyActiveSessionException.java \
-	$(DRMAA_PACK)/AuthorizationException.java \
-	$(DRMAA_PACK)/ConflictingAttributeValuesException.java \
-	$(DRMAA_PACK)/DefaultContactStringException.java \
-	$(DRMAA_PACK)/DeniedByDrmException.java \
-	$(DRMAA_PACK)/DrmaaException.java $(DRMAA_PACK)/DrmaaJNI.java \
-	$(DRMAA_PACK)/DrmCommunicationException.java \
-	$(DRMAA_PACK)/DrmsExitException.java \
-	$(DRMAA_PACK)/DrmsInitException.java \
-	$(DRMAA_PACK)/ExitTimeoutException.java \
-	$(DRMAA_PACK)/FileTransferMode.java \
-	$(DRMAA_PACK)/HoldInconsistentStateException.java \
-	$(DRMAA_PACK)/InconsistentStateException.java \
-	$(DRMAA_PACK)/InternalException.java \
-	$(DRMAA_PACK)/InvalidAttributeFormatException.java \
-	$(DRMAA_PACK)/InvalidAttributeValueException.java \
-	$(DRMAA_PACK)/InvalidContactStringException.java \
-	$(DRMAA_PACK)/InvalidJobException.java \
-	$(DRMAA_PACK)/InvalidJobTemplateException.java \
-	$(DRMAA_PACK)/JobInfo.java $(DRMAA_PACK)/JobTemplate.java \
-	$(DRMAA_PACK)/NoActiveSessionException.java \
-	$(DRMAA_PACK)/NoDefaultContactStringSelectedException.java \
-	$(DRMAA_PACK)/PartialTimestampFormat.java \
-	$(DRMAA_PACK)/PartialTimestamp.java \
-	$(DRMAA_PACK)/ReleaseInconsistentStateException.java \
-	$(DRMAA_PACK)/ResumeInconsistentStateException.java \
-	$(DRMAA_PACK)/SessionFactory.java $(DRMAA_PACK)/Session.java \
-	$(DRMAA_PACK)/SuspendInconsistentStateException.java \
-	$(DRMAA_PACK)/TryLaterException.java \
-	$(DRMAA_PACK)/UnsupportedAttributeException.java \
-	$(DRMAA_PACK)/Version.java $(am__append_1) $(am__append_2)
-
-# -----------------------------
-# -- Includes and Headers
-# -----------------------------
-INCLUDES = -I$(top_srcdir)/include $(DB4_INCLUDE_PATH) \
-	-I${JAVA_HOME}/include -I${JAVA_HOME}/include/$(SYSTEM) \
-	$(am__append_3)
-@GW_GLOBUS_DIRS_FALSE@SYSTEM = @system@
-@GW_GLOBUS_DIRS_TRUE@SYSTEM = @system@
-@GW_GLOBUS_DIRS_FALSE@flavorincludedir = $(prefix)/include
-@GW_GLOBUS_DIRS_TRUE@flavorincludedir = $(GLOBUS_LOCATION)/include/@GLOBUS_FLAVOR_NAME@
-flavorinclude_HEADERS = $(top_srcdir)/include/drmaa.h \
-                        $(top_srcdir)/include/gw_acct.h \
-                        $(top_srcdir)/include/gw_action.h \
-                        $(top_srcdir)/include/gw_array.h \
-                        $(top_srcdir)/include/gw_array_pool.h \
-                        $(top_srcdir)/include/gw_client.h \
-                        $(top_srcdir)/include/gw_cmds_common.h \
-                        $(top_srcdir)/include/gw_common.h \
-                        $(top_srcdir)/include/gw_conf.h \
-                        $(top_srcdir)/include/gw_dm.h \
-                        $(top_srcdir)/include/gw_dm_mad.h \
-                        $(top_srcdir)/include/gw_drmaa_jt.h \
-                        $(top_srcdir)/include/gw_em.h \
-                        $(top_srcdir)/include/gw_em_mad.h \
-                        $(top_srcdir)/include/gw_em_mad_prews.h \
-                        $(top_srcdir)/include/gw_em_rsl.h \
-                        $(top_srcdir)/include/gw_file_parser.h \
-                        $(top_srcdir)/include/gw_history.h \
-                        $(top_srcdir)/include/gw_host.h \
-                        $(top_srcdir)/include/gw_host_pool.h \
-                        $(top_srcdir)/include/gw_im.h \
-                        $(top_srcdir)/include/gw_im_mad.h \
-                        $(top_srcdir)/include/gw_job.h \
-                        $(top_srcdir)/include/gw_job_pool.h \
-                        $(top_srcdir)/include/gw_job_template.h \
-                        $(top_srcdir)/include/gw_log.h \
-                        $(top_srcdir)/include/gw_rm_connection_list.h \
-                        $(top_srcdir)/include/gw_rm.h \
-                        $(top_srcdir)/include/gw_rm_msg.h \
-                        $(top_srcdir)/include/gw_scheduler.h \
-                        $(top_srcdir)/include/gw_template.h \
-                        $(top_srcdir)/include/gw_tm_ftp_transfer.h \
-                        $(top_srcdir)/include/gw_tm.h \
-                        $(top_srcdir)/include/gw_tm_mad.h \
-                        $(top_srcdir)/include/gw_um.h \
-                        $(top_srcdir)/include/gw_user.h \
-                        $(top_srcdir)/include/gw_user_pool.h \
-                        $(top_srcdir)/include/gw_xfr_files.h \
-                        $(top_srcdir)/include/gw_sch_conf.h
-
-__srcdir__gwd_gwd_SOURCES = $(EM_SRC) \
-        $(TM_SRC) \
-        $(IM_SRC) \
-        $(JOB_SRC) \
-        $(HOST_SRC) \
-        $(COMMON_SRC) \
-        $(PM_SRC) \
-        $(ARRAY_SRC) \
-        $(DM_SRC) \
-        $(RM_SRC) \
-        $(GWD_SRC) \
-        $(UM_SRC)  \
-        $(DB_SRC)
-
-bin_SCRIPTS = 
-
-# ---------------------- IM MADS ------------------------
-dist_bin_SCRIPTS = $(CMDS_RB_SRC) $(am__append_4) $(am__append_9) \
-	$(am__append_12) $(IM_MAD)/gw_im_mad_common.sh \
-	$(IM_MAD)/gw_im_mad_static.sh $(am__append_14) \
-	$(am__append_15) $(am__append_17) $(am__append_18)
-CLEANFILES = $(am__append_5) $(srcdir)/drmaa/drmaa.jar \
-	$(am__append_16)
-__srcdir__cmds_gwps_SOURCES = $(CMDS)/gw_ps.c \
-        $(CMDS)/gw_cmds_common.c \
-        $(CLIENT_SRC) \
-        $(COMMON_SRC)
-
-__srcdir__cmds_gwsubmit_SOURCES = $(CMDS)/gw_submit.c \
-        $(CMDS)/gw_cmds_common.c \
-        $(CLIENT_SRC) \
-        $(COMMON_SRC)
-
-__srcdir__cmds_gwhistory_SOURCES = $(CMDS)/gw_history.c \
-        $(CMDS)/gw_cmds_common.c \
-        $(CLIENT_SRC) \
-        $(COMMON_SRC)
-
-__srcdir__cmds_gwkill_SOURCES = $(CMDS)/gw_kill.c \
-        $(CMDS)/gw_cmds_common.c \
-        $(CLIENT_SRC) \
-        $(COMMON_SRC)
-
-__srcdir__cmds_gwhost_SOURCES = $(CMDS)/gw_host.c \
-        $(CMDS)/gw_cmds_common.c \
-        $(CLIENT_SRC) \
-        $(COMMON_SRC)
-
-__srcdir__cmds_gwwait_SOURCES = $(CMDS)/gw_wait.c \
-        $(CMDS)/gw_cmds_common.c \
-        $(CLIENT_SRC) \
-        $(COMMON_SRC)
-
-__srcdir__cmds_gwuser_SOURCES = $(CMDS)/gw_user.c \
-        $(CMDS)/gw_cmds_common.c \
-        $(CLIENT_SRC) \
-        $(COMMON_SRC)
-
-__srcdir__cmds_gwacct_SOURCES = $(CMDS)/gw_acct.c \
-        $(CMDS)/gw_cmds_common.c \
-        $(CLIENT)/gw_client_init.c \
-        $(DB_SRC) \
-        $(CLIENT_ACCT_SRC) \
-        $(COMMON_SRC)
-
-
-# Create gw_jsdl.jar
-@JSDL_TRUE@jsdl_jardir = $(prefix)/lib
-@JSDL_TRUE@jsdl_jar_DATA = $(srcdir)/cmds/gw_jsdl.jar
-__srcdir__scheduler_gw_flood_scheduler_SOURCES = \
-        $(SCHED)/gw_flood_scheduler.c \
-        $(COMMON_SRC) \
-        $(CLIENT_SRC) \
-        $(DB_SRC) \
-        $(SCHED_SRC) \
-        $(GWD)/gw_sch_conf.c \
-        $(GWD)/gw_sch_conf_syntax.y \
-        $(GWD)/gw_sch_conf_parser.l
-
-__srcdir__scheduler_gw_flood_scheduler_LDFLAGS = -lm
-__srcdir__scheduler_gw_sched_SOURCES = \
-        $(SCHED)/gw_scheduler.c \
-        $(COMMON_SRC) \
-        $(CLIENT_SRC) \
-        $(DB_SRC) \
-        $(SCHED_SRC) \
-        $(GWD)/gw_sch_conf.c \
-        $(GWD)/gw_sch_conf_syntax.y \
-        $(GWD)/gw_sch_conf_parser.l
-
-__srcdir__scheduler_gw_sched_LDFLAGS = -lm
-
-# ----------------------------
-# DRMAA
-# ----------------------------
-lib_LTLIBRARIES = $(am__append_6) $(am__append_7)
-@GW_GLOBUS_DIRS_TRUE@__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_SOURCES = $(DRMAA_SRC)
-@GW_GLOBUS_DIRS_TRUE@__srcdir__drmaa_libDrmaaJNI___GLOBUS_FLAVOR_NAME__la_SOURCES = $(DRMAAJNI_SRC)
-@GW_GLOBUS_DIRS_TRUE@__srcdir__drmaa_libDrmaaJNI___GLOBUS_FLAVOR_NAME__la_LIBADD = $(srcdir)/drmaa/libdrmaa_$(GLOBUS_FLAVOR_NAME).la 
-@GW_GLOBUS_DIRS_TRUE@__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_CFLAGS = $(AM_CFLAGS)
-
-# Use libtool to generate drmaa library files
-@GW_GLOBUS_DIRS_TRUE@__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_LINK = $(LIBTOOL) --tag=CC --mode=link $(LINK)
-@GW_GLOBUS_DIRS_TRUE@__srcdir__drmaa_libDrmaaJNI___GLOBUS_FLAVOR_NAME__la_LINK = $(LIBTOOL) --tag=CC --mode=link $(LINK)
-@GW_GLOBUS_DIRS_FALSE@__srcdir__drmaa_libdrmaa_la_SOURCES = $(DRMAA_SRC)
-@GW_GLOBUS_DIRS_FALSE@__srcdir__drmaa_libDrmaaJNI_la_SOURCES = $(DRMAAJNI_SRC)
-@GW_GLOBUS_DIRS_FALSE@__srcdir__drmaa_libDrmaaJNI_la_LIBADD = $(srcdir)/drmaa/libdrmaa.la
-@GW_GLOBUS_DIRS_FALSE@__srcdir__drmaa_libdrmaa_la_CFLAGS = $(AM_CFLAGS)
-
-# Use libtool to generate drmaa library files
-@GW_GLOBUS_DIRS_FALSE@__srcdir__drmaa_libdrmaa_la_LINK = $(LIBTOOL) --tag=CC --mode=link $(LINK)
-@GW_GLOBUS_DIRS_FALSE@__srcdir__drmaa_libDrmaaJNI_la_LINK = $(LIBTOOL) --tag=CC --mode=link $(LINK)
-@DRMAA_TRUE@jardir = $(prefix)/lib
-@DRMAA_TRUE@jar_DATA = $(srcdir)/drmaa/drmaa.jar
-__srcdir__em_mad_gw_em_mad_prews_bin_SOURCES = $(EM_MAD_PREWS_SRC)
-__srcdir__em_mad_gw_em_mad_prews_bin_LDADD = $(GT_PKG_LIBS)
-@GW_GLOBUS_DIRS_FALSE@__srcdir__em_mad_gw_em_mad_prews_bin_LDFLAGS = $(GLOBUS_LDFLAGS)
-@GW_GLOBUS_DIRS_FALSE@__srcdir__em_mad_gw_em_mad_prews_bin_CFLAGS = $(GLOBUS_INCLUDES) \
-@GW_GLOBUS_DIRS_FALSE@        $(GLOBUS_CFLAGS)
-
-@GRIDFTP_TRUE@__srcdir__tm_mad_gw_tm_mad_ftp_bin_SOURCES = $(TM_MAD_SRC)
-@GRIDFTP_TRUE@__srcdir__tm_mad_gw_tm_mad_ftp_bin_LDADD = $(GT_PKG_LIBS)
-@GRIDFTP_TRUE@@GW_GLOBUS_DIRS_FALSE@__srcdir__tm_mad_gw_tm_mad_ftp_bin_LDFLAGS = $(GLOBUS_LDFLAGS)
-@GRIDFTP_TRUE@@GW_GLOBUS_DIRS_FALSE@__srcdir__tm_mad_gw_tm_mad_ftp_bin_CFLAGS = $(GLOBUS_INCLUDES) \
-@GRIDFTP_TRUE@@GW_GLOBUS_DIRS_FALSE@        $(GLOBUS_CFLAGS)
-
-__srcdir__tm_mad_gw_tm_mad_dummy_bin_SOURCES = $(TM_MAD_DUMMY_SRC)
-__srcdir__tm_mad_gw_tm_mad_dummy_bin_LDADD = $(GT_PKG_LIBS)
-@GW_GLOBUS_DIRS_FALSE@__srcdir__tm_mad_gw_tm_mad_dummy_bin_LDFLAGS = $(GLOBUS_LDFLAGS)
-@GW_GLOBUS_DIRS_FALSE@__srcdir__tm_mad_gw_tm_mad_dummy_bin_CFLAGS = $(GLOBUS_INCLUDES) \
-@GW_GLOBUS_DIRS_FALSE@        $(GLOBUS_CFLAGS)
-
-# --------------------------------
-# WS Middleware Access Drivers
-# --------------------------------
-JAVAROOT = .
-
-# ---------------------- IM MADS ------------------------
-@WS_TRUE@im_ws_jardir = $(prefix)/lib
-@WS_TRUE@im_ws_jar_DATA = $(srcdir)/im_mad/gw_im_mad_ws.jar
-
-# ---------------------- EM MADS ------------------------
-@WS_TRUE@em_ws_jardir = $(prefix)/lib
-@WS_TRUE@em_ws_jar_DATA = $(srcdir)/em_mad/gw_em_mad_ws.jar
-
-# ----------------------------
-# TESTS
-# ----------------------------
-@TESTS_TRUE@testdir = @prefix@/test/gridway
-@TESTS_TRUE@__srcdir__test_gwtest_SOURCES = test/gw_test.c \
-@TESTS_TRUE@        $(CMDS)/gw_cmds_common.c \
-@TESTS_TRUE@        $(CLIENT_SRC) \
-@TESTS_TRUE@        $(COMMON_SRC)
-
-
-# ----------------------------
-# Distribute JAVA sources
-# ----------------------------
-EM_MAD_WS_SRC_DIST = $(EM_MAD)/GW_mad_ws.GT4.0.java \
-	$(EM_MAD)/GW_mad_ws.GT4.2.java
-
-IM_MAD_MDS4_SRC_DIST = $(IM_MAD)/Host.java \
-        $(IM_MAD)/Mds4QueryParser.GT4.0.java \
-        $(IM_MAD)/Mds4QueryParser.GT4.2.java \
-        $(IM_MAD)/Queue.java \
-        $(IM_MAD)/QueryClient.GT4.0.java \
-        $(IM_MAD)/QueryClient.GT4.2.java \
-        $(IM_MAD)/GW_im_mad_mds4.java \
-        $(IM_MAD)/ServiceIM.java
-
-all: all-am
+PREFIX = @prefix@
+@GW_GLOBUS_DIRS_FALSE@GW_ETC_DIR = etc
+@GW_GLOBUS_DIRS_TRUE@GW_ETC_DIR = etc/gridway
+@GW_GLOBUS_DIRS_FALSE@GW_VAR_DIR = var
+@GW_GLOBUS_DIRS_TRUE@GW_VAR_DIR = var/gridway
+@GW_GLOBUS_DIRS_FALSE@GW_SHARE_DIR = share
+@GW_GLOBUS_DIRS_TRUE@GW_SHARE_DIR = share/gridway
+@GW_GLOBUS_DIRS_FALSE@GW_TEST_DIR = test
+@GW_GLOBUS_DIRS_TRUE@GW_TEST_DIR = test/gridway
+@GW_GLOBUS_DIRS_FALSE@GW_XML_DIR = xml_schema
+@GW_GLOBUS_DIRS_TRUE@GW_XML_DIR = share/gridway/xml_schema
+FLAGS = $(DB4_INCLUDE_PATH)
+all: all-recursive
 
 .SUFFIXES:
-.SUFFIXES: .c .l .lo .o .obj .y
+am--refresh:
+	@:
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
 	    *$$dep*) \
-	      cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh \
+	      echo ' cd $(srcdir) && $(AUTOMAKE) --foreign  --ignore-deps'; \
+	      cd $(srcdir) && $(AUTOMAKE) --foreign  --ignore-deps \
 		&& exit 0; \
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  --ignore-deps src/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  --ignore-deps Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  --ignore-deps src/Makefile
+	  $(AUTOMAKE) --foreign  --ignore-deps Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
 	  *config.status*) \
-	    cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh;; \
+	    echo ' $(SHELL) ./config.status'; \
+	    $(SHELL) ./config.status;; \
 	  *) \
-	    echo ' cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)'; \
-	    cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe);; \
+	    echo ' cd $(top_builddir) && $(SHELL) ./config.status $@ $(am__depfiles_maybe)'; \
+	    cd $(top_builddir) && $(SHELL) ./config.status $@ $(am__depfiles_maybe);; \
 	esac;
 
 $(top_builddir)/config.status: $(top_srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
-	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
+	$(SHELL) ./config.status --recheck
 
 $(top_srcdir)/configure:  $(am__configure_deps)
-	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
+	cd $(srcdir) && $(AUTOCONF)
 $(ACLOCAL_M4):  $(am__aclocal_m4_deps)
-	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
-install-libLTLIBRARIES: $(lib_LTLIBRARIES)
-	@$(NORMAL_INSTALL)
-	test -z "$(libdir)" || $(mkdir_p) "$(DESTDIR)$(libdir)"
-	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
-	  if test -f $$p; then \
-	    f=$(am__strip_dir) \
-	    echo " $(LIBTOOL) --mode=install $(libLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) '$$p' '$(DESTDIR)$(libdir)/$$f'"; \
-	    $(LIBTOOL) --mode=install $(libLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) "$$p" "$(DESTDIR)$(libdir)/$$f"; \
-	  else :; fi; \
-	done
-
-uninstall-libLTLIBRARIES:
-	@$(NORMAL_UNINSTALL)
-	@set -x; list='$(lib_LTLIBRARIES)'; for p in $$list; do \
-	  p=$(am__strip_dir) \
-	  echo " $(LIBTOOL) --mode=uninstall rm -f '$(DESTDIR)$(libdir)/$$p'"; \
-	  $(LIBTOOL) --mode=uninstall rm -f "$(DESTDIR)$(libdir)/$$p"; \
-	done
-
-clean-libLTLIBRARIES:
-	-test -z "$(lib_LTLIBRARIES)" || rm -f $(lib_LTLIBRARIES)
-	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
-	  dir="`echo $$p | sed -e 's|/[^/]*$$||'`"; \
-	  test "$$dir" != "$$p" || dir=.; \
-	  echo "rm -f \"$${dir}/so_locations\""; \
-	  rm -f "$${dir}/so_locations"; \
-	done
-$(DRMAA_PACK)/$(am__dirstamp):
-	@$(mkdir_p) $(DRMAA_PACK)
-	@: > $(DRMAA_PACK)/$(am__dirstamp)
-$(DRMAA_PACK)/DrmaaJNI.lo: $(DRMAA_PACK)/$(am__dirstamp)
-$(srcdir)/drmaa/$(am__dirstamp):
-	@$(mkdir_p) $(srcdir)/drmaa
-	@: > $(srcdir)/drmaa/$(am__dirstamp)
-$(srcdir)/drmaa/libDrmaaJNI.la: $(__srcdir__drmaa_libDrmaaJNI_la_OBJECTS) $(__srcdir__drmaa_libDrmaaJNI_la_DEPENDENCIES) $(srcdir)/drmaa/$(am__dirstamp)
-	$(__srcdir__drmaa_libDrmaaJNI_la_LINK) $(am___srcdir__drmaa_libDrmaaJNI_la_rpath) $(__srcdir__drmaa_libDrmaaJNI_la_LDFLAGS) $(__srcdir__drmaa_libDrmaaJNI_la_OBJECTS) $(__srcdir__drmaa_libDrmaaJNI_la_LIBADD) $(LIBS)
-$(srcdir)/drmaa/libDrmaaJNI_$(GLOBUS_FLAVOR_NAME).la: $(__srcdir__drmaa_libDrmaaJNI___GLOBUS_FLAVOR_NAME__la_OBJECTS) $(__srcdir__drmaa_libDrmaaJNI___GLOBUS_FLAVOR_NAME__la_DEPENDENCIES) $(srcdir)/drmaa/$(am__dirstamp)
-	$(__srcdir__drmaa_libDrmaaJNI___GLOBUS_FLAVOR_NAME__la_LINK) $(am___srcdir__drmaa_libDrmaaJNI___GLOBUS_FLAVOR_NAME__la_rpath) $(__srcdir__drmaa_libDrmaaJNI___GLOBUS_FLAVOR_NAME__la_LDFLAGS) $(__srcdir__drmaa_libDrmaaJNI___GLOBUS_FLAVOR_NAME__la_OBJECTS) $(__srcdir__drmaa_libDrmaaJNI___GLOBUS_FLAVOR_NAME__la_LIBADD) $(LIBS)
-$(COMMON)/$(am__dirstamp):
-	@$(mkdir_p) $(COMMON)
-	@: > $(COMMON)/$(am__dirstamp)
-$(COMMON)/__srcdir__drmaa_libdrmaa_la-gw_file_parser.lo:  \
-	$(COMMON)/$(am__dirstamp)
-$(CLIENT)/$(am__dirstamp):
-	@$(mkdir_p) $(CLIENT)
-	@: > $(CLIENT)/$(am__dirstamp)
-$(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_job_match.lo:  \
-	$(CLIENT)/$(am__dirstamp)
-$(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_submit.lo:  \
-	$(CLIENT)/$(am__dirstamp)
-$(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_host_status.lo:  \
-	$(CLIENT)/$(am__dirstamp)
-$(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_job_status.lo:  \
-	$(CLIENT)/$(am__dirstamp)
-$(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_user_status.lo:  \
-	$(CLIENT)/$(am__dirstamp)
-$(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_init.lo:  \
-	$(CLIENT)/$(am__dirstamp)
-$(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_signal.lo:  \
-	$(CLIENT)/$(am__dirstamp)
-$(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_wait.lo:  \
-	$(CLIENT)/$(am__dirstamp)
-$(HOST)/$(am__dirstamp):
-	@$(mkdir_p) $(HOST)
-	@: > $(HOST)/$(am__dirstamp)
-$(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_rank_syntax.lo:  \
-	$(HOST)/$(am__dirstamp)
-$(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_reqs_syntax.lo:  \
-	$(HOST)/$(am__dirstamp)
-$(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_attr_parser.lo:  \
-	$(HOST)/$(am__dirstamp)
-$(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_update_syntax.lo:  \
-	$(HOST)/$(am__dirstamp)
-$(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_var.lo:  \
-	$(HOST)/$(am__dirstamp)
-$(DRMAA)/$(am__dirstamp):
-	@$(mkdir_p) $(DRMAA)
-	@: > $(DRMAA)/$(am__dirstamp)
-$(DRMAA)/__srcdir__drmaa_libdrmaa_la-gw_drmaa.lo:  \
-	$(DRMAA)/$(am__dirstamp)
-$(DRMAA)/__srcdir__drmaa_libdrmaa_la-gw_drmaa_jt.lo:  \
-	$(DRMAA)/$(am__dirstamp)
-$(COMMON)/__srcdir__drmaa_libdrmaa_la-gw_template_parser.lo:  \
-	$(COMMON)/$(am__dirstamp)
-$(COMMON)/__srcdir__drmaa_libdrmaa_la-gw_template.lo:  \
-	$(COMMON)/$(am__dirstamp)
-$(COMMON)/__srcdir__drmaa_libdrmaa_la-gw_log.lo:  \
-	$(COMMON)/$(am__dirstamp)
-$(srcdir)/drmaa/libdrmaa.la: $(__srcdir__drmaa_libdrmaa_la_OBJECTS) $(__srcdir__drmaa_libdrmaa_la_DEPENDENCIES) $(srcdir)/drmaa/$(am__dirstamp)
-	$(__srcdir__drmaa_libdrmaa_la_LINK) $(am___srcdir__drmaa_libdrmaa_la_rpath) $(__srcdir__drmaa_libdrmaa_la_LDFLAGS) $(__srcdir__drmaa_libdrmaa_la_OBJECTS) $(__srcdir__drmaa_libdrmaa_la_LIBADD) $(LIBS)
-$(COMMON)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_file_parser.lo:  \
-	$(COMMON)/$(am__dirstamp)
-$(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_job_match.lo:  \
-	$(CLIENT)/$(am__dirstamp)
-$(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_submit.lo:  \
-	$(CLIENT)/$(am__dirstamp)
-$(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_host_status.lo:  \
-	$(CLIENT)/$(am__dirstamp)
-$(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_job_status.lo:  \
-	$(CLIENT)/$(am__dirstamp)
-$(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_user_status.lo:  \
-	$(CLIENT)/$(am__dirstamp)
-$(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_init.lo:  \
-	$(CLIENT)/$(am__dirstamp)
-$(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_signal.lo:  \
-	$(CLIENT)/$(am__dirstamp)
-$(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_wait.lo:  \
-	$(CLIENT)/$(am__dirstamp)
-$(HOST)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_host_rank_syntax.lo:  \
-	$(HOST)/$(am__dirstamp)
-$(HOST)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_host_reqs_syntax.lo:  \
-	$(HOST)/$(am__dirstamp)
-$(HOST)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_host_attr_parser.lo:  \
-	$(HOST)/$(am__dirstamp)
-$(HOST)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_host_update_syntax.lo:  \
-	$(HOST)/$(am__dirstamp)
-$(HOST)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_host_var.lo:  \
-	$(HOST)/$(am__dirstamp)
-$(DRMAA)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_drmaa.lo:  \
-	$(DRMAA)/$(am__dirstamp)
-$(DRMAA)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_drmaa_jt.lo:  \
-	$(DRMAA)/$(am__dirstamp)
-$(COMMON)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_template_parser.lo:  \
-	$(COMMON)/$(am__dirstamp)
-$(COMMON)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_template.lo:  \
-	$(COMMON)/$(am__dirstamp)
-$(COMMON)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_log.lo:  \
-	$(COMMON)/$(am__dirstamp)
-$(srcdir)/drmaa/libdrmaa_$(GLOBUS_FLAVOR_NAME).la: $(__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_OBJECTS) $(__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_DEPENDENCIES) $(srcdir)/drmaa/$(am__dirstamp)
-	$(__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_LINK) $(am___srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_rpath) $(__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_LDFLAGS) $(__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_OBJECTS) $(__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_LIBADD) $(LIBS)
-install-binPROGRAMS: $(bin_PROGRAMS)
-	@$(NORMAL_INSTALL)
-	test -z "$(bindir)" || $(mkdir_p) "$(DESTDIR)$(bindir)"
-	@list='$(bin_PROGRAMS)'; for p in $$list; do \
-	  p1=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
-	  if test -f $$p \
-	     || test -f $$p1 \
-	  ; then \
-	    f=`echo "$$p1" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`; \
-	   echo " $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(binPROGRAMS_INSTALL) '$$p' '$(DESTDIR)$(bindir)/$$f'"; \
-	   $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(binPROGRAMS_INSTALL) "$$p" "$(DESTDIR)$(bindir)/$$f" || exit 1; \
-	  else :; fi; \
-	done
-
-uninstall-binPROGRAMS:
-	@$(NORMAL_UNINSTALL)
-	@list='$(bin_PROGRAMS)'; for p in $$list; do \
-	  f=`echo "$$p" | sed 's,^.*/,,;s/$(EXEEXT)$$//;$(transform);s/$$/$(EXEEXT)/'`; \
-	  echo " rm -f '$(DESTDIR)$(bindir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(bindir)/$$f"; \
-	done
-
-clean-binPROGRAMS:
-	@list='$(bin_PROGRAMS)'; for p in $$list; do \
-	  f=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
-	  echo " rm -f $$p $$f"; \
-	  rm -f $$p $$f ; \
-	done
-install-testPROGRAMS: $(test_PROGRAMS)
-	@$(NORMAL_INSTALL)
-	test -z "$(testdir)" || $(mkdir_p) "$(DESTDIR)$(testdir)"
-	@list='$(test_PROGRAMS)'; for p in $$list; do \
-	  p1=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
-	  if test -f $$p \
-	     || test -f $$p1 \
-	  ; then \
-	    f=`echo "$$p1" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`; \
-	   echo " $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(testPROGRAMS_INSTALL) '$$p' '$(DESTDIR)$(testdir)/$$f'"; \
-	   $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(testPROGRAMS_INSTALL) "$$p" "$(DESTDIR)$(testdir)/$$f" || exit 1; \
-	  else :; fi; \
-	done
-
-uninstall-testPROGRAMS:
-	@$(NORMAL_UNINSTALL)
-	@list='$(test_PROGRAMS)'; for p in $$list; do \
-	  f=`echo "$$p" | sed 's,^.*/,,;s/$(EXEEXT)$$//;$(transform);s/$$/$(EXEEXT)/'`; \
-	  echo " rm -f '$(DESTDIR)$(testdir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(testdir)/$$f"; \
-	done
-
-clean-testPROGRAMS:
-	@list='$(test_PROGRAMS)'; for p in $$list; do \
-	  f=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
-	  echo " rm -f $$p $$f"; \
-	  rm -f $$p $$f ; \
-	done
-$(CMDS)/$(am__dirstamp):
-	@$(mkdir_p) $(CMDS)
-	@: > $(CMDS)/$(am__dirstamp)
-$(CMDS)/gw_acct.$(OBJEXT): $(CMDS)/$(am__dirstamp)
-$(CMDS)/gw_cmds_common.$(OBJEXT): $(CMDS)/$(am__dirstamp)
-$(CLIENT)/gw_client_init.$(OBJEXT): $(CLIENT)/$(am__dirstamp)
-$(DB)/$(am__dirstamp):
-	@$(mkdir_p) $(DB)
-	@: > $(DB)/$(am__dirstamp)
-$(DB)/gw_acct.$(OBJEXT): $(DB)/$(am__dirstamp)
-$(CLIENT)/gw_client_acct.$(OBJEXT): $(CLIENT)/$(am__dirstamp)
-$(COMMON)/gw_action.$(OBJEXT): $(COMMON)/$(am__dirstamp)
-$(COMMON)/gw_common.$(OBJEXT): $(COMMON)/$(am__dirstamp)
-$(COMMON)/gw_file_parser.$(OBJEXT): $(COMMON)/$(am__dirstamp)
-$(COMMON)/gw_log.$(OBJEXT): $(COMMON)/$(am__dirstamp)
-$(COMMON)/gw_template.$(OBJEXT): $(COMMON)/$(am__dirstamp)
-$(COMMON)/gw_template_parser.$(OBJEXT): $(COMMON)/$(am__dirstamp)
-$(srcdir)/cmds/$(am__dirstamp):
-	@$(mkdir_p) $(srcdir)/cmds
-	@: > $(srcdir)/cmds/$(am__dirstamp)
-$(srcdir)/cmds/gwacct$(EXEEXT): $(__srcdir__cmds_gwacct_OBJECTS) $(__srcdir__cmds_gwacct_DEPENDENCIES) $(srcdir)/cmds/$(am__dirstamp)
-	@rm -f $(srcdir)/cmds/gwacct$(EXEEXT)
-	$(LINK) $(__srcdir__cmds_gwacct_LDFLAGS) $(__srcdir__cmds_gwacct_OBJECTS) $(__srcdir__cmds_gwacct_LDADD) $(LIBS)
-$(CMDS)/gw_history.$(OBJEXT): $(CMDS)/$(am__dirstamp)
-$(CLIENT)/gw_client_job_match.$(OBJEXT): $(CLIENT)/$(am__dirstamp)
-$(CLIENT)/gw_client_submit.$(OBJEXT): $(CLIENT)/$(am__dirstamp)
-$(CLIENT)/gw_client_host_status.$(OBJEXT): $(CLIENT)/$(am__dirstamp)
-$(CLIENT)/gw_client_job_status.$(OBJEXT): $(CLIENT)/$(am__dirstamp)
-$(CLIENT)/gw_client_user_status.$(OBJEXT): $(CLIENT)/$(am__dirstamp)
-$(CLIENT)/gw_client_signal.$(OBJEXT): $(CLIENT)/$(am__dirstamp)
-$(CLIENT)/gw_client_wait.$(OBJEXT): $(CLIENT)/$(am__dirstamp)
-$(HOST)/gw_host_rank_syntax.$(OBJEXT): $(HOST)/$(am__dirstamp)
-$(HOST)/gw_host_reqs_syntax.$(OBJEXT): $(HOST)/$(am__dirstamp)
-$(HOST)/gw_host_attr_parser.$(OBJEXT): $(HOST)/$(am__dirstamp)
-$(HOST)/gw_host_update_syntax.$(OBJEXT): $(HOST)/$(am__dirstamp)
-$(HOST)/gw_host_var.$(OBJEXT): $(HOST)/$(am__dirstamp)
-$(srcdir)/cmds/gwhistory$(EXEEXT): $(__srcdir__cmds_gwhistory_OBJECTS) $(__srcdir__cmds_gwhistory_DEPENDENCIES) $(srcdir)/cmds/$(am__dirstamp)
-	@rm -f $(srcdir)/cmds/gwhistory$(EXEEXT)
-	$(LINK) $(__srcdir__cmds_gwhistory_LDFLAGS) $(__srcdir__cmds_gwhistory_OBJECTS) $(__srcdir__cmds_gwhistory_LDADD) $(LIBS)
-$(CMDS)/gw_host.$(OBJEXT): $(CMDS)/$(am__dirstamp)
-$(srcdir)/cmds/gwhost$(EXEEXT): $(__srcdir__cmds_gwhost_OBJECTS) $(__srcdir__cmds_gwhost_DEPENDENCIES) $(srcdir)/cmds/$(am__dirstamp)
-	@rm -f $(srcdir)/cmds/gwhost$(EXEEXT)
-	$(LINK) $(__srcdir__cmds_gwhost_LDFLAGS) $(__srcdir__cmds_gwhost_OBJECTS) $(__srcdir__cmds_gwhost_LDADD) $(LIBS)
-$(CMDS)/gw_kill.$(OBJEXT): $(CMDS)/$(am__dirstamp)
-$(srcdir)/cmds/gwkill$(EXEEXT): $(__srcdir__cmds_gwkill_OBJECTS) $(__srcdir__cmds_gwkill_DEPENDENCIES) $(srcdir)/cmds/$(am__dirstamp)
-	@rm -f $(srcdir)/cmds/gwkill$(EXEEXT)
-	$(LINK) $(__srcdir__cmds_gwkill_LDFLAGS) $(__srcdir__cmds_gwkill_OBJECTS) $(__srcdir__cmds_gwkill_LDADD) $(LIBS)
-$(CMDS)/gw_ps.$(OBJEXT): $(CMDS)/$(am__dirstamp)
-$(srcdir)/cmds/gwps$(EXEEXT): $(__srcdir__cmds_gwps_OBJECTS) $(__srcdir__cmds_gwps_DEPENDENCIES) $(srcdir)/cmds/$(am__dirstamp)
-	@rm -f $(srcdir)/cmds/gwps$(EXEEXT)
-	$(LINK) $(__srcdir__cmds_gwps_LDFLAGS) $(__srcdir__cmds_gwps_OBJECTS) $(__srcdir__cmds_gwps_LDADD) $(LIBS)
-$(CMDS)/gw_submit.$(OBJEXT): $(CMDS)/$(am__dirstamp)
-$(srcdir)/cmds/gwsubmit$(EXEEXT): $(__srcdir__cmds_gwsubmit_OBJECTS) $(__srcdir__cmds_gwsubmit_DEPENDENCIES) $(srcdir)/cmds/$(am__dirstamp)
-	@rm -f $(srcdir)/cmds/gwsubmit$(EXEEXT)
-	$(LINK) $(__srcdir__cmds_gwsubmit_LDFLAGS) $(__srcdir__cmds_gwsubmit_OBJECTS) $(__srcdir__cmds_gwsubmit_LDADD) $(LIBS)
-$(CMDS)/gw_user.$(OBJEXT): $(CMDS)/$(am__dirstamp)
-$(srcdir)/cmds/gwuser$(EXEEXT): $(__srcdir__cmds_gwuser_OBJECTS) $(__srcdir__cmds_gwuser_DEPENDENCIES) $(srcdir)/cmds/$(am__dirstamp)
-	@rm -f $(srcdir)/cmds/gwuser$(EXEEXT)
-	$(LINK) $(__srcdir__cmds_gwuser_LDFLAGS) $(__srcdir__cmds_gwuser_OBJECTS) $(__srcdir__cmds_gwuser_LDADD) $(LIBS)
-$(CMDS)/gw_wait.$(OBJEXT): $(CMDS)/$(am__dirstamp)
-$(srcdir)/cmds/gwwait$(EXEEXT): $(__srcdir__cmds_gwwait_OBJECTS) $(__srcdir__cmds_gwwait_DEPENDENCIES) $(srcdir)/cmds/$(am__dirstamp)
-	@rm -f $(srcdir)/cmds/gwwait$(EXEEXT)
-	$(LINK) $(__srcdir__cmds_gwwait_LDFLAGS) $(__srcdir__cmds_gwwait_OBJECTS) $(__srcdir__cmds_gwwait_LDADD) $(LIBS)
-$(EM_MAD)/$(am__dirstamp):
-	@$(mkdir_p) $(EM_MAD)
-	@: > $(EM_MAD)/$(am__dirstamp)
-$(EM_MAD)/__srcdir__em_mad_gw_em_mad_prews_bin-gw_em_mad_prews_actions.$(OBJEXT):  \
-	$(EM_MAD)/$(am__dirstamp)
-$(EM_MAD)/__srcdir__em_mad_gw_em_mad_prews_bin-gw_em_mad_prews.$(OBJEXT):  \
-	$(EM_MAD)/$(am__dirstamp)
-$(EM_MAD)/__srcdir__em_mad_gw_em_mad_prews_bin-gw_em_mad_prews_pool.$(OBJEXT):  \
-	$(EM_MAD)/$(am__dirstamp)
-$(srcdir)/em_mad/$(am__dirstamp):
-	@$(mkdir_p) $(srcdir)/em_mad
-	@: > $(srcdir)/em_mad/$(am__dirstamp)
-$(srcdir)/em_mad/gw_em_mad_prews.bin$(EXEEXT): $(__srcdir__em_mad_gw_em_mad_prews_bin_OBJECTS) $(__srcdir__em_mad_gw_em_mad_prews_bin_DEPENDENCIES) $(srcdir)/em_mad/$(am__dirstamp)
-	@rm -f $(srcdir)/em_mad/gw_em_mad_prews.bin$(EXEEXT)
-	$(LINK) $(__srcdir__em_mad_gw_em_mad_prews_bin_LDFLAGS) $(__srcdir__em_mad_gw_em_mad_prews_bin_OBJECTS) $(__srcdir__em_mad_gw_em_mad_prews_bin_LDADD) $(LIBS)
-$(EM)/$(am__dirstamp):
-	@$(mkdir_p) $(EM)
-	@: > $(EM)/$(am__dirstamp)
-$(EM)/gw_em_actions.$(OBJEXT): $(EM)/$(am__dirstamp)
-$(EM)/gw_em.$(OBJEXT): $(EM)/$(am__dirstamp)
-$(EM)/gw_em_listener.$(OBJEXT): $(EM)/$(am__dirstamp)
-$(EM)/gw_em_mad.$(OBJEXT): $(EM)/$(am__dirstamp)
-$(EM)/gw_em_rsl2.$(OBJEXT): $(EM)/$(am__dirstamp)
-$(EM)/gw_em_rsl.$(OBJEXT): $(EM)/$(am__dirstamp)
-$(EM)/gw_em_state.$(OBJEXT): $(EM)/$(am__dirstamp)
-$(TM)/$(am__dirstamp):
-	@$(mkdir_p) $(TM)
-	@: > $(TM)/$(am__dirstamp)
-$(TM)/gw_tm_actions.$(OBJEXT): $(TM)/$(am__dirstamp)
-$(TM)/gw_tm.$(OBJEXT): $(TM)/$(am__dirstamp)
-$(TM)/gw_tm_checkpoint.$(OBJEXT): $(TM)/$(am__dirstamp)
-$(TM)/gw_tm_epilog.$(OBJEXT): $(TM)/$(am__dirstamp)
-$(TM)/gw_tm_listener.$(OBJEXT): $(TM)/$(am__dirstamp)
-$(TM)/gw_tm_mad.$(OBJEXT): $(TM)/$(am__dirstamp)
-$(TM)/gw_tm_prolog.$(OBJEXT): $(TM)/$(am__dirstamp)
-$(IM)/$(am__dirstamp):
-	@$(mkdir_p) $(IM)
-	@: > $(IM)/$(am__dirstamp)
-$(IM)/gw_im_actions.$(OBJEXT): $(IM)/$(am__dirstamp)
-$(IM)/gw_im.$(OBJEXT): $(IM)/$(am__dirstamp)
-$(IM)/gw_im_listener.$(OBJEXT): $(IM)/$(am__dirstamp)
-$(IM)/gw_im_mad.$(OBJEXT): $(IM)/$(am__dirstamp)
-$(JOB)/$(am__dirstamp):
-	@$(mkdir_p) $(JOB)
-	@: > $(JOB)/$(am__dirstamp)
-$(JOB)/gw_history.$(OBJEXT): $(JOB)/$(am__dirstamp)
-$(JOB)/gw_job.$(OBJEXT): $(JOB)/$(am__dirstamp)
-$(JOB)/gw_job_environment.$(OBJEXT): $(JOB)/$(am__dirstamp)
-$(JOB)/gw_job_pool.$(OBJEXT): $(JOB)/$(am__dirstamp)
-$(JOB)/gw_job_recover.$(OBJEXT): $(JOB)/$(am__dirstamp)
-$(JOB)/gw_job_template.$(OBJEXT): $(JOB)/$(am__dirstamp)
-$(JOB)/gw_job_template_var_parser.$(OBJEXT): $(JOB)/$(am__dirstamp)
-$(JOB)/gw_xfr_files.$(OBJEXT): $(JOB)/$(am__dirstamp)
-$(HOST)/gw_host.$(OBJEXT): $(HOST)/$(am__dirstamp)
-$(HOST)/gw_host_pool.$(OBJEXT): $(HOST)/$(am__dirstamp)
-$(HOST)/gw_host_rank_syntax.h: $(HOST)/gw_host_rank_syntax.c
-	@if test ! -f $@; then \
-	  rm -f $(HOST)/gw_host_rank_syntax.c; \
-	  $(MAKE) $(HOST)/gw_host_rank_syntax.c; \
-	else :; fi
-$(HOST)/gw_host_reqs_syntax.h: $(HOST)/gw_host_reqs_syntax.c
-	@if test ! -f $@; then \
-	  rm -f $(HOST)/gw_host_reqs_syntax.c; \
-	  $(MAKE) $(HOST)/gw_host_reqs_syntax.c; \
-	else :; fi
-$(HOST)/gw_host_update_syntax.h: $(HOST)/gw_host_update_syntax.c
-	@if test ! -f $@; then \
-	  rm -f $(HOST)/gw_host_update_syntax.c; \
-	  $(MAKE) $(HOST)/gw_host_update_syntax.c; \
-	else :; fi
-$(ARRAY)/$(am__dirstamp):
-	@$(mkdir_p) $(ARRAY)
-	@: > $(ARRAY)/$(am__dirstamp)
-$(ARRAY)/gw_array.$(OBJEXT): $(ARRAY)/$(am__dirstamp)
-$(ARRAY)/gw_array_pool.$(OBJEXT): $(ARRAY)/$(am__dirstamp)
-$(DM)/$(am__dirstamp):
-	@$(mkdir_p) $(DM)
-	@: > $(DM)/$(am__dirstamp)
-$(DM)/gw_dm_action_allocate.$(OBJEXT): $(DM)/$(am__dirstamp)
-$(DM)/gw_dm_action_dispatch.$(OBJEXT): $(DM)/$(am__dirstamp)
-$(DM)/gw_dm_action_hold_release.$(OBJEXT): $(DM)/$(am__dirstamp)
-$(DM)/gw_dm_action_kill.$(OBJEXT): $(DM)/$(am__dirstamp)
-$(DM)/gw_dm_action_reschedule.$(OBJEXT): $(DM)/$(am__dirstamp)
-$(DM)/gw_dm_action_schedule.$(OBJEXT): $(DM)/$(am__dirstamp)
-$(DM)/gw_dm_action_stop_resume.$(OBJEXT): $(DM)/$(am__dirstamp)
-$(DM)/gw_dm_action_wait.$(OBJEXT): $(DM)/$(am__dirstamp)
-$(DM)/gw_dm.$(OBJEXT): $(DM)/$(am__dirstamp)
-$(DM)/gw_dm_listener.$(OBJEXT): $(DM)/$(am__dirstamp)
-$(DM)/gw_dm_mad.$(OBJEXT): $(DM)/$(am__dirstamp)
-$(DM)/gw_dm_state_epilogs.$(OBJEXT): $(DM)/$(am__dirstamp)
-$(DM)/gw_dm_state_failed.$(OBJEXT): $(DM)/$(am__dirstamp)
-$(DM)/gw_dm_state_migrate.$(OBJEXT): $(DM)/$(am__dirstamp)
-$(DM)/gw_dm_state_pending.$(OBJEXT): $(DM)/$(am__dirstamp)
-$(DM)/gw_dm_state_prologs.$(OBJEXT): $(DM)/$(am__dirstamp)
-$(DM)/gw_dm_state_stopped.$(OBJEXT): $(DM)/$(am__dirstamp)
-$(DM)/gw_dm_state_wrappers.$(OBJEXT): $(DM)/$(am__dirstamp)
-$(DM)/gw_dm_state_zombie.$(OBJEXT): $(DM)/$(am__dirstamp)
-$(RM)/$(am__dirstamp):
-	@$(mkdir_p) $(RM)
-	@: > $(RM)/$(am__dirstamp)
-$(RM)/gw_rm.$(OBJEXT): $(RM)/$(am__dirstamp)
-$(RM)/gw_rm_connection_list.$(OBJEXT): $(RM)/$(am__dirstamp)
-$(RM)/gw_rm_hold_release.$(OBJEXT): $(RM)/$(am__dirstamp)
-$(RM)/gw_rm_host_match.$(OBJEXT): $(RM)/$(am__dirstamp)
-$(RM)/gw_rm_host_status.$(OBJEXT): $(RM)/$(am__dirstamp)
-$(RM)/gw_rm_job_history.$(OBJEXT): $(RM)/$(am__dirstamp)
-$(RM)/gw_rm_job_status.$(OBJEXT): $(RM)/$(am__dirstamp)
-$(RM)/gw_rm_kill.$(OBJEXT): $(RM)/$(am__dirstamp)
-$(RM)/gw_rm_reschedule.$(OBJEXT): $(RM)/$(am__dirstamp)
-$(RM)/gw_rm_stop_resume.$(OBJEXT): $(RM)/$(am__dirstamp)
-$(RM)/gw_rm_submit.$(OBJEXT): $(RM)/$(am__dirstamp)
-$(RM)/gw_rm_user_status.$(OBJEXT): $(RM)/$(am__dirstamp)
-$(RM)/gw_rm_wait.$(OBJEXT): $(RM)/$(am__dirstamp)
-$(GWD)/$(am__dirstamp):
-	@$(mkdir_p) $(GWD)
-	@: > $(GWD)/$(am__dirstamp)
-$(GWD)/gw_conf.$(OBJEXT): $(GWD)/$(am__dirstamp)
-$(GWD)/gw_conf_parser.$(OBJEXT): $(GWD)/$(am__dirstamp)
-$(GWD)/gwd.$(OBJEXT): $(GWD)/$(am__dirstamp)
-$(GWD)/gw_sch_conf_syntax.h: $(GWD)/gw_sch_conf_syntax.c
-	@if test ! -f $@; then \
-	  rm -f $(GWD)/gw_sch_conf_syntax.c; \
-	  $(MAKE) $(GWD)/gw_sch_conf_syntax.c; \
-	else :; fi
-$(GWD)/gw_sch_conf_syntax.$(OBJEXT): $(GWD)/$(am__dirstamp)
-$(GWD)/gw_sch_conf_parser.$(OBJEXT): $(GWD)/$(am__dirstamp)
-$(GWD)/gw_sch_conf.$(OBJEXT): $(GWD)/$(am__dirstamp)
-$(UM)/$(am__dirstamp):
-	@$(mkdir_p) $(UM)
-	@: > $(UM)/$(am__dirstamp)
-$(UM)/gw_um.$(OBJEXT): $(UM)/$(am__dirstamp)
-$(UM)/gw_user.$(OBJEXT): $(UM)/$(am__dirstamp)
-$(UM)/gw_user_pool.$(OBJEXT): $(UM)/$(am__dirstamp)
-$(srcdir)/gwd/$(am__dirstamp):
-	@$(mkdir_p) $(srcdir)/gwd
-	@: > $(srcdir)/gwd/$(am__dirstamp)
-$(srcdir)/gwd/gwd$(EXEEXT): $(__srcdir__gwd_gwd_OBJECTS) $(__srcdir__gwd_gwd_DEPENDENCIES) $(srcdir)/gwd/$(am__dirstamp)
-	@rm -f $(srcdir)/gwd/gwd$(EXEEXT)
-	$(LINK) $(__srcdir__gwd_gwd_LDFLAGS) $(__srcdir__gwd_gwd_OBJECTS) $(__srcdir__gwd_gwd_LDADD) $(LIBS)
-$(SCHED)/$(am__dirstamp):
-	@$(mkdir_p) $(SCHED)
-	@: > $(SCHED)/$(am__dirstamp)
-$(SCHED)/gw_flood_scheduler.$(OBJEXT): $(SCHED)/$(am__dirstamp)
-$(SCHED)/gw_scheduler_common.$(OBJEXT): $(SCHED)/$(am__dirstamp)
-$(SCHED)/gw_scheduler_hosts.$(OBJEXT): $(SCHED)/$(am__dirstamp)
-$(SCHED)/gw_scheduler_jobs.$(OBJEXT): $(SCHED)/$(am__dirstamp)
-$(SCHED)/gw_scheduler_users.$(OBJEXT): $(SCHED)/$(am__dirstamp)
-$(srcdir)/scheduler/$(am__dirstamp):
-	@$(mkdir_p) $(srcdir)/scheduler
-	@: > $(srcdir)/scheduler/$(am__dirstamp)
-$(srcdir)/scheduler/gw_flood_scheduler$(EXEEXT): $(__srcdir__scheduler_gw_flood_scheduler_OBJECTS) $(__srcdir__scheduler_gw_flood_scheduler_DEPENDENCIES) $(srcdir)/scheduler/$(am__dirstamp)
-	@rm -f $(srcdir)/scheduler/gw_flood_scheduler$(EXEEXT)
-	$(LINK) $(__srcdir__scheduler_gw_flood_scheduler_LDFLAGS) $(__srcdir__scheduler_gw_flood_scheduler_OBJECTS) $(__srcdir__scheduler_gw_flood_scheduler_LDADD) $(LIBS)
-$(SCHED)/gw_scheduler.$(OBJEXT): $(SCHED)/$(am__dirstamp)
-$(srcdir)/scheduler/gw_sched$(EXEEXT): $(__srcdir__scheduler_gw_sched_OBJECTS) $(__srcdir__scheduler_gw_sched_DEPENDENCIES) $(srcdir)/scheduler/$(am__dirstamp)
-	@rm -f $(srcdir)/scheduler/gw_sched$(EXEEXT)
-	$(LINK) $(__srcdir__scheduler_gw_sched_LDFLAGS) $(__srcdir__scheduler_gw_sched_OBJECTS) $(__srcdir__scheduler_gw_sched_LDADD) $(LIBS)
-test/$(am__dirstamp):
-	@$(mkdir_p) test
-	@: > test/$(am__dirstamp)
-test/gw_test.$(OBJEXT): test/$(am__dirstamp)
-$(srcdir)/test/$(am__dirstamp):
-	@$(mkdir_p) $(srcdir)/test
-	@: > $(srcdir)/test/$(am__dirstamp)
-$(srcdir)/test/gwtest$(EXEEXT): $(__srcdir__test_gwtest_OBJECTS) $(__srcdir__test_gwtest_DEPENDENCIES) $(srcdir)/test/$(am__dirstamp)
-	@rm -f $(srcdir)/test/gwtest$(EXEEXT)
-	$(LINK) $(__srcdir__test_gwtest_LDFLAGS) $(__srcdir__test_gwtest_OBJECTS) $(__srcdir__test_gwtest_LDADD) $(LIBS)
-$(TM_MAD)/$(am__dirstamp):
-	@$(mkdir_p) $(TM_MAD)
-	@: > $(TM_MAD)/$(am__dirstamp)
-$(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_dummy_bin-gw_tm_dummy_mad.$(OBJEXT):  \
-	$(TM_MAD)/$(am__dirstamp)
-$(srcdir)/tm_mad/$(am__dirstamp):
-	@$(mkdir_p) $(srcdir)/tm_mad
-	@: > $(srcdir)/tm_mad/$(am__dirstamp)
-$(srcdir)/tm_mad/gw_tm_mad_dummy.bin$(EXEEXT): $(__srcdir__tm_mad_gw_tm_mad_dummy_bin_OBJECTS) $(__srcdir__tm_mad_gw_tm_mad_dummy_bin_DEPENDENCIES) $(srcdir)/tm_mad/$(am__dirstamp)
-	@rm -f $(srcdir)/tm_mad/gw_tm_mad_dummy.bin$(EXEEXT)
-	$(LINK) $(__srcdir__tm_mad_gw_tm_mad_dummy_bin_LDFLAGS) $(__srcdir__tm_mad_gw_tm_mad_dummy_bin_OBJECTS) $(__srcdir__tm_mad_gw_tm_mad_dummy_bin_LDADD) $(LIBS)
-$(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_mad.$(OBJEXT):  \
-	$(TM_MAD)/$(am__dirstamp)
-$(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_queue.$(OBJEXT):  \
-	$(TM_MAD)/$(am__dirstamp)
-$(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_stack.$(OBJEXT):  \
-	$(TM_MAD)/$(am__dirstamp)
-$(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_transfer.$(OBJEXT):  \
-	$(TM_MAD)/$(am__dirstamp)
-$(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_xfr_pool.$(OBJEXT):  \
-	$(TM_MAD)/$(am__dirstamp)
-$(srcdir)/tm_mad/gw_tm_mad_ftp.bin$(EXEEXT): $(__srcdir__tm_mad_gw_tm_mad_ftp_bin_OBJECTS) $(__srcdir__tm_mad_gw_tm_mad_ftp_bin_DEPENDENCIES) $(srcdir)/tm_mad/$(am__dirstamp)
-	@rm -f $(srcdir)/tm_mad/gw_tm_mad_ftp.bin$(EXEEXT)
-	$(LINK) $(__srcdir__tm_mad_gw_tm_mad_ftp_bin_LDFLAGS) $(__srcdir__tm_mad_gw_tm_mad_ftp_bin_OBJECTS) $(__srcdir__tm_mad_gw_tm_mad_ftp_bin_LDADD) $(LIBS)
-install-binSCRIPTS: $(bin_SCRIPTS)
-	@$(NORMAL_INSTALL)
-	test -z "$(bindir)" || $(mkdir_p) "$(DESTDIR)$(bindir)"
-	@list='$(bin_SCRIPTS)'; for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  if test -f $$d$$p; then \
-	    f=`echo "$$p" | sed 's|^.*/||;$(transform)'`; \
-	    echo " $(binSCRIPT_INSTALL) '$$d$$p' '$(DESTDIR)$(bindir)/$$f'"; \
-	    $(binSCRIPT_INSTALL) "$$d$$p" "$(DESTDIR)$(bindir)/$$f"; \
-	  else :; fi; \
-	done
-
-uninstall-binSCRIPTS:
-	@$(NORMAL_UNINSTALL)
-	@list='$(bin_SCRIPTS)'; for p in $$list; do \
-	  f=`echo "$$p" | sed 's|^.*/||;$(transform)'`; \
-	  echo " rm -f '$(DESTDIR)$(bindir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(bindir)/$$f"; \
-	done
-install-dist_binSCRIPTS: $(dist_bin_SCRIPTS)
-	@$(NORMAL_INSTALL)
-	test -z "$(bindir)" || $(mkdir_p) "$(DESTDIR)$(bindir)"
-	@list='$(dist_bin_SCRIPTS)'; for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  if test -f $$d$$p; then \
-	    f=`echo "$$p" | sed 's|^.*/||;$(transform)'`; \
-	    echo " $(dist_binSCRIPT_INSTALL) '$$d$$p' '$(DESTDIR)$(bindir)/$$f'"; \
-	    $(dist_binSCRIPT_INSTALL) "$$d$$p" "$(DESTDIR)$(bindir)/$$f"; \
-	  else :; fi; \
-	done
-
-uninstall-dist_binSCRIPTS:
-	@$(NORMAL_UNINSTALL)
-	@list='$(dist_bin_SCRIPTS)'; for p in $$list; do \
-	  f=`echo "$$p" | sed 's|^.*/||;$(transform)'`; \
-	  echo " rm -f '$(DESTDIR)$(bindir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(bindir)/$$f"; \
-	done
-
-mostlyclean-compile:
-	-rm -f *.$(OBJEXT)
-	-rm -f $(ARRAY)/gw_array.$(OBJEXT)
-	-rm -f $(ARRAY)/gw_array_pool.$(OBJEXT)
-	-rm -f $(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_host_status.$(OBJEXT)
-	-rm -f $(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_host_status.lo
-	-rm -f $(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_init.$(OBJEXT)
-	-rm -f $(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_init.lo
-	-rm -f $(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_job_match.$(OBJEXT)
-	-rm -f $(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_job_match.lo
-	-rm -f $(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_job_status.$(OBJEXT)
-	-rm -f $(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_job_status.lo
-	-rm -f $(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_signal.$(OBJEXT)
-	-rm -f $(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_signal.lo
-	-rm -f $(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_submit.$(OBJEXT)
-	-rm -f $(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_submit.lo
-	-rm -f $(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_user_status.$(OBJEXT)
-	-rm -f $(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_user_status.lo
-	-rm -f $(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_wait.$(OBJEXT)
-	-rm -f $(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_wait.lo
-	-rm -f $(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_host_status.$(OBJEXT)
-	-rm -f $(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_host_status.lo
-	-rm -f $(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_init.$(OBJEXT)
-	-rm -f $(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_init.lo
-	-rm -f $(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_job_match.$(OBJEXT)
-	-rm -f $(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_job_match.lo
-	-rm -f $(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_job_status.$(OBJEXT)
-	-rm -f $(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_job_status.lo
-	-rm -f $(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_signal.$(OBJEXT)
-	-rm -f $(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_signal.lo
-	-rm -f $(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_submit.$(OBJEXT)
-	-rm -f $(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_submit.lo
-	-rm -f $(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_user_status.$(OBJEXT)
-	-rm -f $(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_user_status.lo
-	-rm -f $(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_wait.$(OBJEXT)
-	-rm -f $(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_wait.lo
-	-rm -f $(CLIENT)/gw_client_acct.$(OBJEXT)
-	-rm -f $(CLIENT)/gw_client_host_status.$(OBJEXT)
-	-rm -f $(CLIENT)/gw_client_init.$(OBJEXT)
-	-rm -f $(CLIENT)/gw_client_job_match.$(OBJEXT)
-	-rm -f $(CLIENT)/gw_client_job_status.$(OBJEXT)
-	-rm -f $(CLIENT)/gw_client_signal.$(OBJEXT)
-	-rm -f $(CLIENT)/gw_client_submit.$(OBJEXT)
-	-rm -f $(CLIENT)/gw_client_user_status.$(OBJEXT)
-	-rm -f $(CLIENT)/gw_client_wait.$(OBJEXT)
-	-rm -f $(CMDS)/gw_acct.$(OBJEXT)
-	-rm -f $(CMDS)/gw_cmds_common.$(OBJEXT)
-	-rm -f $(CMDS)/gw_history.$(OBJEXT)
-	-rm -f $(CMDS)/gw_host.$(OBJEXT)
-	-rm -f $(CMDS)/gw_kill.$(OBJEXT)
-	-rm -f $(CMDS)/gw_ps.$(OBJEXT)
-	-rm -f $(CMDS)/gw_submit.$(OBJEXT)
-	-rm -f $(CMDS)/gw_user.$(OBJEXT)
-	-rm -f $(CMDS)/gw_wait.$(OBJEXT)
-	-rm -f $(COMMON)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_file_parser.$(OBJEXT)
-	-rm -f $(COMMON)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_file_parser.lo
-	-rm -f $(COMMON)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_log.$(OBJEXT)
-	-rm -f $(COMMON)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_log.lo
-	-rm -f $(COMMON)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_template.$(OBJEXT)
-	-rm -f $(COMMON)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_template.lo
-	-rm -f $(COMMON)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_template_parser.$(OBJEXT)
-	-rm -f $(COMMON)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_template_parser.lo
-	-rm -f $(COMMON)/__srcdir__drmaa_libdrmaa_la-gw_file_parser.$(OBJEXT)
-	-rm -f $(COMMON)/__srcdir__drmaa_libdrmaa_la-gw_file_parser.lo
-	-rm -f $(COMMON)/__srcdir__drmaa_libdrmaa_la-gw_log.$(OBJEXT)
-	-rm -f $(COMMON)/__srcdir__drmaa_libdrmaa_la-gw_log.lo
-	-rm -f $(COMMON)/__srcdir__drmaa_libdrmaa_la-gw_template.$(OBJEXT)
-	-rm -f $(COMMON)/__srcdir__drmaa_libdrmaa_la-gw_template.lo
-	-rm -f $(COMMON)/__srcdir__drmaa_libdrmaa_la-gw_template_parser.$(OBJEXT)
-	-rm -f $(COMMON)/__srcdir__drmaa_libdrmaa_la-gw_template_parser.lo
-	-rm -f $(COMMON)/gw_action.$(OBJEXT)
-	-rm -f $(COMMON)/gw_common.$(OBJEXT)
-	-rm -f $(COMMON)/gw_file_parser.$(OBJEXT)
-	-rm -f $(COMMON)/gw_log.$(OBJEXT)
-	-rm -f $(COMMON)/gw_template.$(OBJEXT)
-	-rm -f $(COMMON)/gw_template_parser.$(OBJEXT)
-	-rm -f $(DB)/gw_acct.$(OBJEXT)
-	-rm -f $(DM)/gw_dm.$(OBJEXT)
-	-rm -f $(DM)/gw_dm_action_allocate.$(OBJEXT)
-	-rm -f $(DM)/gw_dm_action_dispatch.$(OBJEXT)
-	-rm -f $(DM)/gw_dm_action_hold_release.$(OBJEXT)
-	-rm -f $(DM)/gw_dm_action_kill.$(OBJEXT)
-	-rm -f $(DM)/gw_dm_action_reschedule.$(OBJEXT)
-	-rm -f $(DM)/gw_dm_action_schedule.$(OBJEXT)
-	-rm -f $(DM)/gw_dm_action_stop_resume.$(OBJEXT)
-	-rm -f $(DM)/gw_dm_action_wait.$(OBJEXT)
-	-rm -f $(DM)/gw_dm_listener.$(OBJEXT)
-	-rm -f $(DM)/gw_dm_mad.$(OBJEXT)
-	-rm -f $(DM)/gw_dm_state_epilogs.$(OBJEXT)
-	-rm -f $(DM)/gw_dm_state_failed.$(OBJEXT)
-	-rm -f $(DM)/gw_dm_state_migrate.$(OBJEXT)
-	-rm -f $(DM)/gw_dm_state_pending.$(OBJEXT)
-	-rm -f $(DM)/gw_dm_state_prologs.$(OBJEXT)
-	-rm -f $(DM)/gw_dm_state_stopped.$(OBJEXT)
-	-rm -f $(DM)/gw_dm_state_wrappers.$(OBJEXT)
-	-rm -f $(DM)/gw_dm_state_zombie.$(OBJEXT)
-	-rm -f $(DRMAA)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_drmaa.$(OBJEXT)
-	-rm -f $(DRMAA)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_drmaa.lo
-	-rm -f $(DRMAA)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_drmaa_jt.$(OBJEXT)
-	-rm -f $(DRMAA)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_drmaa_jt.lo
-	-rm -f $(DRMAA)/__srcdir__drmaa_libdrmaa_la-gw_drmaa.$(OBJEXT)
-	-rm -f $(DRMAA)/__srcdir__drmaa_libdrmaa_la-gw_drmaa.lo
-	-rm -f $(DRMAA)/__srcdir__drmaa_libdrmaa_la-gw_drmaa_jt.$(OBJEXT)
-	-rm -f $(DRMAA)/__srcdir__drmaa_libdrmaa_la-gw_drmaa_jt.lo
-	-rm -f $(DRMAA_PACK)/DrmaaJNI.$(OBJEXT)
-	-rm -f $(DRMAA_PACK)/DrmaaJNI.lo
-	-rm -f $(EM)/gw_em.$(OBJEXT)
-	-rm -f $(EM)/gw_em_actions.$(OBJEXT)
-	-rm -f $(EM)/gw_em_listener.$(OBJEXT)
-	-rm -f $(EM)/gw_em_mad.$(OBJEXT)
-	-rm -f $(EM)/gw_em_rsl.$(OBJEXT)
-	-rm -f $(EM)/gw_em_rsl2.$(OBJEXT)
-	-rm -f $(EM)/gw_em_state.$(OBJEXT)
-	-rm -f $(EM_MAD)/__srcdir__em_mad_gw_em_mad_prews_bin-gw_em_mad_prews.$(OBJEXT)
-	-rm -f $(EM_MAD)/__srcdir__em_mad_gw_em_mad_prews_bin-gw_em_mad_prews_actions.$(OBJEXT)
-	-rm -f $(EM_MAD)/__srcdir__em_mad_gw_em_mad_prews_bin-gw_em_mad_prews_pool.$(OBJEXT)
-	-rm -f $(GWD)/gw_conf.$(OBJEXT)
-	-rm -f $(GWD)/gw_conf_parser.$(OBJEXT)
-	-rm -f $(GWD)/gw_sch_conf.$(OBJEXT)
-	-rm -f $(GWD)/gw_sch_conf_parser.$(OBJEXT)
-	-rm -f $(GWD)/gw_sch_conf_syntax.$(OBJEXT)
-	-rm -f $(GWD)/gwd.$(OBJEXT)
-	-rm -f $(HOST)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_host_attr_parser.$(OBJEXT)
-	-rm -f $(HOST)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_host_attr_parser.lo
-	-rm -f $(HOST)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_host_rank_syntax.$(OBJEXT)
-	-rm -f $(HOST)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_host_rank_syntax.lo
-	-rm -f $(HOST)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_host_reqs_syntax.$(OBJEXT)
-	-rm -f $(HOST)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_host_reqs_syntax.lo
-	-rm -f $(HOST)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_host_update_syntax.$(OBJEXT)
-	-rm -f $(HOST)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_host_update_syntax.lo
-	-rm -f $(HOST)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_host_var.$(OBJEXT)
-	-rm -f $(HOST)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_host_var.lo
-	-rm -f $(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_attr_parser.$(OBJEXT)
-	-rm -f $(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_attr_parser.lo
-	-rm -f $(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_rank_syntax.$(OBJEXT)
-	-rm -f $(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_rank_syntax.lo
-	-rm -f $(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_reqs_syntax.$(OBJEXT)
-	-rm -f $(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_reqs_syntax.lo
-	-rm -f $(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_update_syntax.$(OBJEXT)
-	-rm -f $(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_update_syntax.lo
-	-rm -f $(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_var.$(OBJEXT)
-	-rm -f $(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_var.lo
-	-rm -f $(HOST)/gw_host.$(OBJEXT)
-	-rm -f $(HOST)/gw_host_attr_parser.$(OBJEXT)
-	-rm -f $(HOST)/gw_host_pool.$(OBJEXT)
-	-rm -f $(HOST)/gw_host_rank_syntax.$(OBJEXT)
-	-rm -f $(HOST)/gw_host_reqs_syntax.$(OBJEXT)
-	-rm -f $(HOST)/gw_host_update_syntax.$(OBJEXT)
-	-rm -f $(HOST)/gw_host_var.$(OBJEXT)
-	-rm -f $(IM)/gw_im.$(OBJEXT)
-	-rm -f $(IM)/gw_im_actions.$(OBJEXT)
-	-rm -f $(IM)/gw_im_listener.$(OBJEXT)
-	-rm -f $(IM)/gw_im_mad.$(OBJEXT)
-	-rm -f $(JOB)/gw_history.$(OBJEXT)
-	-rm -f $(JOB)/gw_job.$(OBJEXT)
-	-rm -f $(JOB)/gw_job_environment.$(OBJEXT)
-	-rm -f $(JOB)/gw_job_pool.$(OBJEXT)
-	-rm -f $(JOB)/gw_job_recover.$(OBJEXT)
-	-rm -f $(JOB)/gw_job_template.$(OBJEXT)
-	-rm -f $(JOB)/gw_job_template_var_parser.$(OBJEXT)
-	-rm -f $(JOB)/gw_xfr_files.$(OBJEXT)
-	-rm -f $(RM)/gw_rm.$(OBJEXT)
-	-rm -f $(RM)/gw_rm_connection_list.$(OBJEXT)
-	-rm -f $(RM)/gw_rm_hold_release.$(OBJEXT)
-	-rm -f $(RM)/gw_rm_host_match.$(OBJEXT)
-	-rm -f $(RM)/gw_rm_host_status.$(OBJEXT)
-	-rm -f $(RM)/gw_rm_job_history.$(OBJEXT)
-	-rm -f $(RM)/gw_rm_job_status.$(OBJEXT)
-	-rm -f $(RM)/gw_rm_kill.$(OBJEXT)
-	-rm -f $(RM)/gw_rm_reschedule.$(OBJEXT)
-	-rm -f $(RM)/gw_rm_stop_resume.$(OBJEXT)
-	-rm -f $(RM)/gw_rm_submit.$(OBJEXT)
-	-rm -f $(RM)/gw_rm_user_status.$(OBJEXT)
-	-rm -f $(RM)/gw_rm_wait.$(OBJEXT)
-	-rm -f $(SCHED)/gw_flood_scheduler.$(OBJEXT)
-	-rm -f $(SCHED)/gw_scheduler.$(OBJEXT)
-	-rm -f $(SCHED)/gw_scheduler_common.$(OBJEXT)
-	-rm -f $(SCHED)/gw_scheduler_hosts.$(OBJEXT)
-	-rm -f $(SCHED)/gw_scheduler_jobs.$(OBJEXT)
-	-rm -f $(SCHED)/gw_scheduler_users.$(OBJEXT)
-	-rm -f $(TM)/gw_tm.$(OBJEXT)
-	-rm -f $(TM)/gw_tm_actions.$(OBJEXT)
-	-rm -f $(TM)/gw_tm_checkpoint.$(OBJEXT)
-	-rm -f $(TM)/gw_tm_epilog.$(OBJEXT)
-	-rm -f $(TM)/gw_tm_listener.$(OBJEXT)
-	-rm -f $(TM)/gw_tm_mad.$(OBJEXT)
-	-rm -f $(TM)/gw_tm_prolog.$(OBJEXT)
-	-rm -f $(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_dummy_bin-gw_tm_dummy_mad.$(OBJEXT)
-	-rm -f $(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_mad.$(OBJEXT)
-	-rm -f $(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_queue.$(OBJEXT)
-	-rm -f $(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_stack.$(OBJEXT)
-	-rm -f $(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_transfer.$(OBJEXT)
-	-rm -f $(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_xfr_pool.$(OBJEXT)
-	-rm -f $(UM)/gw_um.$(OBJEXT)
-	-rm -f $(UM)/gw_user.$(OBJEXT)
-	-rm -f $(UM)/gw_user_pool.$(OBJEXT)
-	-rm -f test/gw_test.$(OBJEXT)
-
-distclean-compile:
-	-rm -f *.tab.c
-
-.c.o:
-	$(COMPILE) -c -o $@ $<
-
-.c.obj:
-	$(COMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
-
-.c.lo:
-	$(LTCOMPILE) -c -o $@ $<
-
-$(COMMON)/__srcdir__drmaa_libdrmaa_la-gw_file_parser.lo: $(COMMON)/gw_file_parser.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa_la_CFLAGS) $(CFLAGS) -c -o $(COMMON)/__srcdir__drmaa_libdrmaa_la-gw_file_parser.lo `test -f '$(COMMON)/gw_file_parser.c' || echo '$(srcdir)/'`$(COMMON)/gw_file_parser.c
-
-$(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_job_match.lo: $(CLIENT)/gw_client_job_match.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa_la_CFLAGS) $(CFLAGS) -c -o $(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_job_match.lo `test -f '$(CLIENT)/gw_client_job_match.c' || echo '$(srcdir)/'`$(CLIENT)/gw_client_job_match.c
-
-$(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_submit.lo: $(CLIENT)/gw_client_submit.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa_la_CFLAGS) $(CFLAGS) -c -o $(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_submit.lo `test -f '$(CLIENT)/gw_client_submit.c' || echo '$(srcdir)/'`$(CLIENT)/gw_client_submit.c
-
-$(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_host_status.lo: $(CLIENT)/gw_client_host_status.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa_la_CFLAGS) $(CFLAGS) -c -o $(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_host_status.lo `test -f '$(CLIENT)/gw_client_host_status.c' || echo '$(srcdir)/'`$(CLIENT)/gw_client_host_status.c
-
-$(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_job_status.lo: $(CLIENT)/gw_client_job_status.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa_la_CFLAGS) $(CFLAGS) -c -o $(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_job_status.lo `test -f '$(CLIENT)/gw_client_job_status.c' || echo '$(srcdir)/'`$(CLIENT)/gw_client_job_status.c
-
-$(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_user_status.lo: $(CLIENT)/gw_client_user_status.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa_la_CFLAGS) $(CFLAGS) -c -o $(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_user_status.lo `test -f '$(CLIENT)/gw_client_user_status.c' || echo '$(srcdir)/'`$(CLIENT)/gw_client_user_status.c
-
-$(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_init.lo: $(CLIENT)/gw_client_init.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa_la_CFLAGS) $(CFLAGS) -c -o $(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_init.lo `test -f '$(CLIENT)/gw_client_init.c' || echo '$(srcdir)/'`$(CLIENT)/gw_client_init.c
-
-$(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_signal.lo: $(CLIENT)/gw_client_signal.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa_la_CFLAGS) $(CFLAGS) -c -o $(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_signal.lo `test -f '$(CLIENT)/gw_client_signal.c' || echo '$(srcdir)/'`$(CLIENT)/gw_client_signal.c
-
-$(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_wait.lo: $(CLIENT)/gw_client_wait.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa_la_CFLAGS) $(CFLAGS) -c -o $(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_wait.lo `test -f '$(CLIENT)/gw_client_wait.c' || echo '$(srcdir)/'`$(CLIENT)/gw_client_wait.c
-
-$(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_rank_syntax.lo: $(HOST)/gw_host_rank_syntax.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa_la_CFLAGS) $(CFLAGS) -c -o $(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_rank_syntax.lo `test -f '$(HOST)/gw_host_rank_syntax.c' || echo '$(srcdir)/'`$(HOST)/gw_host_rank_syntax.c
-
-$(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_reqs_syntax.lo: $(HOST)/gw_host_reqs_syntax.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa_la_CFLAGS) $(CFLAGS) -c -o $(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_reqs_syntax.lo `test -f '$(HOST)/gw_host_reqs_syntax.c' || echo '$(srcdir)/'`$(HOST)/gw_host_reqs_syntax.c
-
-$(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_attr_parser.lo: $(HOST)/gw_host_attr_parser.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa_la_CFLAGS) $(CFLAGS) -c -o $(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_attr_parser.lo `test -f '$(HOST)/gw_host_attr_parser.c' || echo '$(srcdir)/'`$(HOST)/gw_host_attr_parser.c
-
-$(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_update_syntax.lo: $(HOST)/gw_host_update_syntax.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa_la_CFLAGS) $(CFLAGS) -c -o $(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_update_syntax.lo `test -f '$(HOST)/gw_host_update_syntax.c' || echo '$(srcdir)/'`$(HOST)/gw_host_update_syntax.c
-
-$(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_var.lo: $(HOST)/gw_host_var.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa_la_CFLAGS) $(CFLAGS) -c -o $(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_var.lo `test -f '$(HOST)/gw_host_var.c' || echo '$(srcdir)/'`$(HOST)/gw_host_var.c
-
-$(DRMAA)/__srcdir__drmaa_libdrmaa_la-gw_drmaa.lo: $(DRMAA)/gw_drmaa.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa_la_CFLAGS) $(CFLAGS) -c -o $(DRMAA)/__srcdir__drmaa_libdrmaa_la-gw_drmaa.lo `test -f '$(DRMAA)/gw_drmaa.c' || echo '$(srcdir)/'`$(DRMAA)/gw_drmaa.c
-
-$(DRMAA)/__srcdir__drmaa_libdrmaa_la-gw_drmaa_jt.lo: $(DRMAA)/gw_drmaa_jt.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa_la_CFLAGS) $(CFLAGS) -c -o $(DRMAA)/__srcdir__drmaa_libdrmaa_la-gw_drmaa_jt.lo `test -f '$(DRMAA)/gw_drmaa_jt.c' || echo '$(srcdir)/'`$(DRMAA)/gw_drmaa_jt.c
-
-$(COMMON)/__srcdir__drmaa_libdrmaa_la-gw_template_parser.lo: $(COMMON)/gw_template_parser.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa_la_CFLAGS) $(CFLAGS) -c -o $(COMMON)/__srcdir__drmaa_libdrmaa_la-gw_template_parser.lo `test -f '$(COMMON)/gw_template_parser.c' || echo '$(srcdir)/'`$(COMMON)/gw_template_parser.c
-
-$(COMMON)/__srcdir__drmaa_libdrmaa_la-gw_template.lo: $(COMMON)/gw_template.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa_la_CFLAGS) $(CFLAGS) -c -o $(COMMON)/__srcdir__drmaa_libdrmaa_la-gw_template.lo `test -f '$(COMMON)/gw_template.c' || echo '$(srcdir)/'`$(COMMON)/gw_template.c
-
-$(COMMON)/__srcdir__drmaa_libdrmaa_la-gw_log.lo: $(COMMON)/gw_log.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa_la_CFLAGS) $(CFLAGS) -c -o $(COMMON)/__srcdir__drmaa_libdrmaa_la-gw_log.lo `test -f '$(COMMON)/gw_log.c' || echo '$(srcdir)/'`$(COMMON)/gw_log.c
-
-$(COMMON)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_file_parser.lo: $(COMMON)/gw_file_parser.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_CFLAGS) $(CFLAGS) -c -o $(COMMON)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_file_parser.lo `test -f '$(COMMON)/gw_file_parser.c' || echo '$(srcdir)/'`$(COMMON)/gw_file_parser.c
-
-$(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_job_match.lo: $(CLIENT)/gw_client_job_match.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_CFLAGS) $(CFLAGS) -c -o $(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_job_match.lo `test -f '$(CLIENT)/gw_client_job_match.c' || echo '$(srcdir)/'`$(CLIENT)/gw_client_job_match.c
-
-$(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_submit.lo: $(CLIENT)/gw_client_submit.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_CFLAGS) $(CFLAGS) -c -o $(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_submit.lo `test -f '$(CLIENT)/gw_client_submit.c' || echo '$(srcdir)/'`$(CLIENT)/gw_client_submit.c
-
-$(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_host_status.lo: $(CLIENT)/gw_client_host_status.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_CFLAGS) $(CFLAGS) -c -o $(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_host_status.lo `test -f '$(CLIENT)/gw_client_host_status.c' || echo '$(srcdir)/'`$(CLIENT)/gw_client_host_status.c
-
-$(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_job_status.lo: $(CLIENT)/gw_client_job_status.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_CFLAGS) $(CFLAGS) -c -o $(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_job_status.lo `test -f '$(CLIENT)/gw_client_job_status.c' || echo '$(srcdir)/'`$(CLIENT)/gw_client_job_status.c
-
-$(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_user_status.lo: $(CLIENT)/gw_client_user_status.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_CFLAGS) $(CFLAGS) -c -o $(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_user_status.lo `test -f '$(CLIENT)/gw_client_user_status.c' || echo '$(srcdir)/'`$(CLIENT)/gw_client_user_status.c
-
-$(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_init.lo: $(CLIENT)/gw_client_init.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_CFLAGS) $(CFLAGS) -c -o $(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_init.lo `test -f '$(CLIENT)/gw_client_init.c' || echo '$(srcdir)/'`$(CLIENT)/gw_client_init.c
-
-$(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_signal.lo: $(CLIENT)/gw_client_signal.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_CFLAGS) $(CFLAGS) -c -o $(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_signal.lo `test -f '$(CLIENT)/gw_client_signal.c' || echo '$(srcdir)/'`$(CLIENT)/gw_client_signal.c
-
-$(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_wait.lo: $(CLIENT)/gw_client_wait.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_CFLAGS) $(CFLAGS) -c -o $(CLIENT)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_client_wait.lo `test -f '$(CLIENT)/gw_client_wait.c' || echo '$(srcdir)/'`$(CLIENT)/gw_client_wait.c
-
-$(HOST)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_host_rank_syntax.lo: $(HOST)/gw_host_rank_syntax.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_CFLAGS) $(CFLAGS) -c -o $(HOST)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_host_rank_syntax.lo `test -f '$(HOST)/gw_host_rank_syntax.c' || echo '$(srcdir)/'`$(HOST)/gw_host_rank_syntax.c
-
-$(HOST)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_host_reqs_syntax.lo: $(HOST)/gw_host_reqs_syntax.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_CFLAGS) $(CFLAGS) -c -o $(HOST)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_host_reqs_syntax.lo `test -f '$(HOST)/gw_host_reqs_syntax.c' || echo '$(srcdir)/'`$(HOST)/gw_host_reqs_syntax.c
-
-$(HOST)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_host_attr_parser.lo: $(HOST)/gw_host_attr_parser.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_CFLAGS) $(CFLAGS) -c -o $(HOST)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_host_attr_parser.lo `test -f '$(HOST)/gw_host_attr_parser.c' || echo '$(srcdir)/'`$(HOST)/gw_host_attr_parser.c
-
-$(HOST)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_host_update_syntax.lo: $(HOST)/gw_host_update_syntax.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_CFLAGS) $(CFLAGS) -c -o $(HOST)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_host_update_syntax.lo `test -f '$(HOST)/gw_host_update_syntax.c' || echo '$(srcdir)/'`$(HOST)/gw_host_update_syntax.c
-
-$(HOST)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_host_var.lo: $(HOST)/gw_host_var.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_CFLAGS) $(CFLAGS) -c -o $(HOST)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_host_var.lo `test -f '$(HOST)/gw_host_var.c' || echo '$(srcdir)/'`$(HOST)/gw_host_var.c
-
-$(DRMAA)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_drmaa.lo: $(DRMAA)/gw_drmaa.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_CFLAGS) $(CFLAGS) -c -o $(DRMAA)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_drmaa.lo `test -f '$(DRMAA)/gw_drmaa.c' || echo '$(srcdir)/'`$(DRMAA)/gw_drmaa.c
-
-$(DRMAA)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_drmaa_jt.lo: $(DRMAA)/gw_drmaa_jt.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_CFLAGS) $(CFLAGS) -c -o $(DRMAA)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_drmaa_jt.lo `test -f '$(DRMAA)/gw_drmaa_jt.c' || echo '$(srcdir)/'`$(DRMAA)/gw_drmaa_jt.c
-
-$(COMMON)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_template_parser.lo: $(COMMON)/gw_template_parser.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_CFLAGS) $(CFLAGS) -c -o $(COMMON)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_template_parser.lo `test -f '$(COMMON)/gw_template_parser.c' || echo '$(srcdir)/'`$(COMMON)/gw_template_parser.c
-
-$(COMMON)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_template.lo: $(COMMON)/gw_template.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_CFLAGS) $(CFLAGS) -c -o $(COMMON)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_template.lo `test -f '$(COMMON)/gw_template.c' || echo '$(srcdir)/'`$(COMMON)/gw_template.c
-
-$(COMMON)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_log.lo: $(COMMON)/gw_log.c
-	$(LIBTOOL) --mode=compile --tag=CC $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_CFLAGS) $(CFLAGS) -c -o $(COMMON)/__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la-gw_log.lo `test -f '$(COMMON)/gw_log.c' || echo '$(srcdir)/'`$(COMMON)/gw_log.c
-
-$(EM_MAD)/__srcdir__em_mad_gw_em_mad_prews_bin-gw_em_mad_prews_actions.o: $(EM_MAD)/gw_em_mad_prews_actions.c
-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__em_mad_gw_em_mad_prews_bin_CFLAGS) $(CFLAGS) -c -o $(EM_MAD)/__srcdir__em_mad_gw_em_mad_prews_bin-gw_em_mad_prews_actions.o `test -f '$(EM_MAD)/gw_em_mad_prews_actions.c' || echo '$(srcdir)/'`$(EM_MAD)/gw_em_mad_prews_actions.c
-
-$(EM_MAD)/__srcdir__em_mad_gw_em_mad_prews_bin-gw_em_mad_prews_actions.obj: $(EM_MAD)/gw_em_mad_prews_actions.c
-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__em_mad_gw_em_mad_prews_bin_CFLAGS) $(CFLAGS) -c -o $(EM_MAD)/__srcdir__em_mad_gw_em_mad_prews_bin-gw_em_mad_prews_actions.obj `if test -f '$(EM_MAD)/gw_em_mad_prews_actions.c'; then $(CYGPATH_W) '$(EM_MAD)/gw_em_mad_prews_actions.c'; else $(CYGPATH_W) '$(srcdir)/$(EM_MAD)/gw_em_mad_prews_actions.c'; fi`
-
-$(EM_MAD)/__srcdir__em_mad_gw_em_mad_prews_bin-gw_em_mad_prews.o: $(EM_MAD)/gw_em_mad_prews.c
-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__em_mad_gw_em_mad_prews_bin_CFLAGS) $(CFLAGS) -c -o $(EM_MAD)/__srcdir__em_mad_gw_em_mad_prews_bin-gw_em_mad_prews.o `test -f '$(EM_MAD)/gw_em_mad_prews.c' || echo '$(srcdir)/'`$(EM_MAD)/gw_em_mad_prews.c
-
-$(EM_MAD)/__srcdir__em_mad_gw_em_mad_prews_bin-gw_em_mad_prews.obj: $(EM_MAD)/gw_em_mad_prews.c
-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__em_mad_gw_em_mad_prews_bin_CFLAGS) $(CFLAGS) -c -o $(EM_MAD)/__srcdir__em_mad_gw_em_mad_prews_bin-gw_em_mad_prews.obj `if test -f '$(EM_MAD)/gw_em_mad_prews.c'; then $(CYGPATH_W) '$(EM_MAD)/gw_em_mad_prews.c'; else $(CYGPATH_W) '$(srcdir)/$(EM_MAD)/gw_em_mad_prews.c'; fi`
-
-$(EM_MAD)/__srcdir__em_mad_gw_em_mad_prews_bin-gw_em_mad_prews_pool.o: $(EM_MAD)/gw_em_mad_prews_pool.c
-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__em_mad_gw_em_mad_prews_bin_CFLAGS) $(CFLAGS) -c -o $(EM_MAD)/__srcdir__em_mad_gw_em_mad_prews_bin-gw_em_mad_prews_pool.o `test -f '$(EM_MAD)/gw_em_mad_prews_pool.c' || echo '$(srcdir)/'`$(EM_MAD)/gw_em_mad_prews_pool.c
-
-$(EM_MAD)/__srcdir__em_mad_gw_em_mad_prews_bin-gw_em_mad_prews_pool.obj: $(EM_MAD)/gw_em_mad_prews_pool.c
-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__em_mad_gw_em_mad_prews_bin_CFLAGS) $(CFLAGS) -c -o $(EM_MAD)/__srcdir__em_mad_gw_em_mad_prews_bin-gw_em_mad_prews_pool.obj `if test -f '$(EM_MAD)/gw_em_mad_prews_pool.c'; then $(CYGPATH_W) '$(EM_MAD)/gw_em_mad_prews_pool.c'; else $(CYGPATH_W) '$(srcdir)/$(EM_MAD)/gw_em_mad_prews_pool.c'; fi`
-
-$(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_dummy_bin-gw_tm_dummy_mad.o: $(TM_MAD)/gw_tm_dummy_mad.c
-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__tm_mad_gw_tm_mad_dummy_bin_CFLAGS) $(CFLAGS) -c -o $(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_dummy_bin-gw_tm_dummy_mad.o `test -f '$(TM_MAD)/gw_tm_dummy_mad.c' || echo '$(srcdir)/'`$(TM_MAD)/gw_tm_dummy_mad.c
-
-$(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_dummy_bin-gw_tm_dummy_mad.obj: $(TM_MAD)/gw_tm_dummy_mad.c
-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__tm_mad_gw_tm_mad_dummy_bin_CFLAGS) $(CFLAGS) -c -o $(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_dummy_bin-gw_tm_dummy_mad.obj `if test -f '$(TM_MAD)/gw_tm_dummy_mad.c'; then $(CYGPATH_W) '$(TM_MAD)/gw_tm_dummy_mad.c'; else $(CYGPATH_W) '$(srcdir)/$(TM_MAD)/gw_tm_dummy_mad.c'; fi`
-
-$(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_mad.o: $(TM_MAD)/gw_tm_ftp_mad.c
-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__tm_mad_gw_tm_mad_ftp_bin_CFLAGS) $(CFLAGS) -c -o $(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_mad.o `test -f '$(TM_MAD)/gw_tm_ftp_mad.c' || echo '$(srcdir)/'`$(TM_MAD)/gw_tm_ftp_mad.c
-
-$(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_mad.obj: $(TM_MAD)/gw_tm_ftp_mad.c
-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__tm_mad_gw_tm_mad_ftp_bin_CFLAGS) $(CFLAGS) -c -o $(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_mad.obj `if test -f '$(TM_MAD)/gw_tm_ftp_mad.c'; then $(CYGPATH_W) '$(TM_MAD)/gw_tm_ftp_mad.c'; else $(CYGPATH_W) '$(srcdir)/$(TM_MAD)/gw_tm_ftp_mad.c'; fi`
-
-$(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_queue.o: $(TM_MAD)/gw_tm_ftp_queue.c
-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__tm_mad_gw_tm_mad_ftp_bin_CFLAGS) $(CFLAGS) -c -o $(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_queue.o `test -f '$(TM_MAD)/gw_tm_ftp_queue.c' || echo '$(srcdir)/'`$(TM_MAD)/gw_tm_ftp_queue.c
-
-$(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_queue.obj: $(TM_MAD)/gw_tm_ftp_queue.c
-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__tm_mad_gw_tm_mad_ftp_bin_CFLAGS) $(CFLAGS) -c -o $(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_queue.obj `if test -f '$(TM_MAD)/gw_tm_ftp_queue.c'; then $(CYGPATH_W) '$(TM_MAD)/gw_tm_ftp_queue.c'; else $(CYGPATH_W) '$(srcdir)/$(TM_MAD)/gw_tm_ftp_queue.c'; fi`
-
-$(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_stack.o: $(TM_MAD)/gw_tm_ftp_stack.c
-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__tm_mad_gw_tm_mad_ftp_bin_CFLAGS) $(CFLAGS) -c -o $(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_stack.o `test -f '$(TM_MAD)/gw_tm_ftp_stack.c' || echo '$(srcdir)/'`$(TM_MAD)/gw_tm_ftp_stack.c
-
-$(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_stack.obj: $(TM_MAD)/gw_tm_ftp_stack.c
-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__tm_mad_gw_tm_mad_ftp_bin_CFLAGS) $(CFLAGS) -c -o $(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_stack.obj `if test -f '$(TM_MAD)/gw_tm_ftp_stack.c'; then $(CYGPATH_W) '$(TM_MAD)/gw_tm_ftp_stack.c'; else $(CYGPATH_W) '$(srcdir)/$(TM_MAD)/gw_tm_ftp_stack.c'; fi`
-
-$(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_transfer.o: $(TM_MAD)/gw_tm_ftp_transfer.c
-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__tm_mad_gw_tm_mad_ftp_bin_CFLAGS) $(CFLAGS) -c -o $(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_transfer.o `test -f '$(TM_MAD)/gw_tm_ftp_transfer.c' || echo '$(srcdir)/'`$(TM_MAD)/gw_tm_ftp_transfer.c
-
-$(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_transfer.obj: $(TM_MAD)/gw_tm_ftp_transfer.c
-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__tm_mad_gw_tm_mad_ftp_bin_CFLAGS) $(CFLAGS) -c -o $(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_transfer.obj `if test -f '$(TM_MAD)/gw_tm_ftp_transfer.c'; then $(CYGPATH_W) '$(TM_MAD)/gw_tm_ftp_transfer.c'; else $(CYGPATH_W) '$(srcdir)/$(TM_MAD)/gw_tm_ftp_transfer.c'; fi`
-
-$(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_xfr_pool.o: $(TM_MAD)/gw_tm_ftp_xfr_pool.c
-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__tm_mad_gw_tm_mad_ftp_bin_CFLAGS) $(CFLAGS) -c -o $(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_xfr_pool.o `test -f '$(TM_MAD)/gw_tm_ftp_xfr_pool.c' || echo '$(srcdir)/'`$(TM_MAD)/gw_tm_ftp_xfr_pool.c
-
-$(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_xfr_pool.obj: $(TM_MAD)/gw_tm_ftp_xfr_pool.c
-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__tm_mad_gw_tm_mad_ftp_bin_CFLAGS) $(CFLAGS) -c -o $(TM_MAD)/__srcdir__tm_mad_gw_tm_mad_ftp_bin-gw_tm_ftp_xfr_pool.obj `if test -f '$(TM_MAD)/gw_tm_ftp_xfr_pool.c'; then $(CYGPATH_W) '$(TM_MAD)/gw_tm_ftp_xfr_pool.c'; else $(CYGPATH_W) '$(srcdir)/$(TM_MAD)/gw_tm_ftp_xfr_pool.c'; fi`
-
-.l.c:
-	$(SHELL) $(YLWRAP) $< $(LEX_OUTPUT_ROOT).c $@ -- $(LEXCOMPILE)
-
-.y.c:
-	$(SHELL) $(YLWRAP) $< y.tab.c $@ y.tab.h $*.h y.output $*.output -- $(YACCCOMPILE)
+	cd $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
+pkgdata/pkg_data_src.gpt: $(top_builddir)/config.status $(top_srcdir)/pkgdata/pkg_data_src.gpt.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
 
 mostlyclean-libtool:
 	-rm -f *.lo
 
 clean-libtool:
-	-rm -rf $(CLIENT)/.libs $(CLIENT)/_libs
-	-rm -rf $(COMMON)/.libs $(COMMON)/_libs
-	-rm -rf $(DRMAA)/.libs $(DRMAA)/_libs
-	-rm -rf $(DRMAA_PACK)/.libs $(DRMAA_PACK)/_libs
-	-rm -rf $(HOST)/.libs $(HOST)/_libs
-	-rm -rf $(srcdir)/drmaa/.libs $(srcdir)/drmaa/_libs
 	-rm -rf .libs _libs
 
 distclean-libtool:
 	-rm -f libtool
 uninstall-info-am:
-install-em_ws_jarDATA: $(em_ws_jar_DATA)
-	@$(NORMAL_INSTALL)
-	test -z "$(em_ws_jardir)" || $(mkdir_p) "$(DESTDIR)$(em_ws_jardir)"
-	@list='$(em_ws_jar_DATA)'; for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  f=$(am__strip_dir) \
-	  echo " $(em_ws_jarDATA_INSTALL) '$$d$$p' '$(DESTDIR)$(em_ws_jardir)/$$f'"; \
-	  $(em_ws_jarDATA_INSTALL) "$$d$$p" "$(DESTDIR)$(em_ws_jardir)/$$f"; \
-	done
 
-uninstall-em_ws_jarDATA:
-	@$(NORMAL_UNINSTALL)
-	@list='$(em_ws_jar_DATA)'; for p in $$list; do \
-	  f=$(am__strip_dir) \
-	  echo " rm -f '$(DESTDIR)$(em_ws_jardir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(em_ws_jardir)/$$f"; \
-	done
-install-im_ws_jarDATA: $(im_ws_jar_DATA)
-	@$(NORMAL_INSTALL)
-	test -z "$(im_ws_jardir)" || $(mkdir_p) "$(DESTDIR)$(im_ws_jardir)"
-	@list='$(im_ws_jar_DATA)'; for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  f=$(am__strip_dir) \
-	  echo " $(im_ws_jarDATA_INSTALL) '$$d$$p' '$(DESTDIR)$(im_ws_jardir)/$$f'"; \
-	  $(im_ws_jarDATA_INSTALL) "$$d$$p" "$(DESTDIR)$(im_ws_jardir)/$$f"; \
-	done
+# This directory's subdirectories are mostly independent; you can cd
+# into them and run `make' without going through this Makefile.
+# To change the values of `make' variables: instead of editing Makefiles,
+# (1) if the variable is set in `config.status', edit `config.status'
+#     (which will cause the Makefiles to be regenerated when you run `make');
+# (2) otherwise, pass the desired values on the `make' command line.
+$(RECURSIVE_TARGETS):
+	@set fnord $$MAKEFLAGS; amf=$$2; \
+	dot_seen=no; \
+	target=`echo $@ | sed s/-recursive//`; \
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  echo "Making $$target in $$subdir"; \
+	  if test "$$subdir" = "."; then \
+	    dot_seen=yes; \
+	    local_target="$$target-am"; \
+	  else \
+	    local_target="$$target"; \
+	  fi; \
+	  (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$local_target) \
+	   || case "$$amf" in *=*) exit 1;; *k*) fail=yes;; *) exit 1;; esac; \
+	done; \
+	if test "$$dot_seen" = "no"; then \
+	  $(MAKE) $(AM_MAKEFLAGS) "$$target-am" || exit 1; \
+	fi; test -z "$$fail"
 
-uninstall-im_ws_jarDATA:
-	@$(NORMAL_UNINSTALL)
-	@list='$(im_ws_jar_DATA)'; for p in $$list; do \
-	  f=$(am__strip_dir) \
-	  echo " rm -f '$(DESTDIR)$(im_ws_jardir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(im_ws_jardir)/$$f"; \
+mostlyclean-recursive clean-recursive distclean-recursive \
+maintainer-clean-recursive:
+	@set fnord $$MAKEFLAGS; amf=$$2; \
+	dot_seen=no; \
+	case "$@" in \
+	  distclean-* | maintainer-clean-*) list='$(DIST_SUBDIRS)' ;; \
+	  *) list='$(SUBDIRS)' ;; \
+	esac; \
+	rev=''; for subdir in $$list; do \
+	  if test "$$subdir" = "."; then :; else \
+	    rev="$$subdir $$rev"; \
+	  fi; \
+	done; \
+	rev="$$rev ."; \
+	target=`echo $@ | sed s/-recursive//`; \
+	for subdir in $$rev; do \
+	  echo "Making $$target in $$subdir"; \
+	  if test "$$subdir" = "."; then \
+	    local_target="$$target-am"; \
+	  else \
+	    local_target="$$target"; \
+	  fi; \
+	  (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$local_target) \
+	   || case "$$amf" in *=*) exit 1;; *k*) fail=yes;; *) exit 1;; esac; \
+	done && test -z "$$fail"
+tags-recursive:
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  test "$$subdir" = . || (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) tags); \
 	done
-install-jarDATA: $(jar_DATA)
-	@$(NORMAL_INSTALL)
-	test -z "$(jardir)" || $(mkdir_p) "$(DESTDIR)$(jardir)"
-	@list='$(jar_DATA)'; for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  f=$(am__strip_dir) \
-	  echo " $(jarDATA_INSTALL) '$$d$$p' '$(DESTDIR)$(jardir)/$$f'"; \
-	  $(jarDATA_INSTALL) "$$d$$p" "$(DESTDIR)$(jardir)/$$f"; \
-	done
-
-uninstall-jarDATA:
-	@$(NORMAL_UNINSTALL)
-	@list='$(jar_DATA)'; for p in $$list; do \
-	  f=$(am__strip_dir) \
-	  echo " rm -f '$(DESTDIR)$(jardir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(jardir)/$$f"; \
-	done
-install-jsdl_jarDATA: $(jsdl_jar_DATA)
-	@$(NORMAL_INSTALL)
-	test -z "$(jsdl_jardir)" || $(mkdir_p) "$(DESTDIR)$(jsdl_jardir)"
-	@list='$(jsdl_jar_DATA)'; for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  f=$(am__strip_dir) \
-	  echo " $(jsdl_jarDATA_INSTALL) '$$d$$p' '$(DESTDIR)$(jsdl_jardir)/$$f'"; \
-	  $(jsdl_jarDATA_INSTALL) "$$d$$p" "$(DESTDIR)$(jsdl_jardir)/$$f"; \
-	done
-
-uninstall-jsdl_jarDATA:
-	@$(NORMAL_UNINSTALL)
-	@list='$(jsdl_jar_DATA)'; for p in $$list; do \
-	  f=$(am__strip_dir) \
-	  echo " rm -f '$(DESTDIR)$(jsdl_jardir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(jsdl_jardir)/$$f"; \
-	done
-install-flavorincludeHEADERS: $(flavorinclude_HEADERS)
-	@$(NORMAL_INSTALL)
-	test -z "$(flavorincludedir)" || $(mkdir_p) "$(DESTDIR)$(flavorincludedir)"
-	@list='$(flavorinclude_HEADERS)'; for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  f=$(am__strip_dir) \
-	  echo " $(flavorincludeHEADERS_INSTALL) '$$d$$p' '$(DESTDIR)$(flavorincludedir)/$$f'"; \
-	  $(flavorincludeHEADERS_INSTALL) "$$d$$p" "$(DESTDIR)$(flavorincludedir)/$$f"; \
-	done
-
-uninstall-flavorincludeHEADERS:
-	@$(NORMAL_UNINSTALL)
-	@list='$(flavorinclude_HEADERS)'; for p in $$list; do \
-	  f=$(am__strip_dir) \
-	  echo " rm -f '$(DESTDIR)$(flavorincludedir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(flavorincludedir)/$$f"; \
+ctags-recursive:
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  test "$$subdir" = . || (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) ctags); \
 	done
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
@@ -2185,10 +359,23 @@ ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	mkid -fID $$unique
 tags: TAGS
 
-TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
+TAGS: tags-recursive $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
 		$(TAGS_FILES) $(LISP)
 	tags=; \
 	here=`pwd`; \
+	if ($(ETAGS) --etags-include --version) >/dev/null 2>&1; then \
+	  include_option=--etags-include; \
+	  empty_fix=.; \
+	else \
+	  include_option=--include; \
+	  empty_fix=; \
+	fi; \
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  if test "$$subdir" = .; then :; else \
+	    test ! -f $$subdir/TAGS || \
+	      tags="$$tags $$include_option=$$here/$$subdir/TAGS"; \
+	  fi; \
+	done; \
 	list='$(SOURCES) $(HEADERS)  $(LISP) $(TAGS_FILES)'; \
 	unique=`for i in $$list; do \
 	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
@@ -2201,7 +388,7 @@ TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
 	    $$tags $$unique; \
 	fi
 ctags: CTAGS
-CTAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
+CTAGS: ctags-recursive $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
 		$(TAGS_FILES) $(LISP)
 	tags=; \
 	here=`pwd`; \
@@ -2224,7 +411,9 @@ distclean-tags:
 	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
 
 distdir: $(DISTFILES)
-	$(mkdir_p) $(distdir)/$(CMDS) $(distdir)/$(CMDS)/dagman $(distdir)/$(COMMON) $(distdir)/$(EM_MAD) $(distdir)/$(GWD) $(distdir)/$(HOST) $(distdir)/$(IM_MAD) $(distdir)/$(JOB) $(distdir)/$(SSH) $(distdir)/$(SSH)/ruby $(distdir)/$(TM_MAD) $(distdir)/../include
+	$(am__remove_distdir)
+	mkdir $(distdir)
+	$(mkdir_p) $(distdir)/config $(distdir)/pkgdata
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
@@ -2251,28 +440,135 @@ distdir: $(DISTFILES)
 	    || exit 1; \
 	  fi; \
 	done
+	list='$(DIST_SUBDIRS)'; for subdir in $$list; do \
+	  if test "$$subdir" = .; then :; else \
+	    test -d "$(distdir)/$$subdir" \
+	    || $(mkdir_p) "$(distdir)/$$subdir" \
+	    || exit 1; \
+	    distdir=`$(am__cd) $(distdir) && pwd`; \
+	    top_distdir=`$(am__cd) $(top_distdir) && pwd`; \
+	    (cd $$subdir && \
+	      $(MAKE) $(AM_MAKEFLAGS) \
+	        top_distdir="$$top_distdir" \
+	        distdir="$$distdir/$$subdir" \
+	        distdir) \
+	      || exit 1; \
+	  fi; \
+	done
 	$(MAKE) $(AM_MAKEFLAGS) \
 	  top_distdir="$(top_distdir)" distdir="$(distdir)" \
 	  dist-hook
-check-am: all-am
-check: check-am
-all-am: Makefile $(LTLIBRARIES) $(PROGRAMS) $(SCRIPTS) $(DATA) \
-		$(HEADERS)
-install-binPROGRAMS: install-libLTLIBRARIES
+	-find $(distdir) -type d ! -perm -777 -exec chmod a+rwx {} \; -o \
+	  ! -type d ! -perm -444 -links 1 -exec chmod a+r {} \; -o \
+	  ! -type d ! -perm -400 -exec chmod a+r {} \; -o \
+	  ! -type d ! -perm -444 -exec $(SHELL) $(install_sh) -c -m a+r {} {} \; \
+	|| chmod -R a+r $(distdir)
+dist-gzip: distdir
+	tardir=$(distdir) && $(am__tar) | GZIP=$(GZIP_ENV) gzip -c >$(distdir).tar.gz
+	$(am__remove_distdir)
 
-installdirs:
-	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(testdir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(em_ws_jardir)" "$(DESTDIR)$(im_ws_jardir)" "$(DESTDIR)$(jardir)" "$(DESTDIR)$(jsdl_jardir)" "$(DESTDIR)$(flavorincludedir)"; do \
-	  test -z "$$dir" || $(mkdir_p) "$$dir"; \
-	done
-install: install-am
-install-exec: install-exec-am
-install-data: install-data-am
-uninstall: uninstall-am
+dist-bzip2: distdir
+	tardir=$(distdir) && $(am__tar) | bzip2 -9 -c >$(distdir).tar.bz2
+	$(am__remove_distdir)
+
+dist-tarZ: distdir
+	tardir=$(distdir) && $(am__tar) | compress -c >$(distdir).tar.Z
+	$(am__remove_distdir)
+
+dist-shar: distdir
+	shar $(distdir) | GZIP=$(GZIP_ENV) gzip -c >$(distdir).shar.gz
+	$(am__remove_distdir)
+
+dist-zip: distdir
+	-rm -f $(distdir).zip
+	zip -rq $(distdir).zip $(distdir)
+	$(am__remove_distdir)
+
+dist dist-all: distdir
+	tardir=$(distdir) && $(am__tar) | GZIP=$(GZIP_ENV) gzip -c >$(distdir).tar.gz
+	$(am__remove_distdir)
+
+# This target untars the dist file and tries a VPATH configuration.  Then
+# it guarantees that the distribution is self-contained by making another
+# tarfile.
+distcheck: dist
+	case '$(DIST_ARCHIVES)' in \
+	*.tar.gz*) \
+	  GZIP=$(GZIP_ENV) gunzip -c $(distdir).tar.gz | $(am__untar) ;;\
+	*.tar.bz2*) \
+	  bunzip2 -c $(distdir).tar.bz2 | $(am__untar) ;;\
+	*.tar.Z*) \
+	  uncompress -c $(distdir).tar.Z | $(am__untar) ;;\
+	*.shar.gz*) \
+	  GZIP=$(GZIP_ENV) gunzip -c $(distdir).shar.gz | unshar ;;\
+	*.zip*) \
+	  unzip $(distdir).zip ;;\
+	esac
+	chmod -R a-w $(distdir); chmod a+w $(distdir)
+	mkdir $(distdir)/_build
+	mkdir $(distdir)/_inst
+	chmod a-w $(distdir)
+	dc_install_base=`$(am__cd) $(distdir)/_inst && pwd | sed -e 's,^[^:\\/]:[\\/],/,'` \
+	  && dc_destdir="$${TMPDIR-/tmp}/am-dc-$$$$/" \
+	  && cd $(distdir)/_build \
+	  && ../configure --srcdir=.. --prefix="$$dc_install_base" \
+	    $(DISTCHECK_CONFIGURE_FLAGS) \
+	  && $(MAKE) $(AM_MAKEFLAGS) \
+	  && $(MAKE) $(AM_MAKEFLAGS) dvi \
+	  && $(MAKE) $(AM_MAKEFLAGS) check \
+	  && $(MAKE) $(AM_MAKEFLAGS) install \
+	  && $(MAKE) $(AM_MAKEFLAGS) installcheck \
+	  && $(MAKE) $(AM_MAKEFLAGS) uninstall \
+	  && $(MAKE) $(AM_MAKEFLAGS) distuninstallcheck_dir="$$dc_install_base" \
+	        distuninstallcheck \
+	  && chmod -R a-w "$$dc_install_base" \
+	  && ({ \
+	       (cd ../.. && umask 077 && mkdir "$$dc_destdir") \
+	       && $(MAKE) $(AM_MAKEFLAGS) DESTDIR="$$dc_destdir" install \
+	       && $(MAKE) $(AM_MAKEFLAGS) DESTDIR="$$dc_destdir" uninstall \
+	       && $(MAKE) $(AM_MAKEFLAGS) DESTDIR="$$dc_destdir" \
+	            distuninstallcheck_dir="$$dc_destdir" distuninstallcheck; \
+	      } || { rm -rf "$$dc_destdir"; exit 1; }) \
+	  && rm -rf "$$dc_destdir" \
+	  && $(MAKE) $(AM_MAKEFLAGS) dist \
+	  && rm -rf $(DIST_ARCHIVES) \
+	  && $(MAKE) $(AM_MAKEFLAGS) distcleancheck
+	$(am__remove_distdir)
+	@(echo "$(distdir) archives ready for distribution: "; \
+	  list='$(DIST_ARCHIVES)'; for i in $$list; do echo $$i; done) | \
+	  sed -e '1{h;s/./=/g;p;x;}' -e '$${p;x;}'
+distuninstallcheck:
+	@cd $(distuninstallcheck_dir) \
+	&& test `$(distuninstallcheck_listfiles) | wc -l` -le 1 \
+	   || { echo "ERROR: files left after uninstall:" ; \
+	        if test -n "$(DESTDIR)"; then \
+	          echo "  (check DESTDIR support)"; \
+	        fi ; \
+	        $(distuninstallcheck_listfiles) ; \
+	        exit 1; } >&2
+distcleancheck: distclean
+	@if test '$(srcdir)' = . ; then \
+	  echo "ERROR: distcleancheck can only run from a VPATH build" ; \
+	  exit 1 ; \
+	fi
+	@test `$(distcleancheck_listfiles) | wc -l` -eq 0 \
+	  || { echo "ERROR: files left in build directory after distclean:" ; \
+	       $(distcleancheck_listfiles) ; \
+	       exit 1; } >&2
+check-am: all-am
+check: check-recursive
+all-am: Makefile
+installdirs: installdirs-recursive
+installdirs-am:
+install: install-recursive
+install-exec: install-exec-recursive
+install-data: install-data-recursive
+uninstall: uninstall-recursive
 
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
 
-installcheck: installcheck-am
+installcheck: installcheck-recursive
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) INSTALL_PROGRAM="$(INSTALL_STRIP_PROGRAM)" \
 	  install_sh_PROGRAM="$(INSTALL_STRIP_PROGRAM)" INSTALL_STRIP_FLAG=-s \
@@ -2281,175 +577,263 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
-	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
-	-rm -f test/$(am__dirstamp)
-	-test -z "$(ARRAY)/$(am__dirstamp)" || rm -f $(ARRAY)/$(am__dirstamp)
-	-test -z "$(CLIENT)/$(am__dirstamp)" || rm -f $(CLIENT)/$(am__dirstamp)
-	-test -z "$(CMDS)/$(am__dirstamp)" || rm -f $(CMDS)/$(am__dirstamp)
-	-test -z "$(COMMON)/$(am__dirstamp)" || rm -f $(COMMON)/$(am__dirstamp)
-	-test -z "$(DB)/$(am__dirstamp)" || rm -f $(DB)/$(am__dirstamp)
-	-test -z "$(DM)/$(am__dirstamp)" || rm -f $(DM)/$(am__dirstamp)
-	-test -z "$(DRMAA)/$(am__dirstamp)" || rm -f $(DRMAA)/$(am__dirstamp)
-	-test -z "$(DRMAA_PACK)/$(am__dirstamp)" || rm -f $(DRMAA_PACK)/$(am__dirstamp)
-	-test -z "$(EM)/$(am__dirstamp)" || rm -f $(EM)/$(am__dirstamp)
-	-test -z "$(EM_MAD)/$(am__dirstamp)" || rm -f $(EM_MAD)/$(am__dirstamp)
-	-test -z "$(GWD)/$(am__dirstamp)" || rm -f $(GWD)/$(am__dirstamp)
-	-test -z "$(HOST)/$(am__dirstamp)" || rm -f $(HOST)/$(am__dirstamp)
-	-test -z "$(IM)/$(am__dirstamp)" || rm -f $(IM)/$(am__dirstamp)
-	-test -z "$(JOB)/$(am__dirstamp)" || rm -f $(JOB)/$(am__dirstamp)
-	-test -z "$(RM)/$(am__dirstamp)" || rm -f $(RM)/$(am__dirstamp)
-	-test -z "$(SCHED)/$(am__dirstamp)" || rm -f $(SCHED)/$(am__dirstamp)
-	-test -z "$(TM)/$(am__dirstamp)" || rm -f $(TM)/$(am__dirstamp)
-	-test -z "$(TM_MAD)/$(am__dirstamp)" || rm -f $(TM_MAD)/$(am__dirstamp)
-	-test -z "$(UM)/$(am__dirstamp)" || rm -f $(UM)/$(am__dirstamp)
-	-test -z "$(srcdir)/cmds/$(am__dirstamp)" || rm -f $(srcdir)/cmds/$(am__dirstamp)
-	-test -z "$(srcdir)/drmaa/$(am__dirstamp)" || rm -f $(srcdir)/drmaa/$(am__dirstamp)
-	-test -z "$(srcdir)/em_mad/$(am__dirstamp)" || rm -f $(srcdir)/em_mad/$(am__dirstamp)
-	-test -z "$(srcdir)/gwd/$(am__dirstamp)" || rm -f $(srcdir)/gwd/$(am__dirstamp)
-	-test -z "$(srcdir)/scheduler/$(am__dirstamp)" || rm -f $(srcdir)/scheduler/$(am__dirstamp)
-	-test -z "$(srcdir)/test/$(am__dirstamp)" || rm -f $(srcdir)/test/$(am__dirstamp)
-	-test -z "$(srcdir)/tm_mad/$(am__dirstamp)" || rm -f $(srcdir)/tm_mad/$(am__dirstamp)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
-	-rm -f $(COMMON)/gw_template_parser.c
-	-rm -f $(GWD)/gw_conf_parser.c
-	-rm -f $(GWD)/gw_sch_conf_parser.c
-	-rm -f $(GWD)/gw_sch_conf_syntax.c
-	-rm -f $(GWD)/gw_sch_conf_syntax.h
-	-rm -f $(HOST)/gw_host_attr_parser.c
-	-rm -f $(HOST)/gw_host_rank_syntax.c
-	-rm -f $(HOST)/gw_host_rank_syntax.h
-	-rm -f $(HOST)/gw_host_reqs_syntax.c
-	-rm -f $(HOST)/gw_host_reqs_syntax.h
-	-rm -f $(HOST)/gw_host_update_syntax.c
-	-rm -f $(HOST)/gw_host_update_syntax.h
-	-rm -f $(JOB)/gw_job_template_var_parser.c
-clean: clean-am
+clean: clean-recursive
 
-clean-am: clean-binPROGRAMS clean-generic clean-libLTLIBRARIES \
-	clean-libtool clean-testPROGRAMS mostlyclean-am
+clean-am: clean-generic clean-libtool mostlyclean-am
 
-distclean: distclean-am
+distclean: distclean-recursive
+	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -f Makefile
-distclean-am: clean-am distclean-compile distclean-generic \
-	distclean-libtool distclean-tags
+distclean-am: clean-am distclean-generic distclean-libtool \
+	distclean-tags
 
-dvi: dvi-am
+dvi: dvi-recursive
 
 dvi-am:
 
-html: html-am
+html: html-recursive
 
-info: info-am
+info: info-recursive
 
 info-am:
 
-install-data-am: install-em_ws_jarDATA install-flavorincludeHEADERS \
-	install-im_ws_jarDATA install-jarDATA install-jsdl_jarDATA \
-	install-testPROGRAMS
+install-data-am:
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
 
-install-exec-am: install-binPROGRAMS install-binSCRIPTS \
-	install-dist_binSCRIPTS install-libLTLIBRARIES
+install-exec-am:
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) install-exec-hook
 
-install-info: install-info-am
+install-info: install-info-recursive
 
 install-man:
 
 installcheck-am:
 
-maintainer-clean: maintainer-clean-am
+maintainer-clean: maintainer-clean-recursive
+	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
+	-rm -rf $(top_srcdir)/autom4te.cache
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
-mostlyclean: mostlyclean-am
+mostlyclean: mostlyclean-recursive
 
-mostlyclean-am: mostlyclean-compile mostlyclean-generic \
-	mostlyclean-libtool
+mostlyclean-am: mostlyclean-generic mostlyclean-libtool
 
-pdf: pdf-am
+pdf: pdf-recursive
 
 pdf-am:
 
-ps: ps-am
+ps: ps-recursive
 
 ps-am:
 
-uninstall-am: uninstall-binPROGRAMS uninstall-binSCRIPTS \
-	uninstall-dist_binSCRIPTS uninstall-em_ws_jarDATA \
-	uninstall-flavorincludeHEADERS uninstall-im_ws_jarDATA \
-	uninstall-info-am uninstall-jarDATA uninstall-jsdl_jarDATA \
-	uninstall-libLTLIBRARIES uninstall-testPROGRAMS
+uninstall-am: uninstall-info-am
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) uninstall-hook
 
-.PHONY: CTAGS GTAGS all all-am check check-am clean clean-binPROGRAMS \
-	clean-generic clean-libLTLIBRARIES clean-libtool \
-	clean-testPROGRAMS ctags dist-hook distclean distclean-compile \
-	distclean-generic distclean-libtool distclean-tags distdir dvi \
+uninstall-info: uninstall-info-recursive
+
+.PHONY: $(RECURSIVE_TARGETS) CTAGS GTAGS all all-am am--refresh check \
+	check-am clean clean-generic clean-libtool clean-recursive \
+	ctags ctags-recursive dist dist-all dist-bzip2 dist-gzip \
+	dist-hook dist-shar dist-tarZ dist-zip distcheck distclean \
+	distclean-generic distclean-libtool distclean-recursive \
+	distclean-tags distcleancheck distdir distuninstallcheck dvi \
 	dvi-am html html-am info info-am install install-am \
-	install-binPROGRAMS install-binSCRIPTS install-data \
-	install-data-am install-dist_binSCRIPTS install-em_ws_jarDATA \
-	install-exec install-exec-am install-flavorincludeHEADERS \
-	install-im_ws_jarDATA install-info install-info-am \
-	install-jarDATA install-jsdl_jarDATA install-libLTLIBRARIES \
-	install-man install-strip install-testPROGRAMS installcheck \
-	installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-compile \
-	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	tags uninstall uninstall-am uninstall-binPROGRAMS \
-	uninstall-binSCRIPTS uninstall-dist_binSCRIPTS \
-	uninstall-em_ws_jarDATA uninstall-flavorincludeHEADERS \
-	uninstall-im_ws_jarDATA uninstall-info-am uninstall-jarDATA \
-	uninstall-jsdl_jarDATA uninstall-libLTLIBRARIES \
-	uninstall-testPROGRAMS
+	install-data install-data-am install-data-hook install-exec \
+	install-exec-am install-exec-hook install-info install-info-am \
+	install-man install-strip installcheck installcheck-am \
+	installdirs installdirs-am maintainer-clean \
+	maintainer-clean-generic maintainer-clean-recursive \
+	mostlyclean mostlyclean-generic mostlyclean-libtool \
+	mostlyclean-recursive pdf pdf-am ps ps-am tags tags-recursive \
+	uninstall uninstall-am uninstall-hook uninstall-info-am
 
-@GW_GLOBUS_DIRS_FALSE@@incgtmk@
-@JSDL_TRUE@$(srcdir)/cmds/gw_jsdl.jar:
-@JSDL_TRUE@	@rm -f lib/gw_jsdl.jar
-@JSDL_TRUE@	@mkdir -p $(CMDS)/package
-@JSDL_TRUE@	$(JAVAC_PATH) $(JSDL_SRC) \
-@JSDL_TRUE@	    -classpath @classpath@:$(CMDS) \
-@JSDL_TRUE@        -d $(CMDS)/package
-@JSDL_TRUE@	jar cf $(srcdir)/cmds/gw_jsdl.jar -C $(CMDS)/package/ .
-@JSDL_TRUE@	@rm -rf $(CMDS)/package
-@DRMAA_TRUE@$(srcdir)/drmaa/drmaa.jar:
-@DRMAA_TRUE@	@rm -f lib/drmaa.jar
-@DRMAA_TRUE@	@mkdir -p $(DRMAA)/package
-@DRMAA_TRUE@	$(JAVAC_PATH) $(DRMAA_JAVA_SRC) \
-@DRMAA_TRUE@	    -classpath $(DRMAA) \
-@DRMAA_TRUE@        -d $(DRMAA)/package
-@DRMAA_TRUE@	jar cf $(srcdir)/drmaa/drmaa.jar -C $(DRMAA)/package/ .
-@DRMAA_TRUE@	@rm -rf $(DRMAA)/package
-@WS_TRUE@$(srcdir)/im_mad/gw_im_mad_ws.jar:
-@WS_TRUE@	@rm -f lib/gw_im_mad_ws.jar
-@WS_TRUE@	@mkdir -p $(IM_MAD)/package 
-@WS_TRUE@	$(JAVAC_PATH) $(IM_MAD_MDS4_SRC) \
-@WS_TRUE@	    -classpath @classpath@:$(IM_MAD) \
-@WS_TRUE@        -d $(IM_MAD)/package
-@WS_TRUE@	jar cf $(srcdir)/im_mad/gw_im_mad_ws.jar -C $(IM_MAD)/package/ .
-@WS_TRUE@	@rm -rf $(IM_MAD)/package
-@WS_TRUE@$(srcdir)/em_mad/gw_em_mad_ws.jar:
-@WS_TRUE@	@rm -f lib/gw_em_mad_ws.jar
-@WS_TRUE@	@mkdir -p $(EM_MAD)/package
-@WS_TRUE@	$(JAVAC_PATH) $(EM_MAD_WS_SRC) \
-@WS_TRUE@	    -classpath @classpath@:$(EM_MAD) \
-@WS_TRUE@        -d $(EM_MAD)/package
-@WS_TRUE@	jar cf $(srcdir)/em_mad/gw_em_mad_ws.jar -C $(EM_MAD)/package/ .
-@WS_TRUE@	@rm -rf $(EM_MAD)/package
 
-dist-hook:
-	@mkdir -p $(distdir)/cmds
-	@mkdir -p $(distdir)/im_mad
-	@mkdir -p $(distdir)/em_mad
-	@mkdir -p $(distdir)/$(DRMAA_SRC_DIR)/org/ggf/drmaa
-	@cp $(JSDL_SRC) $(distdir)/cmds/
-	@cp $(IM_MAD_MDS4_SRC_DIST) $(distdir)/im_mad
-	@cp $(EM_MAD_WS_SRC_DIST) $(distdir)/em_mad
-	@cp $(DRMAA_JAVA_SRC) $(distdir)/$(DRMAA_SRC_DIR)/org/ggf/drmaa
-	@cp $(DRMAA_PACK)/DrmaaJNI.h $(distdir)/$(DRMAA_SRC_DIR)/org/ggf/drmaa
+install-exec-hook:
+	@mkdir -p $(PREFIX)/$(GW_SHARE_DIR)
+	@cp LICENSE README $(PREFIX)/$(GW_SHARE_DIR)
+
+	@rm -rf $(PREFIX)/$(GW_SHARE_DIR)/examples
+	@mkdir -p $(PREFIX)/$(GW_SHARE_DIR)
+	@cp -r examples $(PREFIX)/$(GW_SHARE_DIR)/examples
+
+@TESTS_TRUE@	@rm -rf $(PREFIX)/$(GW_TEST_DIR)
+@TESTS_TRUE@	@mkdir -p $(PREFIX)/$(GW_TEST_DIR)
+@TESTS_TRUE@	@cp -r src/test/gwtest src/test/TEST.pl src/test/jt $(PREFIX)/$(GW_TEST_DIR)
+
+# ----------------------------
+# -- Script renaming - Commons
+# ----------------------------
+
+# -- Dagman Ruby Scripts
+	@mkdir -p $(PREFIX)/libexec/ruby/dagman
+	@mv $(PREFIX)/bin/gw_dagman.rb $(PREFIX)/bin/gwdagman
+	@mv $(PREFIX)/bin/node.rb $(PREFIX)/libexec/ruby/dagman/node.rb
+	@mv $(PREFIX)/bin/parse.rb $(PREFIX)/libexec/ruby/dagman/parse.rb
+	@mv $(PREFIX)/bin/runner.rb $(PREFIX)/libexec/ruby/dagman/runner.rb
+	@mv $(PREFIX)/bin/gridway.rb $(PREFIX)/libexec/ruby/dagman/gridway.rb
+	@mv $(PREFIX)/bin/gw_im_mad_static.sh $(PREFIX)/bin/gw_im_mad_static
+
+@GRIDFTP_TRUE@	@mv $(PREFIX)/bin/gw_tm_mad_ftp.sh $(PREFIX)/bin/gw_tm_mad_ftp
+
+# ----------------------------
+# -- Script renaming - WS
+# ----------------------------
+
+@WS_TRUE@	@mv $(PREFIX)/bin/gw_em_mad_ws.sh $(PREFIX)/bin/gw_em_mad_ws
+@WS_TRUE@	@mv $(PREFIX)/bin/gw_im_mad_mds4.sh $(PREFIX)/bin/gw_im_mad_mds4
+@WS_TRUE@	@mv $(PREFIX)/bin/gw_im_mad_mds4_thr.sh $(PREFIX)/bin/gw_im_mad_mds4_thr
+
+# ----------------------------
+# -- Script renaming - PREWS
+# ----------------------------
+
+@PREWS_TRUE@	@mv $(PREFIX)/bin/gw_im_mad_mds2.sh $(PREFIX)/bin/gw_im_mad_mds2
+@PREWS_TRUE@	@mv $(PREFIX)/bin/gw_im_mad_mds2_glue.sh $(PREFIX)/bin/gw_im_mad_mds2_glue
+@PREWS_TRUE@	@mv $(PREFIX)/bin/gw_tm_mad_dummy.sh $(PREFIX)/bin/gw_tm_mad_dummy
+@PREWS_TRUE@	@mv $(PREFIX)/bin/gw_em_mad_prews.sh $(PREFIX)/bin/gw_em_mad_prews
+
+# ----------------------------
+# -- Script renaming - NORDUGRID
+# ----------------------------
+
+@NORDUGRID_TRUE@	@mv $(PREFIX)/bin/gw_em_mad_nordugrid.sh $(PREFIX)/bin/gw_em_mad_nordugrid
+@NORDUGRID_TRUE@	@mv $(PREFIX)/bin/gw_tm_mad_nordugrid.sh $(PREFIX)/bin/gw_tm_mad_nordugrid
+@NORDUGRID_TRUE@	@mkdir -p $(PREFIX)/libexec/python
+@NORDUGRID_TRUE@	@mv $(PREFIX)/bin/gw_em_mad_nordugrid.py $(PREFIX)/libexec/python/gw_em_mad_nordugrid.py
+@NORDUGRID_TRUE@	@mv $(PREFIX)/bin/gw_tm_mad_nordugrid.py $(PREFIX)/libexec/python/gw_tm_mad_nordugrid.py
+@NORDUGRID_TRUE@	@mv $(PREFIX)/bin/em_nordugrid.py $(PREFIX)/libexec/python/em_nordugrid.py
+@NORDUGRID_TRUE@	@mv $(PREFIX)/bin/tm_nordugrid.py $(PREFIX)/libexec/python/tm_nordugrid.py
+
+# ----------------------------
+# -- Script renaming - LDAP
+# ----------------------------
+@LDAP_TRUE@	@mkdir -p $(PREFIX)/libexec/perl
+@LDAP_TRUE@	@mv $(PREFIX)/bin/gw_im_mad_egee_ldap.sh $(PREFIX)/bin/gw_im_mad_egee_ldap
+@LDAP_TRUE@	@mv $(PREFIX)/bin/gw_im_mad_egee_ldap.pl $(PREFIX)/libexec/perl/gw_im_mad_egee_ldap.pl
+
+# ----------------------------
+# -- Script renaming - SSH
+# ----------------------------
+@SSH_TRUE@	@mkdir -p $(PREFIX)/libexec/ruby
+@SSH_TRUE@	@mv $(PREFIX)/bin/gw_em_mad_ssh.sh $(PREFIX)/bin/gw_em_mad_ssh
+@SSH_TRUE@	@mv $(PREFIX)/bin/gw_tm_mad_ssh.sh $(PREFIX)/bin/gw_tm_mad_ssh
+@SSH_TRUE@	@mv $(PREFIX)/bin/ssh_wrapper.sh $(PREFIX)/libexec
+@SSH_TRUE@	@mv $(PREFIX)/bin/gw_em_mad_ssh.rb \
+@SSH_TRUE@	$(PREFIX)/bin/gwmad.rb \
+@SSH_TRUE@	$(PREFIX)/bin/gw_tm_mad_ssh.rb \
+@SSH_TRUE@	$(PREFIX)/bin/rslparser.rb \
+@SSH_TRUE@	$(PREFIX)/bin/sshjob.rb \
+@SSH_TRUE@	$(PREFIX)/bin/sshresource.rb \
+@SSH_TRUE@	$(PREFIX)/libexec/ruby
+
+# ----------------------------
+# -- Script renaming - JSDL
+# ----------------------------
+
+@JSDL_TRUE@	@mv $(PREFIX)/bin/jsdl2gw.sh $(PREFIX)/bin/jsdl2gw
+
+# ****************************
+# DIR LAYOUT
+# ****************************
+
+install-data-hook:
+	mkdir -p $(PREFIX)/$(GW_VAR_DIR)/acct
+	mkdir -p $(PREFIX)/$(GW_ETC_DIR)
+	mkdir -p $(PREFIX)/$(GW_XML_DIR)
+	cp -r $(top_srcdir)/etc/im_examples $(PREFIX)/$(GW_ETC_DIR)/
+	cp $(top_srcdir)/etc/gwd.conf \
+	   $(top_srcdir)/etc/job_template.default \
+	   $(top_srcdir)/etc/sched.conf \
+	   $(top_srcdir)/etc/gwrc \
+	   $(PREFIX)/$(GW_ETC_DIR)/
+	cp $(top_srcdir)/xml_schema/gridway.xsd $(PREFIX)/$(GW_XML_DIR)
+
+# ----------------------------
+#   Dagman Examples
+# ----------------------------
+	@ln -s A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/B.jt
+	@ln -s A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/C.jt
+	@ln -s A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/D.jt
+	@ln -s A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/E.jt
+	@ln -s A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/F.jt
+	@ln -s A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/G.jt
+	@ln -s A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/H.jt
+	@ln -s A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/I.jt
+	@ln -s A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/J.jt
+	@ln -s A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/K.jt
+
+# ----------------------------
+#    remove svn DIRS
+# ----------------------------
+	@find $(PREFIX) -depth -name .svn -exec rm -rf '{}' \;
+
+# ----------------------------		
+# Copy wrapper, monitor & gw_mad_common.sh
+# ----------------------------
+
+	@mkdir -p $(PREFIX)/libexec
+	@cp $(top_srcdir)/scripts/wrapper.sh $(PREFIX)/libexec/gw_wrapper.sh
+	@cp $(top_srcdir)/scripts/monitor.sh $(PREFIX)/libexec/gw_monitor.sh
+	@mkdir -p $(PREFIX)/bin
+	@cp $(top_srcdir)/scripts/gw_mad_common.sh $(PREFIX)/bin
+
+uninstall-hook:
+	@rm -f $(PREFIX)/bin/gwdagman
+	@rm $(PREFIX)/bin/gw_im_mad_mds2
+	@rm $(PREFIX)/bin/gw_im_mad_mds4
+	@rm $(PREFIX)/bin/gw_em_mad_ws
+	@rm $(PREFIX)/bin/gw_im_mad_mds2_glue
+@GRIDFTP_TRUE@	@rm $(PREFIX)/bin/gw_tm_mad_ftp
+	@rm $(PREFIX)/bin/gw_tm_mad_rft
+	@rm $(PREFIX)/bin/gw_em_mad_prews
+	@rm $(PREFIX)/bin/gw_im_mad_static
+	@rm $(PREFIX)/bin/gw_tm_mad_dummy
+	@rm $(PREFIX)/bin/jsdl2gw
+	@rm -rf $(PREFIX)/lib/ruby/
+	@rm -rf $(PREFIX)/$(GW_VAR_DIR)
+@NORDUGRID_TRUE@	@rm -rf $(PREFIX)/libexec/python
+@NORDUGRID_TRUE@	@rm $(PREFIX)/bin/gw_em_mad_nordugrid
+@NORDUGRID_TRUE@	@rm $(PREFIX)/bin/gw_tm_mad_nordugrid
+@LDAP_TRUE@	@rm -rf $(PREFIX)/libexec/perl
+@LDAP_TRUE@	@rm $(PREFIX)/bin/gw_im_mad_egee_ldap
+	@rm -rf $(PREFIX)/$(GW_XML_DIR)
+
+# *****************************************
+# Dist specifics (see also src/Makefile.am)
+# *****************************************
+
+dist-hook:	
+	@rm -rf $(distdir)/src/$(DRMAA_SRC_DIR)/org/ggf/drmaa/.dirstamp
+	@rm -rf $(distdir)/src/$(DRMAA_SRC_DIR)/org/ggf/drmaa/.libs
+	@rm -f $(distdir)/src/$(DRMAA_SRC_DIR)/org/ggf/drmaa/DrmaaJNI.lo
+	@rm -f $(distdir)/src/$(DRMAA_SRC_DIR)/org/ggf/drmaa/DrmaaJNI.o
+	@cp -r examples $(distdir)
+	@cp -r etc $(distdir)
+	@cp -r src/test/jt $(distdir)/src/test
+	@cp -r src/test/TEST.pl $(distdir)/src/test
+	@mkdir -p $(distdir)/src/drmaa/ruby
+	@cp src/drmaa/ruby/extconf.rb $(distdir)/src/drmaa/ruby
+	@cp src/drmaa/ruby/drmaa_r.i $(distdir)/src/drmaa/ruby
+	@cp src/drmaa/ruby/drmaa_r_wrap.c $(distdir)/src/drmaa/ruby
+	@cp -r scripts $(distdir)
+	@cp pkg_data_src.gpt  $(distdir)/pkg_data_src.gpt
+	@cp -r LICENSE README $(distdir)
+
+# ----------------------------
+#    remove CVS DIRS
+# ----------------------------
+	@find $(distdir) -depth -name .svn -exec rm -rf '{}' \;
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:
