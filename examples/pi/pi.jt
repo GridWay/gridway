@@ -4,4 +4,3 @@ INPUT_FILES = pi.c
 STDOUT_FILE = stdout_file.${TASK_ID}
 STDERR_FILE = stderr_file.${TASK_ID}
 RANK        = CPU_MHZ
-REQUIREMENTS = ( HOSTNAME = "gilda-ce.rediris.es" )
