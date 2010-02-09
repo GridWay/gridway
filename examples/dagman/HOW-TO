@@ -1,0 +1,7 @@
+# First example equivalent to the one in the ../workflow folder
+gwdagman -d workflow.dag | dot -Tpdf -o workflow.pdf || echo "Package dot from graphviz missing"
+gwdagman workflow.dag
+
+# Second example is a complex one, including the first as preliminar job
+gwdagman -d complex.dag | dot -Tpdf -o workflow.pdf || echo "Package dot from graphviz missing"
+gwdagman complex.dag

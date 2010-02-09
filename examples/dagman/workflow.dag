@@ -1,0 +1,8 @@
+# Filename: workflow.dag
+#
+JOB  A  A.jt
+JOB  B  B.jt
+JOB  C  C.jt
+JOB  D  D.jt
+PARENT A CHILD B C
+PARENT B C CHILD D

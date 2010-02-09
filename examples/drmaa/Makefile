@@ -72,7 +72,7 @@ HOWTOS_JOBJS := $(HOWTOS_JOBJS:%.java=%.class)
 #  targets
 #--------------------
 
-all: drmaa_c_howtos drmaa_java_howtos
+all: drmaa_c_howtos 
 
 drmaa_c_howtos: $(HOWTOS_COBJS)
 	$(CC) $(CFLAGS) $(EXAMPLES_DIR)/drmaa_c/Howto1.o -o $(EXAMPLES_DIR)/drmaa_c/Howto1 -L $(LIB_DIR) $(LIBS)

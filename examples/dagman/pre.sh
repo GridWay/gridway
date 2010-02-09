@@ -1,5 +1,3 @@
 #!/bin/sh
-
-echo "done"
-
-
+echo "unzipping job templates"
+gunzip -c E-K.tar.gz | tar xvf -

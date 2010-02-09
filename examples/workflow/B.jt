@@ -1,4 +1,4 @@
-EXECUTABLE=/usr/bin/expr
-ARGUMENTS="`cat out.A`" + 1
+EXECUTABLE=sum
+ARGUMENTS=out.A 1
 INPUT_FILES=out.A
 STDOUT_FILE=out.B
