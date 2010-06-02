@@ -381,7 +381,7 @@ void gw_rm_listener(void *_null)
 
     	if (rc == -1)
     	{
-    		gw_log_print("RM",'E',"Error in select(): %s",strerror(errno));
+    		gw_log_print("RM",'E',"Error in select(): %s\n",strerror(errno));
 			continue;
     	}
     	

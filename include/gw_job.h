@@ -125,7 +125,7 @@ typedef struct gw_job_s
     time_t start_time;
     time_t exit_time;
 
-    time_t last_poll_time;
+    time_t next_poll_time;
     time_t last_rescheduling_time;
     time_t last_checkpoint_time;
     

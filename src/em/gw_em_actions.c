@@ -41,56 +41,56 @@ void gw_em_submit(void *_job_id)
     char          *rsl=NULL;
     char          *contact;
     gw_job_state_t state;
-	char 		   rsl_filename[2048];
-	FILE          *fd;
+    char          rsl_filename[2048];
+    FILE          *fd;
 	
-	/* ----------------------------------------------------------- */  
+    /* ----------------------------------------------------------- */  
     /* 0.- Get job pointer, check if it exits and lock mutex       */
     /* ----------------------------------------------------------- */  
 
-	if ( _job_id != NULL )
-	{
-		job_id = *( (int *) _job_id );	
-		job = gw_job_pool_get(job_id, GW_TRUE);
+    if ( _job_id != NULL )
+    {
+        job_id = *( (int *) _job_id );	
+        job = gw_job_pool_get(job_id, GW_TRUE);
 	
-		if ( job == NULL )
-		{
-			gw_log_print("EM",'E',"Job %s no longer exists (PENDING).\n",
+        if ( job == NULL )
+        {
+            gw_log_print("EM",'E',"Job %s no longer exists (PENDING).\n",
                     job_id);
-			return;
-		}
-	}
-	else
-		return;
+            return;
+        }
+    }
+    else
+        return;
 
     if (job->history == NULL) 
     {
-		gw_log_print("EM",'E',"History of job %s doesn't exists\n",
-				job_id);
-		free(_job_id);
+        gw_log_print("EM",'E',"History of job %s doesn't exists\n",
+                job_id);
+        free(_job_id);
         pthread_mutex_unlock(&(job->mutex));				
-		return;
+        return;
     }
 
-	state = job->job_state;
+    state = job->job_state;
 	
-	/* ----------------------------------------------------------- */  
+    /* ----------------------------------------------------------- */  
     /* 1.- Get execution MAD for this host                         */
     /* ----------------------------------------------------------- */  
 
     job->em_state = GW_EM_STATE_INIT;
     job->history->counter = -1;    
 
-	if ( job->job_state == GW_JOB_STATE_PRE_WRAPPER )
-	{
-		contact = job->history->em_fork_rc;
-    	rsl     = (char *) job->history->em_mad->pre_wrapper_rsl((void *) job);    
-	}
-	else
-	{
-		contact = job->history->em_rc;
-    	rsl     = (char *) job->history->em_mad->wrapper_rsl((void *) job);    		
-	}
+    if ( job->job_state == GW_JOB_STATE_PRE_WRAPPER )
+    {
+        contact = job->history->em_fork_rc;
+        rsl     = (char *) job->history->em_mad->pre_wrapper_rsl((void *) job);    
+    }
+    else
+    {
+        contact = job->history->em_rc;
+        rsl     = (char *) job->history->em_mad->wrapper_rsl((void *) job);    		
+    }
 	
     if ( rsl == NULL )
     {
@@ -109,7 +109,7 @@ void gw_em_submit(void *_job_id)
     fd = fopen(rsl_filename,"w");
     if (fd != NULL )
     {
-		gw_job_print(job,"EM",'I',"Submitting wrapper to %s, RSL used is in %s.\n",contact,rsl_filename);
+        gw_job_print(job,"EM",'I',"Submitting wrapper to %s, RSL used is in %s.\n",contact,rsl_filename);
     	fprintf(fd,"%s",rsl);
     	fclose(fd);
     }
@@ -118,9 +118,9 @@ void gw_em_submit(void *_job_id)
         job->em_state = GW_EM_STATE_FAILED;
         
         gw_log_print("EM",'E',"Job %i failed, could not open RSL file.\n", job_id);
-		gw_job_print(job,"EM",'E',"Job failed, could not open RSL file %s.\n",rsl_filename);
+        gw_job_print(job,"EM",'E',"Job failed, could not open RSL file %s.\n",rsl_filename);
 		
-		gw_am_trigger(gw_em.dm_am, "GW_DM_WRAPPER_FAILED", _job_id);
+        gw_am_trigger(gw_em.dm_am, "GW_DM_WRAPPER_FAILED", _job_id);
         
         pthread_mutex_unlock(&(job->mutex));
         
@@ -129,7 +129,11 @@ void gw_em_submit(void *_job_id)
 
     /* -------------------------------------------------------------------- */
     
-    job->last_poll_time       = time(NULL);
+    job->next_poll_time = time(NULL) + gw_conf.poll_interval/2
+            + gw_rand(gw_conf.poll_interval);            /* randomize polls */
+
+    gw_log_print("EM",'I',"Job %i will be polled in %d seconds.\n", job_id, job->next_poll_time-time(NULL));
+
     job->last_checkpoint_time = 0;
 	
     job->history->stats[LAST_SUSPENSION_TIME] = time(NULL);
@@ -146,7 +150,7 @@ void gw_em_submit(void *_job_id)
 
     /* -------------------------------------------------------------------- */
     
-	free(_job_id);
+    free(_job_id);
     
     free(rsl);
 }
@@ -224,19 +228,19 @@ void gw_em_timer()
 {
     int i;
     gw_job_t      *job;
-    time_t        poll, poll_interval;
-	static int mark = 0;
-	int *_job_id;
+    time_t        now, poll_interval;
+    static int mark = 0;
+    int *_job_id;
     gw_em_mad_t   *mad;
     
     poll_interval = gw_conf.poll_interval;
     	
-	mark = mark + GW_EM_TIMER_PERIOD;
-	if ( mark >= 300 )
-	{
-	    gw_log_print("EM",'I',"-- MARK --\n");
+    mark = mark + GW_EM_TIMER_PERIOD;
+    if ( mark >= 300 )
+    {
+        gw_log_print("EM",'I',"-- MARK --\n");
     	mark = 0;
-	}    
+}    
     
     for (i=0; i< gw_conf.number_of_jobs ; i++)
     {
@@ -258,16 +262,15 @@ void gw_em_timer()
             {
             	if (issubmitted(job->em_state))
             	{
-                    poll = time(NULL) - job->last_poll_time;
-                
-                    if ( poll >= poll_interval )
+                    now = time(NULL);
+
+                    if ( now > job->next_poll_time )
                     {
-                        gw_log_print ("EM",'I',"Poll timeout of job %i expired."
-                            " Checking execution state.\n", i);
+                        gw_log_print ("EM",'I',"Checking execution state of job %i.\n", i);
                             
                         mad = job->history->em_mad;
 
-                      /* Warning! When in Migration Cancel, the previous MAD should be used */
+                        /* Warning! When in Migration Cancel, the previous MAD should be used */
                         if (job->job_state == GW_JOB_STATE_MIGR_CANCEL)
                         {
                             if (job->history->next == NULL) 
@@ -282,7 +285,7 @@ void gw_em_timer()
                                                      
                         gw_em_mad_poll(mad, i);
                     
-                        job->last_poll_time = time(NULL);
+                        job->next_poll_time = now + poll_interval/2 + gw_rand(poll_interval);
                     }            		
             	}
             	else if ((job->em_state == GW_EM_STATE_FAILED)

@@ -158,16 +158,16 @@ install-data-hook:
 # ----------------------------
 #   Dagman Examples
 # ----------------------------
-	@ln -s A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/B.jt
-	@ln -s A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/C.jt
-	@ln -s A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/D.jt
-	@ln -s A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/E.jt
-	@ln -s A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/F.jt
-	@ln -s A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/G.jt
-	@ln -s A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/H.jt
-	@ln -s A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/I.jt
-	@ln -s A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/J.jt
-	@ln -s A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/K.jt
+	@ln -sf A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/B.jt
+	@ln -sf A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/C.jt
+	@ln -sf A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/D.jt
+	@ln -sf A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/E.jt
+	@ln -sf A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/F.jt
+	@ln -sf A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/G.jt
+	@ln -sf A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/H.jt
+	@ln -sf A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/I.jt
+	@ln -sf A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/J.jt
+	@ln -sf A.jt $(PREFIX)/$(GW_SHARE_DIR)/examples/dagman/K.jt
 
 # ----------------------------
 #    remove svn DIRS

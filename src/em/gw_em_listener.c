@@ -43,11 +43,11 @@ void gw_em_listener(void *arg)
  
     int          fd;
     gw_job_t *   job;
+    time_t       now;
 
     char         contact_file[PATH_MAX];
     FILE         *file;
 
-    gw_boolean_t  assume_done;
     gw_em_mad_t * em_mad;
  
     char *ptmp;
@@ -63,7 +63,9 @@ void gw_em_listener(void *arg)
     
     em_mads = (gw_em_mad_t **) malloc(sizeof(gw_em_mad_t *) * 
                                       gw_conf.number_of_users * GW_MAX_MADS);
-                                      	
+
+    now = time(NULL);
+
     while (1)
     {
         greater = gw_user_pool_set_em_pipes (&in_pipes,
@@ -233,6 +235,12 @@ void gw_em_listener(void *arg)
                 {
                     if (strcmp(result, "SUCCESS") == 0)
                     {
+                        job->next_poll_time = now + gw_conf.poll_interval/2
+                                + gw_rand(gw_conf.poll_interval);
+
+                        gw_job_print(job, "EM",'E',"Job poll OK (%s), will poll again in %d seconds.\n",
+                                info, job->next_poll_time - now);
+
                         if (strcmp(info, "PENDING") == 0)
                             gw_am_trigger(&(gw_em.am), "GW_EM_STATE_PENDING",
                                     (void *) job_id); 
@@ -263,14 +271,9 @@ void gw_em_listener(void *arg)
                     {						
                         job->history->failed_polls++;
 						
-                        if (job->history->failed_polls == 3 )
-                            assume_done = GW_TRUE;
-                        else
-                            assume_done = GW_FALSE;
-						
                         em_mad = job->history->em_mad;
 							                    
-                    	if ( assume_done )
+                    	if ( job->history->failed_polls == 3 )
                         {
                             gw_job_print(job, "EM",'E',"Job poll failed (%s), assuming the job is done.\n",info);
                                                 
@@ -278,7 +281,11 @@ void gw_em_listener(void *arg)
                         }
                         else
                         {
-                            gw_job_print(job, "EM",'E',"Job poll failed (%s), will poll again.\n",info);
+                            job->next_poll_time = now + gw_conf.poll_interval*job->history->failed_polls
+                                    + gw_rand(gw_conf.poll_interval*job->history->failed_polls);
+
+                            gw_job_print(job, "EM",'E',"Job poll failed (%s), will poll again in %d seconds.\n",
+                                    info, job->next_poll_time - now);
 							
                             free(job_id);                     
                         }

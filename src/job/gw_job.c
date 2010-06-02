@@ -203,7 +203,7 @@ int gw_job_init(gw_job_t *job, int job_id)
     job->start_time = time(NULL);
     job->exit_time  = 0;
 
-    job->last_poll_time          = 0;
+    job->next_poll_time          = 0;
     job->last_rescheduling_time  = 0;
     job->last_checkpoint_time    = 0;
     

@@ -132,14 +132,14 @@ void gwd_main()
     int fd;
     
 #ifdef HAVE_LIBDB    
-	int rc;
+    int rc;
 #endif
 	
     /* ----------------------------------------------------------- */
     /* Close stds, we no longer need them                          */
     /* ----------------------------------------------------------- */
 
-	fd = open("/dev/null", O_RDWR|O_CREAT, 0666);
+    fd = open("/dev/null", O_RDWR|O_CREAT, 0666);
     	
     dup2(fd,0);
     dup2(fd,1);    
@@ -147,9 +147,11 @@ void gwd_main()
   
     close(fd);	
     
-	fcntl(0,F_SETFD,0); /* Keep them open across exec funcs */
+    fcntl(0,F_SETFD,0); /* Keep them open across exec funcs */
     fcntl(1,F_SETFD,0);
     fcntl(2,F_SETFD,0);
+
+    srand(time(NULL));
 	        
     /* ----------------------------------------------------------- */
     /* Capture SIGTERM signal, and ignore SIGPIPE                  */
@@ -336,13 +338,13 @@ void gwd_main()
 
     unlink(lock);
         
-	gw_job_pool_finalize  ();
-	gw_array_pool_finalize();
-	gw_host_pool_finalize ();
-	gw_user_pool_finalize ();
+    gw_job_pool_finalize();
+    gw_array_pool_finalize();
+    gw_host_pool_finalize();
+    gw_user_pool_finalize();
 
 #ifdef HAVE_LIBDB
-	gw_acct_db_close();
+    gw_acct_db_close();
 #endif
 		
     gw_log_print("GW",'I',"All modules finalized, exiting.\n");    

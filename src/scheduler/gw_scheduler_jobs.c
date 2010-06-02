@@ -218,9 +218,8 @@ static int gw_scheduler_filter_select_queues(gw_scheduler_t * sched,
                                              int              num,
                                              int *            hosts)
 {
-	int                  i,j,jid;
-	
-	int                  hid;
+    int                  i,j,jid,hid;
+
     gw_sch_user_host_t * uhosts;
     	
     gw_msg_history_t *   hlist;
@@ -232,14 +231,14 @@ static int gw_scheduler_filter_select_queues(gw_scheduler_t * sched,
     int                  rank, mrank, qnum;
     int                  fnc,  mfnc;
     int                  queues;
-	time_t               the_time;
+    time_t               the_time;
     
-  	hlist    = NULL;
+    hlist    = NULL;
     the_time = time(NULL);
     uhosts   = sched->users[job->ua_id].hosts;
     queues   = 0;
     
-	for (i=0;i<num;i++)
+    for (i=0;i<num;i++)
     {
         addhost = GW_FALSE;        
         hid     = match[i].host_id;
@@ -248,11 +247,11 @@ static int gw_scheduler_filter_select_queues(gw_scheduler_t * sched,
         /* ----------------------------------- */
         /*           Host Filtering            */
         /* ----------------------------------- */        
-	    /* 1. (ERROR, SUSP, PERF) banned list  */
-	    /* 2. (USER) Hosts in job history      */
-	    /* 3. (DISCOVER) Host with low rank    */
-	    /* 4. (ADMIN) Priority policy          */
-	    /* ----------------------------------- */
+        /* 1. (ERROR, SUSP, PERF) banned list  */
+        /* 2. (USER) Hosts in job history      */
+        /* 3. (DISCOVER) Host with low rank    */
+        /* 4. (ADMIN) Priority policy          */
+        /* ----------------------------------- */
 
         found = GW_FALSE;
 
@@ -274,8 +273,8 @@ static int gw_scheduler_filter_select_queues(gw_scheduler_t * sched,
         if ( found == GW_FALSE )
         {
 #ifdef GWSCHEDDEBUG       
-			gw_scheduler_print('D',"Host %i is not ready for the scheduler.\n",	
-                hid, jid);
+            gw_scheduler_print('D',"Host %i is not ready for the scheduler.\n",	
+                    hid, jid);
 #endif                             
             hosts[i] = -1;                
         }
@@ -283,7 +282,7 @@ static int gw_scheduler_filter_select_queues(gw_scheduler_t * sched,
         {
 #ifdef GWSCHEDDEBUG
             gw_scheduler_print('D',"Host %i will not be used for job %i (BANNED)\n",
-                hid, jid);
+                    hid, jid);
 #endif                           
             hosts[i] = -1;
         }
@@ -336,13 +335,13 @@ static int gw_scheduler_filter_select_queues(gw_scheduler_t * sched,
     	    }   	    	
         	else /* 3. (DISCOVER) Host with low rank    */
         	{
-               /* -------------------------------------------------- */
-               /* ! THIS HAS TO BE SCALED, ALSO THE MIGRATION      ! */
-	    	   /* ! OVERHEAD MUST BE CONSIDERED.                   ! */
-               /* -------------------------------------------------- */
+                /* -------------------------------------------------- */
+                /* ! THIS HAS TO BE SCALED, ALSO THE MIGRATION      ! */
+                /* ! OVERHEAD MUST BE CONSIDERED.                   ! */
+                /* -------------------------------------------------- */
         		
-	            found = GW_FALSE;
-   	            rank  = hlist[0].rank;
+                found = GW_FALSE;
+                rank  = hlist[0].rank;
                        
                 for (j=0; j<match[i].number_of_queues; j++)
                 {               
@@ -361,10 +360,10 @@ static int gw_scheduler_filter_select_queues(gw_scheduler_t * sched,
                         hid, jid);
 #endif                    
                 }
-        	}        	
+            }        	
         }
-		else if (match[i].fixed_priority == 0 ) /* 4. (ADMIN) Priority policy          */
-		{
+        else if (match[i].fixed_priority == 0 ) /* 4. (ADMIN) Priority policy          */
+        {
         /* ----------------------------------- */
         /*   Remove banned hosts               */
         /* ----------------------------------- */
@@ -374,7 +373,7 @@ static int gw_scheduler_filter_select_queues(gw_scheduler_t * sched,
             gw_scheduler_print('D',"Host %i will not be used for job %i (ADMIN BANNED)\n",
                         hid, jid);
 #endif
-		}
+        }
 
         /* ----------------------------------- */
         /*           Queue Selection           */
@@ -385,9 +384,9 @@ static int gw_scheduler_filter_select_queues(gw_scheduler_t * sched,
 
         if (hosts[i] != -1)
         {
-        	mrank = match[i].rank[0];
-        	mfnc  = match[i].slots[0];
-        	qnum  = 0;
+            mrank = match[i].rank[0];
+            mfnc  = match[i].slots[0];
+            qnum  = 0;
         
             for (j=1;j<match[i].number_of_queues;j++)
             {
