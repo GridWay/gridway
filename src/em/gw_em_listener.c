@@ -282,7 +282,7 @@ void gw_em_listener(void *arg)
                         else
                         {
                             job->next_poll_time = now + gw_conf.poll_interval*job->history->failed_polls
-                                    + gw_rand(gw_conf.poll_interval*job->history->failed_polls);
+                                    + gw_rand(gw_conf.poll_interval*(job->history->failed_polls+1));
 
                             gw_job_print(job, "EM",'E',"Job poll failed (%s), will poll again in %d seconds.\n",
                                     info, job->next_poll_time - now);

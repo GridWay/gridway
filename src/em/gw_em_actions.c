@@ -43,6 +43,7 @@ void gw_em_submit(void *_job_id)
     gw_job_state_t state;
     char          rsl_filename[2048];
     FILE          *fd;
+    time_t        now;
 	
     /* ----------------------------------------------------------- */  
     /* 0.- Get job pointer, check if it exits and lock mutex       */
@@ -128,15 +129,18 @@ void gw_em_submit(void *_job_id)
     }
 
     /* -------------------------------------------------------------------- */
-    
-    job->next_poll_time = time(NULL) + gw_conf.poll_interval/2
+
+    now = time(NULL);
+
+    job->next_poll_time = now + gw_conf.poll_interval/2
             + gw_rand(gw_conf.poll_interval);            /* randomize polls */
 
-    gw_log_print("EM",'I',"Job %i will be polled in %d seconds.\n", job_id, job->next_poll_time-time(NULL));
+    gw_log_print("EM",'I',"Job %i will be polled in %d seconds.\n", job_id,
+            job->next_poll_time-now);
 
     job->last_checkpoint_time = 0;
 	
-    job->history->stats[LAST_SUSPENSION_TIME] = time(NULL);
+    job->history->stats[LAST_SUSPENSION_TIME] = now;
     job->history->stats[SUSPENSION_TIME]      = 0;
     job->history->stats[ACTIVE_TIME]          = 0;
 
@@ -228,13 +232,11 @@ void gw_em_timer()
 {
     int i;
     gw_job_t      *job;
-    time_t        now, poll_interval;
+    time_t        now;
     static int mark = 0;
     int *_job_id;
     gw_em_mad_t   *mad;
     
-    poll_interval = gw_conf.poll_interval;
-    	
     mark = mark + GW_EM_TIMER_PERIOD;
     if ( mark >= 300 )
     {
@@ -248,17 +250,17 @@ void gw_em_timer()
         
         if ( job != NULL )
         {   
-			if ( job->history == NULL )
-        	{
-	        	pthread_mutex_unlock(&(job->mutex));
-	        	continue;
-        	}
+            if ( job->history == NULL )
+            {
+                pthread_mutex_unlock(&(job->mutex));
+                continue;
+            }
         		        	               
-        	if ( (job->job_state == GW_JOB_STATE_PRE_WRAPPER) 
-                 || (job->job_state == GW_JOB_STATE_WRAPPER)  
-                 || (job->job_state == GW_JOB_STATE_MIGR_CANCEL)
-                 || (job->job_state == GW_JOB_STATE_STOP_CANCEL)
-                 || (job->job_state == GW_JOB_STATE_KILL_CANCEL))                                  
+            if ( (job->job_state == GW_JOB_STATE_PRE_WRAPPER) 
+                    || (job->job_state == GW_JOB_STATE_WRAPPER)  
+                    || (job->job_state == GW_JOB_STATE_MIGR_CANCEL)
+                    || (job->job_state == GW_JOB_STATE_STOP_CANCEL)
+                    || (job->job_state == GW_JOB_STATE_KILL_CANCEL))                                  
             {
             	if (issubmitted(job->em_state))
             	{
@@ -285,7 +287,11 @@ void gw_em_timer()
                                                      
                         gw_em_mad_poll(mad, i);
                     
-                        job->next_poll_time = now + poll_interval/2 + gw_rand(poll_interval);
+                        job->next_poll_time = now + gw_conf.poll_interval/2
+                                + gw_rand(gw_conf.poll_interval);
+
+                        gw_log_print("EM",'I',"Job %i will be polled in %d seconds.\n", i,
+                                job->next_poll_time-now);
                     }            		
             	}
             	else if ((job->em_state == GW_EM_STATE_FAILED)
@@ -299,7 +305,6 @@ void gw_em_timer()
             			
             		    _job_id    = (int *) malloc (sizeof(int));
             		    *(_job_id) = i;
-            		    
             		    
             		    gw_am_trigger(&(gw_em.am),"GW_EM_SUBMIT", _job_id);
             		}
