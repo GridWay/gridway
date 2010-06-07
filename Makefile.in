@@ -845,7 +845,7 @@ install-data-hook:
 	mkdir -p $(PREFIX)/$(GW_VAR_DIR)/acct
 	mkdir -p $(PREFIX)/$(GW_ETC_DIR)
 	mkdir -p $(PREFIX)/$(GW_XML_DIR)
-	cp -r $(top_srcdir)/etc/im_examples $(PREFIX)/$(GW_ETC_DIR)/
+	cp -rf $(top_srcdir)/etc/im_examples $(PREFIX)/$(GW_ETC_DIR)/
 	cp $(top_srcdir)/etc/gwd.conf \
 	   $(top_srcdir)/etc/job_template.default \
 	   $(top_srcdir)/etc/sched.conf \
