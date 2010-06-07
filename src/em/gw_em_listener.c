@@ -63,9 +63,6 @@ void gw_em_listener(void *arg)
     
     em_mads = (gw_em_mad_t **) malloc(sizeof(gw_em_mad_t *) * 
                                       gw_conf.number_of_users * GW_MAX_MADS);
-
-    now = time(NULL);
-
     while (1)
     {
         greater = gw_user_pool_set_em_pipes (&in_pipes,
@@ -235,6 +232,7 @@ void gw_em_listener(void *arg)
                 {
                     if (strcmp(result, "SUCCESS") == 0)
                     {
+                        now = time(NULL);
                         job->next_poll_time = now + gw_conf.poll_interval/2
                                 + gw_rand(gw_conf.poll_interval);
 
