@@ -90,7 +90,7 @@
 
 
 /* Copy the first part of user declarations.  */
-#line 18 "gw_host_update_syntax.y"
+#line 17 "gw_host_update_syntax.y"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -124,12 +124,12 @@ void host_update_error(YYLTYPE *llocp, gw_host_t *host, int *pos, const char *st
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 34 "gw_host_update_syntax.y"
+#line 33 "gw_host_update_syntax.y"
 {
     int val_int;
     char *val_str;
 }
-/* Line 187 of yacc.c.  */
+/* Line 193 of yacc.c.  */
 #line 134 "host/gw_host_update_syntax.c"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -205,7 +205,7 @@ typedef short int yytype_int16;
 #define YYSIZE_MAXIMUM ((YYSIZE_T) -1)
 
 #ifndef YY_
-# if YYENABLE_NLS
+# if defined YYENABLE_NLS && YYENABLE_NLS
 #  if ENABLE_NLS
 #   include <libintl.h> /* INFRINGES ON USER NAME SPACE */
 #   define YY_(msgid) dgettext ("bison-runtime", msgid)
@@ -446,8 +446,8 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    53,    53,    54,    57,    58,    59,    60,    61,    62,
-      63,    64,    65,    66,    67,    68
+       0,    52,    52,    53,    56,    57,    58,    59,    60,    61,
+      62,    63,    64,    65,    66,    67
 };
 #endif
 
@@ -617,7 +617,7 @@ while (YYID (0))
    we won't break user code: when these are the locations we know.  */
 
 #ifndef YY_LOCATION_PRINT
-# if YYLTYPE_IS_TRIVIAL
+# if defined YYLTYPE_IS_TRIVIAL && YYLTYPE_IS_TRIVIAL
 #  define YY_LOCATION_PRINT(File, Loc)			\
      fprintf (File, "%d.%d-%d.%d",			\
 	      (Loc).first_line, (Loc).first_column,	\
@@ -1204,7 +1204,7 @@ YYLTYPE yylloc;
   yyssp = yyss;
   yyvsp = yyvs;
   yylsp = yyls;
-#if YYLTYPE_IS_TRIVIAL
+#if defined YYLTYPE_IS_TRIVIAL && YYLTYPE_IS_TRIVIAL
   /* Initialize the default location before parsing starts.  */
   yylloc.first_line   = yylloc.last_line   = 1;
   yylloc.first_column = yylloc.last_column = 0;
@@ -1393,72 +1393,72 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 53 "gw_host_update_syntax.y"
+#line 52 "gw_host_update_syntax.y"
     { }
     break;
 
   case 3:
-#line 54 "gw_host_update_syntax.y"
+#line 53 "gw_host_update_syntax.y"
     { }
     break;
 
   case 4:
-#line 57 "gw_host_update_syntax.y"
+#line 56 "gw_host_update_syntax.y"
     { gw_host_set_var_int((yyvsp[(1) - (3)].val_int),-1,(yyvsp[(3) - (3)].val_int),host);}
     break;
 
   case 5:
-#line 58 "gw_host_update_syntax.y"
+#line 57 "gw_host_update_syntax.y"
     { gw_host_set_var_str((yyvsp[(1) - (3)].val_int),-1,(yyvsp[(3) - (3)].val_str),host);}
     break;
 
   case 6:
-#line 59 "gw_host_update_syntax.y"
+#line 58 "gw_host_update_syntax.y"
     { gw_host_set_var_int((yyvsp[(1) - (6)].val_int),(yyvsp[(3) - (6)].val_int),(yyvsp[(6) - (6)].val_int),host);}
     break;
 
   case 7:
-#line 60 "gw_host_update_syntax.y"
+#line 59 "gw_host_update_syntax.y"
     { gw_host_set_var_str((yyvsp[(1) - (6)].val_int),(yyvsp[(3) - (6)].val_int),(yyvsp[(6) - (6)].val_str),host);}
     break;
 
   case 8:
-#line 61 "gw_host_update_syntax.y"
+#line 60 "gw_host_update_syntax.y"
     { gw_host_set_genvar_int((yyvsp[(1) - (3)].val_str),-1,(yyvsp[(3) - (3)].val_int),host);free((yyvsp[(1) - (3)].val_str));}
     break;
 
   case 9:
-#line 62 "gw_host_update_syntax.y"
+#line 61 "gw_host_update_syntax.y"
     { gw_host_set_genvar_str((yyvsp[(1) - (3)].val_str),-1,(yyvsp[(3) - (3)].val_str),host);free((yyvsp[(1) - (3)].val_str));}
     break;
 
   case 10:
-#line 63 "gw_host_update_syntax.y"
+#line 62 "gw_host_update_syntax.y"
     { gw_host_set_genvar_int((yyvsp[(1) - (6)].val_str),(yyvsp[(3) - (6)].val_int),(yyvsp[(6) - (6)].val_int),host);free((yyvsp[(1) - (6)].val_str));}
     break;
 
   case 11:
-#line 64 "gw_host_update_syntax.y"
+#line 63 "gw_host_update_syntax.y"
     { gw_host_set_genvar_str((yyvsp[(1) - (6)].val_str),(yyvsp[(3) - (6)].val_int),(yyvsp[(6) - (6)].val_str),host);free((yyvsp[(1) - (6)].val_str));}
     break;
 
   case 12:
-#line 65 "gw_host_update_syntax.y"
+#line 64 "gw_host_update_syntax.y"
     { gw_host_set_var_null((yyvsp[(1) - (2)].val_int),-1,host);}
     break;
 
   case 13:
-#line 66 "gw_host_update_syntax.y"
+#line 65 "gw_host_update_syntax.y"
     { gw_host_set_var_null((yyvsp[(1) - (5)].val_int),(yyvsp[(3) - (5)].val_int),host);}
     break;
 
   case 14:
-#line 67 "gw_host_update_syntax.y"
+#line 66 "gw_host_update_syntax.y"
     { gw_host_set_genvar_null((yyvsp[(1) - (2)].val_str),-1,host);free((yyvsp[(1) - (2)].val_str));}
     break;
 
   case 15:
-#line 68 "gw_host_update_syntax.y"
+#line 67 "gw_host_update_syntax.y"
     { gw_host_set_genvar_null((yyvsp[(1) - (5)].val_str),(yyvsp[(3) - (5)].val_int),host);free((yyvsp[(1) - (5)].val_str));}
     break;
 
@@ -1684,7 +1684,7 @@ yyreturn:
 }
 
 
-#line 70 "gw_host_update_syntax.y"
+#line 69 "gw_host_update_syntax.y"
 
 
 void host_update_error(YYLTYPE *llocp, gw_host_t *host, int *pos, const char *str)

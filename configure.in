@@ -1,6 +1,5 @@
 # ------------------------------------------------------------------------------
-# Copyright 2002-2010 GridWay Team, Distributed Systems Architecture
-# Group, Universidad Complutense de Madrid
+# Copyright 2002-2010, GridWay Project Leads (GridWay.org)          
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
@@ -16,7 +15,7 @@
 # ------------------------------------------------------------------------------
 
 AC_PREREQ(2.59)
-AC_INIT([GridWay],[5.6.1],[contact@gridway.org],[gridway],[http://gridway.org])
+AC_INIT([GridWay],[5.7],[contact@gridway.org],[gridway],[http://gridway.org])
 AC_CONFIG_AUX_DIR(config)
 AC_CONFIG_SRCDIR([src/dm/gw_dm_action_dispatch.c])
 

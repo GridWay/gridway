@@ -56,13 +56,13 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 32 "gw_sch_conf_syntax.y"
+#line 31 "gw_sch_conf_syntax.y"
 {
     int    val_int;
     float  val_float;
     char * val_str;
 }
-/* Line 1489 of yacc.c.  */
+/* Line 1529 of yacc.c.  */
 #line 67 "gwd/gw_sch_conf_syntax.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

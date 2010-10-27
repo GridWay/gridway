@@ -90,7 +90,7 @@
 
 
 /* Copy the first part of user declarations.  */
-#line 18 "gw_sch_conf_syntax.y"
+#line 17 "gw_sch_conf_syntax.y"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -123,13 +123,13 @@ void gw_sched_error(gw_sch_conf_t *conf, const char *str);
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 32 "gw_sch_conf_syntax.y"
+#line 31 "gw_sch_conf_syntax.y"
 {
     int    val_int;
     float  val_float;
     char * val_str;
 }
-/* Line 187 of yacc.c.  */
+/* Line 193 of yacc.c.  */
 #line 134 "gwd/gw_sch_conf_syntax.c"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -193,7 +193,7 @@ typedef short int yytype_int16;
 #define YYSIZE_MAXIMUM ((YYSIZE_T) -1)
 
 #ifndef YY_
-# if YYENABLE_NLS
+# if defined YYENABLE_NLS && YYENABLE_NLS
 #  if ENABLE_NLS
 #   include <libintl.h> /* INFRINGES ON USER NAME SPACE */
 #   define YY_(msgid) dgettext ("bison-runtime", msgid)
@@ -427,7 +427,7 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    50,    50,    51,    55,    56,    57
+       0,    49,    49,    50,    54,    55,    56
 };
 #endif
 
@@ -586,7 +586,7 @@ while (YYID (0))
    we won't break user code: when these are the locations we know.  */
 
 #ifndef YY_LOCATION_PRINT
-# if YYLTYPE_IS_TRIVIAL
+# if defined YYLTYPE_IS_TRIVIAL && YYLTYPE_IS_TRIVIAL
 #  define YY_LOCATION_PRINT(File, Loc)			\
      fprintf (File, "%d.%d-%d.%d",			\
 	      (Loc).first_line, (Loc).first_column,	\
@@ -1333,27 +1333,27 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 50 "gw_sch_conf_syntax.y"
+#line 49 "gw_sch_conf_syntax.y"
     { }
     break;
 
   case 3:
-#line 51 "gw_sch_conf_syntax.y"
+#line 50 "gw_sch_conf_syntax.y"
     { }
     break;
 
   case 4:
-#line 55 "gw_sch_conf_syntax.y"
+#line 54 "gw_sch_conf_syntax.y"
     { gw_sch_set_var (conf,(yyvsp[(1) - (3)].val_int),(float) (yyvsp[(3) - (3)].val_int));}
     break;
 
   case 5:
-#line 56 "gw_sch_conf_syntax.y"
+#line 55 "gw_sch_conf_syntax.y"
     { gw_sch_set_var (conf,(yyvsp[(1) - (3)].val_int),(yyvsp[(3) - (3)].val_float));}
     break;
 
   case 6:
-#line 57 "gw_sch_conf_syntax.y"
+#line 56 "gw_sch_conf_syntax.y"
     { gw_sch_set_svar(conf,(yyvsp[(1) - (6)].val_int),(yyvsp[(3) - (6)].val_str),(yyvsp[(6) - (6)].val_int)); free((yyvsp[(3) - (6)].val_str));}
     break;
 
@@ -1573,7 +1573,7 @@ yyreturn:
 }
 
 
-#line 60 "gw_sch_conf_syntax.y"
+#line 59 "gw_sch_conf_syntax.y"
 
 
 void gw_sched_error(gw_sch_conf_t *conf, const char *str)
