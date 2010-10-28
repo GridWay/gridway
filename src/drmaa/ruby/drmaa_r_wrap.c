@@ -2436,7 +2436,7 @@ _wrap_drmaa_set_vector_attribute(int argc, VALUE *argv, VALUE self) {
     arg3=0;
     /* Check if is an array */
     if (TYPE(argv[2]) == T_ARRAY) {
-      int size = RARRAY(argv[2])->len;
+      int size = RARRAY_LEN(argv[2]);
       int i = 0;
       arg3 = (char **) malloc((size+1)*sizeof(char *));
       for (i = 0; i < size; i++) {
@@ -2967,7 +2967,7 @@ _wrap_drmaa_synchronize(int argc, VALUE *argv, VALUE self) {
     arg1=0;
     /* Check if is an array */
     if (TYPE(argv[0]) == T_ARRAY) {
-      int size = RARRAY(argv[0])->len;
+      int size = RARRAY_LEN(argv[0]);
       int i = 0;
       arg1 = (char **) malloc((size+1)*sizeof(char *));
       for (i = 0; i < size; i++) {

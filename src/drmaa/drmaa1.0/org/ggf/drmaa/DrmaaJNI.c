@@ -435,7 +435,6 @@ void    generate_job_template(JNIEnv *env, drmaa_job_template_t *jt, jobject job
         jclass								  classList;
         jclass								  classPartialTimestampFormat;
         jmethodID                           getMethod;
-        jfieldID								  getField;
         jobject                                args;
         jobject                                object;
         jobject                                properties;
@@ -448,7 +447,6 @@ void    generate_job_template(JNIEnv *env, drmaa_job_template_t *jt, jobject job
         int                                      ind;
         jint									  size;
         jint									  submissionState;
-        jint									  getStaticField;
 
         classTemplate = (*env)->FindClass(env,"org/ggf/drmaa/GridWayJobTemplate");
         getMethod       = (*env)->GetMethodID(env,classTemplate,"getRemoteCommand","()Ljava/lang/String;");

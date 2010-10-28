@@ -41,7 +41,7 @@ install_location=nil
 
 opts.each do |opt, arg|
 	case opt
-	when '--gridway':
+	when '--gridway'
 		gw_location=arg
 	when '--rubylib'
 		if arg && arg!=""
