@@ -53,7 +53,7 @@ gw_return_code_t gw_client_job_status(int job_id, gw_msg_job_t *job_status)
 	
 	strncpy(msg.owner, gw_client.owner, GW_MSG_STRING_SHORT);	
 	strncpy(msg.group, gw_client.group, GW_MSG_STRING_SHORT);
-	strncpy(msg.proxy_path, gw_client.proxy_path, GW_MSG_STRING_SHORT);
+	strncpy(msg.proxy_path, gw_client.proxy_path, GW_MSG_STRING_LONG);
 
 	pthread_mutex_unlock(&(gw_client.mutex));
     
@@ -141,7 +141,7 @@ gw_return_code_t gw_client_job_status_all( )
     
     strncpy(msg.owner,gw_client.owner,GW_MSG_STRING_SHORT);
     strncpy(msg.group,gw_client.group,GW_MSG_STRING_SHORT);
-    strncpy(msg.proxy_path, gw_client.proxy_path, GW_MSG_STRING_SHORT);
+    strncpy(msg.proxy_path, gw_client.proxy_path, GW_MSG_STRING_LONG);
 
 
     pthread_mutex_unlock(&(gw_client.mutex));
@@ -292,7 +292,7 @@ gw_return_code_t gw_client_job_history(int                 job_id,
     
     strncpy(msg.owner,gw_client.owner,GW_MSG_STRING_SHORT);
     strncpy(msg.group,gw_client.group,GW_MSG_STRING_SHORT);
-    strncpy(msg.proxy_path, gw_client.proxy_path, GW_MSG_STRING_SHORT);
+    strncpy(msg.proxy_path, gw_client.proxy_path, GW_MSG_STRING_LONG);
 
     pthread_mutex_unlock(&(gw_client.mutex));
    	
