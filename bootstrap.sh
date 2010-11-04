@@ -17,8 +17,8 @@
 
 clean_bt(){
 	make clean > /dev/null 2>&1 
-	find -name .dirstamp -exec rm {} \;
-	rm -rf `find -name .libs` > /dev/null 2>&1 
+	find . -name .dirstamp -exec rm {} \;
+	rm -rf `find . -name .libs` > /dev/null 2>&1 
 	rm -rf autom4te.cache > /dev/null 2>&1 
 	rm Makefile > /dev/null 2>&1 	
 	rm src/Makefile > /dev/null 2>&1 
