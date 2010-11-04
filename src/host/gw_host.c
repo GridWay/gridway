@@ -263,6 +263,14 @@ void gw_host_clear_dynamic_info(int host_id)
 
     host->last_monitoring_time = 0;
     
+    /* Notify the scheduler */
+
+    gw_dm_mad_host_monitor(&gw_dm.dm_mad[0],
+                           host->host_id,
+                           host->used_slots,
+                           host->running_jobs,
+                           host->hostname);
+
     pthread_mutex_unlock(&(host->mutex));
 }
 
