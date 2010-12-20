@@ -124,7 +124,7 @@ typedef struct gw_job_s
     time_t start_time;
     time_t exit_time;
 
-    time_t next_poll_time;
+    time_t last_poll_time;
     time_t last_rescheduling_time;
     time_t last_checkpoint_time;
     
@@ -192,6 +192,8 @@ int    gw_job_environment(gw_job_t *job);
 char * gw_job_rsl_environment(gw_job_t *job);
 char * gw_job_rsl2_environment(gw_job_t *job);
 char * gw_job_rsl2_extensions(gw_job_t *job);
+
+char * gw_job_jsdl_environment(gw_job_t *job);
 
 /* -------------------------------------------------------------------------- */
 /*    Function Prototypes to print job information & logging                  */

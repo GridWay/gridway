@@ -1,6 +1,5 @@
 /* -------------------------------------------------------------------------- */
-/* Copyright 2002-2006 GridWay Team, Distributed Systems Architecture         */
-/* Group, Universidad Complutense de Madrid                                   */
+/* Copyright 2002-2010, GridWay Project Leads (GridWay.org)                   */
 /*                                                                            */
 /* Licensed under the Apache License, Version 2.0 (the "License"); you may    */
 /* not use this file except in compliance with the License. You may obtain    */
@@ -22,11 +21,13 @@
 #include "gw_job.h"
 #include "gw_template.h"
 #include "gw_job_template.h"
-#include "gw_em_jsdl.h"
+#include "gw_em_rsl.h"
 
 #include "gw_conf.h"
 
 void gw_job_template_set_str(char **dst, const char *src);
+void gw_job_template_init2 (gw_job_template_t *jt, const gw_template_t *ct);
+void gw_job_pool_dep_cp (const int * src, int **dst);
 
 int main(int argc, char **argv)
 {
