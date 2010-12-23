@@ -218,7 +218,7 @@ char* gw_generate_wrapper_jsdl (gw_job_t *job)
 	    "    <jsdl-posix:Executable>%s</jsdl-posix:Executable>\n"
 	    "    <jsdl-posix:Input>%s</jsdl-posix:Input>\n"
             "    <jsdl-posix:Output>%s</jsdl-posix:Output>\n"
-            "    <jsdl-posix:Error>%s</jsdl-posix:Output>\n",
+            "    <jsdl-posix:Error>%s</jsdl-posix:Error>\n",
             job->template.executable,
             job->template.stdin_file,
             job->template.stdout_file,
@@ -240,7 +240,7 @@ char* gw_generate_wrapper_jsdl (gw_job_t *job)
 	    "   </jsdl-posix:POSIXApplication>\n"
             "  </jsdl:Application>\n"
             "  <jsdl:DataStaging>\n"
-            "   <jsdl:FileName>%s</jsdl:Filename>\n"
+            "   <jsdl:FileName>%s</jsdl:FileName>\n"
             "  </jsdl:DataStaging>\n",
             job->template.file);
         strcat(jsdl_buffer,tmp_buffer);
@@ -430,7 +430,9 @@ char* gw_split_arguments_jsdl (const char *arguments)
 		pre_wrapper_arguments = gw_job_substitute (
                 job->template.pre_wrapper_arguments, job);
 
-		if ( pre_wrapper_arguments == NULL )
+		i f( pre_wrapper_arguments == NULL )
+rt GLOBUS_LOCATION=/usr/local/globus-4.1.2/
+
 		{
 			gw_job_print(job,"DM",'E',"Parse error (%s) while generating rsl.\n",job->template.pre_wrapper_arguments);
 			free(job_environment);
