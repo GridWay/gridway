@@ -217,8 +217,8 @@ char* gw_generate_wrapper_jsdl (gw_job_t *job)
 	jsdl = snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
 	    "    <jsdl-posix:Executable>%s</jsdl-posix:Executable>\n"
 	    "    <jsdl-posix:Input>%s</jsdl-posix:Input>\n"
-            "    <jsdl-posix:Output>%s</jsdl-posix:Input>\n"
-            "    <jsdl-posix:Error>%s</jsdl-posix:Input>\n",
+            "    <jsdl-posix:Output>%s</jsdl-posix:Output>\n"
+            "    <jsdl-posix:Error>%s</jsdl-posix:Output>\n",
             job->template.executable,
             job->template.stdin_file,
             job->template.stdout_file,
