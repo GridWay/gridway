@@ -489,18 +489,17 @@ class Service extends Thread {
         }
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.WEEK_OF_YEAR , calendar.get(Calendar.WEEK_OF_YEAR) + 1);
+        calendar.add(Calendar.WEEK_OF_YEAR, 1);
         
 	try
 	{ 
-        	job.setTerminationTime(calendar.getTime()); // One week
+            job.setTerminationTime(calendar.getTime()); // One week
 	}
 	catch (Exception e)
 	{
 	}
 
         // Submit the job
-        
         try
         {
             job.submit(factoryEndpoint, false, false, null);
