@@ -489,7 +489,7 @@ class Service extends Thread {
         }
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.WEEK_OF_YEAR , calendar.get(Calendar.WEEK_OF_YEAR) + 1);
+        calendar.add(Calendar.WEEK_OF_YEAR, 1);
         
         job.setTerminationTime(calendar.getTime()); // One week
 
