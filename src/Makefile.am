@@ -587,7 +587,7 @@ CLEANFILES += $(srcdir)/drmaa/drmaa.jar
 
 # ---------------------- EM MADS ------------------------
 
-if PREWS
+if GRAM5
 bin_PROGRAMS += $(srcdir)/em_mad/gw_em_mad_prews.bin
 dist_bin_SCRIPTS  += $(EM_MAD)/gw_em_mad_prews.sh
 endif
@@ -606,13 +606,12 @@ endif
 
 # ---------------------- TM MADS ------------------------
 
-if PREWS
+if DUMMY
 bin_PROGRAMS += $(srcdir)/tm_mad/gw_tm_mad_dummy.bin
 dist_bin_SCRIPTS  += $(TM_MAD)/gw_tm_mad_dummy.sh
 endif
 
 if GRIDFTP
-
 bin_PROGRAMS += $(srcdir)/tm_mad/gw_tm_mad_ftp.bin
 dist_bin_SCRIPTS += $(TM_MAD)/gw_tm_mad_ftp.sh
 
@@ -645,23 +644,19 @@ endif
 dist_bin_SCRIPTS  += $(IM_MAD)/gw_im_mad_common.sh
 dist_bin_SCRIPTS  += $(IM_MAD)/gw_im_mad_static.sh
 
-if PREWS
+if MDS2
 dist_bin_SCRIPTS  += $(IM_MAD)/gw_im_mad_mds2.sh
 dist_bin_SCRIPTS  += $(IM_MAD)/gw_im_mad_mds2_glue.sh
-endif
-
-if LDAP
 dist_bin_SCRIPTS  += $(IM_MAD)/gw_im_mad_egee_ldap.sh
 dist_bin_SCRIPTS  += $(IM_MAD)/gw_im_mad_egee_ldap.pl
 endif
+
 # --------------------------------
 # WS Middleware Access Drivers
 # --------------------------------
 JAVAROOT = .
 
-if WS
-# ---------------------- IM MADS ------------------------
-
+if MDS4
 im_ws_jardir = $(prefix)/lib
 im_ws_jar_DATA = $(srcdir)/im_mad/gw_im_mad_ws.jar
 $(srcdir)/im_mad/gw_im_mad_ws.jar:
@@ -677,9 +672,9 @@ dist_bin_SCRIPTS += $(IM_MAD)/gw_im_mad_mds4.sh
 dist_bin_SCRIPTS += $(IM_MAD)/gw_im_mad_mds4_thr.sh
 
 CLEANFILES += $(srcdir)/im_mad/gw_im_mad_ws.jar
+endif
 
-# ---------------------- EM MADS ------------------------
-
+if GRAM4
 em_ws_jardir = $(prefix)/lib
 em_ws_jar_DATA = $(srcdir)/em_mad/gw_em_mad_ws.jar
 $(srcdir)/em_mad/gw_em_mad_ws.jar:

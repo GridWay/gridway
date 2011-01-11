@@ -65,29 +65,45 @@ endif
 	@mv $(PREFIX)/bin/gridway.rb $(PREFIX)/libexec/ruby/dagman/gridway.rb
 	@mv $(PREFIX)/bin/gw_im_mad_static.sh $(PREFIX)/bin/gw_im_mad_static
 
-if GRIDFTP
-	@mv $(PREFIX)/bin/gw_tm_mad_ftp.sh $(PREFIX)/bin/gw_tm_mad_ftp
+# ----------------------------
+# -- Script renaming - EM MADs
+# ----------------------------
+
+if GRAM4
+	@mv $(PREFIX)/bin/gw_em_mad_ws.sh $(PREFIX)/bin/gw_em_mad_ws
+endif
+
+if GRAM5
+	@mv $(PREFIX)/bin/gw_em_mad_prews.sh $(PREFIX)/bin/gw_em_mad_prews
 endif
 
 # ----------------------------
-# -- Script renaming - WS
+# -- Script renaming - IM MADs
 # ----------------------------
 
-if WS
-	@mv $(PREFIX)/bin/gw_em_mad_ws.sh $(PREFIX)/bin/gw_em_mad_ws
+if MDS2
+	@mv $(PREFIX)/bin/gw_im_mad_mds2.sh $(PREFIX)/bin/gw_im_mad_mds2
+	@mv $(PREFIX)/bin/gw_im_mad_mds2_glue.sh $(PREFIX)/bin/gw_im_mad_mds2_glue
+	@mkdir -p $(PREFIX)/libexec/perl
+	@mv $(PREFIX)/bin/gw_im_mad_egee_ldap.sh $(PREFIX)/bin/gw_im_mad_egee_ldap
+	@mv $(PREFIX)/bin/gw_im_mad_egee_ldap.pl $(PREFIX)/libexec/perl/gw_im_mad_egee_ldap.pl
+endif
+
+if MDS4
 	@mv $(PREFIX)/bin/gw_im_mad_mds4.sh $(PREFIX)/bin/gw_im_mad_mds4
 	@mv $(PREFIX)/bin/gw_im_mad_mds4_thr.sh $(PREFIX)/bin/gw_im_mad_mds4_thr
 endif
 
 # ----------------------------
-# -- Script renaming - PREWS
+# -- Script renaming - TM MADs
 # ----------------------------
 
-if PREWS
-	@mv $(PREFIX)/bin/gw_im_mad_mds2.sh $(PREFIX)/bin/gw_im_mad_mds2
-	@mv $(PREFIX)/bin/gw_im_mad_mds2_glue.sh $(PREFIX)/bin/gw_im_mad_mds2_glue
+if GRIDFTP
+	@mv $(PREFIX)/bin/gw_tm_mad_ftp.sh $(PREFIX)/bin/gw_tm_mad_ftp
+endif
+
+if DUMMY
 	@mv $(PREFIX)/bin/gw_tm_mad_dummy.sh $(PREFIX)/bin/gw_tm_mad_dummy
-	@mv $(PREFIX)/bin/gw_em_mad_prews.sh $(PREFIX)/bin/gw_em_mad_prews
 endif
 
 # ----------------------------
@@ -105,15 +121,6 @@ if NORDUGRID
 endif
 
 # ----------------------------
-# -- Script renaming - LDAP
-# ----------------------------
-if LDAP
-	@mkdir -p $(PREFIX)/libexec/perl
-	@mv $(PREFIX)/bin/gw_im_mad_egee_ldap.sh $(PREFIX)/bin/gw_im_mad_egee_ldap
-	@mv $(PREFIX)/bin/gw_im_mad_egee_ldap.pl $(PREFIX)/libexec/perl/gw_im_mad_egee_ldap.pl
-endif
-
-# ----------------------------
 # -- Script renaming - SSH
 # ----------------------------
 if SSH
@@ -121,13 +128,8 @@ if SSH
 	@mv $(PREFIX)/bin/gw_em_mad_ssh.sh $(PREFIX)/bin/gw_em_mad_ssh
 	@mv $(PREFIX)/bin/gw_tm_mad_ssh.sh $(PREFIX)/bin/gw_tm_mad_ssh
 	@mv $(PREFIX)/bin/ssh_wrapper.sh $(PREFIX)/libexec
-	@mv $(PREFIX)/bin/gw_em_mad_ssh.rb \
-	$(PREFIX)/bin/gwmad.rb \
-	$(PREFIX)/bin/gw_tm_mad_ssh.rb \
-	$(PREFIX)/bin/rslparser.rb \
-	$(PREFIX)/bin/sshjob.rb \
-	$(PREFIX)/bin/sshresource.rb \
-	$(PREFIX)/libexec/ruby
+	@mv $(PREFIX)/bin/gw_em_mad_ssh.rb $(PREFIX)/bin/gwmad.rb $(PREFIX)/bin/gw_tm_mad_ssh.rb \
+$(PREFIX)/bin/rslparser.rb $(PREFIX)/bin/sshjob.rb $(PREFIX)/bin/sshresource.rb $(PREFIX)/libexec/ruby
 endif
 
 # ----------------------------
@@ -143,16 +145,13 @@ endif
 # ****************************
 
 install-data-hook:
-	mkdir -p $(PREFIX)/$(GW_VAR_DIR)/acct
-	mkdir -p $(PREFIX)/$(GW_ETC_DIR)
-	mkdir -p $(PREFIX)/$(GW_XML_DIR)
-	cp -rf $(top_srcdir)/etc/im_examples $(PREFIX)/$(GW_ETC_DIR)/
-	cp $(top_srcdir)/etc/gwd.conf \
-	   $(top_srcdir)/etc/job_template.default \
-	   $(top_srcdir)/etc/sched.conf \
-	   $(top_srcdir)/etc/gwrc \
-	   $(PREFIX)/$(GW_ETC_DIR)/
-	cp $(top_srcdir)/xml_schema/gridway.xsd $(PREFIX)/$(GW_XML_DIR)
+	@mkdir -p $(PREFIX)/$(GW_VAR_DIR)/acct
+	@mkdir -p $(PREFIX)/$(GW_ETC_DIR)
+	@mkdir -p $(PREFIX)/$(GW_XML_DIR)
+	@cp -rf $(top_srcdir)/etc/im_examples $(PREFIX)/$(GW_ETC_DIR)/
+	@cp $(top_srcdir)/etc/gwd.conf $(top_srcdir)/etc/job_template.default \
+$(top_srcdir)/etc/sched.conf $(top_srcdir)/etc/gwrc $(PREFIX)/$(GW_ETC_DIR)/
+	@cp $(top_srcdir)/xml_schema/gridway.xsd $(PREFIX)/$(GW_XML_DIR)
 
 # ----------------------------
 #   Dagman Examples
@@ -185,17 +184,29 @@ install-data-hook:
 
 uninstall-hook:
 	@rm -f $(PREFIX)/bin/gwdagman
-	@rm $(PREFIX)/bin/gw_im_mad_mds2
-	@rm $(PREFIX)/bin/gw_im_mad_mds4
+if GRAM4
 	@rm $(PREFIX)/bin/gw_em_mad_ws
+endif
+if MDS4
+	@rm $(PREFIX)/bin/gw_im_mad_mds4
+endif
+if MDS2
+	@rm $(PREFIX)/bin/gw_im_mad_mds2
 	@rm $(PREFIX)/bin/gw_im_mad_mds2_glue
+	@rm -rf $(PREFIX)/libexec/perl
+	@rm $(PREFIX)/bin/gw_im_mad_egee_ldap
+endif
 if GRIDFTP
 	@rm $(PREFIX)/bin/gw_tm_mad_ftp
 endif
 	@rm $(PREFIX)/bin/gw_tm_mad_rft
+if GRAM5
 	@rm $(PREFIX)/bin/gw_em_mad_prews
+endif
 	@rm $(PREFIX)/bin/gw_im_mad_static
+if DUMMY
 	@rm $(PREFIX)/bin/gw_tm_mad_dummy
+endif
 	@rm $(PREFIX)/bin/jsdl2gw
 	@rm -rf $(PREFIX)/lib/ruby/
 	@rm -rf $(PREFIX)/$(GW_VAR_DIR)
@@ -203,10 +214,6 @@ if NORDUGRID
 	@rm -rf $(PREFIX)/libexec/python
 	@rm $(PREFIX)/bin/gw_em_mad_nordugrid
 	@rm $(PREFIX)/bin/gw_tm_mad_nordugrid
-endif
-if LDAP
-	@rm -rf $(PREFIX)/libexec/perl
-	@rm $(PREFIX)/bin/gw_im_mad_egee_ldap
 endif
 	@rm -rf $(PREFIX)/$(GW_XML_DIR)
 
