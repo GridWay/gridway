@@ -24,6 +24,7 @@
 #include <signal.h>
 #include <string.h>
 #include <errno.h>
+#include <stdarg.h>
 
 static void gw_scheduler_init (gw_scheduler_t * sched);
 
@@ -393,7 +394,7 @@ void gw_scheduler_print (const char mode, const char *str_format,...)
     
     char str[26];
 
-    va_start (ap, str_format);
+    va_start(ap, str_format);
 
     if (fd_log != NULL)
     {

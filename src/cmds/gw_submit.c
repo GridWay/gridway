@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <unistd.h>
+#include <string.h>
 
 /* ------------------------------------------------------------------------- */
 /* GLOBAL VARIABLES                                                          */

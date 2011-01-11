@@ -23,6 +23,7 @@
 #include <unistd.h>
 #include <stdarg.h>
 #include <errno.h>
+#include <sys/stat.h>
 
 #include "gw_job.h"
 #include "gw_dm.h"

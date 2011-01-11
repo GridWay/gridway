@@ -26,7 +26,6 @@
 #include "gw_common.h"
 #include "gw_xfr_files.h"
 #include "gw_rm_msg.h"
-#include "globus_gram_client.h"
 
 #define GW_PS_COMMAND_XML "gwps"
 // Next size corresponds to the maximum 4+1+USERNAME="..."+1+HOSTNAME="..."
@@ -91,6 +90,24 @@ typedef enum {
    GW_JOB_STATE_FAILED,
    GW_JOB_STATE_LIMIT      
 } gw_job_state_t;
+
+/* -------------------------------------------------------------------------- */
+
+/* Copied from globus_gram_protocol_constants.h */
+
+typedef enum
+{
+    GLOBUS_GRAM_PROTOCOL_JOB_STATE_PENDING=1,
+    GLOBUS_GRAM_PROTOCOL_JOB_STATE_ACTIVE=2,
+    GLOBUS_GRAM_PROTOCOL_JOB_STATE_FAILED=4,
+    GLOBUS_GRAM_PROTOCOL_JOB_STATE_DONE=8,
+    GLOBUS_GRAM_PROTOCOL_JOB_STATE_SUSPENDED=16,
+    GLOBUS_GRAM_PROTOCOL_JOB_STATE_UNSUBMITTED=32,
+    GLOBUS_GRAM_PROTOCOL_JOB_STATE_STAGE_IN=64,
+    GLOBUS_GRAM_PROTOCOL_JOB_STATE_STAGE_OUT=128,
+    GLOBUS_GRAM_PROTOCOL_JOB_STATE_ALL=0xFFFFF
+}
+globus_gram_protocol_job_state_t;
 
 /* -------------------------------------------------------------------------- */
 
