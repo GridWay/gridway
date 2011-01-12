@@ -6,7 +6,7 @@ LD = $(GLOBUS_LD)
 CFLAGS = $(GLOBUS_CFLAGS) $(GLOBUS_INCLUDES) -I../../../include
 LDFLAGS = $(GLOBUS_LDFLAGS) $(GLOBUS_PKG_LIBS)
 
-progs = gw_tm_mad_ftp
+progs = gw_em_mad_gram2
 
 all: $(progs)
 
