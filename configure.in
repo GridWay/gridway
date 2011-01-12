@@ -21,105 +21,6 @@ AC_CONFIG_SRCDIR([src/dm/gw_dm_action_dispatch.c])
 
 AC_PREFIX_DEFAULT([/opt/AC_PACKAGE_TARNAME/AC_PACKAGE_VERSION])
 
-# Globus stuff only if needed!!!
-
-#-------------------------------------------------------------------------------
-# --- Globus Directory Scheme --- Need to be checked first
-#-------------------------------------------------------------------------------
-
-GW_DIR_SCHEME=" "
-
-AC_ARG_ENABLE(globus-scheme,  AS_HELP_STRING(--enable-globus-scheme,\
-  Adjusts directory layout to install GridWay in GLOBUS_LOCATION. Default is disabled.),\
-  [if test $enableval = "yes"; then GW_DIR_SCHEME="globus"; else \
-  GW_DIR_SCHEME=" "; fi ], [])
-  
-#-------------------------------------------------------------------------------
-# Globus Location and Flavor
-#-------------------------------------------------------------------------------
-   
-echo -n "checking for Globus Toolkit..."
-  
-if test -z "$GLOBUS_LOCATION" ; then
-   echo "GLOBUS_LOCATION is not defined..."
-   exit -1
-else
-   echo "ok"
-fi
-
-AC_ARG_WITH(flavor,  AS_HELP_STRING(--with-flavor,\
-   Specify globus build flavor (eg. gcc32dbg)),\
-   [FLAVOR=$withval], [])
-
-if test -z "$FLAVOR" ; then
-
-   if test -d $GLOBUS_LOCATION/include/gcc32dbg ; then
-      FLAVOR=gcc32dbg
-   elif test -d $GLOBUS_LOCATION/include/gcc32 ; then
-      FLAVOR=gcc32
-   elif test -d $GLOBUS_LOCATION/include/gcc64dbg ; then
-      FLAVOR=gcc64dbg
-   elif test -d $GLOBUS_LOCATION/include/gcc64 ; then
-      FLAVOR=gcc64
-   elif test -d $GLOBUS_LOCATION/include/vendorcc32dbg ; then
-      FLAVOR=vendorcc32dbg
-   elif test -d $GLOBUS_LOCATION/include/vendorcc32 ; then
-      FLAVOR=vendorcc32
-   elif test -d $GLOBUS_LOCATION/include/vendorcc64dbg ; then
-      FLAVOR=vendorcc64dbg
-   elif test -d $GLOBUS_LOCATION/include/vendorcc64 ; then
-      FLAVOR=vendorcc64
-   else
-      echo "use --with-flavor"
-      exit -1
-   fi
-fi
-
-#-------------------------------------------------------------------------------
-# Makefile-header setup (handled by GPT or globus-makefile-header)
-#-------------------------------------------------------------------------------
-
-echo -n "configuring Globus build env..."
-
-if test "x$GW_DIR_SCHEME" = "xglobus"; then
-   if test -z "$GPT_LOCATION" ; then 
-      HEADER_COMMAND=$GLOBUS_LOCATION/sbin/gpt_build_config
-   else
-      HEADER_COMMAND=$GPT_LOCATION/sbin/gpt_build_config
-   fi
-else
-   source $GLOBUS_LOCATION/etc/globus-user-env.sh  > /dev/null 2>&1
-
-   HEADER_COMMAND=$GLOBUS_LOCATION/bin/globus-makefile-header
-fi
-
-if test -x $HEADER_COMMAND; then
-
-   if test "x$GW_DIR_SCHEME" = "xglobus"; then   
-      $HEADER_COMMAND -src=pkgdata/pkg_data_src.gpt -flavor=$FLAVOR -link=shared
-      export GLOBUS_FLAVOR_NAME=$FLAVOR
-      source ./gpt_build_temp.sh
-      AC_SUBST(globus_pkg_libs,"$GPT_CONFIG_PKG_LIBS $GPT_CONFIG_LIBS")            
-   else
-   
-      $HEADER_COMMAND -flavor $FLAVOR globus_gram_client globus_ftp_client \
-            globus_gass_copy > makefile-header
-      AC_SUBST(incgtmk,"include $PWD/makefile-header")
-   fi
-   
-   if test $? -ne 0 ; then
-      echo "failed"
-      exit -1
-   else
-      echo "ok"   
-   fi
-      
-else
-   echo "falied. $HEADER_COMMAND not found!"
-   exit -1
-fi
-
-AC_SUBST(GLOBUS_FLAVOR_NAME,$FLAVOR)
 #-------------------------------------------------------------------------------
 # Check target system
 #-------------------------------------------------------------------------------
@@ -155,36 +56,13 @@ AC_SUBST(java_home, $JAVA_HOME)
 # Argument Definition for configure 
 #------------------------------------------------------------------------------
 
-if test "x$GW_DIR_SCHEME" = "xglobus"; then
-#Default options for Globus builds
-	drmaa="yes"
-	drmaa_ruby=""
-	gt2=""	
-	gt4=""	
-	gt5=""	
-	lcg=""	
-	nordugrid=""
-	ssh=""
-	docs="no"
-	tests="no"	
-	drmaa1="no"		
-	jsdl=""		
-	db=""
-else
-	drmaa="yes"	
-	drmaa_ruby=""
-	gt2=""
-	gt4=""
-	gt5=""
-	lcg=""
-	nordugrid=""
-	ssh=""
-	docs="no"
-	tests="no"
-	drmaa1="no"
-	jsdl="yes"	
-	db="yes"
-fi
+drmaa="yes"	
+drmaa_ruby=""
+docs="no"
+tests="no"
+drmaa1="no"
+jsdl="yes"	
+db="yes"
 
 # --- Enable DRMAA library ---
 
@@ -203,38 +81,6 @@ AC_ARG_ENABLE(drmaa1,  AS_HELP_STRING(--enable-drmaa1,\
 AC_ARG_ENABLE(drmaa_ruby,  AS_HELP_STRING(--enable-drmaa-ruby,\
   Build ruby drmaa support. Default is disabled.),\
   [if test $enableval = "yes"; then drmaa_ruby="yes"; else drmaa_ruby=" "; fi], [])
-
-# --- Enable Globus Drivers ---
-
-AC_ARG_ENABLE(gt2,  AS_HELP_STRING(--enable-gt2,\
-  Build Globus Toolkit 2 drivers. Default is disabled.),\
-  [if test $enableval = "yes"; then gt2="yes"; else gt2=" "; fi], [])
-
-AC_ARG_ENABLE(gt4,  AS_HELP_STRING(--enable-gt4,\
-  Build Globus Toolkit 4 drivers. Default is disabled.),\
-  [if test $enableval = "yes"; then gt4="yes"; else gt4=" "; fi], [])
-
-AC_ARG_ENABLE(gt5,  AS_HELP_STRING(--enable-gt5,\
-  Build Globus Toolkit 5 drivers. Default is disabled.),\
-  [if test $enableval = "yes"; then gt5="yes"; else gt5=" "; fi], [])
-
-# --- Enable LCG Drivers ---
-
-AC_ARG_ENABLE(lcg,  AS_HELP_STRING(--enable-lcg,\
-  Build LCG drivers. Default is disabled.),\
-  [if test $enableval = "yes"; then lcg="yes"; else lcg=" "; fi], [])
-
-# --- Enable NORDUGRID Drivers ---
-
-AC_ARG_ENABLE(nordugrid,  AS_HELP_STRING(--enable-nordugrid,\
-  Build nordugrid drivers. Default is disabled.),\
-  [if test $enableval = "yes"; then nordugrid="yes"; else nordugrid=" "; fi], [])
-
-# --- Enable SSH Drivers ---
-
-AC_ARG_ENABLE(ssh,  AS_HELP_STRING(--enable-ssh,\
-  Build SSH drivers. Default is disabled.),\
-  [if test $enableval = "yes"; then ssh="yes"; else ssh=" "; fi], [])
 
 # --- Enable JSDL  ---
 
@@ -312,68 +158,6 @@ EOF
  fi
 fi
 
-# --- Enable EM Drivers ---
-
-AM_CONDITIONAL(GRAM5, test "x$gt2" = "xyes" || test "x$gt5" = "xyes" || test "x$lcg" = "xyes")
-AM_CONDITIONAL(GRAM4, test "x$gt4" = "xyes")
-
-# --- Enable IM Drivers ---
-
-AM_CONDITIONAL(MDS2, test "x$gt2" = "xyes" || test "x$lcg" = "xyes")
-AM_CONDITIONAL(MDS4, test "x$gt4" = "xyes")
-
-# --- Enable TM Drivers ---
-
-AM_CONDITIONAL(GRIDFTP, test "x$gt2" = "xyes" || "x$gt4" = "xyes" || "x$gt5" = "xyes")
-AM_CONDITIONAL(DUMMY, test "x$lcg" = "xyes")
-
-# --- Enable Nordugrid Drivers ---
-
-AM_CONDITIONAL(NORDUGRID, test "x$nordugrid" = "xyes")
-
-# --- Enable SSH Drivers ---
-
-## Checking the ruby and ruby-dev
-AM_CONDITIONAL(SSH, test "x$ssh" = "xyes")
-if test "x$ssh" = "xssh"; then
- AC_CHECK_PROGS([RUBY],[ruby],[no])
- if [[ "$RUBY" = "no" ]] ; then
-  RUBY_SSH_ERROR="ruby not found in your system. Install it!"
-  RUBY_SSH_TEST="no"
-  AC_MSG_ERROR([$RUBY_SSH_ERROR])
- else
-  AC_MSG_CHECKING([whether $RUBY installation includes the openssl package])
-## Next is kind of conftest for ruby
-  cat >> conftest.rb << EOF
-#!/usr/bin/env ruby
-begin
-#	require 'rubygems'
-#	gem 'net-ssh', '< 2.0.0'
-#	gem 'net-sftp', '< 2.0.0'
-	require 'net/ssh'
-	require 'net/sftp'
-    exit 0
-rescue LoadError
-    STDERR.puts 'OpenSSL package not included in ruby!'
-    exit -1
-end
-EOF
-  $RUBY conftest.rb 2>/dev/null
-  if test $? -eq 0; then
-    rm conftest.rb
-    RUBY_SSH_TEST="yes"
-    AC_MSG_RESULT([$RUBY_SSH_TEST])
-  else
-    rm conftest.rb
-    RUBY_SSH_TEST="no"
-    AC_MSG_RESULT([$RUBY_SSH_TEST])
-    RUBY_SSH_ERROR="ruby ssh support not installed (net-ssh and net-sftp should be installed and below 2.0.0 version). Please install it or remove --enable-ssh!"
-    AC_MSG_ERROR([$RUBY_SSH_ERROR])
-  fi
- fi
-fi
-
-
 # --- Enable JSDL  ---
 
 AM_CONDITIONAL(JSDL, test "x$jsdl" = "xjsdl")
@@ -398,14 +182,6 @@ AM_CONDITIONAL(DB,test "x$db" = "xdb")
 
 AM_CONDITIONAL(TESTS, test "x$tests" = "xyes")
 
-# --- Globus Directory Scheme ---
-
-if test "x$GW_DIR_SCHEME" = "xglobus"; then
-	CFLAGS="$CFLAGS -DGW_GLOBUS_DIRS"
-fi
-
-AM_CONDITIONAL(GW_GLOBUS_DIRS, test "x$GW_DIR_SCHEME" = "xglobus")
-
 #------------------------------------------------------------------------------
 # Checks for programs.
 #------------------------------------------------------------------------------
@@ -419,62 +195,12 @@ AC_PROG_MAKE_SET
 AC_PATH_PROG(JAVAC_PATH, javac)
 	
 if test "x$JAVAC_PATH" = "x"; then
-   	AC_MSG_WARN("A Java compiler is needed for GridWay's WS Drivers & DRMAA JAVA")
+   	AC_MSG_WARN("A Java compiler is needed for GridWay's DRMAA JAVA and JSDL")
 fi
     
 if test "x$JAVA_HOME" = "x"; then
    	AC_MSG_WARN("JAVA_HOME is not set, some Java versions will not work (eg. Mac OS X)")     
 fi
-
-###########################
-# CHECKING GLOBUS VERSION #
-###########################
- 
-if test -f $GLOBUS_LOCATION/lib/addressing-1.0.jar; then
-# GT4.0
-        if test -f src/em_mad/GW_mad_ws.java; then
-            rm -f src/em_mad/GW_mad_ws.java;
-        fi
-        (cd src/em_mad ; ln -s GW_mad_ws.GT4.0.java GW_mad_ws.java);
-     
-        if test -f src/im_mad/QueryClient.java; then
-            rm -f src/im_mad/QueryClient.java;
-        fi
-        (cd src/im_mad ; ln -s QueryClient.GT4.0.java QueryClient.java);
-        
-        if test -f src/im_mad/Mds4QueryParser.java; then
-            rm -f src/im_mad/Mds4QueryParser.java;
-        fi        
-        (cd src/im_mad ; ln -s Mds4QueryParser.GT4.0.java Mds4QueryParser.java);
-
-        CLASSPATH=$GLOBUS_LOCATION/lib/addressing-1.0.jar:$GLOBUS_LOCATION/lib/axis.jar:$GLOBUS_LOCATION/lib/cog-jglobus.jar:$GLOBUS_LOCATION/lib/globus_delegation_service.jar:$GLOBUS_LOCATION/lib/globus_wsrf_rft.jar:$GLOBUS_LOCATION/lib/globus_wsrf_rft_client.jar:$GLOBUS_LOCATION/lib/globus_wsrf_rft_stubs.jar:$GLOBUS_LOCATION/lib/gram-client.jar:$GLOBUS_LOCATION/lib/gram-stubs.jar:$GLOBUS_LOCATION/lib/gram-utils.jar:$GLOBUS_LOCATION/lib/jgss.jar:$GLOBUS_LOCATION/lib/wsrf_core.jar:$GLOBUS_LOCATION/lib/wsrf_core_stubs.jar:$GLOBUS_LOCATION/lib/jaxrpc.jar:$GLOBUS_LOCATION/lib/cog-axis.jar:$GLOBUS_LOCATION/lib/saaj.jar
-
-else
-# GT4.2
-        if test -f src/em_mad/GW_mad_ws.java; then
-            rm -f src/em_mad/GW_mad_ws.java;
-        fi
-        (cd src/em_mad ; ln -s GW_mad_ws.GT4.2.java GW_mad_ws.java);
-
-        if test -f src/im_mad/QueryClient.java; then
-            rm -f src/im_mad/QueryClient.java;
-        fi
-        (cd src/im_mad ; ln -s QueryClient.GT4.2.java QueryClient.java);
-    
-        if test -f src/im_mad/Mds4QueryParser.java; then
-            rm -f src/im_mad/Mds4QueryParser.java;
-        fi
-        (cd src/im_mad ; ln -s Mds4QueryParser.GT4.2.java Mds4QueryParser.java);
-
-        CLASSPATH=$GLOBUS_LOCATION/lib/globus_wsrf_gram_client.jar:$GLOBUS_LOCATION/lib/globus_wsrf_gram_common.jar:$GLOBUS_LOCATION/lib/globus_wsrf_gram_utils.jar:$GLOBUS_LOCATION/lib/globus_delegation_service.jar:$GLOBUS_LOCATION/lib/globus_wsrf_rft.jar:$GLOBUS_LOCATION/lib/globus_wsrf_rft_client.jar:$GLOBUS_LOCATION/lib/globus_wsrf_rft_stubs.jar
-
-        for i in `ls $GLOBUS_LOCATION/lib/common/*.jar`; do
-            CLASSPATH=$CLASSPATH:$i;
-        done
-
-fi
-
-AC_SUBST(classpath,$CLASSPATH)
 
 #------------------------------------------------------------------------------
 # Automake Directives
