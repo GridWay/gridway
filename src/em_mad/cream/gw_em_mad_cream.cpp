@@ -21,14 +21,14 @@
 
 using namespace std;
 
-int main( int argc, char *argv[] ) 
+int main( int argc, char *argv[]) 
 {
   char str[4096];
   char str1[20];
   char str2[20];
   char str3[500];
-  char str4[1024];	
-  bool end=false;	
+  char str4[1024];
+  bool end=false;
   string *action;
   string *contact;
   string *jdlFile;
@@ -40,8 +40,8 @@ int main( int argc, char *argv[] )
   while (!end)
   {
 	cin.getline(str,4096,'\n');
-	
-	paramNum = sscanf(str, "%s %s %s %[^\n]", str1, str2, str3, str4);	 
+
+	paramNum = sscanf(str, "%s %s %s %[^\n]", str1, str2, str3, str4);
 
         if (paramNum != 4)
         {
@@ -54,44 +54,42 @@ int main( int argc, char *argv[] )
 	contact = new string(str3);
 	jdlFile = new string(str4);
 
-        if (action->compare("INIT") == 0)
-	{
-            //fopen("grid-proxy-info -path");
-	    if (argc == 1)
-	    	creamEmMad = new CreamEmMad("GridWay", "/tmp/x509up_u500");
-	    else if (argc == 2)
-	    	creamEmMad = new CreamEmMad(argv[1], "/tmp/x509up_u500");	
-	
-            status = creamEmMad->init();
-        }
-	else if (action->compare("SUBMIT") == 0 && creamEmMad != NULL)
-            status = creamEmMad->submit(jidCREAM, contact, jdlFile);    
-        //else if (action->compare("RECOVER") == 0 && creamEmMad != NULL)
+        if (creamEmMad == NULL)
+            if (action->compare("INIT") == 0)
+            {
+                //fopen("grid-proxy-info -path");
+	        if (argc == 1)
+	    	    creamEmMad = new CreamEmMad("GridWay", "/tmp/x509up_u500");
+                else if (argc == 2)
+                    creamEmMad = new CreamEmMad(argv[1], "/tmp/x509up_u500");
+
+                status = creamEmMad->init();
+            }
+            else
+               cout << action->c_str() << " " << jidCREAM << " FAILURE Not initialized" << endl;
+        else if (action->compare("INIT") == 0)
+               cout << action->c_str() << " " << jidCREAM << " FAILURE Already initialized" << endl;
+	else if (action->compare("SUBMIT") == 0)
+            status = creamEmMad->submit(jidCREAM, contact, jdlFile);
+        //else if (action->compare("RECOVER") == 0)
         //    status = creamEmMad->recover(jidCREAM, contact);
-        else if (action->compare("CANCEL") == 0 && creamEmMad != NULL)
+        else if (action->compare("CANCEL") == 0)
             status = creamEmMad->cancel(jidCREAM);
-        else if (action->compare("POLL") == 0 && creamEmMad != NULL)
-            status = creamEmMad->poll(jidCREAM);      
-	else if (end = (action->compare("FINALIZE") == 0) && creamEmMad != NULL)
+        else if (action->compare("POLL") == 0)
+            status = creamEmMad->poll(jidCREAM);
+	else if (end = (action->compare("FINALIZE") == 0))
         {
      	    status = creamEmMad->finalize();
-	    return 0;            
+	    return 0;
         }
-
-        if (creamEmMad == NULL)
-           cout << action->c_str() << " " << jidCREAM << " FAILURE " << "first use the command INIT" << endl;
-	
 
         if (status != 0)
            cout << action->c_str() << " " << jidCREAM << " FAILURE " << (creamEmMad->getInfo())->c_str() << endl;
-       
+ 
 	delete action;
 	delete contact;
 	delete jdlFile;
   }
 
   return 0;
-
 }
-
-

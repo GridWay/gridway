@@ -75,19 +75,19 @@ string  CreamJob::getIsbUploadUrl()
 	
 CreamEmMad::CreamEmMad(char *delegation, char *certificatePath)
 {
-  this->delegationID = new string(delegation);	
-  this->certificatePath = new string(certificatePath);
-  this->info = NULL;
-  this->baseAddress = new string("https://cream-13.pd.infn.it");
-  this->localCreamJID = new string("");
-  this->creamJobs = new map <int, CreamJob> ();
+    this->delegationID = new string(delegation);	
+    this->certificatePath = new string(certificatePath);
+    this->info = NULL;
+    this->baseAddress = new string("https://cream-13.pd.infn.it");
+    this->localCreamJID = new string("");
+    this->creamJobs = new map <int, CreamJob> ();
 }
 
 int CreamEmMad::init()
 {
-   cout << "INIT SUCCESS" << endl;
+    cout << "INIT SUCCESS - -" << endl;
     
-   return 0;
+    return 0;
 }
 
 int CreamEmMad::submit(int jid, string *contact, string *jdlFile)
@@ -117,9 +117,9 @@ int CreamEmMad::submit(int jid, string *contact, string *jdlFile)
 int CreamEmMad::poll(int jid)
 {
     string status;
-       
+ 
     map<int,CreamJob>::iterator it = this->creamJobs->find(jid);
-   
+ 
     if (it == creamJobs->end())
     {
         this->info = new string ("The job ID do not exist");
@@ -154,22 +154,21 @@ int CreamEmMad::poll(int jid)
         return -1;
     }
 
-   string serviceAddress = *(creamJob.getContact());
+    string serviceAddress = *(creamJob.getContact());
 
-   try 
-   {
-    	creamClient->setCredential(this->certificatePath->c_str());
-    	creamClient->execute(serviceAddress);
-   
-   } 
-   catch(exception& ex) 
-   {
-	this->info = new string(ex.what());
-    	delete creamClient;
-    	return -1;
-   }
+    try 
+    {
+        creamClient->setCredential(this->certificatePath->c_str());
+        creamClient->execute(serviceAddress);
+    }
+    catch(exception& ex) 
+    {
+        this->info = new string(ex.what());
+        delete creamClient;
+        return -1;
+    }
 
-   map<string, boost::tuple<API::JobStatusWrapper::RESULT, API::JobStatusWrapper, std::string> >::const_iterator jobIt = Sresult.begin();
+    map<string, boost::tuple<API::JobStatusWrapper::RESULT, API::JobStatusWrapper, std::string> >::const_iterator jobIt = Sresult.begin();
 
     while( jobIt != Sresult.end() ) 
     {
@@ -244,7 +243,6 @@ int CreamEmMad::cancel(int jid)
    } 
    catch(exception& ex) 
    {
-  
 	this->info = new string(ex.what());
     	delete creamClient;
     	return -1;
@@ -259,6 +257,7 @@ int CreamEmMad::cancel(int jid)
 
 int CreamEmMad::finalize()
 {
+    cout << "FINALIZE SUCCESS - -" << endl;
     return 0;
 }
 
@@ -269,35 +268,35 @@ string *CreamEmMad::getInfo()
 
 int CreamEmMad::proxyDelegate(string *contact)
 {
-   API::AbsCreamProxy 	*creamClient; 
-   string	    	*serviceAddress;
+    API::AbsCreamProxy 	*creamClient; 
+    string	    	*serviceAddress;
 
-   creamClient = API::CreamProxyFactory::make_CreamProxy_ProxyRenew(*(this->delegationID), this->connectionTimeout);
-   //creamClient = API::CreamProxyFactory::make_CreamProxyDelegate(*(this->delegationID), this->connectionTimeout);
+    creamClient = API::CreamProxyFactory::make_CreamProxy_ProxyRenew(*(this->delegationID), this->connectionTimeout);
+    //creamClient = API::CreamProxyFactory::make_CreamProxyDelegate(*(this->delegationID), this->connectionTimeout);
 
-   if (creamClient == NULL)
-   {
-	this->info = new string ("Error creating Cream proxy");
-	return -1;
-   }
+    if (creamClient == NULL)
+    {
+        this->info = new string ("Error creating Cream proxy");
+        return -1;
+    }
 
-   serviceAddress = new string("https://" + *contact + ":8443/ce-cream/services/gridsite-delegation");
+    serviceAddress = new string("https://" + *contact + ":8443/ce-cream/services/gridsite-delegation");
 
-   try 
-   {
-   	creamClient->setCredential(this->certificatePath->c_str());
-    	creamClient->execute(*serviceAddress);
-   } 
-   catch(exception& ex) 
-   {
-	this->info = new string(ex.what());
-    	delete creamClient;
-    	return -1;
-   }
+    try 
+    {
+        creamClient->setCredential(this->certificatePath->c_str());
+        creamClient->execute(*serviceAddress);
+    } 
+    catch(exception& ex) 
+    {
+        this->info = new string(ex.what());
+        delete creamClient;
+        return -1;
+    }
 
-   delete creamClient;
-    
-   return 0;
+    delete creamClient;
+ 
+    return 0;
 }
 
 CreamJob *CreamEmMad::jobSubmit(int jid,string *contact,string *jdlFile)
@@ -313,7 +312,7 @@ CreamJob *CreamEmMad::jobSubmit(int jid,string *contact,string *jdlFile)
     vector<string> *inputFiles;
 
     if (JDL == NULL)
-       return NULL;
+        return NULL;
     else
         inputFiles=this->getInputFiles(JDL);
 	
@@ -449,7 +448,6 @@ int CreamEmMad::stagingInputFiles(CreamJob *job)
 
     for (int i=0; i<(int) inputFiles.size(); i++)
     {	
-
     	if (fork() == 0)
 	{
 	    source = new string("file://" + inputFiles[i]);
@@ -493,7 +491,6 @@ int CreamEmMad::jobStart(CreamJob *job)
 	return -1;
    }
 
- 
    try 
    {
     	creamClient->setCredential( this->certificatePath->c_str() );
@@ -501,7 +498,6 @@ int CreamEmMad::jobStart(CreamJob *job)
    } 
    catch(exception& ex) 
    {
-  
 	this->info = new string(ex.what());
     	delete creamClient;
     	return -1;
@@ -511,4 +507,3 @@ int CreamEmMad::jobStart(CreamJob *job)
 
    return 0;
 }
-
