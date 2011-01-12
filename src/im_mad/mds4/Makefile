@@ -8,7 +8,7 @@ gw_im_mad_mds4.jar: QueryClient.java Mds4QueryParser.java
 	@rm -rf package
 
 QueryClient.java:
-	ln -s QueryClient.GT4.2.java QueryClient.java
+	ln -s QueryClient_GT42.java QueryClient.java
 
 Mds4QueryParser.java:
-	ln -s Mds4QueryParser.GT4.2.java Mds4QueryParser.java
+	ln -s Mds4QueryParser_GT42.java Mds4QueryParser.java

@@ -1,1 +1,0 @@
-QueryClient.GT4.2.java
