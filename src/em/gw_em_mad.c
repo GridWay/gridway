@@ -35,12 +35,12 @@ static int gw_em_mad_start(gw_em_mad_t * em_mad);
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
-int gw_em_mad_init(gw_em_mad_t * em_mad, 
-                   const char *   exe,
-                   const char *   name,
-                   const char *   args,                   
-                   const char *   mode,
-                   const char *   owner)
+int gw_em_mad_init(gw_em_mad_t *em_mad, 
+                   const char *exe,
+                   const char *name,
+                   const char *args,                   
+                   const char *mode,
+                   const char *owner)
 {
     int length,rc;
 	
