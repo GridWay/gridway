@@ -10,6 +10,5 @@ fi
 setup_globus
 cd_var
 mad_debug
-check_proxy
 
-exec nice -n $PRIORITY $GW_LOCATION/bin/gw_em_mad_prews.bin $*
+ruby $GW_LOCATION/libexec/ruby/gw_em_mad_ssh.rb
