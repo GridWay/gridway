@@ -809,7 +809,6 @@ am__isrc
 INSTALL_DATA
 INSTALL_SCRIPT
 INSTALL_PROGRAM
-classpath
 JAVAC_PATH
 SET_MAKE
 LN_S
@@ -826,30 +825,12 @@ CC
 YFLAGS
 YACC
 AWK
-GW_GLOBUS_DIRS_FALSE
-GW_GLOBUS_DIRS_TRUE
 TESTS_FALSE
 TESTS_TRUE
 DB_FALSE
 DB_TRUE
 JSDL_FALSE
 JSDL_TRUE
-SSH_FALSE
-SSH_TRUE
-NORDUGRID_FALSE
-NORDUGRID_TRUE
-DUMMY_FALSE
-DUMMY_TRUE
-GRIDFTP_FALSE
-GRIDFTP_TRUE
-MDS4_FALSE
-MDS4_TRUE
-MDS2_FALSE
-MDS2_TRUE
-GRAM4_FALSE
-GRAM4_TRUE
-GRAM5_FALSE
-GRAM5_TRUE
 RUBY
 DRMAA_RUBY_FALSE
 DRMAA_RUBY_TRUE
@@ -863,9 +844,6 @@ build_os
 build_vendor
 build_cpu
 build
-GLOBUS_FLAVOR_NAME
-incgtmk
-globus_pkg_libs
 target_alias
 host_alias
 build_alias
@@ -907,17 +885,9 @@ SHELL'
 ac_subst_files=''
 ac_user_opts='
 enable_option_checking
-enable_globus_scheme
-with_flavor
 enable_drmaa
 enable_drmaa1
 enable_drmaa_ruby
-enable_gt2
-enable_gt4
-enable_gt5
-enable_lcg
-enable_nordugrid
-enable_ssh
 enable_jsdl
 enable_debug
 with_db
@@ -1564,18 +1534,10 @@ Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
-  --enable-globus-scheme  Adjusts directory layout to install GridWay in
-                          GLOBUS_LOCATION. Default is disabled.
   --disable-drmaa         Do not build drmaa support. Default is enabled.
   --enable-drmaa1         Build drmaa 1.0 specification for the JAVA Bindings.
                           Default is disabled.
   --enable-drmaa-ruby     Build ruby drmaa support. Default is disabled.
-  --enable-gt2            Build Globus Toolkit 2 drivers. Default is disabled.
-  --enable-gt4            Build Globus Toolkit 4 drivers. Default is disabled.
-  --enable-gt5            Build Globus Toolkit 5 drivers. Default is disabled.
-  --enable-lcg            Build LCG drivers. Default is disabled.
-  --enable-nordugrid      Build nordugrid drivers. Default is disabled.
-  --enable-ssh            Build SSH drivers. Default is disabled.
   --enable-jsdl           Build jsdl support. Disabled for GT builds.
   --enable-debug          Enable debug info in GW logs. Default is disabled.
   --disable-dependency-tracking  speeds up one-time build
@@ -1589,7 +1551,6 @@ Optional Features:
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-  --with-flavor           Specify globus build flavor (eg. gcc32dbg)
   --with-db=<no|path_to_db>
                           Build db support for accounting. Disabled for GT
                           builds.
@@ -2642,115 +2603,6 @@ ac_configure="$SHELL $ac_aux_dir/configure"  # Please don't use this var.
 
 
 
-# Globus stuff only if needed!!!
-
-#-------------------------------------------------------------------------------
-# --- Globus Directory Scheme --- Need to be checked first
-#-------------------------------------------------------------------------------
-
-GW_DIR_SCHEME=" "
-
-# Check whether --enable-globus-scheme was given.
-if test "${enable_globus_scheme+set}" = set; then :
-  enableval=$enable_globus_scheme; \
-  if test $enableval = "yes"; then GW_DIR_SCHEME="globus"; else \
-  GW_DIR_SCHEME=" "; fi
-fi
-
-
-#-------------------------------------------------------------------------------
-# Globus Location and Flavor
-#-------------------------------------------------------------------------------
-
-echo -n "checking for Globus Toolkit..."
-
-if test -z "$GLOBUS_LOCATION" ; then
-   echo "GLOBUS_LOCATION is not defined..."
-   exit -1
-else
-   echo "ok"
-fi
-
-
-# Check whether --with-flavor was given.
-if test "${with_flavor+set}" = set; then :
-  withval=$with_flavor; \
-   FLAVOR=$withval
-fi
-
-
-if test -z "$FLAVOR" ; then
-
-   if test -d $GLOBUS_LOCATION/include/gcc32dbg ; then
-      FLAVOR=gcc32dbg
-   elif test -d $GLOBUS_LOCATION/include/gcc32 ; then
-      FLAVOR=gcc32
-   elif test -d $GLOBUS_LOCATION/include/gcc64dbg ; then
-      FLAVOR=gcc64dbg
-   elif test -d $GLOBUS_LOCATION/include/gcc64 ; then
-      FLAVOR=gcc64
-   elif test -d $GLOBUS_LOCATION/include/vendorcc32dbg ; then
-      FLAVOR=vendorcc32dbg
-   elif test -d $GLOBUS_LOCATION/include/vendorcc32 ; then
-      FLAVOR=vendorcc32
-   elif test -d $GLOBUS_LOCATION/include/vendorcc64dbg ; then
-      FLAVOR=vendorcc64dbg
-   elif test -d $GLOBUS_LOCATION/include/vendorcc64 ; then
-      FLAVOR=vendorcc64
-   else
-      echo "use --with-flavor"
-      exit -1
-   fi
-fi
-
-#-------------------------------------------------------------------------------
-# Makefile-header setup (handled by GPT or globus-makefile-header)
-#-------------------------------------------------------------------------------
-
-echo -n "configuring Globus build env..."
-
-if test "x$GW_DIR_SCHEME" = "xglobus"; then
-   if test -z "$GPT_LOCATION" ; then
-      HEADER_COMMAND=$GLOBUS_LOCATION/sbin/gpt_build_config
-   else
-      HEADER_COMMAND=$GPT_LOCATION/sbin/gpt_build_config
-   fi
-else
-   source $GLOBUS_LOCATION/etc/globus-user-env.sh  > /dev/null 2>&1
-
-   HEADER_COMMAND=$GLOBUS_LOCATION/bin/globus-makefile-header
-fi
-
-if test -x $HEADER_COMMAND; then
-
-   if test "x$GW_DIR_SCHEME" = "xglobus"; then
-      $HEADER_COMMAND -src=pkgdata/pkg_data_src.gpt -flavor=$FLAVOR -link=shared
-      export GLOBUS_FLAVOR_NAME=$FLAVOR
-      source ./gpt_build_temp.sh
-      globus_pkg_libs="$GPT_CONFIG_PKG_LIBS $GPT_CONFIG_LIBS"
-
-   else
-
-      $HEADER_COMMAND -flavor $FLAVOR globus_gram_client globus_ftp_client \
-            globus_gass_copy > makefile-header
-      incgtmk="include $PWD/makefile-header"
-
-   fi
-
-   if test $? -ne 0 ; then
-      echo "failed"
-      exit -1
-   else
-      echo "ok"
-   fi
-
-else
-   echo "falied. $HEADER_COMMAND not found!"
-   exit -1
-fi
-
-GLOBUS_FLAVOR_NAME=$FLAVOR
-
 #-------------------------------------------------------------------------------
 # Check target system
 #-------------------------------------------------------------------------------
@@ -2825,36 +2677,13 @@ java_home=$JAVA_HOME
 # Argument Definition for configure
 #------------------------------------------------------------------------------
 
-if test "x$GW_DIR_SCHEME" = "xglobus"; then
-#Default options for Globus builds
-	drmaa="yes"
-	drmaa_ruby=""
-	gt2=""
-	gt4=""
-	gt5=""
-	lcg=""
-	nordugrid=""
-	ssh=""
-	docs="no"
-	tests="no"
-	drmaa1="no"
-	jsdl=""
-	db=""
-else
-	drmaa="yes"
-	drmaa_ruby=""
-	gt2=""
-	gt4=""
-	gt5=""
-	lcg=""
-	nordugrid=""
-	ssh=""
-	docs="no"
-	tests="no"
-	drmaa1="no"
-	jsdl="yes"
-	db="yes"
-fi
+drmaa="yes"
+drmaa_ruby=""
+docs="no"
+tests="no"
+drmaa1="no"
+jsdl="yes"
+db="yes"
 
 # --- Enable DRMAA library ---
 
@@ -2880,56 +2709,6 @@ fi
 if test "${enable_drmaa_ruby+set}" = set; then :
   enableval=$enable_drmaa_ruby; \
   if test $enableval = "yes"; then drmaa_ruby="yes"; else drmaa_ruby=" "; fi
-fi
-
-
-# --- Enable Globus Drivers ---
-
-# Check whether --enable-gt2 was given.
-if test "${enable_gt2+set}" = set; then :
-  enableval=$enable_gt2; \
-  if test $enableval = "yes"; then gt2="yes"; else gt2=" "; fi
-fi
-
-
-# Check whether --enable-gt4 was given.
-if test "${enable_gt4+set}" = set; then :
-  enableval=$enable_gt4; \
-  if test $enableval = "yes"; then gt4="yes"; else gt4=" "; fi
-fi
-
-
-# Check whether --enable-gt5 was given.
-if test "${enable_gt5+set}" = set; then :
-  enableval=$enable_gt5; \
-  if test $enableval = "yes"; then gt5="yes"; else gt5=" "; fi
-fi
-
-
-# --- Enable LCG Drivers ---
-
-# Check whether --enable-lcg was given.
-if test "${enable_lcg+set}" = set; then :
-  enableval=$enable_lcg; \
-  if test $enableval = "yes"; then lcg="yes"; else lcg=" "; fi
-fi
-
-
-# --- Enable NORDUGRID Drivers ---
-
-# Check whether --enable-nordugrid was given.
-if test "${enable_nordugrid+set}" = set; then :
-  enableval=$enable_nordugrid; \
-  if test $enableval = "yes"; then nordugrid="yes"; else nordugrid=" "; fi
-fi
-
-
-# --- Enable SSH Drivers ---
-
-# Check whether --enable-ssh was given.
-if test "${enable_ssh+set}" = set; then :
-  enableval=$enable_ssh; \
-  if test $enableval = "yes"; then ssh="yes"; else ssh=" "; fi
 fi
 
 
@@ -3089,169 +2868,6 @@ $as_echo "$RUBY_TEST" >&6; }
  fi
 fi
 
-# --- Enable EM Drivers ---
-
- if test "x$gt2" = "xyes" || test "x$gt5" = "xyes" || test "x$lcg" = "xyes"; then
-  GRAM5_TRUE=
-  GRAM5_FALSE='#'
-else
-  GRAM5_TRUE='#'
-  GRAM5_FALSE=
-fi
-
- if test "x$gt4" = "xyes"; then
-  GRAM4_TRUE=
-  GRAM4_FALSE='#'
-else
-  GRAM4_TRUE='#'
-  GRAM4_FALSE=
-fi
-
-
-# --- Enable IM Drivers ---
-
- if test "x$gt2" = "xyes" || test "x$lcg" = "xyes"; then
-  MDS2_TRUE=
-  MDS2_FALSE='#'
-else
-  MDS2_TRUE='#'
-  MDS2_FALSE=
-fi
-
- if test "x$gt4" = "xyes"; then
-  MDS4_TRUE=
-  MDS4_FALSE='#'
-else
-  MDS4_TRUE='#'
-  MDS4_FALSE=
-fi
-
-
-# --- Enable TM Drivers ---
-
- if test "x$gt2" = "xyes" || "x$gt4" = "xyes" || "x$gt5" = "xyes"; then
-  GRIDFTP_TRUE=
-  GRIDFTP_FALSE='#'
-else
-  GRIDFTP_TRUE='#'
-  GRIDFTP_FALSE=
-fi
-
- if test "x$lcg" = "xyes"; then
-  DUMMY_TRUE=
-  DUMMY_FALSE='#'
-else
-  DUMMY_TRUE='#'
-  DUMMY_FALSE=
-fi
-
-
-# --- Enable Nordugrid Drivers ---
-
- if test "x$nordugrid" = "xyes"; then
-  NORDUGRID_TRUE=
-  NORDUGRID_FALSE='#'
-else
-  NORDUGRID_TRUE='#'
-  NORDUGRID_FALSE=
-fi
-
-
-# --- Enable SSH Drivers ---
-
-## Checking the ruby and ruby-dev
- if test "x$ssh" = "xyes"; then
-  SSH_TRUE=
-  SSH_FALSE='#'
-else
-  SSH_TRUE='#'
-  SSH_FALSE=
-fi
-
-if test "x$ssh" = "xssh"; then
- for ac_prog in ruby
-do
-  # Extract the first word of "$ac_prog", so it can be a program name with args.
-set dummy $ac_prog; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if test "${ac_cv_prog_RUBY+set}" = set; then :
-  $as_echo_n "(cached) " >&6
-else
-  if test -n "$RUBY"; then
-  ac_cv_prog_RUBY="$RUBY" # Let the user override the test.
-else
-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
-    ac_cv_prog_RUBY="$ac_prog"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-fi
-fi
-RUBY=$ac_cv_prog_RUBY
-if test -n "$RUBY"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $RUBY" >&5
-$as_echo "$RUBY" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-
-  test -n "$RUBY" && break
-done
-test -n "$RUBY" || RUBY="no"
-
- if [ "$RUBY" = "no" ] ; then
-  RUBY_SSH_ERROR="ruby not found in your system. Install it!"
-  RUBY_SSH_TEST="no"
-  as_fn_error "$RUBY_SSH_ERROR" "$LINENO" 5
- else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether $RUBY installation includes the openssl package" >&5
-$as_echo_n "checking whether $RUBY installation includes the openssl package... " >&6; }
-## Next is kind of conftest for ruby
-  cat >> conftest.rb << EOF
-#!/usr/bin/env ruby
-begin
-#	require 'rubygems'
-#	gem 'net-ssh', '< 2.0.0'
-#	gem 'net-sftp', '< 2.0.0'
-	require 'net/ssh'
-	require 'net/sftp'
-    exit 0
-rescue LoadError
-    STDERR.puts 'OpenSSL package not included in ruby!'
-    exit -1
-end
-EOF
-  $RUBY conftest.rb 2>/dev/null
-  if test $? -eq 0; then
-    rm conftest.rb
-    RUBY_SSH_TEST="yes"
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $RUBY_SSH_TEST" >&5
-$as_echo "$RUBY_SSH_TEST" >&6; }
-  else
-    rm conftest.rb
-    RUBY_SSH_TEST="no"
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $RUBY_SSH_TEST" >&5
-$as_echo "$RUBY_SSH_TEST" >&6; }
-    RUBY_SSH_ERROR="ruby ssh support not installed (net-ssh and net-sftp should be installed and below 2.0.0 version). Please install it or remove --enable-ssh!"
-    as_fn_error "$RUBY_SSH_ERROR" "$LINENO" 5
-  fi
- fi
-fi
-
-
 # --- Enable JSDL  ---
 
  if test "x$jsdl" = "xjsdl"; then
@@ -3294,21 +2910,6 @@ fi
 else
   TESTS_TRUE='#'
   TESTS_FALSE=
-fi
-
-
-# --- Globus Directory Scheme ---
-
-if test "x$GW_DIR_SCHEME" = "xglobus"; then
-	CFLAGS="$CFLAGS -DGW_GLOBUS_DIRS"
-fi
-
- if test "x$GW_DIR_SCHEME" = "xglobus"; then
-  GW_GLOBUS_DIRS_TRUE=
-  GW_GLOBUS_DIRS_FALSE='#'
-else
-  GW_GLOBUS_DIRS_TRUE='#'
-  GW_GLOBUS_DIRS_FALSE=
 fi
 
 
@@ -4533,65 +4134,14 @@ fi
 
 
 if test "x$JAVAC_PATH" = "x"; then
-   	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: \"A Java compiler is needed for GridWay's WS Drivers & DRMAA JAVA\"" >&5
-$as_echo "$as_me: WARNING: \"A Java compiler is needed for GridWay's WS Drivers & DRMAA JAVA\"" >&2;}
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: \"A Java compiler is needed for GridWay's DRMAA JAVA and JSDL\"" >&5
+$as_echo "$as_me: WARNING: \"A Java compiler is needed for GridWay's DRMAA JAVA and JSDL\"" >&2;}
 fi
 
 if test "x$JAVA_HOME" = "x"; then
    	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: \"JAVA_HOME is not set" >&5
 $as_echo "$as_me: WARNING: \"JAVA_HOME is not set" >&2;}
 fi
-
-###########################
-# CHECKING GLOBUS VERSION #
-###########################
-
-if test -f $GLOBUS_LOCATION/lib/addressing-1.0.jar; then
-# GT4.0
-        if test -f src/em_mad/GW_mad_ws.java; then
-            rm -f src/em_mad/GW_mad_ws.java;
-        fi
-        (cd src/em_mad ; ln -s GW_mad_ws.GT4.0.java GW_mad_ws.java);
-
-        if test -f src/im_mad/QueryClient.java; then
-            rm -f src/im_mad/QueryClient.java;
-        fi
-        (cd src/im_mad ; ln -s QueryClient.GT4.0.java QueryClient.java);
-
-        if test -f src/im_mad/Mds4QueryParser.java; then
-            rm -f src/im_mad/Mds4QueryParser.java;
-        fi
-        (cd src/im_mad ; ln -s Mds4QueryParser.GT4.0.java Mds4QueryParser.java);
-
-        CLASSPATH=$GLOBUS_LOCATION/lib/addressing-1.0.jar:$GLOBUS_LOCATION/lib/axis.jar:$GLOBUS_LOCATION/lib/cog-jglobus.jar:$GLOBUS_LOCATION/lib/globus_delegation_service.jar:$GLOBUS_LOCATION/lib/globus_wsrf_rft.jar:$GLOBUS_LOCATION/lib/globus_wsrf_rft_client.jar:$GLOBUS_LOCATION/lib/globus_wsrf_rft_stubs.jar:$GLOBUS_LOCATION/lib/gram-client.jar:$GLOBUS_LOCATION/lib/gram-stubs.jar:$GLOBUS_LOCATION/lib/gram-utils.jar:$GLOBUS_LOCATION/lib/jgss.jar:$GLOBUS_LOCATION/lib/wsrf_core.jar:$GLOBUS_LOCATION/lib/wsrf_core_stubs.jar:$GLOBUS_LOCATION/lib/jaxrpc.jar:$GLOBUS_LOCATION/lib/cog-axis.jar:$GLOBUS_LOCATION/lib/saaj.jar
-
-else
-# GT4.2
-        if test -f src/em_mad/GW_mad_ws.java; then
-            rm -f src/em_mad/GW_mad_ws.java;
-        fi
-        (cd src/em_mad ; ln -s GW_mad_ws.GT4.2.java GW_mad_ws.java);
-
-        if test -f src/im_mad/QueryClient.java; then
-            rm -f src/im_mad/QueryClient.java;
-        fi
-        (cd src/im_mad ; ln -s QueryClient.GT4.2.java QueryClient.java);
-
-        if test -f src/im_mad/Mds4QueryParser.java; then
-            rm -f src/im_mad/Mds4QueryParser.java;
-        fi
-        (cd src/im_mad ; ln -s Mds4QueryParser.GT4.2.java Mds4QueryParser.java);
-
-        CLASSPATH=$GLOBUS_LOCATION/lib/globus_wsrf_gram_client.jar:$GLOBUS_LOCATION/lib/globus_wsrf_gram_common.jar:$GLOBUS_LOCATION/lib/globus_wsrf_gram_utils.jar:$GLOBUS_LOCATION/lib/globus_delegation_service.jar:$GLOBUS_LOCATION/lib/globus_wsrf_rft.jar:$GLOBUS_LOCATION/lib/globus_wsrf_rft_client.jar:$GLOBUS_LOCATION/lib/globus_wsrf_rft_stubs.jar
-
-        for i in `ls $GLOBUS_LOCATION/lib/common/*.jar`; do
-            CLASSPATH=$CLASSPATH:$i;
-        done
-
-fi
-
-classpath=$CLASSPATH
-
 
 #------------------------------------------------------------------------------
 # Automake Directives
@@ -8004,13 +7554,13 @@ if test "${lt_cv_nm_interface+set}" = set; then :
 else
   lt_cv_nm_interface="BSD nm"
   echo "int some_variable = 0;" > conftest.$ac_ext
-  (eval echo "\"\$as_me:8007: $ac_compile\"" >&5)
+  (eval echo "\"\$as_me:7557: $ac_compile\"" >&5)
   (eval "$ac_compile" 2>conftest.err)
   cat conftest.err >&5
-  (eval echo "\"\$as_me:8010: $NM \\\"conftest.$ac_objext\\\"\"" >&5)
+  (eval echo "\"\$as_me:7560: $NM \\\"conftest.$ac_objext\\\"\"" >&5)
   (eval "$NM \"conftest.$ac_objext\"" 2>conftest.err > conftest.out)
   cat conftest.err >&5
-  (eval echo "\"\$as_me:8013: output\"" >&5)
+  (eval echo "\"\$as_me:7563: output\"" >&5)
   cat conftest.out >&5
   if $GREP 'External.*some_variable' conftest.out > /dev/null; then
     lt_cv_nm_interface="MS dumpbin"
@@ -9204,7 +8754,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 9207 "configure"' > conftest.$ac_ext
+  echo '#line 8757 "configure"' > conftest.$ac_ext
   if { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_compile\""; } >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -10862,11 +10412,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:10865: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:10415: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:10869: \$? = $ac_status" >&5
+   echo "$as_me:10419: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -11201,11 +10751,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:11204: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:10754: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:11208: \$? = $ac_status" >&5
+   echo "$as_me:10758: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -11306,11 +10856,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:11309: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:10859: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:11313: \$? = $ac_status" >&5
+   echo "$as_me:10863: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -11361,11 +10911,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:11364: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:10914: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:11368: \$? = $ac_status" >&5
+   echo "$as_me:10918: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -13728,7 +13278,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<_LT_EOF
-#line 13731 "configure"
+#line 13281 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -13824,7 +13374,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<_LT_EOF
-#line 13827 "configure"
+#line 13377 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -15780,11 +15330,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15783: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15333: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15787: \$? = $ac_status" >&5
+   echo "$as_me:15337: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -15879,11 +15429,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15882: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15432: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:15886: \$? = $ac_status" >&5
+   echo "$as_me:15436: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -15931,11 +15481,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15934: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15484: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:15938: \$? = $ac_status" >&5
+   echo "$as_me:15488: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -17038,38 +16588,6 @@ if test -z "${DRMAA_RUBY_TRUE}" && test -z "${DRMAA_RUBY_FALSE}"; then
   as_fn_error "conditional \"DRMAA_RUBY\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
-if test -z "${GRAM5_TRUE}" && test -z "${GRAM5_FALSE}"; then
-  as_fn_error "conditional \"GRAM5\" was never defined.
-Usually this means the macro was only invoked conditionally." "$LINENO" 5
-fi
-if test -z "${GRAM4_TRUE}" && test -z "${GRAM4_FALSE}"; then
-  as_fn_error "conditional \"GRAM4\" was never defined.
-Usually this means the macro was only invoked conditionally." "$LINENO" 5
-fi
-if test -z "${MDS2_TRUE}" && test -z "${MDS2_FALSE}"; then
-  as_fn_error "conditional \"MDS2\" was never defined.
-Usually this means the macro was only invoked conditionally." "$LINENO" 5
-fi
-if test -z "${MDS4_TRUE}" && test -z "${MDS4_FALSE}"; then
-  as_fn_error "conditional \"MDS4\" was never defined.
-Usually this means the macro was only invoked conditionally." "$LINENO" 5
-fi
-if test -z "${GRIDFTP_TRUE}" && test -z "${GRIDFTP_FALSE}"; then
-  as_fn_error "conditional \"GRIDFTP\" was never defined.
-Usually this means the macro was only invoked conditionally." "$LINENO" 5
-fi
-if test -z "${DUMMY_TRUE}" && test -z "${DUMMY_FALSE}"; then
-  as_fn_error "conditional \"DUMMY\" was never defined.
-Usually this means the macro was only invoked conditionally." "$LINENO" 5
-fi
-if test -z "${NORDUGRID_TRUE}" && test -z "${NORDUGRID_FALSE}"; then
-  as_fn_error "conditional \"NORDUGRID\" was never defined.
-Usually this means the macro was only invoked conditionally." "$LINENO" 5
-fi
-if test -z "${SSH_TRUE}" && test -z "${SSH_FALSE}"; then
-  as_fn_error "conditional \"SSH\" was never defined.
-Usually this means the macro was only invoked conditionally." "$LINENO" 5
-fi
 if test -z "${JSDL_TRUE}" && test -z "${JSDL_FALSE}"; then
   as_fn_error "conditional \"JSDL\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
@@ -17080,10 +16598,6 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${TESTS_TRUE}" && test -z "${TESTS_FALSE}"; then
   as_fn_error "conditional \"TESTS\" was never defined.
-Usually this means the macro was only invoked conditionally." "$LINENO" 5
-fi
-if test -z "${GW_GLOBUS_DIRS_TRUE}" && test -z "${GW_GLOBUS_DIRS_FALSE}"; then
-  as_fn_error "conditional \"GW_GLOBUS_DIRS\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${AMDEP_TRUE}" && test -z "${AMDEP_FALSE}"; then
