@@ -18,19 +18,11 @@ SUBDIRS = src
 JAVA_HOME = @java_home@
 PREFIX = @prefix@
 
-if GW_GLOBUS_DIRS
-GW_ETC_DIR   = etc/gridway
-GW_VAR_DIR   = var/gridway
-GW_SHARE_DIR = share/gridway
-GW_TEST_DIR  = test/gridway
-GW_XML_DIR = share/gridway/xml_schema
-else
 GW_ETC_DIR   = etc
 GW_VAR_DIR   = var
 GW_SHARE_DIR = share
 GW_TEST_DIR  = test
 GW_XML_DIR = xml_schema
-endif
 
 if DRMAA_RUBY
 SUBDIRS += src/drmaa/ruby
@@ -64,73 +56,6 @@ endif
 	@mv $(PREFIX)/bin/runner.rb $(PREFIX)/libexec/ruby/dagman/runner.rb
 	@mv $(PREFIX)/bin/gridway.rb $(PREFIX)/libexec/ruby/dagman/gridway.rb
 	@mv $(PREFIX)/bin/gw_im_mad_static.sh $(PREFIX)/bin/gw_im_mad_static
-
-# ----------------------------
-# -- Script renaming - EM MADs
-# ----------------------------
-
-if GRAM4
-	@mv $(PREFIX)/bin/gw_em_mad_ws.sh $(PREFIX)/bin/gw_em_mad_ws
-endif
-
-if GRAM5
-	@mv $(PREFIX)/bin/gw_em_mad_prews.sh $(PREFIX)/bin/gw_em_mad_prews
-endif
-
-# ----------------------------
-# -- Script renaming - IM MADs
-# ----------------------------
-
-if MDS2
-	@mv $(PREFIX)/bin/gw_im_mad_mds2.sh $(PREFIX)/bin/gw_im_mad_mds2
-	@mv $(PREFIX)/bin/gw_im_mad_mds2_glue.sh $(PREFIX)/bin/gw_im_mad_mds2_glue
-	@mkdir -p $(PREFIX)/libexec/perl
-	@mv $(PREFIX)/bin/gw_im_mad_egee_ldap.sh $(PREFIX)/bin/gw_im_mad_egee_ldap
-	@mv $(PREFIX)/bin/gw_im_mad_egee_ldap.pl $(PREFIX)/libexec/perl/gw_im_mad_egee_ldap.pl
-endif
-
-if MDS4
-	@mv $(PREFIX)/bin/gw_im_mad_mds4.sh $(PREFIX)/bin/gw_im_mad_mds4
-	@mv $(PREFIX)/bin/gw_im_mad_mds4_thr.sh $(PREFIX)/bin/gw_im_mad_mds4_thr
-endif
-
-# ----------------------------
-# -- Script renaming - TM MADs
-# ----------------------------
-
-if GRIDFTP
-	@mv $(PREFIX)/bin/gw_tm_mad_ftp.sh $(PREFIX)/bin/gw_tm_mad_ftp
-endif
-
-if DUMMY
-	@mv $(PREFIX)/bin/gw_tm_mad_dummy.sh $(PREFIX)/bin/gw_tm_mad_dummy
-endif
-
-# ----------------------------
-# -- Script renaming - NORDUGRID
-# ----------------------------
-
-if NORDUGRID
-	@mv $(PREFIX)/bin/gw_em_mad_nordugrid.sh $(PREFIX)/bin/gw_em_mad_nordugrid
-	@mv $(PREFIX)/bin/gw_tm_mad_nordugrid.sh $(PREFIX)/bin/gw_tm_mad_nordugrid
-	@mkdir -p $(PREFIX)/libexec/python
-	@mv $(PREFIX)/bin/gw_em_mad_nordugrid.py $(PREFIX)/libexec/python/gw_em_mad_nordugrid.py
-	@mv $(PREFIX)/bin/gw_tm_mad_nordugrid.py $(PREFIX)/libexec/python/gw_tm_mad_nordugrid.py
-	@mv $(PREFIX)/bin/em_nordugrid.py $(PREFIX)/libexec/python/em_nordugrid.py
-	@mv $(PREFIX)/bin/tm_nordugrid.py $(PREFIX)/libexec/python/tm_nordugrid.py
-endif
-
-# ----------------------------
-# -- Script renaming - SSH
-# ----------------------------
-if SSH
-	@mkdir -p $(PREFIX)/libexec/ruby
-	@mv $(PREFIX)/bin/gw_em_mad_ssh.sh $(PREFIX)/bin/gw_em_mad_ssh
-	@mv $(PREFIX)/bin/gw_tm_mad_ssh.sh $(PREFIX)/bin/gw_tm_mad_ssh
-	@mv $(PREFIX)/bin/ssh_wrapper.sh $(PREFIX)/libexec
-	@mv $(PREFIX)/bin/gw_em_mad_ssh.rb $(PREFIX)/bin/gwmad.rb $(PREFIX)/bin/gw_tm_mad_ssh.rb \
-$(PREFIX)/bin/rslparser.rb $(PREFIX)/bin/sshjob.rb $(PREFIX)/bin/sshresource.rb $(PREFIX)/libexec/ruby
-endif
 
 # ----------------------------
 # -- Script renaming - JSDL
@@ -183,38 +108,11 @@ $(top_srcdir)/etc/sched.conf $(top_srcdir)/etc/gwrc $(PREFIX)/$(GW_ETC_DIR)/
 	@cp $(top_srcdir)/scripts/gw_mad_common.sh $(PREFIX)/bin
 
 uninstall-hook:
-	@rm -f $(PREFIX)/bin/gwdagman
-if GRAM4
-	@rm $(PREFIX)/bin/gw_em_mad_ws
-endif
-if MDS4
-	@rm $(PREFIX)/bin/gw_im_mad_mds4
-endif
-if MDS2
-	@rm $(PREFIX)/bin/gw_im_mad_mds2
-	@rm $(PREFIX)/bin/gw_im_mad_mds2_glue
 	@rm -rf $(PREFIX)/libexec/perl
-	@rm $(PREFIX)/bin/gw_im_mad_egee_ldap
-endif
-if GRIDFTP
-	@rm $(PREFIX)/bin/gw_tm_mad_ftp
-endif
-	@rm $(PREFIX)/bin/gw_tm_mad_rft
-if GRAM5
-	@rm $(PREFIX)/bin/gw_em_mad_prews
-endif
-	@rm $(PREFIX)/bin/gw_im_mad_static
-if DUMMY
-	@rm $(PREFIX)/bin/gw_tm_mad_dummy
-endif
-	@rm $(PREFIX)/bin/jsdl2gw
+	@rm -rf $(PREFIX)/bin
 	@rm -rf $(PREFIX)/lib/ruby/
 	@rm -rf $(PREFIX)/$(GW_VAR_DIR)
-if NORDUGRID
 	@rm -rf $(PREFIX)/libexec/python
-	@rm $(PREFIX)/bin/gw_em_mad_nordugrid
-	@rm $(PREFIX)/bin/gw_tm_mad_nordugrid
-endif
 	@rm -rf $(PREFIX)/$(GW_XML_DIR)
 
 # *****************************************

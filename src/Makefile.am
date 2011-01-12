@@ -21,15 +21,8 @@
 AUTOMAKE_OPTIONS = subdir-objects no-dependencies
 AM_YFLAGS = -d
 
-# Get rid of libtool by default & make use of globus compiler/linker
-
-if GW_GLOBUS_DIRS
 LINK_PROG    = $(CCLD)
 COMPILE_PROG = $(CC)
-else
-COMPILE_PROG = $(GLOBUS_CC)
-LINK_PROG    = $(GLOBUS_LD)
-endif
 
 LINK_OPTS = $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 
@@ -38,12 +31,6 @@ COMPILE_OPTS = $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 
 LINK = $(LINK_PROG) $(LINK_OPTS)
 COMPILE = $(COMPILE_PROG) $(COMPILE_OPTS)
-
-if GW_GLOBUS_DIRS
-GT_PKG_LIBS = @globus_pkg_libs@
-else
-GT_PKG_LIBS = $(GLOBUS_LIBS) $(GLOBUS_PKG_LIBS)
-endif
 
 # to handle else, not very smart 
 NOP =
@@ -173,6 +160,7 @@ EM_SRC = $(EM)/gw_em_actions.c \
         $(EM)/gw_em_mad.c \
         $(EM)/gw_em_rsl2.c \
         $(EM)/gw_em_rsl.c \
+        $(EM)/gw_em_jdl.c \
         $(EM)/gw_em_state.c
 
 TM_SRC = $(TM)/gw_tm_actions.c \
@@ -343,15 +331,8 @@ INCLUDES = -I$(top_srcdir)/include \
            -I${JAVA_HOME}/include \
            -I${JAVA_HOME}/include/$(SYSTEM)
 
-if GW_GLOBUS_DIRS
-SYSTEM=@system@
-flavorincludedir = $(GLOBUS_LOCATION)/include/@GLOBUS_FLAVOR_NAME@
-else
 SYSTEM=@system@
 flavorincludedir = $(prefix)/include
-@incgtmk@
-INCLUDES += $(GLOBUS_INCLUDES)
-endif
 
 flavorinclude_HEADERS = $(top_srcdir)/include/drmaa.h \
                         $(top_srcdir)/include/gw_acct.h \
@@ -533,26 +514,10 @@ __srcdir__scheduler_gw_sched_LDFLAGS = -lm
 lib_LTLIBRARIES =
 
 if DRMAA
-if GW_GLOBUS_DIRS
-lib_LTLIBRARIES += $(srcdir)/drmaa/libdrmaa_$(GLOBUS_FLAVOR_NAME).la
-lib_LTLIBRARIES += $(srcdir)/drmaa/libDrmaaJNI_$(GLOBUS_FLAVOR_NAME).la
-else
 lib_LTLIBRARIES += $(srcdir)/drmaa/libdrmaa.la
 lib_LTLIBRARIES += $(srcdir)/drmaa/libDrmaaJNI.la
 endif
-endif
 
-if GW_GLOBUS_DIRS
-__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_SOURCES = $(DRMAA_SRC)
-__srcdir__drmaa_libDrmaaJNI___GLOBUS_FLAVOR_NAME__la_SOURCES = $(DRMAAJNI_SRC)
-__srcdir__drmaa_libDrmaaJNI___GLOBUS_FLAVOR_NAME__la_LIBADD  = $(srcdir)/drmaa/libdrmaa_$(GLOBUS_FLAVOR_NAME).la 
-
-__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_CFLAGS = $(AM_CFLAGS)
-
-# Use libtool to generate drmaa library files
-__srcdir__drmaa_libdrmaa___GLOBUS_FLAVOR_NAME__la_LINK = $(LIBTOOL) --tag=CC --mode=link $(LINK)
-__srcdir__drmaa_libDrmaaJNI___GLOBUS_FLAVOR_NAME__la_LINK = $(LIBTOOL) --tag=CC --mode=link $(LINK)
-else
 __srcdir__drmaa_libdrmaa_la_SOURCES = $(DRMAA_SRC)
 __srcdir__drmaa_libDrmaaJNI_la_SOURCES = $(DRMAAJNI_SRC)
 __srcdir__drmaa_libDrmaaJNI_la_LIBADD  = $(srcdir)/drmaa/libdrmaa.la
@@ -562,7 +527,6 @@ __srcdir__drmaa_libdrmaa_la_CFLAGS = $(AM_CFLAGS)
 # Use libtool to generate drmaa library files
 __srcdir__drmaa_libdrmaa_la_LINK = $(LIBTOOL) --tag=CC --mode=link $(LINK)
 __srcdir__drmaa_libDrmaaJNI_la_LINK = $(LIBTOOL) --tag=CC --mode=link $(LINK)
-endif
 
 if DRMAA
 
@@ -580,132 +544,6 @@ $(srcdir)/drmaa/drmaa.jar:
 endif
 
 CLEANFILES += $(srcdir)/drmaa/drmaa.jar
-
-# --------------------------------
-# Pre-WS Middleware Access Drivers
-# --------------------------------
-
-# ---------------------- EM MADS ------------------------
-
-if GRAM5
-bin_PROGRAMS += $(srcdir)/em_mad/gw_em_mad_prews.bin
-dist_bin_SCRIPTS  += $(EM_MAD)/gw_em_mad_prews.sh
-endif
-
-__srcdir__em_mad_gw_em_mad_prews_bin_SOURCES = $(EM_MAD_PREWS_SRC)
-__srcdir__em_mad_gw_em_mad_prews_bin_LDADD   = $(GT_PKG_LIBS)
-
-if GW_GLOBUS_DIRS
-NOP +=
-else
-__srcdir__em_mad_gw_em_mad_prews_bin_LDFLAGS = $(GLOBUS_LDFLAGS)
-__srcdir__em_mad_gw_em_mad_prews_bin_CFLAGS  = $(GLOBUS_INCLUDES) \
-        $(GLOBUS_CFLAGS)
-endif
-
-
-# ---------------------- TM MADS ------------------------
-
-if DUMMY
-bin_PROGRAMS += $(srcdir)/tm_mad/gw_tm_mad_dummy.bin
-dist_bin_SCRIPTS  += $(TM_MAD)/gw_tm_mad_dummy.sh
-endif
-
-if GRIDFTP
-bin_PROGRAMS += $(srcdir)/tm_mad/gw_tm_mad_ftp.bin
-dist_bin_SCRIPTS += $(TM_MAD)/gw_tm_mad_ftp.sh
-
-__srcdir__tm_mad_gw_tm_mad_ftp_bin_SOURCES = $(TM_MAD_SRC)
-__srcdir__tm_mad_gw_tm_mad_ftp_bin_LDADD   = $(GT_PKG_LIBS)
-
-if GW_GLOBUS_DIRS
-NOP +=
-else
-__srcdir__tm_mad_gw_tm_mad_ftp_bin_LDFLAGS = $(GLOBUS_LDFLAGS)
-__srcdir__tm_mad_gw_tm_mad_ftp_bin_CFLAGS  = $(GLOBUS_INCLUDES) \
-        $(GLOBUS_CFLAGS)
-endif
-
-endif
-
-__srcdir__tm_mad_gw_tm_mad_dummy_bin_SOURCES = $(TM_MAD_DUMMY_SRC)
-__srcdir__tm_mad_gw_tm_mad_dummy_bin_LDADD   = $(GT_PKG_LIBS)
-
-if GW_GLOBUS_DIRS
-NOP +=
-else
-__srcdir__tm_mad_gw_tm_mad_dummy_bin_LDFLAGS = $(GLOBUS_LDFLAGS)
-__srcdir__tm_mad_gw_tm_mad_dummy_bin_CFLAGS  = $(GLOBUS_INCLUDES) \
-        $(GLOBUS_CFLAGS)
-endif
-
-# ---------------------- IM MADS ------------------------
-
-dist_bin_SCRIPTS  += $(IM_MAD)/gw_im_mad_common.sh
-dist_bin_SCRIPTS  += $(IM_MAD)/gw_im_mad_static.sh
-
-if MDS2
-dist_bin_SCRIPTS  += $(IM_MAD)/gw_im_mad_mds2.sh
-dist_bin_SCRIPTS  += $(IM_MAD)/gw_im_mad_mds2_glue.sh
-dist_bin_SCRIPTS  += $(IM_MAD)/gw_im_mad_egee_ldap.sh
-dist_bin_SCRIPTS  += $(IM_MAD)/gw_im_mad_egee_ldap.pl
-endif
-
-# --------------------------------
-# WS Middleware Access Drivers
-# --------------------------------
-JAVAROOT = .
-
-if MDS4
-im_ws_jardir = $(prefix)/lib
-im_ws_jar_DATA = $(srcdir)/im_mad/gw_im_mad_ws.jar
-$(srcdir)/im_mad/gw_im_mad_ws.jar:
-	@rm -f lib/gw_im_mad_ws.jar
-	@mkdir -p $(IM_MAD)/package 
-	$(JAVAC_PATH) $(IM_MAD_MDS4_SRC) \
-	    -classpath @classpath@:$(IM_MAD) \
-        -d $(IM_MAD)/package
-	jar cf $(srcdir)/im_mad/gw_im_mad_ws.jar -C $(IM_MAD)/package/ .
-	@rm -rf $(IM_MAD)/package
-
-dist_bin_SCRIPTS += $(IM_MAD)/gw_im_mad_mds4.sh
-dist_bin_SCRIPTS += $(IM_MAD)/gw_im_mad_mds4_thr.sh
-
-CLEANFILES += $(srcdir)/im_mad/gw_im_mad_ws.jar
-endif
-
-if GRAM4
-em_ws_jardir = $(prefix)/lib
-em_ws_jar_DATA = $(srcdir)/em_mad/gw_em_mad_ws.jar
-$(srcdir)/em_mad/gw_em_mad_ws.jar:
-	@rm -f lib/gw_em_mad_ws.jar
-	@mkdir -p $(EM_MAD)/package
-	$(JAVAC_PATH) $(EM_MAD_WS_SRC) \
-	    -classpath @classpath@:$(EM_MAD) \
-        -d $(EM_MAD)/package
-	jar cf $(srcdir)/em_mad/gw_em_mad_ws.jar -C $(EM_MAD)/package/ .
-	@rm -rf $(EM_MAD)/package
-
-dist_bin_SCRIPTS += $(EM_MAD)/gw_em_mad_ws.sh
-
-CLEANFILES += $(srcdir)/em_mad/gw_em_mad_ws.jar
-
-endif
-
-# --------------------------------
-# NORDUGRID Middleware Access Drivers
-# --------------------------------
-
-if NORDUGRID
-dist_bin_SCRIPTS += $(NORDUGRID_MAD_SRC)
-endif
-
-# --------------------------------
-# SSH Middleware Access Drivers
-# --------------------------------
-if SSH
-dist_bin_SCRIPTS += $(SSH_SRC)
-endif
 
 # ----------------------------
 # TESTS
@@ -725,7 +563,6 @@ endif
 # ----------------------------
 # Distribute JAVA sources
 # ----------------------------
-
 
 EM_MAD_WS_SRC_DIST=$(EM_MAD)/GW_mad_ws.GT4.0.java \
 	$(EM_MAD)/GW_mad_ws.GT4.2.java
