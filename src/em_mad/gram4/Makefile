@@ -6,4 +6,4 @@ gw_em_mad_gram4.jar: Gw_em_mad_gram4.java
 	@rm -rf package
 
 Gw_em_mad_gram4.java:
-	ln -s Gw_em_mad_gram4.GT4.2.java Gw_em_mad_gram4.java
+	ln -s Gw_em_mad_gram4_GT42.java Gw_em_mad_gram4.java

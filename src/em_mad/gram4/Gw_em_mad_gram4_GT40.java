@@ -36,7 +36,7 @@ import org.gridforum.jgss.ExtendedGSSCredential;
 import org.gridforum.jgss.ExtendedGSSManager;
 import org.ietf.jgss.GSSCredential;
 
-class GW_mad_ws extends Thread implements GramJobListener {
+class Gw_em_mad_gram4 extends Thread implements GramJobListener {
 
     private Map job_pool = null; // Job pool
     private Map jid_pool = null; // JID pool
@@ -49,7 +49,7 @@ class GW_mad_ws extends Thread implements GramJobListener {
          String arg;
          String _portNumber = "8443";
          boolean error=false;
-         GW_mad_ws gw_mad_ws;
+         Gw_em_mad_gram4 gw_mad;
          
          while (i < args.length && args[i].startsWith("-")) 
          {
@@ -69,16 +69,13 @@ class GW_mad_ws extends Thread implements GramJobListener {
 
         if (error == false)
         {
-        	gw_mad_ws = new GW_mad_ws(_portNumber);
-        	
-            //gw_mad_ws.start();
-            gw_mad_ws.loop();
-            //gw_mad_ws.interrupt();
+            gw_mad = new Gw_em_mad_gram4(_portNumber);
+            gw_mad.loop();
         }
     }
 
     // Constructor
-    GW_mad_ws(String portNumber) {
+    Gw_em_mad_gram4(String portNumber) {
     	
     	this.portNumber = portNumber;
         // Create the job and JID pool
