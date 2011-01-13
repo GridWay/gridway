@@ -33,5 +33,5 @@ char* gw_generate_pre_wrapper_rsl2(gw_job_t *job);
 char* gw_generate_wrapper_xrsl(gw_job_t *job);		/* Nordugrid xrsl */
 
 char* gw_generate_wrapper_jsdl(gw_job_t *job);
-
+char* gw_em_jsdl_environment(gw_job_t *job);
 #endif
