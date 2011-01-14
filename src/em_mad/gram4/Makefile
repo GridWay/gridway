@@ -7,3 +7,12 @@ gw_em_mad_gram4.jar: Gw_em_mad_gram4.java
 
 Gw_em_mad_gram4.java:
 	ln -s Gw_em_mad_gram4_GT42.java Gw_em_mad_gram4.java
+
+install:
+ifdef GW_LOCATION
+	@mv gw_em_mad_gram4.jar $(GW_LOCATION)/lib/
+	@mv gw_em_mad_gram4.sh $(GW_LOCATION)/bin/gw_em_mad_gram4
+else
+        @echo "  GW_LOCATION undefined"
+        @exit 2
+endif

@@ -12,6 +12,15 @@ all: $(progs)
 
 gw_tm_mad_ftp: gw_tm_mad_ftp.c gw_tm_ftp_queue.c gw_tm_ftp_stack.c gw_tm_ftp_transfer.c gw_tm_ftp_xfr_pool.c
 
+install:
+ifdef GW_LOCATION
+	@mv gw_tm_mad_ftp $(GW_LOCATION)/bin/gw_tm_mad_ftp.bin
+	@mv gw_tm_mad_ftp.sh $(GW_LOCATION)/bin/gw_tm_mad_ftp
+else
+	@echo "  GW_LOCATION undefined"
+	@exit 2
+endif
+
 clean:
 	rm -f $(progs)
 

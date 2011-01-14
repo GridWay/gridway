@@ -12,6 +12,15 @@ all: $(progs)
 
 gw_em_mad_gram2: gw_em_mad_gram2.c gw_em_mad_gram2_actions.c gw_em_mad_gram2_pool.c
 
+install:
+ifdef GW_LOCATION
+	@mv gw_em_mad_gram2 $(GW_LOCATION)/bin/gw_em_mad_gram2.bin
+	@mv gw_em_mad_gram2.sh $(GW_LOCATION)/bin/gw_em_mad_gram2
+else
+        @echo "  GW_LOCATION undefined"
+        @exit 2
+endif
+
 clean:
 	rm -f $(progs)
 

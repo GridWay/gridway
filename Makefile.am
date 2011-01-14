@@ -55,7 +55,6 @@ endif
 	@mv $(PREFIX)/bin/parse.rb $(PREFIX)/libexec/ruby/dagman/parse.rb
 	@mv $(PREFIX)/bin/runner.rb $(PREFIX)/libexec/ruby/dagman/runner.rb
 	@mv $(PREFIX)/bin/gridway.rb $(PREFIX)/libexec/ruby/dagman/gridway.rb
-	@mv $(PREFIX)/bin/gw_im_mad_static.sh $(PREFIX)/bin/gw_im_mad_static
 
 # ----------------------------
 # -- Script renaming - JSDL

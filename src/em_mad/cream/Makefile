@@ -17,3 +17,13 @@ clean:
 	@rm $(progs)
 
 gw_em_mad_cream: gw_em_mad_cream.cpp gw_em_mad_cream_actions.cpp
+
+install:
+ifdef GW_LOCATION
+	@mv gw_em_mad_cream $(GW_LOCATION)/bin/gw_em_mad_cream.bin
+	@mv gw_em_mad_cream.sh $(GW_LOCATION)/bin/gw_em_mad_cream
+else
+        @echo "  GW_LOCATION undefined"
+        @exit 2
+endif
+
