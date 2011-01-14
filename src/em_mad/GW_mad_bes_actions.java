@@ -59,7 +59,7 @@ class Service extends Thread {
 		if (action.equals("SUBMIT"))
 			submit();
 		//else if (action.equals("RECOVER"))
-		//status = recover(jid, job, contact);
+			//status = recover(jid, job, contact);
 		else if (action.equals("CANCEL"))
 			cancel();
 		else if (action.equals("POLL"))
@@ -111,7 +111,21 @@ class Service extends Thread {
 		// Cancel the job
 		try
 		{
-			jobCancel();
+			poll();
+			if (info.equals("HARD_KILL")){
+				status = 1;
+				info = "Previously cancelled";
+			}
+			//If the job has not been cancelled (or even if poll() fails), it tries to cancel the job
+			else{
+				jobCancel();
+				if (status == 0){
+					poll();
+					//If poll() fails, it assumes that the job has not been actually cancelled
+					if (status == 1)
+						info = "NOT CANCELLED" + info;
+				}
+			}
 		}
 		catch (Exception e)
 		{
@@ -124,9 +138,14 @@ class Service extends Thread {
 		try
 		{
 			refreshStatus();
-			info = state.getValue().toUpperCase();
+			if (status == 0)
+				info = state.getValue().toUpperCase();
 			if (info.equals("FINISHED"))
-                           info = "DONE";
+                       		info = "DONE";
+			else if (info.equals("CANCELLED"))
+				info = "HARD_KILL";
+			else if (info.equals("RUNNING"))
+				info = "ACTIVE";
 		}
 		catch (Exception e)
 		{
@@ -139,7 +158,7 @@ class Service extends Thread {
 	protected void jobSubmit() throws SOAPException, MalformedURLException,
 		  ServiceException, RemoteException {
 
-		BesServiceLocator besLocator = new BesServiceLocator();
+		BESServiceLocator besLocator = new BESServiceLocator();
                 BESFactoryPortType stub = besLocator.getBes(new URL(job.getContact()));
 		//insertWSSHeader(stub, user, passwd);
 
@@ -190,7 +209,7 @@ class Service extends Thread {
 			status = 1;
                 }
 
-                BesServiceLocator besLocator = new BesServiceLocator();
+                BESServiceLocator besLocator = new BESServiceLocator();
                 BESFactoryPortType stub = besLocator.getBes(new URL(job.getContact()));
 
                 GetActivityStatusesType request = new GetActivityStatusesType();
@@ -245,7 +264,7 @@ class Service extends Thread {
 		status = 1;
         }
 
-        BesServiceLocator besLocator = new BesServiceLocator();
+        BESServiceLocator besLocator = new BESServiceLocator();
         BESFactoryPortType stub = besLocator.getBes(new URL(job.getContact()));
 
         TerminateActivitiesType request = new TerminateActivitiesType();
@@ -253,9 +272,9 @@ class Service extends Thread {
 
         TerminateActivitiesResponseType response = stub.terminateActivities(request);
 
-        TerminateActivityResponseType termActivityArray[] = response.getResponse();
-
-	if (termActivityArray[0].isCancelled()) {
+        /*TerminateActivityResponseType termActivityArray[] = response.getResponse();
+	
+	if (termActivityArray.isCancelled()) {
 		info = "CANCELLED";
         } else {
 		info = "NOT CANCELLED";
@@ -263,7 +282,7 @@ class Service extends Thread {
                 if (termActivityArray[0].getFault() != null) {
 		    info = info + termActivityArray[0].getFault().getFaultstring();
                 }
-        }
+        }*/
     }
 
     public synchronized void setTerminationTime(
@@ -379,22 +398,22 @@ class BESJob {
 
 }
 
-class BesServiceLocator extends org.apache.axis.client.Service { 
+class BESServiceLocator extends org.apache.axis.client.Service { 
 
-    public BesServiceLocator() {
+    public BESServiceLocator() {
     }
 
     // The WSDD service name defaults to the port name.
-    private java.lang.String BesWSDDServiceName = "bes";
+    private java.lang.String BESWSDDServiceName = "bes";
 
-    public java.lang.String getBesWSDDServiceName() {
-        return BesWSDDServiceName;
+    public java.lang.String getBESWSDDServiceName() {
+        return BESWSDDServiceName;
     }
 
     public org.ggf.bes.BESFactoryPortType getBes(java.net.URL portAddress) throws javax.xml.rpc.ServiceException {
         try {
             org.ggf.bes.BESFactoryBindingStub _stub = new org.ggf.bes.BESFactoryBindingStub(portAddress, this);
-            _stub.setPortName(getBesWSDDServiceName());
+            _stub.setPortName(getBESWSDDServiceName());
             return _stub;
         }
         catch (org.apache.axis.AxisFault e) {
