@@ -53,10 +53,7 @@ char* gw_generate_wrapper_jdl(gw_job_t *job)
     if (job->history->tm_mad->url != NULL)
     {
         /* Perform staging with the URL provided by the TM MAD */
-
         staging_url = job->history->tm_mad->url;
-
-        snprintf(wrapper, PATH_MAX -1, "%s", job->template.wrapper);
     }
     else
     {
@@ -76,7 +73,7 @@ char* gw_generate_wrapper_jdl(gw_job_t *job)
             "StdOutput = \"stdout.wrapper.%d\";"
             "StdError = \"stderr.wrapper.%d\";"
             "InputSandbox = {\"%s/%s\"};"
-            "OutputSandbox = {\"%s/%s/%d/stdout.wrapper.%d\", \"%s/%s/%d/stderr.wrapper.%d\"};"
+            "OutputSandbox = {\"%s/%s/" GW_VAR_DIR "/%d/stdout.wrapper.%d\", \"%s/%s/" GW_VAR_DIR "/%d/stderr.wrapper.%d\"};"
             "BatchSystem = \"%s\";"
             "QueueName = \"%s\";"
             "CpuNumber = %d;]",

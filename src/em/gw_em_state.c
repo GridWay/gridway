@@ -62,7 +62,7 @@ void gw_em_pending(void *_job_id)
 	     (job->job_state == GW_JOB_STATE_STOP_CANCEL) ||
 	     (job->job_state == GW_JOB_STATE_KILL_CANCEL) ) &&
 	     (!(issubmitted (current_em_state))))
-	    gw_am_trigger(&(gw_em.am), "GW_EM_CANCEL", _job_id); 
+        gw_am_trigger(&(gw_em.am), "GW_EM_CANCEL", _job_id); 
     else
       	free(_job_id);
       	    
@@ -115,7 +115,7 @@ void gw_em_active(void *_job_id)
 	     (job->job_state == GW_JOB_STATE_STOP_CANCEL) ||
 	     (job->job_state == GW_JOB_STATE_KILL_CANCEL) ) &&
 	     (!(issubmitted (current_em_state))))
-	    gw_am_trigger(&(gw_em.am), "GW_EM_CANCEL", _job_id); 
+        gw_am_trigger(&(gw_em.am), "GW_EM_CANCEL", _job_id); 
     else
       	free(_job_id);
       	    
@@ -175,7 +175,7 @@ void gw_em_suspended(void *_job_id)
 	     (job->job_state == GW_JOB_STATE_STOP_CANCEL) ||
 	     (job->job_state == GW_JOB_STATE_KILL_CANCEL) ) &&
 	     (!(issubmitted (current_em_state))))
-	    gw_am_trigger(&(gw_em.am), "GW_EM_CANCEL", _job_id); 
+        gw_am_trigger(&(gw_em.am), "GW_EM_CANCEL", _job_id); 
     else
       	free(_job_id);
       	    
@@ -241,19 +241,19 @@ void gw_em_done(void *_job_id)
     {
         if ( current_em_state == GW_EM_STATE_ACTIVE )
             job->history->next->stats[ACTIVE_TIME] += time(NULL) 
-                                  - job->history->next->stats[LAST_ACTIVE_TIME];
+                    - job->history->next->stats[LAST_ACTIVE_TIME];
         else     
             job->history->next->stats[SUSPENSION_TIME] += time(NULL) 
-                              - job->history->next->stats[LAST_SUSPENSION_TIME];
+                    - job->history->next->stats[LAST_SUSPENSION_TIME];
     }
     else
     {
         if ( current_em_state == GW_EM_STATE_ACTIVE )
             job->history->stats[ACTIVE_TIME]+= time(NULL) 
-                                        - job->history->stats[LAST_ACTIVE_TIME];
+                    - job->history->stats[LAST_ACTIVE_TIME];
         else
-            job->history->stats[SUSPENSION_TIME] += time(NULL) -
-                                      job->history->stats[LAST_SUSPENSION_TIME];
+            job->history->stats[SUSPENSION_TIME] += time(NULL)
+                    - job->history->stats[LAST_SUSPENSION_TIME];
     }
 
     job->em_state = GW_EM_STATE_DONE;    
@@ -267,8 +267,6 @@ void gw_em_done(void *_job_id)
     pthread_mutex_unlock(&(job->mutex));
     
     gw_am_trigger(gw_em.dm_am, "GW_DM_WRAPPER_DONE", _job_id );
-    
-
 }
 
 /* -------------------------------------------------------------------------- */
