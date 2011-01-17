@@ -40,7 +40,6 @@ char* gw_generate_wrapper_jdl(gw_job_t *job)
     char  tmp_buffer[GW_RSL_LENGTH];
     char *jobtype;
     char *staging_url;
-    char  wrapper[PATH_MAX], stdout_wrapper[PATH_MAX], stderr_wrapper[PATH_MAX];
   
     /* ---------------------------------------------------------------------- */
     /* 1.- Create dynamic job data environment                                */
@@ -58,20 +57,6 @@ char* gw_generate_wrapper_jdl(gw_job_t *job)
         staging_url = job->history->tm_mad->url;
 
         snprintf(wrapper, PATH_MAX -1, "%s", job->template.wrapper);
-
-        snprintf(stdout_wrapper,
-                 PATH_MAX -1,
-                 "%s/" GW_VAR_DIR "/%d/stdout.wrapper.%d",
-                 gw_conf.gw_location,
-                 job->id,
-                 job->restarted);
-
-        snprintf(stderr_wrapper,
-                 PATH_MAX - 1,
-                 "%s/" GW_VAR_DIR "/%d/stderr.wrapper.%d",
-                 gw_conf.gw_location,
-                 job->id,
-                 job->restarted);
     }
     else
     {
@@ -87,10 +72,10 @@ char* gw_generate_wrapper_jdl(gw_job_t *job)
     snprintf(jdl_buffer, sizeof(char) * GW_RSL_LENGTH,
             "[JobType = \"%s\";"
             "Executable = \"%s\";"
-	    "Arguments=\"%s/%s/" GW_VAR_DIR "/%d/job.env\";"
+            "Arguments=\"%s/%s/" GW_VAR_DIR "/%d/job.env\";"
             "StdOutput = \"stdout.wrapper.%d\";"
             "StdError = \"stderr.wrapper.%d\";"
-            "InputSandbox = {\"%s/%s/%d/%s\"};"
+            "InputSandbox = {\"%s/%s\"};"
             "OutputSandbox = {\"%s/%s/%d/stdout.wrapper.%d\", \"%s/%s/%d/stderr.wrapper.%d\"};"
             "BatchSystem = \"%s\";"
             "QueueName = \"%s\";"
@@ -100,12 +85,12 @@ char* gw_generate_wrapper_jdl(gw_job_t *job)
             staging_url, gw_conf.gw_location, job->id,
             job->restarted,
             job->restarted,
-	    staging_url, gw_conf.gw_location, job->id, job->template.wrapper,
-	    staging_url, gw_conf.gw_location, job->id, job->restarted,
-	    staging_url, gw_conf.gw_location, job->id, job->restarted,
-	    job->history->host->lrms_type,
+            staging_url, job->template.wrapper,
+            staging_url, gw_conf.gw_location, job->id, job->restarted,
+            staging_url, gw_conf.gw_location, job->id, job->restarted,
+            job->history->host->lrms_type,
             job->history->queue,
-	    job->template.np);
+            job->template.np);
 
     free(job_environment);
     free(jobtype);
@@ -173,12 +158,12 @@ char* gw_generate_pre_wrapper_jdl(gw_job_t *job)
 
     if ( job->template.pre_wrapper[0] == '/' ) /*Absolute path*/                
         rc = snprintf(jdl_buffer, sizeof(char) * GW_RSL_LENGTH,
-	    "[JobType = \"Normal\";"
+            "[JobType = \"Normal\";"
             "Executable = \"%s\";"
             "StdOutput = \".gw_%s_%i/stdout.pre_wrapper\";"
             "StdError = \".gw_%s_%i/stderr.pre_wrapper\";"
             "Environment = %s;"
-	    "BatchSystem = \"fork\";",
+            "BatchSystem = \"fork\";",
             pre_wrapper,
             job->owner, job->id,
             job->owner, job->id,
@@ -186,12 +171,12 @@ char* gw_generate_pre_wrapper_jdl(gw_job_t *job)
 
     else
         rc = snprintf(jdl_buffer, sizeof(char) * GW_RSL_LENGTH,
-	    "[JobType = \"Normal\";"
+            "[JobType = \"Normal\";"
             "Executable = \".gw_%s_%i/%s\";"
             "Stdoutput = \".gw_%s_%i/stdout.pre_wrapper\")"
             "StdError = \".gw_%s_%i/stderr.pre_wrapper\")"
             "Environment = %s;"
-	    "BatchSystem = \"fork\";",
+            "BatchSystem = \"fork\";",
             job->owner, job->id, pre_wrapper,
             job->owner, job->id,
             job->owner, job->id,
@@ -235,7 +220,7 @@ char* gw_generate_pre_wrapper_jdl(gw_job_t *job)
     free(job_environment);        
     free(pre_wrapper);
     
-    strcat(jdl_buffer,"QueueName =\"cream_1\";]");         	    	  
+    strcat(jdl_buffer,"QueueName =\"cream_1\";]");
 
     jdl = strdup(jdl_buffer);
     return jdl;
