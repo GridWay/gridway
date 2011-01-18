@@ -14,8 +14,9 @@ gw_tm_mad_ftp: gw_tm_mad_ftp.c gw_tm_ftp_queue.c gw_tm_ftp_stack.c gw_tm_ftp_tra
 
 install:
 ifdef GW_LOCATION
-	@mv gw_tm_mad_ftp $(GW_LOCATION)/bin/gw_tm_mad_ftp.bin
-	@mv gw_tm_mad_ftp.sh $(GW_LOCATION)/bin/gw_tm_mad_ftp
+	@cp gw_tm_mad_ftp $(GW_LOCATION)/bin/gw_tm_mad_ftp.bin
+	@cp gw_tm_mad_ftp.sh $(GW_LOCATION)/bin/gw_tm_mad_ftp
+	@echo GridFTP TM MAD successfully installed
 else
 	@echo "  GW_LOCATION undefined"
 	@exit 2
