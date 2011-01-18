@@ -105,8 +105,8 @@ $(top_srcdir)/etc/sched.conf $(top_srcdir)/etc/gwrc $(PREFIX)/$(GW_ETC_DIR)/
 	@cp $(top_srcdir)/scripts/monitor.sh $(PREFIX)/libexec/gw_monitor.sh
 	@mkdir -p $(PREFIX)/bin
 	@cp $(top_srcdir)/scripts/gw_mad_common.sh $(PREFIX)/bin
-	@cp $(top_srcdir)/im_mad/gw_im_mad_common.sh $(PREFIX)/bin
-	@cp $(top_srcdir)/im_mad/gw_im_mad_static.sh $(PREFIX)/bin/gw_im_mad_static
+	@cp $(top_srcdir)/src/im_mad/gw_im_mad_common.sh $(PREFIX)/bin
+	@cp $(top_srcdir)/src/im_mad/gw_im_mad_static.sh $(PREFIX)/bin/gw_im_mad_static
 
 uninstall-hook:
 	@rm -rf $(PREFIX)/libexec/perl
