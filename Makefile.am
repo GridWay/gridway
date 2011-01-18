@@ -97,7 +97,7 @@ $(top_srcdir)/etc/sched.conf $(top_srcdir)/etc/gwrc $(PREFIX)/$(GW_ETC_DIR)/
 	@find $(PREFIX) -depth -name .svn -exec rm -rf '{}' \;
 
 # ----------------------------		
-# Copy wrapper, monitor & gw_mad_common.sh
+# Copy wrapper, monitor, gw_mad_common.sh & static IM MAD
 # ----------------------------
 
 	@mkdir -p $(PREFIX)/libexec
@@ -105,6 +105,8 @@ $(top_srcdir)/etc/sched.conf $(top_srcdir)/etc/gwrc $(PREFIX)/$(GW_ETC_DIR)/
 	@cp $(top_srcdir)/scripts/monitor.sh $(PREFIX)/libexec/gw_monitor.sh
 	@mkdir -p $(PREFIX)/bin
 	@cp $(top_srcdir)/scripts/gw_mad_common.sh $(PREFIX)/bin
+	@cp $(top_srcdir)/im_mad/gw_im_mad_common.sh $(PREFIX)/bin
+	@cp $(top_srcdir)/im_mad/gw_im_mad_static.sh $(PREFIX)/bin/gw_im_mad_static
 
 uninstall-hook:
 	@rm -rf $(PREFIX)/libexec/perl
