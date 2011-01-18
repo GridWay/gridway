@@ -14,8 +14,9 @@ gw_em_mad_gram2: gw_em_mad_gram2.c gw_em_mad_gram2_actions.c gw_em_mad_gram2_poo
 
 install:
 ifdef GW_LOCATION
-	@mv gw_em_mad_gram2 $(GW_LOCATION)/bin/gw_em_mad_gram2.bin
-	@mv gw_em_mad_gram2.sh $(GW_LOCATION)/bin/gw_em_mad_gram2
+	@cp gw_em_mad_gram2 $(GW_LOCATION)/bin/gw_em_mad_gram2.bin
+	@cp gw_em_mad_gram2.sh $(GW_LOCATION)/bin/gw_em_mad_gram2
+	@echo GRAM2 EM MAD successfully installed
 else
         @echo "  GW_LOCATION undefined"
         @exit 2

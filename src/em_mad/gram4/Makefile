@@ -10,8 +10,9 @@ Gw_em_mad_gram4.java:
 
 install:
 ifdef GW_LOCATION
-	@mv gw_em_mad_gram4.jar $(GW_LOCATION)/lib/
-	@mv gw_em_mad_gram4.sh $(GW_LOCATION)/bin/gw_em_mad_gram4
+	@cp gw_em_mad_gram4.jar $(GW_LOCATION)/lib/
+	@cp gw_em_mad_gram4.sh $(GW_LOCATION)/bin/gw_em_mad_gram4
+	@echo GRAM4 EM MAD successfully installed
 else
         @echo "  GW_LOCATION undefined"
         @exit 2
