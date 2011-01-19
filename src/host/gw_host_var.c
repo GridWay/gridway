@@ -261,7 +261,7 @@ void gw_host_set_var_str(gw_host_var_t var, int index, char *value, gw_host_t *h
             {
                 if (strcmp(host->hostname, value) != 0)
                 {
-                    gw_log_print("IM",'W',"Updating host \"%s\" with values of host \"%s\".\n.",
+                    gw_log_print("IM",'W',"Updating host \"%s\" with values of host \"%s\".\n",
                         host->hostname, value);
                 }
             
