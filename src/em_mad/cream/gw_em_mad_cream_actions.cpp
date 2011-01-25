@@ -73,19 +73,48 @@ string  CreamJob::getIsbUploadUrl()
   return this->isbUploadUrl;
 }
 	
-CreamEmMad::CreamEmMad(char *delegation, char *certificatePath)
+CreamEmMad::CreamEmMad(char *delegation)
 {
     this->delegationID = new string(delegation);	
-    this->certificatePath = new string(certificatePath);
     this->info = NULL;
-    this->baseAddress = new string("https://cream-13.pd.infn.it");
-    this->localCreamJID = new string("");
+    this->baseAddress = NULL;
+    this->localCreamJID = NULL;
     this->creamJobs = new map <int, CreamJob> ();
 }
 
 int CreamEmMad::init()
 {
-    cout << "INIT SUCCESS - -" << endl;
+    FILE *file;
+    char path[512], *pline;
+
+    file = popen("grid-proxy-info -path", "r");
+
+    if (file == NULL)
+    {
+        cout << "INIT - FAILURE Error getting proxy path" << endl;
+        return -1;
+    }
+
+    while( fgets(path, sizeof(path), file) != NULL )
+    {
+        // Keep looping even if we just expect one line
+    }
+
+    pclose(file);
+
+    if (path == NULL)
+    {
+        cout << "INIT - FAILURE Error reading proxy path" << endl;
+        return -1;
+    }
+
+    pline =  strchr(path, '\n');
+    if (pline != NULL)
+        *pline = '\0';
+
+    this->certificatePath = new string(path);
+
+    cout << "INIT - SUCCESS -" << endl;
     
     return 0;
 }

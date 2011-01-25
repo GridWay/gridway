@@ -57,11 +57,10 @@ int main( int argc, char *argv[])
         if (creamEmMad == NULL)
             if (action->compare("INIT") == 0)
             {
-                //fopen("grid-proxy-info -path");
 	        if (argc == 1)
-	    	    creamEmMad = new CreamEmMad("GridWay", "/tmp/x509up_u500");
+	    	    creamEmMad = new CreamEmMad("GridWay");
                 else if (argc == 2)
-                    creamEmMad = new CreamEmMad(argv[1], "/tmp/x509up_u500");
+                    creamEmMad = new CreamEmMad(argv[1]);
 
                 status = creamEmMad->init();
             }
