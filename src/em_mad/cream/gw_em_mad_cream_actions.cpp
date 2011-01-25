@@ -18,64 +18,64 @@
 
 CreamJob::CreamJob(int gridwayID, string *creamID, string *contact)
 {
-  this->gridwayID = gridwayID;
-  this->creamID   = new string(*creamID);
-  this->contact   = new string(*contact);
+    this->gridwayID = gridwayID;
+    this->creamID   = new string(*creamID);
+    this->contact   = new string(*contact);
 }
 
 void CreamJob::setGridWayID(int gridwayID)
 {
-  this->gridwayID = gridwayID;
+    this->gridwayID = gridwayID;
 }
 
 void CreamJob::setCreamID(string *creamID)
 {
-  this->creamID = new string(*creamID);
+    this->creamID = new string(*creamID);
 }
 
 void CreamJob::setContact(string *contact)
 {
-  this->contact = new string(*contact);
+    this->contact = new string(*contact);
 }
 
 void CreamJob::setInputFiles(vector<string> *inputFiles)
 {
-  this->inputFiles = inputFiles;
+    this->inputFiles = inputFiles;
 }
 
 void CreamJob::setIsbUploadUrl(string isbUploadUrl)
 {
-  this->isbUploadUrl = isbUploadUrl;
+    this->isbUploadUrl = isbUploadUrl;
 }
  
 int CreamJob::getGridWayID()
 {
-  return this->gridwayID;
+    return this->gridwayID;
 }
 
 string *CreamJob::getCreamID()
 {
-  return this->creamID;
+    return this->creamID;
 }
 
 string *CreamJob::getContact()
 {
-  return this->contact;
+    return this->contact;
 }
 
 vector <string> *CreamJob::getInputFiles()
 {
-  return this->inputFiles;
+    return this->inputFiles;
 }
 
 string  CreamJob::getIsbUploadUrl()
 {
-  return this->isbUploadUrl;
+    return this->isbUploadUrl;
 }
-	
+
 CreamEmMad::CreamEmMad(char *delegation)
 {
-    this->delegationID = new string(delegation);	
+    this->delegationID = new string(delegation);
     this->info = NULL;
     this->baseAddress = NULL;
     this->localCreamJID = NULL;
@@ -202,17 +202,29 @@ int CreamEmMad::poll(int jid)
     while( jobIt != Sresult.end() ) 
     {
         if( jobIt->second.get<0>() == API::JobStatusWrapper::OK ) 
-	{
-	    status = jobIt->second.get<1>().getStatusName();
-            if (status.compare("IDLE") == 0)
-                status = "ACTIVE IDLE";
+        {
+            status = jobIt->second.get<1>().getStatusName();
+            if (status.compare("REGISTERED") == 0)
+                status = "PENDING";
+            else if (status.compare("PENDING") == 0) // For completeness
+                status = "PENDING";
+            else if (status.compare("IDLE") == 0)
+                status = "PENDING";
             else if (status.compare("RUNNING") == 0)
-                status = "ACTIVE RUNNING";
+                status = "ACTIVE";
             else if (status.compare("REALLY-RUNNING") == 0)
-	        status = "ACTIVE RRUNNING";
+                status = "ACTIVE";
+            else if (status.compare("HELD") == 0)
+                status = "PENDING";
+            else if (status.compare("CANCELLED") == 0)
+                status = "DONE";
             else if (status.compare("DONE-OK") == 0)
                 status = "DONE";
-    
+            else if (status.compare("DONE-FAILED") == 0)
+                status = "FAILED";
+            else if (status.compare("ABORTED") == 0)
+                status = "FAILED";
+ 
             cout << "POLL " << jid << " SUCCESS " << status << endl;
         }
         else 
@@ -220,69 +232,69 @@ int CreamEmMad::poll(int jid)
             this->info = new string(jobIt->second.get<2>());
             delete creamClient;
             return -1;    
-	}
-     	jobIt++;
+        }
+        jobIt++;
    }
  
    delete creamClient;
 
-   return 0;	
+   return 0;
 }
 
 int CreamEmMad::cancel(int jid)
 {
-   map<int,CreamJob>::iterator it = this->creamJobs->find(jid);
+    map<int,CreamJob>::iterator it = this->creamJobs->find(jid);
    
-   if (it == creamJobs->end())
-   {
-	this->info = new string ("The job ID  not exists");
-	return -1;
-   }
+    if (it == creamJobs->end())
+    {
+        this->info = new string ("The job ID  not exists");
+        return -1;
+    }
   
-   CreamJob creamJob = it->second;
+    CreamJob creamJob = it->second;
    
-   API::JobIdWrapper job1(*(creamJob.getCreamID()), *(creamJob.getContact()), vector<API::JobPropertyWrapper>());
+    API::JobIdWrapper job1(*(creamJob.getCreamID()), *(creamJob.getContact()), vector<API::JobPropertyWrapper>());
 
-   vector< API::JobIdWrapper > JobVector;
+    vector< API::JobIdWrapper > JobVector;
 
-   JobVector.push_back( job1 );
+    JobVector.push_back( job1 );
 
-   int fromDate = -1;
-   int toDate   = -1;
-   vector<string> statusVec;
+    int fromDate = -1;
+    int toDate   = -1;
+    vector<string> statusVec;
 
-   API::JobFilterWrapper jfw( JobVector, statusVec, fromDate, toDate, "", "" );
+    API::JobFilterWrapper jfw( JobVector, statusVec, fromDate, toDate, "", "" );
 
-   API::ResultWrapper result;
+    API::ResultWrapper result;
 
-   API::AbsCreamProxy* creamClient = API::CreamProxyFactory::make_CreamProxyCancel( &jfw, &result, this->connectionTimeout );
+    API::AbsCreamProxy* creamClient = API::CreamProxyFactory::make_CreamProxyCancel( &jfw, &result, this->connectionTimeout );
   
-   if (creamClient == NULL)
-   {
-	this->info = new string("Error creating Cream client to cancel job");
-	return -1;
-   }
+    if (creamClient == NULL)
+    {
+        this->info = new string("Error creating Cream client to cancel job");
+        return -1;
+    }
 
-   string serviceAddress = *(creamJob.getContact());
+    string serviceAddress = *(creamJob.getContact());
 
-   try 
-   {
-    	creamClient->setCredential(this->certificatePath->c_str());
-    	creamClient->execute(serviceAddress);
-   } 
-   catch(exception& ex) 
-   {
-	this->info = new string(ex.what());
-    	delete creamClient;
-    	return -1;
-   }
+    try 
+    {
+        creamClient->setCredential(this->certificatePath->c_str());
+        creamClient->execute(serviceAddress);
+    } 
+    catch(exception& ex) 
+    {
+        this->info = new string(ex.what());
+        delete creamClient;
+        return -1;
+    }
 
-   cout << "CANCEL " << jid << " SUCCESS" << endl;  
-   delete creamClient;
+    cout << "CANCEL " << jid << " SUCCESS" << endl;  
+    delete creamClient;
 
-   return 0;
+    return 0;
 }
-	
+
 
 int CreamEmMad::finalize()
 {
@@ -293,15 +305,16 @@ int CreamEmMad::finalize()
 string *CreamEmMad::getInfo()
 {
     return this->info;
-}		
+}
 
 int CreamEmMad::proxyDelegate(string *contact)
 {
-    API::AbsCreamProxy 	*creamClient; 
-    string	    	*serviceAddress;
+    API::AbsCreamProxy *creamClient; 
+    string *serviceAddress;
 
-    creamClient = API::CreamProxyFactory::make_CreamProxy_ProxyRenew(*(this->delegationID), this->connectionTimeout);
-    //creamClient = API::CreamProxyFactory::make_CreamProxyDelegate(*(this->delegationID), this->connectionTimeout);
+    // TODO: Delegate for new CEs (list) and renew periodically
+    //creamClient = API::CreamProxyFactory::make_CreamProxy_ProxyRenew(*(this->delegationID), this->connectionTimeout);
+    creamClient = API::CreamProxyFactory::make_CreamProxyDelegate(*(this->delegationID), this->connectionTimeout);
 
     if (creamClient == NULL)
     {
@@ -320,7 +333,8 @@ int CreamEmMad::proxyDelegate(string *contact)
     {
         this->info = new string(ex.what());
         delete creamClient;
-        return -1;
+        //Continue, it could be a duplicate delegation
+        return 0;
     }
 
     delete creamClient;
@@ -331,20 +345,20 @@ int CreamEmMad::proxyDelegate(string *contact)
 CreamJob *CreamEmMad::jobSubmit(int jid,string *contact,string *jdlFile)
 {
     string *JDL = this->fileToString(jdlFile);
-    string *jidCREAM = new string("GridWayJob");	
+    string *jidCREAM = new string("GridWayJob");
     stringstream jidString;
     size_t found;
-    string *serviceAddress;	
+    string *serviceAddress;
     string *creamURL;
     string *creamJID;
-    CreamJob *creamJob;	
+    CreamJob *creamJob;
     vector<string> *inputFiles;
 
     if (JDL == NULL)
         return NULL;
     else
         inputFiles=this->getInputFiles(JDL);
-	
+
     jidString << jid;
 
     *jidCREAM += jidString.str();
@@ -412,23 +426,23 @@ CreamJob *CreamEmMad::jobSubmit(int jid,string *contact,string *jdlFile)
 
 string *CreamEmMad::fileToString(string *jdlFileName)
 {
-   string 	*jdlString = new string("");
-   ifstream	*jdlFile = new ifstream(jdlFileName->c_str());
-   char		str[4096];
+    string *jdlString = new string("");
+    ifstream *jdlFile = new ifstream(jdlFileName->c_str());
+    char str[4096];
 
-   if (!jdlFile->is_open())
-   {
-	this->info = new string("Error open the JDL file: " + *jdlFileName );
-	return NULL;
-   }
+    if (!jdlFile->is_open())
+    {
+        this->info = new string("Error open the JDL file: " + *jdlFileName );
+        return NULL;
+    }
     
-   while (jdlFile->getline(str,40096,'\n'))
-   {
-	string *aux = new string(str);
-	(*jdlString) += *aux ;       	   
-   }   	
-  
-   return jdlString;
+    while (jdlFile->getline(str,40096,'\n'))
+    {
+        string *aux = new string(str);
+        (*jdlString) += *aux;
+    }
+ 
+    return jdlString;
 }
 
 vector<string> *CreamEmMad::getInputFiles(string *jdlString)
@@ -436,33 +450,33 @@ vector<string> *CreamEmMad::getInputFiles(string *jdlString)
     size_t   begin;
     size_t   end;
     string   subString; 
-    string   inputFile;		
+    string   inputFile;
     vector<string> *inputFiles = new vector<string>();
 
     begin = jdlString->find("InputSandbox", 0);
 
-    if (begin != string::npos)	
+    if (begin != string::npos)
     {
-	subString=jdlString->substr(begin, jdlString->size());
+        subString = jdlString->substr(begin, jdlString->size());
 
-    	begin = subString.find("\"",0);
-    	end = subString.find(",",0);
-	
+        begin = subString.find("\"",0);
+        end = subString.find(",",0);
+
         if (end == string::npos)
-	    end = subString.find("}",0);
-	    
-	while (begin!=string::npos && end!=string::npos)
-	{
-   	    inputFile=subString.substr(begin+1, end-begin-2);
-	    inputFiles->push_back(inputFile);	
+            end = subString.find("}",0);
+    
+        while (begin!=string::npos && end!=string::npos)
+        {
+            inputFile=subString.substr(begin+1, end-begin-2);
+            inputFiles->push_back(inputFile);
 
-	    subString = subString.substr(end+1);
-	    begin = subString.find("\"",0);
-    	    end = subString.find(",",0);
+            subString = subString.substr(end+1);
+            begin = subString.find("\"",0);
+            end = subString.find(",",0);
             
-	    if (end == string::npos)
-	    	end = subString.find("}",0);
-	}
+            if (end == string::npos)
+                end = subString.find("}",0);
+        }
     }
    
     return inputFiles;
@@ -476,63 +490,63 @@ int CreamEmMad::stagingInputFiles(CreamJob *job)
     vector<string> inputFiles = *(job->getInputFiles());
 
     for (int i=0; i<(int) inputFiles.size(); i++)
-    {	
-    	if (fork() == 0)
-	{
-	    source = new string("file://" + inputFiles[i]);
-	    destination = new string(job->getIsbUploadUrl() + "/"  + basename(inputFiles[i].c_str()));
-	    
-	    execlp ("globus-url-copy", "globus-url-copy", source->c_str(), destination->c_str(), NULL);
-      	    this->info = new string("Error executing glubus-url-copy");
-	    return -1;
-    	}
-	else
-	    wait(&status);
+    {
+        if (fork() == 0) //Use system
+        {
+            source = new string("file://" + inputFiles[i]);
+            destination = new string(job->getIsbUploadUrl() + "/"  + basename(inputFiles[i].c_str()));
+    
+            execlp ("globus-url-copy", "globus-url-copy", source->c_str(), destination->c_str(), NULL);
+            this->info = new string("Error executing glubus-url-copy");
+            return -1;
+        }
+        else
+            wait(&status);
     }
 
-    return 0; 	       
-}	
+    return 0;
+}
 
 int CreamEmMad::jobStart(CreamJob *job) 
 {
-   string creamURL = *(job->getContact());
-   string localCreamJID1 = *(job->getCreamID());
-   API::JobIdWrapper job1(localCreamJID1, creamURL, vector<API::JobPropertyWrapper>() );
-   	
-   vector< API::JobIdWrapper > JobVector;
-   JobVector.push_back( job1 );
-
-   int fromDate = -1;
-   int toDate   = -1;
-   vector<string> statusVec;
-
-   API::JobFilterWrapper jfw( JobVector, statusVec, fromDate, toDate, *(this->delegationID), "" );
-
-   int connection_timeout = 30; // seconds
-
-   API::ResultWrapper result;
-
-   API::AbsCreamProxy* creamClient = API::CreamProxyFactory::make_CreamProxyStart( &jfw, &result, connection_timeout );
-  
-   if (creamClient == NULL)
-   {
-	this->info = new string("Error creating Cream client");
-	return -1;
-   }
-
-   try 
-   {
-    	creamClient->setCredential( this->certificatePath->c_str() );
-    	creamClient->execute(*(job->getContact()));   
-   } 
-   catch(exception& ex) 
-   {
-	this->info = new string(ex.what());
-    	delete creamClient;
-    	return -1;
-   }
+    string creamURL = *(job->getContact());
+    string localCreamJID1 = *(job->getCreamID());
+    API::JobIdWrapper job1(localCreamJID1, creamURL, vector<API::JobPropertyWrapper>() );
  
-   delete creamClient;
+    vector< API::JobIdWrapper > JobVector;
+    JobVector.push_back( job1 );
 
-   return 0;
+    int fromDate = -1;
+    int toDate   = -1;
+    vector<string> statusVec;
+
+    API::JobFilterWrapper jfw( JobVector, statusVec, fromDate, toDate, *(this->delegationID), "" );
+
+    int connection_timeout = 30; // seconds
+
+    API::ResultWrapper result;
+
+    API::AbsCreamProxy* creamClient = API::CreamProxyFactory::make_CreamProxyStart( &jfw, &result, connection_timeout );
+  
+    if (creamClient == NULL)
+    {
+        this->info = new string("Error creating Cream client");
+        return -1;
+    }
+
+    try 
+    {
+        creamClient->setCredential( this->certificatePath->c_str() );
+        creamClient->execute(*(job->getContact()));   
+    } 
+    catch(exception& ex) 
+    {
+        this->info = new string(ex.what());
+        delete creamClient;
+        return -1;
+    }
+ 
+    delete creamClient;
+
+    return 0;
 }

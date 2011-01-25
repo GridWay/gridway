@@ -73,18 +73,20 @@ char* gw_generate_wrapper_jdl(gw_job_t *job)
             "StdOutput = \"stdout.wrapper.%d\";"
             "StdError = \"stderr.wrapper.%d\";"
             "InputSandbox = {\"%s/%s\"};"
-            "OutputSandbox = {\"%s/%s/" GW_VAR_DIR "/%d/stdout.wrapper.%d\", \"%s/%s/" GW_VAR_DIR "/%d/stderr.wrapper.%d\"};"
+            "OutputSandbox = {\"stdout.wrapper.%d\", \"stderr.wrapper.%d\"};"
+            "OutputSandboxBaseDestURI = \"%s/%s/" GW_VAR_DIR "/%d/\";"
             "BatchSystem = \"%s\";"
             "QueueName = \"%s\";"
-            "CpuNumber = %d;]",
+            "CpuNumber = %d;]\n",
             jobtype, 
             job->template.wrapper,
             staging_url, gw_conf.gw_location, job->id,
             job->restarted,
             job->restarted,
             staging_url, job->template.wrapper,
-            staging_url, gw_conf.gw_location, job->id, job->restarted,
-            staging_url, gw_conf.gw_location, job->id, job->restarted,
+            job->restarted,
+            job->restarted,
+            staging_url, gw_conf.gw_location, job->id,
             job->history->host->lrms_type,
             job->history->queue,
             job->template.np);

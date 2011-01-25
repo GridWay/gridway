@@ -92,7 +92,7 @@ class CreamEmMad
 	vector <string> *getInputFiles(string *jdlString);
 
     public:
-	CreamEmMad(char *delegation, char *certificatePath);
+	CreamEmMad(char *delegation);
 	int init();
 	int submit(int jid, string *contact, string *jdlFile);
 	int recover(int jid, string *contact);
