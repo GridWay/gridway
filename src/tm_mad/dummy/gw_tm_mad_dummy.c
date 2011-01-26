@@ -141,7 +141,7 @@ int main (int argc, char **argv )
                     }
                     else
                     {
-		        int fscanf_result;
+                        int fscanf_result;
                         server_pid = fork();
 
                         switch (server_pid)
@@ -180,7 +180,7 @@ int main (int argc, char **argv )
                     }
                     else
                     {
-		        int fscanf_result;
+                        int fscanf_result;
                         server_pid = fork();
 
                         switch (server_pid)
@@ -212,10 +212,10 @@ int main (int argc, char **argv )
                     }
                 }
                 else
-		{
-		    stg_url = strdup("-");
+                {
+                    stg_url = strdup("-");
                     rc = 0;
-		}
+                }
                                 
                 if (rc == 1)
                     printf("INIT - - FAILURE Error Activating the staging module.\n");
@@ -247,12 +247,12 @@ int main (int argc, char **argv )
                 cp_xfr_id = atoi(cp_xfr_id_s);
                                     
                 if ( g == 1 ) /* Using a gass server */
-                {                	                	                	
-                    if ((strstr(src_url, "stdout.wrapper") != NULL) ||
-                       (strstr(src_url, "stderr.wrapper") != NULL))
+                {
+                    if ((strstr(src_url, "stdout.wrapper") != NULL)
+                            || (strstr(src_url, "stderr.wrapper") != NULL))
                     {
-                    	dst_url_tmp = dst_url + 7; /*skip file:// */
-                    	chmod(dst_url_tmp, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH );
+                        dst_url_tmp = dst_url + 7; /*skip file:// */
+                        chmod(dst_url_tmp, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH );
                     }
                 }
                 
