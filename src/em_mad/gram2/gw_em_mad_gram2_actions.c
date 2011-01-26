@@ -71,26 +71,26 @@ int gw_em_mad_submit( int jid, char *rm_contact, char *rsl_file, char *info )
         return 1;
     }
 
-	fd = open(rsl_file, O_RDONLY);
-	
-	if (fd == -1)
-	{
+    fd = open(rsl_file, O_RDONLY);
+
+    if (fd == -1)
+    {
         strcpy(info, "Error opening RSL file");
         return 1;
-	}		
-	
-	j = read(fd, (void *) rsl_string, sizeof(char)*4095);
-	
-	if ((j ==-1)||(j==0))
-	{
+    }
+
+    j = read(fd, (void *) rsl_string, sizeof(char)*4095);
+
+    if ((j ==-1)||(j==0))
+    {
         strcpy(info, "Error reading RSL file");
         close(fd);
         
-		return 1;	
-	}
-	else
-		rsl_string[j]='\0';
-	
+        return 1;
+    }
+    else
+        rsl_string[j]='\0';
+
     i  = (int *) malloc( sizeof(int));
     *i = jid;    
 
@@ -369,7 +369,7 @@ void gw_em_mad_state_callback(void *arg, char *job_contact, int job_state,
 
     if (jid == -1)
     {
-    	return;
+        return;
     }
  
     switch (job_state)
@@ -422,7 +422,7 @@ void gw_em_mad_state_callback(void *arg, char *job_contact, int job_state,
     }
 
     if (done && (jid != -1))
-    	del_job(jid);
+        del_job(jid);
 }
 
 /*----------------------------------------------------------------------------*/
@@ -511,7 +511,7 @@ int gw_em_mad_refresh(gss_cred_id_t creds, char *info)
         if (job_contact != NULL)
         {
             i  = (int *) malloc( sizeof(int));
-            *i = jid;	
+            *i = jid;
             
             rc = globus_gram_client_register_job_refresh_credentials(
                     job_contact, creds, GLOBUS_GRAM_CLIENT_NO_ATTR,

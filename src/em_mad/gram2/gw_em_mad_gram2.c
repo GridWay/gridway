@@ -46,7 +46,7 @@ int main (int argc, char **argv )
     rc = globus_module_activate(GLOBUS_COMMON_MODULE);
     
     if ( rc != GLOBUS_SUCCESS )
-    	return -1;
+        return -1;
     
     waited = 0;
         
@@ -58,20 +58,20 @@ int main (int argc, char **argv )
         tv.tv_sec  = 0;
         tv.tv_usec = 1000;
         
-		gettimeofday(&t1, NULL);
-		
+        gettimeofday(&t1, NULL);
+
         rc = select(1, &in_pipes, NULL, NULL, &tv);
 
-		gettimeofday(&t2, NULL);
-   		
-   		waited += ((t2.tv_sec - t1.tv_sec)*1000000) + (t2.tv_usec - t1.tv_usec);
-	
-	    if ( waited > 999 )
+        gettimeofday(&t2, NULL);
+ 
+        waited += ((t2.tv_sec - t1.tv_sec)*1000000) + (t2.tv_usec - t1.tv_usec);
+
+        if ( waited > 999 )
         {
-        	globus_poll();
-        	waited = 0;
+            globus_poll();
+            waited = 0;
         }          
-        	
+ 
         if (rc == -1)
         {
             exit(-1);
@@ -128,7 +128,7 @@ int main (int argc, char **argv )
                 status = gw_em_mad_finalize(info);
                 end = 1;
 
-		    	return 0;            
+                return 0;            
             }
 
             if (status != 0)
@@ -141,13 +141,13 @@ int main (int argc, char **argv )
         {
             last_timer = the_time;
 
-			if (mad.initialized == 1)
-			{
-            	status = gw_em_mad_check_credentials(info);
+            if (mad.initialized == 1)
+            {
+                status = gw_em_mad_check_credentials(info);
 
-            	if (status != 0)
-                	printf("%s %d FAILURE %s\n", action, jid, info);
-			}
+                if (status != 0)
+                    printf("%s %d FAILURE %s\n", action, jid, info);
+            }
         }
     }
 

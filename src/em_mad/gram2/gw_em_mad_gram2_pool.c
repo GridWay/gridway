@@ -26,11 +26,11 @@ struct job_pool_s  job_pool;
 void init_job_pool(int max_jobs)
 {
     int jid;
-	
-	job_pool.cancel_state = (int *) malloc (sizeof(int) * max_jobs);
-	job_pool.job_contact  = (char **) malloc (sizeof(char *) * max_jobs);
-	job_pool.max_jobs     = max_jobs;
-	
+
+    job_pool.cancel_state = (int *) malloc (sizeof(int) * max_jobs);
+    job_pool.job_contact  = (char **) malloc (sizeof(char *) * max_jobs);
+    job_pool.max_jobs     = max_jobs;
+
     for (jid = 0; jid<job_pool.max_jobs ; jid++)
     {
         job_pool.job_contact[jid]  = NULL;
