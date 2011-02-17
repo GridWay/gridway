@@ -79,7 +79,7 @@ char* gw_generate_wrapper_jdl(gw_job_t *job)
             "QueueName = \"%s\";"
             "CpuNumber = %d;]\n",
             jobtype, 
-            job->template.wrapper,
+            basename(job->template.wrapper),
             staging_url, gw_conf.gw_location, job->id,
             job->restarted,
             job->restarted,
