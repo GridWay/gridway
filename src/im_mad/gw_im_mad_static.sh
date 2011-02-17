@@ -30,6 +30,6 @@ if [ -z "${GW_LOCATION}" ]; then
     exit -1
 fi
 
-. $GW_LOCATION/bin/gw_mad_common.sh
+. $GW_LOCATION/bin/gw_mad_common.sh 
 
 . $GW_LOCATION/bin/gw_im_mad_common.sh
