@@ -77,7 +77,8 @@ char* gw_generate_wrapper_jdl(gw_job_t *job)
             "OutputSandboxBaseDestURI = \"%s/%s/" GW_VAR_DIR "/%d/\";"
             "BatchSystem = \"%s\";"
             "QueueName = \"%s\";"
-            "CpuNumber = %d;]\n",
+            "CpuNumber = %d;"
+            "Environment = %s]\n",
             jobtype, 
             basename(job->template.wrapper),
             staging_url, gw_conf.gw_location, job->id,
@@ -89,7 +90,8 @@ char* gw_generate_wrapper_jdl(gw_job_t *job)
             staging_url, gw_conf.gw_location, job->id,
             job->history->host->lrms_type,
             job->history->queue,
-            job->template.np);
+            job->template.np,
+            job_environment);
 
     free(job_environment);
     free(jobtype);
