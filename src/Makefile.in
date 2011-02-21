@@ -812,7 +812,6 @@ flavorinclude_HEADERS = $(top_srcdir)/include/drmaa.h \
                         $(top_srcdir)/include/gw_drmaa_jt.h \
                         $(top_srcdir)/include/gw_em.h \
                         $(top_srcdir)/include/gw_em_mad.h \
-                        $(top_srcdir)/include/gw_em_mad_prews.h \
                         $(top_srcdir)/include/gw_em_rsl.h \
                         $(top_srcdir)/include/gw_file_parser.h \
                         $(top_srcdir)/include/gw_history.h \
@@ -829,7 +828,6 @@ flavorinclude_HEADERS = $(top_srcdir)/include/drmaa.h \
                         $(top_srcdir)/include/gw_rm_msg.h \
                         $(top_srcdir)/include/gw_scheduler.h \
                         $(top_srcdir)/include/gw_template.h \
-                        $(top_srcdir)/include/gw_tm_ftp_transfer.h \
                         $(top_srcdir)/include/gw_tm.h \
                         $(top_srcdir)/include/gw_tm_mad.h \
                         $(top_srcdir)/include/gw_um.h \
