@@ -130,12 +130,12 @@ int CreamEmMad::submit(int jid, string *contact, string *jdlFile)
     if (job == NULL)
         return -1;
 
-    // Make staging with GASS!!! And register job with autostart!!!
+    // Staging is done with GASS and job is registered with autostart
     /*if (this->stagingInputFiles(job) != 0)
         return -1;
-
     if (this->jobStart(job) != 0)
         return -1;*/
+
     contact = job->getContact();
     
     cout << "SUBMIT " << jid << " SUCCESS " << contact->substr(0, contact->find("/ce-cream")) << "/" << *(job->getCreamID()) << endl;  
