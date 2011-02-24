@@ -16,21 +16,15 @@
 
 #include "gw_em_mad_cream.h"
 
-CreamJob::CreamJob(int gridwayID, string *creamID, string *contact)
+CreamJob::CreamJob(int gridwayID, string *contact)
 {
     this->gridwayID = gridwayID;
-    this->creamID   = new string(*creamID);
     this->contact   = new string(*contact);
 }
 
 void CreamJob::setGridWayID(int gridwayID)
 {
     this->gridwayID = gridwayID;
-}
-
-void CreamJob::setCreamID(string *creamID)
-{
-    this->creamID = new string(*creamID);
 }
 
 void CreamJob::setContact(string *contact)
@@ -51,11 +45,6 @@ void CreamJob::setIsbUploadUrl(string isbUploadUrl)
 int CreamJob::getGridWayID()
 {
     return this->gridwayID;
-}
-
-string *CreamJob::getCreamID()
-{
-    return this->creamID;
 }
 
 string *CreamJob::getContact()
@@ -129,12 +118,6 @@ int CreamEmMad::submit(int jid, string *contact, string *jdlFile)
 
     if (job == NULL)
         return -1;
-
-    // Staging is done with GASS and job is registered with autostart
-    /*if (this->stagingInputFiles(job) != 0)
-        return -1;
-    if (this->jobStart(job) != 0)
-        return -1;*/
 
     contact = job->getContact();
     
@@ -347,21 +330,16 @@ CreamJob *CreamEmMad::jobSubmit(int jid,string *contact,string *jdlFile)
     string *JDL = this->fileToString(jdlFile);
     string *jidCREAM = new string("GridWayJob");
     stringstream jidString;
-    size_t found;
     string *serviceAddress;
     string *creamURL;
-    string *creamJID;
     CreamJob *creamJob;
-    vector<string> *inputFiles;
 
     if (JDL == NULL)
         return NULL;
-    else
-        inputFiles=this->getInputFiles(JDL);
 
-    jidString << jid;
+    jidCREAM << jidCREAM + jid;
 
-    *jidCREAM += jidString.str();
+    //*jidCREAM += jidString.str();
 
     API::JobDescriptionWrapper jd(*JDL, *(this->delegationID), "", "", true, jidCREAM->c_str());
 
@@ -378,9 +356,9 @@ CreamJob *CreamEmMad::jobSubmit(int jid,string *contact,string *jdlFile)
         return NULL;
     }
 
-    if (contact == NULL || (contact->size() == 1 && (found = contact->find("-")) != string::npos))
+    if (contact == NULL || (contact->size() == 1 && contact->find("-") != string::npos))
         serviceAddress = new string(*(this->baseAddress)+":8443/ce-cream/services/CREAM2");
-    else if ((found = contact->find("https")) == string::npos)
+    else if (contact->find("https") == string::npos)
         serviceAddress = new string("https://" + *(contact)+ ":8443/ce-cream/services/CREAM2");
     else
         serviceAddress = new string(*contact);
@@ -407,21 +385,20 @@ CreamJob *CreamEmMad::jobSubmit(int jid,string *contact,string *jdlFile)
     }  
 
     creamURL  = new string(registrationResponse.get<1>().getCreamURL());
-    creamJID  = new string(registrationResponse.get<1>().getCreamJobID());
-    creamJob  = new CreamJob(jid, creamJID, creamURL);
+    creamJob  = new CreamJob(jid, creamURL);
 
-    map< string, string > properties;
-
-    registrationResponse.get<1>().getProperties( properties );
-    string ISB_upload_url = properties["CREAMInputSandboxURI"];
-    creamJob->setIsbUploadUrl(ISB_upload_url);
-    creamJob->setInputFiles(inputFiles);  
-  
     this->creamJobs->insert(pair<int, CreamJob>(jid, *creamJob));
 
     delete creamClient;
     
     return creamJob;
+}
+
+CreamJob *CreamEmMad::recover(int jid,string *contact)
+{
+    creamJob  = new CreamJob(jid, contact);
+    this->creamJobs->insert(pair<int, CreamJob>(jid, *creamJob));
+    this->poll(jid);
 }
 
 string *CreamEmMad::fileToString(string *jdlFileName)

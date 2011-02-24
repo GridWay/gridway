@@ -70,11 +70,15 @@ int main( int argc, char *argv[])
                cout << action->c_str() << " " << jidCREAM << " FAILURE Not initialized" << endl;
         else if (action->compare("INIT") == 0)
                cout << action->c_str() << " " << jidCREAM << " FAILURE Already initialized" << endl;
-        else if (action->compare("SUBMIT") == 0) {
+        else if (action->compare("SUBMIT") == 0)
+        {
             host = contact->substr(0, contact->find("/"));
             status = creamEmMad->submit(jidCREAM, &host, jdlFile);
-        } //else if (action->compare("RECOVER") == 0)
-        //    status = creamEmMad->recover(jidCREAM, contact);
+        }
+        else if (action->compare("RECOVER") == 0)
+        {
+            status = creamEmMad->poll(jidCREAM);
+        }
         else if (action->compare("CANCEL") == 0)
             status = creamEmMad->cancel(jidCREAM);
         else if (action->compare("POLL") == 0)
