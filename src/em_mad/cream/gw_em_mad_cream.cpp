@@ -77,7 +77,7 @@ int main( int argc, char *argv[])
         }
         else if (action->compare("RECOVER") == 0)
         {
-            status = creamEmMad->poll(jidCREAM);
+            status = creamEmMad->recover(jidCREAM, contact);
         }
         else if (action->compare("CANCEL") == 0)
             status = creamEmMad->cancel(jidCREAM);

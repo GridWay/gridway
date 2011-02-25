@@ -16,50 +16,26 @@
 
 #include "gw_em_mad_cream.h"
 
-CreamJob::CreamJob(int gridwayID, string *contact)
+CreamJob::CreamJob(int gridwayID, string *creamJobId, string *creamURL)
 {
     this->gridwayID = gridwayID;
-    this->contact   = new string(*contact);
+    this->creamJobId = new string(*creamJobId);
+    this->creamURL = new string(*creamURL);
 }
 
-void CreamJob::setGridWayID(int gridwayID)
-{
-    this->gridwayID = gridwayID;
-}
-
-void CreamJob::setContact(string *contact)
-{
-    this->contact = new string(*contact);
-}
-
-void CreamJob::setInputFiles(vector<string> *inputFiles)
-{
-    this->inputFiles = inputFiles;
-}
-
-void CreamJob::setIsbUploadUrl(string isbUploadUrl)
-{
-    this->isbUploadUrl = isbUploadUrl;
-}
- 
 int CreamJob::getGridWayID()
 {
     return this->gridwayID;
 }
 
-string *CreamJob::getContact()
+string *CreamJob::getCreamURL()
 {
-    return this->contact;
+    return this->creamURL;
 }
 
-vector <string> *CreamJob::getInputFiles()
+string *CreamJob::getCreamJobId()
 {
-    return this->inputFiles;
-}
-
-string  CreamJob::getIsbUploadUrl()
-{
-    return this->isbUploadUrl;
+    return this->creamJobId;
 }
 
 CreamEmMad::CreamEmMad(char *delegation)
@@ -110,18 +86,19 @@ int CreamEmMad::init()
 
 int CreamEmMad::submit(int jid, string *contact, string *jdlFile)
 {
-    // Delegation should be once per CE!!!
     if (this->proxyDelegate(contact) != 0)
-      return -1;
+    {
+        //return -1; // Could be a duplicate delegation
+    }
       
     CreamJob *job = this->jobSubmit(jid, contact, jdlFile);
 
     if (job == NULL)
         return -1;
 
-    contact = job->getContact();
+    contact = job->getCreamURL();
     
-    cout << "SUBMIT " << jid << " SUCCESS " << contact->substr(0, contact->find("/ce-cream")) << "/" << *(job->getCreamID()) << endl;  
+    cout << "SUBMIT " << jid << " SUCCESS " << contact->substr(0, contact->find("/ce-cream")) << "/" << *(job->getCreamJobId()) << endl;  
     
     return 0;
 }
@@ -134,13 +111,13 @@ int CreamEmMad::poll(int jid)
  
     if (it == creamJobs->end())
     {
-        this->info = new string ("The job ID do not exist");
+        this->info = new string ("The job ID does not exist");
         return -1;
     }
 
     CreamJob creamJob = it->second;
    
-    API::JobIdWrapper job1(*(creamJob.getCreamID()), *(creamJob.getContact()), vector<API::JobPropertyWrapper>());
+    API::JobIdWrapper job1(*(creamJob.getCreamJobId()), *(creamJob.getCreamURL()), vector<API::JobPropertyWrapper>());
 
     vector< API::JobIdWrapper > JobVector;
 
@@ -166,7 +143,7 @@ int CreamEmMad::poll(int jid)
         return -1;
     }
 
-    string serviceAddress = *(creamJob.getContact());
+    string serviceAddress = *(creamJob.getCreamURL());
 
     try 
     {
@@ -230,13 +207,13 @@ int CreamEmMad::cancel(int jid)
    
     if (it == creamJobs->end())
     {
-        this->info = new string ("The job ID  not exists");
+        this->info = new string ("The job ID does not exist");
         return -1;
     }
   
     CreamJob creamJob = it->second;
    
-    API::JobIdWrapper job1(*(creamJob.getCreamID()), *(creamJob.getContact()), vector<API::JobPropertyWrapper>());
+    API::JobIdWrapper job1(*(creamJob.getCreamJobId()), *(creamJob.getCreamURL()), vector<API::JobPropertyWrapper>());
 
     vector< API::JobIdWrapper > JobVector;
 
@@ -258,7 +235,7 @@ int CreamEmMad::cancel(int jid)
         return -1;
     }
 
-    string serviceAddress = *(creamJob.getContact());
+    string serviceAddress = *(creamJob.getCreamURL());
 
     try 
     {
@@ -295,8 +272,7 @@ int CreamEmMad::proxyDelegate(string *contact)
     API::AbsCreamProxy *creamClient; 
     string *serviceAddress;
 
-    // TODO: Delegate for new CEs (list) and renew periodically
-    //creamClient = API::CreamProxyFactory::make_CreamProxy_ProxyRenew(*(this->delegationID), this->connectionTimeout);
+    // TODO: Delegate only to new CEs (list)
     creamClient = API::CreamProxyFactory::make_CreamProxyDelegate(*(this->delegationID), this->connectionTimeout);
 
     if (creamClient == NULL)
@@ -316,8 +292,8 @@ int CreamEmMad::proxyDelegate(string *contact)
     {
         this->info = new string(ex.what());
         delete creamClient;
-        //Continue, it could be a duplicate delegation
-        return 0;
+
+        return -1;
     }
 
     delete creamClient;
@@ -325,21 +301,55 @@ int CreamEmMad::proxyDelegate(string *contact)
     return 0;
 }
 
+int CreamEmMad::proxyRenew(string *contact)
+{
+    API::AbsCreamProxy *creamClient;
+    string *serviceAddress;
+
+    // TODO: Renew periodically
+    creamClient = API::CreamProxyFactory::make_CreamProxy_ProxyRenew(*(this->delegationID), this->connectionTimeout);
+
+    if (creamClient == NULL)
+    {
+        this->info = new string ("Error renewing Cream proxy");
+        return -1;
+    }
+
+    serviceAddress = new string("https://" + *contact + ":8443/ce-cream/services/gridsite-delegation");
+
+    try
+    {
+        creamClient->setCredential(this->certificatePath->c_str());
+        creamClient->execute(*serviceAddress);
+    }
+    catch(exception& ex)
+    {
+        this->info = new string(ex.what());
+        delete creamClient;
+
+        return -1;
+    }
+
+    delete creamClient;
+
+    return 0;
+}
+
 CreamJob *CreamEmMad::jobSubmit(int jid,string *contact,string *jdlFile)
 {
     string *JDL = this->fileToString(jdlFile);
     string *jidCREAM = new string("GridWayJob");
-    stringstream jidString;
     string *serviceAddress;
     string *creamURL;
+    string *creamJobId;
     CreamJob *creamJob;
 
     if (JDL == NULL)
         return NULL;
 
-    jidCREAM << jidCREAM + jid;
-
-    //*jidCREAM += jidString.str();
+    stringstream jidss;
+    jidss << jid;
+    *jidCREAM += jidss.str();
 
     API::JobDescriptionWrapper jd(*JDL, *(this->delegationID), "", "", true, jidCREAM->c_str());
 
@@ -385,7 +395,9 @@ CreamJob *CreamEmMad::jobSubmit(int jid,string *contact,string *jdlFile)
     }  
 
     creamURL  = new string(registrationResponse.get<1>().getCreamURL());
-    creamJob  = new CreamJob(jid, creamURL);
+    creamJobId  = new string(registrationResponse.get<1>().getCreamJobID());
+
+    creamJob  = new CreamJob(jid, creamJobId, creamURL);
 
     this->creamJobs->insert(pair<int, CreamJob>(jid, *creamJob));
 
@@ -394,11 +406,28 @@ CreamJob *CreamEmMad::jobSubmit(int jid,string *contact,string *jdlFile)
     return creamJob;
 }
 
-CreamJob *CreamEmMad::recover(int jid,string *contact)
+int CreamEmMad::recover(int jid, string *contact)
 {
-    creamJob  = new CreamJob(jid, contact);
+    string *creamJobId;
+    string *creamURL;
+    CreamJob *creamJob;
+
+    if (this->proxyDelegate(contact) != 0)
+    {
+        //return -1; // Could be a duplicate delegation
+    }
+
+    size_t pos = contact->find("/CREAM");
+
+    creamURL = new string(contact->substr(0, pos));
+    *creamURL += "/ce-cream/services/CREAM2";
+    creamJobId = new string(contact->substr(pos+1));
+
+    creamJob = new CreamJob(jid, creamJobId, creamURL);
+
     this->creamJobs->insert(pair<int, CreamJob>(jid, *creamJob));
-    this->poll(jid);
+
+    return this->poll(jid);
 }
 
 string *CreamEmMad::fileToString(string *jdlFileName)
@@ -420,110 +449,4 @@ string *CreamEmMad::fileToString(string *jdlFileName)
     }
  
     return jdlString;
-}
-
-vector<string> *CreamEmMad::getInputFiles(string *jdlString)
-{
-    size_t   begin;
-    size_t   end;
-    string   subString; 
-    string   inputFile;
-    vector<string> *inputFiles = new vector<string>();
-
-    begin = jdlString->find("InputSandbox", 0);
-
-    if (begin != string::npos)
-    {
-        subString = jdlString->substr(begin, jdlString->size());
-
-        begin = subString.find("\"",0);
-        end = subString.find(",",0);
-
-        if (end == string::npos)
-            end = subString.find("}",0);
-    
-        while (begin!=string::npos && end!=string::npos)
-        {
-            inputFile=subString.substr(begin+1, end-begin-2);
-            inputFiles->push_back(inputFile);
-
-            subString = subString.substr(end+1);
-            begin = subString.find("\"",0);
-            end = subString.find(",",0);
-            
-            if (end == string::npos)
-                end = subString.find("}",0);
-        }
-    }
-   
-    return inputFiles;
-}
-
-int CreamEmMad::stagingInputFiles(CreamJob *job)
-{
-    int status;
-    string *destination;
-    string *source;
-    vector<string> inputFiles = *(job->getInputFiles());
-
-    for (int i=0; i<(int) inputFiles.size(); i++)
-    {
-        if (fork() == 0) //Use system
-        {
-            source = new string("file://" + inputFiles[i]);
-            destination = new string(job->getIsbUploadUrl() + "/"  + basename(inputFiles[i].c_str()));
-    
-            execlp ("globus-url-copy", "globus-url-copy", source->c_str(), destination->c_str(), NULL);
-            this->info = new string("Error executing glubus-url-copy");
-            return -1;
-        }
-        else
-            wait(&status);
-    }
-
-    return 0;
-}
-
-int CreamEmMad::jobStart(CreamJob *job) 
-{
-    string creamURL = *(job->getContact());
-    string localCreamJID1 = *(job->getCreamID());
-    API::JobIdWrapper job1(localCreamJID1, creamURL, vector<API::JobPropertyWrapper>() );
- 
-    vector< API::JobIdWrapper > JobVector;
-    JobVector.push_back( job1 );
-
-    int fromDate = -1;
-    int toDate   = -1;
-    vector<string> statusVec;
-
-    API::JobFilterWrapper jfw( JobVector, statusVec, fromDate, toDate, *(this->delegationID), "" );
-
-    int connection_timeout = 30; // seconds
-
-    API::ResultWrapper result;
-
-    API::AbsCreamProxy* creamClient = API::CreamProxyFactory::make_CreamProxyStart( &jfw, &result, connection_timeout );
-  
-    if (creamClient == NULL)
-    {
-        this->info = new string("Error creating Cream client");
-        return -1;
-    }
-
-    try 
-    {
-        creamClient->setCredential( this->certificatePath->c_str() );
-        creamClient->execute(*(job->getContact()));   
-    } 
-    catch(exception& ex) 
-    {
-        this->info = new string(ex.what());
-        delete creamClient;
-        return -1;
-    }
- 
-    delete creamClient;
-
-    return 0;
 }

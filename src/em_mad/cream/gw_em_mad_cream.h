@@ -53,23 +53,17 @@ class CreamJob
 {
    private:
 	int gridwayID;
-	string *creamID;
-	string *contact;
-	vector <string>	*inputFiles;
-	string isbUploadUrl;
+	string *creamJobId;
+        string *creamURL;
    
   public:
-	CreamJob(int gridwayID, string *creamID, string *contact);
+	CreamJob(int gridwayID, string *creamJobId, string *creamURL);
 	void setGridWayID(int gridwayID);
-	void setCreamID(string *creamID);
-	void setContact(string *contact);
-	void setInputFiles(vector<string> *inputFiles);
-	void setIsbUploadUrl(string isbUploadUrl);
+	void setCreamJobId(string *creamJobId);
+	void setCreamURL(string *creamURL);
 	int getGridWayID();
-	string *getCreamID();
-	string *getContact();
-	vector <string> *getInputFiles();		
-	string getIsbUploadUrl();
+	string *getCreamJobId();
+	string *getCreamURL();
 };
 
 class CreamEmMad
@@ -85,6 +79,7 @@ class CreamEmMad
 	map <int, CreamJob> *creamJobs;	
 	
 	int proxyDelegate(string *contact);
+	int proxyRenew(string *contact);
 	CreamJob *jobSubmit(int jid, string *contact, string *jdlFile);	
 	int stagingInputFiles(CreamJob *job);
 	int jobStart(CreamJob *job);	
