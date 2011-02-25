@@ -26,7 +26,6 @@
 
 char* gw_split_arguments_jsdl(const char *arguments);
 
-
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
@@ -46,6 +45,7 @@ char* gw_generate_wrapper_jsdl (gw_job_t *job)
     char *staging_url;
     gw_conf_t gw_conf;
     char *wrapper;
+    char *myproxy_server;
 
     wrapper = strrchr(job->template.wrapper, '/');
     wrapper = strtok(wrapper,"/");
@@ -123,7 +123,6 @@ char* gw_generate_wrapper_jsdl (gw_job_t *job)
             wrapper,
             staging_url, job->template.wrapper);
         strcat(jsdl_buffer,tmp_buffer);
-        
         jsdl = snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
             "  <jsdl:DataStaging>\n"
             "   <jsdl:FileName>stdout.wrapper.%d</jsdl:FileName>\n"
@@ -147,15 +146,25 @@ char* gw_generate_wrapper_jsdl (gw_job_t *job)
             staging_url, gw_conf.gw_location, job->id, job->restarted);
         strcat(jsdl_buffer,tmp_buffer);
 
-
 	free(job_environment);        
 
     if (strlen(jsdl_buffer) + 6 > GW_RSL_LENGTH)
         return NULL;
 
-    strcat(jsdl_buffer,
+    myproxy_server = strtok(job->history->host->hostname,":");
+
+    jsdl = snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
 	    " </jsdl:JobDescription>\n"
-            "</jsdl:JobDefinition>\n");
+            " <MyProxy xmlns=\"urn:gridsam:myproxy\">\n"
+            "  <ProxyServer>%s</ProxyServer>\n"
+            "  <ProxyServerPort>7512</ProxyServerPort>\n"
+            "  <ProxyServerUserName>%s</ProxyServerUserName>\n"
+            "  <ProxyServerPassPhrase>testGW</ProxyServerPassPhrase>\n"
+            " </MyProxy>\n"
+            "</jsdl:JobDefinition>\n",
+            myproxy_server,
+            job->owner);
+    strcat(jsdl_buffer,tmp_buffer);
 
     jsdl = strdup(jsdl_buffer);
     return jsdl;
@@ -203,7 +212,6 @@ char* gw_split_arguments_jsdl (const char *arguments)
 
         return xml_arguments;
 }
-
 
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
