@@ -17,20 +17,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <pthread.h>
+#include <string.h>
 
 #include "gw_em_rsl.h"
 #include "gw_job.h"
 #include "gw_template.h"
+#include "gw_user_pool.h"
 
 char* gw_split_arguments_jsdl(const char *arguments);
-
-/*---------------------------------------------------------------------------*/
-/*---------------------------------------------------------------------------*/
-/*---------------------------------------------------------------------------*/
-
-/*char* gw_generate_nowrapper_jsdl2 (gw_job_t *job)
-{
-}*/
 
 
 /*---------------------------------------------------------------------------*/
@@ -41,14 +35,20 @@ char* gw_generate_wrapper_jsdl (gw_job_t *job)
 {
     char *jsdl;
     char *job_environment; 
-	char jsdl_buffer[GW_RSL_LENGTH];
-	char tmp_buffer[GW_RSL_LENGTH];
-	int print_queue = 0;
-	int rc;
-	int i;
-        char *arguments;
-	char *xml_arguments;
+    char jsdl_buffer[GW_RSL_LENGTH];
+    char tmp_buffer[GW_RSL_LENGTH];
+    int print_queue = 0; 
+    int i;
+    char *arguments;
+    char *xml_arguments;
 
+    char *jobtype;
+    char *staging_url;
+    gw_conf_t gw_conf;
+    char *wrapper;
+
+    wrapper = strrchr(job->template.wrapper, '/');
+    wrapper = strtok(wrapper,"/");
     /* ---------------------------------------------------------------------- */
     /* 1.- Create dynamic job data environment                                */
     /* ---------------------------------------------------------------------- */
@@ -57,6 +57,16 @@ char* gw_generate_wrapper_jsdl (gw_job_t *job)
     
     if ( job_environment == NULL )
         return NULL;
+
+    if (job->history->tm_mad->url != NULL)
+    {
+        /* Perform staging with the URL provided by the TM MAD */
+        staging_url = job->history->tm_mad->url;
+    }
+    else
+    {
+        return NULL;
+    }
 
     /* ---------------------------------------------------------------------- */
     /* 2.- Build JSDL String & Return it                                       */
@@ -69,52 +79,74 @@ char* gw_generate_wrapper_jsdl (gw_job_t *job)
             "   xmlns:jsdl-posix=\"http://schemas.ggf.org/jsdl/2005/11/jsdl-posix\"\n"
             "   xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n"
 	    " <jsdl:JobDescription>\n"
-            "%s"
+            "  <jsdl:JobIdentification>\n"
+            "   <jsdl:JobName>%s</jsdl:JobName>\n"
+            "  </jsdl:JobIdentification>\n"
 	    "  <jsdl:Application>\n"
 	    "   <jsdl-posix:POSIXApplication>\n",
-            job_environment);
+            job->template.name);
 
         jsdl = snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
-            "    <jsdl-posix:Executable>%s</jsdl-posix:Executable>\n",
-            job->template.executable);
+            "    <jsdl-posix:Executable>./%s.wrapper</jsdl-posix:Executable>\n",
+            wrapper);
         strcat(jsdl_buffer,tmp_buffer);
 
-	if (job->template.arguments != NULL)
-	{
-		xml_arguments = gw_split_arguments_jsdl(job->template.arguments);
-        	strncat(jsdl_buffer,xml_arguments,
-              		GW_RSL_LENGTH-strlen(jsdl_buffer));
-        }
+        gw_conf.gw_location = getenv("GW_LOCATION");
+        jsdl = snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
+            "    <jsdl-posix:Argument>%s%s/" GW_VAR_DIR "/%d/job.env</jsdl-posix:Argument>\n",
+            staging_url, gw_conf.gw_location, job->id);
+        strcat(jsdl_buffer,tmp_buffer);
+
 
 	jsdl = snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
-	    "    <jsdl-posix:Input>%s</jsdl-posix:Input>\n"
-            "    <jsdl-posix:Output>%s</jsdl-posix:Output>\n"
-            "    <jsdl-posix:Error>%s</jsdl-posix:Error>\n",
-            job->template.stdin_file,
-            job->template.stdout_file,
-            job->template.stderr_file);
+            "    <jsdl-posix:Output>stdout.wrapper.%d</jsdl-posix:Output>\n"
+            "    <jsdl-posix:Error>stderr.wrapper.%d</jsdl-posix:Error>\n"
+            "%s",
+            job->restarted,
+            job->restarted,
+            job_environment);
 	strcat(jsdl_buffer,tmp_buffer);
-	
-	for (i=0;i<job->template.num_env;i++)
-        {
-        	jsdl = snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
-		    "    <jsdl-posix:Environment name=\"%s\">"
-		    "%s"
-		    "</jsdl-posix:Environment>\n",
-            	    job->template.environment[i][0],
-                    job->template.environment[i][1]);
-        strcat(jsdl_buffer,tmp_buffer);
-        }
 
         jsdl = snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
 	    "   </jsdl-posix:POSIXApplication>\n"
-            "  </jsdl:Application>\n"
-            "  <jsdl:DataStaging>\n"
-            "   <jsdl:FileName>%s</jsdl:FileName>\n"
-	    "   <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"
-            "  </jsdl:DataStaging>\n",
-            job->template.file);
+            "  </jsdl:Application>\n");
         strcat(jsdl_buffer,tmp_buffer);
+
+        jsdl = snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
+            "  <jsdl:DataStaging>\n"
+            "   <jsdl:FileName>%s.wrapper</jsdl:FileName>\n"
+            "   <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"
+            "   <jsdl:Source>\n"
+            "    <jsdl:URI>%s/%s</jsdl:URI>\n"
+            "   </jsdl:Source>\n"
+            "  </jsdl:DataStaging>\n",
+            wrapper,
+            staging_url, job->template.wrapper);
+        strcat(jsdl_buffer,tmp_buffer);
+        
+        jsdl = snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
+            "  <jsdl:DataStaging>\n"
+            "   <jsdl:FileName>stdout.wrapper.%d</jsdl:FileName>\n"
+            "   <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"
+            "   <jsdl:Target>\n"
+            "    <jsdl:URI>%s/%s" GW_VAR_DIR "/%d/stdout.wrapper.%d</jsdl:URI>\n"
+            "   </jsdl:Target>\n"
+            "  </jsdl:DataStaging>\n",
+            job->restarted,
+            staging_url, gw_conf.gw_location, job->id, job->restarted);
+        strcat(jsdl_buffer,tmp_buffer);
+        jsdl = snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
+            "  <jsdl:DataStaging>\n"
+            "   <jsdl:FileName>stderr.wrapper.%d</jsdl:FileName>\n"
+            "   <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"
+            "   <jsdl:Target>\n"
+            "    <jsdl:URI>%s/%s" GW_VAR_DIR "/%d/stderr.wrapper.%d</jsdl:URI>\n"
+            "   </jsdl:Target>\n"
+            "  </jsdl:DataStaging>\n",
+            job->restarted,
+            staging_url, gw_conf.gw_location, job->id, job->restarted);
+        strcat(jsdl_buffer,tmp_buffer);
+
 
 	free(job_environment);        
 
@@ -145,7 +177,7 @@ char* gw_split_arguments_jsdl (const char *arguments)
 	argument = (char *) malloc (length * sizeof(char));
         arg_i    = 0;
 
-    jsdl_buffer[0] = '\0';
+        jsdl_buffer[0] = '\0';
         
 	for (i=0;i<length;i++)
         {
@@ -176,24 +208,39 @@ char* gw_split_arguments_jsdl (const char *arguments)
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
 
-/*char* gw_generate_pre_wrapper_jsdl2 (gw_job_t *job)
-{
-}*/
-
-/*---------------------------------------------------------------------------*/
-/*---------------------------------------------------------------------------*/
-
 char *gw_em_jsdl_environment(gw_job_t *job)
 {
     char jsdl_buffer[640];
+    char tmp_buffer[640];
     char *jsdl_env;
-    int  rc;
+    int rc;
+    int i;
 
-    rc = snprintf(jsdl_buffer, 640,
-            "  <jsdl:JobIdentification>\n"
-            "   <jsdl:JobName>%s</jsdl:JobName>\n"
-            "  </jsdl:JobIdentification>\n",
-            job->template.name);
+    for (i=0;i<job->template.num_env;i++)
+    {
+            rc = snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
+            "    <jsdl-posix:Environment name=\"%s\">%s</jsdl-posix:Environment>\n",
+            job->template.environment[i][0],
+            job->template.environment[i][1]);
+            strcat(jsdl_buffer,tmp_buffer);
+    }
+
+    rc = snprintf(tmp_buffer, 640,
+            "    <jsdl-posix:Environment name=\"GW_HOSTNAME\">%s</jsdl-posix:Environment>\n"
+            "    <jsdl-posix:Environment name=\"GW_USER\">%s</jsdl-posix:Environment>\n"
+            "    <jsdl-posix:Environment name=\"GW_JOB_ID\">%i</jsdl-posix:Environment>\n"
+            "    <jsdl-posix:Environment name=\"GW_TASK_ID\">%i</jsdl-posix:Environment>\n"
+            "    <jsdl-posix:Environment name=\"GW_ARRAY_ID\">%i</jsdl-posix:Environment>\n"
+            "    <jsdl-posix:Environment name=\"GW_TOTAL_TASKS\">%i</jsdl-posix:Environment>\n"
+            "    <jsdl-posix:Environment name=\"GW_RESTARTED\">%i</jsdl-posix:Environment>\n",
+            job->history->host->hostname,
+            job->owner,
+            job->id,
+            job->task_id,
+            job->array_id,
+            job->total_tasks,
+            job->restarted);
+    strcat(jsdl_buffer,tmp_buffer);
 
     if ((rc >= 640 ) || ( rc < 0 ) )
         return NULL;
