@@ -112,7 +112,7 @@ class Service extends Thread {
 		try
 		{
 			poll();
-			if (info.equals("HARD_KILL")){
+			if (info.equals("DONE")){
 				status = 1;
 				info = "Previously cancelled";
 			}
@@ -143,7 +143,7 @@ class Service extends Thread {
 			if (info.equals("FINISHED"))
                        		info = "DONE";
 			else if (info.equals("CANCELLED"))
-				info = "HARD_KILL";
+				info = "DONE";
 			else if (info.equals("RUNNING"))
 				info = "ACTIVE";
 		}
