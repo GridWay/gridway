@@ -34,7 +34,7 @@ sub dynamic_discover
 	$ldap = Net::LDAP->new( "$bdii:2170" ) or print TMPFILE "DISCOVER - FAILURE $@\n";
 	$mesg = $ldap->bind ;    # an anonymous bind
 	$mesg = $ldap->search( # perform a search
-				base   => "mds-vo-name=local,o=grid",
+				base   => "mds-vo-name=resource,o=grid",
 				filter => "(&(objectclass=GlueCE)$QUEUEFILTER)"
 			);
 	my $max = $mesg->count;
@@ -75,7 +75,7 @@ sub dynamic_monitor
 	$mesg = $ldap->bind ;    # an anonymous bind
 	# First search
 	$mesg = $ldap->search( # perform a search
-				base   => "mds-vo-name=local,o=grid",
+				base   => "mds-vo-name=resource,o=grid",
 				filter => "(&(objectclass=GlueCE)(GlueCEInfoHostName=$host)$QUEUEFILTER)"
 			);
 	my $max = $mesg->count;
@@ -161,7 +161,7 @@ sub dynamic_monitor
 	
 	# Second search
 	$mesg = $ldap->search( # perform a search
-				base   => "mds-vo-name=local,o=grid",
+				base   => "mds-vo-name=resource,o=grid",
 				filter => "(&(objectclass=GlueHostOperatingSystem)(GlueSubClusterName=$host))"
 			);	
 	$max = $mesg->count;
