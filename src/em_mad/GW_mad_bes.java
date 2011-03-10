@@ -23,7 +23,7 @@ class GW_mad_bes extends Thread {
 	private Map job_pool = null; // Job pool
 	private Map jid_pool = null; // JID pool
 
-	private String portNumber;
+	private String host;
 
 	public static void main(String args[]) {
 		GW_mad_bes gw_mad_bes;
@@ -76,18 +76,20 @@ class GW_mad_bes extends Thread {
 					System.out.println(action + " " + jid_str + " FAILURE "
 							+ "Error reading line");
 				}
-				fin = true;
+				//fin = true;
 			}
 			else
 			{
 				action = str_split[0].toUpperCase();
 				jid_str = str_split[1];
-				contact = str_split[2];
-				if (!contact.startsWith("http://", 0))
-					contact = "http://" + str_split[2];
+                                host = str_split[2];
+                                if (str_split[2].indexOf('/') != -1)
+                                	host = str_split[2].substring(0,str_split[2].indexOf('/'));
+				contact = "http://" + host + ":8080/gridsam/services/bes?wsdl";
+     		                /*if (!contact.startsWith("http://", 0))
+					contact = "http://" + str_split[2];*/
 				jsdl_file = str_split[3];
-
-				// Perform the action
+                 		// Perform the action
 				if (action.equals("INIT"))
 					init();
 				else if (action.equals("FINALIZE"))
