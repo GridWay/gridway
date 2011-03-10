@@ -15,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # --------------------------------------------------------------------------
-LOCKDIR=".gw_im_mad_egee_ldap.lock"
+LOCKDIR=".gw_im_mad_bdii.lock"
 
 lock_stdout ()
 {
@@ -46,7 +46,7 @@ unlock_stdout ()
 dynamic_discover ()
 {
 	TMPFILE=".search.$$.$RANDOM"
-	$GW_LOCATION/libexec/perl/gw_im_mad_egee_ldap.pl DISCOVER $SERVER $QUEUEFILTER $TMPFILE
+	$GW_LOCATION/libexec/perl/gw_im_mad_bdii.pl DISCOVER $SERVER $QUEUEFILTER $TMPFILE
 	lock_stdout "$$.$RANDOM"
 	cat $TMPFILE
 	rm $TMPFILE
@@ -57,7 +57,7 @@ dynamic_discover ()
 dynamic_monitor ()
 {
 	TMPFILE=".search.$$.$1.$RANDOM"
-	$GW_LOCATION/libexec/perl/gw_im_mad_egee_ldap.pl MONITOR $SERVER $1 $2 $QUEUEFILTER $TMPFILE
+	$GW_LOCATION/libexec/perl/gw_im_mad_bdii.pl MONITOR $SERVER $1 $2 $QUEUEFILTER $TMPFILE
         lock_stdout "$$.$1.$RANDOM"
         cat $TMPFILE
         rm $TMPFILE
