@@ -96,7 +96,7 @@ dynamic_monitor (){
             QUEUE_MAXCOUNT=0; QUEUE_MAXRUNNINGJOBS=0; QUEUE_MAXJOBSINQUEUE=0
 
             QUEUE_NAME=(`grep GlueCEName: $TMPFILE | awk -F": " '{print $2}'`)
-            QUEUE_NODECOUNT=(`grep GlueCEInfoTotalCPUs: $TMPFILE | awk -F": " '{print $2}' | tail +1`)
+            QUEUE_NODECOUNT=(`grep GlueCEInfoTotalCPUs: $TMPFILE | awk -F": " '{print $2}' | tail -n +1`)
             QUEUE_FREENODECOUNT=(`grep GlueCEStateFreeCPUs: $TMPFILE | awk -F": " '{print $2}'`)
             QUEUE_MAXTIME=(`grep GlueCEPolicyMaxWallClockTime: $TMPFILE | awk -F": " '{print $2}'`)
             QUEUE_MAXCPUTIME=(`grep GlueCEPolicyMaxCPUTime: $TMPFILE | awk -F": " '{print $2}'`)
