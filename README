@@ -26,7 +26,7 @@ organization, from in-house systems to Grid infrastructures and Cloud providers.
 
 GridWay supports most of existing Grid middlewares (Globus WS and pre-WS, LCG, 
 CREAM, ARC), is being used on main production Grid infrastructures (EGEE, OSG, 
-TeraGrid, ...) and can dynamically access to Cloud resources (Amazon EC2, ...).
+TeraGrid...) and can dynamically access to Cloud resources (Amazon EC2).
 
 
 ===== DOCUMENTATION =====
@@ -38,25 +38,28 @@ http://gridway.org/doku.php?id=documentation .
 ===== INSTALL =====
 
 Check the Installation Guide and/or the Quick Installation guide for more details 
-http://gridway.org/doku.php?id=documentation:release_5.6:ig .
-Depending on whether you need a single-user or multi-user, it gets slightly more 
-complex due to the role of gridway administrator.
-In any case, it summarizes to ten steps:
+http://gridway.org/doku.php?id=documentation:release_5.7:ig .
+Depending on whether you need a single-user or multi-user configuration, it gets
+slightly more complex due to the role of gridway administrator.
+In any case, it summarizes to these steps:
 
 0) Make sure you have installed and running a working Globus Toolkit (recommended 
-the latest 4.2).
-1) Pre-install a set of packages (make, gcc, java, libssl-dev [openssl-devel], 
-perl, libnet-ldap-perl [perl-LDAP], ruby, ruby-dev [ruby-devel]).
-2) Set up the gwuser (also the gwadmin for administratio of multi-user) and the env
-variables $GW_LOCATION, $GLOBUS_LOCATION, $JAVA_HOME, $PATH, $LD_LIBRARY_PATH
-3) Enter the downloaded directory, either after uncompression or svn check out.
-4) ./configure
-5) make
-6) make install
-7) Configure GridWay (http://gridway.org/doku.php?id=documentation:release_5.6:cg)
-through the files $GW_LOCATION/etc/gwd.conf y $GW_LOCATION/etc/sched.conf.
-8) Launch the gridway daemon from $GW_LOCATION/bin/gwd.
-9) Test it and enjoy!
+the latest 5.0.3).
+1) Install the required packages (make, gcc, java, libssl-dev [openssl-devel], perl,
+libnet-ldap-perl [perl-LDAP], ruby, ruby-dev [ruby-devel]).
+2) In a multi-user configuration, create the gwusers group and the gwadmin user.
+3) Set the envinronment ($GW_LOCATION, $GLOBUS_LOCATION, $JAVA_HOME, $PATH,
+$LD_LIBRARY_PATH...)
+4) Enter the downloaded directory, either after uncompression or svn check out.
+5) ./configure
+6) make
+7) make install
+8) Build and install the needed drivers executing make and make install, in
+$GW_LOCATION/src/{im_mad,em_mad,tm_mad}.
+9) Configure GridWay (http://gridway.org/doku.php?id=documentation:release_5.7:cg)
+through the files $GW_LOCATION/etc/gwd.conf and $GW_LOCATION/etc/sched.conf.
+10) Launch the gridway daemon from $GW_LOCATION/bin/gwd.
+11) Test it and enjoy!
 
 
 ===== TROUBLESHOOTING =====
