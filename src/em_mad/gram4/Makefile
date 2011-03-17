@@ -8,10 +8,11 @@ gw_em_mad_gram4.jar: Gw_em_mad_gram4.java
 Gw_em_mad_gram4.java:
 	ln -s Gw_em_mad_gram4_GT42.java Gw_em_mad_gram4.java
 
-install:
+install: gw_em_mad_gram4.jar
 ifdef GW_LOCATION
 	@cp gw_em_mad_gram4.jar $(GW_LOCATION)/lib/
 	@cp gw_em_mad_gram4.sh $(GW_LOCATION)/bin/gw_em_mad_gram4
+	@chmod a+x $(GW_LOCATION)/bin/gw_em_mad_gram4
 	@echo GRAM4 EM MAD successfully installed
 else
         @echo "  GW_LOCATION undefined"

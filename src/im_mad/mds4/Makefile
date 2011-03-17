@@ -12,3 +12,14 @@ QueryClient.java:
 
 Mds4QueryParser.java:
 	ln -s Mds4QueryParser_GT42.java Mds4QueryParser.java
+
+install: gw_im_mad_mds4.jar
+ifdef GW_LOCATION
+	@cp gw_im_mad_mds4.jar $(GW_LOCATION)/lib
+	@cp gw_im_mad_mds4.sh $(GW_LOCATION)/bin/gw_im_mad_mds4
+	@chmod a+x $(GW_LOCATION)/bin/gw_im_mad_mds4
+        @echo MDS4 IM MAD successfully installed
+else
+        @echo "  GW_LOCATION undefined"
+        @exit 2
+endif
