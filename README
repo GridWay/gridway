@@ -29,6 +29,12 @@ CREAM, ARC), is being used on main production Grid infrastructures (EGEE, OSG,
 TeraGrid...) and can dynamically access to Cloud resources (Amazon EC2).
 
 
+===== RELEASE NOTES =====
+
+The release notes can be found online at
+http://www.gridway.org/doku.php?id=software:release_notes:57 .
+
+
 ===== DOCUMENTATION =====
 
 The documentation is completely online at
@@ -37,11 +43,12 @@ http://gridway.org/doku.php?id=documentation .
 
 ===== INSTALL =====
 
-Check the Installation Guide and/or the Quick Installation guide for more details 
+Check the Installation Guide for more details at
 http://gridway.org/doku.php?id=documentation:release_5.7:ig .
+
 Depending on whether you need a single-user or multi-user configuration, it gets
-slightly more complex due to the role of gridway administrator.
-In any case, it summarizes to these steps:
+slightly more complex due to the role of gridway administrator. In any case, it
+summarizes to these steps:
 
 0) Make sure you have installed and running a working Globus Toolkit (recommended 
 the latest 5.0.3).
@@ -51,15 +58,13 @@ libnet-ldap-perl [perl-LDAP], ruby, ruby-dev [ruby-devel]).
 3) Set the envinronment ($GW_LOCATION, $GLOBUS_LOCATION, $JAVA_HOME, $PATH,
 $LD_LIBRARY_PATH...)
 4) Enter the downloaded directory, either after uncompression or svn check out.
-5) ./configure
-6) make
-7) make install
-8) Build and install the needed drivers executing make and make install, in
+5) Execute "./configure; make; make install".
+6) Build and install the needed drivers executing "make; make install", in
 $GW_LOCATION/src/{im_mad,em_mad,tm_mad}.
-9) Configure GridWay (http://gridway.org/doku.php?id=documentation:release_5.7:cg)
-through the files $GW_LOCATION/etc/gwd.conf and $GW_LOCATION/etc/sched.conf.
-10) Launch the gridway daemon from $GW_LOCATION/bin/gwd.
-11) Test it and enjoy!
+7) Configure GridWay through the file $GW_LOCATION/etc/gwd.conf (check the
+Configuration Guide at http://gridway.org/doku.php?id=documentation:release_5.7:cg).
+8) Launch the GridWay daemon from $GW_LOCATION/bin/gwd.
+9) Test it and enjoy!
 
 
 ===== TROUBLESHOOTING =====
