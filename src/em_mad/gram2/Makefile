@@ -16,6 +16,7 @@ install:
 ifdef GW_LOCATION
 	@cp gw_em_mad_gram2 $(GW_LOCATION)/bin/gw_em_mad_gram2.bin
 	@cp gw_em_mad_gram2.sh $(GW_LOCATION)/bin/gw_em_mad_gram2
+	@chmod a+x $(GW_LOCATION)/bin/gw_em_mad_gram2
 	@echo GRAM2 EM MAD successfully installed
 else
         @echo "  GW_LOCATION undefined"
