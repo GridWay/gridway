@@ -12,7 +12,7 @@ all: $(progs)
 
 gw_em_mad_gram2: gw_em_mad_gram2.c gw_em_mad_gram2_actions.c gw_em_mad_gram2_pool.c
 
-install:
+install: gw_em_mad_gram2
 ifdef GW_LOCATION
 	@cp gw_em_mad_gram2 $(GW_LOCATION)/bin/gw_em_mad_gram2.bin
 	@cp gw_em_mad_gram2.sh $(GW_LOCATION)/bin/gw_em_mad_gram2
