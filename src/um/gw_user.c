@@ -89,13 +89,14 @@ int gw_user_init(gw_user_t *user, const char *name, const char *proxy_path)
 		
             pclose(file);
 	  
-            if (dn != NULL){
+            if (dn != NULL)
+            {
                 pline =  strchr(dn, '\n');
-            if (pline != NULL)
-                *pline = '\0';
+                if (pline != NULL)
+                    *pline = '\0';
 
-            user->dn = strdup(dn);
-            gw_log_print("UM",'I',"User proxy info, %s\n", user->dn);
+                user->dn = strdup(dn);
+                gw_log_print("UM",'I',"User proxy info, %s\n", user->dn);
             }
             else
             {

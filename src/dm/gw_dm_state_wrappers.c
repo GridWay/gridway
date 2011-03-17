@@ -216,25 +216,25 @@ void gw_dm_wrapper_done_cb ( void *_job_id )
     	
     		/* ----------------- Update wrapper stats ---------------------- */    	
     		
-		    job->history->stats[WRAPPER_EXIT_TIME] = time(NULL);
+            job->history->stats[WRAPPER_EXIT_TIME] = time(NULL);
 		    
-		    total      = gw_job_history_get_wrapper_time(job->history);
-		    active     = job->history->stats[ACTIVE_TIME];
-    		suspension = job->history->stats[SUSPENSION_TIME];
+            total      = gw_job_history_get_wrapper_time(job->history);
+            active     = job->history->stats[ACTIVE_TIME];
+            suspension = job->history->stats[SUSPENSION_TIME];
 
-		    gw_job_print(job,"DM",'I',"Wrapper CANCELED:\n");
-		    gw_job_print(job,"DM",'I',"\tActive time     : %i\n", active);
-		    gw_job_print(job,"DM",'I',"\tSuspension time : %i\n", suspension);
-		    gw_job_print(job,"DM",'I',"\tTotal time      : %i\n", total);
+            gw_job_print(job,"DM",'I',"Wrapper CANCELED:\n");
+            gw_job_print(job,"DM",'I',"\tActive time     : %i\n", active);
+            gw_job_print(job,"DM",'I',"\tSuspension time : %i\n", suspension);
+            gw_job_print(job,"DM",'I',"\tTotal time      : %i\n", total);
 
-    		/* -------------- Free used slot from this host -------------- */
+            /* -------------- Free used slot from this host -------------- */
     		
-    		gw_host_dec_uslots(job->history->host, job->template.np);
+            gw_host_dec_uslots(job->history->host, job->template.np);
 			    		
-    		/* ------------ Transition to Stop Epilog state --------------- */
+            /* ------------ Transition to Stop Epilog state --------------- */
     		
-			gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_STOP_EPILOG", _job_id);		    
-    		break;
+            gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_STOP_EPILOG", _job_id);		    
+            break;
     	
     	case GW_JOB_STATE_KILL_CANCEL:
 
