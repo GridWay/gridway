@@ -24,9 +24,9 @@ GW_SHARE_DIR = share
 GW_TEST_DIR  = test
 GW_XML_DIR = xml_schema
 
-if DRMAA_RUBY
-SUBDIRS += src/drmaa/ruby
-endif
+#if DRMAA_RUBY
+#SUBDIRS += src/drmaa/ruby
+#endif
 
 FLAGS=$(DB4_INCLUDE_PATH)
 
@@ -36,12 +36,12 @@ install-exec-hook:
 
 	@rm -rf $(PREFIX)/$(GW_SHARE_DIR)/examples
 	@mkdir -p $(PREFIX)/$(GW_SHARE_DIR)
-	@cp -r examples $(PREFIX)/$(GW_SHARE_DIR)/examples
+	@cp -R examples $(PREFIX)/$(GW_SHARE_DIR)/examples
 
 if TESTS
 	@rm -rf $(PREFIX)/$(GW_TEST_DIR)
 	@mkdir -p $(PREFIX)/$(GW_TEST_DIR)
-	@cp -r src/test/gwtest src/test/TEST.pl src/test/jt $(PREFIX)/$(GW_TEST_DIR)
+	@cp -R src/test/gwtest src/test/TEST.pl src/test/jt $(PREFIX)/$(GW_TEST_DIR)
 endif
 
 # ----------------------------
@@ -72,7 +72,7 @@ install-data-hook:
 	@mkdir -p $(PREFIX)/$(GW_VAR_DIR)/acct
 	@mkdir -p $(PREFIX)/$(GW_ETC_DIR)
 	@mkdir -p $(PREFIX)/$(GW_XML_DIR)
-	@cp -rf $(top_srcdir)/etc/im_examples $(PREFIX)/$(GW_ETC_DIR)/
+	@cp -Rf $(top_srcdir)/etc/im_examples $(PREFIX)/$(GW_ETC_DIR)/
 	@cp $(top_srcdir)/etc/gwd.conf $(top_srcdir)/etc/job_template.default \
 $(top_srcdir)/etc/sched.conf $(top_srcdir)/etc/gwrc $(PREFIX)/$(GW_ETC_DIR)/
 	@cp $(top_srcdir)/xml_schema/gridway.xsd $(PREFIX)/$(GW_XML_DIR)
@@ -125,17 +125,17 @@ dist-hook:
 	@rm -rf $(distdir)/src/$(DRMAA_SRC_DIR)/org/ggf/drmaa/.libs
 	@rm -f $(distdir)/src/$(DRMAA_SRC_DIR)/org/ggf/drmaa/DrmaaJNI.lo
 	@rm -f $(distdir)/src/$(DRMAA_SRC_DIR)/org/ggf/drmaa/DrmaaJNI.o
-	@cp -r examples $(distdir)
-	@cp -r etc $(distdir)
-	@cp -r src/test/jt $(distdir)/src/test
-	@cp -r src/test/TEST.pl $(distdir)/src/test
+	@cp -R examples $(distdir)
+	@cp -R etc $(distdir)
+	@cp -R src/test/jt $(distdir)/src/test
+	@cp -R src/test/TEST.pl $(distdir)/src/test
 	@mkdir -p $(distdir)/src/drmaa/ruby
 	@cp src/drmaa/ruby/extconf.rb $(distdir)/src/drmaa/ruby
 	@cp src/drmaa/ruby/drmaa_r.i $(distdir)/src/drmaa/ruby
 	@cp src/drmaa/ruby/drmaa_r_wrap.c $(distdir)/src/drmaa/ruby
-	@cp -r scripts $(distdir)
-	@cp pkg_data_src.gpt  $(distdir)/pkg_data_src.gpt
-	@cp -r LICENSE README $(distdir)
+	@cp -R scripts $(distdir)
+	@cp pkgdata/pkg_data_src.gpt  $(distdir)/pkg_data_src.gpt
+	@cp LICENSE README $(distdir)
 
 # ----------------------------
 #    remove CVS DIRS
