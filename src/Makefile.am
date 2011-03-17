@@ -27,7 +27,7 @@ COMPILE_PROG = $(CC)
 LINK_OPTS = $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 
 COMPILE_OPTS = $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-			   $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 
 LINK = $(LINK_PROG) $(LINK_OPTS)
 COMPILE = $(COMPILE_PROG) $(COMPILE_OPTS)
@@ -135,16 +135,6 @@ CMDS_RB_SRC=$(CMDS)/gw_dagman.rb \
             $(CMDS)/dagman/parse.rb \
 	    $(CMDS)/dagman/gridway.rb
 
-# NORDUGRID MADS
-
-NORDUGRID_MAD_SRC=\
-	$(EM_MAD)/gw_em_mad_nordugrid.sh \
-	$(EM_MAD)/gw_em_mad_nordugrid.py \
-	$(EM_MAD)/em_nordugrid.py \
-	$(TM_MAD)/gw_tm_mad_nordugrid.sh \
-	$(TM_MAD)/gw_tm_mad_nordugrid.py \
-	$(TM_MAD)/tm_nordugrid.py
-
 JSDL_SRC = $(CMDS)/GWJTElement.java \
         $(CMDS)/GWJT.java  \
         $(CMDS)/GWJTWriter.java  \
@@ -227,42 +217,6 @@ GWD_SRC = $(GWD)/gw_conf.c \
         $(GWD)/gw_sch_conf_syntax.y \
         $(GWD)/gw_sch_conf_parser.l \
         $(GWD)/gw_sch_conf.c        
-
-EM_MAD_PREWS_SRC = $(EM_MAD)/gw_em_mad_prews_actions.c \
-        $(EM_MAD)/gw_em_mad_prews.c \
-        $(EM_MAD)/gw_em_mad_prews_pool.c
-
-EM_MAD_WS_SRC = $(EM_MAD)/GW_mad_ws.java
-
-TM_MAD_SRC = $(TM_MAD)/gw_tm_ftp_mad.c \
-        $(TM_MAD)/gw_tm_ftp_queue.c \
-        $(TM_MAD)/gw_tm_ftp_stack.c \
-        $(TM_MAD)/gw_tm_ftp_transfer.c \
-        $(TM_MAD)/gw_tm_ftp_xfr_pool.c
-
-TM_MAD_DUMMY_SRC = $(TM_MAD)/gw_tm_dummy_mad.c
-
-IM_MAD_MDS4_SRC = $(IM_MAD)/Host.java \
-        $(IM_MAD)/Mds4QueryParser.java \
-        $(IM_MAD)/Queue.java \
-        $(IM_MAD)/QueryClient.java \
-        $(IM_MAD)/GW_im_mad_mds4.java \
-        $(IM_MAD)/ServiceIM.java
-
-TM_MAD_RFT_SRC = $(TM_MAD)/GWRftClient.java \
-        $(TM_MAD)/GWRftProcessor.java \
-        $(TM_MAD)/GWRftResource.java \
-        $(TM_MAD)/GWRftUtil.java
-
-SSH_SRC = $(EM_MAD)/gw_em_mad_ssh.sh \
-        $(TM_MAD)/gw_tm_mad_ssh.sh \
-        $(SSH)/ssh_wrapper.sh \
-        $(SSH)/ruby/gw_em_mad_ssh.rb \
-        $(SSH)/ruby/gwmad.rb \
-        $(SSH)/ruby/gw_tm_mad_ssh.rb \
-        $(SSH)/ruby/rslparser.rb \
-        $(SSH)/ruby/sshjob.rb \
-        $(SSH)/ruby/sshresource.rb
 
 DRMAA_SRC = $(COMMON)/gw_file_parser.c $(CLIENT_SRC) \
         $(DRMAA)/gw_drmaa.c $(DRMAA)/gw_drmaa_jt.c \
@@ -559,28 +513,112 @@ __srcdir__test_gwtest_SOURCES = test/gw_test.c \
 endif
 
 # ----------------------------
-# Distribute JAVA sources
+# Distribute Java and MAD sources
 # ----------------------------
 
-EM_MAD_WS_SRC_DIST=$(EM_MAD)/GW_mad_ws.GT4.0.java \
-	$(EM_MAD)/GW_mad_ws.GT4.2.java
+IM_MAD_STATIC_SRC_DIST = $(IM_MAD)/gw_im_mad_static.sh \
+	$(IM_MAD)/gw_im_mad_common.sh
 
-IM_MAD_MDS4_SRC_DIST = $(IM_MAD)/Host.java \
-        $(IM_MAD)/Mds4QueryParser.GT4.0.java \
-        $(IM_MAD)/Mds4QueryParser.GT4.2.java \
-        $(IM_MAD)/Queue.java \
-        $(IM_MAD)/QueryClient.GT4.0.java \
-        $(IM_MAD)/QueryClient.GT4.2.java \
-        $(IM_MAD)/GW_im_mad_mds4.java \
-        $(IM_MAD)/ServiceIM.java
+IM_MAD_MDS2_SRC_DIST = $(IM_MAD)/mds2/gw_im_mad_mds2.sh \
+        $(IM_MAD)/mds2/gw_im_mad_mds2_glue.sh
+
+IM_MAD_MDS4_SRC_DIST = $(IM_MAD)/mds4/Host.java \
+        $(IM_MAD)/mds4/Mds4QueryParser_GT40.java \
+        $(IM_MAD)/mds4/Mds4QueryParser_GT42.java \
+        $(IM_MAD)/mds4/Queue.java \
+        $(IM_MAD)/mds4/QueryClient_GT40.java \
+        $(IM_MAD)/mds4/QueryClient_GT42.java \
+        $(IM_MAD)/mds4/Gw_im_mad_mds4.java \
+        $(IM_MAD)/mds4/ServiceIM.java \
+        $(IM_MAD)/mds4/Makefile
+
+IM_MAD_BDII_SRC_DIST = $(IM_MAD)/bdii/gw_im_mad_bdii.pl \
+        $(IM_MAD)/bdii/gw_im_mad_bdii.sh
+
+EM_MAD_GRAM2_SRC_DIST = $(EM_MAD)/gram2/gw_em_mad_gram2.c \
+	$(EM_MAD)/gram2/gw_em_mad_gram2_actions.c \
+	$(EM_MAD)/gram2/gw_em_mad_gram2_pool.c \
+	$(EM_MAD)/gram2/gw_em_mad_gram2.h \
+	$(EM_MAD)/gram2/gw_em_mad_gram2.sh \
+	$(EM_MAD)/gram2/Makefile
+
+EM_MAD_GRAM4_SRC_DIST = $(EM_MAD)/gram4/Gw_em_mad_gram4_GT40.java \
+	$(EM_MAD)/gram4/Gw_em_mad_gram4_GT42.java
+
+EM_MAD_CREAM_SRC_DIST = $(EM_MAD)/cream/gw_em_mad_cream.cpp \
+	$(EM_MAD)/cream/gw_em_mad_cream_actions.cpp \
+	$(EM_MAD)/cream/gw_em_mad_cream.h \
+	$(EM_MAD)/cream/stdsoap2.h \
+	$(EM_MAD)/cream/gw_em_mad_cream.sh \
+	$(EM_MAD)/cream/Makefile
+
+EM_MAD_NORDU_SRC_DIST = $(EM_MAD)/nordugrid/gw_em_mad_nordugrid.py \
+	$(EM_MAD)/nordugrid/em_nordugrid.py \
+	$(EM_MAD)/nordugrid/gw_em_mad_nordugrid.sh
+
+EM_MAD_SSH_SRC_DIST = $(EM_MAD)/ssh/gw_em_mad_ssh.rb \
+	$(EM_MAD)/ssh/gwmad.rb \
+	$(EM_MAD)/ssh/rslparser.rb \
+	$(EM_MAD)/ssh/sshjob.rb \
+	$(EM_MAD)/ssh/sshresource.rb \
+	$(EM_MAD)/ssh/gw_em_mad_ssh.sh
+
+TM_MAD_GRIDFTP_SRC_DIST = $(TM_MAD)/gridftp/gw_tm_mad_ftp.c \
+	$(TM_MAD)/gridftp/gw_tm_ftp_transfer.c \
+	$(TM_MAD)/gridftp/gw_tm_ftp_xfr_pool.c \
+	$(TM_MAD)/gridftp/gw_tm_ftp_stack.c \
+	$(TM_MAD)/gridftp/gw_tm_ftp_queue.c \
+	$(TM_MAD)/gridftp/gw_tm_ftp_transfer.h \
+	$(TM_MAD)/gridftp/gw_tm_mad_ftp.sh \
+	$(TM_MAD)/gridftp/Makefile
+
+TM_MAD_DUMMY_SRC_DIST = $(TM_MAD)/dummy/gw_tm_mad_dummy.c \
+	$(TM_MAD)/dummy/gw_tm_mad_dummy.sh \
+	$(TM_MAD)/dummy/Makefile
+
+TM_MAD_NORDU_SRC_DIST = $(TM_MAD)/nordugrid/gw_tm_mad_nordugrid.py \
+        $(TM_MAD)/nordugrid/tm_nordugrid.py \
+        $(TM_MAD)/nordugrid/gw_tm_mad_nordugrid.sh
+
+TM_MAD_SSH_SRC_DIST = $(TM_MAD)/ssh/gw_tm_mad_ssh.rb \
+	$(TM_MAD)/ssh/gw_tm_mad_ssh.sh
+
+TM_MAD_RFT_SRC_DIST = $(TM_MAD)/rft/GWRftClient.java \
+	$(TM_MAD)/rft/GWRftProcessor.java \
+	$(TM_MAD)/rft/GWRftResource.java \
+	$(TM_MAD)/rft/GWRftUtil.java \
+	$(TM_MAD)/rft/gw_tm_mad_rft.sh
 
 dist-hook:
 	@mkdir -p $(distdir)/cmds
-	@mkdir -p $(distdir)/im_mad
-	@mkdir -p $(distdir)/em_mad
 	@mkdir -p $(distdir)/$(DRMAA_SRC_DIR)/org/ggf/drmaa
+	@mkdir -p $(distdir)/im_mad/mds2
+	@mkdir -p $(distdir)/im_mad/mds4
+	@mkdir -p $(distdir)/im_mad/bdii
+	@mkdir -p $(distdir)/em_mad/gram2
+	@mkdir -p $(distdir)/em_mad/gram4
+	@mkdir -p $(distdir)/em_mad/cream
+	@mkdir -p $(distdir)/em_mad/nordugrid
+	@mkdir -p $(distdir)/em_mad/ssh
+	@mkdir -p $(distdir)/tm_mad/gridftp
+	@mkdir -p $(distdir)/tm_mad/dummy
+	@mkdir -p $(distdir)/tm_mad/nordugrid
+	@mkdir -p $(distdir)/tm_mad/ssh
+	@mkdir -p $(distdir)/tm_mad/rft
 	@cp $(JSDL_SRC) $(distdir)/cmds/
-	@cp $(IM_MAD_MDS4_SRC_DIST) $(distdir)/im_mad
-	@cp $(EM_MAD_WS_SRC_DIST) $(distdir)/em_mad
 	@cp $(DRMAA_JAVA_SRC) $(distdir)/$(DRMAA_SRC_DIR)/org/ggf/drmaa
 	@cp $(DRMAA_PACK)/DrmaaJNI.h $(distdir)/$(DRMAA_SRC_DIR)/org/ggf/drmaa
+	@cp $(IM_MAD_STATIC_SRC_DIST) $(distdir)/im_mad/
+	@cp $(IM_MAD_MDS2_SRC_DIST) $(distdir)/im_mad/mds2
+	@cp $(IM_MAD_MDS4_SRC_DIST) $(distdir)/im_mad/mds4
+	@cp $(IM_MAD_BDII_SRC_DIST) $(distdir)/im_mad/bdii
+	@cp $(EM_MAD_GRAM2_SRC_DIST) $(distdir)/em_mad/gram2
+	@cp $(EM_MAD_GRAM4_SRC_DIST) $(distdir)/em_mad/gram4
+	@cp $(EM_MAD_CREAM_SRC_DIST) $(distdir)/em_mad/cream
+	@cp $(EM_MAD_NORDU_SRC_DIST) $(distdir)/em_mad/nordugrid
+	@cp $(EM_MAD_SSH_SRC_DIST) $(distdir)/em_mad/ssh
+	@cp $(TM_MAD_GRIDFTP_SRC_DIST) $(distdir)/tm_mad/gridftp
+	@cp $(TM_MAD_DUMMY_SRC_DIST) $(distdir)/tm_mad/dummy
+	@cp $(TM_MAD_NORDU_SRC_DIST) $(distdir)/tm_mad/nordugrid
+	@cp $(TM_MAD_SSH_SRC_DIST) $(distdir)/tm_mad/ssh
+	@cp $(TM_MAD_RFT_SRC_DIST) $(distdir)/tm_mad/rft
