@@ -22,9 +22,13 @@ function check_globus {
 }
 
 function setup_globus {
-	check_globus
-	. $GLOBUS_LOCATION/etc/globus-user-env.sh
-	. $GLOBUS_LOCATION/etc/globus-devel-env.sh
+    check_globus
+    if [ -x $GLOBUS_LOCATION/etc/globus-user-env.sh ]; then
+        . $GLOBUS_LOCATION/etc/globus-user-env.sh
+    fi
+    if [ -x $GLOBUS_LOCATION/etc/globus-devel-env.sh ]; then
+        . $GLOBUS_LOCATION/etc/globus-devel-env.sh
+    fi
 }
 
 function cd_var {
