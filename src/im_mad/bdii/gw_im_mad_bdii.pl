@@ -34,7 +34,7 @@ sub dynamic_discover
 	$ldap = Net::LDAP->new( "$bdii:2170" ) or print TMPFILE "DISCOVER - FAILURE $@\n";
 	$mesg = $ldap->bind ;    # an anonymous bind
 	$mesg = $ldap->search( # perform a search
-				base   => "mds-vo-name=resource,o=grid",
+				base   => "mds-vo-name=local,o=grid",
 				filter => "(&(objectclass=GlueCE)$QUEUEFILTER)"
 			);
 	my $max = $mesg->count;
@@ -75,7 +75,7 @@ sub dynamic_monitor
 	$mesg = $ldap->bind ;    # an anonymous bind
 	# First search
 	$mesg = $ldap->search( # perform a search
-				base   => "mds-vo-name=resource,o=grid",
+				base   => "mds-vo-name=local,o=grid",
 				filter => "(&(objectclass=GlueCE)(GlueCEInfoHostName=$host)$QUEUEFILTER)"
 			);
 	my $max = $mesg->count;
@@ -161,7 +161,7 @@ sub dynamic_monitor
 	
 	# Second search
 	$mesg = $ldap->search( # perform a search
-				base   => "mds-vo-name=resource,o=grid",
+				base   => "mds-vo-name=local,o=grid",
 				filter => "(&(objectclass=GlueHostOperatingSystem)(GlueSubClusterName=$host))"
 			);	
 	$max = $mesg->count;
@@ -179,6 +179,10 @@ sub dynamic_monitor
 			{
 				$os_version = $value;
 			}
+                        elsif ($attr eq "GlueHostArchitecturePlatformType")
+                        {
+                                $arch = $value;
+                        }
 			elsif ($attr eq "GlueHostProcessorModel")
 			{
 				$cpu_model = $value;
@@ -199,7 +203,7 @@ sub dynamic_monitor
 		}	
 	}
 	
-	$info = "HOSTNAME=\"$host\" ARCH=\"i686\" NODECOUNT=$nodecount LRMS_NAME=\"$lrms_name\" LRMS_TYPE=\"$lrms_type\" OS_NAME=\"$os_name\" OS_VERSION=\"$os_version\" CPU_MODEL=\"$cpu_model\" CPU_MHZ=$cpu_mhz CPU_SMP=$cpu_smp FREE_MEM_MB=$free_mem_mb SIZE_MEM_MB=$size_mem_mb " . $info . "\n";
+	$info = "HOSTNAME=\"$host\" ARCH=\"$arch\" NODECOUNT=$nodecount LRMS_NAME=\"$lrms_name\" LRMS_TYPE=\"$lrms_type\" OS_NAME=\"$os_name\" OS_VERSION=\"$os_version\" CPU_MODEL=\"$cpu_model\" CPU_MHZ=$cpu_mhz CPU_SMP=$cpu_smp FREE_MEM_MB=$free_mem_mb SIZE_MEM_MB=$size_mem_mb " . $info . "\n";
 	
 	$mesg = $ldap->unbind;
 
