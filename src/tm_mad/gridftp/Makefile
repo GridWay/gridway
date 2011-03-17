@@ -12,10 +12,11 @@ all: $(progs)
 
 gw_tm_mad_ftp: gw_tm_mad_ftp.c gw_tm_ftp_queue.c gw_tm_ftp_stack.c gw_tm_ftp_transfer.c gw_tm_ftp_xfr_pool.c
 
-install:
+install: gw_tm_mad_ftp
 ifdef GW_LOCATION
 	@cp gw_tm_mad_ftp $(GW_LOCATION)/bin/gw_tm_mad_ftp.bin
 	@cp gw_tm_mad_ftp.sh $(GW_LOCATION)/bin/gw_tm_mad_ftp
+	@chmod a+x $(GW_LOCATION)/bin/gw_tm_mad_ftp
 	@echo GridFTP TM MAD successfully installed
 else
 	@echo "  GW_LOCATION undefined"
