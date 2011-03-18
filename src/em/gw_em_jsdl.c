@@ -87,7 +87,7 @@ char* gw_generate_wrapper_jsdl (gw_job_t *job)
             job->template.name);
 
         jsdl = snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
-            "    <jsdl-posix:Executable>./%s.wrapper</jsdl-posix:Executable>\n",
+            "    <jsdl-posix:Executable>./%s</jsdl-posix:Executable>\n",
             wrapper);
         strcat(jsdl_buffer,tmp_buffer);
 
@@ -114,7 +114,7 @@ char* gw_generate_wrapper_jsdl (gw_job_t *job)
 
         jsdl = snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
             "  <jsdl:DataStaging>\n"
-            "   <jsdl:FileName>%s.wrapper</jsdl:FileName>\n"
+            "   <jsdl:FileName>%s</jsdl:FileName>\n"
             "   <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"
             "   <jsdl:Source>\n"
             "    <jsdl:URI>%s/%s</jsdl:URI>\n"
