@@ -105,31 +105,39 @@ int gw_dm_dispatch_job (int job_id, int host_id, char *queue_name, int rank)
     }
     else if (job->job_state == GW_JOB_STATE_WRAPPER)
     {    	
+        /* If the job has reached the suspension time and has been scheduled for
+           migration BUT it has an active EM state, abort migration */ 
+        if (job->history != NULL
+                && job->history->reason == GW_REASON_SUSPENSION_TIME
+                && job->em_state == GW_EM_STATE_ACTIVE)
+        {
+            gw_log_print("DM",'W',
+                "Job reached suspension time but already active, won't migrate.\n");
+ 
+            pthread_mutex_unlock(&(host->mutex));
+            pthread_mutex_unlock(&(job->mutex)); 
+            gw_dm_uncheck_job(job->id); 
+ 
+            return -1;
+        }
+
         gw_log_print("DM",'I',"Migrating job %i to %s (%s).\n",
                 job->id, host->hostname, queue_name);
 
-        rc = gw_job_history_add(&(job->history), 
-                host,
-                rank,
-                queue_name,
-                host->fork_name,
-                host->lrms_name,
-                host->lrms_type,
-                job->owner,
-                job->template.job_home,
-                job->id,
-                job->user_id,
-                GW_FALSE);
+        rc = gw_job_history_add(&(job->history), host, rank, queue_name,
+                host->fork_name, host->lrms_name, host->lrms_type,
+                job->owner, job->template.job_home, job->id,
+                job->user_id, GW_FALSE);
                 
-		if ( rc == -1 )
-		{
-	        gw_log_print("DM",'E',"Could not add history record for job %i.\n",
-	                job_id);
-	                
+        if ( rc == -1 )
+        {
+            gw_log_print("DM",'E',"Could not add history record for job %i.\n",
+                    job_id);
+ 
             pthread_mutex_unlock(&(host->mutex));	                
-	        pthread_mutex_unlock(&(job->mutex));
-	        return -1;		
-		}
+            pthread_mutex_unlock(&(job->mutex));
+            return -1;		
+        }
 		
         job->restarted++;
     	job->reschedule = GW_FALSE;
@@ -138,12 +146,12 @@ int gw_dm_dispatch_job (int job_id, int host_id, char *queue_name, int rank)
         
         gw_host_inc_slots_nb(host, job->template.np);
                                        		
-	    /* ----------------------- */
+        /* ----------------------- */
 
         id  = (int *) malloc(sizeof(int));
         *id =  job->id;
 
-		gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_MIGR_CANCEL", (void *) id);
+        gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_MIGR_CANCEL", (void *) id);
 		
         pthread_mutex_unlock(&(host->mutex));
         pthread_mutex_unlock(&(job->mutex));        
@@ -153,7 +161,7 @@ int gw_dm_dispatch_job (int job_id, int host_id, char *queue_name, int rank)
         gw_log_print("DM",'E',"Can't dispatch or migrate job %i in state %s.\n",
                 job->id, gw_job_state_string(job->job_state));
                 
-   	    pthread_mutex_unlock(&(host->mutex));
+        pthread_mutex_unlock(&(host->mutex));
         pthread_mutex_unlock(&(job->mutex));                
         return -1;
     }
