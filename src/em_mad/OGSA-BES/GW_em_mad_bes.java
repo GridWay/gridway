@@ -18,7 +18,7 @@
 import java.io.*;
 import java.util.*;
 
-class GW_mad_bes extends Thread {
+class GW_em_mad_bes extends Thread {
 
 	private Map job_pool = null; // Job pool
 	private Map jid_pool = null; // JID pool
@@ -26,14 +26,14 @@ class GW_mad_bes extends Thread {
 	private String host;
 
 	public static void main(String args[]) {
-		GW_mad_bes gw_mad_bes;
+		GW_em_mad_bes gw_em_mad_bes;
 
-		gw_mad_bes = new GW_mad_bes();
-		gw_mad_bes.loop();
+		gw_em_mad_bes = new GW_em_mad_bes();
+		gw_em_mad_bes.loop();
 	}
 
 	// Constructor
-	GW_mad_bes() {
+	GW_em_mad_bes() {
 		// Create the job and JID pool
 		job_pool = Collections.synchronizedMap(new HashMap());
 		jid_pool = Collections.synchronizedMap(new HashMap());
