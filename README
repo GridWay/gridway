@@ -50,8 +50,7 @@ Depending on whether you need a single-user or multi-user configuration, it gets
 slightly more complex due to the role of gridway administrator. In any case, it
 summarizes to these steps:
 
-0) Make sure you have installed and running a working Globus Toolkit (recommended 
-the latest 5.0.3).
+0) Make sure you have installed the needed middleware (client-side).
 1) Install the required packages (make, gcc, java, libssl-dev [openssl-devel], perl,
 libnet-ldap-perl [perl-LDAP], ruby, ruby-dev [ruby-devel]).
 2) In a multi-user configuration, create the gwusers group and the gwadmin user.
