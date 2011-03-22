@@ -17,7 +17,6 @@ ifdef GW_LOCATION
 	@cp gw_em_mad_bes.jar $(GW_LOCATION)/lib/
 	@cp gw_em_mad_bes.sh $(GW_LOCATION)/bin/GW_em_mad_bes
 	@chmod a+x $(GW_LOCATION)/bin/GW_em_mad_bes
-	@cp client-config.wsdd $(GW_LOCATION)/lib
 	@mkdir -p $(GW_LOCATION)/lib/endorsed
 	@cp $(JAR_FILES)/saaj.jar $(GW_LOCATION)/lib/endorsed
 	@cp $(JAR_FILES)/xalan2.jar $(GW_LOCATION)/lib/endorsed
