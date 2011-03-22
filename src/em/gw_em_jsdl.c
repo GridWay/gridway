@@ -158,6 +158,7 @@ char* gw_generate_wrapper_jsdl (gw_job_t *job)
     strcat(jsdl_buffer, tmp_buffer);
 
     jsdl = strdup(jsdl_buffer);
+    free(job_environment);
     return jsdl;
 }
 
@@ -211,11 +212,10 @@ char *gw_em_jsdl_environment(gw_job_t *job)
 
     for (i=0;i<job->template.num_env;i++)
     {
-            rc = snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
+            rc = snprintf(jsdl_buffer, sizeof(char) * GW_RSL_LENGTH,
             "    <jsdl-posix:Environment name=\"%s\">%s</jsdl-posix:Environment>\n",
             job->template.environment[i][0],
             job->template.environment[i][1]);
-            strcat(jsdl_buffer, tmp_buffer);
     }
 
     rc = snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
@@ -239,6 +239,5 @@ char *gw_em_jsdl_environment(gw_job_t *job)
         return NULL;
 
     jsdl_env = strdup(jsdl_buffer);
-
     return jsdl_env;
 }
