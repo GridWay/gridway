@@ -110,7 +110,9 @@ class GW_em_mad_bes extends Thread {
 					{	
 						if (action.equals("SUBMIT")){
 							host = str_split[2];
-                                			contact = "http://" + host + ":8080/gridsam/services/bes";
+							if (str_split[2].indexOf('/') != -1)
+                                        			host = str_split[2].substring(0,str_split[2].indexOf('/'));
+                                                        contact = "http://" + host + ":8080/gridsam/services/bes";
                                 			jsdl_file = str_split[3];
 							job = new ServiceBES(action, jid, contact, jsdl_file);
 						}
