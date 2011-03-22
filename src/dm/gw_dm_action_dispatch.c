@@ -64,36 +64,28 @@ int gw_dm_dispatch_job (int job_id, int host_id, char *queue_name, int rank)
         gw_log_print("DM",'I',"Dispatching job %i to %s (%s).\n",job->id, 
         	host->hostname, queue_name);
 	    	
-        rc = gw_job_history_add(&(job->history), 
-                host,
-                rank,
-                queue_name,
-                host->fork_name,
-                host->lrms_name,
-                host->lrms_type,
-                job->owner,
-                job->template.job_home,
-                job->id,
-                job->user_id,
+        rc = gw_job_history_add(&(job->history), host, rank, queue_name,
+                host->fork_name, host->lrms_name, host->lrms_type,
+                job->owner, job->template.job_home, job->id, job->user_id,
                 GW_FALSE);
                 
-		if ( rc == -1 )
-		{
-	        gw_log_print("DM",'E',"Could not add history record for job %i.\n",
+        if ( rc == -1 )
+        {
+            gw_log_print("DM",'E',"Could not add history record for job %i.\n",
 	                job_id);
 	                
             pthread_mutex_unlock(&(host->mutex));
-	        pthread_mutex_unlock(&(job->mutex));
-	        return -1;		
-		}
+            pthread_mutex_unlock(&(job->mutex));
+            return -1;		
+        }
 		    	
-   	    /* ----- Update Host & User counters ----- */
+        /* ----- Update Host & User counters ----- */
     	
-    	gw_host_inc_slots_nb(host, job->template.np);
+        gw_host_inc_slots_nb(host, job->template.np);
     	
-	    gw_user_pool_inc_running_jobs(job->user_id, 1);
+        gw_user_pool_inc_running_jobs(job->user_id, 1);
 			    		
-	    /* --------------------------------------- */
+        /* --------------------------------------- */
         
         id  = (int *) malloc(sizeof(int));
         *id =  job->id;
@@ -104,20 +96,20 @@ int gw_dm_dispatch_job (int job_id, int host_id, char *queue_name, int rank)
         pthread_mutex_unlock(&(job->mutex));
     }
     else if (job->job_state == GW_JOB_STATE_WRAPPER)
-    {    	
-        /* If the job has reached the suspension time and has been scheduled for
-           migration BUT it has an active EM state, abort migration */ 
+    {
         if (job->history != NULL
                 && job->history->reason == GW_REASON_SUSPENSION_TIME
                 && job->em_state == GW_EM_STATE_ACTIVE)
         {
-            gw_log_print("DM",'W',
-                "Job reached suspension time but already active, won't migrate.\n");
- 
+            gw_log_print("EM",'W',
+                    "Migration of job %i aborted (suspension timeout) because it is active.\n",
+                    job->id);
+
             pthread_mutex_unlock(&(host->mutex));
-            pthread_mutex_unlock(&(job->mutex)); 
-            gw_dm_uncheck_job(job->id); 
- 
+            pthread_mutex_unlock(&(job->mutex));
+
+            gw_dm_uncheck_job(job->id);
+
             return -1;
         }
 
@@ -126,16 +118,17 @@ int gw_dm_dispatch_job (int job_id, int host_id, char *queue_name, int rank)
 
         rc = gw_job_history_add(&(job->history), host, rank, queue_name,
                 host->fork_name, host->lrms_name, host->lrms_type,
-                job->owner, job->template.job_home, job->id,
-                job->user_id, GW_FALSE);
+                job->owner, job->template.job_home, job->id, job->user_id, 
+                GW_FALSE);
                 
         if ( rc == -1 )
         {
             gw_log_print("DM",'E',"Could not add history record for job %i.\n",
                     job_id);
  
-            pthread_mutex_unlock(&(host->mutex));	                
+            pthread_mutex_unlock(&(host->mutex));
             pthread_mutex_unlock(&(job->mutex));
+
             return -1;		
         }
 		

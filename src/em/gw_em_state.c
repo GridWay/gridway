@@ -138,7 +138,7 @@ void gw_em_active(void *_job_id)
     /* ------------------------------------------------ */
         
     gw_job_print (job,"EM",'I',"New execution state is ACTIVE.\n");
-        
+ 
     pthread_mutex_unlock(&(job->mutex));       
 }
 
