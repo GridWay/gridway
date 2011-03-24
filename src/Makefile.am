@@ -32,8 +32,6 @@ COMPILE_OPTS = $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 LINK = $(LINK_PROG) $(LINK_OPTS)
 COMPILE = $(COMPILE_PROG) $(COMPILE_OPTS)
 
-# to handle else, not very smart 
-NOP =
 # -----------------------------
 # Directory definitions
 # -----------------------------
@@ -68,7 +66,6 @@ DRMAA = $(srcdir)/drmaa
 DRMAA_PACK = $(srcdir)/$(DRMAA_SRC_DIR)/org/ggf/drmaa
 
 SSH = $(srcdir)/ssh
-
 
 JAVA_HOME = @java_home@
 
@@ -143,6 +140,8 @@ JSDL_SRC = $(CMDS)/GWJTElement.java \
         $(CMDS)/JSDLReader.java  \
         $(CMDS)/JSDLParser.java  \
         $(CMDS)/JSDLTranslator.java
+
+EXTRA_DIST = $(JSDL_SRC)
 
 EM_SRC = $(EM)/gw_em_actions.c \
         $(EM)/gw_em.c \
@@ -275,6 +274,8 @@ else
         $(DRMAA_PACK)/SessionImpl.java \
         $(DRMAA_PACK)/SessionFactoryImpl.java        
 endif        
+
+EXTRA_DIST += $(DRMAA_JAVA_SRC) $(DRMAA_PACK)/DrmaaJNI.h
 
 # -----------------------------
 # -- Includes and Headers
@@ -502,7 +503,7 @@ CLEANFILES += $(srcdir)/drmaa/drmaa.jar
 # ----------------------------
 
 if TESTS
-testdir = @prefix@/test/gridway
+testdir = @prefix@/test/
 
 test_PROGRAMS = $(srcdir)/test/gwtest
 
@@ -589,36 +590,43 @@ TM_MAD_RFT_SRC_DIST = $(TM_MAD)/rft/GWRftClient.java \
 	$(TM_MAD)/rft/GWRftUtil.java \
 	$(TM_MAD)/rft/gw_tm_mad_rft.sh
 
-dist-hook:
-	@mkdir -p $(distdir)/cmds
-	@mkdir -p $(distdir)/$(DRMAA_SRC_DIR)/org/ggf/drmaa
-	@mkdir -p $(distdir)/im_mad/mds2
-	@mkdir -p $(distdir)/im_mad/mds4
-	@mkdir -p $(distdir)/im_mad/bdii
-	@mkdir -p $(distdir)/em_mad/gram2
-	@mkdir -p $(distdir)/em_mad/gram4
-	@mkdir -p $(distdir)/em_mad/cream
-	@mkdir -p $(distdir)/em_mad/nordugrid
-	@mkdir -p $(distdir)/em_mad/ssh
-	@mkdir -p $(distdir)/tm_mad/gridftp
-	@mkdir -p $(distdir)/tm_mad/dummy
-	@mkdir -p $(distdir)/tm_mad/nordugrid
-	@mkdir -p $(distdir)/tm_mad/ssh
-	@mkdir -p $(distdir)/tm_mad/rft
-	@cp $(JSDL_SRC) $(distdir)/cmds/
-	@cp $(DRMAA_JAVA_SRC) $(distdir)/$(DRMAA_SRC_DIR)/org/ggf/drmaa
-	@cp $(DRMAA_PACK)/DrmaaJNI.h $(distdir)/$(DRMAA_SRC_DIR)/org/ggf/drmaa
-	@cp $(IM_MAD_STATIC_SRC_DIST) $(distdir)/im_mad/
-	@cp $(IM_MAD_MDS2_SRC_DIST) $(distdir)/im_mad/mds2
-	@cp $(IM_MAD_MDS4_SRC_DIST) $(distdir)/im_mad/mds4
-	@cp $(IM_MAD_BDII_SRC_DIST) $(distdir)/im_mad/bdii
-	@cp $(EM_MAD_GRAM2_SRC_DIST) $(distdir)/em_mad/gram2
-	@cp $(EM_MAD_GRAM4_SRC_DIST) $(distdir)/em_mad/gram4
-	@cp $(EM_MAD_CREAM_SRC_DIST) $(distdir)/em_mad/cream
-	@cp $(EM_MAD_NORDU_SRC_DIST) $(distdir)/em_mad/nordugrid
-	@cp $(EM_MAD_SSH_SRC_DIST) $(distdir)/em_mad/ssh
-	@cp $(TM_MAD_GRIDFTP_SRC_DIST) $(distdir)/tm_mad/gridftp
-	@cp $(TM_MAD_DUMMY_SRC_DIST) $(distdir)/tm_mad/dummy
-	@cp $(TM_MAD_NORDU_SRC_DIST) $(distdir)/tm_mad/nordugrid
-	@cp $(TM_MAD_SSH_SRC_DIST) $(distdir)/tm_mad/ssh
-	@cp $(TM_MAD_RFT_SRC_DIST) $(distdir)/tm_mad/rft
+EXTRA_DIST += $(DRMAA_JAVA_SRC) $(IM_MAD_STATIC_SRC_DIST) \
+$(IM_MAD_MDS2_SRC_DIST) $(IM_MAD_MDS4_SRC_DIST) $(IM_MAD_BDII_SRC_DIST) \
+$(EM_MAD_GRAM2_SRC_DIST) $(EM_MAD_GRAM4_SRC_DIST) $(EM_MAD_CREAM_SRC_DIST) \
+$(EM_MAD_NORDU_SRC_DIST) $(EM_MAD_SSH_SRC_DIST) $(TM_MAD_GRIDFTP_SRC_DIST) \
+$(TM_MAD_DUMMY_SRC_DIST) $(TM_MAD_NORDU_SRC_DIST) $(TM_MAD_SSH_SRC_DIST) \
+$(TM_MAD_RFT_SRC_DIST)
+
+#dist-hook:
+#	@mkdir -p $(distdir)/cmds
+#	@mkdir -p $(distdir)/$(DRMAA_SRC_DIR)/org/ggf/drmaa
+#	@mkdir -p $(distdir)/im_mad/mds2
+#	@mkdir -p $(distdir)/im_mad/mds4
+#	@mkdir -p $(distdir)/im_mad/bdii
+#	@mkdir -p $(distdir)/em_mad/gram2
+#	@mkdir -p $(distdir)/em_mad/gram4
+#	@mkdir -p $(distdir)/em_mad/cream
+#	@mkdir -p $(distdir)/em_mad/nordugrid
+#	@mkdir -p $(distdir)/em_mad/ssh
+#	@mkdir -p $(distdir)/tm_mad/gridftp
+#	@mkdir -p $(distdir)/tm_mad/dummy
+#	@mkdir -p $(distdir)/tm_mad/nordugrid
+#	@mkdir -p $(distdir)/tm_mad/ssh
+#	@mkdir -p $(distdir)/tm_mad/rft
+#	@cp $(JSDL_SRC) $(distdir)/cmds/
+#	@cp $(DRMAA_JAVA_SRC) $(distdir)/$(DRMAA_SRC_DIR)/org/ggf/drmaa
+#	@cp $(DRMAA_PACK)/DrmaaJNI.h $(distdir)/$(DRMAA_SRC_DIR)/org/ggf/drmaa
+#	@cp $(IM_MAD_STATIC_SRC_DIST) $(distdir)/im_mad/
+#	@cp $(IM_MAD_MDS2_SRC_DIST) $(distdir)/im_mad/mds2
+#	@cp $(IM_MAD_MDS4_SRC_DIST) $(distdir)/im_mad/mds4
+#	@cp $(IM_MAD_BDII_SRC_DIST) $(distdir)/im_mad/bdii
+#	@cp $(EM_MAD_GRAM2_SRC_DIST) $(distdir)/em_mad/gram2
+#	@cp $(EM_MAD_GRAM4_SRC_DIST) $(distdir)/em_mad/gram4
+#	@cp $(EM_MAD_CREAM_SRC_DIST) $(distdir)/em_mad/cream
+#	@cp $(EM_MAD_NORDU_SRC_DIST) $(distdir)/em_mad/nordugrid
+#	@cp $(EM_MAD_SSH_SRC_DIST) $(distdir)/em_mad/ssh
+#	@cp $(TM_MAD_GRIDFTP_SRC_DIST) $(distdir)/tm_mad/gridftp
+#	@cp $(TM_MAD_DUMMY_SRC_DIST) $(distdir)/tm_mad/dummy
+#	@cp $(TM_MAD_NORDU_SRC_DIST) $(distdir)/tm_mad/nordugrid
+#	@cp $(TM_MAD_SSH_SRC_DIST) $(distdir)/tm_mad/ssh
+#	@cp $(TM_MAD_RFT_SRC_DIST) $(distdir)/tm_mad/rft
