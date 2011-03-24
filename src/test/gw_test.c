@@ -22,6 +22,8 @@
 #include <limits.h>
 #include <unistd.h>
 #include <signal.h>
+#include <string.h>
+#include <sys/stat.h>
 
 #define TEST_VERSION "0.2"
 
