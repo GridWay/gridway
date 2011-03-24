@@ -533,8 +533,6 @@ COMPILE_OPTS = $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 LINK = $(LINK_PROG) $(LINK_OPTS)
 COMPILE = $(COMPILE_PROG) $(COMPILE_OPTS)
 
-# to handle else, not very smart 
-NOP = 
 # -----------------------------
 # Directory definitions
 # -----------------------------
@@ -633,6 +631,15 @@ JSDL_SRC = $(CMDS)/GWJTElement.java \
         $(CMDS)/JSDLParser.java  \
         $(CMDS)/JSDLTranslator.java
 
+EXTRA_DIST = $(JSDL_SRC) $(DRMAA_JAVA_SRC) $(DRMAA_PACK)/DrmaaJNI.h \
+	$(DRMAA_JAVA_SRC) $(IM_MAD_STATIC_SRC_DIST) \
+	$(IM_MAD_MDS2_SRC_DIST) $(IM_MAD_MDS4_SRC_DIST) \
+	$(IM_MAD_BDII_SRC_DIST) $(EM_MAD_GRAM2_SRC_DIST) \
+	$(EM_MAD_GRAM4_SRC_DIST) $(EM_MAD_CREAM_SRC_DIST) \
+	$(EM_MAD_NORDU_SRC_DIST) $(EM_MAD_SSH_SRC_DIST) \
+	$(TM_MAD_GRIDFTP_SRC_DIST) $(TM_MAD_DUMMY_SRC_DIST) \
+	$(TM_MAD_NORDU_SRC_DIST) $(TM_MAD_SSH_SRC_DIST) \
+	$(TM_MAD_RFT_SRC_DIST)
 EM_SRC = $(EM)/gw_em_actions.c \
         $(EM)/gw_em.c \
         $(EM)/gw_em_listener.c \
@@ -896,7 +903,7 @@ __srcdir__drmaa_libDrmaaJNI_la_LINK = $(LIBTOOL) --tag=CC --mode=link $(LINK)
 # ----------------------------
 # TESTS
 # ----------------------------
-@TESTS_TRUE@testdir = @prefix@/test/gridway
+@TESTS_TRUE@testdir = @prefix@/test/
 @TESTS_TRUE@__srcdir__test_gwtest_SOURCES = test/gw_test.c \
 @TESTS_TRUE@        $(CMDS)/gw_cmds_common.c \
 @TESTS_TRUE@        $(CLIENT_SRC) \
@@ -992,9 +999,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign --ignore-deps src/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu src/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign --ignore-deps src/Makefile
+	  $(AUTOMAKE) --gnu src/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -1861,9 +1868,6 @@ distdir: $(DISTFILES)
 	    || exit 1; \
 	  fi; \
 	done
-	$(MAKE) $(AM_MAKEFLAGS) \
-	  top_distdir="$(top_distdir)" distdir="$(distdir)" \
-	  dist-hook
 check-am: all-am
 check: check-am
 all-am: Makefile $(LTLIBRARIES) $(PROGRAMS) $(SCRIPTS) $(DATA) \
@@ -2014,7 +2018,7 @@ uninstall-am: uninstall-binPROGRAMS uninstall-binSCRIPTS \
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean clean-binPROGRAMS \
 	clean-generic clean-libLTLIBRARIES clean-libtool \
-	clean-testPROGRAMS ctags dist-hook distclean distclean-compile \
+	clean-testPROGRAMS ctags distclean distclean-compile \
 	distclean-generic distclean-libtool distclean-tags distdir dvi \
 	dvi-am html html-am info info-am install install-am \
 	install-binPROGRAMS install-binSCRIPTS install-data \
@@ -2051,39 +2055,39 @@ uninstall-am: uninstall-binPROGRAMS uninstall-binSCRIPTS \
 @DRMAA_TRUE@	jar cf $(srcdir)/drmaa/drmaa.jar -C $(DRMAA)/package/ .
 @DRMAA_TRUE@	@rm -rf $(DRMAA)/package
 
-dist-hook:
-	@mkdir -p $(distdir)/cmds
-	@mkdir -p $(distdir)/$(DRMAA_SRC_DIR)/org/ggf/drmaa
-	@mkdir -p $(distdir)/im_mad/mds2
-	@mkdir -p $(distdir)/im_mad/mds4
-	@mkdir -p $(distdir)/im_mad/bdii
-	@mkdir -p $(distdir)/em_mad/gram2
-	@mkdir -p $(distdir)/em_mad/gram4
-	@mkdir -p $(distdir)/em_mad/cream
-	@mkdir -p $(distdir)/em_mad/nordugrid
-	@mkdir -p $(distdir)/em_mad/ssh
-	@mkdir -p $(distdir)/tm_mad/gridftp
-	@mkdir -p $(distdir)/tm_mad/dummy
-	@mkdir -p $(distdir)/tm_mad/nordugrid
-	@mkdir -p $(distdir)/tm_mad/ssh
-	@mkdir -p $(distdir)/tm_mad/rft
-	@cp $(JSDL_SRC) $(distdir)/cmds/
-	@cp $(DRMAA_JAVA_SRC) $(distdir)/$(DRMAA_SRC_DIR)/org/ggf/drmaa
-	@cp $(DRMAA_PACK)/DrmaaJNI.h $(distdir)/$(DRMAA_SRC_DIR)/org/ggf/drmaa
-	@cp $(IM_MAD_STATIC_SRC_DIST) $(distdir)/im_mad/
-	@cp $(IM_MAD_MDS2_SRC_DIST) $(distdir)/im_mad/mds2
-	@cp $(IM_MAD_MDS4_SRC_DIST) $(distdir)/im_mad/mds4
-	@cp $(IM_MAD_BDII_SRC_DIST) $(distdir)/im_mad/bdii
-	@cp $(EM_MAD_GRAM2_SRC_DIST) $(distdir)/em_mad/gram2
-	@cp $(EM_MAD_GRAM4_SRC_DIST) $(distdir)/em_mad/gram4
-	@cp $(EM_MAD_CREAM_SRC_DIST) $(distdir)/em_mad/cream
-	@cp $(EM_MAD_NORDU_SRC_DIST) $(distdir)/em_mad/nordugrid
-	@cp $(EM_MAD_SSH_SRC_DIST) $(distdir)/em_mad/ssh
-	@cp $(TM_MAD_GRIDFTP_SRC_DIST) $(distdir)/tm_mad/gridftp
-	@cp $(TM_MAD_DUMMY_SRC_DIST) $(distdir)/tm_mad/dummy
-	@cp $(TM_MAD_NORDU_SRC_DIST) $(distdir)/tm_mad/nordugrid
-	@cp $(TM_MAD_SSH_SRC_DIST) $(distdir)/tm_mad/ssh
-	@cp $(TM_MAD_RFT_SRC_DIST) $(distdir)/tm_mad/rft
+#dist-hook:
+#	@mkdir -p $(distdir)/cmds
+#	@mkdir -p $(distdir)/$(DRMAA_SRC_DIR)/org/ggf/drmaa
+#	@mkdir -p $(distdir)/im_mad/mds2
+#	@mkdir -p $(distdir)/im_mad/mds4
+#	@mkdir -p $(distdir)/im_mad/bdii
+#	@mkdir -p $(distdir)/em_mad/gram2
+#	@mkdir -p $(distdir)/em_mad/gram4
+#	@mkdir -p $(distdir)/em_mad/cream
+#	@mkdir -p $(distdir)/em_mad/nordugrid
+#	@mkdir -p $(distdir)/em_mad/ssh
+#	@mkdir -p $(distdir)/tm_mad/gridftp
+#	@mkdir -p $(distdir)/tm_mad/dummy
+#	@mkdir -p $(distdir)/tm_mad/nordugrid
+#	@mkdir -p $(distdir)/tm_mad/ssh
+#	@mkdir -p $(distdir)/tm_mad/rft
+#	@cp $(JSDL_SRC) $(distdir)/cmds/
+#	@cp $(DRMAA_JAVA_SRC) $(distdir)/$(DRMAA_SRC_DIR)/org/ggf/drmaa
+#	@cp $(DRMAA_PACK)/DrmaaJNI.h $(distdir)/$(DRMAA_SRC_DIR)/org/ggf/drmaa
+#	@cp $(IM_MAD_STATIC_SRC_DIST) $(distdir)/im_mad/
+#	@cp $(IM_MAD_MDS2_SRC_DIST) $(distdir)/im_mad/mds2
+#	@cp $(IM_MAD_MDS4_SRC_DIST) $(distdir)/im_mad/mds4
+#	@cp $(IM_MAD_BDII_SRC_DIST) $(distdir)/im_mad/bdii
+#	@cp $(EM_MAD_GRAM2_SRC_DIST) $(distdir)/em_mad/gram2
+#	@cp $(EM_MAD_GRAM4_SRC_DIST) $(distdir)/em_mad/gram4
+#	@cp $(EM_MAD_CREAM_SRC_DIST) $(distdir)/em_mad/cream
+#	@cp $(EM_MAD_NORDU_SRC_DIST) $(distdir)/em_mad/nordugrid
+#	@cp $(EM_MAD_SSH_SRC_DIST) $(distdir)/em_mad/ssh
+#	@cp $(TM_MAD_GRIDFTP_SRC_DIST) $(distdir)/tm_mad/gridftp
+#	@cp $(TM_MAD_DUMMY_SRC_DIST) $(distdir)/tm_mad/dummy
+#	@cp $(TM_MAD_NORDU_SRC_DIST) $(distdir)/tm_mad/nordugrid
+#	@cp $(TM_MAD_SSH_SRC_DIST) $(distdir)/tm_mad/ssh
+#	@cp $(TM_MAD_RFT_SRC_DIST) $(distdir)/tm_mad/rft
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
