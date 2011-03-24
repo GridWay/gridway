@@ -25,15 +25,8 @@ GW_TEST_DIR = test
 GW_XML_DIR = xml_schema
 GW_SRC_DIR = src
 
-EXTRA_DIST = etc scripts examples xml_schema/gridway.xsd LICENSE README
-
-if DRMAA_RUBY
-EXTRA_DIST+= src/drmaa/ruby
-endif
-
-if TESTS
-EXTRA_DIST+= src/test/gw_test.c src/test/TEST.pl src/test/jt
-endif
+EXTRA_DIST = etc scripts examples xml_schema/gridway.xsd LICENSE README \
+src/drmaa/ruby src/test/TEST.pl src/test/jt
 
 FLAGS=$(DB4_INCLUDE_PATH)
 
