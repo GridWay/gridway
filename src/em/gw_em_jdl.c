@@ -26,7 +26,7 @@
 #include "gw_user_pool.h"
 
 char *gw_template_jobtype_string_jdl(gw_jobtype_t type);
-char *gw_job_jdl_environment(gw_job_t *job);
+char *gw_em_jdl_environment(gw_job_t *job);
 
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
@@ -45,7 +45,7 @@ char* gw_generate_wrapper_jdl(gw_job_t *job)
     /* 1.- Create dynamic job data environment                                */
     /* ---------------------------------------------------------------------- */
   
-    job_environment = gw_job_jdl_environment(job);
+    job_environment = gw_em_jdl_environment(job);
     
     if ( job_environment == NULL )
         return NULL;
@@ -134,7 +134,7 @@ char* gw_generate_pre_wrapper_jdl(gw_job_t *job)
     /* 1.- Create dynamic job data environment                                */
     /* ---------------------------------------------------------------------- */
   
-    job_environment = gw_job_jdl_environment(job);
+    job_environment = gw_em_jdl_environment(job);
     
     if ( job_environment == NULL )
         return NULL;
@@ -232,7 +232,7 @@ char* gw_generate_pre_wrapper_jdl(gw_job_t *job)
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
-char *gw_job_jdl_environment(gw_job_t *job)
+char *gw_em_jdl_environment(gw_job_t *job)
 {
     char jdl_buffer[512];
     char *jdl_env; 
