@@ -1,4 +1,3 @@
-
 JAR_FILES = /usr/share/java
 GRIDSAM_HOME = /var/lib/tomcat6/webapps/gridsam
 

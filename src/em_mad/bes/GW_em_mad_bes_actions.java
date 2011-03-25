@@ -391,7 +391,6 @@ class ServiceBES extends Thread {
         }
     }
 
-
     private SOAPElement invokeRemoteOperation( String pPortOperation, XmlObject pOutput ) throws Throwable {
 
         Service xService = null;
