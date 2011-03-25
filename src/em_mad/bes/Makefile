@@ -25,6 +25,6 @@ ifdef GW_LOCATION
 	#@cp conf/client-config.wsdd $(GW_LOCATION)/lib/conf
 	#@cp conf/crypto.properties $(GW_LOCATION)/lib/conf
 else
-	@echo "  GW_LOCATION undefined"
+	@echo "  You must define the GW_LOCATION env variable"
 	@exit 2
 endif

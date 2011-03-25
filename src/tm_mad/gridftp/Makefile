@@ -19,7 +19,7 @@ ifdef GW_LOCATION
 	@chmod a+x $(GW_LOCATION)/bin/gw_tm_mad_ftp
 	@echo GridFTP TM MAD successfully installed
 else
-	@echo "  GW_LOCATION undefined"
+	@echo "  You must define the GW_LOCATION env variable"
 	@exit 2
 endif
 

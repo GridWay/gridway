@@ -20,6 +20,6 @@ ifdef GW_LOCATION
 	@chmod a+x $(GW_LOCATION)/bin/gw_im_mad_mds4
 	@echo MDS4 IM MAD successfully installed
 else
-	@echo "  GW_LOCATION undefined"
+        @echo "  You must define the GW_LOCATION env variable"
 	@exit 2
 endif
