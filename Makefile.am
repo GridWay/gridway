@@ -28,12 +28,10 @@ src/drmaa/ruby src/test/TEST.pl src/test/jt
 FLAGS=$(DB4_INCLUDE_PATH)
  
 dist_sysconf_DATA = etc/gwd.conf etc/sched.conf etc/gwrc etc/job_template.default
-dist_data_DATA = LICENSE README
+dist_data_DATA = LICENSE README NOTICE
 
 install-exec-hook:
 if TESTS
-	$(MKDIR_P) $(DESTDIR)$(testdir)
-	${mkinstalldirs} $(DESTDIR)$(testdir)
 	cp $(srcdir)/src/test/TEST.pl $(DESTDIR)$(testdir)
 	cp -R $(srcdir)/src/test/jt $(DESTDIR)$(testdir)
 
