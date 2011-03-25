@@ -7,5 +7,5 @@ ifdef GW_LOCATION
 	@echo SSH TM MAD successfully installed
 else
 	@echo "  You must define the GW_LOCATION env variable"
-        @exit 2
+	@exit 2
 endif
