@@ -526,7 +526,8 @@ IM_MAD_STATIC_SRC_DIST = $(IM_MAD)/gw_im_mad_static.sh \
 	$(IM_MAD)/gw_im_mad_common.sh
 
 IM_MAD_MDS2_SRC_DIST = $(IM_MAD)/mds2/gw_im_mad_mds2.sh \
-        $(IM_MAD)/mds2/gw_im_mad_mds2_glue.sh
+        $(IM_MAD)/mds2/gw_im_mad_mds2_glue.sh \
+        $(IM_MAD)/mds4/Makefile
 
 IM_MAD_MDS4_SRC_DIST = $(IM_MAD)/mds4/Host.java \
         $(IM_MAD)/mds4/Mds4QueryParser_GT40.java \
@@ -539,7 +540,8 @@ IM_MAD_MDS4_SRC_DIST = $(IM_MAD)/mds4/Host.java \
         $(IM_MAD)/mds4/Makefile
 
 IM_MAD_BDII_SRC_DIST = $(IM_MAD)/bdii/gw_im_mad_bdii.pl \
-        $(IM_MAD)/bdii/gw_im_mad_bdii.sh
+        $(IM_MAD)/bdii/gw_im_mad_bdii.sh \
+        $(IM_MAD)/bdii/Makefile
 
 EM_MAD_GRAM2_SRC_DIST = $(EM_MAD)/gram2/gw_em_mad_gram2.c \
 	$(EM_MAD)/gram2/gw_em_mad_gram2_actions.c \
@@ -549,7 +551,8 @@ EM_MAD_GRAM2_SRC_DIST = $(EM_MAD)/gram2/gw_em_mad_gram2.c \
 	$(EM_MAD)/gram2/Makefile
 
 EM_MAD_GRAM4_SRC_DIST = $(EM_MAD)/gram4/Gw_em_mad_gram4_GT40.java \
-	$(EM_MAD)/gram4/Gw_em_mad_gram4_GT42.java
+	$(EM_MAD)/gram4/Gw_em_mad_gram4_GT42.java \
+	$(EM_MAD)/gram4/Makefile
 
 EM_MAD_CREAM_SRC_DIST = $(EM_MAD)/cream/gw_em_mad_cream.cpp \
 	$(EM_MAD)/cream/gw_em_mad_cream_actions.cpp \
@@ -567,7 +570,13 @@ EM_MAD_SSH_SRC_DIST = $(EM_MAD)/ssh/gw_em_mad_ssh.rb \
 	$(EM_MAD)/ssh/rslparser.rb \
 	$(EM_MAD)/ssh/sshjob.rb \
 	$(EM_MAD)/ssh/sshresource.rb \
-	$(EM_MAD)/ssh/gw_em_mad_ssh.sh
+	$(EM_MAD)/ssh/gw_em_mad_ssh.sh \
+	$(EM_MAD)/ssh/Makefile
+
+EM_MAD_BES_SRC_DIST = $(EM_MAD)/bes/GW_em_mad_bes.java \
+        $(EM_MAD)/bes/GW_em_mad_bes_actions.java \
+	$(EM_MAD)/bes/gw_em_mad_bes.sh \
+	$(EM_MAD)/bes/Makefile
 
 TM_MAD_GRIDFTP_SRC_DIST = $(TM_MAD)/gridftp/gw_tm_mad_ftp.c \
 	$(TM_MAD)/gridftp/gw_tm_ftp_transfer.c \
@@ -587,7 +596,8 @@ TM_MAD_NORDU_SRC_DIST = $(TM_MAD)/nordugrid/gw_tm_mad_nordugrid.py \
         $(TM_MAD)/nordugrid/gw_tm_mad_nordugrid.sh
 
 TM_MAD_SSH_SRC_DIST = $(TM_MAD)/ssh/gw_tm_mad_ssh.rb \
-	$(TM_MAD)/ssh/gw_tm_mad_ssh.sh
+	$(TM_MAD)/ssh/gw_tm_mad_ssh.sh \
+	$(TM_MAD)/ssh/Makefile
 
 TM_MAD_RFT_SRC_DIST = $(TM_MAD)/rft/GWRftClient.java \
 	$(TM_MAD)/rft/GWRftProcessor.java \
@@ -598,6 +608,6 @@ TM_MAD_RFT_SRC_DIST = $(TM_MAD)/rft/GWRftClient.java \
 EXTRA_DIST += $(DRMAA_JAVA_SRC) $(IM_MAD_STATIC_SRC_DIST) \
 $(IM_MAD_MDS2_SRC_DIST) $(IM_MAD_MDS4_SRC_DIST) $(IM_MAD_BDII_SRC_DIST) \
 $(EM_MAD_GRAM2_SRC_DIST) $(EM_MAD_GRAM4_SRC_DIST) $(EM_MAD_CREAM_SRC_DIST) \
-$(EM_MAD_NORDU_SRC_DIST) $(EM_MAD_SSH_SRC_DIST) $(TM_MAD_GRIDFTP_SRC_DIST) \
-$(TM_MAD_DUMMY_SRC_DIST) $(TM_MAD_NORDU_SRC_DIST) $(TM_MAD_SSH_SRC_DIST) \
-$(TM_MAD_RFT_SRC_DIST)
+$(EM_MAD_NORDU_SRC_DIST) $(EM_MAD_SSH_SRC_DIST) $(EM_MAD_BES_SRC_DIST) \
+$(TM_MAD_GRIDFTP_SRC_DIST) $(TM_MAD_DUMMY_SRC_DIST) $(TM_MAD_NORDU_SRC_DIST) \
+$(TM_MAD_SSH_SRC_DIST) $(TM_MAD_RFT_SRC_DIST)
