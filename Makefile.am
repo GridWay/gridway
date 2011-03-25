@@ -18,26 +18,26 @@ SUBDIRS = src
 JAVA_HOME = @java_home@
 PREFIX = @prefix@
 
-GW_ETC_DIR = etc
-GW_VAR_DIR = var
-GW_SHARE_DIR = share
-GW_TEST_DIR = test
-GW_XML_DIR = xml_schema
-GW_SRC_DIR = src
+vardir = $(PREFIX)/var
+testdir = $(PREFIX)/test
+xmldir = $(PREFIX)/xml_schema
 
-EXTRA_DIST = etc scripts examples xml_schema/gridway.xsd LICENSE README \
+EXTRA_DIST = scripts examples xml_schema/gridway.xsd \
 src/drmaa/ruby src/test/TEST.pl src/test/jt
 
 FLAGS=$(DB4_INCLUDE_PATH)
+ 
+dist_sysconf_DATA = etc/gwd.conf etc/sched.conf etc/gwrc etc/job_template.default
+dist_data_DATA = LICENSE README
 
 install-exec-hook:
 if TESTS
-	$(MKDIR_P) $(DESTDIR)$(GW_TEST_DIR)
-	${mkinstalldirs} $(DESTDIR)$(GW_TEST_DIR)
-	cp $(srcdir)/src/test/TEST.pl $(DESTDIR)$(GW_TEST_DIR)
-	cp -R $(srcdir)/src/test/jt $(DESTDIR)$(GW_TEST_DIR)
+	$(MKDIR_P) $(DESTDIR)$(testdir)
+	${mkinstalldirs} $(DESTDIR)$(testdir)
+	cp $(srcdir)/src/test/TEST.pl $(DESTDIR)$(testdir)
+	cp -R $(srcdir)/src/test/jt $(DESTDIR)$(testdir)
 
-	find $(DESTDIR)$(GW_TEST_DIR) -depth -name .svn -exec rm -rf '{}' \;
+	find $(DESTDIR)$(testdir) -depth -name .svn -exec rm -rf '{}' \;
 endif
 
 # ----------------------------
@@ -66,19 +66,10 @@ endif
 # ****************************
 
 install-data-hook:
-	$(MKDIR_P) $(DESTDIR)$(GW_VAR_DIR)/acct
-	$(MKDIR_P) $(DESTDIR)$(GW_ETC_DIR)
-	$(MKDIR_P) $(DESTDIR)$(GW_XML_DIR)
-	$(MKDIR_P) $(DESTDIR)$(GW_SHARE_DIR)
-	${mkinstalldirs} $(DESTDIR)$(GW_VAR_DIR)/acct $(DESTDIR)$(GW_ETC_DIR) \
-$(DESTDIR)$(GW_XML_DIR) $(DESTDIR)$(GW_SHARE_DIR)
-	$(INSTALL_DATA) $(srcdir)/etc/gwd.conf $(DESTDIR)$(GW_ETC_DIR)
-	$(INSTALL_DATA) $(srcdir)/etc/job_template.default $(DESTDIR)$(GW_ETC_DIR)
-	$(INSTALL_DATA) $(srcdir)/etc/sched.conf $(DESTDIR)$(GW_ETC_DIR)
-	$(INSTALL_DATA) $(srcdir)/etc/gwrc $(DESTDIR)$(GW_ETC_DIR)
-	$(INSTALL_DATA) $(srcdir)/xml_schema/gridway.xsd $(DESTDIR)$(GW_XML_DIR)
-	$(INSTALL_DATA) $(srcdir)/LICENSE $(DESTDIR)$(GW_SHARE_DIR)
-	$(INSTALL_DATA) $(srcdir)/README $(DESTDIR)$(GW_SHARE_DIR)
+	$(MKDIR_P) $(DESTDIR)$(vardir)/acct
+	$(MKDIR_P) $(DESTDIR)$(xmldir)
+	${mkinstalldirs} $(DESTDIR)$(vardir)/acct $(DESTDIR)$(xmldir)
+	$(INSTALL_DATA) $(srcdir)/xml_schema/gridway.xsd $(DESTDIR)$(xmldir)
 
 # ----------------------------
 #    remove svn DIRS
@@ -103,10 +94,7 @@ $(DESTDIR)$(bindir)/gw_mad_common.sh
 $(DESTDIR)$(libexecdir)/ruby/dagman/parse.rb $(DESTDIR)$(libexecdir)/ruby/dagman/runner.rb \
 $(DESTDIR)$(libexecdir)/ruby/dagman/gridway.rb
 	rm -f $(DESTDIR)$(libexecdir)/gw_wrapper.sh $(DESTDIR)$(libexecdir)/gw_monitor.sh
-	rm -f $(DESTDIR)$(GW_ETC_DIR)/gwd.conf $(DESTDIR)$(GW_ETC_DIR)/gwrc \
-$(DESTDIR)$(GW_ETC_DIR)/job_template.default $(DESTDIR)$(GW_ETC_DIR)/sched.conf
-	rm -f $(DESTDIR)$(GW_SHARE_DIR)/LICENSE $(DESTDIR)$(GW_SHARE_DIR)/README
-	rm -f $(DESTDIR)$(GW_XML_DIR)/gridway.xsd
+	rm -f $(DESTDIR)$(xmldir)/gridway.xsd
 
 # *****************************************
 # Dist specifics (see also src/Makefile.am)
@@ -117,9 +105,8 @@ dist-hook:
 	rm -rf $(distdir)/src/$(DRMAA_SRC_DIR)/org/ggf/drmaa/.libs
 	rm -f $(distdir)/src/$(DRMAA_SRC_DIR)/org/ggf/drmaa/DrmaaJNI.lo
 	rm -f $(distdir)/src/$(DRMAA_SRC_DIR)/org/ggf/drmaa/DrmaaJNI.o
-#	cp pkgdata/pkg_data_src.gpt  $(distdir)/pkg_data_src.gpt
 
 # ----------------------------
-#    remove SVN DIRS
+#    remove SVN dirs
 # ----------------------------
 	find $(distdir) -depth -name .svn -exec rm -rf '{}' \;
