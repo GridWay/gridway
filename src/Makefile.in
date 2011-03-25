@@ -556,6 +556,10 @@ UM = $(srcdir)/um
 DB = $(srcdir)/acct
 @DRMAA1_FALSE@DRMAA_SRC_DIR = drmaa
 @DRMAA1_TRUE@DRMAA_SRC_DIR = drmaa/drmaa1.0
+
+#if DRMAA_RUBY
+#SUBDIRS = drmaa/ruby
+#endif
 DRMAA = $(srcdir)/drmaa
 DRMAA_PACK = $(srcdir)/$(DRMAA_SRC_DIR)/org/ggf/drmaa
 SSH = $(srcdir)/ssh
@@ -999,9 +1003,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu src/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign --ignore-deps src/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu src/Makefile
+	  $(AUTOMAKE) --foreign --ignore-deps src/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -2054,40 +2058,6 @@ uninstall-am: uninstall-binPROGRAMS uninstall-binSCRIPTS \
 @DRMAA_TRUE@        -d $(DRMAA)/package
 @DRMAA_TRUE@	jar cf $(srcdir)/drmaa/drmaa.jar -C $(DRMAA)/package/ .
 @DRMAA_TRUE@	@rm -rf $(DRMAA)/package
-
-#dist-hook:
-#	@mkdir -p $(distdir)/cmds
-#	@mkdir -p $(distdir)/$(DRMAA_SRC_DIR)/org/ggf/drmaa
-#	@mkdir -p $(distdir)/im_mad/mds2
-#	@mkdir -p $(distdir)/im_mad/mds4
-#	@mkdir -p $(distdir)/im_mad/bdii
-#	@mkdir -p $(distdir)/em_mad/gram2
-#	@mkdir -p $(distdir)/em_mad/gram4
-#	@mkdir -p $(distdir)/em_mad/cream
-#	@mkdir -p $(distdir)/em_mad/nordugrid
-#	@mkdir -p $(distdir)/em_mad/ssh
-#	@mkdir -p $(distdir)/tm_mad/gridftp
-#	@mkdir -p $(distdir)/tm_mad/dummy
-#	@mkdir -p $(distdir)/tm_mad/nordugrid
-#	@mkdir -p $(distdir)/tm_mad/ssh
-#	@mkdir -p $(distdir)/tm_mad/rft
-#	@cp $(JSDL_SRC) $(distdir)/cmds/
-#	@cp $(DRMAA_JAVA_SRC) $(distdir)/$(DRMAA_SRC_DIR)/org/ggf/drmaa
-#	@cp $(DRMAA_PACK)/DrmaaJNI.h $(distdir)/$(DRMAA_SRC_DIR)/org/ggf/drmaa
-#	@cp $(IM_MAD_STATIC_SRC_DIST) $(distdir)/im_mad/
-#	@cp $(IM_MAD_MDS2_SRC_DIST) $(distdir)/im_mad/mds2
-#	@cp $(IM_MAD_MDS4_SRC_DIST) $(distdir)/im_mad/mds4
-#	@cp $(IM_MAD_BDII_SRC_DIST) $(distdir)/im_mad/bdii
-#	@cp $(EM_MAD_GRAM2_SRC_DIST) $(distdir)/em_mad/gram2
-#	@cp $(EM_MAD_GRAM4_SRC_DIST) $(distdir)/em_mad/gram4
-#	@cp $(EM_MAD_CREAM_SRC_DIST) $(distdir)/em_mad/cream
-#	@cp $(EM_MAD_NORDU_SRC_DIST) $(distdir)/em_mad/nordugrid
-#	@cp $(EM_MAD_SSH_SRC_DIST) $(distdir)/em_mad/ssh
-#	@cp $(TM_MAD_GRIDFTP_SRC_DIST) $(distdir)/tm_mad/gridftp
-#	@cp $(TM_MAD_DUMMY_SRC_DIST) $(distdir)/tm_mad/dummy
-#	@cp $(TM_MAD_NORDU_SRC_DIST) $(distdir)/tm_mad/nordugrid
-#	@cp $(TM_MAD_SSH_SRC_DIST) $(distdir)/tm_mad/ssh
-#	@cp $(TM_MAD_RFT_SRC_DIST) $(distdir)/tm_mad/rft
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

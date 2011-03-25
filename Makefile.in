@@ -281,7 +281,7 @@ src/drmaa/ruby src/test/TEST.pl src/test/jt
 
 FLAGS = $(DB4_INCLUDE_PATH)
 dist_sysconf_DATA = etc/gwd.conf etc/sched.conf etc/gwrc etc/job_template.default
-dist_data_DATA = LICENSE README
+dist_data_DATA = LICENSE README NOTICE RELEASE_NOTES
 all: all-recursive
 
 .SUFFIXES:
@@ -816,8 +816,6 @@ uninstall-am: uninstall-dist_dataDATA uninstall-dist_sysconfDATA
 
 
 install-exec-hook:
-@TESTS_TRUE@	$(MKDIR_P) $(DESTDIR)$(testdir)
-@TESTS_TRUE@	${mkinstalldirs} $(DESTDIR)$(testdir)
 @TESTS_TRUE@	cp $(srcdir)/src/test/TEST.pl $(DESTDIR)$(testdir)
 @TESTS_TRUE@	cp -R $(srcdir)/src/test/jt $(DESTDIR)$(testdir)
 

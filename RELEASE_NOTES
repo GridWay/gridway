@@ -1,0 +1,30 @@
+====== Release Notes 5.7 ======
+
+GridWay 5.7 is the new development version of the fifth series of the metascheduler.
+
+Release date: March 31st, 2011.
+
+===== Modified installation procedure =====
+
+GridWay core and commands are now configured, built and installed separately from the MADs, which have their own Makefile.
+
+This way, GridWay installation does not depend on the installation of a given middleware.
+
+===== Randomized Job State Polling =====
+
+Job state is polled at randomized intervals, to avoid saturation due to multiple simultaneous requests. Moreover, the interval is duplicated when a failure occur.
+
+===== CREAM Middleware Access Driver (MAD) =====
+
+A technology preview of an execution driver for CREAM (http://grid.pd.infn.it/cream), the job submission and management interface of gLite, is included in this release.
+
+===== OGSA-BES Middleware Access Driver (MAD) =====
+
+A technology preview of an execution driver for OGSA-BES (www.ogf.org/documents/GFD.108.pdf), the OGF specification for job submission and management, is included in this release.
+
+===== Bug fixing =====
+
+The following bugs have been fixed:
+  * Bug #86 (http://dev.gridway.org/issues/86): Problems with java.util.Calendar
+  * Bug #87 (http://dev.gridway.org/issues/87): Architecture platform always shows i686 from the bdii IM MAD
+  * Bug #89 (http://dev.gridway.org/issues/89): Abort migration due to suspension if job becomes active
