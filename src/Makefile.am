@@ -62,9 +62,9 @@ else
 DRMAA_SRC_DIR=drmaa
 endif
 
-if DRMAA_RUBY
-SUBDIRS = drmaa/ruby
-endif
+#if DRMAA_RUBY
+#SUBDIRS = drmaa/ruby
+#endif
 
 DRMAA = $(srcdir)/drmaa
 DRMAA_PACK = $(srcdir)/$(DRMAA_SRC_DIR)/org/ggf/drmaa

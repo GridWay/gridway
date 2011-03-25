@@ -28,7 +28,7 @@ src/drmaa/ruby src/test/TEST.pl src/test/jt
 FLAGS=$(DB4_INCLUDE_PATH)
  
 dist_sysconf_DATA = etc/gwd.conf etc/sched.conf etc/gwrc etc/job_template.default
-dist_data_DATA = LICENSE README NOTICE
+dist_data_DATA = LICENSE README NOTICE RELEASE_NOTES
 
 install-exec-hook:
 if TESTS
