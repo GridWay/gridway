@@ -30,6 +30,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # --------------------------------------------------------------------------
+
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
@@ -50,7 +51,8 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 subdir = .
-DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
+DIST_COMMON = README $(am__configure_deps) $(dist_data_DATA) \
+	$(dist_sysconf_DATA) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(top_srcdir)/configure \
 	$(top_srcdir)/pkgdata/pkg_data_src.gpt.in config/compile \
 	config/config.guess config/config.sub config/install-sh \
@@ -75,6 +77,29 @@ RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	install-pdf-recursive install-ps-recursive install-recursive \
 	installcheck-recursive installdirs-recursive pdf-recursive \
 	ps-recursive uninstall-recursive
+am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
+am__vpath_adj = case $$p in \
+    $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
+    *) f=$$p;; \
+  esac;
+am__strip_dir = f=`echo $$p | sed -e 's|^.*/||'`;
+am__install_max = 40
+am__nobase_strip_setup = \
+  srcdirstrip=`echo "$(srcdir)" | sed 's/[].[^$$\\*|]/\\\\&/g'`
+am__nobase_strip = \
+  for p in $$list; do echo "$$p"; done | sed -e "s|$$srcdirstrip/||"
+am__nobase_list = $(am__nobase_strip_setup); \
+  for p in $$list; do echo "$$p $$p"; done | \
+  sed "s| $$srcdirstrip/| |;"' / .*\//!s/ .*/ ./; s,\( .*\)/[^/]*$$,\1,' | \
+  $(AWK) 'BEGIN { files["."] = "" } { files[$$2] = files[$$2] " " $$1; \
+    if (++n[$$2] == $(am__install_max)) \
+      { print $$2, files[$$2]; n[$$2] = 0; files[$$2] = "" } } \
+    END { for (dir in files) print dir, files[dir] }'
+am__base_list = \
+  sed '$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;s/\n/ /g' | \
+  sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
+am__installdirs = "$(DESTDIR)$(datadir)" "$(DESTDIR)$(sysconfdir)"
+DATA = $(dist_data_DATA) $(dist_sysconf_DATA)
 RECURSIVE_CLEAN_TARGETS = mostlyclean-recursive clean-recursive	\
   distclean-recursive maintainer-clean-recursive
 AM_RECURSIVE_TARGETS = $(RECURSIVE_TARGETS:-recursive=) \
@@ -248,16 +273,15 @@ top_srcdir = @top_srcdir@
 SUBDIRS = src
 JAVA_HOME = @java_home@
 PREFIX = @prefix@
-GW_ETC_DIR = etc
-GW_VAR_DIR = var
-GW_SHARE_DIR = share
-GW_TEST_DIR = test
-GW_XML_DIR = xml_schema
-GW_SRC_DIR = src
-EXTRA_DIST = etc scripts examples xml_schema/gridway.xsd LICENSE README \
+vardir = $(PREFIX)/var
+testdir = $(PREFIX)/test
+xmldir = $(PREFIX)/xml_schema
+EXTRA_DIST = scripts examples xml_schema/gridway.xsd \
 src/drmaa/ruby src/test/TEST.pl src/test/jt
 
 FLAGS = $(DB4_INCLUDE_PATH)
+dist_sysconf_DATA = etc/gwd.conf etc/sched.conf etc/gwrc etc/job_template.default
+dist_data_DATA = LICENSE README
 all: all-recursive
 
 .SUFFIXES:
@@ -306,6 +330,46 @@ clean-libtool:
 
 distclean-libtool:
 	-rm -f libtool config.lt
+install-dist_dataDATA: $(dist_data_DATA)
+	@$(NORMAL_INSTALL)
+	test -z "$(datadir)" || $(MKDIR_P) "$(DESTDIR)$(datadir)"
+	@list='$(dist_data_DATA)'; test -n "$(datadir)" || list=; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; \
+	done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(datadir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(datadir)" || exit $$?; \
+	done
+
+uninstall-dist_dataDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(dist_data_DATA)'; test -n "$(datadir)" || list=; \
+	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	test -n "$$files" || exit 0; \
+	echo " ( cd '$(DESTDIR)$(datadir)' && rm -f" $$files ")"; \
+	cd "$(DESTDIR)$(datadir)" && rm -f $$files
+install-dist_sysconfDATA: $(dist_sysconf_DATA)
+	@$(NORMAL_INSTALL)
+	test -z "$(sysconfdir)" || $(MKDIR_P) "$(DESTDIR)$(sysconfdir)"
+	@list='$(dist_sysconf_DATA)'; test -n "$(sysconfdir)" || list=; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; \
+	done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(sysconfdir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(sysconfdir)" || exit $$?; \
+	done
+
+uninstall-dist_sysconfDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(dist_sysconf_DATA)'; test -n "$(sysconfdir)" || list=; \
+	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	test -n "$$files" || exit 0; \
+	echo " ( cd '$(DESTDIR)$(sysconfdir)' && rm -f" $$files ")"; \
+	cd "$(DESTDIR)$(sysconfdir)" && rm -f $$files
 
 # This directory's subdirectories are mostly independent; you can cd
 # into them and run `make' without going through this Makefile.
@@ -622,9 +686,12 @@ distcleancheck: distclean
 	       exit 1; } >&2
 check-am: all-am
 check: check-recursive
-all-am: Makefile
+all-am: Makefile $(DATA)
 installdirs: installdirs-recursive
 installdirs-am:
+	for dir in "$(DESTDIR)$(datadir)" "$(DESTDIR)$(sysconfdir)"; do \
+	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
+	done
 install: install-recursive
 install-exec: install-exec-recursive
 install-data: install-data-recursive
@@ -672,14 +739,14 @@ info: info-recursive
 
 info-am:
 
-install-data-am:
+install-data-am: install-dist_dataDATA
 	@$(NORMAL_INSTALL)
 	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
 install-dvi: install-dvi-recursive
 
 install-dvi-am:
 
-install-exec-am:
+install-exec-am: install-dist_sysconfDATA
 	@$(NORMAL_INSTALL)
 	$(MAKE) $(AM_MAKEFLAGS) install-exec-hook
 install-html: install-html-recursive
@@ -720,7 +787,7 @@ ps: ps-recursive
 
 ps-am:
 
-uninstall-am:
+uninstall-am: uninstall-dist_dataDATA uninstall-dist_sysconfDATA
 	@$(NORMAL_INSTALL)
 	$(MAKE) $(AM_MAKEFLAGS) uninstall-hook
 .MAKE: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) ctags-recursive \
@@ -735,23 +802,26 @@ uninstall-am:
 	distclean-libtool distclean-tags distcleancheck distdir \
 	distuninstallcheck dvi dvi-am html html-am info info-am \
 	install install-am install-data install-data-am \
-	install-data-hook install-dvi install-dvi-am install-exec \
-	install-exec-am install-exec-hook install-html install-html-am \
-	install-info install-info-am install-man install-pdf \
-	install-pdf-am install-ps install-ps-am install-strip \
-	installcheck installcheck-am installdirs installdirs-am \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	tags tags-recursive uninstall uninstall-am uninstall-hook
+	install-data-hook install-dist_dataDATA \
+	install-dist_sysconfDATA install-dvi install-dvi-am \
+	install-exec install-exec-am install-exec-hook install-html \
+	install-html-am install-info install-info-am install-man \
+	install-pdf install-pdf-am install-ps install-ps-am \
+	install-strip installcheck installcheck-am installdirs \
+	installdirs-am maintainer-clean maintainer-clean-generic \
+	mostlyclean mostlyclean-generic mostlyclean-libtool pdf pdf-am \
+	ps ps-am tags tags-recursive uninstall uninstall-am \
+	uninstall-dist_dataDATA uninstall-dist_sysconfDATA \
+	uninstall-hook
 
 
 install-exec-hook:
-@TESTS_TRUE@	$(MKDIR_P) $(DESTDIR)$(GW_TEST_DIR)
-@TESTS_TRUE@	${mkinstalldirs} $(DESTDIR)$(GW_TEST_DIR)
-@TESTS_TRUE@	cp $(srcdir)/src/test/TEST.pl $(DESTDIR)$(GW_TEST_DIR)
-@TESTS_TRUE@	cp -R $(srcdir)/src/test/jt $(DESTDIR)$(GW_TEST_DIR)
+@TESTS_TRUE@	$(MKDIR_P) $(DESTDIR)$(testdir)
+@TESTS_TRUE@	${mkinstalldirs} $(DESTDIR)$(testdir)
+@TESTS_TRUE@	cp $(srcdir)/src/test/TEST.pl $(DESTDIR)$(testdir)
+@TESTS_TRUE@	cp -R $(srcdir)/src/test/jt $(DESTDIR)$(testdir)
 
-@TESTS_TRUE@	find $(DESTDIR)$(GW_TEST_DIR) -depth -name .svn -exec rm -rf '{}' \;
+@TESTS_TRUE@	find $(DESTDIR)$(testdir) -depth -name .svn -exec rm -rf '{}' \;
 
 # ----------------------------
 # -- Script renaming - Commons
@@ -777,19 +847,10 @@ install-exec-hook:
 # ****************************
 
 install-data-hook:
-	$(MKDIR_P) $(DESTDIR)$(GW_VAR_DIR)/acct
-	$(MKDIR_P) $(DESTDIR)$(GW_ETC_DIR)
-	$(MKDIR_P) $(DESTDIR)$(GW_XML_DIR)
-	$(MKDIR_P) $(DESTDIR)$(GW_SHARE_DIR)
-	${mkinstalldirs} $(DESTDIR)$(GW_VAR_DIR)/acct $(DESTDIR)$(GW_ETC_DIR) \
-$(DESTDIR)$(GW_XML_DIR) $(DESTDIR)$(GW_SHARE_DIR)
-	$(INSTALL_DATA) $(srcdir)/etc/gwd.conf $(DESTDIR)$(GW_ETC_DIR)
-	$(INSTALL_DATA) $(srcdir)/etc/job_template.default $(DESTDIR)$(GW_ETC_DIR)
-	$(INSTALL_DATA) $(srcdir)/etc/sched.conf $(DESTDIR)$(GW_ETC_DIR)
-	$(INSTALL_DATA) $(srcdir)/etc/gwrc $(DESTDIR)$(GW_ETC_DIR)
-	$(INSTALL_DATA) $(srcdir)/xml_schema/gridway.xsd $(DESTDIR)$(GW_XML_DIR)
-	$(INSTALL_DATA) $(srcdir)/LICENSE $(DESTDIR)$(GW_SHARE_DIR)
-	$(INSTALL_DATA) $(srcdir)/README $(DESTDIR)$(GW_SHARE_DIR)
+	$(MKDIR_P) $(DESTDIR)$(vardir)/acct
+	$(MKDIR_P) $(DESTDIR)$(xmldir)
+	${mkinstalldirs} $(DESTDIR)$(vardir)/acct $(DESTDIR)$(xmldir)
+	$(INSTALL_DATA) $(srcdir)/xml_schema/gridway.xsd $(DESTDIR)$(xmldir)
 
 # ----------------------------
 #    remove svn DIRS
@@ -814,10 +875,7 @@ $(DESTDIR)$(bindir)/gw_mad_common.sh
 $(DESTDIR)$(libexecdir)/ruby/dagman/parse.rb $(DESTDIR)$(libexecdir)/ruby/dagman/runner.rb \
 $(DESTDIR)$(libexecdir)/ruby/dagman/gridway.rb
 	rm -f $(DESTDIR)$(libexecdir)/gw_wrapper.sh $(DESTDIR)$(libexecdir)/gw_monitor.sh
-	rm -f $(DESTDIR)$(GW_ETC_DIR)/gwd.conf $(DESTDIR)$(GW_ETC_DIR)/gwrc \
-$(DESTDIR)$(GW_ETC_DIR)/job_template.default $(DESTDIR)$(GW_ETC_DIR)/sched.conf
-	rm -f $(DESTDIR)$(GW_SHARE_DIR)/LICENSE $(DESTDIR)$(GW_SHARE_DIR)/README
-	rm -f $(DESTDIR)$(GW_XML_DIR)/gridway.xsd
+	rm -f $(DESTDIR)$(xmldir)/gridway.xsd
 
 # *****************************************
 # Dist specifics (see also src/Makefile.am)
@@ -828,10 +886,9 @@ dist-hook:
 	rm -rf $(distdir)/src/$(DRMAA_SRC_DIR)/org/ggf/drmaa/.libs
 	rm -f $(distdir)/src/$(DRMAA_SRC_DIR)/org/ggf/drmaa/DrmaaJNI.lo
 	rm -f $(distdir)/src/$(DRMAA_SRC_DIR)/org/ggf/drmaa/DrmaaJNI.o
-#	cp pkgdata/pkg_data_src.gpt  $(distdir)/pkg_data_src.gpt
 
 # ----------------------------
-#    remove SVN DIRS
+#    remove SVN dirs
 # ----------------------------
 	find $(distdir) -depth -name .svn -exec rm -rf '{}' \;
 
