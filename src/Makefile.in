@@ -642,9 +642,9 @@ EXTRA_DIST = $(JSDL_SRC) $(DRMAA_JAVA_SRC) $(DRMAA_PACK)/DrmaaJNI.h \
 	$(IM_MAD_BDII_SRC_DIST) $(EM_MAD_GRAM2_SRC_DIST) \
 	$(EM_MAD_GRAM4_SRC_DIST) $(EM_MAD_CREAM_SRC_DIST) \
 	$(EM_MAD_NORDU_SRC_DIST) $(EM_MAD_SSH_SRC_DIST) \
-	$(TM_MAD_GRIDFTP_SRC_DIST) $(TM_MAD_DUMMY_SRC_DIST) \
-	$(TM_MAD_NORDU_SRC_DIST) $(TM_MAD_SSH_SRC_DIST) \
-	$(TM_MAD_RFT_SRC_DIST)
+	$(EM_MAD_BES_SRC_DIST) $(TM_MAD_GRIDFTP_SRC_DIST) \
+	$(TM_MAD_DUMMY_SRC_DIST) $(TM_MAD_NORDU_SRC_DIST) \
+	$(TM_MAD_SSH_SRC_DIST) $(TM_MAD_RFT_SRC_DIST)
 EM_SRC = $(EM)/gw_em_actions.c \
         $(EM)/gw_em.c \
         $(EM)/gw_em_listener.c \
@@ -965,6 +965,11 @@ EM_MAD_SSH_SRC_DIST = $(EM_MAD)/ssh/gw_em_mad_ssh.rb \
 	$(EM_MAD)/ssh/sshjob.rb \
 	$(EM_MAD)/ssh/sshresource.rb \
 	$(EM_MAD)/ssh/gw_em_mad_ssh.sh
+
+EM_MAD_BES_SRC_DIST = $(EM_MAD)/bes/GW_em_mad_bes.java \
+        $(EM_MAD)/bes/GW_em_mad_bes_actions.java \
+	$(EM_MAD)/bes/gw_em_mad_bes.sh \
+	$(EM_MAD)/bes/Makefile
 
 TM_MAD_GRIDFTP_SRC_DIST = $(TM_MAD)/gridftp/gw_tm_mad_ftp.c \
 	$(TM_MAD)/gridftp/gw_tm_ftp_transfer.c \

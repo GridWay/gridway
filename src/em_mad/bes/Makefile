@@ -22,8 +22,8 @@ ifdef GW_LOCATION
 	@cp $(JAR_FILES)/xalan2.jar $(GW_LOCATION)/lib/endorsed
 	@mkdir -p $(GW_LOCATION)/lib/conf
 	@echo OGSA-BES EM MAD successfully installed
-        #@cp conf/client-config.wsdd $(GW_LOCATION)/lib/conf
-        #@cp conf/crypto.properties $(GW_LOCATION)/lib/conf
+	#@cp conf/client-config.wsdd $(GW_LOCATION)/lib/conf
+	#@cp conf/crypto.properties $(GW_LOCATION)/lib/conf
 else
 	@echo "  GW_LOCATION undefined"
 	@exit 2

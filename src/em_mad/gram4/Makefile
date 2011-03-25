@@ -15,6 +15,6 @@ ifdef GW_LOCATION
 	@chmod a+x $(GW_LOCATION)/bin/gw_em_mad_gram4
 	@echo GRAM4 EM MAD successfully installed
 else
-        @echo "  GW_LOCATION undefined"
-        @exit 2
+	@echo "  GW_LOCATION undefined"
+	@exit 2
 endif
