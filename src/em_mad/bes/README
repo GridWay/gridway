@@ -1,0 +1,88 @@
+===== WELCOME =====
+
+OGSA-BES (Open Grid Services Architecture-Basic Execution Service) 
+describes a Web services-based interface that is standardized by the OGF 
+(Open Grid Forum) and consists of a well-defined state model of 
+computational jobs. Jobs are specified using JSDL (Job Submission 
+Description Language), which is also an OGF standard.
+
+This source distribution provides an Execution Manager Middleware Access 
+Driver (EM MAD) for the OGSA-BES interface. In order to provide an 
+abstraction with the resource management middleware layer, GridWay uses 
+this MAD module to submit, control and monitor the execution of jobs 
+according to the OGSA-BES standard. GridSAM is used as target 
+implementation of the OGSA-BES interface.
+
+
+===== REQUIREMENTS =====
+
+The source distribution requires on the server-side:
+
+- GridSAM 2.3.0 or higher (http://www.omii.ac.uk/wiki/GridSAM). This 
+must be configured with OMII WS-Security.
+- A GridFTP client such as globus-url-copy.
+- Access to a MyProxy server.
+
+The source distribution requires on the client-side:
+
+- GridWay 5.7 (http://www.gridway.org).
+- The JAR files gridsam-schema-2.3.0.jar, gridsam-core-2.3.0.jar, 
+omii-security-utils-1.3.jar and wss4j-1.5.0-itinnov-2.jar from GridSAM.
+- Apache AXIS 1.4-6 or higher (http://ws.apache.org/axis).
+- XMLBeans 2.4.0-0 or higher (http://xmlbeans.apache.org).
+- The Logging Component 1.1.1-7 or higher 
+(http://commons.apache.org/logging).
+- The Discovery Component 0.4-3 or higher 
+(http://commons.apache.org/discovery).
+- The Web Services Description Language for Java Toolkit 1.6.2-2 or 
+higher (http://wsdl4j.sourceforge.net).
+- The Jakarta Commons HTTPClient library 3.1-9 
+(http://archive.apache.org/dist/httpcomponents/commons-httpclient).
+- Commons Codec 1.4-2 or higher (http://commons.apache.org/codec).
+- DOM4J 1.6.1 or higher (http://dom4j.sourceforge.net).
+- Xalan-Java 2.7.1-5 or higher (http://xml.apache.org/xalan-j).
+- Apache XML Security 1.4.4 or higher (http://santuario.apache.org).
+- A GridFTP server. 
+- Access to a MyProxy server.
+
+
+===== INSTALL =====
+
+This install procedure assumes that you have installed GridWay and you 
+have access to a GridSAM server.
+
+1) Install the required packages and get the necessary JAR files of 
+GridSAM.
+2) Enter the downloaded directory, either after uncompression or svn 
+check out. 
+3) Change the variables, JAR_FILES and GRIDSAM_HOME, as needed in 
+Makefile and gw_em_mad_bes.sh. 
+4) Build and install the driver executing "make; make install".
+5) Configure GridWay through the $GW_LOCATION/etc/gwd.conf file (check 
+the GridWay Configuration Guide) to use the MAD. This EM MAD is intended 
+to work with the "dummy" TM MAD configured for using a GridFTP server. A
+myproxy server is necessary to be able of securely working with GridFTP. 
+This server stores the credentials with associated policies that specify 
+credential lifetimes and who is authorized to retrieve credentials. 
+6) Enter in $GW_LOCATION/lib/conf directory.
+7) Get and configure the client-config.wsdd to support OMII WS-Security. 
+Change also the transport tag to: 
+
+<transport name="http" pivot="java:org.apache.axis.transport.http.HTTPSender"/>
+
+A client-config.wsdd example can be obtained from GridSAM client. 
+8) Get a valid JKS certificate and copy it into $GW_LOCATION/lib/conf.
+9) Configure crypto.properties with the location of the certificate, 
+alias and password. Copy it into $GW_LOCATION/lib/conf.
+10) Launch the GridWay daemon from $GW_LOCATION/bin/gwd.
+11) On the server-side, be sure that BES is configured with OMII 
+WS-Security (see <TOMCAT_DIR>/webapps/gridsam/WEB-INF/server-config.wsdd 
+from GridSAM server or contact the sysadmin). Moreover, be sure that 
+$GLOBUS_LOCATION environment variable is set at the GridSAM service.
+12) Test it and enjoy!
+
+
+===== CREDITS =====
+
+The GridWay team.
+http://gridway.org, http://dsa-research.org.
