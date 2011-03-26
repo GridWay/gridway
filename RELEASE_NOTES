@@ -12,7 +12,7 @@ This way, GridWay installation does not depend on the installation of a given mi
 
 ===== Randomized Job State Polling =====
 
-Job state is polled at randomized intervals, to avoid saturation due to multiple simultaneous requests. Moreover, the interval is duplicated when a failure occur.
+Job state is polled at randomized intervals, to avoid saturation due to multiple simultaneous requests. Moreover, the interval is duplicated when a failure occurs.
 
 ===== CREAM Middleware Access Driver (MAD) =====
 
