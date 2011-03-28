@@ -1,0 +1,46 @@
+===== WELCOME =====
+
+CREAM (Computing Resource Execution And Management) is a simple, 
+lightweight service for job management. It is part of the gLite 
+middleware, and it is currently used as the official job submission 
+interface on EGI. CREAM uses JDL (Job Definition Language) to describe 
+jobs.
+
+This source distribution provides an Execution Manager Middleware Access 
+Driver (EM MAD) for the CREAM interface.
+
+
+===== REQUIREMENTS =====
+
+The source distribution requires on the client-side:
+
+- GridWay 5.7 (http://www.gridway.org)
+- gLite 3.2 UI
+- log4cpp-devel and libxml2-devel packages
+
+
+===== INSTALL =====
+
+This install procedure assumes that you have installed GridWay on a gLite
+UI and you have access to a CREAM CE.
+
+1) Install the required packages.
+2) Go to src/em_mad/cream in the GridWay distribution.
+3) Add /opt/lib/c-ares to LD_LIBRARY_PATH.
+4) Create the Globus build environment with:
+
+gpt-build -force -nosrc -buildir=/tmp/globus_core.$$ gcc64dbg
+
+5) Build and install the driver executing "make; make install".
+6) Configure GridWay through the $GW_LOCATION/etc/gwd.conf file (check 
+the GridWay Configuration Guide) to use the MAD. This EM MAD is intended 
+to work with the "dummy" TM MAD configured for using a GridFTP or GASS 
+server on the client. Use "jdl" as RSL generation function.
+7) Launch the GridWay daemon from $GW_LOCATION/bin/gwd.
+8) Test it and enjoy!
+
+
+===== CREDITS =====
+
+The GridWay team.
+http://gridway.org, http://dsa-research.org.

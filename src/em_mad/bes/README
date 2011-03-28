@@ -60,10 +60,8 @@ Makefile and gw_em_mad_bes.sh.
 4) Build and install the driver executing "make; make install".
 5) Configure GridWay through the $GW_LOCATION/etc/gwd.conf file (check 
 the GridWay Configuration Guide) to use the MAD. This EM MAD is intended 
-to work with the "dummy" TM MAD configured for using a GridFTP server. A
-myproxy server is necessary to be able of securely working with GridFTP. 
-This server stores the credentials with associated policies that specify 
-credential lifetimes and who is authorized to retrieve credentials. 
+to work with the "dummy" TM MAD configured for using a GridFTP server. 
+Use "jsdl" as RSL generation function.
 6) Enter in $GW_LOCATION/lib/conf directory.
 7) Get and configure the client-config.wsdd to support OMII WS-Security. 
 Change also the transport tag to: 
