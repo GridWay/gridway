@@ -14,6 +14,7 @@
 /* limitations under the License.                                             */
 /* -------------------------------------------------------------------------- */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <pthread.h>
@@ -24,6 +25,7 @@
 #include "gw_template.h"
 #include "gw_user_pool.h"
 
+char *gw_em_jsdl_environment(gw_job_t *job);
 char* gw_split_arguments_jsdl(const char *arguments);
 
 /*---------------------------------------------------------------------------*/
@@ -41,7 +43,8 @@ char* gw_generate_wrapper_jsdl (gw_job_t *job)
     char *wrapper;
 
     wrapper = strrchr(job->template.wrapper, '/');
-    wrapper = strtok(wrapper,"/");
+    wrapper = strtok(wrapper, "/");
+
     /* ---------------------------------------------------------------------- */
     /* 1.- Create dynamic job data environment                                */
     /* ---------------------------------------------------------------------- */
@@ -65,32 +68,32 @@ char* gw_generate_wrapper_jsdl (gw_job_t *job)
     /* 2.- Build JSDL String & Return it                                       */
     /* ---------------------------------------------------------------------- */
 
-    jsdl = snprintf(jsdl_buffer, sizeof(char) * GW_RSL_LENGTH,
-	    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+    snprintf(jsdl_buffer, sizeof(char) * GW_RSL_LENGTH,
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
             "<jsdl:JobDefinition xmlns=\"http://www.example.org/\"\n"
             "   xmlns:jsdl=\"http://schemas.ggf.org/jsdl/2005/11/jsdl\"\n"
             "   xmlns:jsdl-posix=\"http://schemas.ggf.org/jsdl/2005/11/jsdl-posix\"\n"
             "   xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n"
-	    " <jsdl:JobDescription>\n"
+            " <jsdl:JobDescription>\n"
             "  <jsdl:JobIdentification>\n"
             "   <jsdl:JobName>%s</jsdl:JobName>\n"
             "  </jsdl:JobIdentification>\n"
-	    "  <jsdl:Application>\n"
-	    "   <jsdl-posix:POSIXApplication>\n",
+            "  <jsdl:Application>\n"
+            "   <jsdl-posix:POSIXApplication>\n",
             job->template.name);
 
-    jsdl = snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
+    snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
             "    <jsdl-posix:Executable>./%s</jsdl-posix:Executable>\n",
             wrapper);
     strcat(jsdl_buffer, tmp_buffer);
 
     gw_conf.gw_location = getenv("GW_LOCATION");
-    jsdl = snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
+    snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
             "    <jsdl-posix:Argument>%s%s/" GW_VAR_DIR "/%d/job.env</jsdl-posix:Argument>\n",
             staging_url, gw_conf.gw_location, job->id);
     strcat(jsdl_buffer, tmp_buffer);
 
-    jsdl = snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
+    snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
             "    <jsdl-posix:Output>stdout.wrapper.%d</jsdl-posix:Output>\n"
             "    <jsdl-posix:Error>stderr.wrapper.%d</jsdl-posix:Error>\n"
             "%s",
@@ -99,12 +102,12 @@ char* gw_generate_wrapper_jsdl (gw_job_t *job)
             job_environment);
     strcat(jsdl_buffer, tmp_buffer);
 
-    jsdl = snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
-	    "   </jsdl-posix:POSIXApplication>\n"
+    snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
+            "   </jsdl-posix:POSIXApplication>\n"
             "  </jsdl:Application>\n");
     strcat(jsdl_buffer, tmp_buffer);
 
-    jsdl = snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
+    snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
             "  <jsdl:DataStaging>\n"
             "   <jsdl:FileName>%s</jsdl:FileName>\n"
             "   <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"
@@ -115,7 +118,8 @@ char* gw_generate_wrapper_jsdl (gw_job_t *job)
             wrapper,
             staging_url, job->template.wrapper);
     strcat(jsdl_buffer, tmp_buffer);
-    jsdl = snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
+
+    snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
             "  <jsdl:DataStaging>\n"
             "   <jsdl:FileName>stdout.wrapper.%d</jsdl:FileName>\n"
             "   <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"
@@ -126,7 +130,8 @@ char* gw_generate_wrapper_jsdl (gw_job_t *job)
             job->restarted,
             staging_url, gw_conf.gw_location, job->id, job->restarted);
     strcat(jsdl_buffer, tmp_buffer);
-    jsdl = snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
+
+    snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
             "  <jsdl:DataStaging>\n"
             "   <jsdl:FileName>stderr.wrapper.%d</jsdl:FileName>\n"
             "   <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"
@@ -168,16 +173,16 @@ char* gw_split_arguments_jsdl (const char *arguments)
        
     for (i=0;i<length;i++)
     {
-	if (arguments[i] != ' ')
-        	argument[arg_i++] = arguments[i];
+        if (arguments[i] != ' ')
+            argument[arg_i++] = arguments[i];
 
         else
         {
-                argument[arg_i]='\0';
-                strcat(jsdl_buffer, "    <jsdl-posix:Argument>");
-                strcat(jsdl_buffer, argument);
-                strcat(jsdl_buffer, "</jsdl-posix:Argument>\n");
-                arg_i = 0;
+            argument[arg_i]='\0';
+            strcat(jsdl_buffer, "    <jsdl-posix:Argument>");
+            strcat(jsdl_buffer, argument);
+            strcat(jsdl_buffer, "</jsdl-posix:Argument>\n");
+            arg_i = 0;
          }
     }
 
@@ -198,10 +203,10 @@ char *gw_em_jsdl_environment(gw_job_t *job)
 
     for (i=0;i<job->template.num_env;i++)
     {
-            rc = snprintf(jsdl_buffer, sizeof(char) * GW_RSL_LENGTH,
-            "    <jsdl-posix:Environment name=\"%s\">%s</jsdl-posix:Environment>\n",
-            job->template.environment[i][0],
-            job->template.environment[i][1]);
+        rc = snprintf(jsdl_buffer, sizeof(char) * GW_RSL_LENGTH,
+                "    <jsdl-posix:Environment name=\"%s\">%s</jsdl-posix:Environment>\n",
+                job->template.environment[i][0],
+                job->template.environment[i][1]);
     }
 
     rc = snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
