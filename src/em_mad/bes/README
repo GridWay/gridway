@@ -43,7 +43,9 @@ higher (http://wsdl4j.sourceforge.net).
 - Xalan-Java 2.7.1-5 or higher (http://xml.apache.org/xalan-j).
 - Apache XML Security 1.4.4 or higher (http://santuario.apache.org).
 - A GridFTP server. 
-- Access to a MyProxy server.
+- Access to a MyProxy server. Access data must be placed in the 
+$HOME/.myproxy file, where the first line is the hostname of the MyProxy 
+server, the second line is the username and the last line is the password.
 
 
 ===== INSTALLATION =====

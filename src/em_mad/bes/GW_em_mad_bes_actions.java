@@ -212,7 +212,7 @@ class ServiceBES extends Thread {
 		status = 0;
 
 		try { 
-			JobDefinitionDocument xJSDL = JobDefinitionDocument.Factory.parse(new File(this.getJSDL()));
+                        JobDefinitionDocument xJSDL = JobDefinitionDocument.Factory.parse(this.getJSDL());
                 	CreateActivityDocument xCreateActivityDocument = CreateActivityDocument.Factory.newInstance();
                 	xCreateActivityDocument.addNewCreateActivity().addNewActivityDocument().setJobDefinition(xJSDL.getJobDefinition());
 
@@ -390,6 +390,7 @@ class ServiceBES extends Thread {
             this.terminationTime.setTime(Calendar.getInstance().getTime());
         }
     }
+
 
     private SOAPElement invokeRemoteOperation( String pPortOperation, XmlObject pOutput ) throws Throwable {
 

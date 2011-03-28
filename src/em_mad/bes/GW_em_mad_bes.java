@@ -114,7 +114,8 @@ class GW_em_mad_bes extends Thread {
                                         			host = str_split[2].substring(0,str_split[2].indexOf('/'));
                                                         contact = "http://" + host + ":8080/gridsam/services/bes";
                                 			jsdl_file = str_split[3];
-							job = new ServiceBES(action, jid, contact, jsdl_file);
+                                                        String jsdl_myproxy = add_myproxy(action, jid_str, jsdl_file);
+							job = new ServiceBES(action, jid, contact, jsdl_myproxy);
 						}
 						else
 						{
@@ -198,4 +199,62 @@ class GW_em_mad_bes extends Thread {
 		}
 	}
 
+	String add_myproxy(String action, String jid_str, String jsdl_filename) {
+		String myproxy_filename;
+		String myproxy_server = null;
+		String user = null;
+    		String passwd = null;
+		String myproxy_buffer;
+  		StringBuffer sb = new StringBuffer();
+		String line;
+
+		myproxy_filename = System.getenv("HOME") + "/.myproxy";
+        	try
+        	{
+                	BufferedReader in = new BufferedReader(new FileReader(myproxy_filename));
+			myproxy_server = in.readLine();
+			user = in.readLine();
+			passwd = in.readLine();
+			in.close();
+        	} catch (IOException e){
+                	String info = e.getMessage().replace('\n', ' ');
+
+                      	synchronized (System.out)
+                        {
+                        	System.out.println(action + " " + jid_str + " FAILURE " + info);
+                        }
+		}
+
+    		myproxy_buffer = " <MyProxy xmlns=\"urn:gridsam:myproxy\">\n" +
+            		"  <ProxyServer>" + myproxy_server + "</ProxyServer>\n" +
+            		"  <ProxyServerPort>7512</ProxyServerPort>\n" +
+            		"  <ProxyServerUserName>" + user + "</ProxyServerUserName>\n" +
+            		"  <ProxyServerPassPhrase>" + passwd + "</ProxyServerPassPhrase>\n" +
+            		" </MyProxy>\n" + 
+		 	"</jsdl:JobDefinition>\n";
+		try
+		{
+			BufferedReader in = new BufferedReader(new FileReader(jsdl_filename));
+			while((line = in.readLine())!=null){
+				if(line.indexOf("</jsdl:JobDefinition>")!= -1){
+					sb.append(myproxy_buffer);
+				}
+				else {
+					sb.append(line);
+                  			sb.append(System.getProperty("line.separator"));
+				}
+			}
+			in.close();
+		} catch (IOException e){
+                        String info = e.getMessage().replace('\n', ' ');
+
+                        synchronized (System.out)
+                        {
+                                System.out.println(action + " " + jid_str + " FAILURE " + info);
+                        }
+		} 
+		return sb.toString();
+	}
+
 }
+
