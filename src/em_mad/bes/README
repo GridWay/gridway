@@ -46,15 +46,14 @@ higher (http://wsdl4j.sourceforge.net).
 - Access to a MyProxy server.
 
 
-===== INSTALL =====
+===== INSTALLATION =====
 
 This install procedure assumes that you have installed GridWay and you 
 have access to a GridSAM server.
 
 1) Install the required packages and get the necessary JAR files of 
 GridSAM.
-2) Enter the downloaded directory, either after uncompression or svn 
-check out. 
+2) Change to src/em_mad/bes directory in the GridWay distribution.
 3) Change the variables, JAR_FILES and GRIDSAM_HOME, as needed in 
 Makefile and gw_em_mad_bes.sh. 
 4) Build and install the driver executing "make; make install".

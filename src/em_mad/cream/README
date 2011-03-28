@@ -19,13 +19,13 @@ The source distribution requires on the client-side:
 - log4cpp-devel and libxml2-devel packages
 
 
-===== INSTALL =====
+===== INSTALLATION =====
 
 This install procedure assumes that you have installed GridWay on a gLite
 UI and you have access to a CREAM CE.
 
 1) Install the required packages.
-2) Go to src/em_mad/cream in the GridWay distribution.
+2) Change to src/em_mad/cream directory in the GridWay distribution.
 3) Add /opt/lib/c-ares to LD_LIBRARY_PATH.
 4) Create the Globus build environment with:
 

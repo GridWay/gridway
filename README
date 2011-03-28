@@ -41,7 +41,7 @@ The documentation is completely online:
 http://gridway.org/doku.php?id=documentation
 
 
-===== INSTALL =====
+===== INSTALLATION =====
 
 Check the Installation Guide for more details.
 
@@ -53,7 +53,7 @@ summarizes to these steps:
 2) In a multi-user configuration, create the gwusers group and the gwadmin user.
 3) Set the envinronment ($GW_LOCATION, $GLOBUS_LOCATION, $JAVA_HOME, $PATH,
 $LD_LIBRARY_PATH...)
-4) Enter the downloaded directory, either after uncompression or svn check out.
+4) Change to the directory containing the GridWay distribution.
 5) Execute "./configure; make; make install".
 6) Build and install the needed drivers executing "make; make install", in
 $GW_LOCATION/src/{im_mad,em_mad,tm_mad}. Before, make sure you have installed
