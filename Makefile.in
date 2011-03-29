@@ -53,8 +53,7 @@ host_triplet = @host@
 subdir = .
 DIST_COMMON = README $(am__configure_deps) $(dist_data_DATA) \
 	$(dist_sysconf_DATA) $(srcdir)/Makefile.am \
-	$(srcdir)/Makefile.in $(top_srcdir)/configure \
-	$(top_srcdir)/pkgdata/pkg_data_src.gpt.in config/compile \
+	$(srcdir)/Makefile.in $(top_srcdir)/configure config/compile \
 	config/config.guess config/config.sub config/install-sh \
 	config/ltmain.sh config/missing config/ylwrap
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -64,7 +63,7 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno config.status.lineno
 mkinstalldirs = $(install_sh) -d
-CONFIG_CLEAN_FILES = pkgdata/pkg_data_src.gpt
+CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 depcomp =
 am__depfiles_maybe =
@@ -276,8 +275,9 @@ PREFIX = @prefix@
 vardir = $(PREFIX)/var
 testdir = $(PREFIX)/test
 xmldir = $(PREFIX)/xml_schema
-EXTRA_DIST = scripts examples xml_schema/gridway.xsd \
-src/drmaa/ruby src/test/TEST.pl src/test/jt
+EXTRA_DIST = scripts/gw_mad_common.sh scripts/monitor.sh scripts/wrapper.sh \
+examples xml_schema/gridway.xsd src/test/TEST.pl src/test/jt \
+src/drmaa/ruby/drmaa_r.i src/drmaa/ruby/drmaa_r_wrap.c src/drmaa/ruby/extconf.rb
 
 FLAGS = $(DB4_INCLUDE_PATH)
 dist_sysconf_DATA = etc/gwd.conf etc/sched.conf etc/gwrc etc/job_template.default
@@ -319,8 +319,6 @@ $(top_srcdir)/configure:  $(am__configure_deps)
 $(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 	$(am__cd) $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
 $(am__aclocal_m4_deps):
-pkgdata/pkg_data_src.gpt: $(top_builddir)/config.status $(top_srcdir)/pkgdata/pkg_data_src.gpt.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -884,6 +882,10 @@ dist-hook:
 	rm -rf $(distdir)/src/$(DRMAA_SRC_DIR)/org/ggf/drmaa/.libs
 	rm -f $(distdir)/src/$(DRMAA_SRC_DIR)/org/ggf/drmaa/DrmaaJNI.lo
 	rm -f $(distdir)/src/$(DRMAA_SRC_DIR)/org/ggf/drmaa/DrmaaJNI.o
+	rm -f $(distdir)/src/$(DRMAA_SRC_DIR)/org/ggf/drmaa/drmaa1.0/.dirstamp
+	rm -rf $(distdir)/src/$(DRMAA_SRC_DIR)/org/ggf/drmaa/drmaa1.0/.libs
+	rm -f $(distdir)/src/$(DRMAA_SRC_DIR)/org/ggf/drmaa/drmaa1.0/DrmaaJNI.lo
+	rm -f $(distdir)/src/$(DRMAA_SRC_DIR)/org/ggf/drmaa/drmaa1.0/DrmaaJNI.o
 
 # ----------------------------
 #    remove SVN dirs

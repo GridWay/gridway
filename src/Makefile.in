@@ -58,21 +58,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-@DRMAA1_TRUE@am__append_1 = $(DRMAA_PACK)/GridWayJobInfo.java \
-@DRMAA1_TRUE@        $(DRMAA_PACK)/GridWayJobTemplate.java \
-@DRMAA1_TRUE@        $(DRMAA_PACK)/GridWaySessionFactory.java \
-@DRMAA1_TRUE@        $(DRMAA_PACK)/GridWaySession.java \
-@DRMAA1_TRUE@        $(DRMAA_PACK)/SimpleJobTemplate.java
-
-@DRMAA1_FALSE@am__append_2 = $(DRMAA_PACK)/DrmaaRuntimeException.java \
-@DRMAA1_FALSE@        $(DRMAA_PACK)/InvalidAttributeException.java \
-@DRMAA1_FALSE@        $(DRMAA_PACK)/JobTemplateImpl.java \
-@DRMAA1_FALSE@        $(DRMAA_PACK)/JobInfoImpl.java \
-@DRMAA1_FALSE@        $(DRMAA_PACK)/NoResourceUsageException.java \
-@DRMAA1_FALSE@        $(DRMAA_PACK)/SessionException.java \
-@DRMAA1_FALSE@        $(DRMAA_PACK)/SessionImpl.java \
-@DRMAA1_FALSE@        $(DRMAA_PACK)/SessionFactoryImpl.java        
-
+@DRMAA_RUBY_TRUE@am__append_1 = drmaa/ruby
 bin_PROGRAMS = $(srcdir)/gwd/gwd$(EXEEXT) $(srcdir)/cmds/gwps$(EXEEXT) \
 	$(srcdir)/cmds/gwsubmit$(EXEEXT) \
 	$(srcdir)/cmds/gwhistory$(EXEEXT) \
@@ -85,10 +71,8 @@ bin_PROGRAMS = $(srcdir)/gwd/gwd$(EXEEXT) $(srcdir)/cmds/gwps$(EXEEXT) \
 # ----------------------------
 # JSDL Support
 # ----------------------------
-@JSDL_TRUE@am__append_3 = $(CMDS)/jsdl2gw.sh
-@JSDL_TRUE@am__append_4 = $(srcdir)/cmds/gw_jsdl.jar
-@DRMAA_TRUE@am__append_5 = $(srcdir)/drmaa/libdrmaa.la \
-@DRMAA_TRUE@	$(srcdir)/drmaa/libDrmaaJNI.la
+@JSDL_TRUE@am__append_2 = $(CMDS)/jsdl2gw.sh
+@JSDL_TRUE@am__append_3 = $(srcdir)/cmds/gw_jsdl.jar
 @TESTS_TRUE@test_PROGRAMS = $(srcdir)/test/gwtest$(EXEEXT)
 subdir = src
 DIST_COMMON = $(COMMON)/gw_template_parser.c $(GWD)/gw_conf_parser.c \
@@ -141,7 +125,6 @@ am__objects_1 = $(DRMAA_PACK)/DrmaaJNI.lo
 am___srcdir__drmaa_libDrmaaJNI_la_OBJECTS = $(am__objects_1)
 __srcdir__drmaa_libDrmaaJNI_la_OBJECTS =  \
 	$(am___srcdir__drmaa_libDrmaaJNI_la_OBJECTS)
-@DRMAA_TRUE@am___srcdir__drmaa_libDrmaaJNI_la_rpath = -rpath $(libdir)
 __srcdir__drmaa_libdrmaa_la_LIBADD =
 am__objects_2 =  \
 	$(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_job_match.lo \
@@ -168,7 +151,6 @@ am__objects_3 =  \
 am___srcdir__drmaa_libdrmaa_la_OBJECTS = $(am__objects_3)
 __srcdir__drmaa_libdrmaa_la_OBJECTS =  \
 	$(am___srcdir__drmaa_libdrmaa_la_OBJECTS)
-@DRMAA_TRUE@am___srcdir__drmaa_libdrmaa_la_rpath = -rpath $(libdir)
 PROGRAMS = $(bin_PROGRAMS) $(test_PROGRAMS)
 am__objects_4 = $(DB)/gw_acct.$(OBJEXT)
 am__objects_5 = $(CLIENT)/gw_client_acct.$(OBJEXT)
@@ -392,11 +374,49 @@ DIST_SOURCES = $(__srcdir__drmaa_libDrmaaJNI_la_SOURCES) \
 	$(__srcdir__scheduler_gw_flood_scheduler_SOURCES) \
 	$(__srcdir__scheduler_gw_sched_SOURCES) \
 	$(am____srcdir__test_gwtest_SOURCES_DIST)
+RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
+	html-recursive info-recursive install-data-recursive \
+	install-dvi-recursive install-exec-recursive \
+	install-html-recursive install-info-recursive \
+	install-pdf-recursive install-ps-recursive install-recursive \
+	installcheck-recursive installdirs-recursive pdf-recursive \
+	ps-recursive uninstall-recursive
 DATA = $(jar_DATA) $(jsdl_jar_DATA)
 HEADERS = $(flavorinclude_HEADERS)
+RECURSIVE_CLEAN_TARGETS = mostlyclean-recursive clean-recursive	\
+  distclean-recursive maintainer-clean-recursive
+AM_RECURSIVE_TARGETS = $(RECURSIVE_TARGETS:-recursive=) \
+	$(RECURSIVE_CLEAN_TARGETS:-recursive=) tags TAGS ctags CTAGS \
+	distdir
 ETAGS = etags
 CTAGS = ctags
+DIST_SUBDIRS = . drmaa/ruby
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
+am__relativize = \
+  dir0=`pwd`; \
+  sed_first='s,^\([^/]*\)/.*$$,\1,'; \
+  sed_rest='s,^[^/]*/*,,'; \
+  sed_last='s,^.*/\([^/]*\)$$,\1,'; \
+  sed_butlast='s,/*[^/]*$$,,'; \
+  while test -n "$$dir1"; do \
+    first=`echo "$$dir1" | sed -e "$$sed_first"`; \
+    if test "$$first" != "."; then \
+      if test "$$first" = ".."; then \
+        dir2=`echo "$$dir0" | sed -e "$$sed_last"`/"$$dir2"; \
+        dir0=`echo "$$dir0" | sed -e "$$sed_butlast"`; \
+      else \
+        first2=`echo "$$dir2" | sed -e "$$sed_first"`; \
+        if test "$$first2" = "$$first"; then \
+          dir2=`echo "$$dir2" | sed -e "$$sed_rest"`; \
+        else \
+          dir2="../$$dir2"; \
+        fi; \
+        dir0="$$dir0"/"$$first"; \
+      fi; \
+    fi; \
+    dir1=`echo "$$dir1" | sed -e "$$sed_rest"`; \
+  done; \
+  reldir="$$dir2"
 ACLOCAL = @ACLOCAL@
 ALLOCA = @ALLOCA@
 AMTAR = @AMTAR@
@@ -555,14 +575,12 @@ DM = $(srcdir)/dm
 RM = $(srcdir)/rm
 UM = $(srcdir)/um
 DB = $(srcdir)/acct
-@DRMAA1_FALSE@DRMAA_SRC_DIR = drmaa
-@DRMAA1_TRUE@DRMAA_SRC_DIR = drmaa/drmaa1.0
-
-#if DRMAA_RUBY
-#SUBDIRS = drmaa/ruby
-#endif
+DRMAA1_SRC_DIR = drmaa/drmaa1.0
+DRMAA_SRC_DIR = drmaa
+SUBDIRS = . $(am__append_1)
 DRMAA = $(srcdir)/drmaa
 DRMAA_PACK = $(srcdir)/$(DRMAA_SRC_DIR)/org/ggf/drmaa
+DRMAA1_PACK = $(srcdir)/$(DRMAA1_SRC_DIR)/org/ggf/drmaa
 SSH = $(srcdir)/ssh
 JAVA_HOME = @java_home@
 
@@ -637,14 +655,16 @@ JSDL_SRC = $(CMDS)/GWJTElement.java \
         $(CMDS)/JSDLTranslator.java
 
 EXTRA_DIST = $(JSDL_SRC) $(DRMAA_JAVA_SRC) $(DRMAA_PACK)/DrmaaJNI.h \
-	$(DRMAA_JAVA_SRC) $(IM_MAD_STATIC_SRC_DIST) \
-	$(IM_MAD_MDS2_SRC_DIST) $(IM_MAD_MDS4_SRC_DIST) \
-	$(IM_MAD_BDII_SRC_DIST) $(EM_MAD_GRAM2_SRC_DIST) \
-	$(EM_MAD_GRAM4_SRC_DIST) $(EM_MAD_CREAM_SRC_DIST) \
-	$(EM_MAD_NORDU_SRC_DIST) $(EM_MAD_SSH_SRC_DIST) \
-	$(EM_MAD_BES_SRC_DIST) $(TM_MAD_GRIDFTP_SRC_DIST) \
-	$(TM_MAD_DUMMY_SRC_DIST) $(TM_MAD_NORDU_SRC_DIST) \
-	$(TM_MAD_SSH_SRC_DIST) $(TM_MAD_RFT_SRC_DIST)
+	$(DRMAA_PACK)/DrmaaJNI.c $(DRMAA1_JAVA_SRC) \
+	$(DRMAA1_PACK)/DrmaaJNI.h $(DRMAA1_PACK)/DrmaaJNI.c \
+	$(IM_MAD_STATIC_SRC_DIST) $(IM_MAD_MDS2_SRC_DIST) \
+	$(IM_MAD_MDS4_SRC_DIST) $(IM_MAD_BDII_SRC_DIST) \
+	$(EM_MAD_GRAM2_SRC_DIST) $(EM_MAD_GRAM4_SRC_DIST) \
+	$(EM_MAD_CREAM_SRC_DIST) $(EM_MAD_NORDU_SRC_DIST) \
+	$(EM_MAD_SSH_SRC_DIST) $(EM_MAD_BES_SRC_DIST) \
+	$(TM_MAD_GRIDFTP_SRC_DIST) $(TM_MAD_DUMMY_SRC_DIST) \
+	$(TM_MAD_NORDU_SRC_DIST) $(TM_MAD_SSH_SRC_DIST) \
+	$(TM_MAD_RFT_SRC_DIST)
 EM_SRC = $(EM)/gw_em_actions.c \
         $(EM)/gw_em.c \
         $(EM)/gw_em_listener.c \
@@ -725,37 +745,90 @@ DRMAA_SRC = $(COMMON)/gw_file_parser.c $(CLIENT_SRC) \
         $(COMMON)/gw_template.c $(COMMON)/gw_log.c
 
 DRMAAJNI_SRC = $(DRMAA_PACK)/DrmaaJNI.c
+DRMAA1JNI_SRC = $(DRMAA1_PACK)/DrmaaJNI.c
 DRMAA_JAVA_SRC = $(DRMAA_PACK)/AlreadyActiveSessionException.java \
-	$(DRMAA_PACK)/AuthorizationException.java \
-	$(DRMAA_PACK)/ConflictingAttributeValuesException.java \
-	$(DRMAA_PACK)/DefaultContactStringException.java \
-	$(DRMAA_PACK)/DeniedByDrmException.java \
-	$(DRMAA_PACK)/DrmaaException.java $(DRMAA_PACK)/DrmaaJNI.java \
-	$(DRMAA_PACK)/DrmCommunicationException.java \
-	$(DRMAA_PACK)/DrmsExitException.java \
-	$(DRMAA_PACK)/DrmsInitException.java \
-	$(DRMAA_PACK)/ExitTimeoutException.java \
-	$(DRMAA_PACK)/FileTransferMode.java \
-	$(DRMAA_PACK)/HoldInconsistentStateException.java \
-	$(DRMAA_PACK)/InconsistentStateException.java \
-	$(DRMAA_PACK)/InternalException.java \
-	$(DRMAA_PACK)/InvalidAttributeFormatException.java \
-	$(DRMAA_PACK)/InvalidAttributeValueException.java \
-	$(DRMAA_PACK)/InvalidContactStringException.java \
-	$(DRMAA_PACK)/InvalidJobException.java \
-	$(DRMAA_PACK)/InvalidJobTemplateException.java \
-	$(DRMAA_PACK)/JobInfo.java $(DRMAA_PACK)/JobTemplate.java \
-	$(DRMAA_PACK)/NoActiveSessionException.java \
-	$(DRMAA_PACK)/NoDefaultContactStringSelectedException.java \
-	$(DRMAA_PACK)/PartialTimestampFormat.java \
-	$(DRMAA_PACK)/PartialTimestamp.java \
-	$(DRMAA_PACK)/ReleaseInconsistentStateException.java \
-	$(DRMAA_PACK)/ResumeInconsistentStateException.java \
-	$(DRMAA_PACK)/SessionFactory.java $(DRMAA_PACK)/Session.java \
-	$(DRMAA_PACK)/SuspendInconsistentStateException.java \
-	$(DRMAA_PACK)/TryLaterException.java \
-	$(DRMAA_PACK)/UnsupportedAttributeException.java \
-	$(DRMAA_PACK)/Version.java $(am__append_1) $(am__append_2)
+        $(DRMAA_PACK)/AuthorizationException.java \
+        $(DRMAA_PACK)/ConflictingAttributeValuesException.java \
+        $(DRMAA_PACK)/DefaultContactStringException.java \
+        $(DRMAA_PACK)/DeniedByDrmException.java \
+        $(DRMAA_PACK)/DrmaaException.java \
+        $(DRMAA_PACK)/DrmaaJNI.java \
+        $(DRMAA_PACK)/DrmCommunicationException.java \
+        $(DRMAA_PACK)/DrmsExitException.java \
+        $(DRMAA_PACK)/DrmsInitException.java \
+        $(DRMAA_PACK)/ExitTimeoutException.java \
+        $(DRMAA_PACK)/FileTransferMode.java \
+        $(DRMAA_PACK)/HoldInconsistentStateException.java \
+        $(DRMAA_PACK)/InconsistentStateException.java \
+        $(DRMAA_PACK)/InternalException.java \
+        $(DRMAA_PACK)/InvalidAttributeFormatException.java \
+        $(DRMAA_PACK)/InvalidAttributeValueException.java \
+        $(DRMAA_PACK)/InvalidContactStringException.java \
+        $(DRMAA_PACK)/InvalidJobException.java \
+        $(DRMAA_PACK)/InvalidJobTemplateException.java \
+        $(DRMAA_PACK)/JobInfo.java \
+        $(DRMAA_PACK)/JobTemplate.java \
+        $(DRMAA_PACK)/NoActiveSessionException.java \
+        $(DRMAA_PACK)/NoDefaultContactStringSelectedException.java \
+        $(DRMAA_PACK)/PartialTimestampFormat.java \
+        $(DRMAA_PACK)/PartialTimestamp.java \
+        $(DRMAA_PACK)/ReleaseInconsistentStateException.java \
+        $(DRMAA_PACK)/ResumeInconsistentStateException.java \
+        $(DRMAA_PACK)/SessionFactory.java \
+        $(DRMAA_PACK)/Session.java \
+        $(DRMAA_PACK)/SuspendInconsistentStateException.java \
+        $(DRMAA_PACK)/TryLaterException.java \
+        $(DRMAA_PACK)/UnsupportedAttributeException.java \
+        $(DRMAA_PACK)/Version.java \
+        $(DRMAA_PACK)/DrmaaRuntimeException.java \
+        $(DRMAA_PACK)/InvalidAttributeException.java \
+        $(DRMAA_PACK)/JobTemplateImpl.java \
+        $(DRMAA_PACK)/JobInfoImpl.java \
+        $(DRMAA_PACK)/NoResourceUsageException.java \
+        $(DRMAA_PACK)/SessionException.java \
+        $(DRMAA_PACK)/SessionImpl.java \
+        $(DRMAA_PACK)/SessionFactoryImpl.java
+
+DRMAA1_JAVA_SRC = $(DRMAA1_PACK)/AlreadyActiveSessionException.java \
+        $(DRMAA1_PACK)/AuthorizationException.java \
+        $(DRMAA1_PACK)/ConflictingAttributeValuesException.java \
+        $(DRMAA1_PACK)/DefaultContactStringException.java \
+        $(DRMAA1_PACK)/DeniedByDrmException.java \
+        $(DRMAA1_PACK)/DrmaaException.java \
+        $(DRMAA1_PACK)/DrmaaJNI.java \
+        $(DRMAA1_PACK)/DrmCommunicationException.java \
+        $(DRMAA1_PACK)/DrmsExitException.java \
+        $(DRMAA1_PACK)/DrmsInitException.java \
+        $(DRMAA1_PACK)/ExitTimeoutException.java \
+        $(DRMAA1_PACK)/FileTransferMode.java \
+        $(DRMAA1_PACK)/HoldInconsistentStateException.java \
+        $(DRMAA1_PACK)/InconsistentStateException.java \
+        $(DRMAA1_PACK)/InternalException.java \
+        $(DRMAA1_PACK)/InvalidAttributeFormatException.java \
+        $(DRMAA1_PACK)/InvalidAttributeValueException.java \
+        $(DRMAA1_PACK)/InvalidContactStringException.java \
+        $(DRMAA1_PACK)/InvalidJobException.java \
+        $(DRMAA1_PACK)/InvalidJobTemplateException.java \
+        $(DRMAA1_PACK)/JobInfo.java \
+        $(DRMAA1_PACK)/JobTemplate.java \
+        $(DRMAA1_PACK)/NoActiveSessionException.java \
+        $(DRMAA1_PACK)/NoDefaultContactStringSelectedException.java \
+        $(DRMAA1_PACK)/PartialTimestampFormat.java \
+        $(DRMAA1_PACK)/PartialTimestamp.java \
+        $(DRMAA1_PACK)/ReleaseInconsistentStateException.java \
+        $(DRMAA1_PACK)/ResumeInconsistentStateException.java \
+        $(DRMAA1_PACK)/SessionFactory.java \
+        $(DRMAA1_PACK)/Session.java \
+        $(DRMAA1_PACK)/SuspendInconsistentStateException.java \
+        $(DRMAA1_PACK)/TryLaterException.java \
+        $(DRMAA1_PACK)/UnsupportedAttributeException.java \
+        $(DRMAA1_PACK)/Version.java \
+        $(DRMAA1_PACK)/GridWayJobInfo.java \
+        $(DRMAA1_PACK)/GridWayJobTemplate.java \
+        $(DRMAA1_PACK)/GridWaySessionFactory.java \
+        $(DRMAA1_PACK)/GridWaySession.java \
+        $(DRMAA1_PACK)/SimpleJobTemplate.java
+
 
 # -----------------------------
 # -- Includes and Headers
@@ -768,42 +841,42 @@ INCLUDES = -I$(top_srcdir)/include \
 SYSTEM = @system@
 flavorincludedir = $(prefix)/include
 flavorinclude_HEADERS = $(top_srcdir)/include/drmaa.h \
-                        $(top_srcdir)/include/gw_acct.h \
-                        $(top_srcdir)/include/gw_action.h \
-                        $(top_srcdir)/include/gw_array.h \
-                        $(top_srcdir)/include/gw_array_pool.h \
-                        $(top_srcdir)/include/gw_client.h \
-                        $(top_srcdir)/include/gw_cmds_common.h \
-                        $(top_srcdir)/include/gw_common.h \
-                        $(top_srcdir)/include/gw_conf.h \
-                        $(top_srcdir)/include/gw_dm.h \
-                        $(top_srcdir)/include/gw_dm_mad.h \
-                        $(top_srcdir)/include/gw_drmaa_jt.h \
-                        $(top_srcdir)/include/gw_em.h \
-                        $(top_srcdir)/include/gw_em_mad.h \
-                        $(top_srcdir)/include/gw_em_rsl.h \
-                        $(top_srcdir)/include/gw_file_parser.h \
-                        $(top_srcdir)/include/gw_history.h \
-                        $(top_srcdir)/include/gw_host.h \
-                        $(top_srcdir)/include/gw_host_pool.h \
-                        $(top_srcdir)/include/gw_im.h \
-                        $(top_srcdir)/include/gw_im_mad.h \
-                        $(top_srcdir)/include/gw_job.h \
-                        $(top_srcdir)/include/gw_job_pool.h \
-                        $(top_srcdir)/include/gw_job_template.h \
-                        $(top_srcdir)/include/gw_log.h \
-                        $(top_srcdir)/include/gw_rm_connection_list.h \
-                        $(top_srcdir)/include/gw_rm.h \
-                        $(top_srcdir)/include/gw_rm_msg.h \
-                        $(top_srcdir)/include/gw_scheduler.h \
-                        $(top_srcdir)/include/gw_template.h \
-                        $(top_srcdir)/include/gw_tm.h \
-                        $(top_srcdir)/include/gw_tm_mad.h \
-                        $(top_srcdir)/include/gw_um.h \
-                        $(top_srcdir)/include/gw_user.h \
-                        $(top_srcdir)/include/gw_user_pool.h \
-                        $(top_srcdir)/include/gw_xfr_files.h \
-                        $(top_srcdir)/include/gw_sch_conf.h
+        $(top_srcdir)/include/gw_acct.h \
+        $(top_srcdir)/include/gw_action.h \
+        $(top_srcdir)/include/gw_array.h \
+        $(top_srcdir)/include/gw_array_pool.h \
+        $(top_srcdir)/include/gw_client.h \
+        $(top_srcdir)/include/gw_cmds_common.h \
+        $(top_srcdir)/include/gw_common.h \
+        $(top_srcdir)/include/gw_conf.h \
+        $(top_srcdir)/include/gw_dm.h \
+        $(top_srcdir)/include/gw_dm_mad.h \
+        $(top_srcdir)/include/gw_drmaa_jt.h \
+        $(top_srcdir)/include/gw_em.h \
+        $(top_srcdir)/include/gw_em_mad.h \
+        $(top_srcdir)/include/gw_em_rsl.h \
+        $(top_srcdir)/include/gw_file_parser.h \
+        $(top_srcdir)/include/gw_history.h \
+        $(top_srcdir)/include/gw_host.h \
+        $(top_srcdir)/include/gw_host_pool.h \
+        $(top_srcdir)/include/gw_im.h \
+        $(top_srcdir)/include/gw_im_mad.h \
+        $(top_srcdir)/include/gw_job.h \
+        $(top_srcdir)/include/gw_job_pool.h \
+        $(top_srcdir)/include/gw_job_template.h \
+        $(top_srcdir)/include/gw_log.h \
+        $(top_srcdir)/include/gw_rm_connection_list.h \
+        $(top_srcdir)/include/gw_rm.h \
+        $(top_srcdir)/include/gw_rm_msg.h \
+        $(top_srcdir)/include/gw_scheduler.h \
+        $(top_srcdir)/include/gw_template.h \
+        $(top_srcdir)/include/gw_tm.h \
+        $(top_srcdir)/include/gw_tm_mad.h \
+        $(top_srcdir)/include/gw_um.h \
+        $(top_srcdir)/include/gw_user.h \
+        $(top_srcdir)/include/gw_user_pool.h \
+        $(top_srcdir)/include/gw_xfr_files.h \
+        $(top_srcdir)/include/gw_sch_conf.h
 
 __srcdir__gwd_gwd_SOURCES = $(EM_SRC) \
         $(TM_SRC) \
@@ -820,8 +893,8 @@ __srcdir__gwd_gwd_SOURCES = $(EM_SRC) \
         $(DB_SRC)
 
 bin_SCRIPTS = 
-dist_bin_SCRIPTS = $(CMDS_RB_SRC) $(am__append_3)
-CLEANFILES = $(am__append_4) $(srcdir)/drmaa/drmaa.jar
+dist_bin_SCRIPTS = $(CMDS_RB_SRC) $(am__append_2)
+CLEANFILES = $(am__append_3) $(srcdir)/drmaa/drmaa.jar
 __srcdir__cmds_gwps_SOURCES = $(CMDS)/gw_ps.c \
         $(CMDS)/gw_cmds_common.c \
         $(CLIENT_SRC) \
@@ -894,7 +967,8 @@ __srcdir__scheduler_gw_sched_LDFLAGS = -lm
 # ----------------------------
 # DRMAA
 # ----------------------------
-lib_LTLIBRARIES = $(am__append_5)
+lib_LTLIBRARIES = $(srcdir)/drmaa/libdrmaa.la \
+	$(srcdir)/drmaa/libDrmaaJNI.la
 __srcdir__drmaa_libdrmaa_la_SOURCES = $(DRMAA_SRC)
 __srcdir__drmaa_libDrmaaJNI_la_SOURCES = $(DRMAAJNI_SRC)
 __srcdir__drmaa_libDrmaaJNI_la_LIBADD = $(srcdir)/drmaa/libdrmaa.la
@@ -903,8 +977,8 @@ __srcdir__drmaa_libdrmaa_la_CFLAGS = $(AM_CFLAGS)
 # Use libtool to generate drmaa library files
 __srcdir__drmaa_libdrmaa_la_LINK = $(LIBTOOL) --tag=CC --mode=link $(LINK)
 __srcdir__drmaa_libDrmaaJNI_la_LINK = $(LIBTOOL) --tag=CC --mode=link $(LINK)
-@DRMAA_TRUE@jardir = $(prefix)/lib
-@DRMAA_TRUE@jar_DATA = $(srcdir)/drmaa/drmaa.jar
+@DRMAA_JAVA_TRUE@jardir = $(prefix)/lib
+@DRMAA_JAVA_TRUE@jar_DATA = $(srcdir)/drmaa/drmaa.jar
 
 # ----------------------------
 # TESTS
@@ -1002,7 +1076,7 @@ TM_MAD_RFT_SRC_DIST = $(TM_MAD)/rft/GWRftClient.java \
 	$(TM_MAD)/rft/GWRftUtil.java \
 	$(TM_MAD)/rft/gw_tm_mad_rft.sh
 
-all: all-am
+all: all-recursive
 
 .SUFFIXES:
 .SUFFIXES: .c .l .lo .o .obj .y
@@ -1075,7 +1149,7 @@ $(srcdir)/drmaa/$(am__dirstamp):
 	@$(MKDIR_P) $(srcdir)/drmaa
 	@: > $(srcdir)/drmaa/$(am__dirstamp)
 $(srcdir)/drmaa/libDrmaaJNI.la: $(__srcdir__drmaa_libDrmaaJNI_la_OBJECTS) $(__srcdir__drmaa_libDrmaaJNI_la_DEPENDENCIES) $(srcdir)/drmaa/$(am__dirstamp)
-	$(__srcdir__drmaa_libDrmaaJNI_la_LINK) $(am___srcdir__drmaa_libDrmaaJNI_la_rpath) $(__srcdir__drmaa_libDrmaaJNI_la_OBJECTS) $(__srcdir__drmaa_libDrmaaJNI_la_LIBADD) $(LIBS)
+	$(__srcdir__drmaa_libDrmaaJNI_la_LINK) -rpath $(libdir) $(__srcdir__drmaa_libDrmaaJNI_la_OBJECTS) $(__srcdir__drmaa_libDrmaaJNI_la_LIBADD) $(LIBS)
 $(COMMON)/$(am__dirstamp):
 	@$(MKDIR_P) $(COMMON)
 	@: > $(COMMON)/$(am__dirstamp)
@@ -1127,7 +1201,7 @@ $(COMMON)/__srcdir__drmaa_libdrmaa_la-gw_template.lo:  \
 $(COMMON)/__srcdir__drmaa_libdrmaa_la-gw_log.lo:  \
 	$(COMMON)/$(am__dirstamp)
 $(srcdir)/drmaa/libdrmaa.la: $(__srcdir__drmaa_libdrmaa_la_OBJECTS) $(__srcdir__drmaa_libdrmaa_la_DEPENDENCIES) $(srcdir)/drmaa/$(am__dirstamp)
-	$(__srcdir__drmaa_libdrmaa_la_LINK) $(am___srcdir__drmaa_libdrmaa_la_rpath) $(__srcdir__drmaa_libdrmaa_la_OBJECTS) $(__srcdir__drmaa_libdrmaa_la_LIBADD) $(LIBS)
+	$(__srcdir__drmaa_libdrmaa_la_LINK) -rpath $(libdir) $(__srcdir__drmaa_libdrmaa_la_OBJECTS) $(__srcdir__drmaa_libdrmaa_la_LIBADD) $(LIBS)
 install-binPROGRAMS: $(bin_PROGRAMS)
 	@$(NORMAL_INSTALL)
 	test -z "$(bindir)" || $(MKDIR_P) "$(DESTDIR)$(bindir)"
@@ -1804,6 +1878,76 @@ uninstall-flavorincludeHEADERS:
 	echo " ( cd '$(DESTDIR)$(flavorincludedir)' && rm -f" $$files ")"; \
 	cd "$(DESTDIR)$(flavorincludedir)" && rm -f $$files
 
+# This directory's subdirectories are mostly independent; you can cd
+# into them and run `make' without going through this Makefile.
+# To change the values of `make' variables: instead of editing Makefiles,
+# (1) if the variable is set in `config.status', edit `config.status'
+#     (which will cause the Makefiles to be regenerated when you run `make');
+# (2) otherwise, pass the desired values on the `make' command line.
+$(RECURSIVE_TARGETS):
+	@fail= failcom='exit 1'; \
+	for f in x $$MAKEFLAGS; do \
+	  case $$f in \
+	    *=* | --[!k]*);; \
+	    *k*) failcom='fail=yes';; \
+	  esac; \
+	done; \
+	dot_seen=no; \
+	target=`echo $@ | sed s/-recursive//`; \
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  echo "Making $$target in $$subdir"; \
+	  if test "$$subdir" = "."; then \
+	    dot_seen=yes; \
+	    local_target="$$target-am"; \
+	  else \
+	    local_target="$$target"; \
+	  fi; \
+	  ($(am__cd) $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$local_target) \
+	  || eval $$failcom; \
+	done; \
+	if test "$$dot_seen" = "no"; then \
+	  $(MAKE) $(AM_MAKEFLAGS) "$$target-am" || exit 1; \
+	fi; test -z "$$fail"
+
+$(RECURSIVE_CLEAN_TARGETS):
+	@fail= failcom='exit 1'; \
+	for f in x $$MAKEFLAGS; do \
+	  case $$f in \
+	    *=* | --[!k]*);; \
+	    *k*) failcom='fail=yes';; \
+	  esac; \
+	done; \
+	dot_seen=no; \
+	case "$@" in \
+	  distclean-* | maintainer-clean-*) list='$(DIST_SUBDIRS)' ;; \
+	  *) list='$(SUBDIRS)' ;; \
+	esac; \
+	rev=''; for subdir in $$list; do \
+	  if test "$$subdir" = "."; then :; else \
+	    rev="$$subdir $$rev"; \
+	  fi; \
+	done; \
+	rev="$$rev ."; \
+	target=`echo $@ | sed s/-recursive//`; \
+	for subdir in $$rev; do \
+	  echo "Making $$target in $$subdir"; \
+	  if test "$$subdir" = "."; then \
+	    local_target="$$target-am"; \
+	  else \
+	    local_target="$$target"; \
+	  fi; \
+	  ($(am__cd) $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$local_target) \
+	  || eval $$failcom; \
+	done && test -z "$$fail"
+tags-recursive:
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  test "$$subdir" = . || ($(am__cd) $$subdir && $(MAKE) $(AM_MAKEFLAGS) tags); \
+	done
+ctags-recursive:
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  test "$$subdir" = . || ($(am__cd) $$subdir && $(MAKE) $(AM_MAKEFLAGS) ctags); \
+	done
+
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
 	unique=`for i in $$list; do \
@@ -1814,10 +1958,23 @@ ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	mkid -fID $$unique
 tags: TAGS
 
-TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
+TAGS: tags-recursive $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
 		$(TAGS_FILES) $(LISP)
 	set x; \
 	here=`pwd`; \
+	if ($(ETAGS) --etags-include --version) >/dev/null 2>&1; then \
+	  include_option=--etags-include; \
+	  empty_fix=.; \
+	else \
+	  include_option=--include; \
+	  empty_fix=; \
+	fi; \
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  if test "$$subdir" = .; then :; else \
+	    test ! -f $$subdir/TAGS || \
+	      set "$$@" "$$include_option=$$here/$$subdir/TAGS"; \
+	  fi; \
+	done; \
 	list='$(SOURCES) $(HEADERS)  $(LISP) $(TAGS_FILES)'; \
 	unique=`for i in $$list; do \
 	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
@@ -1836,7 +1993,7 @@ TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
 	  fi; \
 	fi
 ctags: CTAGS
-CTAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
+CTAGS: ctags-recursive $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
 		$(TAGS_FILES) $(LISP)
 	list='$(SOURCES) $(HEADERS)  $(LISP) $(TAGS_FILES)'; \
 	unique=`for i in $$list; do \
@@ -1886,25 +2043,54 @@ distdir: $(DISTFILES)
 	    || exit 1; \
 	  fi; \
 	done
+	@list='$(DIST_SUBDIRS)'; for subdir in $$list; do \
+	  if test "$$subdir" = .; then :; else \
+	    test -d "$(distdir)/$$subdir" \
+	    || $(MKDIR_P) "$(distdir)/$$subdir" \
+	    || exit 1; \
+	  fi; \
+	done
+	@list='$(DIST_SUBDIRS)'; for subdir in $$list; do \
+	  if test "$$subdir" = .; then :; else \
+	    dir1=$$subdir; dir2="$(distdir)/$$subdir"; \
+	    $(am__relativize); \
+	    new_distdir=$$reldir; \
+	    dir1=$$subdir; dir2="$(top_distdir)"; \
+	    $(am__relativize); \
+	    new_top_distdir=$$reldir; \
+	    echo " (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) top_distdir="$$new_top_distdir" distdir="$$new_distdir" \\"; \
+	    echo "     am__remove_distdir=: am__skip_length_check=: am__skip_mode_fix=: distdir)"; \
+	    ($(am__cd) $$subdir && \
+	      $(MAKE) $(AM_MAKEFLAGS) \
+	        top_distdir="$$new_top_distdir" \
+	        distdir="$$new_distdir" \
+		am__remove_distdir=: \
+		am__skip_length_check=: \
+		am__skip_mode_fix=: \
+	        distdir) \
+	      || exit 1; \
+	  fi; \
+	done
 check-am: all-am
-check: check-am
+check: check-recursive
 all-am: Makefile $(LTLIBRARIES) $(PROGRAMS) $(SCRIPTS) $(DATA) \
 		$(HEADERS)
 install-binPROGRAMS: install-libLTLIBRARIES
 
-installdirs:
+installdirs: installdirs-recursive
+installdirs-am:
 	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(testdir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(jardir)" "$(DESTDIR)$(jsdl_jardir)" "$(DESTDIR)$(flavorincludedir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
-install: install-am
-install-exec: install-exec-am
-install-data: install-data-am
-uninstall: uninstall-am
+install: install-recursive
+install-exec: install-exec-recursive
+install-data: install-data-recursive
+uninstall: uninstall-recursive
 
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
 
-installcheck: installcheck-am
+installcheck: installcheck-recursive
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) INSTALL_PROGRAM="$(INSTALL_STRIP_PROGRAM)" \
 	  install_sh_PROGRAM="$(INSTALL_STRIP_PROGRAM)" INSTALL_STRIP_FLAG=-s \
@@ -1958,72 +2144,72 @@ maintainer-clean-generic:
 	-rm -f $(HOST)/gw_host_update_syntax.c
 	-rm -f $(HOST)/gw_host_update_syntax.h
 	-rm -f $(JOB)/gw_job_template_var_parser.c
-clean: clean-am
+clean: clean-recursive
 
 clean-am: clean-binPROGRAMS clean-generic clean-libLTLIBRARIES \
 	clean-libtool clean-testPROGRAMS mostlyclean-am
 
-distclean: distclean-am
+distclean: distclean-recursive
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
 
-dvi: dvi-am
+dvi: dvi-recursive
 
 dvi-am:
 
-html: html-am
+html: html-recursive
 
 html-am:
 
-info: info-am
+info: info-recursive
 
 info-am:
 
 install-data-am: install-flavorincludeHEADERS install-jarDATA \
 	install-jsdl_jarDATA install-testPROGRAMS
 
-install-dvi: install-dvi-am
+install-dvi: install-dvi-recursive
 
 install-dvi-am:
 
 install-exec-am: install-binPROGRAMS install-binSCRIPTS \
 	install-dist_binSCRIPTS install-libLTLIBRARIES
 
-install-html: install-html-am
+install-html: install-html-recursive
 
 install-html-am:
 
-install-info: install-info-am
+install-info: install-info-recursive
 
 install-info-am:
 
 install-man:
 
-install-pdf: install-pdf-am
+install-pdf: install-pdf-recursive
 
 install-pdf-am:
 
-install-ps: install-ps-am
+install-ps: install-ps-recursive
 
 install-ps-am:
 
 installcheck-am:
 
-maintainer-clean: maintainer-clean-am
+maintainer-clean: maintainer-clean-recursive
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
-mostlyclean: mostlyclean-am
+mostlyclean: mostlyclean-recursive
 
 mostlyclean-am: mostlyclean-compile mostlyclean-generic \
 	mostlyclean-libtool
 
-pdf: pdf-am
+pdf: pdf-recursive
 
 pdf-am:
 
-ps: ps-am
+ps: ps-recursive
 
 ps-am:
 
@@ -2032,29 +2218,31 @@ uninstall-am: uninstall-binPROGRAMS uninstall-binSCRIPTS \
 	uninstall-jarDATA uninstall-jsdl_jarDATA \
 	uninstall-libLTLIBRARIES uninstall-testPROGRAMS
 
-.MAKE: install-am install-strip
+.MAKE: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) ctags-recursive \
+	install-am install-strip tags-recursive
 
-.PHONY: CTAGS GTAGS all all-am check check-am clean clean-binPROGRAMS \
+.PHONY: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) CTAGS GTAGS \
+	all all-am check check-am clean clean-binPROGRAMS \
 	clean-generic clean-libLTLIBRARIES clean-libtool \
-	clean-testPROGRAMS ctags distclean distclean-compile \
-	distclean-generic distclean-libtool distclean-tags distdir dvi \
-	dvi-am html html-am info info-am install install-am \
-	install-binPROGRAMS install-binSCRIPTS install-data \
-	install-data-am install-dist_binSCRIPTS install-dvi \
-	install-dvi-am install-exec install-exec-am \
+	clean-testPROGRAMS ctags ctags-recursive distclean \
+	distclean-compile distclean-generic distclean-libtool \
+	distclean-tags distdir dvi dvi-am html html-am info info-am \
+	install install-am install-binPROGRAMS install-binSCRIPTS \
+	install-data install-data-am install-dist_binSCRIPTS \
+	install-dvi install-dvi-am install-exec install-exec-am \
 	install-flavorincludeHEADERS install-html install-html-am \
 	install-info install-info-am install-jarDATA \
 	install-jsdl_jarDATA install-libLTLIBRARIES install-man \
 	install-pdf install-pdf-am install-ps install-ps-am \
 	install-strip install-testPROGRAMS installcheck \
-	installcheck-am installdirs maintainer-clean \
+	installcheck-am installdirs installdirs-am maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	tags uninstall uninstall-am uninstall-binPROGRAMS \
-	uninstall-binSCRIPTS uninstall-dist_binSCRIPTS \
-	uninstall-flavorincludeHEADERS uninstall-jarDATA \
-	uninstall-jsdl_jarDATA uninstall-libLTLIBRARIES \
-	uninstall-testPROGRAMS
+	tags tags-recursive uninstall uninstall-am \
+	uninstall-binPROGRAMS uninstall-binSCRIPTS \
+	uninstall-dist_binSCRIPTS uninstall-flavorincludeHEADERS \
+	uninstall-jarDATA uninstall-jsdl_jarDATA \
+	uninstall-libLTLIBRARIES uninstall-testPROGRAMS
 
 @JSDL_TRUE@$(srcdir)/cmds/gw_jsdl.jar:
 @JSDL_TRUE@	@rm -f lib/gw_jsdl.jar
@@ -2064,14 +2252,17 @@ uninstall-am: uninstall-binPROGRAMS uninstall-binSCRIPTS \
 @JSDL_TRUE@        -d $(CMDS)/package
 @JSDL_TRUE@	jar cf $(srcdir)/cmds/gw_jsdl.jar -C $(CMDS)/package/ .
 @JSDL_TRUE@	@rm -rf $(CMDS)/package
-@DRMAA_TRUE@$(srcdir)/drmaa/drmaa.jar:
-@DRMAA_TRUE@	@rm -f lib/drmaa.jar
-@DRMAA_TRUE@	@mkdir -p $(DRMAA)/package
-@DRMAA_TRUE@	$(JAVAC_PATH) $(DRMAA_JAVA_SRC) \
-@DRMAA_TRUE@	    -classpath $(DRMAA) \
-@DRMAA_TRUE@        -d $(DRMAA)/package
-@DRMAA_TRUE@	jar cf $(srcdir)/drmaa/drmaa.jar -C $(DRMAA)/package/ .
-@DRMAA_TRUE@	@rm -rf $(DRMAA)/package
+@DRMAA_JAVA_TRUE@$(srcdir)/drmaa/drmaa.jar:
+@DRMAA_JAVA_TRUE@	@rm -f lib/drmaa.jar
+@DRMAA_JAVA_TRUE@	@mkdir -p $(DRMAA)/package
+@DRMAA1_JAVA_TRUE@@DRMAA_JAVA_TRUE@	$(JAVAC_PATH) $(DRMAA1_JAVA_SRC) \
+@DRMAA1_JAVA_TRUE@@DRMAA_JAVA_TRUE@	        -classpath $(DRMAA) \
+@DRMAA1_JAVA_TRUE@@DRMAA_JAVA_TRUE@                -d $(DRMAA)/package
+@DRMAA1_JAVA_FALSE@@DRMAA_JAVA_TRUE@	$(JAVAC_PATH) $(DRMAA_JAVA_SRC) \
+@DRMAA1_JAVA_FALSE@@DRMAA_JAVA_TRUE@	        -classpath $(DRMAA) \
+@DRMAA1_JAVA_FALSE@@DRMAA_JAVA_TRUE@	        -d $(DRMAA)/package
+@DRMAA_JAVA_TRUE@	jar cf $(srcdir)/drmaa/drmaa.jar -C $(DRMAA)/package/ .
+@DRMAA_JAVA_TRUE@	@rm -rf $(DRMAA)/package
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
