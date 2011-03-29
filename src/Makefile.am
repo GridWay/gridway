@@ -56,18 +56,19 @@ RM = $(srcdir)/rm
 UM = $(srcdir)/um
 DB = $(srcdir)/acct
 
-if DRMAA1
-DRMAA_SRC_DIR=drmaa/drmaa1.0
-else
+DRMAA1_SRC_DIR=drmaa/drmaa1.0
 DRMAA_SRC_DIR=drmaa
+
+SUBDIRS = .
+
+if DRMAA_RUBY
+SUBDIRS += drmaa/ruby
 endif
 
-#if DRMAA_RUBY
-#SUBDIRS = drmaa/ruby
-#endif
-
 DRMAA = $(srcdir)/drmaa
+
 DRMAA_PACK = $(srcdir)/$(DRMAA_SRC_DIR)/org/ggf/drmaa
+DRMAA1_PACK = $(srcdir)/$(DRMAA1_SRC_DIR)/org/ggf/drmaa
 
 SSH = $(srcdir)/ssh
 
@@ -228,6 +229,7 @@ DRMAA_SRC = $(COMMON)/gw_file_parser.c $(CLIENT_SRC) \
         $(COMMON)/gw_template.c $(COMMON)/gw_log.c
 
 DRMAAJNI_SRC = $(DRMAA_PACK)/DrmaaJNI.c
+DRMAA1JNI_SRC = $(DRMAA1_PACK)/DrmaaJNI.c
 
 DRMAA_JAVA_SRC = $(DRMAA_PACK)/AlreadyActiveSessionException.java \
         $(DRMAA_PACK)/AuthorizationException.java \
@@ -262,25 +264,59 @@ DRMAA_JAVA_SRC = $(DRMAA_PACK)/AlreadyActiveSessionException.java \
         $(DRMAA_PACK)/SuspendInconsistentStateException.java \
         $(DRMAA_PACK)/TryLaterException.java \
         $(DRMAA_PACK)/UnsupportedAttributeException.java \
-        $(DRMAA_PACK)/Version.java
-if DRMAA1        
-        DRMAA_JAVA_SRC += $(DRMAA_PACK)/GridWayJobInfo.java \
-        $(DRMAA_PACK)/GridWayJobTemplate.java \
-        $(DRMAA_PACK)/GridWaySessionFactory.java \
-        $(DRMAA_PACK)/GridWaySession.java \
-        $(DRMAA_PACK)/SimpleJobTemplate.java
-else
-        DRMAA_JAVA_SRC += $(DRMAA_PACK)/DrmaaRuntimeException.java \
+        $(DRMAA_PACK)/Version.java \
+        $(DRMAA_PACK)/DrmaaRuntimeException.java \
         $(DRMAA_PACK)/InvalidAttributeException.java \
         $(DRMAA_PACK)/JobTemplateImpl.java \
         $(DRMAA_PACK)/JobInfoImpl.java \
         $(DRMAA_PACK)/NoResourceUsageException.java \
         $(DRMAA_PACK)/SessionException.java \
         $(DRMAA_PACK)/SessionImpl.java \
-        $(DRMAA_PACK)/SessionFactoryImpl.java        
-endif        
+        $(DRMAA_PACK)/SessionFactoryImpl.java
 
-EXTRA_DIST += $(DRMAA_JAVA_SRC) $(DRMAA_PACK)/DrmaaJNI.h
+DRMAA1_JAVA_SRC = $(DRMAA1_PACK)/AlreadyActiveSessionException.java \
+        $(DRMAA1_PACK)/AuthorizationException.java \
+        $(DRMAA1_PACK)/ConflictingAttributeValuesException.java \
+        $(DRMAA1_PACK)/DefaultContactStringException.java \
+        $(DRMAA1_PACK)/DeniedByDrmException.java \
+        $(DRMAA1_PACK)/DrmaaException.java \
+        $(DRMAA1_PACK)/DrmaaJNI.java \
+        $(DRMAA1_PACK)/DrmCommunicationException.java \
+        $(DRMAA1_PACK)/DrmsExitException.java \
+        $(DRMAA1_PACK)/DrmsInitException.java \
+        $(DRMAA1_PACK)/ExitTimeoutException.java \
+        $(DRMAA1_PACK)/FileTransferMode.java \
+        $(DRMAA1_PACK)/HoldInconsistentStateException.java \
+        $(DRMAA1_PACK)/InconsistentStateException.java \
+        $(DRMAA1_PACK)/InternalException.java \
+        $(DRMAA1_PACK)/InvalidAttributeFormatException.java \
+        $(DRMAA1_PACK)/InvalidAttributeValueException.java \
+        $(DRMAA1_PACK)/InvalidContactStringException.java \
+        $(DRMAA1_PACK)/InvalidJobException.java \
+        $(DRMAA1_PACK)/InvalidJobTemplateException.java \
+        $(DRMAA1_PACK)/JobInfo.java \
+        $(DRMAA1_PACK)/JobTemplate.java \
+        $(DRMAA1_PACK)/NoActiveSessionException.java \
+        $(DRMAA1_PACK)/NoDefaultContactStringSelectedException.java \
+        $(DRMAA1_PACK)/PartialTimestampFormat.java \
+        $(DRMAA1_PACK)/PartialTimestamp.java \
+        $(DRMAA1_PACK)/ReleaseInconsistentStateException.java \
+        $(DRMAA1_PACK)/ResumeInconsistentStateException.java \
+        $(DRMAA1_PACK)/SessionFactory.java \
+        $(DRMAA1_PACK)/Session.java \
+        $(DRMAA1_PACK)/SuspendInconsistentStateException.java \
+        $(DRMAA1_PACK)/TryLaterException.java \
+        $(DRMAA1_PACK)/UnsupportedAttributeException.java \
+        $(DRMAA1_PACK)/Version.java \
+        $(DRMAA1_PACK)/GridWayJobInfo.java \
+        $(DRMAA1_PACK)/GridWayJobTemplate.java \
+        $(DRMAA1_PACK)/GridWaySessionFactory.java \
+        $(DRMAA1_PACK)/GridWaySession.java \
+        $(DRMAA1_PACK)/SimpleJobTemplate.java
+
+EXTRA_DIST += $(DRMAA_JAVA_SRC) $(DRMAA_PACK)/DrmaaJNI.h $(DRMAA_PACK)/DrmaaJNI.c
+
+EXTRA_DIST += $(DRMAA1_JAVA_SRC) $(DRMAA1_PACK)/DrmaaJNI.h $(DRMAA1_PACK)/DrmaaJNI.c
 
 # -----------------------------
 # -- Includes and Headers
@@ -295,42 +331,42 @@ SYSTEM=@system@
 flavorincludedir = $(prefix)/include
 
 flavorinclude_HEADERS = $(top_srcdir)/include/drmaa.h \
-                        $(top_srcdir)/include/gw_acct.h \
-                        $(top_srcdir)/include/gw_action.h \
-                        $(top_srcdir)/include/gw_array.h \
-                        $(top_srcdir)/include/gw_array_pool.h \
-                        $(top_srcdir)/include/gw_client.h \
-                        $(top_srcdir)/include/gw_cmds_common.h \
-                        $(top_srcdir)/include/gw_common.h \
-                        $(top_srcdir)/include/gw_conf.h \
-                        $(top_srcdir)/include/gw_dm.h \
-                        $(top_srcdir)/include/gw_dm_mad.h \
-                        $(top_srcdir)/include/gw_drmaa_jt.h \
-                        $(top_srcdir)/include/gw_em.h \
-                        $(top_srcdir)/include/gw_em_mad.h \
-                        $(top_srcdir)/include/gw_em_rsl.h \
-                        $(top_srcdir)/include/gw_file_parser.h \
-                        $(top_srcdir)/include/gw_history.h \
-                        $(top_srcdir)/include/gw_host.h \
-                        $(top_srcdir)/include/gw_host_pool.h \
-                        $(top_srcdir)/include/gw_im.h \
-                        $(top_srcdir)/include/gw_im_mad.h \
-                        $(top_srcdir)/include/gw_job.h \
-                        $(top_srcdir)/include/gw_job_pool.h \
-                        $(top_srcdir)/include/gw_job_template.h \
-                        $(top_srcdir)/include/gw_log.h \
-                        $(top_srcdir)/include/gw_rm_connection_list.h \
-                        $(top_srcdir)/include/gw_rm.h \
-                        $(top_srcdir)/include/gw_rm_msg.h \
-                        $(top_srcdir)/include/gw_scheduler.h \
-                        $(top_srcdir)/include/gw_template.h \
-                        $(top_srcdir)/include/gw_tm.h \
-                        $(top_srcdir)/include/gw_tm_mad.h \
-                        $(top_srcdir)/include/gw_um.h \
-                        $(top_srcdir)/include/gw_user.h \
-                        $(top_srcdir)/include/gw_user_pool.h \
-                        $(top_srcdir)/include/gw_xfr_files.h \
-                        $(top_srcdir)/include/gw_sch_conf.h
+        $(top_srcdir)/include/gw_acct.h \
+        $(top_srcdir)/include/gw_action.h \
+        $(top_srcdir)/include/gw_array.h \
+        $(top_srcdir)/include/gw_array_pool.h \
+        $(top_srcdir)/include/gw_client.h \
+        $(top_srcdir)/include/gw_cmds_common.h \
+        $(top_srcdir)/include/gw_common.h \
+        $(top_srcdir)/include/gw_conf.h \
+        $(top_srcdir)/include/gw_dm.h \
+        $(top_srcdir)/include/gw_dm_mad.h \
+        $(top_srcdir)/include/gw_drmaa_jt.h \
+        $(top_srcdir)/include/gw_em.h \
+        $(top_srcdir)/include/gw_em_mad.h \
+        $(top_srcdir)/include/gw_em_rsl.h \
+        $(top_srcdir)/include/gw_file_parser.h \
+        $(top_srcdir)/include/gw_history.h \
+        $(top_srcdir)/include/gw_host.h \
+        $(top_srcdir)/include/gw_host_pool.h \
+        $(top_srcdir)/include/gw_im.h \
+        $(top_srcdir)/include/gw_im_mad.h \
+        $(top_srcdir)/include/gw_job.h \
+        $(top_srcdir)/include/gw_job_pool.h \
+        $(top_srcdir)/include/gw_job_template.h \
+        $(top_srcdir)/include/gw_log.h \
+        $(top_srcdir)/include/gw_rm_connection_list.h \
+        $(top_srcdir)/include/gw_rm.h \
+        $(top_srcdir)/include/gw_rm_msg.h \
+        $(top_srcdir)/include/gw_scheduler.h \
+        $(top_srcdir)/include/gw_template.h \
+        $(top_srcdir)/include/gw_tm.h \
+        $(top_srcdir)/include/gw_tm_mad.h \
+        $(top_srcdir)/include/gw_um.h \
+        $(top_srcdir)/include/gw_user.h \
+        $(top_srcdir)/include/gw_user_pool.h \
+        $(top_srcdir)/include/gw_xfr_files.h \
+        $(top_srcdir)/include/gw_sch_conf.h
 
 #-----------------------------------
 # GWD
@@ -469,12 +505,8 @@ __srcdir__scheduler_gw_sched_LDFLAGS = -lm
 # DRMAA
 # ----------------------------
 
-lib_LTLIBRARIES =
-
-if DRMAA
-lib_LTLIBRARIES += $(srcdir)/drmaa/libdrmaa.la
+lib_LTLIBRARIES = $(srcdir)/drmaa/libdrmaa.la
 lib_LTLIBRARIES += $(srcdir)/drmaa/libDrmaaJNI.la
-endif
 
 __srcdir__drmaa_libdrmaa_la_SOURCES = $(DRMAA_SRC)
 __srcdir__drmaa_libDrmaaJNI_la_SOURCES = $(DRMAAJNI_SRC)
@@ -486,7 +518,7 @@ __srcdir__drmaa_libdrmaa_la_CFLAGS = $(AM_CFLAGS)
 __srcdir__drmaa_libdrmaa_la_LINK = $(LIBTOOL) --tag=CC --mode=link $(LINK)
 __srcdir__drmaa_libDrmaaJNI_la_LINK = $(LIBTOOL) --tag=CC --mode=link $(LINK)
 
-if DRMAA
+if DRMAA_JAVA
 
 jardir = $(prefix)/lib
 
@@ -494,9 +526,15 @@ jar_DATA = $(srcdir)/drmaa/drmaa.jar
 $(srcdir)/drmaa/drmaa.jar:
 	@rm -f lib/drmaa.jar
 	@mkdir -p $(DRMAA)/package
+if DRMAA1_JAVA
+	$(JAVAC_PATH) $(DRMAA1_JAVA_SRC) \
+	        -classpath $(DRMAA) \
+                -d $(DRMAA)/package
+else
 	$(JAVAC_PATH) $(DRMAA_JAVA_SRC) \
-	    -classpath $(DRMAA) \
-        -d $(DRMAA)/package
+	        -classpath $(DRMAA) \
+	        -d $(DRMAA)/package
+endif
 	jar cf $(srcdir)/drmaa/drmaa.jar -C $(DRMAA)/package/ .
 	@rm -rf $(DRMAA)/package
 endif
@@ -605,8 +643,8 @@ TM_MAD_RFT_SRC_DIST = $(TM_MAD)/rft/GWRftClient.java \
 	$(TM_MAD)/rft/GWRftUtil.java \
 	$(TM_MAD)/rft/gw_tm_mad_rft.sh
 
-EXTRA_DIST += $(DRMAA_JAVA_SRC) $(IM_MAD_STATIC_SRC_DIST) \
-$(IM_MAD_MDS2_SRC_DIST) $(IM_MAD_MDS4_SRC_DIST) $(IM_MAD_BDII_SRC_DIST) \
+EXTRA_DIST += $(IM_MAD_STATIC_SRC_DIST) $(IM_MAD_MDS2_SRC_DIST) \
+$(IM_MAD_MDS4_SRC_DIST) $(IM_MAD_BDII_SRC_DIST) \
 $(EM_MAD_GRAM2_SRC_DIST) $(EM_MAD_GRAM4_SRC_DIST) $(EM_MAD_CREAM_SRC_DIST) \
 $(EM_MAD_NORDU_SRC_DIST) $(EM_MAD_SSH_SRC_DIST) $(EM_MAD_BES_SRC_DIST) \
 $(TM_MAD_GRIDFTP_SRC_DIST) $(TM_MAD_DUMMY_SRC_DIST) $(TM_MAD_NORDU_SRC_DIST) \

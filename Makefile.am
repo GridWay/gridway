@@ -22,8 +22,9 @@ vardir = $(PREFIX)/var
 testdir = $(PREFIX)/test
 xmldir = $(PREFIX)/xml_schema
 
-EXTRA_DIST = scripts examples xml_schema/gridway.xsd \
-src/drmaa/ruby src/test/TEST.pl src/test/jt
+EXTRA_DIST = scripts/gw_mad_common.sh scripts/monitor.sh scripts/wrapper.sh \
+examples xml_schema/gridway.xsd src/test/TEST.pl src/test/jt \
+src/drmaa/ruby/drmaa_r.i src/drmaa/ruby/drmaa_r_wrap.c src/drmaa/ruby/extconf.rb
 
 FLAGS=$(DB4_INCLUDE_PATH)
  
@@ -103,6 +104,10 @@ dist-hook:
 	rm -rf $(distdir)/src/$(DRMAA_SRC_DIR)/org/ggf/drmaa/.libs
 	rm -f $(distdir)/src/$(DRMAA_SRC_DIR)/org/ggf/drmaa/DrmaaJNI.lo
 	rm -f $(distdir)/src/$(DRMAA_SRC_DIR)/org/ggf/drmaa/DrmaaJNI.o
+	rm -f $(distdir)/src/$(DRMAA_SRC_DIR)/org/ggf/drmaa/drmaa1.0/.dirstamp
+	rm -rf $(distdir)/src/$(DRMAA_SRC_DIR)/org/ggf/drmaa/drmaa1.0/.libs
+	rm -f $(distdir)/src/$(DRMAA_SRC_DIR)/org/ggf/drmaa/drmaa1.0/DrmaaJNI.lo
+	rm -f $(distdir)/src/$(DRMAA_SRC_DIR)/org/ggf/drmaa/drmaa1.0/DrmaaJNI.o
 
 # ----------------------------
 #    remove SVN dirs
