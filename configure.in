@@ -57,48 +57,48 @@ AC_SUBST(java_home, $JAVA_HOME)
 # Argument Definition for configure 
 #------------------------------------------------------------------------------
 
-drmaa="yes"	
-drmaa_ruby=""
+drmaa_java="no"	
+drmaa1_java="no"
+drmaa_ruby="no"
 docs="no"
 tests="no"
-drmaa1="no"
-jsdl="yes"	
-db="yes"
+jsdl="no"
+db="no"
 
-# --- Enable DRMAA library ---
+# --- Enable DRMAA Java library ---
 
-AC_ARG_ENABLE(drmaa,  AS_HELP_STRING(--disable-drmaa,\
-  Do not build drmaa support. Default is enabled.),\
-  [if test $enableval = "yes"; then drmaa="yes"; else drmaa=" "; fi], [])
+AC_ARG_ENABLE(drmaa_java,  AS_HELP_STRING(--enable-drmaa-java,\
+  Build Java DRMAA support.),\
+  [if test $enableval = "yes"; then drmaa_java="yes"; else drmaa_java=" "; fi], [])
 
-# --- Enable DRMAA 1.0 JAVA library ---
+# --- Enable DRMAA 1.0 Java library ---
 
-AC_ARG_ENABLE(drmaa1,  AS_HELP_STRING(--enable-drmaa1,\
-  Build drmaa 1.0 specification for the JAVA Bindings. Default is disabled.),\
-  [if test $enableval = "yes"; then drmaa1="drmaa1";drmaa="yes"; else drmaa1=" "; drmaa=" "; fi], [])
+AC_ARG_ENABLE(drmaa1_java,  AS_HELP_STRING(--enable-drmaa1-java,\
+  Build DRMAA 1.0 specification for the Java binding.),\
+  [if test $enableval = "yes"; then drmaa1_java="yes";drmaa_java="yes"; else drmaa1_java=" "; drmaa_java=" "; fi], [])
   
-# --- Enable DRMAA RUBY library ---
+# --- Enable DRMAA Ruby library ---
 
 AC_ARG_ENABLE(drmaa_ruby,  AS_HELP_STRING(--enable-drmaa-ruby,\
-  Build ruby drmaa support. Default is disabled.),\
+  Build Ruby DRMAA support.),\
   [if test $enableval = "yes"; then drmaa_ruby="yes"; else drmaa_ruby=" "; fi], [])
 
 # --- Enable JSDL  ---
 
 AC_ARG_ENABLE(jsdl,  AS_HELP_STRING(--enable-jsdl,\
-  Build jsdl support. Disabled for GT builds.),\
+  Build JSDL support.),\
   [if test $enableval = "yes"; then jsdl="yes"; else jsdl=" "; fi], [])
 
 # --- Enable Debug ---
 
 AC_ARG_ENABLE(debug,  AS_HELP_STRING(--enable-debug,\
-  Enable debug info in GW logs. Default is disabled.),\
+  Enable debug info in logs.),\
   [CFLAGS="$CFLAGS -Wall -g -DGWIMDEBUG -DGWJOBDEBUG -DGWHOSTDEBUG -DGWEMDEBUG -DGWDMDEBUG  -DGWTMDEBUG -DGWUSERDEBUG -DGWSCHEDDEBUG";], [])
 
 # --- With DB ---      
 
 AC_ARG_WITH(db,  AS_HELP_STRING(--with-db=<no|path_to_db>,\
-       Build db support for accounting. Disabled for GT builds.),\
+       Build db support for accounting.),\
        [if test $withval = "no";  then  db=" "; else \       
         if test $withval = "yes"; then  db="yes"; db_path=" "; fi; \
         if test $withval != "yes"; then db="yes"; db_path="$withval"; fi; \
@@ -107,17 +107,17 @@ AC_ARG_WITH(db,  AS_HELP_STRING(--with-db=<no|path_to_db>,\
 # --- With GridWay tests ---
 
 AC_ARG_WITH(tests,  AS_HELP_STRING(--with-tests,\
-        Build GridWay test suite. Default is disabled.),\
+        Build GridWay test suite.),\
         [if test $withval = "yes"; then tests="yes"; else tests="no"; fi], [])
           
 #------------------------------------------------------------------------------
 # Argument check
 #------------------------------------------------------------------------------
 
-# --- Enable DRMAA library ---
+# --- Enable DRMAA Java library ---
 
-AM_CONDITIONAL(DRMAA, test "x$drmaa" = "xyes")
-AM_CONDITIONAL(DRMAA1, test "x$drmaa1" = "xyes")
+AM_CONDITIONAL(DRMAA_JAVA, test "x$drmaa_java" = "xyes")
+AM_CONDITIONAL(DRMAA1_JAVA, test "x$drmaa1_java" = "xyes")
 
 ## Checking the ruby and ruby-dev
 AM_CONDITIONAL(DRMAA_RUBY, test "x$drmaa_ruby" = "xyes")
@@ -155,7 +155,9 @@ EOF
   fi
   (GW_SRC=$PWD;cd src/drmaa/ruby;
   ruby extconf.rb -g $GW_SRC -r $prefix/lib/ruby;
-  echo -e "\n\ndistdir:\n" >> Makefile)
+  echo >> Makefile;
+  echo "distdir:" >> Makefile;
+  echo >> Makefile)
  fi
 fi
 
@@ -177,7 +179,7 @@ else
 	DB4_INCLUDE_PATH=" ";
 fi
 
-AM_CONDITIONAL(DB,test "x$db" = "xdb")
+AM_CONDITIONAL(DB, test "x$db" = "xdb")
 
 # --- With GridWay tests ---
 
@@ -196,11 +198,11 @@ AC_PROG_MAKE_SET
 AC_PATH_PROG(JAVAC_PATH, javac)
 	
 if test "x$JAVAC_PATH" = "x"; then
-   	AC_MSG_WARN("A Java compiler is needed for GridWay's DRMAA JAVA and JSDL")
+   	AC_MSG_WARN("A Java compiler is needed for GridWay's DRMAA Java and JSDL")
 fi
     
 if test "x$JAVA_HOME" = "x"; then
-   	AC_MSG_WARN("JAVA_HOME is not set, some Java versions will not work (eg. Mac OS X)")     
+   	AC_MSG_WARN("JAVA_HOME is not set, some Java versions will not work (e.g. Mac OS X)")     
 fi
 
 #------------------------------------------------------------------------------
@@ -268,5 +270,5 @@ AC_PROG_LIBTOOL
 
 AC_CONFIG_FILES([Makefile src/Makefile])
                   
-AC_CONFIG_FILES([pkgdata/pkg_data_src.gpt])
+#AC_CONFIG_FILES([pkgdata/pkg_data_src.gpt])
 AC_OUTPUT
