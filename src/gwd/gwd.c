@@ -1,5 +1,5 @@
 /* -------------------------------------------------------------------------- */
-/* Copyright 2002-2010, GridWay Project Leads (GridWay.org)                   */
+/* Copyright 2002-2011, GridWay Project Leads (GridWay.org)                   */
 /*                                                                            */
 /* Licensed under the Apache License, Version 2.0 (the "License"); you may    */
 /* not use this file except in compliance with the License. You may obtain    */
@@ -98,7 +98,7 @@ void gw_recover_state();
 void print_license()
 {
   printf(GW_VERSION"\n");
-  printf("Copyright 2002-2010 GridWay Project Leads\n");
+  printf("Copyright 2002-2011 GridWay Project Leads\n");
   printf("GridWay is distributed and licensed for use under the terms of the\n"); 
   printf("Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0).\n");
 }

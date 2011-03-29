@@ -1,5 +1,5 @@
 /* -------------------------------------------------------------------------- */
-/* Copyright 2002-2010 GridWay Team, Distributed Systems Architecture         */
+/* Copyright 2002-2011 GridWay Team, Distributed Systems Architecture         */
 /* Group, Universidad Complutense de Madrid                                   */
 /*                                                                            */
 /* Licensed under the Apache License, Version 2.0 (the "License"); you may    */
@@ -20,17 +20,17 @@ import java.util.*;
 
 class GW_em_mad_bes extends Thread {
 
-	private Map job_pool = null; // Job pool
-	private Map jid_pool = null; // JID pool
+    private Map job_pool = null; // Job pool
+    private Map jid_pool = null; // JID pool
 
-	private String host;
+    private String host;
 
-	public static void main(String args[]) {
-		GW_em_mad_bes gw_em_mad_bes;
+    public static void main(String args[]) {
+        GW_em_mad_bes gw_em_mad_bes;
 
-		gw_em_mad_bes = new GW_em_mad_bes();
-		gw_em_mad_bes.loop();
-	}
+        gw_em_mad_bes = new GW_em_mad_bes();
+        gw_em_mad_bes.loop();
+    }
 
 	// Constructor
 	GW_em_mad_bes() {
