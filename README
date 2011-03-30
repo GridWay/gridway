@@ -57,7 +57,8 @@ $LD_LIBRARY_PATH...)
 5) Execute "./configure; make; make install".
 6) Build and install the needed drivers executing "make; make install", in
 $GW_LOCATION/src/{im_mad,em_mad,tm_mad}. Before, make sure you have installed
-the needed middleware (client-side) and packages.
+the needed middleware (client-side) and packages. Some drivers have specific
+requirements that will be shown at build time.
 7) Configure GridWay through the file $GW_LOCATION/etc/gwd.conf (check the
 Configuration Guide).
 8) Launch the GridWay daemon from $GW_LOCATION/bin/gwd.
