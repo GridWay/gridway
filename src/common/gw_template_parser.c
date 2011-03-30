@@ -73,7 +73,6 @@ typedef int flex_int32_t;
 typedef unsigned char flex_uint8_t; 
 typedef unsigned short int flex_uint16_t;
 typedef unsigned int flex_uint32_t;
-#endif /* ! C99 */
 
 /* Limits of integral types. */
 #ifndef INT8_MIN
@@ -103,6 +102,8 @@ typedef unsigned int flex_uint32_t;
 #ifndef UINT32_MAX
 #define UINT32_MAX             (4294967295U)
 #endif
+
+#endif /* ! C99 */
 
 #endif /* ! FLEXINT_H */
 
@@ -160,7 +161,15 @@ typedef unsigned int flex_uint32_t;
 
 /* Size of default input buffer. */
 #ifndef YY_BUF_SIZE
+#ifdef __ia64__
+/* On IA-64, the buffer size is 16k, not 8k.
+ * Moreover, YY_BUF_SIZE is 2*YY_READ_BUF_SIZE in the general case.
+ * Ditto for the __ia64__ case accordingly.
+ */
+#define YY_BUF_SIZE 32768
+#else
 #define YY_BUF_SIZE 16384
+#endif /* __ia64__ */
 #endif
 
 /* The state buf must be large enough to hold one state per character in the main buffer.
@@ -172,12 +181,7 @@ typedef unsigned int flex_uint32_t;
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
 #endif
 
-#ifndef YY_TYPEDEF_YY_SIZE_T
-#define YY_TYPEDEF_YY_SIZE_T
-typedef size_t yy_size_t;
-#endif
-
-extern yy_size_t jtp_leng;
+extern int jtp_leng;
 
 extern FILE *jtp_in, *jtp_out;
 
@@ -216,6 +220,11 @@ extern FILE *jtp_in, *jtp_out;
 
 #define unput(c) yyunput( c, (yytext_ptr)  )
 
+#ifndef YY_TYPEDEF_YY_SIZE_T
+#define YY_TYPEDEF_YY_SIZE_T
+typedef size_t yy_size_t;
+#endif
+
 #ifndef YY_STRUCT_YY_BUFFER_STATE
 #define YY_STRUCT_YY_BUFFER_STATE
 struct yy_buffer_state
@@ -233,7 +242,7 @@ struct yy_buffer_state
 	/* Number of characters read into yy_ch_buf, not including EOB
 	 * characters.
 	 */
-	yy_size_t yy_n_chars;
+	int yy_n_chars;
 
 	/* Whether we "own" the buffer - i.e., we know we created it,
 	 * and can realloc() it to grow it, and should free() it to
@@ -303,8 +312,8 @@ static YY_BUFFER_STATE * yy_buffer_stack = 0; /**< Stack as an array. */
 
 /* yy_hold_char holds the character lost when jtp_text is formed. */
 static char yy_hold_char;
-static yy_size_t yy_n_chars;		/* number of characters read into yy_ch_buf */
-yy_size_t jtp_leng;
+static int yy_n_chars;		/* number of characters read into yy_ch_buf */
+int jtp_leng;
 
 /* Points to current character in buffer. */
 static char *yy_c_buf_p = (char *) 0;
@@ -332,7 +341,7 @@ static void jtp__init_buffer (YY_BUFFER_STATE b,FILE *file  );
 
 YY_BUFFER_STATE jtp__scan_buffer (char *base,yy_size_t size  );
 YY_BUFFER_STATE jtp__scan_string (yyconst char *yy_str  );
-YY_BUFFER_STATE jtp__scan_bytes (yyconst char *bytes,yy_size_t len  );
+YY_BUFFER_STATE jtp__scan_bytes (yyconst char *bytes,int len  );
 
 void *jtp_alloc (yy_size_t  );
 void *jtp_realloc (void *,yy_size_t  );
@@ -898,7 +907,7 @@ int dl[3];
 
 
 
-#line 902 "common/gw_template_parser.c"
+#line 911 "common/gw_template_parser.c"
 
 #define INITIAL 0
 #define var_int 1
@@ -950,7 +959,7 @@ FILE *jtp_get_out (void );
 
 void jtp_set_out  (FILE * out_str  );
 
-yy_size_t jtp_get_leng (void );
+int jtp_get_leng (void );
 
 char *jtp_get_text (void );
 
@@ -990,7 +999,12 @@ static int input (void );
 
 /* Amount of stuff to slurp up with each read. */
 #ifndef YY_READ_BUF_SIZE
+#ifdef __ia64__
+/* On IA-64, the buffer size is 16k, not 8k */
+#define YY_READ_BUF_SIZE 16384
+#else
 #define YY_READ_BUF_SIZE 8192
+#endif /* __ia64__ */
 #endif
 
 /* Copy whatever the last rule matched to the standard output. */
@@ -998,7 +1012,7 @@ static int input (void );
 /* This used to be an fputs(), but since the string might contain NUL's,
  * we now use fwrite().
  */
-#define ECHO fwrite( jtp_text, jtp_leng, 1, jtp_out )
+#define ECHO do { if (fwrite( jtp_text, jtp_leng, 1, jtp_out )) {} } while (0)
 #endif
 
 /* Gets input and stuffs it into "buf".  number of characters read, or YY_NULL,
@@ -1009,7 +1023,7 @@ static int input (void );
 	if ( YY_CURRENT_BUFFER_LVALUE->yy_is_interactive ) \
 		{ \
 		int c = '*'; \
-		yy_size_t n; \
+		size_t n; \
 		for ( n = 0; n < max_size && \
 			     (c = getc( jtp_in )) != EOF && c != '\n'; ++n ) \
 			buf[n] = (char) c; \
@@ -1098,7 +1112,7 @@ YY_DECL
     /*    Parse comments                                                     */
     /* --------------------------------------------------------------------- */
     
-#line 1102 "common/gw_template_parser.c"
+#line 1116 "common/gw_template_parser.c"
 
 	if ( !(yy_init) )
 		{
@@ -1614,7 +1628,7 @@ YY_RULE_SETUP
 #line 255 "gw_template_parser.l"
 ECHO;
 	YY_BREAK
-#line 1618 "common/gw_template_parser.c"
+#line 1632 "common/gw_template_parser.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(var_int):
 case YY_STATE_EOF(var_yn):
@@ -1813,7 +1827,7 @@ static int yy_get_next_buffer (void)
 
 	else
 		{
-			yy_size_t num_to_read =
+			int num_to_read =
 			YY_CURRENT_BUFFER_LVALUE->yy_buf_size - number_to_move - 1;
 
 		while ( num_to_read <= 0 )
@@ -1827,7 +1841,7 @@ static int yy_get_next_buffer (void)
 
 			if ( b->yy_is_our_buffer )
 				{
-				yy_size_t new_size = b->yy_buf_size * 2;
+				int new_size = b->yy_buf_size * 2;
 
 				if ( new_size <= 0 )
 					b->yy_buf_size += b->yy_buf_size / 8;
@@ -1858,7 +1872,7 @@ static int yy_get_next_buffer (void)
 
 		/* Read in more data. */
 		YY_INPUT( (&YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[number_to_move]),
-			(yy_n_chars), num_to_read );
+			(yy_n_chars), (size_t) num_to_read );
 
 		YY_CURRENT_BUFFER_LVALUE->yy_n_chars = (yy_n_chars);
 		}
@@ -1980,7 +1994,7 @@ static int yy_get_next_buffer (void)
 
 		else
 			{ /* need more input */
-			yy_size_t offset = (yy_c_buf_p) - (yytext_ptr);
+			int offset = (yy_c_buf_p) - (yytext_ptr);
 			++(yy_c_buf_p);
 
 			switch ( yy_get_next_buffer(  ) )
@@ -2004,7 +2018,7 @@ static int yy_get_next_buffer (void)
 				case EOB_ACT_END_OF_FILE:
 					{
 					if ( jtp_wrap( ) )
-						return 0;
+						return EOF;
 
 					if ( ! (yy_did_buffer_switch_on_eof) )
 						YY_NEW_FILE;
@@ -2261,7 +2275,7 @@ void jtp_pop_buffer_state (void)
  */
 static void jtp_ensure_buffer_stack (void)
 {
-	yy_size_t num_to_alloc;
+	int num_to_alloc;
     
 	if (!(yy_buffer_stack)) {
 
@@ -2353,16 +2367,17 @@ YY_BUFFER_STATE jtp__scan_string (yyconst char * yystr )
 
 /** Setup the input buffer state to scan the given bytes. The next call to jtp_lex() will
  * scan from a @e copy of @a bytes.
- * @param bytes the byte buffer to scan
- * @param len the number of bytes in the buffer pointed to by @a bytes.
+ * @param yybytes the byte buffer to scan
+ * @param _yybytes_len the number of bytes in the buffer pointed to by @a bytes.
  * 
  * @return the newly allocated buffer state object.
  */
-YY_BUFFER_STATE jtp__scan_bytes  (yyconst char * yybytes, yy_size_t  _yybytes_len )
+YY_BUFFER_STATE jtp__scan_bytes  (yyconst char * yybytes, int  _yybytes_len )
 {
 	YY_BUFFER_STATE b;
 	char *buf;
-	yy_size_t n, i;
+	yy_size_t n;
+	int i;
     
 	/* Get memory for full buffer, including space for trailing EOB's. */
 	n = _yybytes_len + 2;
@@ -2444,7 +2459,7 @@ FILE *jtp_get_out  (void)
 /** Get the length of the current token.
  * 
  */
-yy_size_t jtp_get_leng  (void)
+int jtp_get_leng  (void)
 {
         return jtp_leng;
 }
