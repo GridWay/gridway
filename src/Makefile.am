@@ -595,7 +595,6 @@ EM_MAD_GRAM4_SRC_DIST = $(EM_MAD)/gram4/Gw_em_mad_gram4_GT40.java \
 EM_MAD_CREAM_SRC_DIST = $(EM_MAD)/cream/gw_em_mad_cream.cpp \
 	$(EM_MAD)/cream/gw_em_mad_cream_actions.cpp \
 	$(EM_MAD)/cream/gw_em_mad_cream.h \
-	$(EM_MAD)/cream/stdsoap2.h \
 	$(EM_MAD)/cream/gw_em_mad_cream.sh \
 	$(EM_MAD)/cream/Makefile
 
