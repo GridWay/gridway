@@ -15,10 +15,10 @@
 # --------------------------------------------------------------------------
 
 function check_globus {
-	if [ -z "${GLOBUS_LOCATION}" ]; then
-	    echo "Please, set GLOBUS_LOCATION variable."
-	    exit -1
-	fi
+    if [ -z "${GLOBUS_LOCATION}" ]; then
+        echo "Please, set GLOBUS_LOCATION variable."
+        exit -1
+    fi
 }
 
 function setup_globus {
@@ -32,40 +32,41 @@ function setup_globus {
 }
 
 function cd_var {
-	GW_VAR_DIR=var
-	if [ -d "${GW_LOCATION}/var/gridway" ]; then
-		GW_VAR_DIR=var/gridway
-	fi
-	cd $GW_LOCATION/$GW_VAR_DIR
+    GW_VAR_DIR=var
+    if [ -d "${GW_LOCATION}/var/gridway" ]; then
+        GW_VAR_DIR=var/gridway
+    fi
+    cd $GW_LOCATION/$GW_VAR_DIR
 }
 
 function mad_debug {
-	if [ -n "${MADDEBUG}" ]; then
-	    ulimit -c 15000
-	fi
+    if [ -n "${MADDEBUG}" ]; then
+        ulimit -c 15000
+    fi
 }
 
 function export_rc_vars {
     if [ -f $1 ] ; then
-		GW_VARS=`cat $1 | egrep -e '^[a-zA-Z\-\_0-9]*=' | sed 's/=.*$//'`
+        GW_VARS=`cat $1 | egrep -e '^[a-zA-Z\-\_0-9]*=' | sed 's/=.*$//'`
 
         . $1
 
-		for v in $GW_VARS; do
-	      export $v
-		done
-	fi
+        for v in $GW_VARS; do
+            export $v
+        done
+    fi
 }
 
 # Check and set X509_USER_PROXY
 function check_proxy {
-	grid-proxy-info -exists 2> /dev/null
+    grid-proxy-info -exists 2> /dev/null
 
-	if [ "x$?" = "x0" ]; then
-		export X509_USER_PROXY=`grid-proxy-info -path`
-	else
-		exit -1
-	fi
+    if [ "x$?" = "x0" ]; then
+        export X509_USER_PROXY=`grid-proxy-info -path`
+    else
+        echo "Please, set your proxy certificate."
+        exit -1
+    fi
 }
 
 export CLASSPATH=$CLASSPATH:$GW_LOCATION/bin
@@ -82,5 +83,5 @@ export_rc_vars ~/.gwrc
 
 # Sanitize PRIORITY variable
 if [ -z "$PRIORITY" ]; then
-	export PRIORITY=19
+    export PRIORITY=19
 fi
