@@ -140,7 +140,7 @@ gw_client_t* gw_client_init()
     }
     else
     {
-    	fprintf(stderr,"Error parsing gwd.conf. Cannot find NUMBER_OF_HOSTS\n");
+    	fprintf(stderr,"Error parsing gwd.conf. Cannot find NUMBER_OF_JOBS\n");
     	free(conf_file);
     	
     	pthread_mutex_unlock(&gw_client.mutex);
