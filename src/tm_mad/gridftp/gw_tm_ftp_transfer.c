@@ -391,8 +391,6 @@ void gw_tm_ftp_list_read_callback(void *user_arg,
                     mode, links, owner, group, size, month,
                     day, file, alt_file);
 
-printf("rc=%d file=%s alt_file=%s\n", rc, file, alt_file);
-
             if ( rc == 8 )
                 filename = file;
             else if (rc == 9)
