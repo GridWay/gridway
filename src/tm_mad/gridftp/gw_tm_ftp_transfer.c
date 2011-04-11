@@ -24,7 +24,7 @@
 extern gw_tm_ftp_transfer_t **	gw_tm_ftp_xfr_pool;
 extern int	GW_TM_FTP_XFR_POOL_MAX;
 
-int  gw_tm_ftp_mad_init (int ids)
+int  gw_tm_ftp_mad_init(int ids)
 {
 	static int initialized = 0;
 	int rc;
@@ -52,43 +52,43 @@ int  gw_tm_ftp_mad_init (int ids)
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
-int gw_tm_ftp_transfer_init (gw_tm_ftp_transfer_t *xfr, int jid)
+int gw_tm_ftp_transfer_init(gw_tm_ftp_transfer_t *xfr, int jid)
 {
     globus_result_t  grc;
 	
-    grc = globus_ftp_client_handleattr_init (&(xfr->attr));
+    grc = globus_ftp_client_handleattr_init(&(xfr->attr));
     if ( grc != GLOBUS_SUCCESS )
 		return -1;
 		
-	grc = globus_ftp_client_handleattr_set_cache_all (&(xfr->attr), GLOBUS_TRUE);
+	grc = globus_ftp_client_handleattr_set_cache_all(&(xfr->attr), GLOBUS_TRUE);
     if ( grc != GLOBUS_SUCCESS )
 		return -1;
 	
-    grc = globus_ftp_client_handle_init (&(xfr->handle),&(xfr->attr));
+    grc = globus_ftp_client_handle_init(&(xfr->handle),&(xfr->attr));
     if ( grc != GLOBUS_SUCCESS )
 		return -1;
 
-    grc = globus_ftp_client_operationattr_init (&(xfr->op_attr));
+    grc = globus_ftp_client_operationattr_init(&(xfr->op_attr));
     if ( grc != GLOBUS_SUCCESS )
 		return -1;
 
-    grc = globus_gass_copy_attr_init (&(xfr->gass_attr));
+    grc = globus_gass_copy_attr_init(&(xfr->gass_attr));
     if ( grc != GLOBUS_SUCCESS )
 		return -1;
 
-    grc = globus_gass_copy_attr_init (&(xfr->src_gass_attr));
+    grc = globus_gass_copy_attr_init(&(xfr->src_gass_attr));
     if ( grc != GLOBUS_SUCCESS )
 		return -1;
 
-    grc = globus_ftp_client_operationattr_init (&(xfr->src_op_attr));
+    grc = globus_ftp_client_operationattr_init(&(xfr->src_op_attr));
     if ( grc != GLOBUS_SUCCESS )
 		return -1;
 
-    grc = globus_gass_copy_attr_set_ftp (&(xfr->gass_attr), &(xfr->op_attr));
+    grc = globus_gass_copy_attr_set_ftp(&(xfr->gass_attr), &(xfr->op_attr));
     if ( grc != GLOBUS_SUCCESS )
 		return -1;
     
-    grc = globus_gass_copy_attr_set_ftp (&(xfr->src_gass_attr), &(xfr->src_op_attr));
+    grc = globus_gass_copy_attr_set_ftp(&(xfr->src_gass_attr), &(xfr->src_op_attr));
     if ( grc != GLOBUS_SUCCESS )
 		return -1;
 	
@@ -96,23 +96,22 @@ int gw_tm_ftp_transfer_init (gw_tm_ftp_transfer_t *xfr, int jid)
     if ( grc != GLOBUS_SUCCESS )
 		return -1;
 	
-	grc = globus_gass_copy_handle_init  (&(xfr->gass_handle), &(xfr->gass_handel_attr));
+	grc = globus_gass_copy_handle_init(&(xfr->gass_handle), &(xfr->gass_handel_attr));
     if ( grc != GLOBUS_SUCCESS )
 		return -1;
 
-    grc = globus_gass_copy_set_no_third_party_transfers (&(xfr->gass_handle), GLOBUS_FALSE);
+    grc = globus_gass_copy_set_no_third_party_transfers(&(xfr->gass_handle), GLOBUS_FALSE);
     if ( grc != GLOBUS_SUCCESS )
 		return -1;
         
-    xfr->jid           = jid;
+    xfr->jid = jid;
     xfr->handle_in_use = GW_FALSE;
-    xfr->base_dir      = NULL;
-    xfr->list_buffer   = NULL;    
+    xfr->base_dir = NULL;
+    xfr->list_buffer = NULL;    
     xfr->buffer_length = 0;
-    xfr->read_buffer   = (globus_byte_t *) malloc( GW_TM_FTP_BUFFER_LENGTH * 
-    												sizeof(globus_byte_t));
-    xfr->current_xfr.dst_url   = NULL;
-    xfr->current_xfr.src_url   = NULL;
+    xfr->read_buffer = (globus_byte_t *) malloc( GW_TM_FTP_BUFFER_LENGTH * sizeof(globus_byte_t));
+    xfr->current_xfr.dst_url = NULL;
+    xfr->current_xfr.src_url = NULL;
     xfr->current_xfr.cp_xfr_id = 0;
     
 	gw_tm_ftp_stack_init(&(xfr->file_stack));
@@ -122,7 +121,7 @@ int gw_tm_ftp_transfer_init (gw_tm_ftp_transfer_t *xfr, int jid)
 	return 0;
 }
 
-void gw_tm_ftp_transfer_flush (gw_tm_ftp_transfer_t *xfr)
+void gw_tm_ftp_transfer_flush(gw_tm_ftp_transfer_t *xfr)
 {    
 	if ( xfr->list_buffer != NULL )
 		free(xfr->list_buffer);
@@ -155,13 +154,13 @@ void gw_tm_ftp_transfer_cancel_cb(	void *                      user_arg,
 	
    	free(user_arg);
 	        
-	globus_ftp_client_handle_destroy (&(xfr->handle));
-    globus_ftp_client_handleattr_destroy (&(xfr->attr));
+	globus_ftp_client_handle_destroy(&(xfr->handle));
+    globus_ftp_client_handleattr_destroy(&(xfr->attr));
 	
-	globus_ftp_client_operationattr_destroy (&(xfr->op_attr));
-	globus_ftp_client_operationattr_destroy (&(xfr->src_op_attr));
+	globus_ftp_client_operationattr_destroy(&(xfr->op_attr));
+	globus_ftp_client_operationattr_destroy(&(xfr->src_op_attr));
 	
-	globus_gass_copy_handle_destroy (&(xfr->gass_handle));
+	globus_gass_copy_handle_destroy(&(xfr->gass_handle));
 	globus_gass_copy_handleattr_destroy(&(xfr->gass_handel_attr));
 	
 	/* THERE IS NO FUNCTION TO DESTROY 	globus_gass_copy_attr_t */
@@ -192,19 +191,19 @@ void gw_tm_ftp_transfer_cancel_cb(	void *                      user_arg,
 	
    	free(gw_tm_ftp_xfr_pool[xfr_id]);
    	
-    gw_tm_ftp_xfr_pool[xfr_id]  = NULL;
+    gw_tm_ftp_xfr_pool[xfr_id] = NULL;
 	
 }
 
-void gw_tm_ftp_transfer_destroy (gw_tm_ftp_transfer_t *xfr)
+void gw_tm_ftp_transfer_destroy(gw_tm_ftp_transfer_t *xfr)
 {    
 	int *xfr_id;
 	globus_result_t rc;
 	
-	xfr_id  = ( int *) malloc (sizeof(int));
+	xfr_id = ( int *) malloc(sizeof(int));
 	*xfr_id = xfr->jid;
 	
-	globus_ftp_client_abort (&(xfr->handle));
+	globus_ftp_client_abort(&(xfr->handle));
 	
 	rc = globus_gass_copy_cancel( &(xfr->gass_handle), gw_tm_ftp_transfer_cancel_cb,
         (void *)  xfr_id);
@@ -218,7 +217,7 @@ void gw_tm_ftp_transfer_destroy (gw_tm_ftp_transfer_t *xfr)
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
-int gw_tm_ftp_transfer_expand_url ( int                                   xfr_id,
+int gw_tm_ftp_transfer_expand_url( int                                   xfr_id,
 									const char *                          url_dir,
 									globus_ftp_client_complete_callback_t done_cb)
 {
@@ -258,11 +257,11 @@ int gw_tm_ftp_transfer_expand_url ( int                                   xfr_id
 	
 	/* MACHINE LIST SHOULD BE CHECK IF FEATURE IS SUPPORTED */
 	/* WE WILL USE LIST COMMAND...
-	grc = globus_ftp_client_machine_list ( &(xfr->handle), xfr->base_dir, 
+	grc = globus_ftp_client_machine_list( &(xfr->handle), xfr->base_dir, 
 				&(xfr->op_attr), done_cb, (void *) xfr);
 	*/
 	
-	_xfr_id    = ( int *) malloc (sizeof(int));
+	_xfr_id = ( int *) malloc (sizeof(int));
 	*(_xfr_id) = xfr->jid;
 	
 	grc = globus_ftp_client_verbose_list( &(xfr->handle), xfr->base_dir,
@@ -274,7 +273,7 @@ int gw_tm_ftp_transfer_expand_url ( int                                   xfr_id
 		return 1;
 	}
 
-	_xfr_id    = ( int *) malloc (sizeof(int));
+	_xfr_id = ( int *) malloc (sizeof(int));
 	*(_xfr_id) = xfr->jid;
 		
 	grc = globus_ftp_client_register_read (&(xfr->handle), (xfr->read_buffer),
@@ -286,8 +285,8 @@ int gw_tm_ftp_transfer_expand_url ( int                                   xfr_id
         return 1;
     }
     
-	return 0;
-}									
+    return 0;
+}
 
 
 
@@ -295,66 +294,66 @@ int gw_tm_ftp_transfer_expand_url ( int                                   xfr_id
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
-void gw_tm_ftp_list_read_callback(void *                             user_arg,
-					    		  globus_ftp_client_handle_t *       handle,
-								  globus_object_t *                  err,
-								  globus_byte_t *                    buffer,
-								  globus_size_t                      length,
-								  globus_off_t                       offset,
-								  globus_bool_t                      eof)
+void gw_tm_ftp_list_read_callback(void *user_arg,
+        globus_ftp_client_handle_t *handle,
+        globus_object_t *err,
+        globus_byte_t *buffer,
+        globus_size_t length,
+        globus_off_t offset,
+        globus_bool_t eof)
 {
-	
-	gw_tm_ftp_transfer_t * xfr;	
+    gw_tm_ftp_transfer_t * xfr;	
     globus_result_t    grc;
     char *             temp_p = NULL;
-	char *             start_ptr;
-	char *             end_ptr;
-	char               mode[16];
-	char               links[16];
-	char               owner[16];
-	char               group[16];
-	char               size[16];
-	char               month[5];
-	char               day[5];
-	char               file[256];
-	char               alt_file[256];	
-	char *             filename;
-	char *             url;
+    char *             start_ptr;
+    char *             end_ptr;
+    char               mode[16];
+    char               links[16];
+    char               owner[16];
+    char               group[16];
+    char               size[16];
+    char               month[5];
+    char               day[5];
+    char               hour[256];
+    char               file[256];
+    char               alt_file[256];	
+    char *             filename;
+    char *             url;
     int		       i,len, rc;
     int                xfr_id;
         		    
     if(err)  /* ERROR DIR DOES NOT EXISTS : ERROR HANDLING NOT HERE */
-		return;
+        return;
 
-	xfr_id = *( (int *) user_arg );
+    xfr_id = *( (int *) user_arg );
 	
-	if ( ( xfr_id < GW_TM_FTP_XFR_POOL_MAX ) && (xfr_id >= 0 ) )
-	    if ( gw_tm_ftp_xfr_pool[xfr_id] != NULL )
-	    	xfr = gw_tm_ftp_xfr_pool[xfr_id];
-	    else
-	    {
-	    	free(user_arg);
-	    	return;
-	    }
-	else
-	{
-    	free(user_arg);
-		return;	
-	}
+    if ( ( xfr_id < GW_TM_FTP_XFR_POOL_MAX ) && (xfr_id >= 0 ) )
+        if ( gw_tm_ftp_xfr_pool[xfr_id] != NULL )
+            xfr = gw_tm_ftp_xfr_pool[xfr_id];
+        else
+        {
+            free(user_arg);
+            return;
+        }
+    else
+    {
+        free(user_arg);
+        return;	
+    }
 	   	
     if( xfr->list_buffer == NULL && eof && offset == 0)
     {
-        xfr->list_buffer   = (char *) malloc( sizeof(char) *length); 
+        xfr->list_buffer = (char *) malloc( sizeof(char) *length); 
         xfr->buffer_length = length;
         
-		memcpy(xfr->list_buffer,buffer,length);
+        memcpy(xfr->list_buffer,buffer,length);
     }
     else
     {
         if( (length + offset) > xfr->buffer_length )
         {
-            temp_p             = (char *) realloc(xfr->list_buffer, length + offset);    
-            xfr->list_buffer   = temp_p;
+            temp_p = (char *) realloc(xfr->list_buffer, length + offset);    
+            xfr->list_buffer = temp_p;
             xfr->buffer_length = length + offset;
         }       
 
@@ -363,99 +362,87 @@ void gw_tm_ftp_list_read_callback(void *                             user_arg,
     
     if(!eof)
     {
-		grc = globus_ftp_client_register_read (&(xfr->handle), buffer,
-			GW_TM_FTP_BUFFER_LENGTH, gw_tm_ftp_list_read_callback, user_arg);
+        grc = globus_ftp_client_register_read (&(xfr->handle), buffer,
+                GW_TM_FTP_BUFFER_LENGTH, gw_tm_ftp_list_read_callback, user_arg);
 			
         if( grc != GLOBUS_SUCCESS ) /* ERROR & CANCEL? */
         {
-		  printf("RMDIR %d - FAILURE globus_ftp_client_register_read command\n", xfr->jid);
-		  free(user_arg);
-          return;
+            printf("RMDIR %d - FAILURE globus_ftp_client_register_read command\n", xfr->jid);
+            free(user_arg);
+            return;
         } 
     }
     else
     {
-    	i         = 0;
+    	i = 0;
     	start_ptr = xfr->list_buffer;
-    	end_ptr   = xfr->list_buffer;
+    	end_ptr = xfr->list_buffer;
     	
     	while (i < xfr->buffer_length)
     	{
-    		while ((*end_ptr != '\n') && (*end_ptr != '\r'))
-    		{
-    			end_ptr++;
-    			i++;
-    		}
-    		
-    		*end_ptr = '\0';
-    		
-    		rc = sscanf(start_ptr,"%s %s %s %s %s %s %s %s %s",
-    		                 mode,
-    		                 links,
-    		                 owner,
-    		                 group,
-    		                 size,
-    		                 month,
-    		                 day,
-    		                 file,
-    		                 alt_file);
-    		if ( rc == 8 )
-    			filename = file;
-    		else if (rc == 9)
-    			filename = alt_file;
-			else    		  			
-  			{
-  		    	start_ptr = end_ptr+1;
-   				end_ptr   = start_ptr;
-	     		i         = i+1;
-   				continue;    				
-   			}
-  			
-   			if ( (strcmp(filename,".") !=0) && 
-				 (strcmp(filename,"..")!=0) )	
-			{
-    			len = xfr->base_dir_length + strlen(filename) + 1;
-					
-				if (mode[0] == '-')
-			    {					
-					url = (char *) malloc (sizeof(char)* len);
-					
-					snprintf(url, sizeof(char)* len,"%s%s",
-						                xfr->base_dir, 
-						                filename);
-						                
-					gw_tm_ftp_stack_push(&(xfr->file_stack), 
-					                     url, 
-						   			     GW_TM_FTP_FILE, 
-						   			     GW_FALSE);
-     			    free(url);						   			     
-				}
-				else if (mode[0] == 'd')
-				{		
-				 	url = (char *) malloc (sizeof(char)* (len+1));
-					snprintf(url, sizeof(char)* (len + 1),"%s%s/",
-					                    xfr->base_dir, 
-					                    filename);
-					                    
-					gw_tm_ftp_stack_push(&(xfr->file_stack), 
-					                     url, 
-						   			     GW_TM_FTP_DIR, 
-						   			     GW_FALSE);
-     			    free(url);
-				}
-			}						   		
+            while ((*end_ptr != '\n') && (*end_ptr != '\r'))
+            {
+                end_ptr++;
+                i++;
+            }
+ 
+            *end_ptr = '\0';
 
-	    	start_ptr = end_ptr+1;
-   			end_ptr   = start_ptr;
-	   		i         = i+1;		
-    	}
+            rc = sscanf(start_ptr,"%s %s %s %s %s %s %s %s %s %s",
+                    mode, links, owner, group, size, month,
+                    day, hour, file, alt_file);
+
+            if ( rc == 8 )
+                filename = hour;
+            else if (rc == 9)
+                filename = file;
+            else if (rc == 10)
+                filename = alt_file;
+            else
+            {
+                start_ptr = end_ptr+1;
+                end_ptr = start_ptr;
+                i = i+1;
+                continue;
+            }
+ 
+            if ( (strcmp(filename,".") != 0)
+                    && (strcmp(filename,"..") != 0) )
+            {
+                len = xfr->base_dir_length + strlen(filename) + 1;
+
+                if (mode[0] == '-')
+                {
+                    url = (char *) malloc (sizeof(char)* len);
+
+                    snprintf(url, sizeof(char)* len,"%s%s",
+                            xfr->base_dir, filename);
+
+                    gw_tm_ftp_stack_push(&(xfr->file_stack), url, GW_TM_FTP_FILE, GW_FALSE);
+                    free(url);
+                }
+                else if (mode[0] == 'd')
+                {
+                    url = (char *) malloc (sizeof(char)* (len+1));
+                    snprintf(url, sizeof(char)* (len + 1),"%s%s/",
+                            xfr->base_dir, filename);
+
+                    gw_tm_ftp_stack_push(&(xfr->file_stack), url, GW_TM_FTP_DIR, GW_FALSE);
+                     free(url);
+                }
+            }
+
+            start_ptr = end_ptr+1;
+            end_ptr = start_ptr;
+	    i = i+1;
+        }
+ 
+        free(xfr->list_buffer);
     	
-    	free(xfr->list_buffer);
-    	
-    	xfr->list_buffer   = NULL;
-    	xfr->buffer_length = 0;
-    	
-   	   	free(user_arg);
+        xfr->list_buffer = NULL;
+        xfr->buffer_length = 0;
+    
+        free(user_arg);
     }
 
     return;
@@ -480,84 +467,79 @@ void gw_tm_ftp_transfer_rmdir_cb(
         globus_ftp_client_handle_t *   handle,
         globus_object_t *              err)
 {
-	gw_tm_ftp_transfer_t *  xfr;
-	gw_tm_ftp_stack_t *     file;
+    gw_tm_ftp_transfer_t *  xfr;
+    gw_tm_ftp_stack_t *     file;
     globus_result_t         grc;
     int                     xfr_id;
     
-	xfr_id = *( (int *) user_arg );
+    xfr_id = *( (int *) user_arg );
 	
-	if ( ( xfr_id < GW_TM_FTP_XFR_POOL_MAX ) && (xfr_id >= 0 ) )
-	    if ( gw_tm_ftp_xfr_pool[xfr_id] != NULL )
-	    	xfr = gw_tm_ftp_xfr_pool[xfr_id];
-	    else
-	    {
-	    	/*printf("RMDIR %d - FAILURE transfer does not exisit.\n", xfr_id);*/
-	    	
-	    	free(user_arg);
-	    	return;
-	    }
+    if ( ( xfr_id < GW_TM_FTP_XFR_POOL_MAX ) && (xfr_id >= 0 ) )
+        if ( gw_tm_ftp_xfr_pool[xfr_id] != NULL )
+            xfr = gw_tm_ftp_xfr_pool[xfr_id];
+        else
+        {
+            /*printf("RMDIR %d - FAILURE transfer does not exisit.\n", xfr_id);*/
+    	
+            free(user_arg);
+            return;
+        }
 	else
 	{
 	    /*printf("RMDIR %d - FAILURE invalid transfer id in callback.\n", xfr_id);*/
 	    			
-    	free(user_arg);
-		return;	
+            free(user_arg);
+            return;	
 	}
-    
+ 
     if(err != GLOBUS_SUCCESS) /* ERROR RMDIR OR EXPAND */
     {
-		printf("RMDIR %d - FAILURE ftp_client_delete/rmdir command.\n",xfr->jid);
-		
-		free(user_arg);
-		return;
+        printf("RMDIR %d - FAILURE ftp_client_delete/rmdir command.\n",xfr->jid);
+
+        free(user_arg);
+        return;
     }
 
-	file = gw_tm_ftp_stack_pop(&(xfr->file_stack));
+    file = gw_tm_ftp_stack_pop(&(xfr->file_stack));
 	
-	if( file != NULL )
-	{
-		if ( (file->type == GW_TM_FTP_DIR) && (file->expanded == GW_FALSE) )
-		{
-			
-			gw_tm_ftp_transfer_flush (xfr);
-			gw_tm_ftp_transfer_expand_url (xfr_id, file->file_name, 
-					gw_tm_ftp_transfer_rmdir_cb);
-					
-			free(file->file_name);
-			free(file);
-			free(user_arg);
-			return;						
-		}
-		else
-		{
-			if ( file->type == GW_TM_FTP_FILE )
-				grc = globus_ftp_client_delete (&(xfr->handle),
-        										file->file_name,
-        								    	&(xfr->op_attr),
-									        	gw_tm_ftp_transfer_rmdir_cb,
-									        	user_arg);
-			else
-				grc = globus_ftp_client_rmdir ( &(xfr->handle),
-												file->file_name,
-												&(xfr->op_attr),
-									        	gw_tm_ftp_transfer_rmdir_cb,
-									        	user_arg);
+    if( file != NULL )
+    {
+       if ( (file->type == GW_TM_FTP_DIR) && (file->expanded == GW_FALSE) )
+       {
+            gw_tm_ftp_transfer_flush (xfr);
+            gw_tm_ftp_transfer_expand_url (xfr_id, file->file_name, 
+                    gw_tm_ftp_transfer_rmdir_cb);
+
+            free(file->file_name);
+            free(file);
+            free(user_arg);
+            return;						
+        }
+        else
+        {
+            if ( file->type == GW_TM_FTP_FILE )
+                grc = globus_ftp_client_delete (&(xfr->handle),
+                        file->file_name, &(xfr->op_attr),
+       	                gw_tm_ftp_transfer_rmdir_cb, user_arg);
+            else
+                grc = globus_ftp_client_rmdir ( &(xfr->handle),
+                        file->file_name, &(xfr->op_attr),
+                        gw_tm_ftp_transfer_rmdir_cb, user_arg);
 									        	
-			if ( grc != GLOBUS_SUCCESS )
-			{
-				printf("RMDIR %d - FAILURE ftp_client_delete/rmdir command\n", xfr->jid);
-				free(user_arg);
-			}					
-				      
-			free(file->file_name);
-			free(file);
-			return;
-		}
-	}
-	
-	printf("RMDIR %d - SUCCESS -\n", xfr->jid);	
-	free(user_arg);
+            if ( grc != GLOBUS_SUCCESS )
+            {
+                printf("RMDIR %d - FAILURE ftp_client_delete/rmdir command\n", xfr->jid);
+                free(user_arg);
+            }					
+
+            free(file->file_name);
+            free(file);
+            return;
+        }
+    }
+
+    printf("RMDIR %d - SUCCESS -\n", xfr->jid);	
+    free(user_arg);
 }
 
 
@@ -636,7 +618,7 @@ int gw_tm_ftp_transfer_exists_dir (int                              xfr_id,
 		
 	xfr->base_dir_length = strlen(xfr->base_dir);
 
-	_xfr_id    = ( int *) malloc (sizeof(int));
+	_xfr_id = ( int *) malloc (sizeof(int));
 	*(_xfr_id) = xfr->jid;
 		
 	grc = globus_ftp_client_exists ( &(xfr->handle), 
@@ -690,7 +672,7 @@ int gw_tm_ftp_transfer_mkdir(int                                xfr_id,
 		
 	xfr->base_dir_length = strlen(xfr->base_dir);
 
-	_xfr_id    = ( int *) malloc (sizeof(int));
+	_xfr_id = ( int *) malloc (sizeof(int));
 	*(_xfr_id) = xfr->jid;
 		
 	grc = globus_ftp_client_mkdir ( &(xfr->handle), 
@@ -774,7 +756,7 @@ int gw_tm_ftp_transfer_url_to_url ( int                             xfr_id,
 	{
 		xfr->handle_in_use = GW_TRUE;
 
-		_xfr_id  = ( int *) malloc (sizeof(int));		
+		_xfr_id = ( int *) malloc (sizeof(int));		
 		*_xfr_id = xfr->jid;    
 		
 		if (xfr->current_xfr.src_url != NULL )
@@ -790,9 +772,9 @@ int gw_tm_ftp_transfer_url_to_url ( int                             xfr_id,
 		xfr->current_xfr.cp_xfr_id = cp_xfr_id;
 		
 		if ( modex == 'X' )
-			xfr->current_xfr.cp_type   = GW_TM_FTP_MODEX;
+			xfr->current_xfr.cp_type = GW_TM_FTP_MODEX;
 		else
-			xfr->current_xfr.cp_type   = GW_TM_FTP_NONE;		
+			xfr->current_xfr.cp_type = GW_TM_FTP_NONE;		
 		
 		grc = globus_gass_copy_register_url_to_url (
         	&(xfr->gass_handle), 
@@ -881,7 +863,7 @@ void gw_tm_ftp_transfer_url_to_url_cb(	void *                      user_arg,
     	{
     		xfr->current_xfr.cp_type = GW_TM_FTP_NONE;
     		
-    		_xfr_id  = ( int *) malloc (sizeof(int));		
+    		_xfr_id = ( int *) malloc (sizeof(int));		
 		    *_xfr_id = xfr->jid;    
     		
     		grc = globus_ftp_client_chmod (&(xfr->handle),
@@ -924,7 +906,7 @@ void gw_tm_ftp_transfer_url_to_url_cb(	void *                      user_arg,
 		
 		while (!end)
 		{
-			_xfr_id  = ( int *) malloc (sizeof(int));		
+			_xfr_id = ( int *) malloc (sizeof(int));		
 			*_xfr_id = xfr->jid;    
 
 			if (xfr->current_xfr.src_url != NULL )
@@ -937,7 +919,7 @@ void gw_tm_ftp_transfer_url_to_url_cb(	void *                      user_arg,
 		
 			xfr->current_xfr.cp_xfr_id = pending->cp_xfr_id;
 		
-			xfr->current_xfr.cp_type   = pending->cp_type;
+			xfr->current_xfr.cp_type = pending->cp_type;
 		
 			grc = globus_gass_copy_register_url_to_url (
 	        	&(xfr->gass_handle), 
@@ -1043,7 +1025,7 @@ void gw_tm_ftp_transfer_chmod_cb( void *                         user_arg,
 		
 		while (!end)
 		{
-			_xfr_id  = ( int *) malloc (sizeof(int));		
+			_xfr_id = ( int *) malloc (sizeof(int));		
 			*_xfr_id = xfr->jid;    
 
 			if (xfr->current_xfr.src_url != NULL )
@@ -1056,7 +1038,7 @@ void gw_tm_ftp_transfer_chmod_cb( void *                         user_arg,
 		
 			xfr->current_xfr.cp_xfr_id = pending->cp_xfr_id;
 		
-			xfr->current_xfr.cp_type   = pending->cp_type;
+			xfr->current_xfr.cp_type = pending->cp_type;
 		
 			grc = globus_gass_copy_register_url_to_url (
 	        	&(xfr->gass_handle), 
