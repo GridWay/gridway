@@ -24,15 +24,15 @@
 extern gw_tm_ftp_transfer_t **	gw_tm_ftp_xfr_pool;
 extern int	GW_TM_FTP_XFR_POOL_MAX;
 
-int  gw_tm_ftp_mad_init(int ids)
+int gw_tm_ftp_mad_init(int ids)
 {
-	static int initialized = 0;
-	int rc;
+    static int initialized = 0;
+    int rc;
 	
-	if (initialized == 1 )
-		return 0;
+    if (initialized == 1 )
+        return 0;
 			    
-   	rc = globus_module_activate(GLOBUS_FTP_CLIENT_MODULE);
+    rc = globus_module_activate(GLOBUS_FTP_CLIENT_MODULE);
     if ( rc != GLOBUS_SUCCESS )
         return 1;
 
@@ -314,7 +314,6 @@ void gw_tm_ftp_list_read_callback(void *user_arg,
     char               size[16];
     char               month[5];
     char               day[5];
-    char               hour[256];
     char               file[256];
     char               alt_file[256];	
     char *             filename;
@@ -388,15 +387,15 @@ void gw_tm_ftp_list_read_callback(void *user_arg,
  
             *end_ptr = '\0';
 
-            rc = sscanf(start_ptr,"%s %s %s %s %s %s %s %s %s %s",
+            rc = sscanf(start_ptr, "%s %s %s %s %s %s %s %s %s",
                     mode, links, owner, group, size, month,
-                    day, hour, file, alt_file);
+                    day, file, alt_file);
+
+printf("rc=%d file=%s alt_file=%s\n", rc, file, alt_file);
 
             if ( rc == 8 )
-                filename = hour;
-            else if (rc == 9)
                 filename = file;
-            else if (rc == 10)
+            else if (rc == 9)
                 filename = alt_file;
             else
             {
@@ -406,8 +405,8 @@ void gw_tm_ftp_list_read_callback(void *user_arg,
                 continue;
             }
  
-            if ( (strcmp(filename,".") != 0)
-                    && (strcmp(filename,"..") != 0) )
+            if ( (strcmp(filename, ".") != 0)
+                    && (strcmp(filename, "..") != 0) )
             {
                 len = xfr->base_dir_length + strlen(filename) + 1;
 
@@ -415,7 +414,7 @@ void gw_tm_ftp_list_read_callback(void *user_arg,
                 {
                     url = (char *) malloc (sizeof(char)* len);
 
-                    snprintf(url, sizeof(char)* len,"%s%s",
+                    snprintf(url, sizeof(char)*len, "%s%s",
                             xfr->base_dir, filename);
 
                     gw_tm_ftp_stack_push(&(xfr->file_stack), url, GW_TM_FTP_FILE, GW_FALSE);
@@ -424,11 +423,11 @@ void gw_tm_ftp_list_read_callback(void *user_arg,
                 else if (mode[0] == 'd')
                 {
                     url = (char *) malloc (sizeof(char)* (len+1));
-                    snprintf(url, sizeof(char)* (len + 1),"%s%s/",
+                    snprintf(url, sizeof(char)*(len + 1), "%s%s/",
                             xfr->base_dir, filename);
 
                     gw_tm_ftp_stack_push(&(xfr->file_stack), url, GW_TM_FTP_DIR, GW_FALSE);
-                     free(url);
+                    free(url);
                 }
             }
 
