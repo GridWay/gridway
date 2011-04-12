@@ -22,8 +22,8 @@
 #include "gw_common.h"
 
 #define GW_TM_FTP_BUFFER_LENGTH 2048
-#define GW_TM_FTP_FILE	0
-#define GW_TM_FTP_DIR	1
+#define GW_TM_FTP_FILE 0
+#define GW_TM_FTP_DIR 1
 
 /* ------------------------------------------------- */
 
@@ -35,7 +35,7 @@ typedef struct gw_tm_ftp_stack_s
     int type;
     gw_boolean_t expanded;
     
-	struct gw_tm_ftp_stack_s *next;
+    struct gw_tm_ftp_stack_s *next;
 	
 }gw_tm_ftp_stack_t;
 
@@ -50,13 +50,13 @@ struct gw_tm_ftp_queue_s;
 
 typedef struct gw_tm_ftp_queue_s
 {
-	char *  src_url;
-	char *  dst_url;
+	char *src_url;
+	char *dst_url;
 	
-	int            cp_xfr_id;
+	int cp_xfr_id;
 	gw_tm_ftp_cp_t cp_type;
 	
-	struct gw_tm_ftp_queue_s *  next;
+	struct gw_tm_ftp_queue_s *next;
 	
 }gw_tm_ftp_queue_t;
 
@@ -64,55 +64,55 @@ typedef struct gw_tm_ftp_queue_s
 
 typedef struct gw_tm_ftp_transfer_s
 {
-	int 		  jid;
+    int jid;
 
-	gw_boolean_t  handle_in_use;
+    gw_boolean_t handle_in_use;
 			
-    globus_ftp_client_handle_t        handle;
-    globus_ftp_client_handleattr_t    attr;
+    globus_ftp_client_handle_t handle;
+    globus_ftp_client_handleattr_t attr;
     globus_ftp_client_operationattr_t op_attr;
-	globus_gass_copy_handle_t 		  gass_handle;
-	globus_gass_copy_handleattr_t     gass_handel_attr;
-	globus_gass_copy_attr_t 		  gass_attr;
+    globus_gass_copy_handle_t gass_handle;
+    globus_gass_copy_handleattr_t gass_handel_attr;
+    globus_gass_copy_attr_t gass_attr;
 
-	globus_ftp_client_operationattr_t src_op_attr;
-	globus_gass_copy_attr_t           src_gass_attr;
+    globus_ftp_client_operationattr_t src_op_attr;
+    globus_gass_copy_attr_t src_gass_attr;
 	    
-	globus_byte_t *                   read_buffer;
+    globus_byte_t *read_buffer;
 
-	gw_tm_ftp_queue_t * url_queue;
+    gw_tm_ftp_queue_t *url_queue;
 
-	gw_tm_ftp_queue_t current_xfr;	
+    gw_tm_ftp_queue_t current_xfr;	
 	
-	char * base_dir;
-	int    base_dir_length;
+    char *base_dir;
+    int base_dir_length;
 		
-	char * list_buffer;
-	int    buffer_length;
+    char *list_buffer;
+    int buffer_length;
 	
-	gw_tm_ftp_stack_t * file_stack;
+    gw_tm_ftp_stack_t *file_stack;
 	
 } gw_tm_ftp_transfer_t;
 
 
 
-void gw_tm_ftp_init_xfr_pool( int ids);
-int  gw_tm_ftp_add_xfr( int xfr_id );
-int  gw_tm_ftp_del_xfr( int xfr_id  );
+void gw_tm_ftp_init_xfr_pool(int ids);
+int gw_tm_ftp_add_xfr(int xfr_id);
+int gw_tm_ftp_del_xfr(int xfr_id);
 
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 
-void gw_tm_ftp_queue_init    (gw_tm_ftp_queue_t ** queue);
-void gw_tm_ftp_queue_destroy (gw_tm_ftp_queue_t ** queue);
+void gw_tm_ftp_queue_init(gw_tm_ftp_queue_t **queue);
+void gw_tm_ftp_queue_destroy(gw_tm_ftp_queue_t **queue);
 
-void gw_tm_ftp_queue_put (gw_tm_ftp_queue_t ** queue, 
-						 const char *          src,
-                         const char *          dst,
-                         int                   cp_xfr_id,
-                         gw_tm_ftp_cp_t        cp_type);                          
+void gw_tm_ftp_queue_put(gw_tm_ftp_queue_t **queue, 
+        const char *src,
+        const char *dst,
+        int cp_xfr_id,
+        gw_tm_ftp_cp_t cp_type);                          
                           
 gw_tm_ftp_queue_t * gw_tm_ftp_queue_get (gw_tm_ftp_queue_t **  queue);
 
