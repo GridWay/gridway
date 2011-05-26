@@ -21,6 +21,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <syslog.h>
 
 static gw_log_t gw_log;
 
@@ -33,7 +34,8 @@ void gw_log_init(const char *log_file)
     pthread_mutex_init(&(gw_log.mutex),(pthread_mutexattr_t *) NULL);
 
     pthread_mutex_lock(&(gw_log.mutex));
-    
+
+#ifndef GWSYSLOG
     if (log_file != NULL)
     {
         gw_log.log_file = strdup(log_file);
@@ -41,7 +43,10 @@ void gw_log_init(const char *log_file)
     }
     else
         gw_log.log_file = NULL;    
-        
+#else
+    openlog("GridWay", LOG_PID, GWSYSLOG);
+#endif
+    
     pthread_mutex_unlock(&(gw_log.mutex));
 }
 
@@ -52,9 +57,13 @@ void gw_log_destroy()
 {
     pthread_mutex_lock(&(gw_log.mutex));
 
+#ifndef GWSYSLOG
     if (gw_log.log_file != NULL)
         free(gw_log.log_file);
-        
+#else
+    closelog();
+#endif
+ 
     pthread_mutex_unlock(&(gw_log.mutex));
     
     pthread_mutex_destroy(&(gw_log.mutex));               
@@ -65,16 +74,23 @@ void gw_log_destroy()
 
 void gw_log_print(const char *module, const char type, const char *str_format,...)
 {
+#ifndef GWSYSLOG
     FILE    *log;
-    va_list ap;
-    time_t  the_time;
-    
+    //va_list ap;
+    time_t  the_time;    
     char str[26];
-
+#else
+    char *str_syslog;
+    str_syslog = (char*) malloc(sizeof(char)*(10+strlen(str_format)));
+    sprintf(str_syslog, "[%s][%c] %s", module, type, str_format);
+#endif
+ 
+    va_list ap;
     va_start (ap, str_format);
     
     pthread_mutex_lock(&(gw_log.mutex));
-    
+
+#ifndef GWSYSLOG
     log = fopen(gw_log.log_file,"a");
 
     if (log != NULL)
@@ -94,6 +110,24 @@ void gw_log_print(const char *module, const char type, const char *str_format,..
         
         fclose(log);
     }
-    
+#else
+    switch(type)
+    {
+        case 'I':
+            vsyslog(LOG_INFO, str_syslog, ap);
+            break;
+        case 'E':
+            vsyslog(LOG_ERR, str_syslog, ap);
+            break;
+        case 'W':
+            vsyslog(LOG_WARNING, str_syslog, ap);
+            break;
+        case 'D':
+            vsyslog(LOG_DEBUG, str_syslog, ap);
+            break;
+    }
+    free(str_syslog);
+#endif
+
     pthread_mutex_unlock(&(gw_log.mutex));
 }

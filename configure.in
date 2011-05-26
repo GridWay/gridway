@@ -63,6 +63,7 @@ drmaa_ruby="no"
 docs="no"
 tests="no"
 jsdl="no"
+syslog="LOG_USER"
 db="no"
 
 # --- Enable DRMAA Java library ---
@@ -94,6 +95,13 @@ AC_ARG_ENABLE(jsdl,  AS_HELP_STRING(--enable-jsdl,\
 AC_ARG_ENABLE(debug,  AS_HELP_STRING(--enable-debug,\
   Enable debug info in logs.),\
   [CFLAGS="$CFLAGS -Wall -g -DGWIMDEBUG -DGWJOBDEBUG -DGWHOSTDEBUG -DGWEMDEBUG -DGWDMDEBUG  -DGWTMDEBUG -DGWUSERDEBUG -DGWSCHEDDEBUG";], [])
+
+# --- With Syslog  ---
+
+AC_ARG_WITH(syslog,  AS_HELP_STRING(--with-syslog=facility,\
+  Build syslog compilant logs support.),\
+  [if test $withval = "LOG_DAEMON" -o $withval = "LOG_USER" -o $withval = "LOG_LOCAL0" -o $withval = "LOG_LOCAL1" -o $withval = "LOG_LOCAL2" -o $withval = "LOG_LOCAL3" -o $withval = "LOG_LOCAL4" -o $withval = "LOG_LOCAL5" -o $withval = "LOG_LOCAL6" -o $withval = "LOG_LOCAL7"; then syslog="$withval"; \
+  CFLAGS+=" -DGWSYSLOG=$syslog"; fi], [])
 
 # --- With DB ---      
 
@@ -164,6 +172,10 @@ fi
 # --- Enable JSDL  ---
 
 AM_CONDITIONAL(JSDL, test "x$jsdl" = "xjsdl")
+
+# --- With Syslog ---
+
+AM_CONDITIONAL(SYSLOG, test "x$syslog" = "xsyslog")
 
 # --- With DB ---
 
