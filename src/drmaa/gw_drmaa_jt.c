@@ -462,8 +462,12 @@ int  drmaa_gw_jt_set_vval(drmaa_job_template_t * jt,
 	}
 	
 	for (i=0;i<len;i++)
-		(*jt_values)[i] = strdup(values[i]);
-		
+	{
+                int length = strlen(values[i]);
+                (*jt_values)[i] = malloc(length + 2);
+                strcpy((*jt_values)[i],values[i]);
+		// (*jt_values)[i] = strdup(values[i]);
+	}
 	 *jt_num_values = len;
 
 	 return DRMAA_ERRNO_SUCCESS;

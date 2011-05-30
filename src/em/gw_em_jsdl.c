@@ -102,6 +102,36 @@ char* gw_generate_wrapper_jsdl (gw_job_t *job)
             job_environment);
     strcat(jsdl_buffer, tmp_buffer);
 
+    if ((job->max_time > 0) && (job->max_walltime == 0))
+    {
+            snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
+                    "    <jsdl-posix:WallTimeLimit>%d</jsdl-posix:WallTimeLimit>\n",
+                    job->max_time*60);
+            strcat(jsdl_buffer, tmp_buffer);
+    }
+    if (job->max_walltime > 0) 
+    {
+            snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
+                    "    <jsdl-posix:WallTimeLimit>%d</jsdl-posix:WallTimeLimit>\n",
+                    job->max_walltime*60);
+            strcat(jsdl_buffer, tmp_buffer);
+    }
+    if (job->max_memory > 0)
+    {
+            snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
+                    "    <jsdl-posix:MemoryLimit>%d</jsdl-posix:MemoryLimit>\n",
+                    job->max_memory*1024);
+            strcat(jsdl_buffer, tmp_buffer);
+    }
+    if (job->max_cpu_time > 0)
+    {
+            snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
+                    "    <jsdl-posix:CPUTimeLimit>%d</jsdl-posix:CPUTimeLimit>\n",
+                    job->max_cpu_time*60);
+            strcat(jsdl_buffer, tmp_buffer);
+    }
+
+
     snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
             "   </jsdl-posix:POSIXApplication>\n"
             "  </jsdl:Application>\n");
@@ -203,10 +233,13 @@ char *gw_em_jsdl_environment(gw_job_t *job)
 
     for (i=0;i<job->template.num_env;i++)
     {
-        rc = snprintf(jsdl_buffer, sizeof(char) * GW_RSL_LENGTH,
+        if (strcmp(job->template.environment[i][0], "MAXCPUTIME") != 0 && strcmp(job->template.environment[i][0], "MAXTIME") != 0 && strcmp(job->template.environment[i][0], "MAXWALLTIME") != 0 && strcmp(job->template.environment[i][0], "MAXMEMORY") != 0 && strcmp(job->template.environment[i][0], "MINMEMORY") != 0) 
+        {
+            rc = snprintf(jsdl_buffer, sizeof(char) * GW_RSL_LENGTH,
                 "    <jsdl-posix:Environment name=\"%s\">%s</jsdl-posix:Environment>\n",
                 job->template.environment[i][0],
                 job->template.environment[i][1]);
+        }
     }
 
     rc = snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,

@@ -156,6 +156,12 @@ typedef struct gw_job_s
     gw_history_t *history;
     
     gw_boolean_t reschedule;
+
+    int max_cpu_time;
+    int max_time;
+    int max_walltime;
+    int max_memory;
+    int min_memory;
 } gw_job_t;
 
 

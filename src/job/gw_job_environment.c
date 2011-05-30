@@ -325,6 +325,11 @@ int gw_job_environment(gw_job_t *job)
         }        
     }
 
+    job->max_cpu_time = 0;
+    job->max_time = 0;
+    job->max_walltime = 0;
+    job->max_memory = 0;
+    job->min_memory = 0;
     if ( job->template.num_env != 0 )
     {
         for (i=0;i<job->template.num_env;i++)
@@ -334,7 +339,23 @@ int gw_job_environment(gw_job_t *job)
             if (var != NULL)
             {
                    fprintf(fd,"export %s=\"%s\"\n",
-                    job->template.environment[i][GW_ENV_VAR], var); 
+                    job->template.environment[i][GW_ENV_VAR], var);
+                if (strcmp("MAXCPUTIME", job->template.environment[i][GW_ENV_VAR]) == 0)
+                {
+                    job->max_cpu_time = atoi(var);
+                } else if (strcmp("MAXTIME", job->template.environment[i][GW_ENV_VAR]) == 0)
+                {
+                    job->max_time = atoi(var);
+                } else if (strcmp("MAXWALLTIME", job->template.environment[i][GW_ENV_VAR]) == 0)
+                {
+                    job->max_walltime = atoi(var);
+                } else if (strcmp("MAXMEMORY", job->template.environment[i][GW_ENV_VAR]) == 0)
+                {
+                    job->max_memory = atoi(var);
+                } else if (strcmp("MINMEMORY", job->template.environment[i][GW_ENV_VAR]) == 0)
+                {
+                    job->min_memory = atoi(var);
+                } 
                 free(var);                
             }
         }
