@@ -84,6 +84,7 @@ install-data-hook:
 	$(INSTALL_DATA) $(top_srcdir)/scripts/gw_mad_common.sh $(DESTDIR)$(bindir)
 	$(INSTALL_DATA) $(top_srcdir)/src/im_mad/gw_im_mad_common.sh $(DESTDIR)$(bindir)
 	$(INSTALL_DATA) $(top_srcdir)/src/im_mad/gw_im_mad_static.sh $(DESTDIR)$(bindir)/gw_im_mad_static
+	chmod a+x $(DESTDIR)$(bindir)/gw_im_mad_static
 
 uninstall-hook:
 	rm -f $(DESTDIR)$(bindir)/gw_im_mad_common.sh $(DESTDIR)$(bindir)/gw_im_mad_static \
