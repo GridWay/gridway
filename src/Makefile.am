@@ -229,6 +229,7 @@ DRMAA_SRC = $(COMMON)/gw_file_parser.c $(CLIENT_SRC) \
         $(COMMON)/gw_template.c $(COMMON)/gw_log.c
 
 DRMAAJNI_SRC = $(DRMAA_PACK)/DrmaaJNI.c
+
 DRMAA1JNI_SRC = $(DRMAA1_PACK)/DrmaaJNI.c
 
 DRMAA_JAVA_SRC = $(DRMAA_PACK)/AlreadyActiveSessionException.java \
@@ -509,7 +510,11 @@ lib_LTLIBRARIES = $(srcdir)/drmaa/libdrmaa.la
 lib_LTLIBRARIES += $(srcdir)/drmaa/libDrmaaJNI.la
 
 __srcdir__drmaa_libdrmaa_la_SOURCES = $(DRMAA_SRC)
+if DRMAA1_JAVA
+__srcdir__drmaa_libDrmaaJNI_la_SOURCES = $(DRMAA1JNI_SRC)
+else
 __srcdir__drmaa_libDrmaaJNI_la_SOURCES = $(DRMAAJNI_SRC)
+endif
 __srcdir__drmaa_libDrmaaJNI_la_LIBADD  = $(srcdir)/drmaa/libdrmaa.la
 
 __srcdir__drmaa_libdrmaa_la_CFLAGS = $(AM_CFLAGS)

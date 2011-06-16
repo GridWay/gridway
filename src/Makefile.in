@@ -120,13 +120,19 @@ am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(bindir)" \
 LTLIBRARIES = $(lib_LTLIBRARIES)
 __srcdir__drmaa_libDrmaaJNI_la_DEPENDENCIES =  \
 	$(srcdir)/drmaa/libdrmaa.la
+am____srcdir__drmaa_libDrmaaJNI_la_SOURCES_DIST =  \
+	$(DRMAA_PACK)/DrmaaJNI.c $(DRMAA1_PACK)/DrmaaJNI.c
 am__dirstamp = $(am__leading_dot)dirstamp
 am__objects_1 = $(DRMAA_PACK)/DrmaaJNI.lo
-am___srcdir__drmaa_libDrmaaJNI_la_OBJECTS = $(am__objects_1)
+am__objects_2 = $(DRMAA1_PACK)/DrmaaJNI.lo
+@DRMAA1_JAVA_FALSE@am___srcdir__drmaa_libDrmaaJNI_la_OBJECTS =  \
+@DRMAA1_JAVA_FALSE@	$(am__objects_1)
+@DRMAA1_JAVA_TRUE@am___srcdir__drmaa_libDrmaaJNI_la_OBJECTS =  \
+@DRMAA1_JAVA_TRUE@	$(am__objects_2)
 __srcdir__drmaa_libDrmaaJNI_la_OBJECTS =  \
 	$(am___srcdir__drmaa_libDrmaaJNI_la_OBJECTS)
 __srcdir__drmaa_libdrmaa_la_LIBADD =
-am__objects_2 =  \
+am__objects_3 =  \
 	$(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_job_match.lo \
 	$(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_submit.lo \
 	$(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_host_status.lo \
@@ -140,32 +146,32 @@ am__objects_2 =  \
 	$(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_attr_parser.lo \
 	$(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_update_syntax.lo \
 	$(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_var.lo
-am__objects_3 =  \
+am__objects_4 =  \
 	$(COMMON)/__srcdir__drmaa_libdrmaa_la-gw_file_parser.lo \
-	$(am__objects_2) \
+	$(am__objects_3) \
 	$(DRMAA)/__srcdir__drmaa_libdrmaa_la-gw_drmaa.lo \
 	$(DRMAA)/__srcdir__drmaa_libdrmaa_la-gw_drmaa_jt.lo \
 	$(COMMON)/__srcdir__drmaa_libdrmaa_la-gw_template_parser.lo \
 	$(COMMON)/__srcdir__drmaa_libdrmaa_la-gw_template.lo \
 	$(COMMON)/__srcdir__drmaa_libdrmaa_la-gw_log.lo
-am___srcdir__drmaa_libdrmaa_la_OBJECTS = $(am__objects_3)
+am___srcdir__drmaa_libdrmaa_la_OBJECTS = $(am__objects_4)
 __srcdir__drmaa_libdrmaa_la_OBJECTS =  \
 	$(am___srcdir__drmaa_libdrmaa_la_OBJECTS)
 PROGRAMS = $(bin_PROGRAMS) $(test_PROGRAMS)
-am__objects_4 = $(DB)/gw_acct.$(OBJEXT)
-am__objects_5 = $(CLIENT)/gw_client_acct.$(OBJEXT)
-am__objects_6 = $(COMMON)/gw_action.$(OBJEXT) \
+am__objects_5 = $(DB)/gw_acct.$(OBJEXT)
+am__objects_6 = $(CLIENT)/gw_client_acct.$(OBJEXT)
+am__objects_7 = $(COMMON)/gw_action.$(OBJEXT) \
 	$(COMMON)/gw_common.$(OBJEXT) \
 	$(COMMON)/gw_file_parser.$(OBJEXT) $(COMMON)/gw_log.$(OBJEXT) \
 	$(COMMON)/gw_template.$(OBJEXT) \
 	$(COMMON)/gw_template_parser.$(OBJEXT)
 am___srcdir__cmds_gwacct_OBJECTS = $(CMDS)/gw_acct.$(OBJEXT) \
 	$(CMDS)/gw_cmds_common.$(OBJEXT) \
-	$(CLIENT)/gw_client_init.$(OBJEXT) $(am__objects_4) \
-	$(am__objects_5) $(am__objects_6)
+	$(CLIENT)/gw_client_init.$(OBJEXT) $(am__objects_5) \
+	$(am__objects_6) $(am__objects_7)
 __srcdir__cmds_gwacct_OBJECTS = $(am___srcdir__cmds_gwacct_OBJECTS)
 __srcdir__cmds_gwacct_LDADD = $(LDADD)
-am__objects_7 = $(CLIENT)/gw_client_job_match.$(OBJEXT) \
+am__objects_8 = $(CLIENT)/gw_client_job_match.$(OBJEXT) \
 	$(CLIENT)/gw_client_submit.$(OBJEXT) \
 	$(CLIENT)/gw_client_host_status.$(OBJEXT) \
 	$(CLIENT)/gw_client_job_status.$(OBJEXT) \
@@ -179,68 +185,68 @@ am__objects_7 = $(CLIENT)/gw_client_job_match.$(OBJEXT) \
 	$(HOST)/gw_host_update_syntax.$(OBJEXT) \
 	$(HOST)/gw_host_var.$(OBJEXT)
 am___srcdir__cmds_gwhistory_OBJECTS = $(CMDS)/gw_history.$(OBJEXT) \
-	$(CMDS)/gw_cmds_common.$(OBJEXT) $(am__objects_7) \
-	$(am__objects_6)
+	$(CMDS)/gw_cmds_common.$(OBJEXT) $(am__objects_8) \
+	$(am__objects_7)
 __srcdir__cmds_gwhistory_OBJECTS =  \
 	$(am___srcdir__cmds_gwhistory_OBJECTS)
 __srcdir__cmds_gwhistory_LDADD = $(LDADD)
 am___srcdir__cmds_gwhost_OBJECTS = $(CMDS)/gw_host.$(OBJEXT) \
-	$(CMDS)/gw_cmds_common.$(OBJEXT) $(am__objects_7) \
-	$(am__objects_6)
+	$(CMDS)/gw_cmds_common.$(OBJEXT) $(am__objects_8) \
+	$(am__objects_7)
 __srcdir__cmds_gwhost_OBJECTS = $(am___srcdir__cmds_gwhost_OBJECTS)
 __srcdir__cmds_gwhost_LDADD = $(LDADD)
 am___srcdir__cmds_gwkill_OBJECTS = $(CMDS)/gw_kill.$(OBJEXT) \
-	$(CMDS)/gw_cmds_common.$(OBJEXT) $(am__objects_7) \
-	$(am__objects_6)
+	$(CMDS)/gw_cmds_common.$(OBJEXT) $(am__objects_8) \
+	$(am__objects_7)
 __srcdir__cmds_gwkill_OBJECTS = $(am___srcdir__cmds_gwkill_OBJECTS)
 __srcdir__cmds_gwkill_LDADD = $(LDADD)
 am___srcdir__cmds_gwps_OBJECTS = $(CMDS)/gw_ps.$(OBJEXT) \
-	$(CMDS)/gw_cmds_common.$(OBJEXT) $(am__objects_7) \
-	$(am__objects_6)
+	$(CMDS)/gw_cmds_common.$(OBJEXT) $(am__objects_8) \
+	$(am__objects_7)
 __srcdir__cmds_gwps_OBJECTS = $(am___srcdir__cmds_gwps_OBJECTS)
 __srcdir__cmds_gwps_LDADD = $(LDADD)
 am___srcdir__cmds_gwsubmit_OBJECTS = $(CMDS)/gw_submit.$(OBJEXT) \
-	$(CMDS)/gw_cmds_common.$(OBJEXT) $(am__objects_7) \
-	$(am__objects_6)
+	$(CMDS)/gw_cmds_common.$(OBJEXT) $(am__objects_8) \
+	$(am__objects_7)
 __srcdir__cmds_gwsubmit_OBJECTS =  \
 	$(am___srcdir__cmds_gwsubmit_OBJECTS)
 __srcdir__cmds_gwsubmit_LDADD = $(LDADD)
 am___srcdir__cmds_gwuser_OBJECTS = $(CMDS)/gw_user.$(OBJEXT) \
-	$(CMDS)/gw_cmds_common.$(OBJEXT) $(am__objects_7) \
-	$(am__objects_6)
+	$(CMDS)/gw_cmds_common.$(OBJEXT) $(am__objects_8) \
+	$(am__objects_7)
 __srcdir__cmds_gwuser_OBJECTS = $(am___srcdir__cmds_gwuser_OBJECTS)
 __srcdir__cmds_gwuser_LDADD = $(LDADD)
 am___srcdir__cmds_gwwait_OBJECTS = $(CMDS)/gw_wait.$(OBJEXT) \
-	$(CMDS)/gw_cmds_common.$(OBJEXT) $(am__objects_7) \
-	$(am__objects_6)
+	$(CMDS)/gw_cmds_common.$(OBJEXT) $(am__objects_8) \
+	$(am__objects_7)
 __srcdir__cmds_gwwait_OBJECTS = $(am___srcdir__cmds_gwwait_OBJECTS)
 __srcdir__cmds_gwwait_LDADD = $(LDADD)
-am__objects_8 = $(EM)/gw_em_actions.$(OBJEXT) $(EM)/gw_em.$(OBJEXT) \
+am__objects_9 = $(EM)/gw_em_actions.$(OBJEXT) $(EM)/gw_em.$(OBJEXT) \
 	$(EM)/gw_em_listener.$(OBJEXT) $(EM)/gw_em_mad.$(OBJEXT) \
 	$(EM)/gw_em_rsl2.$(OBJEXT) $(EM)/gw_em_rsl.$(OBJEXT) \
 	$(EM)/gw_em_jdl.$(OBJEXT) $(EM)/gw_em_jsdl.$(OBJEXT) \
 	$(EM)/gw_em_state.$(OBJEXT)
-am__objects_9 = $(TM)/gw_tm_actions.$(OBJEXT) $(TM)/gw_tm.$(OBJEXT) \
+am__objects_10 = $(TM)/gw_tm_actions.$(OBJEXT) $(TM)/gw_tm.$(OBJEXT) \
 	$(TM)/gw_tm_checkpoint.$(OBJEXT) $(TM)/gw_tm_epilog.$(OBJEXT) \
 	$(TM)/gw_tm_listener.$(OBJEXT) $(TM)/gw_tm_mad.$(OBJEXT) \
 	$(TM)/gw_tm_prolog.$(OBJEXT)
-am__objects_10 = $(IM)/gw_im_actions.$(OBJEXT) $(IM)/gw_im.$(OBJEXT) \
+am__objects_11 = $(IM)/gw_im_actions.$(OBJEXT) $(IM)/gw_im.$(OBJEXT) \
 	$(IM)/gw_im_listener.$(OBJEXT) $(IM)/gw_im_mad.$(OBJEXT)
-am__objects_11 = $(JOB)/gw_history.$(OBJEXT) $(JOB)/gw_job.$(OBJEXT) \
+am__objects_12 = $(JOB)/gw_history.$(OBJEXT) $(JOB)/gw_job.$(OBJEXT) \
 	$(JOB)/gw_job_environment.$(OBJEXT) \
 	$(JOB)/gw_job_pool.$(OBJEXT) $(JOB)/gw_job_recover.$(OBJEXT) \
 	$(JOB)/gw_job_template.$(OBJEXT) \
 	$(JOB)/gw_job_template_var_parser.$(OBJEXT) \
 	$(JOB)/gw_xfr_files.$(OBJEXT)
-am__objects_12 = $(HOST)/gw_host.$(OBJEXT) \
+am__objects_13 = $(HOST)/gw_host.$(OBJEXT) \
 	$(HOST)/gw_host_var.$(OBJEXT) $(HOST)/gw_host_pool.$(OBJEXT) \
 	$(HOST)/gw_host_rank_syntax.$(OBJEXT) \
 	$(HOST)/gw_host_reqs_syntax.$(OBJEXT) \
 	$(HOST)/gw_host_update_syntax.$(OBJEXT) \
 	$(HOST)/gw_host_attr_parser.$(OBJEXT)
-am__objects_13 = $(ARRAY)/gw_array.$(OBJEXT) \
+am__objects_14 = $(ARRAY)/gw_array.$(OBJEXT) \
 	$(ARRAY)/gw_array_pool.$(OBJEXT)
-am__objects_14 = $(DM)/gw_dm_action_allocate.$(OBJEXT) \
+am__objects_15 = $(DM)/gw_dm_action_allocate.$(OBJEXT) \
 	$(DM)/gw_dm_action_dispatch.$(OBJEXT) \
 	$(DM)/gw_dm_action_hold_release.$(OBJEXT) \
 	$(DM)/gw_dm_action_kill.$(OBJEXT) \
@@ -257,7 +263,7 @@ am__objects_14 = $(DM)/gw_dm_action_allocate.$(OBJEXT) \
 	$(DM)/gw_dm_state_stopped.$(OBJEXT) \
 	$(DM)/gw_dm_state_wrappers.$(OBJEXT) \
 	$(DM)/gw_dm_state_zombie.$(OBJEXT)
-am__objects_15 = $(RM)/gw_rm.$(OBJEXT) \
+am__objects_16 = $(RM)/gw_rm.$(OBJEXT) \
 	$(RM)/gw_rm_connection_list.$(OBJEXT) \
 	$(RM)/gw_rm_hold_release.$(OBJEXT) \
 	$(RM)/gw_rm_host_match.$(OBJEXT) \
@@ -267,27 +273,27 @@ am__objects_15 = $(RM)/gw_rm.$(OBJEXT) \
 	$(RM)/gw_rm_reschedule.$(OBJEXT) \
 	$(RM)/gw_rm_stop_resume.$(OBJEXT) $(RM)/gw_rm_submit.$(OBJEXT) \
 	$(RM)/gw_rm_user_status.$(OBJEXT) $(RM)/gw_rm_wait.$(OBJEXT)
-am__objects_16 = $(GWD)/gw_conf.$(OBJEXT) \
+am__objects_17 = $(GWD)/gw_conf.$(OBJEXT) \
 	$(GWD)/gw_conf_parser.$(OBJEXT) $(GWD)/gwd.$(OBJEXT) \
 	$(GWD)/gw_sch_conf_syntax.$(OBJEXT) \
 	$(GWD)/gw_sch_conf_parser.$(OBJEXT) \
 	$(GWD)/gw_sch_conf.$(OBJEXT)
-am__objects_17 = $(UM)/gw_um.$(OBJEXT) $(UM)/gw_user.$(OBJEXT) \
+am__objects_18 = $(UM)/gw_um.$(OBJEXT) $(UM)/gw_user.$(OBJEXT) \
 	$(UM)/gw_user_pool.$(OBJEXT)
-am___srcdir__gwd_gwd_OBJECTS = $(am__objects_8) $(am__objects_9) \
-	$(am__objects_10) $(am__objects_11) $(am__objects_12) \
-	$(am__objects_6) $(am__objects_13) $(am__objects_14) \
-	$(am__objects_15) $(am__objects_16) $(am__objects_17) \
-	$(am__objects_4)
+am___srcdir__gwd_gwd_OBJECTS = $(am__objects_9) $(am__objects_10) \
+	$(am__objects_11) $(am__objects_12) $(am__objects_13) \
+	$(am__objects_7) $(am__objects_14) $(am__objects_15) \
+	$(am__objects_16) $(am__objects_17) $(am__objects_18) \
+	$(am__objects_5)
 __srcdir__gwd_gwd_OBJECTS = $(am___srcdir__gwd_gwd_OBJECTS)
 __srcdir__gwd_gwd_LDADD = $(LDADD)
-am__objects_18 = $(SCHED)/gw_scheduler_common.$(OBJEXT) \
+am__objects_19 = $(SCHED)/gw_scheduler_common.$(OBJEXT) \
 	$(SCHED)/gw_scheduler_hosts.$(OBJEXT) \
 	$(SCHED)/gw_scheduler_jobs.$(OBJEXT) \
 	$(SCHED)/gw_scheduler_users.$(OBJEXT)
 am___srcdir__scheduler_gw_flood_scheduler_OBJECTS =  \
-	$(SCHED)/gw_flood_scheduler.$(OBJEXT) $(am__objects_6) \
-	$(am__objects_7) $(am__objects_4) $(am__objects_18) \
+	$(SCHED)/gw_flood_scheduler.$(OBJEXT) $(am__objects_7) \
+	$(am__objects_8) $(am__objects_5) $(am__objects_19) \
 	$(GWD)/gw_sch_conf.$(OBJEXT) \
 	$(GWD)/gw_sch_conf_syntax.$(OBJEXT) \
 	$(GWD)/gw_sch_conf_parser.$(OBJEXT)
@@ -300,8 +306,8 @@ __srcdir__scheduler_gw_flood_scheduler_LINK = $(LIBTOOL) --tag=CC \
 	$(__srcdir__scheduler_gw_flood_scheduler_LDFLAGS) $(LDFLAGS) \
 	-o $@
 am___srcdir__scheduler_gw_sched_OBJECTS =  \
-	$(SCHED)/gw_scheduler.$(OBJEXT) $(am__objects_6) \
-	$(am__objects_7) $(am__objects_4) $(am__objects_18) \
+	$(SCHED)/gw_scheduler.$(OBJEXT) $(am__objects_7) \
+	$(am__objects_8) $(am__objects_5) $(am__objects_19) \
 	$(GWD)/gw_sch_conf.$(OBJEXT) \
 	$(GWD)/gw_sch_conf_syntax.$(OBJEXT) \
 	$(GWD)/gw_sch_conf_parser.$(OBJEXT)
@@ -325,8 +331,8 @@ am____srcdir__test_gwtest_SOURCES_DIST = test/gw_test.c \
 	$(COMMON)/gw_log.c $(COMMON)/gw_template.c \
 	$(COMMON)/gw_template_parser.l
 @TESTS_TRUE@am___srcdir__test_gwtest_OBJECTS = test/gw_test.$(OBJEXT) \
-@TESTS_TRUE@	$(CMDS)/gw_cmds_common.$(OBJEXT) $(am__objects_7) \
-@TESTS_TRUE@	$(am__objects_6)
+@TESTS_TRUE@	$(CMDS)/gw_cmds_common.$(OBJEXT) $(am__objects_8) \
+@TESTS_TRUE@	$(am__objects_7)
 __srcdir__test_gwtest_OBJECTS = $(am___srcdir__test_gwtest_OBJECTS)
 __srcdir__test_gwtest_LDADD = $(LDADD)
 am__dist_bin_SCRIPTS_DIST = $(CMDS)/gw_dagman.rb \
@@ -361,7 +367,7 @@ SOURCES = $(__srcdir__drmaa_libDrmaaJNI_la_SOURCES) \
 	$(__srcdir__scheduler_gw_flood_scheduler_SOURCES) \
 	$(__srcdir__scheduler_gw_sched_SOURCES) \
 	$(__srcdir__test_gwtest_SOURCES)
-DIST_SOURCES = $(__srcdir__drmaa_libDrmaaJNI_la_SOURCES) \
+DIST_SOURCES = $(am____srcdir__drmaa_libDrmaaJNI_la_SOURCES_DIST) \
 	$(__srcdir__drmaa_libdrmaa_la_SOURCES) \
 	$(__srcdir__cmds_gwacct_SOURCES) \
 	$(__srcdir__cmds_gwhistory_SOURCES) \
@@ -970,7 +976,8 @@ __srcdir__scheduler_gw_sched_LDFLAGS = -lm
 lib_LTLIBRARIES = $(srcdir)/drmaa/libdrmaa.la \
 	$(srcdir)/drmaa/libDrmaaJNI.la
 __srcdir__drmaa_libdrmaa_la_SOURCES = $(DRMAA_SRC)
-__srcdir__drmaa_libDrmaaJNI_la_SOURCES = $(DRMAAJNI_SRC)
+@DRMAA1_JAVA_FALSE@__srcdir__drmaa_libDrmaaJNI_la_SOURCES = $(DRMAAJNI_SRC)
+@DRMAA1_JAVA_TRUE@__srcdir__drmaa_libDrmaaJNI_la_SOURCES = $(DRMAA1JNI_SRC)
 __srcdir__drmaa_libDrmaaJNI_la_LIBADD = $(srcdir)/drmaa/libdrmaa.la
 __srcdir__drmaa_libdrmaa_la_CFLAGS = $(AM_CFLAGS)
 
@@ -1144,6 +1151,10 @@ $(DRMAA_PACK)/$(am__dirstamp):
 	@$(MKDIR_P) $(DRMAA_PACK)
 	@: > $(DRMAA_PACK)/$(am__dirstamp)
 $(DRMAA_PACK)/DrmaaJNI.lo: $(DRMAA_PACK)/$(am__dirstamp)
+$(DRMAA1_PACK)/$(am__dirstamp):
+	@$(MKDIR_P) $(DRMAA1_PACK)
+	@: > $(DRMAA1_PACK)/$(am__dirstamp)
+$(DRMAA1_PACK)/DrmaaJNI.lo: $(DRMAA1_PACK)/$(am__dirstamp)
 $(srcdir)/drmaa/$(am__dirstamp):
 	@$(MKDIR_P) $(srcdir)/drmaa
 	@: > $(srcdir)/drmaa/$(am__dirstamp)
@@ -1649,6 +1660,8 @@ mostlyclean-compile:
 	-rm -f $(DRMAA)/__srcdir__drmaa_libdrmaa_la-gw_drmaa.lo
 	-rm -f $(DRMAA)/__srcdir__drmaa_libdrmaa_la-gw_drmaa_jt.$(OBJEXT)
 	-rm -f $(DRMAA)/__srcdir__drmaa_libdrmaa_la-gw_drmaa_jt.lo
+	-rm -f $(DRMAA1_PACK)/DrmaaJNI.$(OBJEXT)
+	-rm -f $(DRMAA1_PACK)/DrmaaJNI.lo
 	-rm -f $(DRMAA_PACK)/DrmaaJNI.$(OBJEXT)
 	-rm -f $(DRMAA_PACK)/DrmaaJNI.lo
 	-rm -f $(EM)/gw_em.$(OBJEXT)
@@ -1808,6 +1821,7 @@ clean-libtool:
 	-rm -rf $(CLIENT)/.libs $(CLIENT)/_libs
 	-rm -rf $(COMMON)/.libs $(COMMON)/_libs
 	-rm -rf $(DRMAA)/.libs $(DRMAA)/_libs
+	-rm -rf $(DRMAA1_PACK)/.libs $(DRMAA1_PACK)/_libs
 	-rm -rf $(DRMAA_PACK)/.libs $(DRMAA_PACK)/_libs
 	-rm -rf $(HOST)/.libs $(HOST)/_libs
 	-rm -rf $(srcdir)/cmds/.libs $(srcdir)/cmds/_libs
@@ -2111,6 +2125,7 @@ distclean-generic:
 	-test -z "$(DB)/$(am__dirstamp)" || rm -f $(DB)/$(am__dirstamp)
 	-test -z "$(DM)/$(am__dirstamp)" || rm -f $(DM)/$(am__dirstamp)
 	-test -z "$(DRMAA)/$(am__dirstamp)" || rm -f $(DRMAA)/$(am__dirstamp)
+	-test -z "$(DRMAA1_PACK)/$(am__dirstamp)" || rm -f $(DRMAA1_PACK)/$(am__dirstamp)
 	-test -z "$(DRMAA_PACK)/$(am__dirstamp)" || rm -f $(DRMAA_PACK)/$(am__dirstamp)
 	-test -z "$(EM)/$(am__dirstamp)" || rm -f $(EM)/$(am__dirstamp)
 	-test -z "$(GWD)/$(am__dirstamp)" || rm -f $(GWD)/$(am__dirstamp)
