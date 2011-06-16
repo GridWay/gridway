@@ -37,7 +37,6 @@ char* gw_generate_wrapper_jdl(gw_job_t *job)
     char *jdl;
     char *job_environment; 
     char  jdl_buffer[GW_RSL_LENGTH];
-    char  tmp_buffer[GW_RSL_LENGTH];
     char *jobtype;
     char *staging_url;
   
