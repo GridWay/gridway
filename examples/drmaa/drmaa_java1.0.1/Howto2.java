@@ -28,9 +28,9 @@ public class Howto2
 		{
 			session.init(null);
 			System.out.println("Session Init success");
-					
+
 			JobTemplate jt = session.createJobTemplate();
-			
+
 			ArrayList   jobArgs = new ArrayList();
 
 			jobArgs.add("-l");
@@ -50,13 +50,10 @@ public class Howto2
 			System.out.println("Remote Command: " + jt.getRemoteCommand());
 			
 			jt.setArgs(jobArgs);			
-			System.out.println("Pasa por array List");
 			
 			jt.setOutputPath("stdout." + GridWaySession.GW_JOB_ID);
 			jt.setErrorPath("stderr." + GridWaySession.GW_JOB_ID);
-			
-			System.out.println("Va a ser en el runJob");
-			
+
 			String id = session.runJob(jt);
 			
 			System.out.println("Job successfully submitted ID: " + id);
