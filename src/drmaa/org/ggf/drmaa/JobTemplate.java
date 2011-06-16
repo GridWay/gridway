@@ -826,8 +826,10 @@ public abstract class JobTemplate
 
         public  abstract void setPriority(String priority)
                 throws DrmaaException;
+
         public  abstract void setType(String type)
                 throws DrmaaException;
+
         public  abstract void setNp(String np)
                 throws DrmaaException;
 	

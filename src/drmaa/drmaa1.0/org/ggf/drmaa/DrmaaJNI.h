@@ -105,7 +105,7 @@ JNIEXPORT jobject JNICALL Java_org_ggf_drmaa_DrmaaJNI_getVersion
 
 /*
  * Class:     org_ggf_drmaa_DrmaaJNI
- * Method:    getDRMSInfo
+ * Method:    getDrmsInfo
  * Signature: ()Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL Java_org_ggf_drmaa_DrmaaJNI_getDrmsInfo
