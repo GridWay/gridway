@@ -15,6 +15,8 @@
 /* -------------------------------------------------------------------------- */
 
 #include "gw_em_mad_cream.h"
+#include <pthread.h>
+#include <time.h>
 
 CreamJob::CreamJob(int gridwayID, string *creamJobId, string *creamURL)
 {
@@ -45,12 +47,16 @@ CreamEmMad::CreamEmMad(char *delegation)
     this->baseAddress = NULL;
     this->localCreamJID = NULL;
     this->creamJobs = new map <int, CreamJob> ();
+    this->credentials = new list<string> ();
 }
 
 int CreamEmMad::init()
 {
     FILE *file;
     char path[512], *pline;
+
+    pthread_mutex_init(&credentialsMutex, 0);
+    pthread_mutex_init(&jobMutex, 0);
 
     file = popen("grid-proxy-info -path", "r");
 
@@ -88,9 +94,9 @@ int CreamEmMad::submit(int jid, string *contact, string *jdlFile)
 {
     if (this->proxyDelegate(contact) != 0)
     {
-        //return -1; // Could be a duplicate delegation
+        return -1;
     }
-      
+
     CreamJob *job = this->jobSubmit(jid, contact, jdlFile);
 
     if (job == NULL)
@@ -272,6 +278,19 @@ int CreamEmMad::proxyDelegate(string *contact)
     API::AbsCreamProxy *creamClient; 
     string *serviceAddress;
 
+    list<string>::iterator it;
+    pthread_mutex_lock(&credentialsMutex);
+        for (it=this->credentials->begin(); it != this->credentials->end(); it++) 
+        {
+             if (*contact == *it)
+             {
+                  pthread_mutex_unlock(&credentialsMutex); 
+                  return 0;
+             }
+        }
+        this->credentials->push_back(*contact);
+    pthread_mutex_unlock(&credentialsMutex);
+
     // TODO: Delegate only to new CEs (list)
     creamClient = API::CreamProxyFactory::make_CreamProxyDelegate(*(this->delegationID), this->connectionTimeout);
 
@@ -288,6 +307,16 @@ int CreamEmMad::proxyDelegate(string *contact)
         creamClient->setCredential(this->certificatePath->c_str());
         creamClient->execute(*serviceAddress);
     } 
+    catch(DelegationException& ex)
+    {
+	if (this->proxyRenew(contact) != 0)
+        {
+            this->info = new string(ex.what());
+            delete creamClient; 
+
+            return -1;
+        }
+    }
     catch(exception& ex) 
     {
         this->info = new string(ex.what());
@@ -357,9 +386,9 @@ CreamJob *CreamEmMad::jobSubmit(int jid,string *contact,string *jdlFile)
     API::AbsCreamProxy::RegisterArrayResult resp;
 
     reqs.push_back( &jd );
-     
+    
     API::AbsCreamProxy* creamClient = API::CreamProxyFactory::make_CreamProxyRegister( &reqs, &resp, connectionTimeout );
-     
+
     if (creamClient == NULL)
     {
         this->info = new string("Error creating Cream client");
@@ -399,7 +428,9 @@ CreamJob *CreamEmMad::jobSubmit(int jid,string *contact,string *jdlFile)
 
     creamJob  = new CreamJob(jid, creamJobId, creamURL);
 
-    this->creamJobs->insert(pair<int, CreamJob>(jid, *creamJob));
+    pthread_mutex_lock(&jobMutex);
+        this->creamJobs->insert(pair<int, CreamJob>(jid, *creamJob));
+    pthread_mutex_unlock(&jobMutex);
 
     delete creamClient;
     
@@ -411,13 +442,17 @@ int CreamEmMad::recover(int jid, string *contact)
     string *creamJobId;
     string *creamURL;
     CreamJob *creamJob;
+    string *host;
 
-    if (this->proxyDelegate(contact) != 0)
+    size_t pos = contact->find(":8443/");
+    host = new string(contact->substr(8, pos-8));
+
+    if (this->proxyDelegate(host) != 0)
     {
-        //return -1; // Could be a duplicate delegation
+        return -1; 
     }
 
-    size_t pos = contact->find("/CREAM");
+    pos = contact->find("/CREAM");
 
     creamURL = new string(contact->substr(0, pos));
     *creamURL += "/ce-cream/services/CREAM2";
@@ -425,7 +460,9 @@ int CreamEmMad::recover(int jid, string *contact)
 
     creamJob = new CreamJob(jid, creamJobId, creamURL);
 
-    this->creamJobs->insert(pair<int, CreamJob>(jid, *creamJob));
+    pthread_mutex_lock(&jobMutex);
+        this->creamJobs->insert(pair<int, CreamJob>(jid, *creamJob));
+    pthread_mutex_unlock(&jobMutex);
 
     return this->poll(jid);
 }
@@ -449,4 +486,21 @@ string *CreamEmMad::fileToString(string *jdlFileName)
     }
  
     return jdlString;
+}
+
+void CreamEmMad::timer()
+{
+    clock_t endwait;
+    list<string>::iterator it;
+    string contact;
+
+    for (;;)
+    {
+        endwait = clock () + this->refreshTime * CLOCKS_PER_SEC ;
+        while (clock() < endwait) {}
+        for (it=this->credentials->begin(); it != this->credentials->end(); it++){   
+	     contact=*it; 
+             if (this->proxyRenew(&contact) != 0) return;
+	 }
+    }
 }
