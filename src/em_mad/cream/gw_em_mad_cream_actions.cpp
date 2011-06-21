@@ -43,14 +43,14 @@ string *CreamJob::getCreamJobId()
 CreamEmMad::CreamEmMad(char *delegation)
 {
     this->delegationID = new string(delegation);
-    this->info = NULL;
+    this->info = new map<int, string> ();
     this->baseAddress = NULL;
     this->localCreamJID = NULL;
     this->creamJobs = new map <int, CreamJob> ();
     this->credentials = new list<string> ();
 }
 
-int CreamEmMad::init()
+void CreamEmMad::init()
 {
     FILE *file;
     char path[512], *pline;
@@ -63,7 +63,7 @@ int CreamEmMad::init()
     if (file == NULL)
     {
         cout << "INIT - FAILURE Error getting proxy path" << endl;
-        return -1;
+        return;
     }
 
     while( fgets(path, sizeof(path), file) != NULL )
@@ -76,7 +76,7 @@ int CreamEmMad::init()
     if (path == NULL)
     {
         cout << "INIT - FAILURE Error reading proxy path" << endl;
-        return -1;
+        return;
     }
 
     pline =  strchr(path, '\n');
@@ -87,17 +87,17 @@ int CreamEmMad::init()
 
     cout << "INIT - SUCCESS -" << endl;
     
-    return 0;
+    return;
 }
 
-int CreamEmMad::submit(int jid, string *contact, string *jdlFile)
+int CreamEmMad::submit(int jid, string *contact, string *jdlFile, int threadid)
 {
-    if (this->proxyDelegate(contact) != 0)
+    if (this->proxyDelegate(contact, threadid) != 0)
     {
         return -1;
     }
 
-    CreamJob *job = this->jobSubmit(jid, contact, jdlFile);
+    CreamJob *job = this->jobSubmit(jid, contact, jdlFile, threadid);
 
     if (job == NULL)
         return -1;
@@ -109,7 +109,7 @@ int CreamEmMad::submit(int jid, string *contact, string *jdlFile)
     return 0;
 }
 
-int CreamEmMad::poll(int jid)
+int CreamEmMad::poll(int jid, int threadid)
 {
     string status;
  
@@ -117,7 +117,9 @@ int CreamEmMad::poll(int jid)
  
     if (it == creamJobs->end())
     {
-        this->info = new string ("The job ID does not exist");
+        pthread_mutex_lock(&jobMutex);
+            this->info->insert(pair<int, string>(threadid, "The job ID does not exist"));
+        pthread_mutex_unlock(&jobMutex);
         return -1;
     }
 
@@ -145,7 +147,9 @@ int CreamEmMad::poll(int jid)
   
     if (creamClient == NULL)
     {
-        this->info = new string("Error creating Cream client");
+        pthread_mutex_lock(&jobMutex);
+            this->info->insert(pair<int, string>(threadid, "Error creating Cream client"));
+        pthread_mutex_unlock(&jobMutex);
         return -1;
     }
 
@@ -158,7 +162,9 @@ int CreamEmMad::poll(int jid)
     }
     catch(exception& ex) 
     {
-        this->info = new string(ex.what());
+        pthread_mutex_lock(&jobMutex);
+            this->info->insert(pair<int, string>(threadid, ex.what()));
+        pthread_mutex_unlock(&jobMutex);
         delete creamClient;
         return -1;
     }
@@ -195,7 +201,9 @@ int CreamEmMad::poll(int jid)
         }
         else 
         {
-            this->info = new string(jobIt->second.get<2>());
+            pthread_mutex_lock(&jobMutex);
+                this->info->insert(pair<int, string>(threadid, jobIt->second.get<2>()));
+            pthread_mutex_lock(&jobMutex);
             delete creamClient;
             return -1;    
         }
@@ -207,13 +215,15 @@ int CreamEmMad::poll(int jid)
    return 0;
 }
 
-int CreamEmMad::cancel(int jid)
+int CreamEmMad::cancel(int jid, int threadid)
 {
     map<int,CreamJob>::iterator it = this->creamJobs->find(jid);
    
     if (it == creamJobs->end())
     {
-        this->info = new string ("The job ID does not exist");
+        pthread_mutex_lock(&jobMutex);
+            this->info->insert(pair<int, string>(threadid, "The job ID does not exist"));
+        pthread_mutex_unlock(&jobMutex);
         return -1;
     }
   
@@ -237,7 +247,9 @@ int CreamEmMad::cancel(int jid)
   
     if (creamClient == NULL)
     {
-        this->info = new string("Error creating Cream client to cancel job");
+        pthread_mutex_lock(&jobMutex);
+            this->info->insert(pair<int, string>(threadid, "Error creating Cream client to cancel job"));
+        pthread_mutex_unlock(&jobMutex);
         return -1;
     }
 
@@ -250,7 +262,9 @@ int CreamEmMad::cancel(int jid)
     } 
     catch(exception& ex) 
     {
-        this->info = new string(ex.what());
+        pthread_mutex_lock(&jobMutex);
+	    this->info->insert(pair<int, string>(threadid, ex.what()));
+        pthread_mutex_unlock(&jobMutex);
         delete creamClient;
         return -1;
     }
@@ -262,18 +276,19 @@ int CreamEmMad::cancel(int jid)
 }
 
 
-int CreamEmMad::finalize()
+void CreamEmMad::finalize()
 {
     cout << "FINALIZE SUCCESS - -" << endl;
-    return 0;
+    return;
 }
 
-string *CreamEmMad::getInfo()
+string *CreamEmMad::getInfo(int threadid)
 {
-    return this->info;
+    map<int,string>::iterator it = this->info->find(threadid);
+    return &(it->second);
 }
 
-int CreamEmMad::proxyDelegate(string *contact)
+int CreamEmMad::proxyDelegate(string *contact, int threadid)
 {
     API::AbsCreamProxy *creamClient; 
     string *serviceAddress;
@@ -296,7 +311,9 @@ int CreamEmMad::proxyDelegate(string *contact)
 
     if (creamClient == NULL)
     {
-        this->info = new string ("Error creating Cream proxy");
+        pthread_mutex_lock(&jobMutex);
+            this->info->insert(pair<int, string>(threadid, "Error creating Cream proxy"));
+        pthread_mutex_unlock(&jobMutex);
         return -1;
     }
 
@@ -309,9 +326,11 @@ int CreamEmMad::proxyDelegate(string *contact)
     } 
     catch(DelegationException& ex)
     {
-	if (this->proxyRenew(contact) != 0)
+	if (this->proxyRenew(contact, threadid) != 0)
         {
-            this->info = new string(ex.what());
+            pthread_mutex_lock(&jobMutex);
+                this->info->insert(pair<int, string>(threadid, ex.what()));
+            pthread_mutex_unlock(&jobMutex);
             delete creamClient; 
 
             return -1;
@@ -319,7 +338,9 @@ int CreamEmMad::proxyDelegate(string *contact)
     }
     catch(exception& ex) 
     {
-        this->info = new string(ex.what());
+        pthread_mutex_lock(&jobMutex);
+            this->info->insert(pair<int, string>(threadid, ex.what()));
+        pthread_mutex_unlock(&jobMutex);
         delete creamClient;
 
         return -1;
@@ -330,7 +351,7 @@ int CreamEmMad::proxyDelegate(string *contact)
     return 0;
 }
 
-int CreamEmMad::proxyRenew(string *contact)
+int CreamEmMad::proxyRenew(string *contact, int threadid)
 {
     API::AbsCreamProxy *creamClient;
     string *serviceAddress;
@@ -340,7 +361,9 @@ int CreamEmMad::proxyRenew(string *contact)
 
     if (creamClient == NULL)
     {
-        this->info = new string ("Error renewing Cream proxy");
+        pthread_mutex_lock(&jobMutex);
+            this->info->insert(pair<int, string>(threadid, "Error renewing Cream proxy"));
+        pthread_mutex_unlock(&jobMutex);
         return -1;
     }
 
@@ -353,7 +376,9 @@ int CreamEmMad::proxyRenew(string *contact)
     }
     catch(exception& ex)
     {
-        this->info = new string(ex.what());
+        pthread_mutex_lock(&jobMutex);
+            this->info->insert(pair<int, string>(threadid, ex.what()));
+        pthread_mutex_unlock(&jobMutex);
         delete creamClient;
 
         return -1;
@@ -364,9 +389,9 @@ int CreamEmMad::proxyRenew(string *contact)
     return 0;
 }
 
-CreamJob *CreamEmMad::jobSubmit(int jid,string *contact,string *jdlFile)
+CreamJob *CreamEmMad::jobSubmit(int jid,string *contact,string *jdlFile, int threadid)
 {
-    string *JDL = this->fileToString(jdlFile);
+    string *JDL = this->fileToString(jdlFile, threadid);
     string *jidCREAM = new string("GridWayJob");
     string *serviceAddress;
     string *creamURL;
@@ -391,7 +416,9 @@ CreamJob *CreamEmMad::jobSubmit(int jid,string *contact,string *jdlFile)
 
     if (creamClient == NULL)
     {
-        this->info = new string("Error creating Cream client");
+        pthread_mutex_lock(&jobMutex);
+            this->info->insert(pair<int, string>(threadid, "Error creating Cream client"));
+        pthread_mutex_unlock(&jobMutex);
         return NULL;
     }
 
@@ -409,7 +436,9 @@ CreamJob *CreamEmMad::jobSubmit(int jid,string *contact,string *jdlFile)
     } 
     catch(exception& ex)
     {
-        this->info = new string(ex.what());
+        pthread_mutex_lock(&jobMutex);
+            this->info->insert(pair<int, string>(threadid, ex.what()));
+        pthread_mutex_unlock(&jobMutex);
         delete creamClient;
         return NULL;
     }
@@ -418,7 +447,9 @@ CreamJob *CreamEmMad::jobSubmit(int jid,string *contact,string *jdlFile)
        
     if(registrationResponse.get<0>()!=API::JobIdWrapper::OK) 
     {
-        this->info = new string(registrationResponse.get<2>());
+        pthread_mutex_lock(&jobMutex);
+	    this->info->insert(pair<int, string>(threadid, registrationResponse.get<2>()));
+        pthread_mutex_unlock(&jobMutex);
         delete creamClient;
         return NULL;
     }  
@@ -437,7 +468,7 @@ CreamJob *CreamEmMad::jobSubmit(int jid,string *contact,string *jdlFile)
     return creamJob;
 }
 
-int CreamEmMad::recover(int jid, string *contact)
+int CreamEmMad::recover(int jid, string *contact, int threadid)
 {
     string *creamJobId;
     string *creamURL;
@@ -447,7 +478,7 @@ int CreamEmMad::recover(int jid, string *contact)
     size_t pos = contact->find(":8443/");
     host = new string(contact->substr(8, pos-8));
 
-    if (this->proxyDelegate(host) != 0)
+    if (this->proxyDelegate(host, threadid) != 0)
     {
         return -1; 
     }
@@ -464,10 +495,10 @@ int CreamEmMad::recover(int jid, string *contact)
         this->creamJobs->insert(pair<int, CreamJob>(jid, *creamJob));
     pthread_mutex_unlock(&jobMutex);
 
-    return this->poll(jid);
+    return this->poll(jid, threadid);
 }
 
-string *CreamEmMad::fileToString(string *jdlFileName)
+string *CreamEmMad::fileToString(string *jdlFileName, int threadid)
 {
     string *jdlString = new string("");
     ifstream *jdlFile = new ifstream(jdlFileName->c_str());
@@ -475,7 +506,9 @@ string *CreamEmMad::fileToString(string *jdlFileName)
 
     if (!jdlFile->is_open())
     {
-        this->info = new string("Error open the JDL file: " + *jdlFileName );
+        pthread_mutex_lock(&jobMutex);
+            this->info->insert(pair<int, string>(threadid, "Error open the JDL file: " + *jdlFileName));
+        pthread_mutex_unlock(&jobMutex);
         return NULL;
     }
     
@@ -500,7 +533,7 @@ void CreamEmMad::timer()
         while (clock() < endwait) {}
         for (it=this->credentials->begin(); it != this->credentials->end(); it++){   
 	     contact=*it; 
-             if (this->proxyRenew(&contact) != 0) return;
+             if (this->proxyRenew(&contact, 0) != 0) return;
 	 }
     }
 }
