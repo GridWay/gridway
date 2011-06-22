@@ -37,8 +37,10 @@ char* gw_generate_wrapper_jdl(gw_job_t *job)
     char *jdl;
     char *job_environment; 
     char  jdl_buffer[GW_RSL_LENGTH];
+    char  tmp_buffer[GW_RSL_LENGTH];
     char *jobtype;
     char *staging_url;
+    int prev_reqs = 0;
   
     /* ---------------------------------------------------------------------- */
     /* 1.- Create dynamic job data environment                                */
@@ -76,8 +78,7 @@ char* gw_generate_wrapper_jdl(gw_job_t *job)
             "OutputSandboxBaseDestURI = \"%s/%s/" GW_VAR_DIR "/%d/\";"
             "BatchSystem = \"%s\";"
             "QueueName = \"%s\";"
-            "CpuNumber = %d;"
-            "Environment = %s]\n",
+            "CpuNumber = %d;",
             jobtype, 
             basename(job->template.wrapper),
             staging_url, gw_conf.gw_location, job->id,
@@ -89,8 +90,63 @@ char* gw_generate_wrapper_jdl(gw_job_t *job)
             staging_url, gw_conf.gw_location, job->id,
             job->history->host->lrms_type,
             job->history->queue,
-            job->template.np,
+            job->template.np);
+
+    if ((job->max_cpu_time > 0) || (job->max_time > 0) || (job->max_walltime > 0) || (job->max_memory > 0) || (job->min_memory > 0))
+    {
+            strcat(jdl_buffer, "Requirements = ");
+
+            if (job->max_cpu_time > 0)
+            {
+                snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
+                        "(other.GlueCEPolicyMaxCPUTime <= %d)",
+                        job->max_cpu_time);
+                strcat(jdl_buffer, tmp_buffer);
+                prev_reqs = 1;
+            }
+            if ((job->max_time > 0) && (job->max_walltime == 0))
+            {
+                if (prev_reqs) strcat(jdl_buffer, " && ");
+                snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
+                        "(other.GlueCEPolicyMaxWallClockTime <= %d)",
+                        job->max_time);
+                strcat(jdl_buffer, tmp_buffer);
+                prev_reqs = 1;
+            }
+            if (job->max_walltime > 0)
+            {
+                if (prev_reqs) strcat(jdl_buffer, " && ");
+                snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
+                        "(other.GlueCEPolicyMaxWallClockTime <= %d)",
+                        job->max_walltime);
+                strcat(jdl_buffer, tmp_buffer);
+                prev_reqs = 1;
+            }
+            if (job->max_memory > 0)
+            {
+                if (prev_reqs) strcat(jdl_buffer, " && ");
+                snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
+                        "(other.GlueHostMainMemoryRAMSize <= %d)",
+                        job->max_memory);
+                strcat(jdl_buffer, tmp_buffer);
+                prev_reqs = 1;
+            }
+            if (job->min_memory > 0)
+            {
+                if (prev_reqs) strcat(jdl_buffer, " && ");
+                snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
+                        "(other.GlueHostMainMemoryRAMSize >= %d)",
+                        job->min_memory);
+                strcat(jdl_buffer, tmp_buffer);
+            }
+            strcat(jdl_buffer, ";");
+    }
+
+    snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
+            "Environment = %s]\n",
             job_environment);
+    strcat(jdl_buffer, tmp_buffer);
+
 
     free(job_environment);
     free(jobtype);
