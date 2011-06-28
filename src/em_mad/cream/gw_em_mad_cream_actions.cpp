@@ -48,6 +48,7 @@ CreamEmMad::CreamEmMad(char *delegation)
     this->localCreamJID = NULL;
     this->creamJobs = new map <int, CreamJob> ();
     this->credentials = new list<string> ();
+    this->refreshTime = 300;
 }
 
 void CreamEmMad::init()
@@ -523,14 +524,12 @@ string *CreamEmMad::fileToString(string *jdlFileName, int threadid)
 
 void CreamEmMad::timer()
 {
-    clock_t endwait;
     list<string>::iterator it;
     string contact;
 
     for (;;)
     {
-        endwait = clock () + this->refreshTime * CLOCKS_PER_SEC ;
-        while (clock() < endwait) {}
+        sleep(this->refreshTime);
         for (it=this->credentials->begin(); it != this->credentials->end(); it++){   
 	     contact=*it; 
              if (this->proxyRenew(&contact, 0) != 0) return;

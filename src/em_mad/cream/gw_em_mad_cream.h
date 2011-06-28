@@ -72,7 +72,6 @@ class CreamEmMad
     private:
 	int jid;
 	int connectionTimeout;
-	//string *info;
         map <int, string> *info;
 	string *delegationID;
 	string *baseAddress;
