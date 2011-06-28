@@ -73,6 +73,7 @@ bin_PROGRAMS = $(srcdir)/gwd/gwd$(EXEEXT) $(srcdir)/cmds/gwps$(EXEEXT) \
 # ----------------------------
 @JSDL_TRUE@am__append_2 = $(CMDS)/jsdl2gw.sh
 @JSDL_TRUE@am__append_3 = $(srcdir)/cmds/gw_jsdl.jar
+@DRMAA_JAVA_TRUE@am__append_4 = $(srcdir)/drmaa/libDrmaaJNI.la
 @TESTS_TRUE@test_PROGRAMS = $(srcdir)/test/gwtest$(EXEEXT)
 subdir = src
 DIST_COMMON = $(COMMON)/gw_template_parser.c $(GWD)/gw_conf_parser.c \
@@ -125,12 +126,14 @@ am____srcdir__drmaa_libDrmaaJNI_la_SOURCES_DIST =  \
 am__dirstamp = $(am__leading_dot)dirstamp
 am__objects_1 = $(DRMAA_PACK)/DrmaaJNI.lo
 am__objects_2 = $(DRMAA1_PACK)/DrmaaJNI.lo
-@DRMAA1_JAVA_FALSE@am___srcdir__drmaa_libDrmaaJNI_la_OBJECTS =  \
-@DRMAA1_JAVA_FALSE@	$(am__objects_1)
-@DRMAA1_JAVA_TRUE@am___srcdir__drmaa_libDrmaaJNI_la_OBJECTS =  \
-@DRMAA1_JAVA_TRUE@	$(am__objects_2)
+@DRMAA1_JAVA_FALSE@@DRMAA_JAVA_TRUE@am___srcdir__drmaa_libDrmaaJNI_la_OBJECTS =  \
+@DRMAA1_JAVA_FALSE@@DRMAA_JAVA_TRUE@	$(am__objects_1)
+@DRMAA1_JAVA_TRUE@@DRMAA_JAVA_TRUE@am___srcdir__drmaa_libDrmaaJNI_la_OBJECTS =  \
+@DRMAA1_JAVA_TRUE@@DRMAA_JAVA_TRUE@	$(am__objects_2)
 __srcdir__drmaa_libDrmaaJNI_la_OBJECTS =  \
 	$(am___srcdir__drmaa_libDrmaaJNI_la_OBJECTS)
+@DRMAA_JAVA_TRUE@am___srcdir__drmaa_libDrmaaJNI_la_rpath = -rpath \
+@DRMAA_JAVA_TRUE@	$(libdir)
 __srcdir__drmaa_libdrmaa_la_LIBADD =
 am__objects_3 =  \
 	$(CLIENT)/__srcdir__drmaa_libdrmaa_la-gw_client_job_match.lo \
@@ -973,11 +976,10 @@ __srcdir__scheduler_gw_sched_LDFLAGS = -lm
 # ----------------------------
 # DRMAA
 # ----------------------------
-lib_LTLIBRARIES = $(srcdir)/drmaa/libdrmaa.la \
-	$(srcdir)/drmaa/libDrmaaJNI.la
+lib_LTLIBRARIES = $(srcdir)/drmaa/libdrmaa.la $(am__append_4)
 __srcdir__drmaa_libdrmaa_la_SOURCES = $(DRMAA_SRC)
-@DRMAA1_JAVA_FALSE@__srcdir__drmaa_libDrmaaJNI_la_SOURCES = $(DRMAAJNI_SRC)
-@DRMAA1_JAVA_TRUE@__srcdir__drmaa_libDrmaaJNI_la_SOURCES = $(DRMAA1JNI_SRC)
+@DRMAA1_JAVA_FALSE@@DRMAA_JAVA_TRUE@__srcdir__drmaa_libDrmaaJNI_la_SOURCES = $(DRMAAJNI_SRC)
+@DRMAA1_JAVA_TRUE@@DRMAA_JAVA_TRUE@__srcdir__drmaa_libDrmaaJNI_la_SOURCES = $(DRMAA1JNI_SRC)
 __srcdir__drmaa_libDrmaaJNI_la_LIBADD = $(srcdir)/drmaa/libdrmaa.la
 __srcdir__drmaa_libdrmaa_la_CFLAGS = $(AM_CFLAGS)
 
@@ -1159,7 +1161,7 @@ $(srcdir)/drmaa/$(am__dirstamp):
 	@$(MKDIR_P) $(srcdir)/drmaa
 	@: > $(srcdir)/drmaa/$(am__dirstamp)
 $(srcdir)/drmaa/libDrmaaJNI.la: $(__srcdir__drmaa_libDrmaaJNI_la_OBJECTS) $(__srcdir__drmaa_libDrmaaJNI_la_DEPENDENCIES) $(srcdir)/drmaa/$(am__dirstamp)
-	$(__srcdir__drmaa_libDrmaaJNI_la_LINK) -rpath $(libdir) $(__srcdir__drmaa_libDrmaaJNI_la_OBJECTS) $(__srcdir__drmaa_libDrmaaJNI_la_LIBADD) $(LIBS)
+	$(__srcdir__drmaa_libDrmaaJNI_la_LINK) $(am___srcdir__drmaa_libDrmaaJNI_la_rpath) $(__srcdir__drmaa_libDrmaaJNI_la_OBJECTS) $(__srcdir__drmaa_libDrmaaJNI_la_LIBADD) $(LIBS)
 $(COMMON)/$(am__dirstamp):
 	@$(MKDIR_P) $(COMMON)
 	@: > $(COMMON)/$(am__dirstamp)

@@ -507,13 +507,18 @@ __srcdir__scheduler_gw_sched_LDFLAGS = -lm
 # ----------------------------
 
 lib_LTLIBRARIES = $(srcdir)/drmaa/libdrmaa.la
+
+if DRMAA_JAVA
 lib_LTLIBRARIES += $(srcdir)/drmaa/libDrmaaJNI.la
+endif
 
 __srcdir__drmaa_libdrmaa_la_SOURCES = $(DRMAA_SRC)
+if DRMAA_JAVA
 if DRMAA1_JAVA
 __srcdir__drmaa_libDrmaaJNI_la_SOURCES = $(DRMAA1JNI_SRC)
 else
 __srcdir__drmaa_libDrmaaJNI_la_SOURCES = $(DRMAAJNI_SRC)
+endif
 endif
 __srcdir__drmaa_libDrmaaJNI_la_LIBADD  = $(srcdir)/drmaa/libdrmaa.la
 
