@@ -1,0 +1,86 @@
+#!/bin/bash
+#
+# chkconfig: 23 95 20
+# description: GridWay Metascheduler
+# processname: gwd
+#
+# Copyright 2002-2011 GridWay Team, Distributed Systems Architecture
+# Group, Universidad Complutense de Madrid
+#
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+DESC="GridWay Metascheduler"
+PIDFILE=/var/run/gwd.pid
+SCRIPTNAME=/etc/init.d/gwd
+RETVAL=0
+
+# Exit if the package is not installed
+test -x "/opt/gridway/5.7/bin/gwd" || exit 0
+
+start(){
+echo -n $"Starting $DESC: "
+su gwadmin -c "sh -lc 'gwd -m'" > /dev/null 2>&1 &
+RETVAL=$?
+[ $RETVAL = 0 ] && echo $!>$PIDFILE && echo_success
+echo
+return $RETVAL
+}
+
+stop(){
+echo -n $"Stopping $DESC: "
+killproc gwd
+RETVAL=$?
+echo
+[ $RETVAL -eq 0 ] && rm -f /opt/gridway/5.7/var/.lock
+return $RETVAL
+}
+
+rh_status(){
+status gwd
+}
+
+rh_status_q(){
+rh_status >/dev/null 2>&1
+}
+
+case "$1" in
+start)
+rh_status_q && exit 0
+start
+;;
+stop)
+rh_status_q || exit 0
+stop
+;;
+restart)
+stop
+sleep 3
+start
+;;
+reload)
+rh_status_q || exit 7
+stop
+sleep 3
+start
+;;
+force-reload)
+stop
+sleep 3
+start
+;;
+status)
+rh_status
+;;
+condrestart|try-restart)
+rh_status_q || exit 0
+restart
+;;
+*)
+echo -n $"Usage: $SCRIPTNAME {start|stop|status|restart|condrestart|try-restart|reload|force-reload}"
+echo
+exit 1
+esac
+
+exit $RETVAL
