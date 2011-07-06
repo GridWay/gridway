@@ -19,7 +19,6 @@ Vendor:		GridWay Project Leads
 # cp -p README gridway-5.7/
 # cp -p gwd gridway-5.7/etc/
 # chmod 755 gridway-5.7/etc/gwd
-# chmod 755 gridway-5.7/src/
 # cp -p Makefile.am gridway-5.7/src/
 # cp -p Makefile.in gridway-5.7/src/
 # tar -czf gridway-5.7.tar.gz gridway-5.7/

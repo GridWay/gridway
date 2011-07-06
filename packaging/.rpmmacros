@@ -1,6 +1,5 @@
 %_topdir      %(echo $HOME)/rpmbuild
 %_smp_mflags  -j3
-#%__arch_install_post   /usr/lib/rpm/check-rpaths   /usr/lib/rpm/check-buildroot
 %_signature gpg
 %_gpg_name GridWay Project Leads
 %_gpg_path %(echo $HOME)/.gnupg
