@@ -16,8 +16,10 @@ Vendor:		GridWay Project Leads
 # wget http://dev.gridway.org/projects/gridway/repository/revisions/415/raw/trunk/src/Makefile.am
 # wget http://dev.gridway.org/projects/gridway/repository/revisions/415/raw/trunk/src/Makefile.in
 # tar -xzf gridway-5.7.tar.gz
-# cp -p README gridway-5.7/src/share/README
-# cp -p gwd gridway-5.7/src/etc/gwd
+# cp -p README gridway-5.7/
+# cp -p gwd gridway-5.7/etc/
+# chmod 755 gridway-5.7/etc/gwd
+# chmod 755 gridway-5.7/src/
 # cp -p Makefile.am gridway-5.7/src/
 # cp -p Makefile.in gridway-5.7/src/
 # tar -czf gridway-5.7.tar.gz gridway-5.7/
@@ -51,6 +53,7 @@ GridWay Core
 /usr/sbin/groupadd gwusers > /dev/null 2> /dev/null
 /usr/sbin/useradd -d /opt/%{_name}/%{version} -g gwusers -s /bin/sh gwadmin > /dev/null 2> /dev/null
 chown -R gwadmin:gwusers /opt/%{_name}/%{version}
+chmod 755 /opt/%{_name}/%{version}/bin/gw_im_mad_static
 %if "%{?rhel}" <="5" || "%{?fedora}" <= "9"
 mv /opt/%{_name}/%{version}/etc/gwd %{_initrddir}
 %else
