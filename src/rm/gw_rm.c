@@ -141,6 +141,11 @@ gw_rm_t* gw_rm_init()
                    gw_rm_connection, 
                    &(gw_rm.am));
 
+    gw_am_register("GW_RM_CONNECTION_SUBMIT",
+                   GW_ACTION_THREADED,
+                   gw_rm_connection_submit,
+                   &(gw_rm.am));
+
     gw_am_register("GW_RM_SUBMIT", 
                    GW_ACTION_THREADED, 
                    gw_rm_submit, 
@@ -338,6 +343,78 @@ static void gw_rm_del_fd_set(int *active_connections, int socket, int *max_fd)
 			*max_fd = active_connections[j];
 }
 
+
+/*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+
+static inline gw_boolean_t gw_rm_is_gwadmin(const char * owner)
+{
+        if (strncmp(owner, gw_conf.gwadmin,GW_MSG_STRING_SHORT) == 0)
+                return GW_TRUE;
+        else
+                return GW_FALSE;
+}
+
+/*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+
+static inline void gw_rm_permission_denied(gw_msg_t *msg)
+{
+    int      length;
+    int      rc;
+
+        length  = sizeof(gw_msg_t);
+        msg->rc = GW_RC_FAILED_PERM;
+
+        rc = send(msg->client_socket,
+                  (void *) msg,
+                  length,
+                  0);
+
+        if ( rc == -1 )
+                gw_log_print("RM",'E',"Error sending message %s\n",strerror(errno));
+}
+
+/*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+
+static inline gw_boolean_t gw_rm_check_priority(gw_msg_t *msg)
+{
+        int          priority;
+        gw_boolean_t granted   = GW_TRUE;
+
+        priority  = gw_sch_get_user_priority(&(gw_conf.sch_conf),
+                                         msg->owner,
+                                         msg->group);
+
+    if (msg->fixed_priority == GW_JOB_DEFAULT_PRIORITY)
+    {
+        msg->fixed_priority = priority;
+    }
+    else if (msg->fixed_priority == GW_JOB_MAX_PRIORITY)
+        {
+                if ( gw_rm_is_gwadmin(msg->owner) == GW_FALSE )
+                {
+                        gw_log_print("RM",'W',"Only gwadmin can submit urgent jobs.\n");
+                        granted = GW_FALSE;
+                }
+                else
+                        granted = GW_TRUE;
+        }
+        else if ((msg->fixed_priority < GW_JOB_MIN_PRIORITY) ||
+                         (msg->fixed_priority > GW_JOB_MAX_PRIORITY) ||
+                         (msg->fixed_priority > priority))
+        {
+                gw_log_print("RM",'W',"Priority range exceeded (user %s).\n",msg->owner);
+                granted = GW_FALSE;
+        }
+
+        return granted;
+}
+
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
@@ -345,14 +422,16 @@ static void gw_rm_del_fd_set(int *active_connections, int socket, int *max_fd)
 void gw_rm_listener(void *_null)
 {
     int                    client_socket;    
-	struct sockaddr_in     client_addr;
-	socklen_t              client_size;
-	gw_msg_t               * msg;
-	fd_set                 clients;
-	int                    *active_connections;
-	int                    i, rc;
-	int                    max_fd;
-    ssize_t 			   bytes;
+    struct sockaddr_in     client_addr;
+    socklen_t              client_size;
+    gw_msg_t               * msg;
+    gw_template_t	       * jt;
+    gw_msg_submit_t        * msg_submit;
+    fd_set                 clients;
+    int                    *active_connections;
+    int                    i, rc;
+    int                    max_fd;
+    ssize_t 			   bytes, bytes_jt;
     size_t				   length;
     int                    close_connection;
 	
@@ -364,13 +443,13 @@ void gw_rm_listener(void *_null)
     /* 2.- Forward the msg to the msg handler              */
     /* ----------------------------------------------------*/
 
-	active_connections    = (int *) malloc (sizeof(int) * gw_conf.max_number_of_clients);
-	active_connections[0] = gw_rm.socket;
+    active_connections    = (int *) malloc (sizeof(int) * gw_conf.max_number_of_clients);
+    active_connections[0] = gw_rm.socket;
 	
-	for (i=1;i<gw_conf.max_number_of_clients;i++)
-		active_connections[i] = -1;
+    for (i=1;i<gw_conf.max_number_of_clients;i++)
+	active_connections[i] = -1;
 		
-	max_fd = active_connections[0];
+    max_fd = active_connections[0];
 	
     while(1)
     {
@@ -401,35 +480,55 @@ void gw_rm_listener(void *_null)
 			            continue;
 			        }
     				
-					close_connection = gw_rm_add_fd_set(active_connections, client_socket, &max_fd);
+				close_connection = gw_rm_add_fd_set(active_connections, client_socket, &max_fd);
 					
-					if (close_connection)
-					{
-						gw_log_print("RM",'W',"Maximum number of clients reached, try later.\n");
-						close(client_socket);
-					}				
+				if (close_connection)
+				{
+				    gw_log_print("RM",'W',"Maximum number of clients reached, try later.\n");
+				    close(client_socket);
+				}				
     			}
     			else /* Active connection, read and forward event */
     			{
-					msg    = (gw_msg_t *) malloc(sizeof(gw_msg_t));    
-				    length = sizeof(gw_msg_t);
+				msg    = (gw_msg_t *) malloc(sizeof(gw_msg_t));    
+				length = sizeof(gw_msg_t);
     
-				    bytes  = recv(i, (void *) msg,  length, MSG_WAITALL);
-				    
-				    if ( bytes == length )
-				    	close_connection = msg->msg_type == GW_MSG_DISENGAGE;
-                
-				    if ( (bytes == -1) || (bytes != length) || close_connection)  /* close connection*/
-				    {
-						gw_rm_del_fd_set(active_connections, i, &max_fd);
-				        free(msg);
-				        
-				        gw_connection_list_delete(&(gw_rm.connection_list),i);
+				bytes  = recv(i, (void *) msg,  length, MSG_WAITALL);
+
+                                if ((msg->msg_type == GW_MSG_SUBMIT) || (msg->msg_type == GW_MSG_SUBMIT_ARRAY))
+                                {
+                                    msg_submit = (gw_msg_submit_t *) malloc(sizeof(gw_msg_submit_t));
+                                    msg_submit->msg = (gw_msg_t) *msg;
+                                    jt = (gw_template_t *) malloc(sizeof(gw_template_t));
+                                    bytes_jt = recv(i, (void *) jt, sizeof(gw_template_t), MSG_WAITALL);
+                                    msg_submit->jt = (gw_template_t) *jt;
+                                }
+				   
+				if ( bytes == length )
+				    close_connection = msg->msg_type == GW_MSG_DISENGAGE;
+
+				if ( (bytes == -1) || (bytes != length) || close_connection)  /* close connection*/
+				{
+				    gw_rm_del_fd_set(active_connections, i, &max_fd);
+				    if ((msg->msg_type == GW_MSG_SUBMIT) || (msg->msg_type == GW_MSG_SUBMIT_ARRAY))
+                                    {
+					free(jt);
+					free(msg_submit);
 				    }
+				    free(msg);
+
+				    gw_connection_list_delete(&(gw_rm.connection_list),i);
+				}
     				else
     				{
-    					msg->client_socket = i;
-    				    gw_am_trigger(&(gw_rm.am),"GW_RM_CONNECTION", (void *) msg);
+                                    msg->client_socket = i;
+                                    if ((msg->msg_type == GW_MSG_SUBMIT) || (msg->msg_type == GW_MSG_SUBMIT_ARRAY))
+                                    {
+					msg_submit->msg.client_socket = i;
+					gw_am_trigger(&(gw_rm.am),"GW_RM_CONNECTION_SUBMIT", (void *) msg_submit);
+                                    }
+                                    else
+    				        gw_am_trigger(&(gw_rm.am),"GW_RM_CONNECTION", (void *) msg);
     				}
     			}
     		}
@@ -477,72 +576,39 @@ static inline gw_boolean_t gw_rm_auth_user(int job_id, const char *owner,
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
 
-static inline gw_boolean_t gw_rm_is_gwadmin(const char * owner)
+void gw_rm_connection_submit(void *_msg)
 {
-	if (strncmp(owner, gw_conf.gwadmin,GW_MSG_STRING_SHORT) == 0)
-		return GW_TRUE;
-	else
-		return GW_FALSE;	
-}
+    gw_msg_submit_t *   msg_submit;
 
-/*---------------------------------------------------------------------------*/
-/*---------------------------------------------------------------------------*/
-/*---------------------------------------------------------------------------*/
+    msg_submit = (gw_msg_submit_t *) _msg;
 
-static inline void gw_rm_permission_denied(gw_msg_t *msg)
-{
-    int      length;
-    int      rc;
-    
-	length  = sizeof(gw_msg_t);
-	msg->rc = GW_RC_FAILED_PERM;
-	
-	rc = send(msg->client_socket, 
-	          (void *) msg, 
-	          length, 
-	          0);
-
-	if ( rc == -1 )
-		gw_log_print("RM",'E',"Error sending message %s\n",strerror(errno));
-}
-
-/*---------------------------------------------------------------------------*/
-/*---------------------------------------------------------------------------*/
-/*---------------------------------------------------------------------------*/
-
-static inline gw_boolean_t gw_rm_check_priority(gw_msg_t *msg)
-{
-	int          priority;
-	gw_boolean_t granted   = GW_TRUE;
-	
-	priority  = gw_sch_get_user_priority(&(gw_conf.sch_conf), 
-                                         msg->owner, 
-                                         msg->group);
-                                         
-    if (msg->fixed_priority == GW_JOB_DEFAULT_PRIORITY)
+    switch(msg_submit->msg.msg_type)
     {
-        msg->fixed_priority = priority;
+                case GW_MSG_SUBMIT:
+                
+                        if ( gw_rm_check_priority(&(msg_submit->msg)) == GW_FALSE )
+                        {
+                		gw_rm_permission_denied(&(msg_submit->msg));
+                                free (msg_submit);
+                        }
+                        else
+                                gw_am_trigger(gw_rm.dm_am, "GW_DM_ALLOCATE_JOB", (void *) msg_submit);
+                        break;
+                        
+                case GW_MSG_SUBMIT_ARRAY:
+                        if ( gw_rm_check_priority(&(msg_submit->msg)) == GW_FALSE )
+                        {
+                		gw_rm_permission_denied(&(msg_submit->msg));
+                                free (msg_submit);
+                        }
+                        else
+                                gw_am_trigger(gw_rm.dm_am, "GW_DM_ALLOCATE_ARRAY", (void *) msg_submit);
+                        break;
+		default:
+			free(msg_submit);
+			break;
     }
-    else if (msg->fixed_priority == GW_JOB_MAX_PRIORITY)
-	{
-		if ( gw_rm_is_gwadmin(msg->owner) == GW_FALSE )
-		{
-  			gw_log_print("RM",'W',"Only gwadmin can submit urgent jobs.\n");		
-			granted = GW_FALSE;
-		}
-		else
-			granted = GW_TRUE;		
-	}
-	else if ((msg->fixed_priority < GW_JOB_MIN_PRIORITY) || 
-			 (msg->fixed_priority > GW_JOB_MAX_PRIORITY) ||
-			 (msg->fixed_priority > priority))
-	{
-	  	gw_log_print("RM",'W',"Priority range exceeded (user %s).\n",msg->owner);
-		granted = GW_FALSE;
-	}
-	
-	return granted;	
-} 
+}
 
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
@@ -551,34 +617,13 @@ static inline gw_boolean_t gw_rm_check_priority(gw_msg_t *msg)
 void gw_rm_connection(void *_msg)
 {
     int *        job_id;
-	gw_msg_t *   msg;
-	gw_boolean_t in_list;
+    gw_msg_t *   msg;
+    gw_boolean_t in_list;
 
     msg = (gw_msg_t *) _msg;
 
     switch(msg->msg_type)
     {
-		case GW_MSG_SUBMIT:
-		
-			if ( gw_rm_check_priority(msg) == GW_FALSE )
-			{
-                gw_rm_permission_denied(msg);
-		  		free (msg);
-			}
-			else
-				gw_am_trigger(gw_rm.dm_am, "GW_DM_ALLOCATE_JOB", (void *) msg);
-	  		break;
-	  		
-	  	case GW_MSG_SUBMIT_ARRAY:
-			if ( gw_rm_check_priority(msg) == GW_FALSE )
-			{
-                gw_rm_permission_denied(msg);
-		  		free (msg);
-			}
-			else
-				gw_am_trigger(gw_rm.dm_am, "GW_DM_ALLOCATE_ARRAY", (void *) msg);
-		  	break;		  	
-		  	
 	  	case GW_MSG_WAIT:
 
 		  	if (gw_rm_auth_user(msg->job_id, msg->owner, msg->proxy_path) == GW_FALSE)

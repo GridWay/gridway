@@ -138,7 +138,7 @@ typedef struct gw_msg_s
     char proxy_path[GW_MSG_STRING_LONG];
 
     int	init_state;	
-    gw_template_t jt;
+    //gw_template_t jt;
 
     int job_id;
     int array_id;	
@@ -151,6 +151,16 @@ typedef struct gw_msg_s
     int fixed_priority;
  
 } gw_msg_t;   
+
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+
+typedef struct gw_msg_submit_s
+{
+    gw_msg_t msg;
+    gw_template_t jt;
+
+} gw_msg_submit_t;
 
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */

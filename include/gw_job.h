@@ -173,7 +173,7 @@ typedef struct gw_job_s
 /* -------------------------------------------------------------------------- */
 
 int gw_job_init(gw_job_t *job, int job_id);
-int gw_job_fill(gw_job_t *job, const gw_msg_t *msg);
+int gw_job_fill(gw_job_t *job, const gw_msg_submit_t *msg_submit);
 int gw_job_recover(gw_job_t *job);
 int gw_job_recover_state_transition(gw_job_t *job,
         gw_job_state_t previous_job_state, gw_job_state_t job_state,

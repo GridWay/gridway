@@ -44,6 +44,7 @@ gw_return_code_t gw_client_job_submit(char *         template,
                                       int            fixed_priority)
 {
     gw_msg_t  msg;
+    gw_template_t jt;
  	int       rc;
  	int       length;
 	int       fd;
@@ -77,12 +78,12 @@ gw_return_code_t gw_client_job_submit(char *         template,
   	
   	msg.fixed_priority = fixed_priority;
 
-	rc = gw_template_init(&(msg.jt), template);
+        rc = gw_template_init(&(jt), template);
 	if ( rc != 0 )
 		return GW_RC_FAILED_JT;
 	
 		
-	rc =  gw_host_client_check_syntax(&host, msg.jt.requirements, msg.jt.rank);
+        rc =  gw_host_client_check_syntax(&host, jt.requirements, jt.rank);
 
 	if ( rc == -2 )
 		return GW_RC_FAILED;
@@ -94,7 +95,7 @@ gw_return_code_t gw_client_job_submit(char *         template,
 		if ( deps[0] != -1 )
 		{
 			msg.init_state = GW_JOB_STATE_HOLD;
-			gw_client_dep_cp (deps, msg.jt.job_deps);
+                        gw_client_dep_cp (deps, jt.job_deps);
 		}
 	}
 
@@ -136,10 +137,29 @@ gw_return_code_t gw_client_job_submit(char *         template,
 		return GW_RC_FAILED_CONNECTION;
 	}
 
+        length = sizeof(gw_template_t);
+        rc = send(fd,(void *) &jt,length,0);
+
+        if ( rc == -1 )
+        {
+                perror("send()");
+                close(fd);
+
+                return GW_RC_FAILED_CONNECTION;
+        }
+        else if ( rc != length )
+        {
+                fprintf(stderr,"Error sending message\n");
+                close(fd);
+
+                return GW_RC_FAILED_CONNECTION;
+        }
+
     /* ----------------------------------------------------------------- */
     /* 3.- Receive response     	      	      	      	      	     */
     /* ----------------------------------------------------------------- */
-	
+
+	length = sizeof(gw_msg_t);
 	rc = recv(fd, (void *) &msg,length,MSG_WAITALL);
 	
     if ( rc == -1) 
@@ -179,7 +199,8 @@ gw_return_code_t gw_client_array_submit(char *         template,
                                         int            pinc,
                                         int            fixed_priority)
 {
-    gw_msg_t  msg;          
+    gw_msg_t  msg;         
+    gw_template_t jt; 
     int       i;
     int       length;
 	int       rc;
@@ -232,11 +253,11 @@ gw_return_code_t gw_client_array_submit(char *         template,
   	msg.pstart          = pstart;
   	msg.fixed_priority  = fixed_priority;
   	
-	rc = gw_template_init(&(msg.jt), template);
+	rc = gw_template_init(&(jt), template);
 	if ( rc != 0 )
 		return GW_RC_FAILED_JT;
 
-	rc =  gw_host_client_check_syntax(&host, msg.jt.requirements, msg.jt.rank);
+	rc =  gw_host_client_check_syntax(&host, jt.requirements, jt.rank);
 	
 	if ( rc == -2 )
 		return GW_RC_FAILED;
@@ -248,7 +269,7 @@ gw_return_code_t gw_client_array_submit(char *         template,
 		if ( deps[0] != -1 )
 		{
 			msg.init_state = GW_JOB_STATE_HOLD;
-			gw_client_dep_cp (deps, msg.jt.job_deps);
+			gw_client_dep_cp (deps, jt.job_deps);
 		}
 	}
 
@@ -290,10 +311,29 @@ gw_return_code_t gw_client_array_submit(char *         template,
 		return GW_RC_FAILED_CONNECTION;
 	}
 
+        length = sizeof(gw_template_t);
+        rc = send(fd,(void *) &jt,length,0);
+
+        if ( rc == -1 )
+        {
+                perror("send()");
+                close(fd);
+
+                return GW_RC_FAILED_CONNECTION;
+        }
+        else if ( rc != length )
+        {
+                fprintf(stderr,"Error sending message\n");
+                close(fd);
+
+                return GW_RC_FAILED_CONNECTION;
+        }
+
     /* ----------------------------------------------------------------- */
     /* 3.- Receive response     	      	      	      	      	     */
     /* ----------------------------------------------------------------- */
 
+        length = sizeof(gw_msg_t);
 	rc = recv(fd, (void *) &msg,length,MSG_WAITALL);
 	
     if ( rc == -1) 

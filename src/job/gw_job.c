@@ -38,7 +38,7 @@
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
-int gw_job_fill(gw_job_t *job, const gw_msg_t *msg)
+int gw_job_fill(gw_job_t *job, const gw_msg_submit_t *msg_submit)
 {
     int    rc;
     FILE   *log, *template_file, *file;
@@ -69,11 +69,11 @@ int gw_job_fill(gw_job_t *job, const gw_msg_t *msg)
 	if (job->owner != NULL )
 		free(job->owner);
 		
-    job->owner = strdup(msg->owner);	           
+    job->owner = strdup(msg_submit->msg.owner);	           
 
 /* -------------------------------------------------------------------------- */
     
-    gw_job_template_init( &(job->template), &(msg->jt) );
+    gw_job_template_init( &(job->template), &(msg_submit->jt) );
         
 /* -------------------------------------------------------------------------- */
     
@@ -117,13 +117,13 @@ int gw_job_fill(gw_job_t *job, const gw_msg_t *msg)
         return -1;
     }
 
-    if (msg->proxy_path[0] == '\0'){
+    if (msg_submit->msg.proxy_path[0] == '\0'){
         fprintf(file, "%ld %s - %s %i %i\n", job->start_time, job->owner,
-                job->template.job_home, msg->pstart, msg->pinc);
+                job->template.job_home, msg_submit->msg.pstart, msg_submit->msg.pinc);
 	}
     else {
-        fprintf(file, "%ld %s %s %s %i %i\n", job->start_time, job->owner, msg->proxy_path,
-                job->template.job_home, msg->pstart, msg->pinc);
+        fprintf(file, "%ld %s %s %s %i %i\n", job->start_time, job->owner, msg_submit->msg.proxy_path,
+                job->template.job_home, msg_submit->msg.pstart, msg_submit->msg.pinc);
 	}
     
     fclose(file);

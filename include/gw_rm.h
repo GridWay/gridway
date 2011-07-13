@@ -63,6 +63,7 @@ void gw_rm_listener(void *_null);
 void gw_rm_submit(void *_msg);
 
 void gw_rm_connection(void *_connection);
+void gw_rm_connection_submit(void *_connection);
 
 void gw_rm_hold_success(void *_job_id);    
 void gw_rm_hold_failed (void *_job_id);
