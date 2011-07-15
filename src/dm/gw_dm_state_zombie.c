@@ -50,7 +50,7 @@ void gw_dm_zombie ( void *_job_id )
 
         if ( job == NULL )
         {
-			gw_log_print("DM",'E',"Job %i does not exist (JOB_STATE_ZOMBIE).\n",job_id);
+	    gw_log_print("DM",'E',"Job %i does not exist (JOB_STATE_ZOMBIE).\n",job_id);
 
             free(_job_id);
             return;
@@ -67,20 +67,25 @@ void gw_dm_zombie ( void *_job_id )
     {
         case GW_JOB_STATE_EPILOG:
         
-	        gw_job_set_state(job, GW_JOB_STATE_ZOMBIE, GW_FALSE);
+	    gw_job_set_state(job, GW_JOB_STATE_ZOMBIE, GW_FALSE);
 	        
-			gw_log_print("DM",'I',"Job %i done, with exit code %i.\n",job->id, job->exit_code);
+	    gw_log_print("DM",'I',"Job %i done, with exit code %i.\n",job->id, job->exit_code);
 			
             gw_job_print(job,"DM",'I',"Job done, history:\n");            
             gw_job_print_history(job);
                                 
             job->history->reason = GW_REASON_NONE;
             job->exit_time       = time(NULL);
-                    
+    
             if ( job->client_waiting > 0 )
- 	           gw_am_trigger(gw_dm.rm_am,"GW_RM_WAIT_SUCCESS", _job_id);
+ 	      	gw_am_trigger(gw_dm.rm_am,"GW_RM_WAIT_SUCCESS", _job_id);
             else
-               free(_job_id);               
+            {
+	       	if (gw_conf.dispose == GW_TRUE)
+               		gw_am_trigger(&(gw_dm.am), "GW_DM_KILL", _job_id);
+		else
+	       		free(_job_id);
+	    }
 
 			/* -------- Update User & Host running jobs -------- */
             
@@ -105,7 +110,6 @@ void gw_dm_zombie ( void *_job_id )
 			/* -------- Update other jobs dependencies -------- */
 			
 			gw_job_pool_dep_check(job_id);			
-			
             break;
                     
         case GW_JOB_STATE_KILL_EPILOG:

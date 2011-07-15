@@ -28,15 +28,16 @@
 
 gw_conf_t gw_conf;
 
-int  gw_conf_init (gw_boolean_t multiuser)
+int  gw_conf_init (gw_boolean_t multiuser, gw_boolean_t dispose)
 {
     int i;
     int loc_length;
-	struct passwd *    pw_ent;
+    struct passwd *    pw_ent;
 	
-	gw_conf.multiuser = multiuser;
+    gw_conf.multiuser = multiuser;
+    gw_conf.dispose = dispose;
 	
-	pw_ent            = getpwuid(getuid());
+    pw_ent            = getpwuid(getuid());
     gw_conf.gwadmin   = strdup(pw_ent->pw_name);
     
     gw_conf.gw_location = getenv("GW_LOCATION");

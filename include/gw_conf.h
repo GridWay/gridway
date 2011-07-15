@@ -101,9 +101,10 @@
 typedef struct gw_conf_s
 {
     gw_boolean_t multiuser;
+    gw_boolean_t dispose;
     
     char *conf_file;
-	char *sch_conf_file;    
+    char *sch_conf_file;    
     char *template_default;
     char *gw_location;
     char *gw_globus_seg;
@@ -165,7 +166,7 @@ typedef enum {
 /* -------------------------------------------------------------------- */
 /* -------------------------------------------------------------------- */
 
-int gw_conf_init (gw_boolean_t multiuser);
+int gw_conf_init (gw_boolean_t multiuser, gw_boolean_t dispose);
 
 int gw_conf_lex_parser ();
 

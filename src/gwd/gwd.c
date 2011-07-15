@@ -63,10 +63,11 @@ const char * usage =
 "  -v            prints GridWay version and license\n"
 "  -m            runs GridWay daemon in multiuser mode\n"
 "  -c            clears previous GridWay state (otherwise, it is recovered)\n"
-"  -f            run GridWay in foreground mode (no detached)\n";
+"  -f            run GridWay in foreground mode (no detached)\n"
+"  -d            disposes jobs when done\n";
 
 const char * susage =
-"usage: gwd [-h] [-v] [-m] [-c]\n";
+"usage: gwd [-h] [-v] [-m] [-c] [-d]\n";
 
 /* -------------------------------------------------------------------------- */
 
@@ -365,8 +366,9 @@ int main(int argc, char **argv)
     int   length;
     gw_boolean_t multiuser  = GW_FALSE, clear_state = GW_FALSE;
     gw_boolean_t fg_mode = GW_FALSE;
+    gw_boolean_t dispose = GW_FALSE;
     
-    while((opt = getopt(argc,argv,"vhmcf")) != -1)
+    while((opt = getopt(argc,argv,"vhmcfd")) != -1)
         switch(opt)
         {
             case 'v':
@@ -385,7 +387,10 @@ int main(int argc, char **argv)
             	break;       
             case 'f':
             	fg_mode  = GW_TRUE;
-            	break; 
+            	break;
+            case 'd':
+                dispose = GW_TRUE;
+                break; 
             default:
                 fprintf(stderr,"error: invalid option \'%c\'\n",optopt);
                 printf("%s", susage);
@@ -444,7 +449,7 @@ int main(int argc, char **argv)
     
     gw_log_init(log);
     
-    gw_conf_init(multiuser);
+    gw_conf_init(multiuser, dispose);
     
     rc = gw_loadconf();    
     
