@@ -291,21 +291,21 @@ void gw_scheduler_loop(gw_scheduler_function_t scheduler, void *user_arg)
 
           	gwrc = gw_client_job_status(jid, &job_status);
           	
-          	if ( gwrc == GW_RC_SUCCESS )
-          	{
-          		fixed_priority = job_status.fixed_priority;
-          		np             = job_status.np;
-                deadline       = job_status.deadline;
-          	}
-          	else
-          	{
-         		gw_scheduler_print('E',"Error getting job information, will use default values.\n");
-          		fixed_priority = 0;
-          		np             = 1;
+            if ( gwrc == GW_RC_SUCCESS )
+            {
+                fixed_priority = job_status.fixed_priority;
+                np             = job_status.np;
+                deadline       = job_status.start_time + job_status.deadline;
+            }
+            else
+            {
+                gw_scheduler_print('E',"Error getting job information, will use default values.\n");
+                fixed_priority = 0;
+          	np             = 1;
                 deadline       = 0;
-          	}
+            }
           	
-          	gw_scheduler_job_add(&sched,jid,aid,np,reason,
+            gw_scheduler_job_add(&sched,jid,aid,np,reason,
                     fixed_priority,uid,deadline);	
         }
         else if (strcmp(act, "SCHEDULE") == 0 )
