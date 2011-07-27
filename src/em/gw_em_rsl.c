@@ -132,6 +132,7 @@ char* gw_generate_wrapper_rsl_nsh (gw_job_t *job)
     int rc;
     char *staging_url;
     char wrapper[PATH_MAX], stdout_wrapper[PATH_MAX], stderr_wrapper[PATH_MAX];
+    char *jobtype;
 
     if ( job->history->queue != NULL )
         if ( strcmp(job->history->queue,"-") != 0 )
@@ -199,19 +200,26 @@ char* gw_generate_wrapper_rsl_nsh (gw_job_t *job)
     /* 2.- Build RSL String & Return it                                       */
     /* ---------------------------------------------------------------------- */
 
+    jobtype = strdup(gw_template_jobtype_string(job->template.type));
+
     rc = snprintf(rsl_buffer, sizeof(char) * GW_RSL_LENGTH,
-            "&(executable=\"%s/%s\")"
+            "&(jobtype=\"%s\")"
+            "(executable=\"%s/%s\")"
             "(arguments=\"%s/%s/" GW_VAR_DIR "/%d/job.env\")"
             "(stdout=\"%s/%s\")"
             "(stderr=\"%s/%s\")"
-            "(environment=%s)",
+            "(environment=%s)"
+            "(count=%d)",
+            jobtype,
             staging_url, wrapper,
             staging_url, gw_conf.gw_location, job->id,
             staging_url, stdout_wrapper,
             staging_url, stderr_wrapper,
-            job_environment);
+            job_environment,
+            job->template.np);
     
-    free(job_environment);        
+    free(job_environment);
+    free(jobtype);
 
     if ( print_queue )
     {
