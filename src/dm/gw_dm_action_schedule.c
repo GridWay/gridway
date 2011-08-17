@@ -42,7 +42,7 @@ void gw_dm_schedule (void *_null)
 {
     int i;
     gw_job_t *job;
-	static int mark = 0;
+    static int mark = 0;
     	
 	mark = mark + gw_conf.scheduling_interval;
 	if ( mark >= 300 )
