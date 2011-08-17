@@ -34,12 +34,12 @@
 
 int gw_dm_dispatch_job (int job_id, int host_id, char *queue_name, int rank)
 {
-    int *       id;
-    gw_job_t *  job;
-    gw_host_t * host;
-    int         rc;
+    int *id;
+    gw_job_t *job;
+    gw_host_t *host;
+    int rc;
    
-    job  = gw_job_pool_get(job_id, GW_TRUE);
+    job = gw_job_pool_get(job_id, GW_TRUE);
                         
     if (job == NULL)
     {
@@ -56,14 +56,14 @@ int gw_dm_dispatch_job (int job_id, int host_id, char *queue_name, int rank)
         pthread_mutex_unlock(&(job->mutex));
         return -1;
     }
-        
+
     /* -------------------------------- */
     
     if (job->job_state == GW_JOB_STATE_PENDING)
     {
         gw_log_print("DM",'I',"Dispatching job %i to %s (%s).\n",job->id, 
-        	host->hostname, queue_name);
-	    	
+                host->hostname, queue_name);
+
         rc = gw_job_history_add(&(job->history), host, rank, queue_name,
                 host->fork_name, host->lrms_name, host->lrms_type,
                 job->owner, job->template.job_home, job->id, job->user_id,
@@ -72,23 +72,23 @@ int gw_dm_dispatch_job (int job_id, int host_id, char *queue_name, int rank)
         if ( rc == -1 )
         {
             gw_log_print("DM",'E',"Could not add history record for job %i.\n",
-	                job_id);
-	                
+                    job_id);
+                
             pthread_mutex_unlock(&(host->mutex));
             pthread_mutex_unlock(&(job->mutex));
-            return -1;		
+            return -1;
         }
-		    	
+
         /* ----- Update Host & User counters ----- */
-    	
+
         gw_host_inc_slots_nb(host, job->template.np);
-    	
+
         gw_user_pool_inc_running_jobs(job->user_id, 1);
-			    		
+ 
         /* --------------------------------------- */
         
-        id  = (int *) malloc(sizeof(int));
-        *id =  job->id;
+        id = (int *) malloc(sizeof(int));
+        *id = job->id;
 
         gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_PROLOG", (void *) id);
 
@@ -120,7 +120,7 @@ int gw_dm_dispatch_job (int job_id, int host_id, char *queue_name, int rank)
                 host->fork_name, host->lrms_name, host->lrms_type,
                 job->owner, job->template.job_home, job->id, job->user_id, 
                 GW_FALSE);
-                
+ 
         if ( rc == -1 )
         {
             gw_log_print("DM",'E',"Could not add history record for job %i.\n",
@@ -129,23 +129,23 @@ int gw_dm_dispatch_job (int job_id, int host_id, char *queue_name, int rank)
             pthread_mutex_unlock(&(host->mutex));
             pthread_mutex_unlock(&(job->mutex));
 
-            return -1;		
+            return -1;
         }
-		
-        job->restarted++;
-    	job->reschedule = GW_FALSE;
 
-    	/* ----- Update Host ----- */
+        job->restarted++;
+        job->reschedule = GW_FALSE;
+
+        /* ----- Update Host ----- */
         
         gw_host_inc_slots_nb(host, job->template.np);
-                                       		
+ 
         /* ----------------------- */
 
-        id  = (int *) malloc(sizeof(int));
-        *id =  job->id;
+        id = (int *) malloc(sizeof(int));
+        *id = job->id;
 
         gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_MIGR_CANCEL", (void *) id);
-		
+
         pthread_mutex_unlock(&(host->mutex));
         pthread_mutex_unlock(&(job->mutex));        
     }
