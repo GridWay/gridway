@@ -88,11 +88,11 @@ void gw_dm_listener(void *arg)
                         gw_log_print("DM",'I',"MAD (%s) successfully reloaded\n",
                             dm_mad->name);
                         
-                        gw_user_pool_dm_recover (dm_mad);
+                        gw_user_pool_dm_recover(dm_mad);
                         
-                        gw_host_pool_dm_recover (dm_mad);
+                        gw_host_pool_dm_recover(dm_mad);
                         
-                        gw_job_pool_dm_recover  (dm_mad);
+                        gw_job_pool_dm_recover(dm_mad);
                     }
                     else
                     {
