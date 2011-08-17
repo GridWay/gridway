@@ -443,8 +443,8 @@ void gw_client_print_status_full(gw_msg_job_t * msg)
     printf("CLIENT_WAITING=%d\n",msg->client_waiting);
     printf("RESCHEDULE=%d\n",msg->reschedule);
 
-	printf("START_TIME=%s\n",gw_print_time2(msg->start_time,the_time));
-	printf("EXIT_TIME=%s\n",gw_print_time2(msg->exit_time,the_time));
+	printf("START_TIME=%s\n",gw_print_date_and_time(msg->start_time,the_time));
+	printf("EXIT_TIME=%s\n",gw_print_date_and_time(msg->exit_time,the_time));
 	printf("EXEC_TIME=%s\n",gw_print_time (msg->cpu_time,the_time)); 
 	printf("XFR_TIME=%s\n",gw_print_time (msg->xfr_time,the_time)); 
 	        
