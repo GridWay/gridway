@@ -155,7 +155,8 @@ void gw_dm_mad_job_success(gw_dm_mad_t * dm_mad,
                            float         exe)
 {
     char buf[GW_DM_MAX_STRING];
-	int write_result;
+    int write_result;
+
     sprintf(buf, "JOB_SUCCESS %i %i %f %f %f\n",hid,uid,xfr,sus,exe);
     write_result = write(dm_mad->dm_mad_pipe, buf, strlen(buf));
     
@@ -172,7 +173,8 @@ void gw_dm_mad_job_schedule(gw_dm_mad_t *         dm_mad,
                             gw_migration_reason_t reason)
 {
     char buf[GW_DM_MAX_STRING];
-	int write_result;
+    int write_result;
+
     sprintf(buf, "JOB_SCHEDULE %i %i %i %i -\n",
             jid,aid,uid,reason);
     write_result = write(dm_mad->dm_mad_pipe, buf, strlen(buf));
