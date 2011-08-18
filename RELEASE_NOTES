@@ -1,8 +1,8 @@
-====== Release Notes 5.8 RC1 ======
+====== Release Notes 5.8 ======
 
-GridWay 5.8 RC1 is the new development version of the fifth series of the metascheduler.
+GridWay 5.8 is the new stable version of the fifth series of the metascheduler.
 
-Release date: August 18th, 2011.
+Release date: September 30th, 2011.
 
 ===== Modified Installation Procedure =====
 
@@ -40,6 +40,7 @@ The following bugs have been fixed:
   * Bug #86 (http://dev.gridway.org/issues/86): Problems with java.util.Calendar
   * Bug #87 (http://dev.gridway.org/issues/87): Architecture platform always shows i686 from the bdii IM MAD
   * Bug #89 (http://dev.gridway.org/issues/89): Abort migration due to suspension if job becomes active
+  * Bug #90 (http://dev.gridway.org/issues/90): Problem loading MADs in multiple-user mode
   * Bug #92 (http://dev.gridway.org/issues/92): Error removing remote dir
   * Bug #93 (http://dev.gridway.org/issues/93): GW sometimes loses LRMS type information and it sends jobs to FORK jobmanager
   * Bug #97 (http://dev.gridway.org/issues/97): Deadline time isn't recovered correctly
