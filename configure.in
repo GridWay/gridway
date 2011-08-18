@@ -15,7 +15,7 @@
 # ------------------------------------------------------------------------------
 
 AC_PREREQ(2.59)
-AC_INIT([GridWay],[5.7],[contact@gridway.org],[gridway],[http://gridway.org])
+AC_INIT([GridWay],[5.9],[contact@gridway.org],[gridway],[http://gridway.org])
 AC_CONFIG_AUX_DIR(config)
 AC_CONFIG_SRCDIR([src/dm/gw_dm_action_dispatch.c])
 
@@ -129,6 +129,7 @@ AM_CONDITIONAL(DRMAA1_JAVA, test "x$drmaa1_java" = "xyes")
 
 ## Checking the ruby and ruby-dev
 AM_CONDITIONAL(DRMAA_RUBY, test "x$drmaa_ruby" = "xyes")
+
 if test "x$drmaa_ruby" = "xyes"; then
  AC_CHECK_PROGS([RUBY],[ruby],[no])
  if [[ "$RUBY" = "no" ]] ; then
@@ -149,6 +150,7 @@ rescue LoadError
     exit -1
 end
 EOF
+
   $RUBY conftest.rb 2>/dev/null
   if test $? -eq 0; then
     rm conftest.rb
@@ -167,6 +169,10 @@ EOF
   echo "distdir:" >> Makefile;
   echo >> Makefile)
  fi
+else
+ (GW_SRC=$PWD;cd src/drmaa/ruby;
+ echo "distdir:" >> Makefile;
+ echo >> Makefile)
 fi
 
 # --- Enable JSDL  ---

@@ -42,7 +42,7 @@ void gw_rm_job_match(int client_socket, int job_id)
     gw_msg_match_t msg;
     gw_boolean_t   match;
     int            length;
-    int            gwfreenc;
+    int            slots, allowed_slots;
     
     msg.msg_type = GW_MSG_JOB_MATCH;
     length       = sizeof(gw_msg_match_t);
@@ -64,6 +64,12 @@ void gw_rm_job_match(int client_socket, int job_id)
         
         if ( host != NULL )
         {
+            if (host->lrms_name == NULL)
+            {
+                pthread_mutex_unlock(&(host->mutex));    
+                continue;
+            }
+
 			number_of_queues   = 0;
 			msg.rc             = GW_RC_SUCCESS;
 			msg.matched        = GW_FALSE;
@@ -87,21 +93,25 @@ void gw_rm_job_match(int client_socket, int job_id)
                     {
                         msg.matched = GW_TRUE;
                         msg.match[number_of_queues] = 1;
-                        msg.rank [number_of_queues] = gw_host_compute_rank(host,j,job->template.rank);
+                        msg.rank[number_of_queues] = gw_host_compute_rank(host,j,job->template.rank);
 
-                        gwfreenc = host->queue_nodecount[j] - host->used_slots;
-            
-                        if ( host->queue_freenodecount[j] < gwfreenc )
-                            msg.slots[number_of_queues] = host->queue_freenodecount[j];
-                        else if ( gwfreenc > 0)
-                            msg.slots[number_of_queues] = gwfreenc;
-                        else
-                            msg.slots[number_of_queues] = 0;
+                        slots = gw_conf.sch_conf.max_resource*gw_conf.scheduling_interval/60 + 1;
+
+                        if (slots > host->queue_nodecount[j])
+                            slots = host->queue_nodecount[j];
+
+                        if (host->queue_maxjobsinqueue[j] > 0) {
+                            allowed_slots = host->queue_maxjobsinqueue[j] - host->used_slots;
+                            if (slots > allowed_slots)
+		                slots = allowed_slots;
+                        }
+
+                        msg.slots[number_of_queues] = slots;
                     }
                     else
                     {
                         msg.match[number_of_queues] = 0;
-                        msg.rank [number_of_queues] = 0;    
+                        msg.rank[number_of_queues] = 0;    
                         msg.slots[number_of_queues] = 0;                        
                     }
                     
