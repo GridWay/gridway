@@ -1,5 +1,5 @@
 %_topdir      %(echo $HOME)/rpmbuild
 %_smp_mflags  -j3
 %_signature gpg
-%_gpg_name GridWay Project Leads
+%_gpg_name B4D025B3
 %_gpg_path %(echo $HOME)/.gnupg
