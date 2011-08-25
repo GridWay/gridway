@@ -94,14 +94,14 @@ rm -rf $RPM_BUILD_ROOT
 /usr/share/gridway/5.8.RC1/bin/gw_tm_mad_ftp.bin
 
 %changelog
-* Wed Aug 24 2011 GridWay Project Leads <http://gridway.org/> - 5.8-RC1.el5
+* Wed Aug 24 2011 GridWay Project Leads <http://gridway.org/> - 5.8-RC1
 - Update to GridWay 5.8-RC1
 
-* Wed Jun 29 2011 GridWay Project Leads <http://gridway.org/> - 5.7-1.el5
+* Wed Jun 29 2011 GridWay Project Leads <http://gridway.org/> - 5.7-1
 - Fixed some recommendations for FHS compilant
 
-* Thu Jun 9 2011 GridWay Project Leads <http://gridway.org/> - 5.7-1.el5
+* Thu Jun 9 2011 GridWay Project Leads <http://gridway.org/> - 5.7-1
 - Update to GridWay 5.7-1 
 
-* Mon Jun 6 2011 GridWay Project Leads <http://gridway.org/> - 5.7-0.el5
+* Mon Jun 6 2011 GridWay Project Leads <http://gridway.org/> - 5.7-0
 - Initial version
