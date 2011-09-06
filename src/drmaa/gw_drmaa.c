@@ -1077,10 +1077,11 @@ int drmaa_run_bulk_jobs(drmaa_job_ids_t **     jobids,
     int  * job_ids;
     int    array_id;
     char * jt_file;
-	int    rc;
-	int    jid;
-	int    i;
+    int    rc;
+    int    jid;
+    int    i;
     char * jt_parse;
+    int prio;
     
     gw_return_code_t grc;
 
@@ -1088,28 +1089,24 @@ int drmaa_run_bulk_jobs(drmaa_job_ids_t **     jobids,
     
     pthread_mutex_lock(&(drmaa_gw_session.mutex));
         
-	if ( drmaa_gw_session.session_id == -1 )
+    if ( drmaa_gw_session.session_id == -1 )
     {
     	if ( error != NULL )
-	       	snprintf(error,
-			 error_len,
-			 "%s",
-	       	         drmaa_gw_error_strs[DRMAA_ERRNO_NO_ACTIVE_SESSION]);
+            snprintf(error, error_len, "%s",
+                    drmaa_gw_error_strs[DRMAA_ERRNO_NO_ACTIVE_SESSION]);
 	       	         
-	    pthread_mutex_unlock(&(drmaa_gw_session.mutex));
+        pthread_mutex_unlock(&(drmaa_gw_session.mutex));
 	    
         return DRMAA_ERRNO_NO_ACTIVE_SESSION;
     }
         
-	if ( (jobids == NULL) || ( jt == NULL ) || ( total_jobs == 0 ) )
+    if ( (jobids == NULL) || ( jt == NULL ) || ( total_jobs == 0 ) )
     {
     	if ( error != NULL )    	
-	       	snprintf(error,
-			 error_len,
-			 "%s",
-	       	         drmaa_gw_error_strs[DRMAA_ERRNO_INVALID_ARGUMENT]);
+            snprintf(error, error_len, "%s",
+       	            drmaa_gw_error_strs[DRMAA_ERRNO_INVALID_ARGUMENT]);
 
-	    pthread_mutex_unlock(&(drmaa_gw_session.mutex));
+        pthread_mutex_unlock(&(drmaa_gw_session.mutex));
 	    
         return DRMAA_ERRNO_INVALID_ARGUMENT;
     }    
@@ -1168,6 +1165,10 @@ int drmaa_run_bulk_jobs(drmaa_job_ids_t **     jobids,
         return DRMAA_ERRNO_INTERNAL_ERROR; 
     }
     
+    if (jt->priority != NULL)
+        prio = atoi(jt->priority);
+    else
+        prio = GW_JOB_DEFAULT_PRIORITY;
     
     if (strcmp(jt->js_state,DRMAA_SUBMISSION_STATE_HOLD) == 0)
 	    grc = gw_client_array_submit(jt_parse,
@@ -1178,7 +1179,7 @@ int drmaa_run_bulk_jobs(drmaa_job_ids_t **     jobids,
 	                                 NULL,
 	                                 start,
 	                                 incr,
-	                                 atoi(jt->priority));
+	                                 prio);
 	else
 	    grc = gw_client_array_submit(jt_parse,
 	                                 total_jobs,
@@ -1188,7 +1189,7 @@ int drmaa_run_bulk_jobs(drmaa_job_ids_t **     jobids,
 	                                 NULL,
 	                                 start,
 	                                 incr,
-	                                 atoi(jt->priority));
+	                                 prio);
 	                                 
 	pthread_mutex_unlock(&(jt->mutex));
 	                                     	    
@@ -1361,8 +1362,8 @@ int drmaa_control(const char *jobid, int action, char *error, size_t error_len)
 	}
 	else
 	{	
-    	jid    = atoi (jobid);
-		all_rc = drmaa_gw_control_job(jid,action);
+            jid    = atoi (jobid);
+            all_rc = drmaa_gw_control_job(jid,action);
 	}
 	
 	if ( all_rc == GW_RC_FAILED_BAD_JOB_STATE )
