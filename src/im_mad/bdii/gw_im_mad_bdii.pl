@@ -71,7 +71,7 @@ sub dynamic_monitor
 	
 	open(TMPFILE,">$TMPFILE");
 
-	$ldap = Net::LDAP->new( "$bdii:2170" ) or print TMPFILE "DISCOVER - FAILURE $@\n";
+	$ldap = Net::LDAP->new( "$bdii:2170" ) or print TMPFILE "MONITOR $mid FAILURE $@\n";
 	$mesg = $ldap->bind ;    # an anonymous bind
 	# First search
 	$mesg = $ldap->search( # perform a search
