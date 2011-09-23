@@ -62,9 +62,9 @@ dynamic_monitor (){
 
 	if [ "x$PORTNUMBER" = "x" ]
 	then
-		nice -n $PRIORITY grid-info-search -x -LLL -nowrap -h $2 > $TMPFILE 2> $ERRFILE
+		nice -n $PRIORITY grid-info-search -x -LLL -nowrap -h $2 -b $BASE > $TMPFILE 2> $ERRFILE
 	else
-		nice -n $PRIORITY grid-info-search -x -LLL -nowrap -p $PORTNUMBER -h $2 > $TMPFILE 2> $ERRFILE
+		nice -n $PRIORITY grid-info-search -x -LLL -nowrap -p $PORTNUMBER -h $2 -b $BASE > $TMPFILE 2> $ERRFILE
 	fi    
              
     if [ $? -eq 0 ]
@@ -84,7 +84,7 @@ dynamic_monitor (){
         LRMS_NAME=`grep GlueCEUniqueID: $TMPFILE | awk -F"/" '{print $2}' | awk -F- '{ORS=""; print $1; for (i=2;i<NF;i++) print "-" $i; print "\n"}' | tail -1`
         LRMS_TYPE=`grep GlueCEInfoLRMSType: $TMPFILE | awk -F": " '{print $2}' | tail -1`
 
-        nice -n $PRIORITY grid-info-search -x -LLL -h $2 "(&(objectclass=GlueCE)$QUEUEFILTER)" > $TMPFILE 2> $ERRFILE
+        nice -n $PRIORITY grid-info-search -x -LLL -h $2 -b $BASE "(&(objectclass=GlueCE)$QUEUEFILTER)" > $TMPFILE 2> $ERRFILE
 
         saveIFS=$IFS
         IFS="
@@ -96,7 +96,7 @@ dynamic_monitor (){
             QUEUE_MAXCOUNT=0; QUEUE_MAXRUNNINGJOBS=0; QUEUE_MAXJOBSINQUEUE=0
 
             QUEUE_NAME=(`grep GlueCEName: $TMPFILE | awk -F": " '{print $2}'`)
-            QUEUE_NODECOUNT=(`grep GlueCEInfoTotalCPUs: $TMPFILE | awk -F": " '{print $2}' | tail +1`)
+            QUEUE_NODECOUNT=(`grep GlueCEInfoTotalCPUs: $TMPFILE | awk -F": " '{print $2}' | tail -n +1`)
             QUEUE_FREENODECOUNT=(`grep GlueCEStateFreeCPUs: $TMPFILE | awk -F": " '{print $2}'`)
             QUEUE_MAXTIME=(`grep GlueCEPolicyMaxWallClockTime: $TMPFILE | awk -F": " '{print $2}'`)
             QUEUE_MAXCPUTIME=(`grep GlueCEPolicyMaxCPUTime: $TMPFILE | awk -F": " '{print $2}'`)
@@ -142,7 +142,7 @@ dynamic_monitor (){
     rm -f $TMPFILE $ERRFILE
 }
 
-BASE="mds-vo-name=local,o=grid"
+BASE="mds-vo-name=resource,o=grid"
 HOSTFILTER=""
 QUEUEFILTER=""
 
