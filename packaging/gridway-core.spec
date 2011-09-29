@@ -11,7 +11,7 @@ Group:		System Environment/Libraries
 License:	Apache License
 URL:		http://www.gridway.org/
 Vendor:		GridWay Project Leads
-# wget http://dev.gridway.org/attachments/download/53/gridway-5.8.0.tar.gz
+# wget http://dev.gridway.org/attachments/download/55/gridway-5.8.0.tar.gz
 # wget http://dev.gridway.org/projects/gridway/repository/raw/branches/gw_5_8_branch/packaging/README
 # wget http://dev.gridway.org/projects/gridway/repository/raw/branches/gw_5_8_branch/packaging/gwd
 # tar -xzf gridway-5.8.0.tar.gz
