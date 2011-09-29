@@ -185,7 +185,7 @@ AM_CONDITIONAL(SYSLOG, test "x$syslog" = "xsyslog")
 
 # --- With DB ---
 
-if test "x$db" = "xdb" ; then
+if test "x$db" = "xyes" ; then
 	if test "x$db_path"="x " ; then
 		LDFLAGS="${LDFLAGS} -L/usr/lib";
 		DB4_INCLUDE_PATH="-I /usr/include";	
@@ -197,7 +197,7 @@ else
 	DB4_INCLUDE_PATH=" ";
 fi
 
-AM_CONDITIONAL(DB, test "x$db" = "xdb")
+AM_CONDITIONAL(DB, test "x$db" = "xyes")
 
 # --- With GridWay tests ---
 
@@ -237,7 +237,7 @@ AM_PROG_LEX
 
 AC_CHECK_LIB([pthread], [pthread_cond_wait])
 
-if test "x$db" = "xdb"; then
+if test "x$db" = "xyes"; then
 AC_CHECK_LIB([db], [db_env_create])
 fi
 

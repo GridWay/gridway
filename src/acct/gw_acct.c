@@ -20,6 +20,8 @@
 #include "gw_conf.h"
 #include "gw_log.h"
 #include <limits.h>
+#include <stdlib.h>
+#include <string.h>
 
 /* -------------------------------------------------------------------------- */
 static gw_acct_db_t gw_acct_db = {NULL,NULL,NULL,NULL,NULL,NULL};
