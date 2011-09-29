@@ -424,21 +424,21 @@ static int gw_scheduler_filter_select_queues(gw_scheduler_t * sched,
 
 void gw_scheduler_matching_arrays(gw_scheduler_t * sched)
 {    
-    int              i,j,k,l,idx,tqs,jid,aid;
-    int              last_array;
+    int i,j,k,l,idx,tqs,jid,aid;
+    int last_array;
 
-    gw_msg_match_t *     match;
-    gw_sch_user_host_t * uhosts;
+    gw_msg_match_t *match;
+    gw_sch_user_host_t *uhosts;
         
-    int              num;
-    int *            hosts;
+    int num;
+    int *hosts;
         
     gw_return_code_t rc;
 
-	match  = NULL;		
-	hosts  = NULL;
+    match = NULL;		
+    hosts = NULL;
 
-	last_array  = -1;	
+    last_array = -1;	
 	            
     for (i=0;i<sched->num_jobs;i++)
     {
@@ -447,48 +447,45 @@ void gw_scheduler_matching_arrays(gw_scheduler_t * sched)
     	
     	if (sched->jobs[i].mhosts != NULL)
     	{
-    		free(sched->jobs[i].mhosts);
-    		
-         	sched->jobs[i].num_mhosts = 0;	
-         	sched->jobs[i].mhosts     = NULL;
-    	}
+            free(sched->jobs[i].mhosts);
+ 
+             sched->jobs[i].num_mhosts = 0;	
+             sched->jobs[i].mhosts = NULL;
+        }
     	
-    	if (( aid == -1 ) || (last_array != aid) || 
-    	    (sched->jobs[i].reason == GW_REASON_SELF_MIGRATION))
+        if (( aid == -1 ) || (last_array != aid)
+                || (sched->jobs[i].reason == GW_REASON_SELF_MIGRATION))
     	{
-    		if (hosts != NULL)
-    		{
-    			free(hosts);
-    			hosts = NULL;
-    		}
+            if (hosts != NULL)
+            {
+                free(hosts);
+                hosts = NULL;
+            }
+ 
+            if (match != NULL)
+            {
+                free(match);
+                match = NULL;
+            }
     		
-    		if (match != NULL)
-    		{
-    			free(match);
-    			match = NULL;
-    		}
-    		
-		    rc = gw_client_match_job(jid,aid,&match,&num);
+            rc = gw_client_match_job(jid, aid, &match, &num);
 
-			if ((rc != GW_RC_SUCCESS)||(num == 0))
-			{	    	
-		        gw_scheduler_print('W',"No matching hosts found for job"
-   	    		    " %i - %s\n",jid,gw_ret_code_string(rc));
-				continue;
-		    }
+            if ((rc != GW_RC_SUCCESS)||(num == 0))
+            {	    	
+                gw_scheduler_print('W',"No matching hosts found for job"
+       	                " %i - %s\n", jid, gw_ret_code_string(rc));
+                continue;
+            }
 
-			hosts = (int *) malloc (sizeof(int) * num);
-			memset((void *)hosts,0,sizeof(int) * num);
+            hosts = (int *) malloc(sizeof(int) * num);
+            memset((void *)hosts, 0, sizeof(int) * num);
 
-		    /* ------------------------------- */
-		    /* Queue Filtering & Selection     */
-			/* ------------------------------- */
-	            
-		    tqs = gw_scheduler_filter_select_queues(sched,
-        	                                    &(sched->jobs[i]),
-            	                                match,
-                	                            num,
-                    	                        hosts);
+            /* ------------------------------- */
+            /* Queue Filtering & Selection     */
+            /* ------------------------------- */
+
+            tqs = gw_scheduler_filter_select_queues(sched,
+                    &(sched->jobs[i]), match, num, hosts);
 
             /* ------------------------------- */
             /* Build the Matching Hosts Array  */
@@ -497,9 +494,9 @@ void gw_scheduler_matching_arrays(gw_scheduler_t * sched)
             if ( tqs > 0 )
             {
                 sched->jobs[i].num_mhosts = tqs;
-                sched->jobs[i].mhosts     = malloc (tqs*sizeof(gw_sch_queue_t));
+                sched->jobs[i].mhosts = malloc (tqs*sizeof(gw_sch_queue_t));
                 
-                uhosts  = sched->users[sched->jobs[i].ua_id].hosts;
+                uhosts = sched->users[sched->jobs[i].ua_id].hosts;
             
                 for (j=0, k=0; j<num; j++)
                 {
@@ -507,7 +504,7 @@ void gw_scheduler_matching_arrays(gw_scheduler_t * sched)
                 
                     if ( idx != -1 )
                     {
-                        for (l=0;l<sched->num_hosts;l++)
+                        for (l= 0; l<sched->num_hosts; l++)
                         {
                             if (uhosts[l].hid == match[j].host_id)
                             {
@@ -515,12 +512,12 @@ void gw_scheduler_matching_arrays(gw_scheduler_t * sched)
                                         match[j].queue_name[idx],
                                         GW_MSG_STRING_SHORT-1);
                             
-                                sched->jobs[i].mhosts[k].ha_id  = uhosts[l].ha_id;
+                                sched->jobs[i].mhosts[k].ha_id = uhosts[l].ha_id;
                                 sched->jobs[i].mhosts[k].uha_id = l;
-                                sched->jobs[i].mhosts[k].slots  = match[j].slots[idx];
-                                sched->jobs[i].mhosts[k].fixed  = match[j].fixed_priority;
-                                sched->jobs[i].mhosts[k].rank   = match[j].rank[idx];
-                                sched->jobs[i].mhosts[k].usage  = 0.0;
+                                sched->jobs[i].mhosts[k].slots = match[j].slots[idx];
+                                sched->jobs[i].mhosts[k].fixed = match[j].fixed_priority;
+                                sched->jobs[i].mhosts[k].rank = match[j].rank[idx];
+                                sched->jobs[i].mhosts[k].usage = 0.0;
                                 
                                 k++;
                                 break;
@@ -533,7 +530,7 @@ void gw_scheduler_matching_arrays(gw_scheduler_t * sched)
                     gw_scheduler_host_policies (sched,i);
                             
             }
-            else if ((tqs == 0)&&(sched->jobs[i].reason != GW_REASON_NONE))
+            else if ((tqs == 0) && (sched->jobs[i].reason != GW_REASON_NONE))
             {
                 gw_scheduler_print('W',"No hosts found to re-schedule job %i\n",
                     sched->jobs[i].jid);
@@ -549,19 +546,31 @@ void gw_scheduler_matching_arrays(gw_scheduler_t * sched)
     	else if ( last_array == aid ) /* Already made match-making */
     	{
 #ifdef GWSCHEDDEBUG            
-			gw_scheduler_print('D',"Skipping match-making for array %i\n", aid);
+            gw_scheduler_print('D',"Skipping match-making for array %i\n", aid);
 #endif
             sched->jobs[i].num_mhosts = sched->jobs[i-1].num_mhosts;
-            sched->jobs[i].mhosts     = malloc (
-                    sched->jobs[i-1].num_mhosts * sizeof(gw_sch_queue_t));
+            sched->jobs[i].mhosts = malloc (sched->jobs[i-1].num_mhosts
+                    * sizeof(gw_sch_queue_t));
   
-            for (j=0;j<sched->jobs[i].num_mhosts;j++)
+            for (j=0; j<sched->jobs[i].num_mhosts; j++)
             {
-                    memcpy((void *) &(sched->jobs[i].mhosts[j]), 
-                           (void *) &(sched->jobs[i-1].mhosts[j]),
-                           sizeof(gw_sch_queue_t));
+                memcpy((void *) &(sched->jobs[i].mhosts[j]), 
+                        (void *) &(sched->jobs[i-1].mhosts[j]),
+                        sizeof(gw_sch_queue_t));
             }
     	}
+    }
+
+    if (hosts != NULL)
+    {
+        free(hosts);
+        hosts = NULL;
+    }
+
+    if (match != NULL)
+    {
+        free(match);
+        match = NULL;
     }
 }
 
