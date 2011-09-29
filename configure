@@ -1554,7 +1554,7 @@ Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
   --with-syslog=facility  Build syslog compilant logs support.
-  --with-db=<no|path_to_db>
+  --with-db=<no|yes|path_to_db>
                           Build db support for accounting.
   --with-tests            Build GridWay test suite.
   --with-pic              try to use only PIC/non-PIC objects [default=use
@@ -2915,7 +2915,7 @@ fi
 
 # --- With DB ---
 
-if test "x$db" = "xdb" ; then
+if test "x$db" = "xyes" ; then
 	if test "x$db_path"="x " ; then
 		LDFLAGS="${LDFLAGS} -L/usr/lib";
 		DB4_INCLUDE_PATH="-I /usr/include";
@@ -2927,7 +2927,7 @@ else
 	DB4_INCLUDE_PATH=" ";
 fi
 
- if test "x$db" = "xdb"; then
+ if test "x$db" = "xyes"; then
   DB_TRUE=
   DB_FALSE='#'
 else
@@ -5321,7 +5321,7 @@ _ACEOF
 fi
 
 
-if test "x$db" = "xdb"; then
+if test "x$db" = "xyes"; then
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for db_env_create in -ldb" >&5
 $as_echo_n "checking for db_env_create in -ldb... " >&6; }
 if test "${ac_cv_lib_db_db_env_create+set}" = set; then :
