@@ -45,3 +45,7 @@ The following bugs have been fixed:
   * Bug #93 (http://dev.gridway.org/issues/93): GW sometimes loses LRMS type information and it sends jobs to FORK jobmanager
   * Bug #97 (http://dev.gridway.org/issues/97): Deadline time isn't recovered correctly
   * Bug #100 (http://dev.gridway.org/issues/100): jobtype and count parameters not generated in RSL NSH
+  * Bug #101 (http://dev.gridway.org/issues/101): SEGFAULT in drmaa_run_bulk_jobs when GW_PRIORITY is not specified
+  * Bug #102 (http://dev.gridway.org/issues/102): BDII IM MAD stops monitoring after a discovery failure
+  * Bug #104 (http://dev.gridway.org/issues/104): Memory leak in scheduler
+  * Bug #105 (http://dev.gridway.org/issues/105): Build error if accounting enabled
