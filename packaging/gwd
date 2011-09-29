@@ -17,7 +17,7 @@ SCRIPTNAME=/etc/init.d/gwd
 RETVAL=0
 
 # Exit if the package is not installed
-test -x "/usr/share/gridway/5.8.RC1/bin/gwd" || exit 0
+test -x "/usr/share/gridway/5.8.0/bin/gwd" || exit 0
 
 start(){
 echo -n $"Starting $DESC: "
@@ -33,7 +33,7 @@ echo -n $"Stopping $DESC: "
 killproc gwd
 RETVAL=$?
 echo
-[ $RETVAL -eq 0 ] && rm -f /usr/share/gridway/5.8.RC1/var/.lock
+[ $RETVAL -eq 0 ] && rm -f /usr/share/gridway/5.8.0/var/.lock
 return $RETVAL
 }
 

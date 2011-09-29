@@ -1,9 +1,9 @@
 %define _name gridway
-%define _release RC1
+%define _release 0
 
 Name:		gridway-core
 Version:	5.8
-Release:	RC1%{dist}
+Release:	0%{dist}
 Summary:	GridWay Core
 Packager:	GridWay Project Leads <http://gridway.org/>
 
@@ -11,14 +11,14 @@ Group:		System Environment/Libraries
 License:	Apache License
 URL:		http://www.gridway.org/
 Vendor:		GridWay Project Leads
-# wget http://dev.gridway.org/attachments/download/52/gridway-5.8.RC1.tar.gz
+# wget http://dev.gridway.org/attachments/download/53/gridway-5.8.0.tar.gz
 # wget http://dev.gridway.org/projects/gridway/repository/raw/branches/gw_5_8_branch/packaging/README
 # wget http://dev.gridway.org/projects/gridway/repository/raw/branches/gw_5_8_branch/packaging/gwd
-# tar -xzf gridway-5.8.RC1.tar.gz
-# cp -p README gridway-5.8.RC1/
-# cp -p gwd gridway-5.8.RC1/etc/
-# chmod 755 gridway-5.8.RC1/etc/gwd
-# tar -czf gridway-5.8.RC1.tar.gz gridway-5.8.RC1/
+# tar -xzf gridway-5.8.0.tar.gz
+# cp -p README gridway-5.8.0/
+# cp -p gwd gridway-5.8.0/etc/
+# chmod 755 gridway-5.8.0/etc/gwd
+# tar -czf gridway-5.8.0.tar.gz gridway-5.8.0/
 
 Source:		%{_name}-%{version}.%{_release}.tar.gz
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
@@ -90,83 +90,86 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-/usr/share/gridway/5.8.RC1/etc/gwd.conf
-/usr/share/gridway/5.8.RC1/etc/gwrc
-/usr/share/gridway/5.8.RC1/etc/job_template.default
-/usr/share/gridway/5.8.RC1/etc/sched.conf
-/usr/share/gridway/5.8.RC1/etc/gwd
-/usr/share/gridway/5.8.RC1/bin/gw_flood_scheduler
-/usr/share/gridway/5.8.RC1/bin/gw_im_mad_common.sh
-/usr/share/gridway/5.8.RC1/bin/gw_im_mad_static
-/usr/share/gridway/5.8.RC1/bin/gw_mad_common.sh
-/usr/share/gridway/5.8.RC1/bin/gw_sched
-/usr/share/gridway/5.8.RC1/bin/gwacct
-/usr/share/gridway/5.8.RC1/bin/gwd
-/usr/share/gridway/5.8.RC1/bin/gwdagman
-/usr/share/gridway/5.8.RC1/bin/gwhistory
-/usr/share/gridway/5.8.RC1/bin/gwhost
-/usr/share/gridway/5.8.RC1/bin/gwkill
-/usr/share/gridway/5.8.RC1/bin/gwps
-/usr/share/gridway/5.8.RC1/bin/gwsubmit
-/usr/share/gridway/5.8.RC1/bin/gwuser
-/usr/share/gridway/5.8.RC1/bin/gwwait
-/usr/share/gridway/5.8.RC1/lib/libdrmaa.a
-/usr/share/gridway/5.8.RC1/lib/libdrmaa.la
-/usr/share/gridway/5.8.RC1/lib/libdrmaa.so
-/usr/share/gridway/5.8.RC1/lib/libdrmaa.so.0
-/usr/share/gridway/5.8.RC1/lib/libdrmaa.so.0.0.0
-/usr/share/gridway/5.8.RC1/libexec/gw_monitor.sh
-/usr/share/gridway/5.8.RC1/libexec/gw_wrapper.sh
-/usr/share/gridway/5.8.RC1/libexec/ruby/dagman/gridway.rb
-/usr/share/gridway/5.8.RC1/libexec/ruby/dagman/node.rb
-/usr/share/gridway/5.8.RC1/libexec/ruby/dagman/parse.rb
-/usr/share/gridway/5.8.RC1/libexec/ruby/dagman/runner.rb
-/usr/share/gridway/5.8.RC1/share/LICENSE
-/usr/share/gridway/5.8.RC1/share/NOTICE
-/usr/share/gridway/5.8.RC1/share/README
-/usr/share/gridway/5.8.RC1/share/RELEASE_NOTES
-/usr/share/gridway/5.8.RC1/include/drmaa.h
-/usr/share/gridway/5.8.RC1/include/gw_acct.h
-/usr/share/gridway/5.8.RC1/include/gw_action.h
-/usr/share/gridway/5.8.RC1/include/gw_array.h
-/usr/share/gridway/5.8.RC1/include/gw_array_pool.h
-/usr/share/gridway/5.8.RC1/include/gw_client.h
-/usr/share/gridway/5.8.RC1/include/gw_cmds_common.h
-/usr/share/gridway/5.8.RC1/include/gw_common.h
-/usr/share/gridway/5.8.RC1/include/gw_conf.h
-/usr/share/gridway/5.8.RC1/include/gw_dm.h
-/usr/share/gridway/5.8.RC1/include/gw_dm_mad.h
-/usr/share/gridway/5.8.RC1/include/gw_drmaa_jt.h
-/usr/share/gridway/5.8.RC1/include/gw_em.h
-/usr/share/gridway/5.8.RC1/include/gw_em_mad.h
-/usr/share/gridway/5.8.RC1/include/gw_em_rsl.h
-/usr/share/gridway/5.8.RC1/include/gw_file_parser.h
-/usr/share/gridway/5.8.RC1/include/gw_history.h
-/usr/share/gridway/5.8.RC1/include/gw_host.h
-/usr/share/gridway/5.8.RC1/include/gw_host_pool.h
-/usr/share/gridway/5.8.RC1/include/gw_im.h
-/usr/share/gridway/5.8.RC1/include/gw_im_mad.h
-/usr/share/gridway/5.8.RC1/include/gw_job.h
-/usr/share/gridway/5.8.RC1/include/gw_job_pool.h
-/usr/share/gridway/5.8.RC1/include/gw_job_template.h
-/usr/share/gridway/5.8.RC1/include/gw_log.h
-/usr/share/gridway/5.8.RC1/include/gw_rm.h
-/usr/share/gridway/5.8.RC1/include/gw_rm_connection_list.h
-/usr/share/gridway/5.8.RC1/include/gw_rm_msg.h
-/usr/share/gridway/5.8.RC1/include/gw_sch_conf.h
-/usr/share/gridway/5.8.RC1/include/gw_scheduler.h
-/usr/share/gridway/5.8.RC1/include/gw_template.h
-/usr/share/gridway/5.8.RC1/include/gw_tm.h
-/usr/share/gridway/5.8.RC1/include/gw_tm_mad.h
-/usr/share/gridway/5.8.RC1/include/gw_um.h
-/usr/share/gridway/5.8.RC1/include/gw_user.h
-/usr/share/gridway/5.8.RC1/include/gw_user_pool.h
-/usr/share/gridway/5.8.RC1/include/gw_xfr_files.h
-/usr/share/gridway/5.8.RC1/xml_schema/gridway.xsd
-/usr/share/gridway/5.8.RC1/var
-/usr/share/gridway/5.8.RC1/var/acct
+/usr/share/gridway/5.8.0/etc/gwd.conf
+/usr/share/gridway/5.8.0/etc/gwrc
+/usr/share/gridway/5.8.0/etc/job_template.default
+/usr/share/gridway/5.8.0/etc/sched.conf
+/usr/share/gridway/5.8.0/etc/gwd
+/usr/share/gridway/5.8.0/bin/gw_flood_scheduler
+/usr/share/gridway/5.8.0/bin/gw_im_mad_common.sh
+/usr/share/gridway/5.8.0/bin/gw_im_mad_static
+/usr/share/gridway/5.8.0/bin/gw_mad_common.sh
+/usr/share/gridway/5.8.0/bin/gw_sched
+/usr/share/gridway/5.8.0/bin/gwacct
+/usr/share/gridway/5.8.0/bin/gwd
+/usr/share/gridway/5.8.0/bin/gwdagman
+/usr/share/gridway/5.8.0/bin/gwhistory
+/usr/share/gridway/5.8.0/bin/gwhost
+/usr/share/gridway/5.8.0/bin/gwkill
+/usr/share/gridway/5.8.0/bin/gwps
+/usr/share/gridway/5.8.0/bin/gwsubmit
+/usr/share/gridway/5.8.0/bin/gwuser
+/usr/share/gridway/5.8.0/bin/gwwait
+/usr/share/gridway/5.8.0/lib/libdrmaa.a
+/usr/share/gridway/5.8.0/lib/libdrmaa.la
+/usr/share/gridway/5.8.0/lib/libdrmaa.so
+/usr/share/gridway/5.8.0/lib/libdrmaa.so.0
+/usr/share/gridway/5.8.0/lib/libdrmaa.so.0.0.0
+/usr/share/gridway/5.8.0/libexec/gw_monitor.sh
+/usr/share/gridway/5.8.0/libexec/gw_wrapper.sh
+/usr/share/gridway/5.8.0/libexec/ruby/dagman/gridway.rb
+/usr/share/gridway/5.8.0/libexec/ruby/dagman/node.rb
+/usr/share/gridway/5.8.0/libexec/ruby/dagman/parse.rb
+/usr/share/gridway/5.8.0/libexec/ruby/dagman/runner.rb
+/usr/share/gridway/5.8.0/share/LICENSE
+/usr/share/gridway/5.8.0/share/NOTICE
+/usr/share/gridway/5.8.0/share/README
+/usr/share/gridway/5.8.0/share/RELEASE_NOTES
+/usr/share/gridway/5.8.0/include/drmaa.h
+/usr/share/gridway/5.8.0/include/gw_acct.h
+/usr/share/gridway/5.8.0/include/gw_action.h
+/usr/share/gridway/5.8.0/include/gw_array.h
+/usr/share/gridway/5.8.0/include/gw_array_pool.h
+/usr/share/gridway/5.8.0/include/gw_client.h
+/usr/share/gridway/5.8.0/include/gw_cmds_common.h
+/usr/share/gridway/5.8.0/include/gw_common.h
+/usr/share/gridway/5.8.0/include/gw_conf.h
+/usr/share/gridway/5.8.0/include/gw_dm.h
+/usr/share/gridway/5.8.0/include/gw_dm_mad.h
+/usr/share/gridway/5.8.0/include/gw_drmaa_jt.h
+/usr/share/gridway/5.8.0/include/gw_em.h
+/usr/share/gridway/5.8.0/include/gw_em_mad.h
+/usr/share/gridway/5.8.0/include/gw_em_rsl.h
+/usr/share/gridway/5.8.0/include/gw_file_parser.h
+/usr/share/gridway/5.8.0/include/gw_history.h
+/usr/share/gridway/5.8.0/include/gw_host.h
+/usr/share/gridway/5.8.0/include/gw_host_pool.h
+/usr/share/gridway/5.8.0/include/gw_im.h
+/usr/share/gridway/5.8.0/include/gw_im_mad.h
+/usr/share/gridway/5.8.0/include/gw_job.h
+/usr/share/gridway/5.8.0/include/gw_job_pool.h
+/usr/share/gridway/5.8.0/include/gw_job_template.h
+/usr/share/gridway/5.8.0/include/gw_log.h
+/usr/share/gridway/5.8.0/include/gw_rm.h
+/usr/share/gridway/5.8.0/include/gw_rm_connection_list.h
+/usr/share/gridway/5.8.0/include/gw_rm_msg.h
+/usr/share/gridway/5.8.0/include/gw_sch_conf.h
+/usr/share/gridway/5.8.0/include/gw_scheduler.h
+/usr/share/gridway/5.8.0/include/gw_template.h
+/usr/share/gridway/5.8.0/include/gw_tm.h
+/usr/share/gridway/5.8.0/include/gw_tm_mad.h
+/usr/share/gridway/5.8.0/include/gw_um.h
+/usr/share/gridway/5.8.0/include/gw_user.h
+/usr/share/gridway/5.8.0/include/gw_user_pool.h
+/usr/share/gridway/5.8.0/include/gw_xfr_files.h
+/usr/share/gridway/5.8.0/xml_schema/gridway.xsd
+/usr/share/gridway/5.8.0/var
+/usr/share/gridway/5.8.0/var/acct
 
 %changelog
+* Thu Sep 30 2011 GridWay Project Leads <http://gridway.org/> - 5.8-0
+- Update to GridWay 5.8-0
+
 * Wed Aug 24 2011 GridWay Project Leads <http://gridway.org/> - 5.8-RC1
 - Update to GridWay 5.8-RC1
 

@@ -1,5 +1,5 @@
 %define _name gridway
-%define _release RC1
+%define _release 0
 
 %ifarch alpha ia64 ppc64 s390x sparc64 x86_64
 %global flavor gcc64pthr
@@ -9,7 +9,7 @@
 
 Name:		gridway-GT5
 Version:	5.8
-Release:	RC1%{dist}
+Release:	0%{dist}
 Summary:	GT5 MADs for GridWay
 Packager:	GridWay Project Leads <http://gridway.org/>
 
@@ -88,12 +88,15 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-/usr/share/gridway/5.8.RC1/bin/gw_em_mad_gram2
-/usr/share/gridway/5.8.RC1/bin/gw_em_mad_gram2.bin
-/usr/share/gridway/5.8.RC1/bin/gw_tm_mad_ftp
-/usr/share/gridway/5.8.RC1/bin/gw_tm_mad_ftp.bin
+/usr/share/gridway/5.8.0/bin/gw_em_mad_gram2
+/usr/share/gridway/5.8.0/bin/gw_em_mad_gram2.bin
+/usr/share/gridway/5.8.0/bin/gw_tm_mad_ftp
+/usr/share/gridway/5.8.0/bin/gw_tm_mad_ftp.bin
 
 %changelog
+* Thu Sep 30 2011 GridWay Project Leads <http://gridway.org/> - 5.8-0
+- Update to GridWay 5.8-0
+
 * Wed Aug 24 2011 GridWay Project Leads <http://gridway.org/> - 5.8-RC1
 - Update to GridWay 5.8-RC1
 
