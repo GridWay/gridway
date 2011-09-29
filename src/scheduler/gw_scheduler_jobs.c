@@ -563,6 +563,18 @@ void gw_scheduler_matching_arrays(gw_scheduler_t * sched)
             }
     	}
     }
+
+    if (hosts != NULL)
+    {
+        free(hosts);
+        hosts = NULL;
+    }
+
+    if (match != NULL)
+    {
+        free(match);
+        match = NULL;
+    }
 }
 
 /* -------------------------------------------------------------------------- */
