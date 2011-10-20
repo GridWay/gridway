@@ -461,6 +461,7 @@ CreamJob *CreamEmMad::jobSubmit(int jid,string *contact,string *jdlFile, int thr
     creamJob  = new CreamJob(jid, creamJobId, creamURL);
 
     pthread_mutex_lock(&jobMutex);
+        this->creamJobs->erase(jid);
         this->creamJobs->insert(pair<int, CreamJob>(jid, *creamJob));
     pthread_mutex_unlock(&jobMutex);
 
