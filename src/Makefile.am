@@ -575,7 +575,7 @@ IM_MAD_STATIC_SRC_DIST = $(IM_MAD)/gw_im_mad_static.sh \
 
 IM_MAD_MDS2_SRC_DIST = $(IM_MAD)/mds2/gw_im_mad_mds2.sh \
         $(IM_MAD)/mds2/gw_im_mad_mds2_glue.sh \
-        $(IM_MAD)/mds4/Makefile
+        $(IM_MAD)/mds2/Makefile
 
 IM_MAD_MDS4_SRC_DIST = $(IM_MAD)/mds4/Host.java \
         $(IM_MAD)/mds4/Mds4QueryParser_GT40.java \
@@ -585,6 +585,7 @@ IM_MAD_MDS4_SRC_DIST = $(IM_MAD)/mds4/Host.java \
         $(IM_MAD)/mds4/QueryClient_GT42.java \
         $(IM_MAD)/mds4/Gw_im_mad_mds4.java \
         $(IM_MAD)/mds4/ServiceIM.java \
+        $(IM_MAD)/mds4/gw_im_mad_mds4.sh \
         $(IM_MAD)/mds4/Makefile
 
 IM_MAD_BDII_SRC_DIST = $(IM_MAD)/bdii/gw_im_mad_bdii.pl \
@@ -600,6 +601,7 @@ EM_MAD_GRAM2_SRC_DIST = $(EM_MAD)/gram2/gw_em_mad_gram2.c \
 
 EM_MAD_GRAM4_SRC_DIST = $(EM_MAD)/gram4/Gw_em_mad_gram4_GT40.java \
 	$(EM_MAD)/gram4/Gw_em_mad_gram4_GT42.java \
+	$(EM_MAD)/gram4/gw_em_mad_gram4.sh \
 	$(EM_MAD)/gram4/Makefile
 
 EM_MAD_CREAM_SRC_DIST = $(EM_MAD)/cream/gw_em_mad_cream.cpp \
