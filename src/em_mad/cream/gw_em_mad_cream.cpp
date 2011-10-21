@@ -81,7 +81,7 @@ int main( int argc, char *argv[])
         else if (creamEmMad == NULL)
             if (action->compare("INIT") == 0)
             {
-                //TODO: delegationID???
+                //TODO: Use other delegationID?
                 if (argc == 1)
                     creamEmMad = new CreamEmMad("GridWay");
                 else if (argc == 2)

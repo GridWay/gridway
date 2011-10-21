@@ -307,7 +307,6 @@ int CreamEmMad::proxyDelegate(string *contact, int threadid)
         this->credentials->push_back(*contact);
     pthread_mutex_unlock(&credentialsMutex);
 
-    // TODO: Delegate only to new CEs (list)
     creamClient = API::CreamProxyFactory::make_CreamProxyDelegate(*(this->delegationID), this->connectionTimeout);
 
     if (creamClient == NULL)
@@ -357,7 +356,6 @@ int CreamEmMad::proxyRenew(string *contact, int threadid)
     API::AbsCreamProxy *creamClient;
     string *serviceAddress;
 
-    // TODO: Renew periodically
     creamClient = API::CreamProxyFactory::make_CreamProxy_ProxyRenew(*(this->delegationID), this->connectionTimeout);
 
     if (creamClient == NULL)
