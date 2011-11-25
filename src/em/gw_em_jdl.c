@@ -88,7 +88,7 @@ char* gw_generate_wrapper_jdl(gw_job_t *job)
             job->restarted,
             job->restarted,
             staging_url, gw_conf.gw_location, job->id,
-            job->history->host->lrms_type,
+            strchr(job->history->host->lrms_name, '-') + 1,
             job->history->queue,
             job->template.np);
 
