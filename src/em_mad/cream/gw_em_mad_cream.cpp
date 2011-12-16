@@ -20,24 +20,27 @@
 #include <string>
 #include <pthread.h>
 
-void *CreamAction(void *thread_data);
-void *Timer(void *thread_data);
-int getthreadid();
+void *creamAction(void *thread_data);
+void *timer(void *);
+int getThreadID();
 
 using namespace std;
+	
+extern char *optarg;
+extern int   optopt;
 
 typedef struct thread_operation_s{
-    string *action;
+    string action;
     int jidCREAM;
-    int threadid;
-    string *contact;
-    string *jdlFile;
-    CreamEmMad *creamEmMad;
+    int threadid; 
+    string contact;
+    string jdlFile;
 } thread_operation_t;
-thread_operation_t thread_operation[MAX_THREADS];
 
+thread_operation_t operation[MAX_THREADS];
+CreamEmMad *creamEmMad = NULL;
 
-int main( int argc, char *argv[]) 
+int main( int argc, char **argv) 
 {
     char str[4096];
     char str1[20];
@@ -45,128 +48,139 @@ int main( int argc, char *argv[])
     char str3[500];
     char str4[1024];
     bool end=false;
-    string *action;
-    string *contact;
-    string *jdlFile;
+    string action;
+    string contact;
+    string jdlFile;
+    string delegation;
+    int refreshTime = 0;
+    char opt;
     int paramNum;
     int jidCREAM;
-    int i = 1;
-    CreamEmMad *creamEmMad=NULL; 
+    int i;
 
-    pthread_t timer;
-    pthread_t operation;
+    pthread_t creamTimer;
+    pthread_t creamOperation[MAX_THREADS];
     pthread_attr_t attr;
 
     pthread_attr_init(&attr);
-    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
 
-    for(i=0;i<MAX_THREADS;i++)
-        thread_operation[i].threadid = -1;
+    for(i=0;i<MAX_THREADS;i++) 
+        operation[i].threadid = -1;
+
+    while((opt = getopt(argc, argv, ":d:t:")) != -1)
+        switch(opt)
+        {
+            case 'd': 
+                delegation = optarg;
+                break;
+            case 't': 
+           	refreshTime = atoi(optarg);
+		break;
+            case '?':
+                cout << "error: invalid option " << optopt << endl;
+                exit(1);
+                break;                
+            case ':':
+                cout << "error: must provide an argument for option " << optopt << endl;
+                exit(1);
+                break;
+	}
 
     while (!end)
-    {
+    { 
         cin.getline(str,4096,'\n');
 
         paramNum = sscanf(str, "%s %s %s %[^\n]", str1, str2, str3, str4);
 
-        action = new string(str1);
+        action = str1;
         jidCREAM = atoi(str2);
-        contact = new string(str3);
-        jdlFile = new string(str4);
+        contact = str3;
+        jdlFile = str4;
         if (paramNum != 4)
         {
             cout << "FAILURE Not all four arguments defined" << endl;
             continue;
         }
         else if (creamEmMad == NULL)
-            if (action->compare("INIT") == 0)
+            if (action == "INIT")
             {
-                //TODO: Use other delegationID?
-                if (argc == 1)
-                    creamEmMad = new CreamEmMad("GridWay");
-                else if (argc == 2)
-                    creamEmMad = new CreamEmMad(argv[1]);
-
+                //TODO: delegationID???
+		creamEmMad = new CreamEmMad(delegation, refreshTime);
                 creamEmMad->init();
-                pthread_create(&timer, &attr, Timer, (void *) creamEmMad);
+
+                pthread_create(&creamTimer, &attr, timer, NULL);
             }
             else
-               cout << action->c_str() << " " << jidCREAM << " FAILURE Not initialized" << endl;
-        else if (action->compare("INIT") == 0)
-               cout << action->c_str() << " " << jidCREAM << " FAILURE Already initialized" << endl;
-        else if (end = (action->compare("FINALIZE") == 0))
+               cout << action << " " << jidCREAM << " FAILURE Not initialized" << endl;
+        else if (action == "INIT")
+               cout << action << " " << jidCREAM << " FAILURE Already initialized" << endl;
+        else if (action == "FINALIZE")
         {
+            end = true;
+	    pthread_cancel(creamTimer);
+            pthread_attr_destroy(&attr); 
             creamEmMad->finalize();
-            pthread_kill(timer,9);
-            return 0;
+            delete creamEmMad; 
         }
         else {
-	    while ( (i=getthreadid()) == -1 );
-            thread_operation[i].action = action;
-            thread_operation[i].jidCREAM = jidCREAM;
-	    thread_operation[i].threadid = i;
-            thread_operation[i].contact = contact;
-            thread_operation[i].jdlFile = jdlFile;
-            thread_operation[i].creamEmMad = creamEmMad;
-            pthread_create(&operation, &attr, CreamAction, &thread_operation[i]);
+	    while ((i=getThreadID()) == -1);
+            operation[i].action = action;
+            operation[i].jidCREAM = jidCREAM;
+	    operation[i].threadid = i;
+            operation[i].contact = contact;
+            operation[i].jdlFile = jdlFile;
+            pthread_create(&creamOperation[i], &attr, creamAction, &operation[i]);
         }
-  }
-
-  pthread_exit(NULL);
+  } 
 }
 
-int getthreadid()
+int getThreadID()
 {
     int i;
 
-    for(i=1;i<MAX_THREADS;i++)
-        if(thread_operation[i].threadid == -1) return i;
+    for (i=0;i<MAX_THREADS;i++)
+        if (operation[i].threadid == -1) 
+            return i;
     return -1;
 }
 
-void *Timer(void *thread_data)
+void *timer(void *)
 {
-    CreamEmMad *my_data;
-    my_data = (CreamEmMad *) thread_data;
-
-    my_data->timer();
+    pthread_detach(pthread_self());
+ 
+    creamEmMad->timer();
     pthread_exit(NULL);
 }
 
-void *CreamAction(void *thread_data)
+void *creamAction(void *thread_data)
 {
-    thread_operation_t *my_data;
-    my_data = (thread_operation_t *) thread_data;
+    thread_operation_t *data;
+    data = (thread_operation_t *) thread_data;
 
-    string *action =  my_data->action;
-    string *contact = my_data->contact;
-    string *jdlFile = my_data->jdlFile;
+    pthread_detach(pthread_self());
+
+    string action =  data->action;
+    string contact = data->contact;
+    string jdlFile = data->jdlFile;
     string host;
-    int jidCREAM = my_data->jidCREAM;
-    int threadid = my_data->threadid;
-    CreamEmMad *creamEmMad = my_data->creamEmMad;
+    int jidCREAM = data->jidCREAM;
     int status = -1;
 
-    if (action->compare("SUBMIT") == 0)
+    if (action == "SUBMIT")
     {
-        host = contact->substr(0, contact->find("/"));
-        status = creamEmMad->submit(jidCREAM, &host, jdlFile, threadid);
+        host = contact.substr(0, contact.find("/"));
+        status = creamEmMad->submit(jidCREAM, host, jdlFile);
     }
-    else if (action->compare("RECOVER") == 0)
+    else if (action == "RECOVER")
     {
-        status = creamEmMad->recover(jidCREAM, contact, threadid);
+        status = creamEmMad->recover(jidCREAM, contact);
     }
-    else if (action->compare("CANCEL") == 0)
-        status = creamEmMad->cancel(jidCREAM, threadid);
-    else if (action->compare("POLL") == 0)
-        status = creamEmMad->poll(jidCREAM, threadid);
+    else if (action == "CANCEL")
+        status = creamEmMad->cancel(jidCREAM);
+    else if (action == "POLL")
+        status = creamEmMad->poll(jidCREAM);
 
-    if (status != 0)
-        cout << action->c_str() << " " << jidCREAM << " FAILURE " << (creamEmMad->getInfo(threadid))->c_str() << endl;
+    data->threadid = -1;
 
-    thread_operation[threadid].threadid = -1;
-    delete action;
-    delete contact;
-    delete jdlFile;
     pthread_exit(NULL);
 }

@@ -16,7 +16,7 @@
 
 #ifndef CREAMEMMAD_H_
 #define CREAMEMMAD_H_
-#define MAX_THREADS 1024
+#define MAX_THREADS 16
 
 /* 
 CREAM CLIENT API C++ includes
@@ -54,54 +54,66 @@ class CreamJob
 {
    private:
 	int gridwayID;
-	string *creamJobId;
-        string *creamURL;
+        string creamJobId;
+        string creamURL;
    
   public:
-	CreamJob(int gridwayID, string *creamJobId, string *creamURL);
-	void setGridWayID(int gridwayID);
-	void setCreamJobId(string *creamJobId);
-	void setCreamURL(string *creamURL);
+	CreamJob(int gridwayID, string creamJobId, string creamURL);
 	int getGridWayID();
-	string *getCreamJobId();
-	string *getCreamURL();
+	string getCreamJobId();
+	string getCreamURL();
+};
+
+struct CreamOperation
+{ 
+  	int code; 
+  	string info;
+   	CreamJob *job;
+};
+
+class CreamService
+{
+    private:
+        int connectionTimeout;
+        string certificatePath;
+        //string baseAddress;
+
+    public:
+	CreamService();
+	void setPath(string path);
+        CreamOperation proxyDelegate(string contact, string delegationID);
+        CreamOperation proxyRenew(string contact, string delegationID);
+        CreamOperation submit(int jid, string contact, string JDL, string delegationID);
+        CreamOperation poll(CreamJob creamJob);
+        CreamOperation cancel(CreamJob creamJob);
 };
 
 class CreamEmMad
 {
     private:
 	int jid;
-	int connectionTimeout;
-        map <int, string> *info;
-	string *delegationID;
-	string *baseAddress;
-	string *localCreamJID;
-	string *certificatePath;
+	string delegationID;
 	map <int, CreamJob> *creamJobs;	
 	pthread_mutex_t jobMutex;
         pthread_mutex_t credentialsMutex;
         list<string> *credentials;
         int refreshTime;
+	CreamService *creamService;
 	
-	int proxyDelegate(string *contact, int threadid);
-	int proxyRenew(string *contact, int threadid);
-	CreamJob *jobSubmit(int jid, string *contact, string *jdlFile, int threadid);	
+        int proxyDelegate(string action, int jid, string contact, string delegationID);
 	int stagingInputFiles(CreamJob *job);
-	int jobStart(CreamJob *job);	
-	string *fileToString(string *jdlFileName, int threadid); 
-	vector <string> *getInputFiles(string *jdlString);
+	string fileToString(string jdlFileName);
 
     public:
-	CreamEmMad(char *delegation);
+	CreamEmMad(string delegation, int refreshTime);
+	~CreamEmMad();
 	void init();
-	int submit(int jid, string *contact, string *jdlFile, int threadid);
-	int recover(int jid, string *contact, int threadid);
-	int cancel(int jid, int threadid);
-	int poll(int jid, int threadid);
+	int submit(int jid, string contact, string jdlFile);
+	int recover(int jid, string contact);
+	int cancel(int jid);
+	int poll(int jid);
 	void finalize();
-	string *getInfo(int threadid);
         void timer();
 };
 
 #endif /*CREAMEMMAD_H_*/
-
