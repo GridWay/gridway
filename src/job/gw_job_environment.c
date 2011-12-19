@@ -334,11 +334,18 @@ int gw_job_environment(gw_job_t *job)
     {
         for (i=0;i<job->template.num_env;i++)
         {
-               var = gw_job_substitute (job->template.environment[i][GW_ENV_VAL], job);        
-            
+
+            if (strncmp(job->template.environment[i][GW_ENV_VAR], "\"", 1) == 0)
+            {
+                job->template.environment[i][GW_ENV_VAR] = strdup(job->template.environment[i][GW_ENV_VAR] + 1);
+		job->template.environment[i][GW_ENV_VAL][strlen(job->template.environment[i][GW_ENV_VAL])-1] = '\0';
+            }
+
+            var = gw_job_substitute (job->template.environment[i][GW_ENV_VAL], job);        
+
             if (var != NULL)
             {
-                   fprintf(fd,"export %s=\"%s\"\n",
+                fprintf(fd,"export %s=\"%s\"\n",
                     job->template.environment[i][GW_ENV_VAR], var);
                 if (strcmp("MAXCPUTIME", job->template.environment[i][GW_ENV_VAR]) == 0)
                 {
