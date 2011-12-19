@@ -1,8 +1,6 @@
 #!/bin/bash
 
-export JAR_FILES="/usr/share/java"
-export GRIDSAM_HOME="/var/lib/tomcat6/webapps/gridsam"
-
+GRIDSAM_HOME=/opt/gridsam-2.3.0-client
 if [ -z "${GW_LOCATION}" ]; then
     echo "Please, set GW_LOCATION variable."
     exit -1
@@ -15,5 +13,4 @@ cd_var
 mad_debug
 check_proxy
 
-exec nice -n $PRIORITY java -classpath $GW_LOCATION/lib/gw_em_mad_bes.jar:$JAR_FILES/axis.jar:$JAR_FILES/jaxrpc.jar:$GRIDSAM_HOME/WEB-INF/lib/gridsam-schema-2.3.0.jar:$JAR_FILES/xmlbeans.jar:$JAR_FILES/commons-logging.jar:$JAR_FILES/commons-discovery.jar:$GRIDSAM_HOME/WEB-INF/lib/gridsam-core-2.3.0.jar:$JAR_FILES/wsdl4j.jar:$JAR_FILES/commons-httpclient.jar:$JAR_FILES/commons-codec.jar:$JAR_FILES/dom4j.jar:$GRIDSAM_HOME/WEB-INF/lib/omii-security-utils-1.3.jar:$GRIDSAM_HOME/WEB-INF/lib/wss4j-1.5.0-itinnov-2.jar:$JAR_FILES/xmlsec.jar:$GW_LOCATION/lib/conf -Djava.endorsed.dirs=$GW_LOCATION/lib/endorsed -Dlog4j.configuration="file://$GRIDSAM_HOME/WEB-INF/classes/log4j.properties" -Daxis.ClientConfigFile=$GW_LOCATION/lib/conf/client-config.wsdd GW_em_mad_bes 
-
+exec nice -n $PRIORITY java -classpath $GW_LOCATION/lib/gw_em_mad_bes.jar:/usr/share/java/xmlbeans.jar:/usr/share/java/jaxrpc.jar:$(GRIDSAM_HOME)/lib/gridsam-schema-2.3.0.jar:/usr/share/java/axis.jar:$(GRIDSAM_HOME)/lib/gridsam-core-2.3.0.jar:/usr/share/java/commons-logging.jar:/usr/share/java/commons-discovery.jar:/usr/share/java/wsdl4j.jar:$(GRIDSAM_HOME)/lib/omii-security-utils-1.3.jar:$(GRIDSAM_HOME)/lib/wss4j-1.5.0-itinnov-2.jar:$(GRIDSAM_HOME)/conf:/usr/share/java/xml-security.jar:/usr/share/java/dom4j.jar -Djava.endorsed.dirs=$(GRIDSAM_HOME)/endorsed -Daxis.ClientConfigFile=$(GRIDSAM_HOME)/conf/client-config.wsdd -Dlog4j.configuration=$(GRIDSAM_HOME)/conf/log4j.properties GW_em_mad_bes

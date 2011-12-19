@@ -112,7 +112,7 @@ class GW_em_mad_bes extends Thread {
 							host = str_split[2];
 							if (str_split[2].indexOf('/') != -1)
                                         			host = str_split[2].substring(0,str_split[2].indexOf('/'));
-                                                        contact = "http://" + host + ":8080/gridsam/services/bes";
+                                                        contact = "http://" + host + ":8080/gridsam/services/bes?wsdl";
                                 			jsdl_file = str_split[3];
                                                         String jsdl_myproxy = add_myproxy(action, jid_str, jsdl_file);
 							job = new ServiceBES(action, jid, contact, jsdl_myproxy);

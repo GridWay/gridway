@@ -28,12 +28,23 @@ setup(){
 
     if [ -z "${GW_JOB_ID}" \
             -o -z "${GW_USER}" \
-            -o -z "${GW_HOSTNAME}" \
-            -o -z "${GLOBUS_LOCATION}" ]; then
+            -o -z "${GW_HOSTNAME}" ]; then
          echo "failed."
          exit 1
     fi
 
+    if [ -z "${GLOBUS_LOCATION}" ]; then
+	export GLOBUS_LOCATION=`locate bin/globus-url-copy | sed -n '1,1 s:bin/globus-url-copy::p'`
+        if [ -z "${GLOBUS_LOCATION}" ]; then
+             echo "failed."
+             exit 1
+        fi
+    fi
+
+    if [ -z "${HOME}" ]; then
+         export HOME=${PWD}
+    fi
+            
     export LD_LIBRARY_PATH=$GLOBUS_LOCATION/lib:$LD_LIBRARY_PATH
 
     printf "`date`: Checking remote job home... "
