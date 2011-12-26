@@ -50,169 +50,29 @@ class ServiceBES extends Thread {
 	private Integer jid;
 	private String contact;
 	private String jsdlFile;
-	private ServiceBES job;
 	private org.icenigrid.schema.bes.factory.y2006.m08.ActivityStateEnumeration.Enum state;
 
 	int status = 0;
 	String info;
 
-        private Calendar terminationTime = null;
         private EndpointReferenceDocument xActivityIdentifier;
 
-        public ServiceBES(String action, Integer jid, String contact, String JSDL) {
-                this.action = action;
+        public ServiceBES(Integer jid, String contact, String JSDL) {
 		this.jid = jid;
                 this.contact = contact;
                 this.jsdlFile = JSDL;
         }
 
-        public ServiceBES(String action, Integer jid, ServiceBES job) {
-                this.action = action;
-                this.jid = jid;
-                this.job = job;
-		this.contact = job.getContact();
-        }
-
-        public ServiceBES(String action, Integer jid, String GridSAMID) {
-                this.action = action;
-                this.jid = jid;
-		this.contact = GridSAMID;
-        }
-
-        protected void setEPR(EndpointReferenceDocument EPR){
-                xActivityIdentifier = EPR;
-        }
-
-        public String getContact(){
-                return contact;
-        }
-
-        public String getJSDL(){
-                return jsdlFile;
-        }
-
-        public EndpointReferenceDocument getEPR(){
-                return xActivityIdentifier;
-        }
-
-
-	public void run() {
-		// Perform the action
-		if (action.equals("SUBMIT"))
-			submit();
-		else if (action.equals("RECOVER"))
-			recover();
-		else if (action.equals("CANCEL"))
-			cancel(); 
-		else if (action.equals("POLL"))
-			poll();
-		else
-		{
-			status = 1;
-			info = "Not valid action";
-		}
-
-		synchronized (System.out)
-		{
-			if (status == 0)
-				System.out.println(action + " " + jid + " SUCCESS " + info);
-			else
-				System.out.println(action + " " + jid + " FAILURE " + info);
-		}
-	}
-
-	void submit() {
-
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(Calendar.WEEK_OF_YEAR , calendar.get(Calendar.WEEK_OF_YEAR) + 1);
-
-		try
-		{ 
-			setTerminationTime(calendar.getTime()); // One week
-		}
-		catch (Exception e)
-		{
-		}
-
-		// Submit the job
-                try
-		{
-			jobSubmit();
-
-		}
-		catch (Exception e)
-		{
-			info = e.getMessage().replace('\n', ' ');
-			status = 1;
-		}
-
-	}
-
-        void recover() {
-
-                // Cancel the job
-                try
-                {
-                        jobRecover();
-                        if (status == 0){
-                                info = state.toString().toUpperCase();
-                        	if (info.equals("FINISHED"))
-                                	info = "DONE";
-                        	else if (info.equals("CANCELLED"))
-                                	info = "DONE";
-                       	 	else if (info.equals("RUNNING"))
-                                	info = "ACTIVE";
-			}
-                }
-                catch (Exception e)
-                {
-                        info = e.getMessage().replace('\n', ' ');
-                        status = 1;
-                }
-        }
-
-	void cancel() {
-
-		// Cancel the job
-		try
-		{
-			jobCancel();                              
-		}
-		catch (Exception e)
-		{
-			info = e.getMessage().replace('\n', ' ');
-			status = 1;
-		}
-	}
-
-	void poll() {
-		try
-		{
-			refreshStatus();
-			if (status == 0)
-                                info = state.toString().toUpperCase();
-			if (info.equals("FINISHED"))
-                       		info = "DONE";
-			else if (info.equals("CANCELLED"))
-				info = "DONE";
-			else if (info.equals("RUNNING"))
-				info = "ACTIVE";
-		}
-		catch (Exception e)
-		{
-			info = e.getMessage().replace('\n', ' ');
-			status = 1;
-		}
+	public String getInformation(){
+		return info;
 	}
 
 
-	protected void jobSubmit() throws SOAPException, MalformedURLException,
+	protected int submit() throws SOAPException, MalformedURLException,
 		  ServiceException, RemoteException {
 
-		status = 0;
-
 		try { 
-                        JobDefinitionDocument xJSDL = JobDefinitionDocument.Factory.parse(this.getJSDL());
+                        JobDefinitionDocument xJSDL = JobDefinitionDocument.Factory.parse(this.jsdlFile);
                 	CreateActivityDocument xCreateActivityDocument = CreateActivityDocument.Factory.newInstance();
                 	xCreateActivityDocument.addNewCreateActivity().addNewActivityDocument().setJobDefinition(xJSDL.getJobDefinition());
 
@@ -231,191 +91,193 @@ class ServiceBES extends Thread {
                 	xActivityIdentifier.setEndpointReference( xResult.getCreateActivityResponse().getActivityIdentifier() );
 
 			if (xResult == null) {
-                	       	status = 1;
+				//this.info = "";
+				return -1;
                 	}
 			else {
 				//Get GridSAM JobID
 				String id = xActivityIdentifier.getEndpointReference().getDomNode().getOwnerDocument().
 						getElementsByTagName("ID").item(0).getChildNodes().item(0).getNodeValue();
-				info = contact + "/" + id;
-	                        this.setEPR(xActivityIdentifier);
+				this.info = contact + "/" + id;
+				this.xActivityIdentifier = xActivityIdentifier; 
         		}
 		} catch(Exception ex) {
-			info = ex.getMessage().replace('\n', ' ');
-			status = 1;
-		}			
+			this.info = ex.getMessage().replace('\n', ' ');
+			return -1;
+		}		
+		return 0;	
 	}
   
-    protected void jobRecover() throws SOAPException, MalformedURLException,
+   	protected int recover() throws SOAPException, MalformedURLException,
                         ServiceException, RemoteException {
 
-	status = 0;
-	String serviceURL;
-	String jobID;
+		String serviceURL;
+		String jobID;
 
-	serviceURL = contact.substring(0,contact.indexOf("/urn:gridsam:"));
-	jobID = contact.substring(contact.indexOf("urn:gridsam:"),contact.length());
-	this.contact = serviceURL;
-        EndpointReferenceDocument xActivityEPR = EndpointReferenceDocument.Factory.newInstance();
+		serviceURL = contact.substring(0,contact.indexOf("/urn:gridsam:"));
+		jobID = contact.substring(contact.indexOf("urn:gridsam:"),contact.length());
+		this.contact = serviceURL;
+        	EndpointReferenceDocument xActivityEPR = EndpointReferenceDocument.Factory.newInstance();
 
-        if (jobID != null && jobID.startsWith("urn:gridsam:")) {
-		JobIdentifierDocument xJobIdentifier = JobIdentifierDocument.Factory.newInstance();
-                xJobIdentifier.addNewJobIdentifier().setID(jobID);
-                EndpointReferenceType xActivityIdentifier = EndpointReferenceType.Factory.newInstance();
-                xActivityIdentifier.addNewAddress().setStringValue(serviceURL);
-                xActivityIdentifier.addNewReferenceParameters().set(xJobIdentifier);
-		xActivityEPR.addNewEndpointReference();
-		xActivityEPR.setEndpointReference(xActivityIdentifier);
-	}
-	else {
-		status = 1;
-		return;
-	}
-        setEPR(xActivityEPR);
-        this.contact = serviceURL;
+        	if (jobID != null && jobID.startsWith("urn:gridsam:")) {
+			JobIdentifierDocument xJobIdentifier = JobIdentifierDocument.Factory.newInstance();
+                	xJobIdentifier.addNewJobIdentifier().setID(jobID);
+                	EndpointReferenceType xActivityIdentifier = EndpointReferenceType.Factory.newInstance();
+                	xActivityIdentifier.addNewAddress().setStringValue(serviceURL);
+                	xActivityIdentifier.addNewReferenceParameters().set(xJobIdentifier);
+			xActivityEPR.addNewEndpointReference();
+			xActivityEPR.setEndpointReference(xActivityIdentifier);
+		}
+		else {
+			//this.info = "";
+			return -1;
+		}
+		this.xActivityIdentifier = xActivityEPR;
+        	this.contact = serviceURL;
 
-	//refreshStatus
-        GetActivityStatusesDocument xActivities = GetActivityStatusesDocument.Factory.newInstance();
-        try {
-                EndpointReferenceDocument xActivityIdentifier = EndpointReferenceDocument.Factory.parse( (new DOMReader()).read( 
+		//refreshStatus
+        	GetActivityStatusesDocument xActivities = GetActivityStatusesDocument.Factory.newInstance();
+        	try {
+                	EndpointReferenceDocument xActivityIdentifier = EndpointReferenceDocument.Factory.parse( (new DOMReader()).read( 
 				xActivityEPR.getEndpointReference().getDomNode().getOwnerDocument() ).asXML() );
-                xActivities.addNewGetActivityStatuses().addNewActivityIdentifier().set( xActivityIdentifier.getEndpointReference() );
-        } catch ( Throwable exc ){
-                info = exc.getMessage().replace('\n', ' ');
-                status = 1;
-        }
-
-        GetActivityStatusesResponseDocument xResult;
-        try {
-                SOAPElement xResponse = invokeRemoteOperation( "BESFactoryPort/GetActivityStatuses", xActivities);
-                xResult = GetActivityStatusesResponseDocument.Factory.parse(xResponse);
-        } catch ( Throwable exc ) {
-                if ( exc instanceof RemoteException ) {
-                        throw ((RemoteException)exc);
-                }
-                throw new ServiceException( exc );
-        }
-        if (xResult == null){
-                info = "No response available";
-                status = 1;
-                return;
-        }
-	if (xResult.getGetActivityStatusesResponse().getResponseArray(0).getActivityStatus() != null)
-               	this.state = xResult.getGetActivityStatusesResponse().getResponseArray(0).getActivityStatus().getState();
-	else{
-		info = "Bad contact";
-		status = 1;
-	}
-    }
-
-    protected void refreshStatus() throws SOAPException, MalformedURLException, ServiceException, RemoteException { 
-	status = 0;
-
-        String xActivityEPR = (new DOMReader()).read( this.job.getEPR().getEndpointReference().getDomNode().getOwnerDocument() ).asXML();
-	GetActivityStatusesDocument xActivities = GetActivityStatusesDocument.Factory.newInstance();
-        try {
-		EndpointReferenceDocument xActivityIdentifier = EndpointReferenceDocument.Factory.parse( xActivityEPR );
-                xActivities.addNewGetActivityStatuses().addNewActivityIdentifier().set( xActivityIdentifier.getEndpointReference() );
-        } catch ( Throwable exc ){
-		info = exc.getMessage().replace('\n', ' ');
-                status = 1;        
-        }
-
-	GetActivityStatusesResponseDocument xResult;
-       	try {
-         	SOAPElement xResponse = invokeRemoteOperation( "BESFactoryPort/GetActivityStatuses", xActivities);
-        	xResult = GetActivityStatusesResponseDocument.Factory.parse(xResponse);
-       	} catch ( Throwable exc ) {
-       		if ( exc instanceof RemoteException ) {
-               		throw ((RemoteException)exc);
-       		}
-       		throw new ServiceException( exc );
-       	}
-
-	if (xResult == null){
-		info = "No response available";
-		status = 1;
-		return;
-	}
-        if (xResult.getGetActivityStatusesResponse().getResponseArray(0).getActivityStatus() != null)
-                this.state = xResult.getGetActivityStatusesResponse().getResponseArray(0).getActivityStatus().getState();
-        else{
-                status = 1;
-        }
-    }
-    
-    protected void jobCancel() 
-        throws SOAPException, MalformedURLException, ServiceException, RemoteException {
-
-	status = 0;
-
-        String xActivityEPR = (new DOMReader()).read( this.job.getEPR().getEndpointReference().getDomNode().getOwnerDocument() ).asXML();
-        TerminateActivitiesDocument xActivities = TerminateActivitiesDocument.Factory.newInstance();
-	try {
-        	EndpointReferenceDocument xActivityIdentifier = EndpointReferenceDocument.Factory.parse( xActivityEPR );
-                xActivities.addNewTerminateActivities().addNewActivityIdentifier().set( xActivityIdentifier.getEndpointReference() );
-      	} catch ( Throwable exc ){
-                info = exc.getMessage().replace('\n', ' ');
-                status = 1;
-	}
-
-	TerminateActivitiesResponseDocument xResult;
-	try {
-        	SOAPElement xResponse = invokeRemoteOperation( "BESFactoryPort/TerminateActivities", xActivities);
-            	xResult = TerminateActivitiesResponseDocument.Factory.parse(xResponse);
-        } catch ( Throwable exc ) {
-        	if ( exc instanceof RemoteException ) {
-                	throw ((RemoteException)exc);
+                	xActivities.addNewGetActivityStatuses().addNewActivityIdentifier().set( xActivityIdentifier.getEndpointReference() );
+        	} catch ( Throwable exc ){
+                	this.info = exc.getMessage().replace('\n', ' ');
+			return -1;
         	}
-        	throw new ServiceException( exc );
-        }
 
-        if (xResult == null){
-		info = "Not cancelled";
-                status = 1;
-	}
-        if (xResult.getTerminateActivitiesResponse().getResponseArray(0).getTerminated())
-		info = "Cancelled";
-    }
+        	GetActivityStatusesResponseDocument xResult;
+        	try {
+                	SOAPElement xResponse = invokeRemoteOperation( "BESFactoryPort/GetActivityStatuses", xActivities);
+                	xResult = GetActivityStatusesResponseDocument.Factory.parse(xResponse);
+        	} catch ( Throwable exc ) {
+                	if ( exc instanceof RemoteException ) {
+                        	throw ((RemoteException)exc);
+                	}
+                	throw new ServiceException( exc );
+        	}
+        	if (xResult == null){
+                	this.info = "No response available";
+			return -1;
+        	}
+		if (xResult.getGetActivityStatusesResponse().getResponseArray(0).getActivityStatus() != null){
+               		this.state = xResult.getGetActivityStatusesResponse().getResponseArray(0).getActivityStatus().getState();
+			this.info = state.toString().toUpperCase();
+			if (info.equals("FINISHED"))
+                		this.info = "DONE";
+               		else if (info.equals("CANCELLED"))
+                       		this.info = "DONE";
+             		else if (info.equals("RUNNING"))
+                      		this.info = "ACTIVE";
+		}
+		else{
+			this.info = "Bad contact";
+			return -1;
+		}
+		return 0;
+    	}
 
-    public synchronized void setTerminationTime(Date date) {
+    	protected int poll() throws SOAPException, MalformedURLException, ServiceException, RemoteException { 
 
-        if (this.terminationTime == null) {
-            this.terminationTime = Calendar.getInstance();
-        }
+        	String xActivityEPR = (new DOMReader()).read( this.xActivityIdentifier.getEndpointReference().getDomNode().getOwnerDocument() ).asXML();
+		GetActivityStatusesDocument xActivities = GetActivityStatusesDocument.Factory.newInstance();
+        	try {
+			EndpointReferenceDocument xActivityIdentifier = EndpointReferenceDocument.Factory.parse( xActivityEPR );
+                	xActivities.addNewGetActivityStatuses().addNewActivityIdentifier().set( xActivityIdentifier.getEndpointReference() );
+        	} catch ( Throwable exc ){
+			this.info = exc.getMessage().replace('\n', ' ');
+			return -1;
+        	}
 
-        if (date != null) {
-            this.terminationTime.setTime(date);
-        } else {
-            this.terminationTime.setTime(Calendar.getInstance().getTime());
-        }
-    }
+		GetActivityStatusesResponseDocument xResult;
+       		try {
+         		SOAPElement xResponse = invokeRemoteOperation( "BESFactoryPort/GetActivityStatuses", xActivities);
+        		xResult = GetActivityStatusesResponseDocument.Factory.parse(xResponse);
+       		} catch ( Throwable exc ) {
+       			if ( exc instanceof RemoteException ) {
+               			throw ((RemoteException)exc);
+       			}
+       			throw new ServiceException( exc );
+       		}
 
+		if (xResult == null){
+			this.info = "No response available";
+			return -1;
+		}
+        	if (xResult.getGetActivityStatusesResponse().getResponseArray(0).getActivityStatus() != null){
+                	this.state = xResult.getGetActivityStatusesResponse().getResponseArray(0).getActivityStatus().getState();
+			this.info = state.toString().toUpperCase();
+                	if (info.equals("FINISHED"))
+                 		this.info = "DONE";
+               		else if (info.equals("CANCELLED"))
+                  		this.info = "DONE";
+              		else if (info.equals("RUNNING"))
+                   		this.info = "ACTIVE";
+		}
+        	else{
+			//this.info = "";
+			return -1;
+        	}
+		return 0;
+    	}
+    
+    	protected int cancel() 
+        	throws SOAPException, MalformedURLException, ServiceException, RemoteException {
 
-    private SOAPElement invokeRemoteOperation( String pPortOperation, XmlObject pOutput ) throws Throwable {
+        	String xActivityEPR = (new DOMReader()).read( this.xActivityIdentifier.getEndpointReference().getDomNode().getOwnerDocument() ).asXML();
+        	TerminateActivitiesDocument xActivities = TerminateActivitiesDocument.Factory.newInstance();
+		try {
+        		EndpointReferenceDocument xActivityIdentifier = EndpointReferenceDocument.Factory.parse( xActivityEPR );
+                	xActivities.addNewTerminateActivities().addNewActivityIdentifier().set( xActivityIdentifier.getEndpointReference() );
+	      	} catch ( Throwable exc ){
+        	        this.info = exc.getMessage().replace('\n', ' ');
+			return -1;
+		}
 
-        Service xService = null;
-        Call xCall = null;
+		TerminateActivitiesResponseDocument xResult;
+		try {
+        		SOAPElement xResponse = invokeRemoteOperation( "BESFactoryPort/TerminateActivities", xActivities);
+            		xResult = TerminateActivitiesResponseDocument.Factory.parse(xResponse);
+        	} catch ( Throwable exc ) {
+        		if ( exc instanceof RemoteException ) {
+                		throw ((RemoteException)exc);
+        		}
+        		throw new ServiceException( exc );
+        	}
+
+       	 	if (xResult == null){
+			this.info = "Not cancelled";
+			return -1;
+		}
+        	if (xResult.getTerminateActivitiesResponse().getResponseArray(0).getTerminated())
+			this.info = "CANCELLED";
+		return 0;
+    	}
+
+    	private SOAPElement invokeRemoteOperation( String pPortOperation, XmlObject pOutput ) throws Throwable {
+
+        	Service xService = null;
+        	Call xCall = null;
             
-	xService = ServiceFactory.newInstance().createService(getClass().getClassLoader().getResource(
-                "org/icenigrid/gridsam/resource/schema/wsdl/bes.wsdl"),
-        new QName(GridSAMSupport.BES_NAMESPACE_STRING, "BasicExecutionService"));
+		xService = ServiceFactory.newInstance().createService(getClass().getClassLoader().getResource(
+                	"org/icenigrid/gridsam/resource/schema/wsdl/bes.wsdl"),
+        	new QName(GridSAMSupport.BES_NAMESPACE_STRING, "BasicExecutionService"));
 
-        xCall = xService.createCall( new QName( GridSAMSupport.BES_FACTORY_NAMESPACE_STRING, pPortOperation.split("/")[0] ), pPortOperation.split("/")[1] );
-        xCall.setProperty( Call.SOAPACTION_USE_PROPERTY, Boolean.TRUE );
-        xCall.setProperty( Call.SOAPACTION_URI_PROPERTY, GridSAMSupport.BES_FACTORY_NAMESPACE_STRING + "/" + pPortOperation );
+        	xCall = xService.createCall( new QName( GridSAMSupport.BES_FACTORY_NAMESPACE_STRING, pPortOperation.split("/")[0] ), pPortOperation.split("/")[1] );
+        	xCall.setProperty( Call.SOAPACTION_USE_PROPERTY, Boolean.TRUE );
+        	xCall.setProperty( Call.SOAPACTION_URI_PROPERTY, GridSAMSupport.BES_FACTORY_NAMESPACE_STRING + "/" + pPortOperation );
 
-        xCall.setTargetEndpointAddress(this.getContact());
+        	xCall.setTargetEndpointAddress(this.contact);
 
-        SOAPElement xRequest = MessageFactory.newInstance().createMessage().getSOAPBody().addDocument((Document)pOutput.newDomNode());
+        	SOAPElement xRequest = MessageFactory.newInstance().createMessage().getSOAPBody().addDocument((Document)pOutput.newDomNode());
 
-        Object xRet = xCall.invoke(new Object[] { xRequest });
+        	Object xRet = xCall.invoke(new Object[] { xRequest });
 
-        SOAPElement xResponse = null;
-        if (xRet instanceof List) {
-            xResponse = (SOAPElement) ((List) xRet).get(0);
-        }
+        	SOAPElement xResponse = null;
+        	if (xRet instanceof List) {
+           		xResponse = (SOAPElement) ((List) xRet).get(0);
+        	}
  
-        return xResponse;
+        	return xResponse;
     }
 }
