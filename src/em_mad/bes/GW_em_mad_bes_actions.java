@@ -43,18 +43,14 @@ import org.icenigrid.schema.service.gridsam.JobIdentifierDocument;
 import org.w3c.dom.Document;
 import org.w3.x2005.x08.addressing.EndpointReferenceDocument;
 import org.w3.x2005.x08.addressing.EndpointReferenceType;
-
+import org.icenigrid.schema.bes.factory.y2006.m08.ActivityStateEnumeration.Enum;
 
 class ServiceBES extends Thread {
 	private String action;
 	private Integer jid;
 	private String contact;
 	private String jsdlFile;
-	private org.icenigrid.schema.bes.factory.y2006.m08.ActivityStateEnumeration.Enum state;
-
-	int status = 0;
 	String info;
-
         private EndpointReferenceDocument xActivityIdentifier;
 
         public ServiceBES(Integer jid, String contact, String JSDL) {
@@ -113,6 +109,7 @@ class ServiceBES extends Thread {
 
 		String serviceURL;
 		String jobID;
+        	Enum state;
 
 		serviceURL = contact.substring(0,contact.indexOf("/urn:gridsam:"));
 		jobID = contact.substring(contact.indexOf("urn:gridsam:"),contact.length());
@@ -161,7 +158,7 @@ class ServiceBES extends Thread {
 			return -1;
         	}
 		if (xResult.getGetActivityStatusesResponse().getResponseArray(0).getActivityStatus() != null){
-               		this.state = xResult.getGetActivityStatusesResponse().getResponseArray(0).getActivityStatus().getState();
+               		state = xResult.getGetActivityStatusesResponse().getResponseArray(0).getActivityStatus().getState();
 			this.info = state.toString().toUpperCase();
 			if (info.equals("FINISHED"))
                 		this.info = "DONE";
@@ -178,6 +175,8 @@ class ServiceBES extends Thread {
     	}
 
     	protected int poll() throws SOAPException, MalformedURLException, ServiceException, RemoteException { 
+
+        	Enum state;
 
         	String xActivityEPR = (new DOMReader()).read( this.xActivityIdentifier.getEndpointReference().getDomNode().getOwnerDocument() ).asXML();
 		GetActivityStatusesDocument xActivities = GetActivityStatusesDocument.Factory.newInstance();
@@ -205,7 +204,7 @@ class ServiceBES extends Thread {
 			return -1;
 		}
         	if (xResult.getGetActivityStatusesResponse().getResponseArray(0).getActivityStatus() != null){
-                	this.state = xResult.getGetActivityStatusesResponse().getResponseArray(0).getActivityStatus().getState();
+                	state = xResult.getGetActivityStatusesResponse().getResponseArray(0).getActivityStatus().getState();
 			this.info = state.toString().toUpperCase();
                 	if (info.equals("FINISHED"))
                  		this.info = "DONE";
