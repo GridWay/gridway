@@ -9,10 +9,10 @@ gw_em_mad_bes.jar: GW_em_mad_bes.java GW_em_mad_bes_actions.java
 	jar cf gw_em_mad_bes.jar -C package .
 	@rm -rf package
 
-install: gw_em_mad_bes.jar
-
 clean: 
 	@rm gw_em_mad_bes.jar
+
+install: gw_em_mad_bes.jar
 
 ifdef GW_LOCATION
 	@cp gw_em_mad_bes.jar $(GW_LOCATION)/lib/
