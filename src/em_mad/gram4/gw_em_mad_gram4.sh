@@ -13,7 +13,7 @@ mad_debug
 check_proxy
 
 if [ -z "${GLOBUS_TCP_PORT_RANGE}" ]; then
-    exec nice -n $PRIORITY java -DGLOBUS_LOCATION=$GLOBUS_LOCATION -DX509_USER_PROXY=$X509_USER_PROXY -Djava.endorsed.dirs=$GLOBUS_LOCATION/endorsed -classpath $CLASSPATH:$GW_LOCATION/lib/gw_em_mad_mds4.jar Gw_em_mad_mds4 $*
+    exec nice -n $PRIORITY java -DGLOBUS_LOCATION=$GLOBUS_LOCATION -DX509_USER_PROXY=$X509_USER_PROXY -Djava.endorsed.dirs=$GLOBUS_LOCATION/endorsed -classpath $CLASSPATH:$GW_LOCATION/lib/gw_em_mad_gram4.jar Gw_em_mad_gram4 $*
 else
-    exec nice -n $PRIORITY java -DGLOBUS_LOCATION=$GLOBUS_LOCATION -DX509_USER_PROXY=$X509_USER_PROXY -Djava.endorsed.dirs=$GLOBUS_LOCATION/endorsed -DGLOBUS_TCP_PORT_RANGE=$GLOBUS_TCP_PORT_RANGE -classpath $CLASSPATH:$GW_LOCATION/lib/gw_em_mad_mds4.jar Gw_em_mad_mds4 $*
+    exec nice -n $PRIORITY java -DGLOBUS_LOCATION=$GLOBUS_LOCATION -DX509_USER_PROXY=$X509_USER_PROXY -Djava.endorsed.dirs=$GLOBUS_LOCATION/endorsed -DGLOBUS_TCP_PORT_RANGE=$GLOBUS_TCP_PORT_RANGE -classpath $CLASSPATH:$GW_LOCATION/lib/gw_em_mad_gram4.jar Gw_em_mad_gram4 $*
 fi
