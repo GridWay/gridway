@@ -80,7 +80,7 @@ public class QueryClient
 	    String expression = "/*/*/*[local-name()=\"MemberServiceEPR\"]/*[local-name()=\"Address\" "+
 							"and substring-after(text(),\"/wsrf/services/\")=\"DefaultIndexService\"]";		
 		String contactString;
-		String result = "FAILED";
+		String result = "FAILURE";
 		
 		contactString = "https://" + serverName + ":" + portNumber + "/wsrf/services/DefaultIndexService";
 		
@@ -92,7 +92,7 @@ public class QueryClient
 		}
 		catch(MalformedURIException mfue)
 		{
-			result = "FAILED Malformed URI Exception. Error message:" + mfue.getMessage().replace('\n', ' ');
+			result = "FAILURE Malformed URI Exception. Error message:" + mfue.getMessage().replace('\n', ' ');
 			return result;			
 		}
 	
@@ -122,7 +122,7 @@ public class QueryClient
 		} 
 		catch(Exception e) 
 		{
-			result = "FAILED " + e.getMessage().replace('\n', ' ');
+			result = "FAILURE " + e.getMessage().replace('\n', ' ');
 			return result;
 		}
 		
@@ -147,7 +147,7 @@ public class QueryClient
 	    String expression = "/*/*/*[local-name()=\"MemberServiceEPR\"]/*[local-name()=\"Address\" and" + 		
 					  " substring-after(text(),\"/wsrf/services/\")=\"ManagedJobFactoryService\"]/../..";	
 		String contactString ;
-		String result = "FAILED";
+		String result = "FAILURE";
 		
 		contactString = "https://" + serverName + ":" + portNumber + "/wsrf/services/DefaultIndexService";
 		
@@ -159,7 +159,7 @@ public class QueryClient
 		}
 		catch(MalformedURIException mfue)
 		{
-			result = "FAILED Malformed URI Exception. Error message:" + mfue.getMessage().replace('\n', ' ');
+			result = "FAILURE Malformed URI Exception. Error message:" + mfue.getMessage().replace('\n', ' ');
 			return result;			
 		}				
 		
@@ -189,7 +189,7 @@ public class QueryClient
 		} 
 		catch(Exception e) 
 		{
-			result = "FAILED " + e.getMessage().replace('\n', ' ');
+			result = "FAILURE " + e.getMessage().replace('\n', ' ');
 			return result;
 		}
 		
