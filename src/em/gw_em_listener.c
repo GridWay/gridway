@@ -28,47 +28,43 @@
 
 void gw_em_listener(void *arg)
 {
-    fd_set       in_pipes;
-    int          i,j;
-    int *        job_id;    
-    int          greater, rc, rcm;
-    char         c;
+    fd_set in_pipes;
+    int i,j;
+    int *job_id;
+    int greater, rc, rcm;
+    char c;
  
-    char         info[GW_EM_MAX_INFO];
-    char         s_job_id[GW_EM_MAX_JOB_ID];
-    char         result[GW_EM_MAX_RESULT];
-    char         action[GW_EM_MAX_ACTION];
-    char         str[GW_EM_MAX_STRING];
+    char info[GW_EM_MAX_INFO];
+    char s_job_id[GW_EM_MAX_JOB_ID];
+    char result[GW_EM_MAX_RESULT];
+    char action[GW_EM_MAX_ACTION];
+    char str[GW_EM_MAX_STRING];
  
-    int          fd;
-    gw_job_t *   job;
-    time_t       now;
+    int fd;
+    gw_job_t *job;
+    time_t now;
 
-    char         contact_file[PATH_MAX];
-    FILE         *file;
+    char contact_file[PATH_MAX];
+    FILE *file;
 
-    gw_em_mad_t * em_mad;
+    gw_em_mad_t *em_mad;
  
     char *ptmp;
 
-    int  *         fds;    
-    int            num_fds;
-    gw_em_mad_t ** em_mads;
-    
+    int *fds;
+    int num_fds;
+    gw_em_mad_t **em_mads;
+
     pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL); 
     pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
 
-    fds     = (int *) malloc(sizeof(int)*gw_conf.number_of_users*GW_MAX_MADS);
-    
+    fds = (int *) malloc(sizeof(int)*gw_conf.number_of_users*GW_MAX_MADS);
+
     em_mads = (gw_em_mad_t **) malloc(sizeof(gw_em_mad_t *) * 
                                       gw_conf.number_of_users * GW_MAX_MADS);
     while (1)
     {
-        greater = gw_user_pool_set_em_pipes (&in_pipes,
-                                             fds, 
-                                             &num_fds, 
-                                             em_mads, 
-                                             gw_em.um_em_pipe_r);
+        greater = gw_user_pool_set_em_pipes(&in_pipes, fds, &num_fds, em_mads, gw_em.um_em_pipe_r);
                                                      
         rc = select( greater+1, &in_pipes, NULL, NULL, NULL);
 
@@ -76,7 +72,7 @@ void gw_em_listener(void *arg)
             continue;
         
         for (i=0; i<num_fds; i++)
-        {   
+        {
             fd = fds[i];
             
             if ( FD_ISSET(fd, &in_pipes) )
@@ -99,7 +95,7 @@ void gw_em_listener(void *arg)
                 do
                 {
                     rc = read(fd, (void *) &c, sizeof(char));
-                    str[j++] = c;    
+                    str[j++] = c;
                 }
                 while ((rc > 0) && (c != '\n') && (j < (GW_EM_MAX_STRING-1)));
 
@@ -108,21 +104,21 @@ void gw_em_listener(void *arg)
                 if (rc <= 0)
                 {
                     gw_log_print("EM",'W',"Error reading MAD (%s) message\n",
-                            em_mads[i]->name);
+                                 em_mads[i]->name);
                     
                     rcm = gw_em_mad_reload (em_mads[i]);
                     
                     if ( rcm == 0 )
                     {
                         gw_log_print("EM",'I',"MAD (%s) successfully reloaded\n",
-                            em_mads[i]->name);
+                                     em_mads[i]->name);
                         
                         gw_job_pool_em_recover(em_mads[i]);
                     }
                     else
                     {
                         gw_log_print("EM",'E',"Error reloading MAD (%s)\n",
-                            em_mads[i]->name);
+                                     em_mads[i]->name);
                         
                         em_mads[i]->mad_em_pipe = -1;
                     }
@@ -133,15 +129,12 @@ void gw_em_listener(void *arg)
                        GW2STR(GW_EM_MAX_JOB_ID) "s %" 
                        GW2STR(GW_EM_MAX_RESULT) "s %" 
                        GW2STR(GW_EM_MAX_INFO) "[^\n]", 
-                       action, 
-                       s_job_id, 
-                       result, 
-                       info);
+                       action, s_job_id, result, info);
 
 #ifdef GWEMDEBUG
                 gw_log_print("EM",'D',"MAD message received:\"%s %s %s %s\".\n",
                              action, s_job_id, result, info);
-#endif                      
+#endif
                 if (s_job_id[0] == '-')
                     continue;
 
@@ -159,11 +152,11 @@ void gw_em_listener(void *arg)
                         
                     continue;
                 }
-                if ((job->job_state != GW_JOB_STATE_PRE_WRAPPER)
-                        && (job->job_state != GW_JOB_STATE_WRAPPER)
-                        && (job->job_state != GW_JOB_STATE_MIGR_CANCEL)
-                        && (job->job_state != GW_JOB_STATE_STOP_CANCEL)
-                        && (job->job_state != GW_JOB_STATE_KILL_CANCEL))
+                if (job->job_state != GW_JOB_STATE_PRE_WRAPPER
+                    && job->job_state != GW_JOB_STATE_WRAPPER
+                    && job->job_state != GW_JOB_STATE_MIGR_CANCEL
+                    && job->job_state != GW_JOB_STATE_STOP_CANCEL
+                    && job->job_state != GW_JOB_STATE_KILL_CANCEL)
                 {
                     gw_log_print("EM",'W',"MAD message for job %i but not in an execution state.\n",
                             *job_id);
@@ -175,7 +168,7 @@ void gw_em_listener(void *arg)
                 else if ( job->em_state == GW_EM_STATE_HARD_KILL )
                 {
                     gw_log_print("EM",'W',"MAD message for job %i but it is being killed (hard).\n",
-                            *job_id);
+                                 *job_id);
 
                     free(job_id);
                     pthread_mutex_unlock(&(job->mutex));
@@ -187,21 +180,18 @@ void gw_em_listener(void *arg)
                     if (strcmp(result, "FAILURE") == 0)
                     {
                         gw_job_print(job, "EM",'E',"Job submission failed: %s\n",
-                                info);
-                                    
+                                     info);
                         gw_log_print("EM",'E',"Submission of job %d failed: %s.\n",
-                                job->id, info);
+                                     job->id, info);
 
                         gw_am_trigger(&(gw_em.am), "GW_EM_STATE_FAILED",
-                                (void *) job_id); 
+                                      (void *) job_id); 
                     }
                     else /* Save persistent job contact */
                     {
-                        snprintf(contact_file, 
-                                 PATH_MAX-1, 
+                        snprintf(contact_file, PATH_MAX-1, 
                                  "%s/" GW_VAR_DIR "/%i/job.contact",
-                                 gw_conf.gw_location, 
-                                 job->id);
+                                 gw_conf.gw_location, job->id);
                                  
                         file = fopen(contact_file, "w");
                         
@@ -212,20 +202,34 @@ void gw_em_listener(void *arg)
                         }
 
                         gw_am_trigger(&(gw_em.am), "GW_EM_STATE_PENDING",
-                                    (void *) job_id);
+                                      (void *) job_id);
                     }
-                }                
+                }
                 else if (strcmp(action, "CANCEL") == 0)
                 {
-                    if (strcmp(result, "FAILURE") == 0)
+                    if (strcmp(result, "SUCCESS") == 0)
                     {
-                        gw_job_print(job, "EM",'E',"Job cancel failed (%s), assuming the job is done.\n",info);
-                        gw_log_print("EM",'E',"Cancel of job %d failed: %s.\n",job->id, info);
+                        gw_job_print(job, "EM",'I',"Job cancel succeeded (%s).\n", info);
+                        gw_log_print("EM",'I',"Cancel of job %i succeeded (%s).\n", *job_id, info);
 
-                        gw_am_trigger(&(gw_em.am), "GW_EM_STATE_DONE",(void *) job_id);
+                        // Will wait for state change to DONE or FAILED
+                        //gw_am_trigger(&(gw_em.am), "GW_EM_STATE_DONE",
+                        //        (void *) job_id);
                     }
                     else
-                        free(job_id);
+                    {
+                        gw_job_print(job, "EM",'E',"Job cancel failed (%s).\n",info);
+                        gw_log_print("EM",'E',"Cancel of job %d failed: %s.\n",job->id, info);
+
+                        if (job->history->tries >= job->template.number_of_retries)
+                        {
+                            gw_log_print("EM",'I',"Max number of cancel retries for job %i reached, considering it done\n", *job_id);
+                            gw_job_print(job, "EM",'I',"Max number of cancel retries reached, considering it done\n");
+
+                            job->history->tries = 0;
+                            gw_am_trigger(&(gw_em.am),"GW_EM_STATE_DONE", (void *) job_id);
+                        }
+                    }
                 }
                 else if (strcmp(action, "POLL") == 0)
                 {
@@ -240,15 +244,15 @@ void gw_em_listener(void *arg)
 
                         if (strcmp(info, "PENDING") == 0)
                             gw_am_trigger(&(gw_em.am), "GW_EM_STATE_PENDING",
-                                    (void *) job_id); 
+                                          (void *) job_id); 
                                         
                         else if (strcmp(info, "SUSPENDED") == 0)
                             gw_am_trigger(&(gw_em.am), "GW_EM_STATE_SUSPENDED",
-                                    (void *) job_id);
+                                          (void *) job_id);
                                         
                         else if (strcmp(info, "ACTIVE") == 0)
                             gw_am_trigger(&(gw_em.am),"GW_EM_STATE_ACTIVE",
-                                    (void *) job_id);
+                                          (void *) job_id);
                                 
                         else if (strstr(info, "DONE") != NULL)
                         {
@@ -257,12 +261,12 @@ void gw_em_listener(void *arg)
                             if ((ptmp != NULL) && (strlen(ptmp+5) > 0))/*No-wrapper mode*/
                                 job->exit_code=atoi(ptmp+5);
 
-                             gw_am_trigger(&(gw_em.am), "GW_EM_STATE_DONE",
-                                        (void *) job_id);
-                        }                
+                            gw_am_trigger(&(gw_em.am), "GW_EM_STATE_DONE", 
+                                          (void *) job_id);
+                        }
                         else if (strcmp(info, "FAILED") == 0)
                             gw_am_trigger(&(gw_em.am), "GW_EM_STATE_FAILED",
-                                    (void *) job_id);
+                                          (void *) job_id);
                     } 
                     else 
                     {
@@ -278,13 +282,14 @@ void gw_em_listener(void *arg)
                         }
                         else
                         {
+                            now = time(NULL);
                             job->next_poll_time = now + gw_conf.poll_interval*job->history->failed_polls
-                                    + gw_rand(gw_conf.poll_interval*(job->history->failed_polls+1));
+                                    + gw_rand(gw_conf.poll_interval*job->history->failed_polls);
 
                             gw_job_print(job, "EM",'E',"Job poll failed (%s), will poll again in %d seconds.\n",
-                                    info, job->next_poll_time - now);
+                                         info, job->next_poll_time - now);
 
-                            free(job_id);                     
+                            free(job_id);
                         }
                     }
                 }
@@ -294,13 +299,13 @@ void gw_em_listener(void *arg)
                     {
                         if (strcmp(info, "PENDING") == 0)
                             gw_am_trigger(&(gw_em.am), "GW_EM_STATE_PENDING",
-                                    (void *) job_id); 
+                                          (void *) job_id); 
                         else if (strcmp(info, "SUSPENDED") == 0)
                             gw_am_trigger(&(gw_em.am), "GW_EM_STATE_SUSPENDED",
-                                    (void *) job_id);
+                                          (void *) job_id);
                         else if (strcmp(info, "ACTIVE") == 0)
                             gw_am_trigger(&(gw_em.am),"GW_EM_STATE_ACTIVE",
-                                    (void *) job_id);
+                                          (void *) job_id);
                         else if (strstr(info, "DONE") != NULL)
                         {
                             ptmp = strstr(info,"DONE:");
@@ -309,18 +314,17 @@ void gw_em_listener(void *arg)
                                 job->exit_code = atoi(ptmp+5);
 
                             gw_am_trigger(&(gw_em.am), "GW_EM_STATE_DONE",
-                                    (void *) job_id);
-                        }            
+                                          (void *) job_id);
+                        }
                         else if (strcmp(info, "FAILED") == 0)
                             gw_am_trigger(&(gw_em.am), "GW_EM_STATE_FAILED",
-                                    (void *) job_id);
+                                          (void *) job_id);
                     } 
                     else 
                     {
                         gw_job_print(job,"EM",'E',"Job recover failed (%s), assuming the job is done.\n", info);
-                        
                         gw_log_print("EM",'E',"Recover of job %i failed.\n", *job_id);
-                                                
+
                         gw_am_trigger(&(gw_em.am), "GW_EM_STATE_DONE", (void *) job_id);
                     }
                 }
@@ -330,16 +334,16 @@ void gw_em_listener(void *arg)
                     {
                         if (strcmp(info, "PENDING") == 0)
                             gw_am_trigger(&(gw_em.am),"GW_EM_STATE_PENDING",
-                                    (void *) job_id);
-                                    
+                                          (void *) job_id);
+
                         else if (strcmp(info, "SUSPENDED") == 0)
                             gw_am_trigger(&(gw_em.am),"GW_EM_STATE_SUSPENDED",
-                                    (void *) job_id);
-                                
+                                          (void *) job_id);
+
                         else if (strcmp(info, "ACTIVE") == 0)
                             gw_am_trigger(&(gw_em.am),"GW_EM_STATE_ACTIVE", 
-                                    (void *) job_id);
-                                    
+                                          (void *) job_id);
+
                         else if (strstr(info, "DONE") != NULL)
                         {
                             ptmp = strstr(info,"DONE:");
@@ -348,34 +352,31 @@ void gw_em_listener(void *arg)
                                 job->exit_code=atoi(ptmp+5);
 
                             gw_am_trigger(&(gw_em.am), "GW_EM_STATE_DONE",
-                                    (void *) job_id);
-                        }    
-                                    
+                                          (void *) job_id);
+                        }
                         else if (strcmp(info, "FAILED") == 0)/* user cancelled */
                         {
                             gw_job_print(job, "EM",'I',"Job cancelled (%s).\n", info);
-
                             gw_log_print("EM",'I',"Job %i cancelled (%s).\n",*job_id, info);
                                     
                             gw_am_trigger(&(gw_em.am), "GW_EM_STATE_DONE",
-                                    (void *) job_id);
+                                          (void *) job_id);
                         }
                     }
                     else
                     {
                         gw_job_print(job, "EM",'E',"Job callback failed (%s).\n", info);
-
                         gw_log_print("EM",'E',"Callback of job %i failed: %s.\n",
                                 *job_id, info);
                 
-                        if ( (job->job_state == GW_JOB_STATE_MIGR_CANCEL)||
-                                (job->job_state == GW_JOB_STATE_STOP_CANCEL)||
-                                (job->job_state == GW_JOB_STATE_KILL_CANCEL))
+                        if (job->job_state == GW_JOB_STATE_MIGR_CANCEL
+                            || job->job_state == GW_JOB_STATE_STOP_CANCEL
+                            || job->job_state == GW_JOB_STATE_KILL_CANCEL)
                             gw_am_trigger(&(gw_em.am), "GW_EM_STATE_DONE",
-                                    (void *) job_id);
+                                          (void *) job_id);
                         else
                             gw_am_trigger(&(gw_em.am), "GW_EM_STATE_FAILED",
-                                    (void *) job_id);
+                                          (void *) job_id);
                     }
                 }
                 

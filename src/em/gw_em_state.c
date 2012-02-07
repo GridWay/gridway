@@ -41,14 +41,14 @@ void gw_em_pending(void *_job_id)
        
     if ( _job_id != NULL )
     {
-    	job_id = *( (int *) _job_id );    	
-    	job    = gw_job_pool_get(job_id, GW_TRUE);
-    	
-    	if ( job == NULL )
-    		return;
+        job_id = *( (int *) _job_id );
+        job    = gw_job_pool_get(job_id, GW_TRUE);
+ 
+        if ( job == NULL )
+            return;
     }
     else
-    	return;
+        return;
 
     /* ------------------------------------------------ */
         
@@ -59,16 +59,16 @@ void gw_em_pending(void *_job_id)
     /* ----------------------------------------------- */
     
     if (((job->job_state == GW_JOB_STATE_MIGR_CANCEL) ||
-	     (job->job_state == GW_JOB_STATE_STOP_CANCEL) ||
-	     (job->job_state == GW_JOB_STATE_KILL_CANCEL) ) &&
-	     (!(issubmitted (current_em_state))))
+            (job->job_state == GW_JOB_STATE_STOP_CANCEL) ||
+            (job->job_state == GW_JOB_STATE_KILL_CANCEL) ) &&
+            (!(issubmitted (current_em_state))))
         gw_am_trigger(&(gw_em.am), "GW_EM_CANCEL", _job_id); 
     else
-      	free(_job_id);
-      	    
+        free(_job_id);
+ 
     if ( current_em_state == GW_EM_STATE_PENDING )
     {
-    	gw_job_print (job,"EM",'I',"Execution state is PENDING.\n");
+        gw_job_print (job,"EM",'I',"Execution state is PENDING.\n");
         pthread_mutex_unlock(&(job->mutex));
         return;
     }
@@ -78,7 +78,7 @@ void gw_em_pending(void *_job_id)
     /* ------------------------------------------------ */
     
     gw_job_print (job,"EM",'I',"New execution state is PENDING.\n");
-          	
+ 
     pthread_mutex_unlock(&(job->mutex));    
 }
 
@@ -94,14 +94,14 @@ void gw_em_active(void *_job_id)
 
     if ( _job_id != NULL )
     {
-    	job_id = *( (int *) _job_id );
-    	job    = gw_job_pool_get(job_id, GW_TRUE);
-    	
-    	if ( job == NULL )
-    		return;
+        job_id = *( (int *) _job_id );
+        job    = gw_job_pool_get(job_id, GW_TRUE);
+
+        if ( job == NULL )
+            return;
     }
     else
-    	return;
+        return;
 
     /* ------------------------------------------------ */
 
@@ -112,16 +112,16 @@ void gw_em_active(void *_job_id)
     /* ----------------------------------------------- */
     
     if (((job->job_state == GW_JOB_STATE_MIGR_CANCEL) ||
-	     (job->job_state == GW_JOB_STATE_STOP_CANCEL) ||
-	     (job->job_state == GW_JOB_STATE_KILL_CANCEL) ) &&
-	     (!(issubmitted (current_em_state))))
+            (job->job_state == GW_JOB_STATE_STOP_CANCEL) ||
+            (job->job_state == GW_JOB_STATE_KILL_CANCEL) ) &&
+            (!(issubmitted (current_em_state))))
         gw_am_trigger(&(gw_em.am), "GW_EM_CANCEL", _job_id); 
     else
-      	free(_job_id);
-      	    
+        free(_job_id);
+ 
     if ( current_em_state == GW_EM_STATE_ACTIVE )
     {
-    	gw_job_print (job,"EM",'I',"Execution state is ACTIVE.\n");
+        gw_job_print (job,"EM",'I',"Execution state is ACTIVE.\n");
         pthread_mutex_unlock(&(job->mutex));      
         return;
     }        
@@ -133,8 +133,8 @@ void gw_em_active(void *_job_id)
     job->em_state = GW_EM_STATE_ACTIVE;
     
     if (job->last_checkpoint_time == 0)
-    	job->last_checkpoint_time = time(NULL);
-    	
+        job->last_checkpoint_time = time(NULL);
+ 
     /* ------------------------------------------------ */
         
     gw_job_print (job,"EM",'I',"New execution state is ACTIVE.\n");
@@ -154,14 +154,14 @@ void gw_em_suspended(void *_job_id)
 
     if ( _job_id != NULL )
     {
-    	job_id = *( (int *) _job_id );
-    	job    = gw_job_pool_get(job_id, GW_TRUE);
-    	
-    	if ( job == NULL )
-    		return;
+        job_id = *( (int *) _job_id );
+        job    = gw_job_pool_get(job_id, GW_TRUE);
+ 
+        if ( job == NULL )
+            return;
     }
     else
-    	return;
+        return;
     
     /* ------------------------------------------------ */
     
@@ -172,13 +172,13 @@ void gw_em_suspended(void *_job_id)
     /* ----------------------------------------------- */
     
     if (((job->job_state == GW_JOB_STATE_MIGR_CANCEL) ||
-	     (job->job_state == GW_JOB_STATE_STOP_CANCEL) ||
-	     (job->job_state == GW_JOB_STATE_KILL_CANCEL) ) &&
-	     (!(issubmitted (current_em_state))))
+            (job->job_state == GW_JOB_STATE_STOP_CANCEL) ||
+            (job->job_state == GW_JOB_STATE_KILL_CANCEL) ) &&
+            (!(issubmitted (current_em_state))))
         gw_am_trigger(&(gw_em.am), "GW_EM_CANCEL", _job_id); 
     else
-      	free(_job_id);
-      	    
+        free(_job_id);
+
     if ( current_em_state == GW_EM_STATE_SUSPENDED )
     {
         gw_job_print (job,"EM",'I',"Execution state is SUSPENDED.\n");
@@ -215,15 +215,15 @@ void gw_em_done(void *_job_id)
 
     if ( _job_id != NULL )
     {
-    	job_id = *( (int *) _job_id );
-    	    	
-    	job    = gw_job_pool_get(job_id, GW_TRUE);
-    	
-    	if ( job == NULL )
-    		return;
+        job_id = *( (int *) _job_id );
+
+        job    = gw_job_pool_get(job_id, GW_TRUE);
+
+        if ( job == NULL )
+            return;
     }
     else
-    	return;
+        return;
    
     /* ------------------------------------------------ */
         
@@ -283,29 +283,28 @@ void gw_em_failed(void *_job_id)
 
     if ( _job_id != NULL )
     {
-    	job_id = *( (int *) _job_id );
-    	    	
-    	job    = gw_job_pool_get(job_id, GW_TRUE);
-    	
-    	if ( job == NULL )
-    		return;
+        job_id = *( (int *) _job_id );
+
+        job    = gw_job_pool_get(job_id, GW_TRUE);
+
+        if ( job == NULL )
+            return;
     }
     else
-    	return;
+        return;
     
-        
     current_em_state = job->em_state;
 
     /* -------------------------------------------------------------------- */
     
-    if (  (current_em_state == GW_EM_STATE_SUSPENDED)
-        ||(current_em_state == GW_EM_STATE_PENDING) )
+    if (current_em_state == GW_EM_STATE_SUSPENDED
+            || current_em_state == GW_EM_STATE_PENDING)
         job->history->stats[SUSPENSION_TIME] += time(NULL) 
-                                    - job->history->stats[LAST_SUSPENSION_TIME];
-        
-    if ( current_em_state == GW_EM_STATE_ACTIVE )
+                - job->history->stats[LAST_SUSPENSION_TIME];
+ 
+    if (current_em_state == GW_EM_STATE_ACTIVE)
         job->history->stats[ACTIVE_TIME] += time(NULL)
-                                        - job->history->stats[LAST_ACTIVE_TIME];
+                - job->history->stats[LAST_ACTIVE_TIME];
 
     job->em_state = GW_EM_STATE_FAILED;
     
@@ -321,16 +320,16 @@ void gw_em_failed(void *_job_id)
     if ( tries >= num_retries )
     {   
         job->history->counter = -1;
-            	             
+ 
         gw_job_print(job,"EM",'E',"Job failed, no retries left.\n");
         gw_log_print("EM",'E',"Job %i failed, no retries left.\n", job_id);
                 
- 		gw_am_trigger(gw_em.dm_am, "GW_DM_WRAPPER_FAILED", _job_id);
+        gw_am_trigger(gw_em.dm_am, "GW_DM_WRAPPER_FAILED", _job_id);
     }
     else
     {       
-    	job->history->counter = tries;
-    					    	
+        job->history->counter = tries;
+
         gw_job_print (job,"EM",'W',"Retrying execution in ~%i seconds, (%i retries left).\n", 
             tries * GW_EM_TIMER_PERIOD,
             num_retries - tries);
