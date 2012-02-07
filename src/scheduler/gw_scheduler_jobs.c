@@ -287,16 +287,16 @@ static int gw_scheduler_filter_select_queues(gw_scheduler_t * sched,
         }
         else if ((job->reason==GW_REASON_USER_REQUESTED)||(job->reason == GW_REASON_SUSPENSION_TIME))
         {
-   	        if ( hlist == NULL )
+            if ( hlist == NULL )
     	    {
     	        rc = gw_client_job_history(jid, &hlist, &hnum);	
     	            
     	        if ( rc != GW_RC_SUCCESS )
     	        {
-    	        	hosts[i] = -1;
+    	            hosts[i] = -1;
     	            continue;
     	        }
-   	    	}
+            }
    	    	
     	    found = isinhistory(hid, hlist, hnum);
     	    	
@@ -311,34 +311,34 @@ static int gw_scheduler_filter_select_queues(gw_scheduler_t * sched,
         }
         else if ( job->reason == GW_REASON_RESCHEDULING_TIMEOUT )
         {
-   	        if ( hlist == NULL )
+            if ( hlist == NULL )
     	    {
     	        rc = gw_client_job_history(jid, &hlist, &hnum);	
     	            
     	        if ( rc != GW_RC_SUCCESS )
     	        {
-    	        	hosts[i] = -1;
+                    hosts[i] = -1;
     	            continue;
     	        }
-   	    	}
+            }
 
-    	    found = isinhistory(hid, hlist, hnum);
-    	    	
-    	    if (found == GW_TRUE) 
-    	    {
-    	    	hosts[i] = -1;
+            found = isinhistory(hid, hlist, hnum);
+        
+            if (found == GW_TRUE) 
+            {
+                hosts[i] = -1;
 #ifdef GWSCHEDDEBUG
                 gw_scheduler_print('D',"Host %i will not be used for job %i (HISTORY_RESCHED)\n",
                     hid, jid);
-#endif    	    	
-    	    }   	    	
-        	else /* 3. (DISCOVER) Host with low rank    */
-        	{
+#endif       
+            }
+            else /* 3. (DISCOVER) Host with low rank    */
+            {
                 /* -------------------------------------------------- */
                 /* ! THIS HAS TO BE SCALED, ALSO THE MIGRATION      ! */
                 /* ! OVERHEAD MUST BE CONSIDERED.                   ! */
                 /* -------------------------------------------------- */
-        		
+       
                 found = GW_FALSE;
                 rank  = hlist[0].rank;
                        
@@ -346,20 +346,20 @@ static int gw_scheduler_filter_select_queues(gw_scheduler_t * sched,
                 {               
                     if (match[i].rank[j] > rank)
                     {
-                    	found = GW_TRUE;
-                    	break;
+                        found = GW_TRUE;
+                        break;
                     }
                 }
                 
                 if (found == GW_FALSE)
                 {
-                    hosts[i] = -1;        		
+                    hosts[i] = -1;
 #ifdef GWSCHEDDEBUG
                     gw_scheduler_print('D',"Host %i will not be used for job %i (RANK)\n",
                         hid, jid);
 #endif                    
                 }
-            }        	
+            }
         }
         else if (match[i].fixed_priority == 0 ) /* 4. (ADMIN) Priority policy          */
         {
@@ -389,26 +389,26 @@ static int gw_scheduler_filter_select_queues(gw_scheduler_t * sched,
         
             for (j=1;j<match[i].number_of_queues;j++)
             {
-            	rank = match[i].rank[j];
-            	fnc  = match[i].slots[j];
-            	
-            	if ( rank > mrank )
-            	{
-            	    mrank = match[i].rank[j];
-            	    qnum  = j;
-            	}
-            	else if (rank == mrank)
-            	{
-            	    if ( fnc > mfnc )
-            	    {
-            	    	mfnc = fnc;
-            	    	qnum = j;
-            	    }  
-            	}
+                rank = match[i].rank[j];
+                fnc  = match[i].slots[j];
+ 
+                if ( rank > mrank )
+                {
+                    mrank = match[i].rank[j];
+                    qnum  = j;
+                }
+                else if (rank == mrank)
+                {
+                    if ( fnc > mfnc )
+                    {
+                        mfnc = fnc;
+                        qnum = j;
+                    }  
+                }
             }
-        	
-        	hosts[i] = qnum;
-           	queues++;        	
+ 
+            hosts[i] = qnum;
+            queues++;
         }
     }
     
@@ -435,27 +435,27 @@ void gw_scheduler_matching_arrays(gw_scheduler_t * sched)
         
     gw_return_code_t rc;
 
-    match = NULL;		
+    match = NULL;
     hosts = NULL;
 
-    last_array = -1;	
-	            
+    last_array = -1;
+            
     for (i=0;i<sched->num_jobs;i++)
     {
-    	jid = sched->jobs[i].jid;    	
-    	aid = sched->jobs[i].aid;
-    	
-    	if (sched->jobs[i].mhosts != NULL)
-    	{
+        jid = sched->jobs[i].jid;
+        aid = sched->jobs[i].aid;
+
+        if (sched->jobs[i].mhosts != NULL)
+        {
             free(sched->jobs[i].mhosts);
  
-             sched->jobs[i].num_mhosts = 0;	
+             sched->jobs[i].num_mhosts = 0;
              sched->jobs[i].mhosts = NULL;
         }
-    	
+ 
         if (( aid == -1 ) || (last_array != aid)
                 || (sched->jobs[i].reason == GW_REASON_SELF_MIGRATION))
-    	{
+        {
             if (hosts != NULL)
             {
                 free(hosts);
@@ -467,13 +467,13 @@ void gw_scheduler_matching_arrays(gw_scheduler_t * sched)
                 free(match);
                 match = NULL;
             }
-    		
+
             rc = gw_client_match_job(jid, aid, &match, &num);
 
             if ((rc != GW_RC_SUCCESS)||(num == 0))
-            {	    	
+            {
                 gw_scheduler_print('W',"No matching hosts found for job"
-       	                " %i - %s\n", jid, gw_ret_code_string(rc));
+                        " %i - %s\n", jid, gw_ret_code_string(rc));
                 continue;
             }
 
@@ -542,9 +542,9 @@ void gw_scheduler_matching_arrays(gw_scheduler_t * sched)
                 last_array = -1;
             else
                 last_array = aid;
-    	} 
-    	else if ( last_array == aid ) /* Already made match-making */
-    	{
+        } 
+        else if ( last_array == aid ) /* Already made match-making */
+        {
 #ifdef GWSCHEDDEBUG            
             gw_scheduler_print('D',"Skipping match-making for array %i\n", aid);
 #endif
@@ -558,7 +558,7 @@ void gw_scheduler_matching_arrays(gw_scheduler_t * sched)
                         (void *) &(sched->jobs[i-1].mhosts[j]),
                         sizeof(gw_sch_queue_t));
             }
-    	}
+        }
     }
 
     if (hosts != NULL)
@@ -587,49 +587,49 @@ void gw_scheduler_job_add(gw_scheduler_t *      sched,
                           int                   uid,
                           time_t                deadline)
 {   
-	int          k,j;
-	
-	for (k=0;k<sched->num_users;k++)
-	    if (sched->users[k].uid == uid)
-		{
-			sched->users[k].total_jobs++;
+    int          k,j;
+
+    for (k=0;k<sched->num_users;k++)
+        if (sched->users[k].uid == uid)
+        {
+            sched->users[k].total_jobs++;
 
             j               = sched->num_jobs;
-		    sched->num_jobs = sched->num_jobs + 1;
-			   	   
-		    sched->jobs = realloc((void *) sched->jobs, 
-		                          (sched->num_jobs) * sizeof(gw_sch_job_t));
-		                          
-		    sched->jobs[j].ua_id  = k;
+            sched->num_jobs = sched->num_jobs + 1;
+ 
+            sched->jobs = realloc((void *) sched->jobs, 
+                          (sched->num_jobs) * sizeof(gw_sch_job_t));
+                          
+            sched->jobs[j].ua_id  = k;
 
-		    sched->jobs[j].jid    = jid;
-		    sched->jobs[j].aid    = aid;
+            sched->jobs[j].jid    = jid;
+            sched->jobs[j].aid    = aid;
 
             sched->jobs[j].np    = np;
-                    		    
-		    sched->jobs[j].reason = reason;
+ 
+            sched->jobs[j].reason = reason;
 
             sched->jobs[j].num_mhosts = 0;
             sched->jobs[j].mhosts     = NULL;
             
             sched->jobs[j].schedule_time = time(NULL);
-			sched->jobs[j].deadline_time = deadline;
-			
+            sched->jobs[j].deadline_time = deadline;
+
             sched->jobs[j].fixed     = fixed_priority;  
-			sched->jobs[j].nfixed    = 0.0;
+            sched->jobs[j].nfixed    = 0.0;
+ 
+            sched->jobs[j].waiting   = 0;
+            sched->jobs[j].nwaiting  = 0.0;
     
-			sched->jobs[j].waiting   = 0;
-			sched->jobs[j].nwaiting  = 0.0;
-    
-			sched->jobs[j].deadline  = 0;
-			sched->jobs[j].ndeadline = 0.0;
+            sched->jobs[j].deadline  = 0;
+            sched->jobs[j].ndeadline = 0.0;
             
 #ifdef GWSCHEDDEBUG
             gw_scheduler_print('D',"Job Added, ID:%i AID:%i FP:%i RS:%i UID:%i\n",
                 jid,aid,fixed_priority,reason,uid);
 #endif
-			break;
-    	}
+            break;
+    }
 }
 
 /* -------------------------------------------------------------------------- */
