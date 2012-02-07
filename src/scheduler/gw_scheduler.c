@@ -72,8 +72,7 @@ static void gw_sched_dispatch (gw_scheduler_t * sched,
     int free_slots;
     
     int running_user;
-    int running_host;
-    
+ 
     gw_sch_job_t  * job;
     gw_sch_user_t * user;
     gw_sch_host_t * host;
@@ -109,12 +108,10 @@ static void gw_sched_dispatch (gw_scheduler_t * sched,
         {
             host = &(sched->hosts[job->mhosts[j].ha_id]);
                         
-            running_host = host->used_slots + host->dispatched;
-            
-            if (max_host && running_host >= max_host)   
+            if (max_host && host->dispatched >= max_host)   
             {
 #ifdef GWSCHEDDEBUG
-                gw_scheduler_print('D',"Max. number of running jobs for host %s reached\n",
+                gw_scheduler_print('D',"Max. number of dispatched jobs for host %s reached\n",
                     host->name);
 #endif
                 continue;   
