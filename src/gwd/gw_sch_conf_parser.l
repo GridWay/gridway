@@ -36,29 +36,29 @@ int gw_sched_parse (gw_sch_conf_t *conf);
 
 #.*\n           
 
-FP_WEIGHT            { lvalp->val_int = FP_WEIGHT;            return VARIABLE;}
-FP_USER              { lvalp->val_int = FP_USER;              return VARIABLE;}
-FP_GROUP             { lvalp->val_int = FP_GROUP;             return VARIABLE;}
-SH_WEIGHT            { lvalp->val_int = SH_WEIGHT;            return VARIABLE;}
-SH_USER              { lvalp->val_int = SH_USER;              return VARIABLE;}
-SH_WINDOW_DEPTH      { lvalp->val_int = SH_WINDOW_DEPTH;      return VARIABLE;}
-SH_WINDOW_SIZE       { lvalp->val_int = SH_WINDOW_SIZE;       return VARIABLE;}
-WT_WEIGHT            { lvalp->val_int = WT_WEIGHT;            return VARIABLE;}
-DL_WEIGHT            { lvalp->val_int = DL_WEIGHT;            return VARIABLE;}
-DL_HALF              { lvalp->val_int = DL_HALF;              return VARIABLE;}
-RP_WEIGHT            { lvalp->val_int = RP_WEIGHT;            return VARIABLE;}
-RP_HOST              { lvalp->val_int = RP_HOST;              return VARIABLE;}
-RP_IM                { lvalp->val_int = RP_IM;                return VARIABLE;}
-RA_WEIGHT            { lvalp->val_int = RA_WEIGHT;            return VARIABLE;}
-FR_MAX_BANNED        { lvalp->val_int = FR_MAX_BANNED;        return VARIABLE;}
-FR_BANNED_C          { lvalp->val_int = FR_BANNED_C;          return VARIABLE;}
-UG_WEIGHT            { lvalp->val_int = UG_WEIGHT;            return VARIABLE;}
-UG_HISTORY_WINDOW    { lvalp->val_int = UG_HISTORY_WINDOW;    return VARIABLE;}
-UG_HISTORY_RATIO     { lvalp->val_int = UG_HISTORY_RATIO;     return VARIABLE;}
-DISABLE              { lvalp->val_int = DISABLE;              return VARIABLE;}
-DISPATCH_CHUNK       { lvalp->val_int = DISPATCH_CHUNK;       return VARIABLE;}
-MAX_RUNNING_USER     { lvalp->val_int = MAX_RUNNING_USER;     return VARIABLE;}
-MAX_RUNNING_RESOURCE { lvalp->val_int = MAX_RUNNING_RESOURCE; return VARIABLE;}
+FP_WEIGHT             { lvalp->val_int = FP_WEIGHT;            return VARIABLE;}
+FP_USER               { lvalp->val_int = FP_USER;              return VARIABLE;}
+FP_GROUP              { lvalp->val_int = FP_GROUP;             return VARIABLE;}
+SH_WEIGHT             { lvalp->val_int = SH_WEIGHT;            return VARIABLE;}
+SH_USER               { lvalp->val_int = SH_USER;              return VARIABLE;}
+SH_WINDOW_DEPTH       { lvalp->val_int = SH_WINDOW_DEPTH;      return VARIABLE;}
+SH_WINDOW_SIZE        { lvalp->val_int = SH_WINDOW_SIZE;       return VARIABLE;}
+WT_WEIGHT             { lvalp->val_int = WT_WEIGHT;            return VARIABLE;}
+DL_WEIGHT             { lvalp->val_int = DL_WEIGHT;            return VARIABLE;}
+DL_HALF               { lvalp->val_int = DL_HALF;              return VARIABLE;}
+RP_WEIGHT             { lvalp->val_int = RP_WEIGHT;            return VARIABLE;}
+RP_HOST               { lvalp->val_int = RP_HOST;              return VARIABLE;}
+RP_IM                 { lvalp->val_int = RP_IM;                return VARIABLE;}
+RA_WEIGHT             { lvalp->val_int = RA_WEIGHT;            return VARIABLE;}
+FR_MAX_BANNED         { lvalp->val_int = FR_MAX_BANNED;        return VARIABLE;}
+FR_BANNED_C           { lvalp->val_int = FR_BANNED_C;          return VARIABLE;}
+UG_WEIGHT             { lvalp->val_int = UG_WEIGHT;            return VARIABLE;}
+UG_HISTORY_WINDOW     { lvalp->val_int = UG_HISTORY_WINDOW;    return VARIABLE;}
+UG_HISTORY_RATIO      { lvalp->val_int = UG_HISTORY_RATIO;     return VARIABLE;}
+DISABLE               { lvalp->val_int = DISABLE;              return VARIABLE;}
+DISPATCH_CHUNK        { lvalp->val_int = DISPATCH_CHUNK;       return VARIABLE;}
+MAX_DISPATCH_RESOURCE { lvalp->val_int = MAX_DISPATCH_RESOURCE; return VARIABLE;}
+MAX_RUNNING_USER      { lvalp->val_int = MAX_RUNNING_USER;     return VARIABLE;}
 
 -?[0-9]+          { lvalp->val_int   = atoi(yytext);   return INTEGER;}
 Yes|yes|YES       { lvalp->val_int   = 1;              return INTEGER;}

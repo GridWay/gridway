@@ -33,43 +33,43 @@ void gw_sch_conf_init (gw_sch_conf_t *conf)
     conf->disable      = 0;
     
     conf->max_dispatch = GW_SCH_DIPATCH_CHUNK_DEFAULT;
-    conf->max_resource = GW_SCH_MAX_RUNNING_RESOURCE_DEFAULT;
+    conf->max_resource = GW_SCH_MAX_DISPATCH_RESOURCE_DEFAULT;
     conf->max_user     = GW_SCH_MAX_RUNNING_USER_DEFAULT;
 
-	conf->wfixed         = GW_SCH_FP_WEIGHT_DEFAULT;
-	conf->ufixed_default = GW_SCH_FP_DEFAULT;
+    conf->wfixed         = GW_SCH_FP_WEIGHT_DEFAULT;
+    conf->ufixed_default = GW_SCH_FP_DEFAULT;
 	
-	conf->nufixed  = 0;
+    conf->nufixed  = 0;
     conf->ufixed   = NULL;
 
-	conf->ngfixed  = 0;
+    conf->ngfixed  = 0;
     conf->gfixed   = NULL;
 	
-	conf->wshare         = GW_SCH_SH_WEIGHT_DEFAULT;
-	conf->ushare_default = GW_SCH_SH_DEFAULT;
+    conf->wshare         = GW_SCH_SH_WEIGHT_DEFAULT;
+    conf->ushare_default = GW_SCH_SH_DEFAULT;
 
-	conf->nushare  = 0;
+    conf->nushare  = 0;
     conf->ushare   = NULL;
 	
-	conf->wwaiting  = GW_SCH_WT_WEIGHT_DEFAULT;
+    conf->wwaiting  = GW_SCH_WT_WEIGHT_DEFAULT;
     conf->wdeadline = GW_SCH_DL_WEIGHT_DEFAULT;
     
     conf->window_size  = GW_SCH_SH_WINDOW_SIZE_DEFAULT;
     conf->window_depth = GW_SCH_SH_WINDOW_DEPTH_DEFAULT;
     
-	conf->wrfixed        = GW_SCH_RP_WEIGHT_DEFAULT; 
-	conf->rfixed_default = GW_SCH_RP_DEFAULT;
+    conf->wrfixed        = GW_SCH_RP_WEIGHT_DEFAULT; 
+    conf->rfixed_default = GW_SCH_RP_DEFAULT;
   
-	conf->nifixed = 0;
-	conf->ifixed  = NULL;
+    conf->nifixed = 0;
+    conf->ifixed  = NULL;
 
-	conf->nhfixed = 0;
-	conf->hfixed  = NULL;
+    conf->nhfixed = 0;
+    conf->hfixed  = NULL;
 	
-	conf->wrank   = GW_SCH_RA_WEIGHT_DEFAULT; 
+    conf->wrank   = GW_SCH_RA_WEIGHT_DEFAULT; 
 	
-	conf->fr_max_banned = GW_SCH_FR_MAX_BANNED_DEFAULT;
-	conf->fr_banned_c   = GW_SCH_FR_BANNED_C_DEFAULT;	
+    conf->fr_max_banned = GW_SCH_FR_MAX_BANNED_DEFAULT;
+    conf->fr_banned_c   = GW_SCH_FR_BANNED_C_DEFAULT;	
 
 	conf->wusage    = GW_SCH_UG_WEIGHT_DEFAULT;
 	conf->ug_window = GW_SCH_UG_WINDOW_DEFAULT;
@@ -436,7 +436,7 @@ void gw_sch_set_var (gw_sch_conf_t * conf, int var, float val)
             conf->max_user = val;
         break;
         
-        case MAX_RUNNING_RESOURCE:
+        case MAX_DISPATCH_RESOURCE:
             conf->max_resource = val;
         break;
         

@@ -223,8 +223,8 @@ int gw_loadconf ()
     gw_log_print("GW",'I',"  Scheduler configuration attributes                \n");    
     gw_log_print("GW",'I',"    DISABLE                  : %s\n",gw_conf.sch_conf.disable?"yes":"no");
     gw_log_print("GW",'I',"    DISPATCH_CHUNK           : %i\n",gw_conf.sch_conf.max_dispatch);
+    gw_log_print("GW",'I',"    MAX_DISPATCH_RESOURCE     : %i\n",gw_conf.sch_conf.max_resource);
     gw_log_print("GW",'I',"    MAX_RUNNING_USER         : %i\n",gw_conf.sch_conf.max_user);
-    gw_log_print("GW",'I',"    MAX_RUNNING_RESOURCE     : %i\n",gw_conf.sch_conf.max_resource);
 	
 	gw_log_print("GW",'I',"  Job Fixed Priority Policy\n");
 	gw_log_print("GW",'I',"    FP_WEIGHT                : %-8.2f\n",gw_conf.sch_conf.wfixed);	
