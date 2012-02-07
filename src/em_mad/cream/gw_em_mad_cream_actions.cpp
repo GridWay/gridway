@@ -86,7 +86,7 @@ void CreamCredentialStatus::setDelegation(string status)
 
     pthread_mutex_lock(&credMutex);
    	this->status = status;
-    	if ((status.compare("DONE") == 0) | (status.compare("FAILED") == 0))
+    	if ((status.compare("DONE") == 0) || (status.compare("FAILED") == 0))
             pthread_cond_broadcast(&credCond);
     pthread_mutex_unlock(&credMutex);
 }
@@ -662,7 +662,7 @@ CreamOperation CreamService::creamClientExecute(API::AbsCreamProxy* creamClient,
 	    if ((renewedProxy == false) && (typeid(*creamClient) != typeid(API::CreamProxy_ProxyRenew)))
 		result = proxyRenew(contact, delegationID);
 
-	    if ((renewedProxy == true) | (typeid(*creamClient) == typeid(API::CreamProxy_ProxyRenew)) | (result.code == -1))
+	    if ((renewedProxy == true) | (typeid(*creamClient) == typeid(API::CreamProxy_ProxyRenew)) || (result.code == -1))
     	    {
         	delete creamClient;
         	result.code = -1;
