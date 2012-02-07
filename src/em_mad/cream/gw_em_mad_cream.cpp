@@ -22,7 +22,7 @@
 
 void *creamAction(void *thread_data);
 void *timer(void *);
-int getThreadID();
+int getFreeThread();
 
 using namespace std;
 	
@@ -32,9 +32,10 @@ extern int   optopt;
 typedef struct thread_operation_s{
     string action;
     int jidCREAM;
-    int threadid; 
     string contact;
     string jdlFile;
+    pthread_mutex_t mutex;
+    bool free;
 } thread_operation_t;
 
 thread_operation_t operation[MAX_THREADS];
@@ -47,7 +48,7 @@ int main( int argc, char **argv)
     char str2[20];
     char str3[500];
     char str4[1024];
-    bool end=false;
+    bool end = false;
     string action;
     string contact;
     string jdlFile;
@@ -64,8 +65,11 @@ int main( int argc, char **argv)
 
     pthread_attr_init(&attr);
 
-    for(i=0;i<MAX_THREADS;i++) 
-        operation[i].threadid = -1;
+    for(i=0;i<MAX_THREADS;i++)
+    { 
+        pthread_mutex_init(&(operation[i].mutex), 0);
+        operation[i].free = true;
+    }
 
     while((opt = getopt(argc, argv, ":d:t:")) != -1)
         switch(opt)
@@ -102,9 +106,8 @@ int main( int argc, char **argv)
             continue;
         }
         else if (creamEmMad == NULL)
-            if (action == "INIT")
+            if (action.compare("INIT") == 0)
             {
-                //TODO: delegationID???
 		creamEmMad = new CreamEmMad(delegation, refreshTime);
                 creamEmMad->init();
 
@@ -112,21 +115,19 @@ int main( int argc, char **argv)
             }
             else
                cout << action << " " << jidCREAM << " FAILURE Not initialized" << endl;
-        else if (action == "INIT")
+        else if (action.compare("INIT") == 0)
                cout << action << " " << jidCREAM << " FAILURE Already initialized" << endl;
-        else if (action == "FINALIZE")
+        else if (action.compare("FINALIZE") == 0)
         {
             end = true;
 	    pthread_cancel(creamTimer);
             pthread_attr_destroy(&attr); 
             creamEmMad->finalize();
-            delete creamEmMad; 
         }
         else {
-	    while ((i=getThreadID()) == -1);
+	    while ((i=getFreeThread()) == -1);
             operation[i].action = action;
             operation[i].jidCREAM = jidCREAM;
-	    operation[i].threadid = i;
             operation[i].contact = contact;
             operation[i].jdlFile = jdlFile;
             pthread_create(&creamOperation[i], &attr, creamAction, &operation[i]);
@@ -134,13 +135,23 @@ int main( int argc, char **argv)
   } 
 }
 
-int getThreadID()
+int getFreeThread()
 {
-    int i;
+    bool found = false;
 
-    for (i=0;i<MAX_THREADS;i++)
-        if (operation[i].threadid == -1) 
-            return i;
+    for (int i=0;i<MAX_THREADS;i++)
+    {
+	pthread_mutex_lock(&(operation[i].mutex));
+            if (operation[i].free == true) 
+            {
+            	operation[i].free = false;
+		found = true;
+            }
+        pthread_mutex_unlock(&(operation[i].mutex));
+
+	if (found == true) return i;
+    }
+
     return -1;
 }
 
@@ -166,21 +177,23 @@ void *creamAction(void *thread_data)
     int jidCREAM = data->jidCREAM;
     int status = -1;
 
-    if (action == "SUBMIT")
+    if (action.compare("SUBMIT") == 0)
     {
         host = contact.substr(0, contact.find("/"));
         status = creamEmMad->submit(jidCREAM, host, jdlFile);
     }
-    else if (action == "RECOVER")
+    else if (action.compare("RECOVER") == 0)
     {
         status = creamEmMad->recover(jidCREAM, contact);
     }
-    else if (action == "CANCEL")
+    else if (action.compare("CANCEL") == 0)
         status = creamEmMad->cancel(jidCREAM);
-    else if (action == "POLL")
+    else if (action.compare("POLL") == 0)
         status = creamEmMad->poll(jidCREAM);
 
-    data->threadid = -1;
+    pthread_mutex_lock(&(data->mutex));
+        data->free = true;
+    pthread_mutex_unlock(&(data->mutex));
 
     pthread_exit(NULL);
 }

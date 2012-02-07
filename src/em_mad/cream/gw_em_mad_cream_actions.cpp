@@ -18,9 +18,10 @@
 #include <pthread.h>
 #include <time.h>
 
-/* 
+/************* 
 CreamJob class
-*/
+*************/
+
 CreamJob::CreamJob(int gridwayID, string creamJobId, string creamURL)
 {
     this->gridwayID = gridwayID;
@@ -43,9 +44,56 @@ string CreamJob::getCreamJobId()
     return this->creamJobId;
 }
 
-/* 
+/************************** 
+CreamCredentialStatus class
+**************************/
+
+CreamCredentialStatus::CreamCredentialStatus(string status)
+{
+    this->status = status;
+    this->connectionTimeout = 30;
+    pthread_mutex_init(&credMutex, 0);
+    pthread_cond_init(&credCond, 0);
+}
+
+string CreamCredentialStatus::getStatus()
+{
+    return this->status;
+}
+
+int CreamCredentialStatus::waitForDelegation()
+{
+    struct timeval now;
+    struct timezone zone;
+    struct timespec timeout;
+    int retval = -1;
+
+    gettimeofday(&now, &zone);
+    timeout.tv_sec = now.tv_sec + connectionTimeout;
+    timeout.tv_nsec = now.tv_usec * 1000;
+
+    pthread_mutex_lock(&credMutex);
+	pthread_cond_timedwait(&credCond, &credMutex, &timeout);
+    	if (status.compare("DONE") == 0)
+	    retval = 0;
+    pthread_mutex_unlock(&credMutex);
+
+    return retval;
+}
+
+void CreamCredentialStatus::setDelegation(string status)
+{
+
+    pthread_mutex_lock(&credMutex);
+   	this->status = status;
+    	if ((status.compare("DONE") == 0) | (status.compare("FAILED") == 0))
+            pthread_cond_broadcast(&credCond);
+    pthread_mutex_unlock(&credMutex);
+}
+
+/*************** 
 CreamEmMad class
-*/
+***************/
 
 CreamEmMad::CreamEmMad(string delegation, int refreshTime)
 {
@@ -56,16 +104,9 @@ CreamEmMad::CreamEmMad(string delegation, int refreshTime)
     this->refreshTime = 43200;
     if (refreshTime > 0)
         this->refreshTime = refreshTime;
-    this->creamJobs = new map <int, CreamJob> ();
-    this->credentials = new list<string> ();
+    this->creamJobs.clear();
+    this->credentials.clear();
     this->creamService = new CreamService();
-}
-
-CreamEmMad::~CreamEmMad() 
-{
-    delete this->creamJobs;
-    delete this->credentials;
-    delete this->creamService;
 }
 
 void CreamEmMad::init()
@@ -102,7 +143,7 @@ void CreamEmMad::init()
         *pline = '\0';
 
     pthread_mutex_lock(&jobMutex);
-    	this->creamService->setPath(path);
+    	creamService->setPath(path);
     pthread_mutex_unlock(&jobMutex);
 
     cout << "INIT - SUCCESS -" << endl;
@@ -112,46 +153,57 @@ void CreamEmMad::init()
 
 int CreamEmMad::submit(int jid, string contact, string jdlFile)
 {
-    if (this->proxyDelegate("SUBMIT", jid, contact, delegationID) != 0)
-    {
+    if (proxyDelegate("SUBMIT", jid, contact, delegationID) != 0)
         return -1;
-    }
 
-    string JDL = this->fileToString(jdlFile);
+    string JDL = fileToString(jdlFile);
     CreamOperation result = creamService->submit(jid, contact, JDL, delegationID);
 
-    if (result.job == NULL)
-        return -1;
+    if (result.code == -1)
+    {	
+	cout << "SUBMIT " << jid << " FAILURE " << result.info << endl;
+	return -1;
+    }
 
-    pthread_mutex_lock(&jobMutex);
-        this->creamJobs->erase(jid);
-        this->creamJobs->insert(pair<int, CreamJob>(jid, *result.job));
-    pthread_mutex_unlock(&jobMutex);
+    pthread_mutex_lock(&jobMutex); 
+        map<int, CreamJob *>::iterator it = creamJobs.find(jid);
 
-    contact = result.job->getCreamURL();
-    
+	if (it != creamJobs.end())
+	{
+	    if (it->second != NULL) 
+		delete it->second;
+	    it->second = result.job;
+	}
+	else
+            creamJobs.insert(pair<int, CreamJob *>(jid, result.job));
+
+        contact = result.job->getCreamURL();
+        string creamJobId = result.job->getCreamJobId();   
+    pthread_mutex_unlock(&jobMutex); 
+
     if (result.code == 0)
-    	cout << "SUBMIT " << jid << " SUCCESS " << contact.substr(0, contact.find("/ce-cream")) << "/" << (result.job->getCreamJobId()) << endl;  
-    else
-        cout << "SUBMIT " << jid << " FAILURE " << result.info << endl;
+        cout << "SUBMIT " << jid << " SUCCESS " << contact.substr(0, contact.find("/ce-cream")) << "/" << creamJobId << endl;  
 
-    delete result.job;   
     return 0;
 }
 
 int CreamEmMad::poll(int jid)
 {
-    map<int,CreamJob>::iterator it = this->creamJobs->find(jid);
+    map<int, CreamJob *>::iterator it = creamJobs.find(jid);
  
-    if (it == creamJobs->end())
+    if (it == creamJobs.end())
     {
         cout << "POLL " << jid << " FAILURE " << "The job ID does not exist" << endl;
         return -1;
     }
 
-    CreamJob creamJob = it->second;
+    pthread_mutex_lock(&jobMutex);
+        CreamJob *creamJob = it->second;
+	string creamJid = creamJob->getCreamJobId();
+	string serviceAddress = creamJob->getCreamURL();
+    pthread_mutex_unlock(&jobMutex);
 
-    CreamOperation result = creamService->poll(creamJob); 
+    CreamOperation result = creamService->poll(creamJid, serviceAddress, delegationID); 
 
     if (result.code == 0)
         cout << "POLL " << jid << " SUCCESS " << result.info << endl;
@@ -159,27 +211,41 @@ int CreamEmMad::poll(int jid)
         cout << "POLL " << jid << " FAILURE " << result.info << endl;
 
     if (result.info.compare("DONE") == 0 || result.info.compare("FAILED") == 0)
-        this->creamJobs->erase(jid);
+    {
+	pthread_mutex_lock(&jobMutex);
+	    delete creamJobs.find(jid)->second;
+	    creamJobs.erase(jid);
+	pthread_mutex_unlock(&jobMutex);
+    }
 
     return 0;
 }
 
 int CreamEmMad::cancel(int jid)
 {
-    map<int,CreamJob>::iterator it = this->creamJobs->find(jid);
+    map<int,CreamJob *>::iterator it = creamJobs.find(jid);
    
-    if (it == creamJobs->end())
+    if (it == creamJobs.end())
     {
         cout << "CANCEL " << jid << " FAILURE " << "The job ID does not exist" << endl;
         return -1;
     }
 
-    CreamJob creamJob = it->second;
+    pthread_mutex_lock(&jobMutex);
+        CreamJob *creamJob = it->second;
+	if (creamJob == NULL)
+	{
+            pthread_mutex_unlock(&jobMutex);
+            return -1;
+	}
+        string creamJid = creamJob->getCreamJobId();
+        string serviceAddress = creamJob->getCreamURL();
+    pthread_mutex_unlock(&jobMutex);
 
-    CreamOperation result = creamService->cancel(creamJob);
+    CreamOperation result = creamService->cancel(creamJid, serviceAddress, delegationID);
 
     if (result.code == 0)
-        cout << "CANCEL " << jid << " SUCCESS" << endl;  
+        cout << "CANCEL " << jid << " SUCCESS -" << endl;  
     else
         cout << "CANCEL " << jid << " FAILURE " << result.info << endl;
 
@@ -196,25 +262,38 @@ void CreamEmMad::finalize()
 
 int CreamEmMad::proxyDelegate(string action, int jid, string contact, string delegationID)
 {
-    list<string>::iterator it;
     pthread_mutex_lock(&credentialsMutex);
-        for (it=this->credentials->begin(); it != this->credentials->end(); it++) 
-        {
-             if (contact == *it)
-             {
-                  pthread_mutex_unlock(&credentialsMutex); 
-                  return 0;
-             }
-        }
-        this->credentials->push_back(contact);
-	CreamOperation result = creamService->proxyDelegate(contact, delegationID);
+	map<string, CreamCredentialStatus *>::iterator it = credentials.find(contact);
+
+	if (it != credentials.end())
+	{
+	    if (it->second->getStatus().compare("DONE") == 0)
+	    {
+		pthread_mutex_unlock(&credentialsMutex);
+		return 0;
+	    }
+	    else if (it->second->getStatus().compare("PENDING") == 0) 
+	    {
+		pthread_mutex_unlock(&credentialsMutex);
+		return it->second->waitForDelegation();
+	    }
+	    else if (it->second->getStatus().compare("FAILED") == 0)	
+		credentials[contact]->setDelegation("PENDING");
+	}
+        else 
+	    credentials.insert(pair<string, CreamCredentialStatus *>(contact, new CreamCredentialStatus("PENDING"))); 
     pthread_mutex_unlock(&credentialsMutex);
+
+    CreamOperation result = creamService->proxyDelegate(contact, delegationID);
 
     if (result.code != 0)
     {
 	cout << action << " " << jid << " FAILURE " << result.info << endl;
+	credentials[contact]->setDelegation("FAILED");
 	return -1;
     }
+
+    credentials[contact]->setDelegation("DONE");
     return 0;
 }
 
@@ -228,7 +307,7 @@ int CreamEmMad::recover(int jid, string contact)
     size_t pos = contact.find(":8443/");
     host = contact.substr(8, pos-8);
 
-    if (this->proxyDelegate("RECOVER", jid, host, delegationID) != 0)
+    if (proxyDelegate("RECOVER", jid, host, delegationID) != 0)
         return -1; 
 
     pos = contact.find("/CREAM");
@@ -238,14 +317,35 @@ int CreamEmMad::recover(int jid, string contact)
     creamJobId = contact.substr(pos+1);
 
     creamJob = new CreamJob(jid, creamJobId, creamURL);
-
     pthread_mutex_lock(&jobMutex);
-        this->creamJobs->erase(jid); 
-        this->creamJobs->insert(pair<int, CreamJob>(jid, *creamJob));
-    pthread_mutex_unlock(&jobMutex);
+        map<int, CreamJob *>::iterator it = creamJobs.find(jid);
 
-    delete creamJob;
-    return this->poll(jid);
+        if (it != creamJobs.end())
+        {
+            if (it->second != NULL)
+                delete it->second;
+            it->second = creamJob;
+        }
+        else
+            creamJobs.insert(pair<int, CreamJob *>(jid, creamJob));
+    pthread_mutex_unlock(&jobMutex);
+  
+    CreamOperation result = creamService->poll(creamJobId, creamURL, delegationID);
+
+    if (result.info.compare("DONE") == 0 || result.info.compare("FAILED") == 0)
+    {
+        pthread_mutex_lock(&jobMutex);
+            delete creamJobs.find(jid)->second;
+            creamJobs.erase(jid);
+        pthread_mutex_unlock(&jobMutex);
+    }
+
+    if (result.code == 0)
+        cout << "RECOVER " << jid << " SUCCESS " << result.info << endl;
+    else
+        cout << "RECOVER " << jid << " FAILURE " << result.info << endl;
+
+    return 0;
 }
 
 string CreamEmMad::fileToString(string jdlFileName)
@@ -265,39 +365,41 @@ string CreamEmMad::fileToString(string jdlFileName)
         string aux = str;
         jdlString += aux;
     }
- 
+
     delete jdlFile;
     return jdlString;
 }
 
 void CreamEmMad::timer()
 {
-    list<string>::iterator it;
     string contact;
     CreamOperation result;
-
+    
+    map<string,CreamCredentialStatus *>::iterator it;
     for (;;)
     {
-        sleep(this->refreshTime);
-        for (it=this->credentials->begin(); it != this->credentials->end(); it++){   
-	     contact=*it; 
-             result = creamService->proxyRenew(contact, delegationID);
+        sleep(refreshTime);
+        for (it=credentials.begin(); it != credentials.end(); it++)
+	{   
+	     contact = it->first;
+	     if (it->second->getStatus().compare("DONE") == 0)
+                 result = creamService->proxyRenew(contact, delegationID);
 	     if (result.code != 0)
 		cout << "TIMER - " << " FAILURE " << result.info << endl;
 	     else
-		cout << "TIMER - " << " SUCCESS " << endl;
+		cout << "TIMER - " << " SUCCESS -" << endl;
+
 	 }
     }
 }
 
-/* 
+/***************** 
 CreamService class
-*/
+*****************/
 
 CreamService::CreamService()
 {
-    //this->baseAddress = NULL;
-    this->connectionTimeout = 300;
+    this->connectionTimeout = 30;
     this->certificatePath = "";
 }
 
@@ -341,31 +443,16 @@ CreamOperation CreamService::submit(int jid, string contact, string JDL, string 
 	return result; 
     }
 
-    /*if (contact == "" || (contact.size() == 1 && contact.find("-") != string::npos))
-        serviceAddress = new string(*(this->baseAddress)+":8443/ce-cream/services/CREAM2");
-    else*/ if (contact.find("https") == string::npos)
-        serviceAddress = "https://" + (contact)+ ":8443/ce-cream/services/CREAM2";
-    else
-        serviceAddress = contact;
+    serviceAddress = "https://" + contact + ":8443/ce-cream/services/CREAM2";
 
-    try
-    {
-        creamClient->setCredential(this->certificatePath);
-        creamClient->execute(serviceAddress);
-    }
-    catch(exception& ex)
-    {
-        delete creamClient;
-        result.code = -1;
-        result.info = ex.what();
+    result = creamClientExecute(creamClient, serviceAddress, contact, delegationID);
+    if (result.code != 0)
         return result;
-    }
 
     boost::tuple<bool, API::JobIdWrapper, string> registrationResponse = resp[jidCREAM];
 
     if(registrationResponse.get<0>()!=API::JobIdWrapper::OK)
     {
-        delete creamClient;
         result.code = -1;
         result.info = registrationResponse.get<2>();
         return result;
@@ -376,25 +463,20 @@ CreamOperation CreamService::submit(int jid, string contact, string JDL, string 
 
     result.job  = new CreamJob(jid, creamJobId, creamURL);
 
-    delete creamClient;
-    result.code = 0;
     return result;
 }
 
-
-CreamOperation CreamService::poll(CreamJob creamJob)
+CreamOperation CreamService::poll(string creamJid, string serviceAddress, string delegationID)
 {
     string status;
     CreamOperation result;
 
-    API::JobIdWrapper job1((creamJob.getCreamJobId()), (creamJob.getCreamURL()), vector<API::JobPropertyWrapper>());
+    API::JobIdWrapper job1(creamJid, serviceAddress, vector<API::JobPropertyWrapper>());
 
     vector< API::JobIdWrapper > JobVector;
 
     JobVector.push_back( job1 );
 
-    string delegationID = "";
-    
     int fromDate = -1;
     int toDate   = -1;
     vector<string> statusVec;
@@ -413,20 +495,12 @@ CreamOperation CreamService::poll(CreamJob creamJob)
         return result;
     }
 
-    string serviceAddress = (creamJob.getCreamURL());
+    size_t pos = serviceAddress.find(":8443/");
+    string contact = string(serviceAddress.substr(8, pos-8));
 
-    try
-    {
-        creamClient->setCredential(this->certificatePath);
-        creamClient->execute(serviceAddress);
-    }
-    catch(exception& ex)
-    {
-        delete creamClient;
-        result.code = -1;
-        result.info = ex.what();
+    result = creamClientExecute(creamClient, serviceAddress, contact, delegationID);
+    if (result.code != 0)
         return result;
-    }
 
     map<string, boost::tuple<API::JobStatusWrapper::RESULT, API::JobStatusWrapper, std::string> >::const_iterator jobIt = Sresult.begin();
 
@@ -457,10 +531,25 @@ CreamOperation CreamService::poll(CreamJob creamJob)
                 status = "FAILED";
             else if (status.compare("ABORTED") == 0)
                 status = "FAILED";
+
+	    if (status.compare("DONE") == 0 || status.compare("FAILED") == 0)
+	    {
+		API::ResultWrapper resultWrapper;
+
+		API::AbsCreamProxy* creamClient = API::CreamProxyFactory::make_CreamProxyPurge(&jfw, &resultWrapper, connectionTimeout);
+		if (creamClient == NULL)
+    		{
+        	    delete creamClient;
+       	 	    result.code = -1;
+        	    result.info = "Error creating Cream client";
+        	    return result;
+    		}
+		creamClientExecute(creamClient, serviceAddress, contact, delegationID);
+	    }
+            break;
         }
         else
         {
-            delete creamClient;
             result.code = -1;
             result.info = jobIt->second.get<2>();
             return result;
@@ -468,17 +557,15 @@ CreamOperation CreamService::poll(CreamJob creamJob)
         jobIt++;
    }
 
-   delete creamClient;
-   result.code = 0;
    result.info = status;
    return result;
 }
 
-CreamOperation CreamService::cancel(CreamJob creamJob)
+CreamOperation CreamService::cancel(string creamJid, string serviceAddress, string delegationID)
 {
     CreamOperation result;
 
-    API::JobIdWrapper job1((creamJob.getCreamJobId()), (creamJob.getCreamURL()), vector<API::JobPropertyWrapper>());
+    API::JobIdWrapper job1(creamJid, serviceAddress, vector<API::JobPropertyWrapper>());
 
     vector< API::JobIdWrapper > JobVector;
 
@@ -492,7 +579,7 @@ CreamOperation CreamService::cancel(CreamJob creamJob)
 
     API::ResultWrapper resultwrapper;
 
-    API::AbsCreamProxy* creamClient = API::CreamProxyFactory::make_CreamProxyCancel( &jfw, &resultwrapper, this->connectionTimeout );
+    API::AbsCreamProxy* creamClient = API::CreamProxyFactory::make_CreamProxyCancel( &jfw, &resultwrapper, connectionTimeout);
 
     if (creamClient == NULL)
     {
@@ -502,23 +589,11 @@ CreamOperation CreamService::cancel(CreamJob creamJob)
         return result;
     }
 
-    string serviceAddress = (creamJob.getCreamURL());
+    size_t pos = serviceAddress.find(":8443/");
+    string contact = string(serviceAddress.substr(8, pos-8));
 
-    try
-    {
-        creamClient->setCredential(this->certificatePath);
-        creamClient->execute(serviceAddress);
-    }
-    catch(exception& ex)
-    {
-        delete creamClient;
-        result.code = -1;
-        result.info = ex.what();
-        return result;
-    }
+    result = creamClientExecute(creamClient, serviceAddress, contact, delegationID);
 
-    delete creamClient;
-    result.code = 0;
     return result;
 }
 
@@ -528,8 +603,7 @@ CreamOperation CreamService::proxyDelegate(string contact, string delegationID)
     API::AbsCreamProxy *creamClient;
     string serviceAddress;
 
-    // TODO: Delegate only to new CEs (list)
-    creamClient = API::CreamProxyFactory::make_CreamProxyDelegate(delegationID, this->connectionTimeout);
+    creamClient = API::CreamProxyFactory::make_CreamProxyDelegate(delegationID, connectionTimeout);
 
     if (creamClient == NULL)
     {
@@ -541,32 +615,8 @@ CreamOperation CreamService::proxyDelegate(string contact, string delegationID)
 
     serviceAddress = "https://" + contact + ":8443/ce-cream/services/gridsite-delegation";
 
-    try
-    {
-        creamClient->setCredential(this->certificatePath);
-        creamClient->execute(serviceAddress);
-    }
-    catch(DelegationException& ex)
-    {
-        result = this->proxyRenew(contact, delegationID);
-        if (result.code != 0)
-        {
-            delete creamClient;
-            result.code = -1;
-            result.info = ex.what();
-            return result;
-        }
-    }
-    catch(exception& ex)
-    {
-        delete creamClient;
-        result.code = 0;
-        result.info = ex.what();
-        return result;
-    }
+    result = creamClientExecute(creamClient, serviceAddress, contact, delegationID);
 
-    delete creamClient;
-    result.code = 0;
     return result;
 }
 
@@ -576,8 +626,7 @@ CreamOperation CreamService::proxyRenew(string contact, string delegationID)
     API::AbsCreamProxy *creamClient;
     string serviceAddress;
 
-    // TODO: Renew periodically
-    creamClient = API::CreamProxyFactory::make_CreamProxy_ProxyRenew(delegationID, this->connectionTimeout);
+    creamClient = API::CreamProxyFactory::make_CreamProxy_ProxyRenew(delegationID, connectionTimeout);
 
     if (creamClient == NULL)
     {
@@ -589,19 +638,52 @@ CreamOperation CreamService::proxyRenew(string contact, string delegationID)
 
     serviceAddress = "https://" + contact + ":8443/ce-cream/services/gridsite-delegation";
 
-    try
-    {
-        creamClient->setCredential(this->certificatePath);
-        creamClient->execute(serviceAddress);
-    }
-    catch(exception& ex)
-    {
-        delete creamClient;
-        result.code = -1;
-        result.info = ex.what();
-        return result;
-    }
+    result = creamClientExecute(creamClient, serviceAddress, contact, delegationID);
 
+    return result;
+}
+
+CreamOperation CreamService::creamClientExecute(API::AbsCreamProxy* creamClient, string serviceAddress, string contact, string delegationID)
+{
+    CreamOperation result;
+    bool renewedProxy = false;
+    bool end = false; 
+
+    while (!end)
+    {
+        try
+        {
+            creamClient->setCredential(certificatePath);
+            creamClient->execute(serviceAddress);
+            end = true;
+        }
+        catch(DelegationException &ex)
+        {
+	    if ((renewedProxy == false) && (typeid(*creamClient) != typeid(API::CreamProxy_ProxyRenew)))
+		result = proxyRenew(contact, delegationID);
+
+	    if ((renewedProxy == true) | (typeid(*creamClient) == typeid(API::CreamProxy_ProxyRenew)) | (result.code == -1))
+    	    {
+        	delete creamClient;
+        	result.code = -1;
+        	result.info = ex.what();
+        	return result;
+	    }
+
+            if (typeid(*creamClient) == typeid(API::CreamProxy_Delegate))
+                end = true;
+
+	    renewedProxy = true; 
+	}
+        catch(exception &ex)
+	{
+	    delete creamClient;
+            result.code = -1;
+            result.info = ex.what();
+	    return result;
+	}
+    }
+    
     delete creamClient;
     result.code = 0;
     return result;
