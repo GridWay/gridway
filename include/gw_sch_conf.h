@@ -18,6 +18,7 @@
 #define _GW_SCH_CONF_H
 
 #define GW_SCH_DIPATCH_CHUNK_DEFAULT        15
+#define GW_SCH_MAX_DISPATCH_RESOURCE_DEFAULT 5
 #define GW_SCH_MAX_RUNNING_USER_DEFAULT     30
 
 #define GW_SCH_FP_WEIGHT_DEFAULT            1
@@ -33,7 +34,6 @@
 #define GW_SCH_DL_WEIGHT_DEFAULT            1
 #define GW_SCH_DL_HALF_DEFAULT              1 
 
-#define GW_SCH_MAX_RUNNING_RESOURCE_DEFAULT 10
 #define GW_SCH_RP_WEIGHT_DEFAULT            1
 #define GW_SCH_RP_DEFAULT                   1
 
@@ -54,6 +54,7 @@ typedef enum
 {
   DISABLE,
   DISPATCH_CHUNK,
+  MAX_DISPATCH_RESOURCE,  
   MAX_RUNNING_USER, 
   FP_WEIGHT,
   FP_USER,
@@ -65,7 +66,6 @@ typedef enum
   WT_WEIGHT,
   DL_WEIGHT,
   DL_HALF,
-  MAX_RUNNING_RESOURCE,  
   RP_WEIGHT,
   RP_HOST,
   RP_IM,
