@@ -283,7 +283,7 @@ class Gw_em_mad_gram4 extends Thread implements GramJobListener {
                 if (job.getFault() == null)
                 {
                     status = 0;
-                    info = StateEnumeration._Done.toUpperCase();
+                    info = StateEnumeration._Failed.toUpperCase();
                 }
                 else
                 {
