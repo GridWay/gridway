@@ -29,7 +29,7 @@ clean:
 makefile-header:
 	@echo "  First, you have to create a makefile-header file with:"
 	@echo "    globus-makefile-header --flavor=FLAVOR globus_gass_copy > makefile-header"
-	@echo "  Replace FLAVOR with gcc32dbg, gcc32dbgpthr, gcc64dbg..."
+	@echo "  Replace FLAVOR with gcc32, gcc32dbg, gcc64..."
 	@echo "  Maybe, you also have to execute this as root:"
 	@echo "    gpt-build -nosrc FLAVOR"
 	@exit 2
