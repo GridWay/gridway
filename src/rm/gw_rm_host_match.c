@@ -42,7 +42,7 @@ void gw_rm_job_match(int client_socket, int job_id)
     gw_msg_match_t msg;
     gw_boolean_t   match;
     int            length;
-    int            slots, allowed_slots;
+    int            slots;
     
     msg.msg_type = GW_MSG_JOB_MATCH;
     length       = sizeof(gw_msg_match_t);
@@ -70,15 +70,15 @@ void gw_rm_job_match(int client_socket, int job_id)
                 continue;
             }
 
-			number_of_queues   = 0;
-			msg.rc             = GW_RC_SUCCESS;
-			msg.matched        = GW_FALSE;
-			msg.host_id        = i;
-			msg.job_id         = job_id;
-			msg.fixed_priority = host->fixed_priority;
-			msg.running_jobs   = host->running_jobs;
-			
-			gw_rm_copy_str_host(host->hostname, msg.hostname);
+            number_of_queues   = 0;
+            msg.rc             = GW_RC_SUCCESS;
+            msg.matched        = GW_FALSE;
+            msg.host_id        = i;
+            msg.job_id         = job_id;
+            msg.fixed_priority = host->fixed_priority;
+            msg.running_jobs   = host->running_jobs;
+
+            gw_rm_copy_str_host(host->hostname, msg.hostname);
               
             for (j=0;j<GW_HOST_MAX_QUEUES;j++)
             {
@@ -95,16 +95,11 @@ void gw_rm_job_match(int client_socket, int job_id)
                         msg.match[number_of_queues] = 1;
                         msg.rank[number_of_queues] = gw_host_compute_rank(host,j,job->template.rank);
 
-                        slots = gw_conf.sch_conf.max_resource*gw_conf.scheduling_interval/60 + 1;
-
-                        if (slots > host->queue_nodecount[j])
-                            slots = host->queue_nodecount[j];
-
-                        if (host->queue_maxjobsinqueue[j] > 0) {
-                            allowed_slots = host->queue_maxjobsinqueue[j] - host->used_slots;
-                            if (slots > allowed_slots)
-		                slots = allowed_slots;
-                        }
+                        if (host->queue_maxjobsinqueue[j] > 0
+                                && host->queue_maxjobsinqueue[j] < host->queue_nodecount[j])
+                            slots = host->queue_maxjobsinqueue[j] - host->running_jobs;
+                        else 
+                            slots = host->queue_nodecount[j] - host->running_jobs;
 
                         msg.slots[number_of_queues] = slots;
                     }
@@ -125,10 +120,10 @@ void gw_rm_job_match(int client_socket, int job_id)
             
             if (msg.matched == GW_TRUE)
             {
-            	rc = send(client_socket,(void *) &msg,length,0);
+                rc = send(client_socket,(void *) &msg,length,0);
     
-            	if ( rc == -1 )
-                	gw_log_print("RM",'E',"Error sending message %s\n",strerror(errno));
+                if ( rc == -1 )
+                    gw_log_print("RM",'E',"Error sending message %s\n",strerror(errno));
             }
         }        
     }
@@ -171,15 +166,15 @@ void gw_rm_array_match(int client_socket, int array_id)
     /* Find a job from this array */
     
     for (i=0;i < array->number_of_tasks; i++)
-	{
-		if (array->job_ids[i] != -1)
-		{
-    	    gw_rm_job_match(client_socket, array->job_ids[i]);
-		    break;	
-		}
-	}
-	
-	pthread_mutex_unlock(&(array->mutex));
+    {
+        if (array->job_ids[i] != -1)
+        {
+            gw_rm_job_match(client_socket, array->job_ids[i]);
+            break;
+        }
+    }
+
+    pthread_mutex_unlock(&(array->mutex));
 }
 
 /* ------------------------------------------------------------------------- */
