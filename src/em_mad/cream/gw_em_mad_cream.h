@@ -40,7 +40,6 @@ CREAM CLIENT API C++ includes
 #include <ctime> 
 #include <fstream> 
 #include <sstream>
-#include <queue>
 
 /** 
   boost includes
