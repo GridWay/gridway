@@ -598,7 +598,7 @@ int gw_sched__flex_debug = 0;
 char *gw_sched_text;
 #line 1 "gw_sch_conf_parser.l"
 /* -------------------------------------------------------------------------- */
-/* Copyright 2002-2011, GridWay Project Leads (GridWay.org)                   */
+/* Copyright 2002-2012, GridWay Project Leads (GridWay.org)                   */
 /*                                                                            */
 /* Licensed under the Apache License, Version 2.0 (the "License"); you may    */
 /* not use this file except in compliance with the License. You may obtain    */
