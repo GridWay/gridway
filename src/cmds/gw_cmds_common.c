@@ -889,7 +889,6 @@ void gw_client_print_host_queues(gw_msg_host_t * msg, gw_boolean_t header)
     int string_short=GW_MSG_STRING_SHORT;
     char head_string[200];
     char buffer[string_short];
-    char *tmp;    
     int  i;
     
     sprintf(head_string,"\n%-20s %-7s %-5s %-5s %-5s %-5s %-5s %-8s %-10s %-8s",
@@ -910,7 +909,7 @@ void gw_client_print_host_queues(gw_msg_host_t * msg, gw_boolean_t header)
         
         sprintf(buffer,"%3i/%-3i",msg->queue_freenodecount[i],
                         msg->queue_nodecount[i]);
-        printf("%-7s ",tmp);
+        printf("%-7s ",buffer);
 
         printf("%-5i ",msg->queue_maxtime[i]);
         printf("%-5i ",msg->queue_maxcputime[i]);
