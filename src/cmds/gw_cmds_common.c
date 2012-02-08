@@ -88,7 +88,7 @@ char *gw_print_date_and_time(time_t t, char *the_time)
 /*---------------------------------------------------------------------------*/
 
 int gw_check_state(char jobstate_from_user, gw_job_state_t current_job_state)
-{	
+{
 	if(jobstate_from_user == '&')
 		return 1;
 	
@@ -428,28 +428,28 @@ void gw_client_print_status_full(gw_msg_job_t * msg)
     }
            
     if(strlen(msg->host) > 0)
-	    printf("HOST=%s\n",msg->host);
+        printf("HOST=%s\n",msg->host);
         
-	printf("FIXED_PRIORITY=%u\n",msg->fixed_priority);
-	printf("DEADLINE=%s\n",gw_template_deadline_string(msg->deadline));
+    printf("FIXED_PRIORITY=%u\n",msg->fixed_priority);
+    printf("DEADLINE=%s\n",gw_template_deadline_string(msg->deadline));
 
-	printf("TYPE=%s\n",gw_template_jobtype_string(msg->type));
-	printf("NP=%d\n",msg->np);
+    printf("TYPE=%s\n",gw_template_jobtype_string(msg->type));
+    printf("NP=%d\n",msg->np);
 		
-	printf("JOB_STATE=%s\n", gw_job_state_string(msg->job_state));
+    printf("JOB_STATE=%s\n", gw_job_state_string(msg->job_state));
     
-	printf("EM_STATE=%s\n", gw_em_state_string (msg->em_state));
-	printf("RESTARTED=%d\n",msg->restarted);
+    printf("EM_STATE=%s\n", gw_em_state_string (msg->em_state));
+    printf("RESTARTED=%d\n",msg->restarted);
     printf("CLIENT_WAITING=%d\n",msg->client_waiting);
     printf("RESCHEDULE=%d\n",msg->reschedule);
 
-	printf("START_TIME=%s\n",gw_print_date_and_time(msg->start_time,the_time));
-	printf("EXIT_TIME=%s\n",gw_print_date_and_time(msg->exit_time,the_time));
-	printf("EXEC_TIME=%s\n",gw_print_time (msg->cpu_time,the_time)); 
-	printf("XFR_TIME=%s\n",gw_print_time (msg->xfr_time,the_time)); 
+    printf("START_TIME=%s\n",gw_print_date_and_time(msg->start_time,the_time));
+    printf("EXIT_TIME=%s\n",gw_print_date_and_time(msg->exit_time,the_time));
+    printf("EXEC_TIME=%s\n",gw_print_time (msg->cpu_time,the_time)); 
+    printf("XFR_TIME=%s\n",gw_print_time (msg->xfr_time,the_time)); 
 	        
-	if (msg->job_state == GW_JOB_STATE_ZOMBIE)
-	    printf("EXIT_CODE=%d\n",msg->exit_code);
+    if (msg->job_state == GW_JOB_STATE_ZOMBIE)
+        printf("EXIT_CODE=%d\n",msg->exit_code);
     
     printf("\n");
 }
@@ -821,8 +821,8 @@ void gw_client_print_host_status_header()
 {
     char head_string[210];
     
-    sprintf(head_string,"%-3s %-4s %-15s %-5s %-4s %%%-3s %11s %13s %13s %-18s %-30s",
-    "HID","PRIO","OS","ARCH","MHZ","CPU","MEM(F/T)","DISK(F/T)","N(U/F/T)","LRMS","HOSTNAME");
+    sprintf(head_string,"%-3s %-3s %-15s %-6s %-4s %%%-3s %11s %13s %13s %-18s %-30s",
+    "HID","PRI","OS","ARCH","MHZ","CPU","MEM(F/T)","DISK(F/T)","NODES(U/F/T)","LRMS","HOSTNAME");
     
     bold();
     underline(); 
@@ -840,31 +840,30 @@ void gw_client_print_host_status(gw_msg_host_t * msg)
 {
     int string_short=GW_MSG_STRING_SHORT;
     char buffer[string_short];
-    char *tmp;
     int freenodecount;
     int i;
     
     printf("%-3i ",msg->host_id);
-    printf("%-4i ",msg->fixed_priority);    
+    printf("%-3i ",msg->fixed_priority);    
     
     snprintf(buffer,sizeof(char)*string_short,"%s%s",msg->os_name, msg->os_version);
     printf("%-15.15s ",buffer);
     
-    printf("%-5.5s ",msg->arch);
+    printf("%-6.6s ",msg->arch);
     printf("%4i ",msg->cpu_mhz);
     printf("%4i ",msg->cpu_free);
 
     snprintf(buffer,sizeof(char)*string_short,"%i/%i",msg->free_mem_mb,msg->size_mem_mb);    
-    tmp = buffer;
-    while (*tmp ==' ')
-        tmp++;
-    printf("%11s ",tmp);
+    printf("%11s ",buffer);
 
-    snprintf(buffer,sizeof(char)*string_short,"%i/%i",msg->free_disk_mb,msg->size_disk_mb);
-    tmp = buffer;
-    while (*tmp ==' ')
-        tmp++;
-    printf("%13s ",tmp);    
+    if (msg->size_disk_mb >= 10000)
+        if (msg->free_disk_mb >= 10000)
+            snprintf(buffer,sizeof(char)*string_short,"%liG/%liG",msg->free_disk_mb/1024,msg->size_disk_mb/1024);
+        else
+            snprintf(buffer,sizeof(char)*string_short,"%liM/%liG",msg->free_disk_mb,msg->size_disk_mb/1024);
+    else
+        snprintf(buffer,sizeof(char)*string_short,"%liM/%liM",msg->free_disk_mb,msg->size_disk_mb);
+    printf("%13s ",buffer);    
 
     freenodecount = 0;
     for (i=0; i<msg->number_of_queues; i++)
@@ -874,10 +873,7 @@ void gw_client_print_host_status(gw_msg_host_t * msg)
     }
     
     snprintf(buffer,sizeof(char)*string_short,"%i/%i/%i",msg->used_slots,freenodecount,msg->nodecount);
-    tmp = buffer;
-    while (*tmp ==' ')
-        tmp++;
-    printf("%13s ",tmp);
+    printf("%13s ",buffer);
 
     printf("%-18.18s ",msg->lrms_name);
     
@@ -914,9 +910,6 @@ void gw_client_print_host_queues(gw_msg_host_t * msg, gw_boolean_t header)
         
         sprintf(buffer,"%3i/%-3i",msg->queue_freenodecount[i],
                         msg->queue_nodecount[i]);
-        tmp = buffer;
-        while (*tmp ==' ')
-            tmp++;
         printf("%-7s ",tmp);
 
         printf("%-5i ",msg->queue_maxtime[i]);
@@ -977,8 +970,8 @@ void gw_client_print_host_match_header()
 {
     char head_string[200];
 
-    sprintf(head_string,"%-3s %-10s %-5s %-5s %-5s %-20s", 
-        "HID","QNAME","RANK","PRIO","SLOTS","HOSTNAME"); 
+    sprintf(head_string,"%-3s %-10s %-5s %-4s %-5s %-20s", 
+        "HID","QNAME","RANK","PRI","SLOTS","HOSTNAME"); 
     bold();
     underline(); 
     printf("%s",head_string);
@@ -1045,7 +1038,7 @@ void gw_client_print_host_match_xml(gw_msg_match_t *match_list)
 
 		  printf("    <QUEUE QUEUE_ID=\"%i\">\n", j);
 		  printf("      <QUEUE_NAME>%s</QUEUE_NAME>\n", match_list->queue_name[j]);
-		  printf("      <RANK>%i</RANK>\n" , match_list->rank[j]);
+		  printf("      <RANK>%i</RANK>\n", match_list->rank[j]);
 		  printf("      <SLOTS>%i</SLOTS>\n", match_list->slots[j]);
 		  printf("    </QUEUE>\n");
 
@@ -1086,8 +1079,8 @@ void gw_client_print_host_status_full(gw_msg_host_t * msg)
 
     printf("FREE_MEM_MB=%d\n", msg->free_mem_mb);
     printf("SIZE_MEM_MB=%d\n", msg->size_mem_mb);
-    printf("FREE_DISK_MB=%d\n", msg->free_disk_mb);
-    printf("SIZE_DISK_MB=%d\n", msg->size_disk_mb);
+    printf("FREE_DISK_MB=%ld\n", msg->free_disk_mb);
+    printf("SIZE_DISK_MB=%ld\n", msg->size_disk_mb);
 
     freenodecount = 0;
     for (i=0; i<msg->number_of_queues; i++)
@@ -1153,8 +1146,8 @@ void gw_client_print_host_status_xml(gw_msg_host_t * msg)
 
     printf("    <FREE_MEM_MB>%d</FREE_MEM_MB>\n", msg->free_mem_mb);
     printf("    <SIZE_MEM_MB>%d</SIZE_MEM_MB>\n", msg->size_mem_mb);
-    printf("    <FREE_DISK_MB>%d</FREE_DISK_MB>\n", msg->free_disk_mb);
-    printf("    <SIZE_DISK_MB>%d</SIZE_DISK_MB>\n", msg->size_disk_mb);
+    printf("    <FREE_DISK_MB>%ld</FREE_DISK_MB>\n", msg->free_disk_mb);
+    printf("    <SIZE_DISK_MB>%ld</SIZE_DISK_MB>\n", msg->size_disk_mb);
 
     freenodecount = 0;
     for (i=0; i<msg->number_of_queues; i++)

@@ -126,7 +126,7 @@ typedef enum
 
 typedef struct gw_msg_s
 {
-    gw_msg_type_t msg_type;	
+    gw_msg_type_t msg_type;
     gw_return_code_t rc;
 
     int client_socket;
@@ -137,11 +137,11 @@ typedef struct gw_msg_s
     char group[GW_MSG_STRING_SHORT];
     char proxy_path[GW_MSG_STRING_LONG];
 
-    int	init_state;	
+    int init_state;
     //gw_template_t jt;
 
     int job_id;
-    int array_id;	
+    int array_id;
     int number_of_tasks;
     int exit_code;
     
@@ -187,7 +187,7 @@ typedef struct gw_msg_job_s
 
     gw_jobtype_t type;
     int np;
-	
+
     int em_state;
     int job_state;
     
@@ -210,8 +210,8 @@ typedef struct gw_msg_job_s
 
 typedef struct gw_msg_history_s
 {
-	gw_msg_type_t msg_type;
-	gw_return_code_t rc;
+    gw_msg_type_t msg_type;
+    gw_return_code_t rc;
 
     int rank;
     int host_id;
@@ -236,9 +236,9 @@ typedef struct gw_msg_history_s
        
     char rdir[GW_MSG_STRING_SHORT];
   // Next contains hostname/lrms
-	char em_rc[GW_MSG_STRING_USER_AT_HOST];
+    char em_rc[GW_MSG_STRING_USER_AT_HOST];
     char queue[GW_MSG_STRING_SHORT];
-    	
+
     int tries;
     gw_migration_reason_t reason;
        
@@ -249,16 +249,16 @@ typedef struct gw_msg_history_s
 
 typedef struct gw_msg_host_s 
 {
-	gw_msg_type_t msg_type;
-	gw_return_code_t rc;
-	
+    gw_msg_type_t msg_type;
+    gw_return_code_t rc;
+
     char em_mad[GW_MSG_STRING_SHORT];
     char tm_mad[GW_MSG_STRING_SHORT];
     char im_mad[GW_MSG_STRING_SHORT]; 
 
     int used_slots;
-	int running_jobs;
-	
+    int running_jobs;
+
     int host_id;
     int fixed_priority;
 
@@ -273,16 +273,16 @@ typedef struct gw_msg_host_s
     int  cpu_smp;
     int  nodecount;
 
-    int size_mem_mb;
-    int free_mem_mb;
-    int size_disk_mb;
-    int free_disk_mb;
+    int  size_mem_mb;
+    int  free_mem_mb;
+    long size_disk_mb;
+    long free_disk_mb;
 
     char fork_name[GW_MSG_STRING_SHORT];
     char lrms_name[GW_MSG_STRING_SHORT];
     char lrms_type[GW_MSG_STRING_SHORT];
 
-	int  number_of_queues;
+    int  number_of_queues;
     char queue_name[GW_HOST_MAX_QUEUES][GW_MSG_STRING_SHORT];
     int  queue_nodecount[GW_HOST_MAX_QUEUES];
     int  queue_freenodecount[GW_HOST_MAX_QUEUES];
@@ -295,32 +295,32 @@ typedef struct gw_msg_host_s
     char queue_dispatchtype[GW_HOST_MAX_QUEUES][GW_MSG_STRING_SHORT];
     char queue_priority[GW_HOST_MAX_QUEUES][GW_MSG_STRING_SHORT];
 
-	int  number_of_int_vars;   
-   	char gen_var_int_name[GW_HOST_MAX_GENVARS][GW_MSG_STRING_SHORT];
-   	int  gen_var_int_value[GW_HOST_MAX_GENVARS];
+    int  number_of_int_vars;   
+    char gen_var_int_name[GW_HOST_MAX_GENVARS][GW_MSG_STRING_SHORT];
+    int  gen_var_int_value[GW_HOST_MAX_GENVARS];
 
-	int  number_of_str_vars;
-   	char gen_var_str_name[GW_HOST_MAX_GENVARS][GW_MSG_STRING_SHORT];
-   	char gen_var_str_value[GW_HOST_MAX_GENVARS][GW_MSG_STRING_LONG];   	
+    int  number_of_str_vars;
+    char gen_var_str_name[GW_HOST_MAX_GENVARS][GW_MSG_STRING_SHORT];
+    char gen_var_str_value[GW_HOST_MAX_GENVARS][GW_MSG_STRING_LONG];
     
 } gw_msg_host_t;
 
 
 typedef struct gw_msg_match_s 
 {
-	gw_msg_type_t	 msg_type;
-	gw_return_code_t rc;
-	
-	int              host_id;
-	int              job_id;
-	int              fixed_priority;
+    gw_msg_type_t    msg_type;
+    gw_return_code_t rc;
 
-	gw_boolean_t     matched;
+    int host_id;
+    int job_id;
+    int fixed_priority;
+
+    gw_boolean_t matched;
 
     char hostname[GW_MSG_STRING_HOST];
-	int  running_jobs;
-	
-	int  number_of_queues;
+    int  running_jobs;
+
+    int  number_of_queues;
     char queue_name[GW_HOST_MAX_QUEUES][GW_MSG_STRING_SHORT];
     int  match[GW_HOST_MAX_QUEUES];
     int  rank [GW_HOST_MAX_QUEUES];
@@ -333,23 +333,23 @@ typedef struct gw_msg_user_s
 {
     gw_msg_type_t msg_type;
     gw_return_code_t rc;
-	
+
     int user_id;
-    char name[GW_MSG_STRING_SHORT];	
-    char dn[GW_MSG_STRING_LONG];	
+    char name[GW_MSG_STRING_SHORT];
+    char dn[GW_MSG_STRING_LONG];
     
-	int active_jobs;
-	int running_jobs;
-	
-	time_t idle;
-	
-	int  num_ems;
-	int  em_pid[GW_MAX_MADS];
-	char em_name[GW_HOST_MAX_QUEUES][GW_MSG_STRING_SHORT];
-	
-	int  num_tms;
-	int  tm_pid[GW_MAX_MADS];
-	char tm_name[GW_HOST_MAX_QUEUES][GW_MSG_STRING_SHORT];
+    int active_jobs;
+    int running_jobs;
+
+    time_t idle;
+
+    int  num_ems;
+    int  em_pid[GW_MAX_MADS];
+    char em_name[GW_HOST_MAX_QUEUES][GW_MSG_STRING_SHORT];
+
+    int  num_tms;
+    int  tm_pid[GW_MAX_MADS];
+    char tm_name[GW_HOST_MAX_QUEUES][GW_MSG_STRING_SHORT];
     
 } gw_msg_user_t;
 
