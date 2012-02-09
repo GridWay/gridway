@@ -32,7 +32,7 @@ OSG, TeraGrid).
 ===== RELEASE NOTES =====
 
 The release notes can be found online:
-http://gridway.org/doku.php?id=software:release_notes:510
+http://gridway.org/doku.php?id=software:release_notes:5.10
 
 
 ===== DOCUMENTATION =====
@@ -47,7 +47,7 @@ Check the Installation Guide for more details.
 
 1) Install the GridWay Core
 
-The binary RPM package gridway-core installs GridWay with a multi-user configuration. Please note that all GridWay users must to be added to the gwusers group.
+The binary RPM package gridway-core installs GridWay with a multi-user configuration. Please note that all GridWay users must be added to the gwusers group.
 RPM dependencies: 
 - chkconfig
 - initscripts
@@ -55,7 +55,7 @@ RPM dependencies:
 - db4-devel
 - db4-utils
 Post-install configuration:
-- All GridWay users must to be added to the gwusers group.
+- All GridWay users must be added to the gwusers group.
 - GridWay users will need to export the environmental variables: $GW_LOCATION and $LD_LIBRARY_PATH (append $GW_LOCATION/lib).
 - Some privileges are required to be set in the /etc/sudoers file. Please add the below lines.
    Defaults:gwadmin !requiretty
@@ -70,7 +70,7 @@ RPM dependencies: none
 
 2) Install the GridWay MADs for GT5
 
-The binary RPM package gridway-GT5 installs the GridWay MADs to interface with the Globus Toolkit 5 services, GRAM5 and GridFTP. This provides a basic configuration of the MADs (see $GW_LOCATION/etc/gwd.conf). You only must to configure the available hosts for your GridWay instance (check the Configuration Guide).
+The binary RPM package gridway-GT5 installs the GridWay MADs to interface with the Globus Toolkit 5 services, GRAM5 and GridFTP. This provides a basic configuration of the MADs (see $GW_LOCATION/etc/gwd.conf). You only must configure the available hosts for your GridWay instance (check the Configuration Guide).
 RPM dependencies:
 - gridway-core
 - globus-gram-client
@@ -78,7 +78,7 @@ RPM dependencies:
 - globus-gass-copy-progs
 - globus-proxy-utils
 Post-install configuration:
-- You must to configure $GW_LOCATION/etc/gram5_hosts.list according to your resources.
+- You must configure $GW_LOCATION/etc/gram5_hosts.list according to your resources.
 - GridWay users will need to export the environmental variables: $GLOBUS_LOCATION and $LD_LIBRARY_PATH (append $GLOBUS_LOCATION/lib).
 - Some privileges are required to be set in the /etc/sudoers file. Please add the below lines.
    Defaults>GWUSERS env_keep="GW_LOCATION GLOBUS_LOCATION"
