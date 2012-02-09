@@ -203,6 +203,34 @@ AM_CONDITIONAL(DB, test "x$db" = "xyes")
 
 AM_CONDITIONAL(TESTS, test "x$tests" = "xyes")
 
+# --- Fine tuning of the installation directories ---
+
+if test $localstatedir != '${prefix}/var'; then
+if test $prefix = NONE; then
+      vardir=${localstatedir#$ac_default_prefix}
+      if test $vardir = $localstatedir; then
+        $as_echo "$as_myself: error: localstatedir does not match in default prefix" >&2
+        exit 1
+      fi
+    else
+      vardir=${localstatedir#$prefix}
+      if test $vardir = $localstatedir; then
+        $as_echo "$as_myself: error: localstatedir does not match in prefix" >&2
+        exit 1
+      fi
+    fi
+fi;
+
+if test -n "$vardir"; then
+cat >>confdefs.h <<_ACEOF
+#define VAR_DIR "$vardir"
+_ACEOF
+else
+cat >>confdefs.h <<_ACEOF
+#define VAR_DIR "var"
+_ACEOF
+fi
+
 #------------------------------------------------------------------------------
 # Checks for programs.
 #------------------------------------------------------------------------------

@@ -29,7 +29,7 @@
 #define GW_TEST_DIR "test/gridway"
 #else
 #define GW_ETC_DIR "etc"
-#define GW_VAR_DIR "var"
+#define GW_VAR_DIR VAR_DIR
 #define GW_TEST_DIR "test"
 #endif
 

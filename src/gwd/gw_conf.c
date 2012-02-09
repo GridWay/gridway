@@ -31,7 +31,7 @@ gw_conf_t gw_conf;
 int  gw_conf_init (gw_boolean_t multiuser, gw_boolean_t dispose)
 {
     int i;
-    int loc_length;
+    int loc_length, var_length;
     struct passwd *    pw_ent;
 	
     gw_conf.multiuser = multiuser;
@@ -50,12 +50,13 @@ int  gw_conf_init (gw_boolean_t multiuser, gw_boolean_t dispose)
     }
     
     loc_length = strlen(gw_conf.gw_location) + sizeof(GW_ETC_DIR);
+    var_length = strlen(gw_conf.gw_location) + sizeof(GW_VAR_DIR);
   
     gw_conf.conf_file        = (char *) malloc (sizeof(char) * (loc_length + 11));
     gw_conf.sch_conf_file    = (char *) malloc (sizeof(char) * (loc_length + 13));
     gw_conf.template_default = (char *) malloc (sizeof(char) * (loc_length + 23));
-    gw_conf.gw_globus_seg    = (char *) malloc (sizeof(char) * (loc_length + 16));
-    gw_conf.gw_acct          = (char *) malloc (sizeof(char) * (loc_length + 11));
+    gw_conf.gw_globus_seg    = (char *) malloc (sizeof(char) * (var_length + 16));
+    gw_conf.gw_acct          = (char *) malloc (sizeof(char) * (var_length + 11));
     
     if ((gw_conf.conf_file == NULL) || 
         (gw_conf.template_default == NULL) ||

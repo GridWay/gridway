@@ -18,7 +18,7 @@ SUBDIRS = src
 JAVA_HOME = @java_home@
 PREFIX = @prefix@
 
-vardir = $(PREFIX)/var
+vardir = @localstatedir@
 testdir = $(PREFIX)/test
 xmldir = $(PREFIX)/xml_schema
 
