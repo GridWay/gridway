@@ -2,23 +2,19 @@
 %define _release 0
 
 Name:		gridway-core
-Version:	5.9
+Version:	5.10
 Release:	0%{dist}
 Summary:	GridWay Core
-Packager:	GridWay Project Leads <http://gridway.org/>
 
 Group:		System Environment/Libraries
 License:	Apache License
 URL:		http://www.gridway.org/
-Vendor:		GridWay Project Leads
-# wget http://dev.gridway.org/attachments/download/56/gridway-5.9.0.tar.gz
-# wget http://dev.gridway.org/projects/gridway/repository/raw/tags/GW_5_9_0/packaging/README
-# wget http://dev.gridway.org/projects/gridway/repository/raw/tags/GW_5_9_0/packaging/gwd
-# tar -xzf gridway-5.9.0.tar.gz
-# cp -p README gridway-5.9.0/
-# cp -p gwd gridway-5.9.0/etc/
-# chmod 755 gridway-5.9.0/etc/gwd
-# tar -czf gridway-5.9.0.tar.gz gridway-5.9.0/
+Vendor:         Initiative for Globus in Europe (IGE)
+# svn co http://svn.gridway.org/gridway/tags/GW_5_10_0 gridway-5.10.0
+# cp -p packaging/README gridway-5.10.0/
+# cp -p packaging/gwd gridway-5.10.0/etc/
+# chmod 755 gridway-5.10.0/etc/gwd
+# tar -czf gridway-5.10.0.tar.gz gridway-5.10.0/
 
 Source:		%{_name}-%{version}.%{_release}.tar.gz
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
@@ -28,6 +24,9 @@ Requires(post): chkconfig
 Requires(preun): chkconfig
 Requires(preun): initscripts
 Requires(postun): initscripts
+Requires: db4
+Requires: db4-devel
+Requires: db4-utils
 
 %description
 The GridWay Metascheduler enables large-scale, reliable and efficient sharing 
@@ -49,12 +48,8 @@ GridWay Core
 /usr/sbin/groupadd gwusers > /dev/null 2> /dev/null
 /usr/sbin/useradd -d /usr/share/%{_name} -g gwusers -s /bin/sh gwadmin > /dev/null 2> /dev/null
 chown -R gwadmin:gwusers /usr/share/%{_name}/%{version}.%{_release}
-%if "%{?rhel}" <="5" || "%{?fedora}" <= "9"
-mv /usr/share/%{_name}/%{version}.%{_release}/etc/gwd %{_initrddir}
-%else
-mv /usr/share/%{_name}/%{version}.%{_release}/etc/gwd %{_initddir}
-%endif
 /sbin/chkconfig --add gwd
+/sbin/ldconfig
 
 %preun
 if [ $1 -eq 0 ] ; then
@@ -62,26 +57,29 @@ if [ $1 -eq 0 ] ; then
  /sbin/chkconfig --del gwd
 fi
 
-%postun 
+%postun
 /usr/sbin/userdel gwadmin > /dev/null 2> /dev/null
 /usr/sbin/groupdel gwusers > /dev/null 2> /dev/null
 if [ "$1" -ge "1" ] ; then
  /sbin/service gwd condrestart >/dev/null 2>&1 || :
 fi
-%if "%{?rhel}" <="5" || "%{?fedora}" <= "9"
-rm %{_initrddir}/gwd
-%else
-rm %{_initddir}/gwd
-%endif
+/sbin/ldconfig
 
 %build
-./configure --prefix=/usr/share/%{_name}/%{version}.%{_release}
+./configure --prefix=/usr/ --localstatedir=/usr/share/%{_name}/%{version}.%{_release}/var --datarootdir=/usr/share/doc/%{_name}-%{version}.%{_release} --with-db=yes --with-syslog=LOG_USER
 make
 
 %install
 rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
-cp etc/gwd $RPM_BUILD_ROOT/usr/share/%{_name}/%{version}.%{_release}/etc
+mv $RPM_BUILD_ROOT/usr/xml_schema/ $RPM_BUILD_ROOT/usr/share/%{_name}/%{version}.%{_release}/
+%if "%{?rhel}" <="5" || "%{?fedora}" <= "9"
+mkdir -p $RPM_BUILD_ROOT/%{_initrddir}
+cp etc/gwd $RPM_BUILD_ROOT/%{_initrddir}
+%else
+mkdir -p $RPM_BUILD_ROOT/%{_initddir}
+cp etc/gwd $RPM_BUILD_ROOT/%{_initddir}
+%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -90,85 +88,89 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-/usr/share/gridway/5.9.0/etc/gwd.conf
-/usr/share/gridway/5.9.0/etc/gwrc
-/usr/share/gridway/5.9.0/etc/job_template.default
-/usr/share/gridway/5.9.0/etc/sched.conf
-/usr/share/gridway/5.9.0/etc/gwd
-/usr/share/gridway/5.9.0/bin/gw_flood_scheduler
-/usr/share/gridway/5.9.0/bin/gw_im_mad_common.sh
-/usr/share/gridway/5.9.0/bin/gw_im_mad_static
-/usr/share/gridway/5.9.0/bin/gw_mad_common.sh
-/usr/share/gridway/5.9.0/bin/gw_sched
-/usr/share/gridway/5.9.0/bin/gwacct
-/usr/share/gridway/5.9.0/bin/gwd
-/usr/share/gridway/5.9.0/bin/gwdagman
-/usr/share/gridway/5.9.0/bin/gwhistory
-/usr/share/gridway/5.9.0/bin/gwhost
-/usr/share/gridway/5.9.0/bin/gwkill
-/usr/share/gridway/5.9.0/bin/gwps
-/usr/share/gridway/5.9.0/bin/gwsubmit
-/usr/share/gridway/5.9.0/bin/gwuser
-/usr/share/gridway/5.9.0/bin/gwwait
-/usr/share/gridway/5.9.0/lib/libdrmaa.a
-/usr/share/gridway/5.9.0/lib/libdrmaa.la
-/usr/share/gridway/5.9.0/lib/libdrmaa.so
-/usr/share/gridway/5.9.0/lib/libdrmaa.so.0
-/usr/share/gridway/5.9.0/lib/libdrmaa.so.0.0.0
-/usr/share/gridway/5.9.0/libexec/gw_monitor.sh
-/usr/share/gridway/5.9.0/libexec/gw_wrapper.sh
-/usr/share/gridway/5.9.0/libexec/ruby/dagman/gridway.rb
-/usr/share/gridway/5.9.0/libexec/ruby/dagman/node.rb
-/usr/share/gridway/5.9.0/libexec/ruby/dagman/parse.rb
-/usr/share/gridway/5.9.0/libexec/ruby/dagman/runner.rb
-/usr/share/gridway/5.9.0/share/LICENSE
-/usr/share/gridway/5.9.0/share/NOTICE
-/usr/share/gridway/5.9.0/share/README
-/usr/share/gridway/5.9.0/share/RELEASE_NOTES
-/usr/share/gridway/5.9.0/include/drmaa.h
-/usr/share/gridway/5.9.0/include/gw_acct.h
-/usr/share/gridway/5.9.0/include/gw_action.h
-/usr/share/gridway/5.9.0/include/gw_array.h
-/usr/share/gridway/5.9.0/include/gw_array_pool.h
-/usr/share/gridway/5.9.0/include/gw_client.h
-/usr/share/gridway/5.9.0/include/gw_cmds_common.h
-/usr/share/gridway/5.9.0/include/gw_common.h
-/usr/share/gridway/5.9.0/include/gw_conf.h
-/usr/share/gridway/5.9.0/include/gw_dm.h
-/usr/share/gridway/5.9.0/include/gw_dm_mad.h
-/usr/share/gridway/5.9.0/include/gw_drmaa_jt.h
-/usr/share/gridway/5.9.0/include/gw_em.h
-/usr/share/gridway/5.9.0/include/gw_em_mad.h
-/usr/share/gridway/5.9.0/include/gw_em_rsl.h
-/usr/share/gridway/5.9.0/include/gw_file_parser.h
-/usr/share/gridway/5.9.0/include/gw_history.h
-/usr/share/gridway/5.9.0/include/gw_host.h
-/usr/share/gridway/5.9.0/include/gw_host_pool.h
-/usr/share/gridway/5.9.0/include/gw_im.h
-/usr/share/gridway/5.9.0/include/gw_im_mad.h
-/usr/share/gridway/5.9.0/include/gw_job.h
-/usr/share/gridway/5.9.0/include/gw_job_pool.h
-/usr/share/gridway/5.9.0/include/gw_job_template.h
-/usr/share/gridway/5.9.0/include/gw_log.h
-/usr/share/gridway/5.9.0/include/gw_rm.h
-/usr/share/gridway/5.9.0/include/gw_rm_connection_list.h
-/usr/share/gridway/5.9.0/include/gw_rm_msg.h
-/usr/share/gridway/5.9.0/include/gw_sch_conf.h
-/usr/share/gridway/5.9.0/include/gw_scheduler.h
-/usr/share/gridway/5.9.0/include/gw_template.h
-/usr/share/gridway/5.9.0/include/gw_tm.h
-/usr/share/gridway/5.9.0/include/gw_tm_mad.h
-/usr/share/gridway/5.9.0/include/gw_um.h
-/usr/share/gridway/5.9.0/include/gw_user.h
-/usr/share/gridway/5.9.0/include/gw_user_pool.h
-/usr/share/gridway/5.9.0/include/gw_xfr_files.h
-/usr/share/gridway/5.9.0/xml_schema/gridway.xsd
-/usr/share/gridway/5.9.0/var
-/usr/share/gridway/5.9.0/var/acct
+/usr/etc/gwd.conf
+/usr/etc/gwrc
+/usr/etc/job_template.default
+/usr/etc/sched.conf
+%if "%{?rhel}" <="5" || "%{?fedora}" <= "9"
+%{_initrddir}/gwd
+%else
+%{_initddir}/gwd
+%endif
+/usr/bin/gw_flood_scheduler
+/usr/bin/gw_im_mad_common.sh
+/usr/bin/gw_im_mad_static
+/usr/bin/gw_mad_common.sh
+/usr/bin/gw_sched
+/usr/bin/gwacct
+/usr/bin/gwd
+/usr/bin/gwdagman
+/usr/bin/gwhistory
+/usr/bin/gwhost
+/usr/bin/gwkill
+/usr/bin/gwps
+/usr/bin/gwsubmit
+/usr/bin/gwuser
+/usr/bin/gwwait
+/usr/lib/libdrmaa.a
+/usr/lib/libdrmaa.la
+/usr/lib/libdrmaa.so
+/usr/lib/libdrmaa.so.0
+/usr/lib/libdrmaa.so.0.0.0
+/usr/libexec/gw_monitor.sh
+/usr/libexec/gw_wrapper.sh
+/usr/libexec/ruby/dagman/gridway.rb
+/usr/libexec/ruby/dagman/node.rb
+/usr/libexec/ruby/dagman/parse.rb
+/usr/libexec/ruby/dagman/runner.rb
+/usr/share/doc/gridway-5.10.0/LICENSE
+/usr/share/doc/gridway-5.10.0/NOTICE
+/usr/share/doc/gridway-5.10.0/README
+/usr/share/doc/gridway-5.10.0/RELEASE_NOTES
+/usr/include/drmaa.h
+/usr/include/gw_acct.h
+/usr/include/gw_action.h
+/usr/include/gw_array.h
+/usr/include/gw_array_pool.h
+/usr/include/gw_client.h
+/usr/include/gw_cmds_common.h
+/usr/include/gw_common.h
+/usr/include/gw_conf.h
+/usr/include/gw_dm.h
+/usr/include/gw_dm_mad.h
+/usr/include/gw_drmaa_jt.h
+/usr/include/gw_em.h
+/usr/include/gw_em_mad.h
+/usr/include/gw_em_rsl.h
+/usr/include/gw_file_parser.h
+/usr/include/gw_history.h
+/usr/include/gw_host.h
+/usr/include/gw_host_pool.h
+/usr/include/gw_im.h
+/usr/include/gw_im_mad.h
+/usr/include/gw_job.h
+/usr/include/gw_job_pool.h
+/usr/include/gw_job_template.h
+/usr/include/gw_log.h
+/usr/include/gw_rm.h
+/usr/include/gw_rm_connection_list.h
+/usr/include/gw_rm_msg.h
+/usr/include/gw_sch_conf.h
+/usr/include/gw_scheduler.h
+/usr/include/gw_template.h
+/usr/include/gw_tm.h
+/usr/include/gw_tm_mad.h
+/usr/include/gw_um.h
+/usr/include/gw_user.h
+/usr/include/gw_user_pool.h
+/usr/include/gw_xfr_files.h
+/usr/share/gridway/5.10.0/xml_schema/gridway.xsd
+/usr/share/gridway/5.10.0/var
+/usr/share/gridway/5.10.0/var/acct
 
 %changelog
-* Tue Oct 4 2011 GridWay Project Leads <http://gridway.org/> - 5.9-0
-- Update to GridWay 5.9-0
+* Tue Feb 09 2012 GridWay Project Leads <http://gridway.org/> - 5.10-0
+- Update to GridWay 5.10-0
 
 * Thu Sep 30 2011 GridWay Project Leads <http://gridway.org/> - 5.8-0
 - Update to GridWay 5.8-0
@@ -179,8 +181,8 @@ rm -rf $RPM_BUILD_ROOT
 * Wed Jun 29 2011 GridWay Project Leads <http://gridway.org/> - 5.7-1
 - Fixed some recommendations for FHS compilant
 
-* Thu Jun 9 2011 GridWay Project Leads <http://gridway.org/> - 5.7-1
+* Thu Jun 09 2011 GridWay Project Leads <http://gridway.org/> - 5.7-1
 - Update to GridWay 5.7-1
 
-* Fri Jun 3 2011 GridWay Project Leads <http://gridway.org/> - 5.7-0
+* Fri Jun 03 2011 GridWay Project Leads <http://gridway.org/> - 5.7-0
 - Initial version

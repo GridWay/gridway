@@ -4,7 +4,7 @@
 # description: GridWay Metascheduler
 # processname: gwd
 #
-# Copyright 2002-2012 GridWay Team, Distributed Systems Architecture
+# Copyright 2002-2011 GridWay Team, Distributed Systems Architecture
 # Group, Universidad Complutense de Madrid
 #
 
@@ -17,7 +17,7 @@ SCRIPTNAME=/etc/init.d/gwd
 RETVAL=0
 
 # Exit if the package is not installed
-test -x "/usr/share/gridway/5.9.0/bin/gwd" || exit 0
+test -x "/usr/bin/gwd" || exit 0
 
 start(){
 echo -n $"Starting $DESC: "
@@ -33,7 +33,7 @@ echo -n $"Stopping $DESC: "
 killproc gwd
 RETVAL=$?
 echo
-[ $RETVAL -eq 0 ] && rm -f /usr/share/gridway/5.9.0/var/.lock
+[ $RETVAL -eq 0 ] && rm -f /usr/share/gridway/5.10.0/var/.lock
 return $RETVAL
 }
 
