@@ -14,9 +14,8 @@ Driver (EM MAD) for the CREAM interface.
 
 The source distribution requires on the client-side:
 
-- GridWay 5.7 (http://www.gridway.org)
-- gLite 3.2 UI
-- log4cpp-devel, libxml2-devel and gsoap-devel packages
+- GridWay 5.10 (http://www.gridway.org)
+- emi-ui, boost-devel, log4cpp-devel, libxml2-devel, classads-devel and gsoap-devel packages
 
 
 ===== INSTALLATION =====
@@ -26,18 +25,13 @@ UI and you have access to a CREAM CE.
 
 1) Install the required packages.
 2) Change to src/em_mad/cream directory in the GridWay distribution.
-3) Add /opt/lib/c-ares to LD_LIBRARY_PATH.
-4) Create the Globus build environment with:
-
-gpt-build -force -nosrc -buildir=/tmp/globus_core.$$ gcc64dbg
-
-5) Build and install the driver executing "make; make install".
-6) Configure GridWay through the $GW_LOCATION/etc/gwd.conf file (check 
+3) Build and install the driver executing "make; make install".
+4) Configure GridWay through the $GW_LOCATION/etc/gwd.conf file (check 
 the GridWay Configuration Guide) to use the MAD. This EM MAD is intended 
 to work with the "dummy" TM MAD configured for using a GridFTP or GASS 
 server on the client. Use "jdl" as RSL generation function.
-7) Launch the GridWay daemon from $GW_LOCATION/bin/gwd.
-8) Test it and enjoy!
+5) Launch the GridWay daemon from $GW_LOCATION/bin/gwd.
+6) Test it and enjoy!
 
 
 ===== CREDITS =====
