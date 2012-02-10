@@ -94,7 +94,7 @@ rm -rf $RPM_BUILD_ROOT
 /usr/bin/gw_tm_mad_ftp.bin
 
 %changelog
-* Mon Feb 09 2012 GridWay Project Leads <http://gridway.org/> - 5.10-0
+* Thu Feb 09 2012 GridWay Project Leads <http://gridway.org/> - 5.10-0
 - Update to GridWay 5.10-0
 
 * Fri Jan 27 2012 Mattias Ellert <mattias.ellert@fysat.uu.se> - 5.8-2

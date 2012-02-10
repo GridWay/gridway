@@ -169,7 +169,7 @@ rm -rf $RPM_BUILD_ROOT
 /usr/share/gridway/5.10.0/var/acct
 
 %changelog
-* Tue Feb 09 2012 GridWay Project Leads <http://gridway.org/> - 5.10-0
+* Thu Feb 09 2012 GridWay Project Leads <http://gridway.org/> - 5.10-0
 - Update to GridWay 5.10-0
 
 * Thu Sep 30 2011 GridWay Project Leads <http://gridway.org/> - 5.8-0
