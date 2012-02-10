@@ -45,18 +45,12 @@ http://gridway.org/doku.php?id=documentation
 
 Check the Installation Guide for more details.
 
-1) Install the GridWay Core
+1) Install the GridWay Core: The binary RPM package gridway-core installs GridWay with a multi-user configuration.
 
-The binary RPM package gridway-core installs GridWay with a multi-user configuration. Please note that all GridWay users must be added to the gwusers group.
-RPM dependencies: 
-- chkconfig
-- initscripts
-- db4
-- db4-devel
-- db4-utils
-Post-install configuration:
+1.1) Install RPM dependencies: chkconfig, initscripts, db4, db4-devel and db4-utils.
+1.2) Post-install configuration:
 - All GridWay users must be added to the gwusers group.
-- GridWay users will need to export the environmental variables: $GW_LOCATION and $LD_LIBRARY_PATH (append $GW_LOCATION/lib).
+- GridWay users must export the $GW_LOCATION environmental variable: export GW_LOCATION=/usr
 - Some privileges are required to be set in the /etc/sudoers file. Please add the below lines.
    Defaults:gwadmin !requiretty
    # User alias specification (GridWay)
@@ -66,34 +60,41 @@ Post-install configuration:
    gwadmin ALL=(GWUSERS) NOPASSWD: /usr/bin/grid-proxy-info *
 
 The source RPM package gridway-core enables you to build the binary RPM.
-RPM dependencies: none
+Build RPM dependencies: none
 
-2) Install the GridWay MADs for GT5
+2) Install the GridWay MADs
 
-The binary RPM package gridway-GT5 installs the GridWay MADs to interface with the Globus Toolkit 5 services, GRAM5 and GridFTP. This provides a basic configuration of the MADs (see $GW_LOCATION/etc/gwd.conf). You only must configure the available hosts for your GridWay instance (check the Configuration Guide).
-RPM dependencies:
-- gridway-core
-- globus-gram-client
-- globus-gass-copy
-- globus-gass-copy-progs
-- globus-proxy-utils
-Post-install configuration:
-- You must configure $GW_LOCATION/etc/gram5_hosts.list according to your resources.
-- GridWay users will need to export the environmental variables: $GLOBUS_LOCATION and $LD_LIBRARY_PATH (append $GLOBUS_LOCATION/lib).
+2a) MADs for GT5: The binary RPM package gridway-GT5 installs the GridWay MADs to interface with the Globus Toolkit 5 services, GRAM5 and GridFTP, as well as an static information MAD is provided.
+
+2.1a) Install RPM dependencies: gridway-core, globus-gram-client and globus-gass-copy.
+2.2a) Post-install configuration:
+- This RPM provides a basic configuration of the MADs through the file /usr/etc/gwd.conf (check the Configuration Guide).
+- You must configure the available hosts for your GridWay instance (see the example file /usr/etc/gram5_hosts.list).
+- GridWay users must export the $GLOBUS_LOCATION environmental variable: export GLOBUS_LOCATION=/usr
 - Some privileges are required to be set in the /etc/sudoers file. Please add the below lines.
    Defaults>GWUSERS env_keep="GW_LOCATION GLOBUS_LOCATION"
    #GridWay entries (GT5 MAD)
-   gwadmin ALL=(GWUSERS) NOPASSWD: $GW_LOCATION/bin/gw_em_mad_gram5 *
-   gwadmin ALL=(GWUSERS) NOPASSWD: $GW_LOCATION/bin/gw_tm_mad_ftp *
+   gwadmin ALL=(GWUSERS) NOPASSWD: /usr/bin/gw_em_mad_gram5 *
+   gwadmin ALL=(GWUSERS) NOPASSWD: /usr/bin/gw_tm_mad_ftp *
 
 The source RPM package gridway-GT5 enables you to build the binary RPM.
-RPM dependencies: 
-- globus-common-devel
-- globus-gram-client
-- globus-gram-client-devel
-- globus-gass-copy
-- globus-ftp-client-devel
-- globus-gass-copy-devel
+Build RPM dependencies: globus-ftp-client-devel, globus-gass-copy-devel, grid-packaging-tools and globus-common-progs.
+
+2b) MADs for gLite 3.2: The binary RPM package gridway-gLite installs the GridWay MADs to interface with the gLite 3.2 services, BDII and CREAM, as well as a dummy transfer MAD is provided.
+
+2.1b) Install RPM dependencies: gridway-core and globus-gass-server-ez-progs. 
+2.2b) Post-install configuration:
+- This RPM provides a basic configuration of the MADs through the file /usr/etc/gwd.conf (check the Configuration Guide). Set up your BDII server and your VO.
+- GridWay users must export the $GLOBUS_LOCATION environmental variable: export GLOBUS_LOCATION=/usr
+- Some privileges are required to be set in the /etc/sudoers file. Please add the below lines.
+   Defaults>GWUSERS env_keep="GW_LOCATION GLOBUS_LOCATION"
+   #GridWay entries (gLite MAD)
+   gwadmin ALL=(GWUSERS) NOPASSWD: /usr/bin/gw_im_mad_bdii *
+   gwadmin ALL=(GWUSERS) NOPASSWD: /usr/bin/gw_em_mad_cream *
+   gwadmin ALL=(GWUSERS) NOPASSWD: /usr/bin/gw_tm_mad_dummy *
+
+The source RPM package gridway-gLite enables you to build the binary RPM.
+Build RPM dependencies: emi-ui, boost-devel, gsoap-devel, libxml2-devel, log4cpp-devel and classads-devel.
 
 3) Launch the gwd daemon.
 
