@@ -96,7 +96,7 @@ Build RPM dependencies: globus-ftp-client-devel, globus-gass-copy-devel, grid-pa
 The source RPM package gridway-gLite enables you to build the binary RPM.
 Build RPM dependencies: emi-ui, boost-devel, gsoap-devel, libxml2-devel, log4cpp-devel and classads-devel.
 
-2c) GridWay MADs for OGSA-BES endpoints: The binary RPM package gridway-BES installs the GridWay MADs to interface with OGSA-BES services, as well as an static information MAD and a dummy transfer MAD are provided.
+2c) GridWay MADs for OGSA-BES endpoints: The binary RPM package gridway-BES installs the GridWay MAD to interface with OGSA-BES services, as well as an static information MAD and a dummy transfer MAD are provided.
 
 2.1c) Install RPM dependencies: gridway-core, xmlbeans, axis, apache-commons-logging, apache-commons-discovery, wsdl4j, xml-security, dom4j and log4j. 
       Other dependencies (non RPM): gridsam-client (check the default location in Makefile).
@@ -106,7 +106,7 @@ Build RPM dependencies: emi-ui, boost-devel, gsoap-devel, libxml2-devel, log4cpp
 - GridWay users must export the $GLOBUS_LOCATION environmental variable: export GLOBUS_LOCATION=/usr
 - Some privileges are required to be set in the /etc/sudoers file. Please add the below lines.
    Defaults>GWUSERS env_keep="GW_LOCATION GLOBUS_LOCATION"
-   #GridWay entries (gLite MAD)
+   #GridWay entries (OGSA-BES MAD)
    gwadmin ALL=(GWUSERS) NOPASSWD: /usr/bin/GW_em_mad_bes *
    gwadmin ALL=(GWUSERS) NOPASSWD: /usr/bin/gw_tm_mad_dummy *
 - Add the transport tag:
