@@ -18,10 +18,10 @@ implementation of the OGSA-BES interface.
 
 The source distribution requires on the client-side:
 
-- GridWay 5.7 (http://www.gridway.org)
+- GridWay 5.10 (http://www.gridway.org)
 - GridSAM 2.3.0 client
-- libxmlbeans-java, libdom4j-java, libaxis-java, libcommons-logging-java, 
-libcommons-discovery-java, libwsdl4j-java and libxml-security-java
+- xmlbeans, dom4j, axis, commons-logging, commons-discovery, wsdl4j, log4j, 
+and xml-security
 - A GridFTP server
 - Access to a MyProxy server. Access data must be placed in the 
 $HOME/.myproxy file, where the first line is the hostname of the MyProxy 
