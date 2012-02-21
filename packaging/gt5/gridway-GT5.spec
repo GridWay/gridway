@@ -94,23 +94,23 @@ rm -rf $RPM_BUILD_ROOT
 /usr/bin/gw_tm_mad_ftp.bin
 
 %changelog
-* Thu Feb 09 2012 GridWay Project Leads <http://gridway.org/> - 5.10-0
+* Thu Feb 09 2012 GridWay Project Leads <contact@gridway.org> - 5.10-0
 - Update to GridWay 5.10-0
 
 * Fri Jan 27 2012 Mattias Ellert <mattias.ellert@fysat.uu.se> - 5.8-2
 - Recompiled for Globus Toolkit 5.2
 
-* Thu Sep 30 2011 GridWay Project Leads <http://gridway.org/> - 5.8-0
+* Thu Sep 30 2011 GridWay Project Leads <contact@gridway.org> - 5.8-0
 - Update to GridWay 5.8-0
 
-* Wed Aug 24 2011 GridWay Project Leads <http://gridway.org/> - 5.8-RC1
+* Wed Aug 24 2011 GridWay Project Leads <contact@gridway.org> - 5.8-RC1
 - Update to GridWay 5.8-RC1
 
-* Wed Jun 29 2011 GridWay Project Leads <http://gridway.org/> - 5.7-1
+* Wed Jun 29 2011 GridWay Project Leads <contact@gridway.org> - 5.7-1
 - Fixed some recommendations for FHS compilant
 
-* Thu Jun 09 2011 GridWay Project Leads <http://gridway.org/> - 5.7-1
+* Thu Jun 09 2011 GridWay Project Leads <contact@gridway.org> - 5.7-1
 - Update to GridWay 5.7-1 
 
-* Mon Jun 06 2011 GridWay Project Leads <http://gridway.org/> - 5.7-0
+* Mon Jun 06 2011 GridWay Project Leads <contact@gridway.org> - 5.7-0
 - Initial version

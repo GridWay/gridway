@@ -88,5 +88,5 @@ rm -rf $RPM_BUILD_ROOT
 /usr/bin/gw_tm_mad_dummy.bin
 
 %changelog
-* Mon Feb 13 2012 GridWay Project Leads <http://gridway.org/> - 5.10-0
+* Mon Feb 13 2012 GridWay Project Leads <contact@gridway.org> - 5.10-0
 - Initial version

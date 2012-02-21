@@ -1,0 +1,5 @@
+#!/bin/bash
+
+/usr/sbin/userdel gwadmin > /dev/null 2> /dev/null
+/usr/sbin/groupdel gwusers > /dev/null 2> /dev/null
+/sbin/ldconfig

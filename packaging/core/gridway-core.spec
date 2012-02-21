@@ -11,7 +11,7 @@ License:	Apache License
 URL:		http://www.gridway.org/
 Vendor:         Initiative for Globus in Europe (IGE)
 # svn co http://svn.gridway.org/gridway/tags/GW_5_10_0 gridway-5.10.0
-# cp -p packaging/README gridway-5.10.0/
+# cp -p packaging/README.rpm gridway-5.10.0/README
 # cp -p packaging/gwd gridway-5.10.0/etc/
 # chmod 755 gridway-5.10.0/etc/gwd
 # tar -czf gridway-5.10.0.tar.gz gridway-5.10.0/
@@ -169,20 +169,20 @@ rm -rf $RPM_BUILD_ROOT
 /usr/share/gridway/5.10.0/var/acct
 
 %changelog
-* Thu Feb 09 2012 GridWay Project Leads <http://gridway.org/> - 5.10-0
+* Thu Feb 09 2012 GridWay Project Leads <contact@gridway.org> - 5.10-0
 - Update to GridWay 5.10-0
 
-* Thu Sep 30 2011 GridWay Project Leads <http://gridway.org/> - 5.8-0
+* Thu Sep 30 2011 GridWay Project Leads <contact@gridway.org> - 5.8-0
 - Update to GridWay 5.8-0
 
-* Wed Aug 24 2011 GridWay Project Leads <http://gridway.org/> - 5.8-RC1
+* Wed Aug 24 2011 GridWay Project Leads <contact@gridway.org> - 5.8-RC1
 - Update to GridWay 5.8-RC1
 
-* Wed Jun 29 2011 GridWay Project Leads <http://gridway.org/> - 5.7-1
+* Wed Jun 29 2011 GridWay Project Leads <contact@gridway.org> - 5.7-1
 - Fixed some recommendations for FHS compilant
 
-* Thu Jun 09 2011 GridWay Project Leads <http://gridway.org/> - 5.7-1
+* Thu Jun 09 2011 GridWay Project Leads <contact@gridway.org> - 5.7-1
 - Update to GridWay 5.7-1
 
-* Fri Jun 03 2011 GridWay Project Leads <http://gridway.org/> - 5.7-0
+* Fri Jun 03 2011 GridWay Project Leads <contact@gridway.org> - 5.7-0
 - Initial version

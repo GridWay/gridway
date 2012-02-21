@@ -1,0 +1,4 @@
+#!/bin/bash
+
+/sbin/service gridway-core stop >/dev/null 2>&1
+/sbin/chkconfig --del gridway-core
