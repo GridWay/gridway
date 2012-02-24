@@ -1,4 +1,4 @@
-Source: gridway
+Source: gridway-core
 Priority: optional
 Maintainer: Initiative for Globus in Europe (IGE) <info@ige-project.eu>
 Standards-Version: 3.9.2
@@ -8,8 +8,9 @@ Homepage: http://www.ige-project.eu/
 
 Package: gridway-core
 Architecture: any
-Depends: ${shlibs:Depends}, libdb4.8, ruby
-Description: The GridWay Metascheduler enables large-scale, reliable and efficient sharing 
+Depends: libdb4.8
+Description: 
+ The GridWay Metascheduler enables large-scale, reliable and efficient sharing 
  of computing resources: clusters, supercomputers, stand-alone servers... It 
  supports different LRM systems (PBS, SGE, LSF, Condor...) within a single 
  organization or scattered across several administrative domains. GridWay 
@@ -17,3 +18,5 @@ Description: The GridWay Metascheduler enables large-scale, reliable and efficie
  in-house systems to Grid infrastructures and Cloud providers. GridWay supports
  most of existing Grid middle-wares, can be used on main production Grid 
  infrastructures and can dynamically access to Cloud resources.
+ .
+ The gridway-core package contains: GridWay Core

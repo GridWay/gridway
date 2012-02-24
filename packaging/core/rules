@@ -11,14 +11,12 @@ _datadir = $(_prefix)/share
 _mandir = $(_datadir)/man
 _docdir = $(_datadir)/doc/gridway-5.10.0
 
-configure: confiture-stamp
+configure: configure-stamp
 
 configure-stamp:
 	dh_testdir
 
-	./configure --prefix=/usr/ --localstatedir=/usr/share/gridway/5.10.0/var --datarootdir=/usr/share/doc/gridway-5.10.0 --with-db=yes --with-syslog=LOG_USER
-
-	touch $@
+	./configure --prefix=/usr/ --localstatedir=/usr/share/gridway/5.10.0/var --datarootdir=/usr/share/doc/gridway-core --with-db=yes --with-syslog=LOG_USER
 
 build: build-arch build-indep
 
@@ -31,8 +29,6 @@ build-stamp: configure-stamp
 
 	$(MAKE)
 
-	touch $@
-
 clean:
 	dh_testdir
 	dh_testroot
@@ -41,7 +37,7 @@ clean:
 
 	rm -f build-stamp configure-stamp
 
-	dh_clean debian/*.install
+	dh_clean
 
 install: build-stamp
 	dh_testdir
@@ -55,8 +51,7 @@ binary: binary-arch binary-indep
 binary-arch: install
 	dh_testdir
 	dh_testroot
-	#dh_installdocs -a debian/README
-	#dh_installchangelogs -a
+	dh_installchangelogs -a
 	dh_install -a
 	dh_installman -a
 	dh_installinit -a
