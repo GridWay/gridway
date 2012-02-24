@@ -12,7 +12,7 @@ URL:		http://www.gridway.org/
 Vendor:         Initiative for Globus in Europe (IGE)
 # svn co http://svn.gridway.org/gridway/tags/GW_5_10_0 gridway-5.10.0
 # cp -p packaging/README.rpm gridway-5.10.0/README
-# cp -p packaging/gwd gridway-5.10.0/etc/
+# cp -p packaging/core/RPM/gwd gridway-5.10.0/etc/
 # chmod 755 gridway-5.10.0/etc/gwd
 # tar -czf gridway-5.10.0.tar.gz gridway-5.10.0/
 
