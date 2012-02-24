@@ -120,10 +120,10 @@ class CreamEmMad
     public:
 	CreamEmMad(string delegation, int refreshTime);
 	void init();
-	int submit(int jid, string contact, string jdlFile);
-	int recover(int jid, string contact);
-	int cancel(int jid);
-	int poll(int jid);
+	void submit(int jid, string contact, string jdlFile);
+	void recover(int jid, string contact);
+	void cancel(int jid);
+	void poll(int jid);
 	void finalize();
         void timer();
 };

@@ -101,7 +101,7 @@ CreamEmMad::CreamEmMad(string delegation, int refreshTime)
 	this->delegationID = "GridWay";
     else
     	this->delegationID = delegation;
-    this->refreshTime = 43200;
+    this->refreshTime = 21600;
     if (refreshTime > 0)
         this->refreshTime = refreshTime;
     this->creamJobs.clear();
@@ -151,10 +151,10 @@ void CreamEmMad::init()
     return;
 }
 
-int CreamEmMad::submit(int jid, string contact, string jdlFile)
+void CreamEmMad::submit(int jid, string contact, string jdlFile)
 {
     if (proxyDelegate("SUBMIT", jid, contact, delegationID) != 0)
-        return -1;
+        return;
 
     string JDL = fileToString(jdlFile);
     CreamOperation result = creamService->submit(jid, contact, JDL, delegationID);
@@ -162,7 +162,7 @@ int CreamEmMad::submit(int jid, string contact, string jdlFile)
     if (result.code == -1)
     {	
 	cout << "SUBMIT " << jid << " FAILURE " << result.info << endl;
-	return -1;
+	return;
     }
 
     pthread_mutex_lock(&jobMutex); 
@@ -181,20 +181,19 @@ int CreamEmMad::submit(int jid, string contact, string jdlFile)
         string creamJobId = result.job->getCreamJobId();   
     pthread_mutex_unlock(&jobMutex); 
 
-    if (result.code == 0)
-        cout << "SUBMIT " << jid << " SUCCESS " << contact.substr(0, contact.find("/ce-cream")) << "/" << creamJobId << endl;  
+    cout << "SUBMIT " << jid << " SUCCESS " << contact.substr(0, contact.find("/ce-cream")) << "/" << creamJobId << endl;  
 
-    return 0;
+    return;
 }
 
-int CreamEmMad::poll(int jid)
+void CreamEmMad::poll(int jid)
 {
     map<int, CreamJob *>::iterator it = creamJobs.find(jid);
  
     if (it == creamJobs.end())
     {
         cout << "POLL " << jid << " FAILURE " << "The job ID does not exist" << endl;
-        return -1;
+        return;
     }
 
     pthread_mutex_lock(&jobMutex);
@@ -210,7 +209,7 @@ int CreamEmMad::poll(int jid)
     else 
         cout << "POLL " << jid << " FAILURE " << result.info << endl;
 
-    if (result.info.compare("DONE") == 0 || result.info.compare("FAILED") == 0)
+    if ((result.info.compare("DONE") == 0) || (result.info.compare("FAILED") == 0))
     {
 	pthread_mutex_lock(&jobMutex);
 	    delete creamJobs.find(jid)->second;
@@ -218,17 +217,17 @@ int CreamEmMad::poll(int jid)
 	pthread_mutex_unlock(&jobMutex);
     }
 
-    return 0;
+    return;
 }
 
-int CreamEmMad::cancel(int jid)
+void CreamEmMad::cancel(int jid)
 {
     map<int,CreamJob *>::iterator it = creamJobs.find(jid);
    
     if (it == creamJobs.end())
     {
         cout << "CANCEL " << jid << " FAILURE " << "The job ID does not exist" << endl;
-        return -1;
+        return;
     }
 
     pthread_mutex_lock(&jobMutex);
@@ -236,7 +235,7 @@ int CreamEmMad::cancel(int jid)
 	if (creamJob == NULL)
 	{
             pthread_mutex_unlock(&jobMutex);
-            return -1;
+            return;
 	}
         string creamJid = creamJob->getCreamJobId();
         string serviceAddress = creamJob->getCreamURL();
@@ -249,7 +248,7 @@ int CreamEmMad::cancel(int jid)
     else
         cout << "CANCEL " << jid << " FAILURE " << result.info << endl;
 
-    return 0;
+    return;
 }
 
 void CreamEmMad::finalize()
@@ -275,10 +274,15 @@ int CreamEmMad::proxyDelegate(string action, int jid, string contact, string del
 	    else if (it->second->getStatus().compare("PENDING") == 0) 
 	    {
 		pthread_mutex_unlock(&credentialsMutex);
-		return it->second->waitForDelegation();
+		if (it->second->waitForDelegation() == -1)
+		{
+		    cout << action << " " << jid << " FAILURE " << "Connection timed out" << endl;
+		    return -1;
+		}
+		return 0;
 	    }
-	    else if (it->second->getStatus().compare("FAILED") == 0)	
-		credentials[contact]->setDelegation("PENDING");
+	    else if (it->second->getStatus().compare("FAILED") == 0)	{
+		credentials[contact]->setDelegation("PENDING");}
 	}
         else 
 	    credentials.insert(pair<string, CreamCredentialStatus *>(contact, new CreamCredentialStatus("PENDING"))); 
@@ -297,7 +301,7 @@ int CreamEmMad::proxyDelegate(string action, int jid, string contact, string del
     return 0;
 }
 
-int CreamEmMad::recover(int jid, string contact)
+void CreamEmMad::recover(int jid, string contact)
 {
     string creamJobId;
     string creamURL;
@@ -308,7 +312,7 @@ int CreamEmMad::recover(int jid, string contact)
     host = contact.substr(8, pos-8);
 
     if (proxyDelegate("RECOVER", jid, host, delegationID) != 0)
-        return -1; 
+        return; 
 
     pos = contact.find("/CREAM");
 
@@ -332,7 +336,7 @@ int CreamEmMad::recover(int jid, string contact)
   
     CreamOperation result = creamService->poll(creamJobId, creamURL, delegationID);
 
-    if (result.info.compare("DONE") == 0 || result.info.compare("FAILED") == 0)
+    if ((result.info.compare("DONE") == 0) || (result.info.compare("FAILED") == 0))
     {
         pthread_mutex_lock(&jobMutex);
             delete creamJobs.find(jid)->second;
@@ -345,7 +349,7 @@ int CreamEmMad::recover(int jid, string contact)
     else
         cout << "RECOVER " << jid << " FAILURE " << result.info << endl;
 
-    return 0;
+    return;
 }
 
 string CreamEmMad::fileToString(string jdlFileName)
@@ -360,7 +364,7 @@ string CreamEmMad::fileToString(string jdlFileName)
         return NULL;
     }
     
-    while (jdlFile->getline(str,40096,'\n'))
+    while (jdlFile->getline(str,4096,'\n'))
     {
         string aux = str;
         jdlString += aux;
@@ -374,7 +378,7 @@ void CreamEmMad::timer()
 {
     string contact;
     CreamOperation result;
-    
+
     map<string,CreamCredentialStatus *>::iterator it;
     for (;;)
     {
@@ -383,12 +387,16 @@ void CreamEmMad::timer()
 	{   
 	     contact = it->first;
 	     if (it->second->getStatus().compare("DONE") == 0)
+	     {
                  result = creamService->proxyRenew(contact, delegationID);
-	     if (result.code != 0)
-		cout << "TIMER - " << " FAILURE " << result.info << endl;
-	     else
-		cout << "TIMER - " << " SUCCESS -" << endl;
-
+	     	 if (result.code != 0)
+		 {
+		     credentials[contact]->setDelegation("FAILED");
+		     cout << "TIMER - " << " FAILURE " << result.info << endl;
+		 }
+	     	 else
+		     cout << "TIMER - " << " SUCCESS -" << endl;
+	     }
 	 }
     }
 }
@@ -532,7 +540,7 @@ CreamOperation CreamService::poll(string creamJid, string serviceAddress, string
             else if (status.compare("ABORTED") == 0)
                 status = "FAILED";
 
-	    if (status.compare("DONE") == 0 || status.compare("FAILED") == 0)
+	    if ((status.compare("DONE") == 0) || (status.compare("FAILED") == 0))
 	    {
 		API::ResultWrapper resultWrapper;
 
@@ -659,10 +667,10 @@ CreamOperation CreamService::creamClientExecute(API::AbsCreamProxy* creamClient,
         }
         catch(DelegationException &ex)
         {
-	    if ((renewedProxy == false) && (typeid(*creamClient) != typeid(API::CreamProxy_ProxyRenew)))
+	    if ((renewedProxy == false) & (typeid(*creamClient) != typeid(API::CreamProxy_ProxyRenew)))
 		result = proxyRenew(contact, delegationID);
 
-	    if ((renewedProxy == true) | (typeid(*creamClient) == typeid(API::CreamProxy_ProxyRenew)) || (result.code == -1))
+	    if ((renewedProxy == true) | (typeid(*creamClient) == typeid(API::CreamProxy_ProxyRenew)) | (result.code == -1))
     	    {
         	delete creamClient;
         	result.code = -1;

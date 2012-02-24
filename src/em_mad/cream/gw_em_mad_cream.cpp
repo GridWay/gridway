@@ -91,21 +91,23 @@ int main( int argc, char **argv)
 	}
 
     while (!end)
-    { 
+    {
         cin.getline(str,4096,'\n');
 
         paramNum = sscanf(str, "%s %s %s %[^\n]", str1, str2, str3, str4);
 
-        action = str1;
-        jidCREAM = atoi(str2);
-        contact = str3;
-        jdlFile = str4;
         if (paramNum != 4)
         {
             cout << "FAILURE Not all four arguments defined" << endl;
             continue;
         }
-        else if (creamEmMad == NULL)
+
+        action = str1;
+        jidCREAM = atoi(str2);
+        contact = str3;
+        jdlFile = str4;
+
+        if (creamEmMad == NULL)
             if (action.compare("INIT") == 0)
             {
 		creamEmMad = new CreamEmMad(delegation, refreshTime);
@@ -124,7 +126,7 @@ int main( int argc, char **argv)
             pthread_attr_destroy(&attr); 
             creamEmMad->finalize();
         }
-        else {
+        else if ( (action.compare("SUBMIT") == 0) || (action.compare("POLL") == 0) || (action.compare("CANCEL") == 0) || (action.compare("RECOVER") == 0) ) {
 	    while ((i=getFreeThread()) == -1);
             operation[i].action = action;
             operation[i].jidCREAM = jidCREAM;
@@ -132,6 +134,8 @@ int main( int argc, char **argv)
             operation[i].jdlFile = jdlFile;
             pthread_create(&creamOperation[i], &attr, creamAction, &operation[i]);
         }
+	else
+	    cout << "FAILURE " << action << " is not a valid action" << endl;
   } 
 }
 
@@ -175,21 +179,20 @@ void *creamAction(void *thread_data)
     string jdlFile = data->jdlFile;
     string host;
     int jidCREAM = data->jidCREAM;
-    int status = -1;
 
     if (action.compare("SUBMIT") == 0)
     {
         host = contact.substr(0, contact.find("/"));
-        status = creamEmMad->submit(jidCREAM, host, jdlFile);
+        creamEmMad->submit(jidCREAM, host, jdlFile);
     }
     else if (action.compare("RECOVER") == 0)
     {
-        status = creamEmMad->recover(jidCREAM, contact);
+        creamEmMad->recover(jidCREAM, contact);
     }
     else if (action.compare("CANCEL") == 0)
-        status = creamEmMad->cancel(jidCREAM);
+        creamEmMad->cancel(jidCREAM);
     else if (action.compare("POLL") == 0)
-        status = creamEmMad->poll(jidCREAM);
+        creamEmMad->poll(jidCREAM);
 
     pthread_mutex_lock(&(data->mutex));
         data->free = true;
