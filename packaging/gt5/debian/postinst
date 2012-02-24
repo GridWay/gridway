@@ -1,0 +1,8 @@
+#!/bin/bash
+
+echo "# MADs for GT5
+IM_MAD = static:gw_im_mad_static:-l etc/gram5_hosts.list:gridFTP:gram5
+EM_MAD = gram5:gw_em_mad_gram5::rsl
+TM_MAD = gridFTP:gw_tm_mad_ftp:" >> /usr/etc/gwd.conf
+
+touch /usr/etc/gram5_hosts.list

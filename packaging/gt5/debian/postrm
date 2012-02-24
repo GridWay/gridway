@@ -1,0 +1,8 @@
+#!/bin/bash
+
+sed '/# MADs for GT5/d' -i /usr/etc/gwd.conf
+sed '/gram5/d' -i /usr/etc/gwd.conf
+sed '/gridFTP/d' -i /usr/etc/gwd.conf
+if [ ! -s "/usr/etc/gram5_hosts.list" ]; then
+ rm -f /usr/etc/gram5_hosts.list;
+fi

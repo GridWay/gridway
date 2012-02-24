@@ -1,0 +1,19 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 01_Makefile.dpatch by  <imarin@imarin.fdi.ucm.es>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+@DPATCH@
+
+--- ../src/tm_mad/gridftp/Makefile	2012-02-20 17:15:20.000000000 +0100
++++ ../src/tm_mad/gridftp/Makefile.patch	2012-02-23 12:07:26.424166750 +0100
+@@ -4,7 +4,7 @@
+ LD = $(GLOBUS_LD)
+ 
+ CFLAGS = $(GLOBUS_CFLAGS) $(GLOBUS_INCLUDES) -I../../../include
+-LDFLAGS = $(GLOBUS_LDFLAGS) $(GLOBUS_PKG_LIBS)
++LDFLAGS = $(GLOBUS_LDFLAGS) -Wl,--no-as-needed $(GLOBUS_PKG_LIBS)
+ 
+ progs = gw_tm_mad_ftp
+ 
