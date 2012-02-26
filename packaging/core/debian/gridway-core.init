@@ -16,7 +16,6 @@
 
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 DAEMON=/bin/sh
-DAEMON_OPTS="-lc -- gwd -m > /dev/null 2>&1 &"
 DAEMON_GWD=/usr/bin/gwd
 NAME=gwd
 DESC=gridway-core
@@ -65,27 +64,25 @@ running()
 }
 
 start() {
-        echo -n "Starting $DESC: "
-        start-stop-daemon --start --quiet --chuid $USERNAME --pidfile $PIDFILE \
-            --exec $DAEMON -- $DAEMON_OPTS
-        RETVAL=$?
-        [ $RETVAL = 0 ] && echo `pidof $DAEMON_GWD` >$PIDFILE #&& echo "$NAME."
-        #[ $RETVAL != 0 ] && echo " ERROR."
-	if running ; then
-            echo "$NAME."
-        else
-            echo " ERROR."
-        fi
+    echo -n "Starting $DESC: "
+    start-stop-daemon --start --quiet --chuid $USERNAME --pidfile $PIDFILE \
+        --exec $DAEMON -- -lc 'gwd -m' > /dev/null 2>&1 
+    RETVAL=$?
+    [ $RETVAL = 0 ] && echo `pidof $DAEMON_GWD` >$PIDFILE
+    if running ; then
+        echo "$NAME."
+    else
+        echo " ERROR."
+    fi
 }
 
 stop() {
-        echo -n "Stopping $DESC: "
-        start-stop-daemon --stop --quiet --pidfile $PIDFILE \
-            --exec $DAEMON_GWD
-        RETVAL=$?
-        [ $RETVAL -eq 0 ] && rm -f /usr/share/gridway/5.10.0/var/.lock
-
-        echo "$NAME."
+    echo -n "Stopping $DESC: "
+    start-stop-daemon --stop --quiet --pidfile $PIDFILE \
+        --exec $DAEMON_GWD
+    RETVAL=$?
+    [ $RETVAL -eq 0 ] && rm -f /usr/share/gridway/5.10.0/var/.lock
+    echo "$NAME."
 }
 
 force_stop() {
@@ -124,32 +121,8 @@ case "$1" in
             echo " ERROR."
         fi
         ;;
-  #reload)
-        #
-        # If the daemon can reload its config files on the fly
-        # for example by sending it SIGHUP, do it here.
-        #
-        # If the daemon responds to changes in its config file
-        # directly anyway, make this a do-nothing entry.
-        #
-        # echo "Reloading $DESC configuration files."
-        # start-stop-daemon --stop --signal 1 --quiet --pidfile \
-        #       /var/run/$NAME.pid --exec $DAEMON
-  #;;
-  force-reload)
-        #
-        # If the "reload" option is implemented, move the "force-reload"
-        # option to the "reload" entry above. If not, "force-reload" is
-        # just the same as "restart" except that it does nothing if the
-        # daemon isn't already running.
-        # check wether $DAEMON is running. If so, restart
-        start-stop-daemon --stop --test --quiet --pidfile \
-            /var/run/$NAME.pid --exec $DAEMON \
-            && $0 restart \
-            || exit 0
-        ;;
   restart)
-    echo -n "Restarting $DESC: \n"
+    echo -n "Restarting $DESC: "
 	stop
         [ -n "$DODTIME" ] && sleep $DODTIME
 	start
@@ -165,8 +138,7 @@ case "$1" in
     ;;
   *)
     N=/etc/init.d/$NAME
-    # echo "Usage: $N {start|stop|restart|reload|force-reload}" >&2
-    echo "Usage: $N {start|stop|restart|force-reload|status|force-stop}" >&2
+    echo "Usage: $N {start|stop|restart|status|force-stop}" >&2
     exit 1
     ;;
 esac
