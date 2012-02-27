@@ -2,13 +2,13 @@ Source: gridway-gt5
 Priority: optional
 Maintainer: Initiative for Globus in Europe (IGE) <info@ige-project.eu>
 Standards-Version: 3.9.2
-Build-Depends: debhelper (>= 5), gcc (>= 3.4.2), libglobus-common-dev, libglobus-gram-client-dev, libglobus-ftp-client-dev, libglobus-gass-copy-dev, grid-packaging-tools, libglobus-common-dev
+Build-Depends: debhelper (>= 5), gcc (>= 3.4.2), libglobus-common-dev, libglobus-gram-client-dev, libglobus-ftp-client-dev, libglobus-gass-copy-dev, grid-packaging-tools
 Section: libs
 Homepage: http://www.ige-project.eu/
 
 Package: gridway-gt5
 Architecture: any
-Depends: gridway-core
+Depends: gridway-core, libglobus-gram-client-dev, libglobus-gass-copy-dev
 Description: 
  GridWay uses several Middleware Access Drivers (MAD) to interface with 
  different Grid services. The following MADs are part of the GridWay 
@@ -16,6 +16,6 @@ Description:
  services, Execution MADs to interface with different execution services, and 
  Transfer MADs to interface with different transfer services.
  .
- The gridway-GT5 package contains: GridWay MADs to interface with Globus Toolkit 5 services. These are an 
+ The gridway-gt5 package contains: GridWay MADs to interface with Globus Toolkit 5 services. These are an 
  Execution MAD to interface with GRAM5 services and a Transfer MAD to interface 
  with GridFTP services.

@@ -47,7 +47,7 @@ This also includes an static Information MAD and a dummy Transfer MAD.
 echo "# MADs for OGSA-BES
 IM_MAD = static:gw_im_mad_static:-l etc/BES_hosts.list:dummy:bes
 EM_MAD = bes:GW_em_mad_bes::jsdl
-TM_MAD = dummy:gw_tm_mad_dummy:" >> /usr/etc/gwd.conf
+TM_MAD = dummy:gw_tm_mad_dummy:-u gsiftp\://<hostname>" >> /usr/etc/gwd.conf
 touch /usr/etc/BES_hosts.list
 
 %postun 

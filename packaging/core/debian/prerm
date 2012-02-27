@@ -1,4 +1,4 @@
 #!/bin/bash
 
-/etc/init.d/gridway-core stop >/dev/null 2>&1
-/sbin/chkconfig --del gridway-core
+/etc/init.d/gwd stop >/dev/null 2>&1
+/sbin/chkconfig --del gwd

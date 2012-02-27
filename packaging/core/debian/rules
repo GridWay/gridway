@@ -16,6 +16,8 @@ configure: configure-stamp
 configure-stamp:
 	dh_testdir
 
+	# wget http://dev.gridway.org/projects/gridway/repository/raw/tags/GW_5_10_0/packaging/README.debian
+	cp -rp README.debian README
 	./configure --prefix=/usr/ --localstatedir=/usr/share/gridway/5.10.0/var --datarootdir=/usr/share/doc/gridway-core --with-db=yes --with-syslog=LOG_USER
 
 build: build-arch build-indep

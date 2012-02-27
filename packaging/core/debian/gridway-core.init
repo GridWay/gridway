@@ -18,7 +18,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 DAEMON=/bin/sh
 DAEMON_GWD=/usr/bin/gwd
 NAME=gwd
-DESC=gridway-core
+DESC=gridway
 
 test -x $DAEMON_GWD || exit 0
 
