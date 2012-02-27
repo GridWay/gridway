@@ -10,7 +10,7 @@ gw_em_mad_bes.jar: GW_em_mad_bes.java GW_em_mad_bes_actions.java
 	@rm -rf package
 
 clean: 
-	@rm gw_em_mad_bes.jar
+	@rm -f gw_em_mad_bes.jar
 
 install: gw_em_mad_bes.jar
 
