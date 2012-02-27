@@ -1,0 +1,22 @@
+Source: gridway-bes
+Priority: optional
+Maintainer: Initiative for Globus in Europe (IGE) <info@ige-project.eu>
+Standards-Version: 3.9.2
+Build-Depends: debhelper (>= 5), gcc (>= 3.4.2), openjdk-6-jdk, libdom4j-java, libaxis-java, libxmlbeans-java 
+#gridsam-client
+Section: libs
+Homepage: http://www.ige-project.eu/
+
+Package: gridway-bes
+Architecture: any
+Depends: gridway-core, libxmlbeans-java, libaxis-java, libcommons-logging-java, libcommons-discovery-java, libwsdl4j-java, libxml-security-java, libdom4j-java 
+#gridsam-client 
+Description: 
+ GridWay uses several Middleware Access Drivers (MAD) to interface with 
+ different Grid services. The following MADs are part of the GridWay 
+ distribution: Information MADS to interface with different information 
+ services, Execution MADs to interface with different execution services, and 
+ Transfer MADs to interface with different transfer services.
+ .
+ The gridway-BES package contains: An Execution MAD to interface with the OGSA Basic Execution Service (BES). 
+ This also includes an static Information MAD and a dummy Transfer MAD.
