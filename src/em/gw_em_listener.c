@@ -317,8 +317,13 @@ void gw_em_listener(void *arg)
                                           (void *) job_id);
                         }
                         else if (strcmp(info, "FAILED") == 0)
+                        {
+                            /* Do not retry */
+                            job->history->tries= job->template.number_of_retries;
+
                             gw_am_trigger(&(gw_em.am), "GW_EM_STATE_FAILED",
                                           (void *) job_id);
+                        }
                     } 
                     else 
                     {
