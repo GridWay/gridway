@@ -157,6 +157,12 @@ void CreamEmMad::submit(int jid, string contact, string jdlFile)
         return;
 
     string JDL = fileToString(jdlFile);
+    if ( JDL.empty() )
+    {
+        cout << "SUBMIT " << jid << " FAILURE " << "Error open the JDL file: " + jdlFile << endl;
+        return;
+    }
+
     CreamOperation result = creamService->submit(jid, contact, JDL, delegationID);
 
     if (result.code == -1)
@@ -281,8 +287,8 @@ int CreamEmMad::proxyDelegate(string action, int jid, string contact, string del
 		}
 		return 0;
 	    }
-	    else if (it->second->getStatus().compare("FAILED") == 0)	{
-		credentials[contact]->setDelegation("PENDING");}
+	    else if (it->second->getStatus().compare("FAILED") == 0)
+		credentials[contact]->setDelegation("PENDING");
 	}
         else 
 	    credentials.insert(pair<string, CreamCredentialStatus *>(contact, new CreamCredentialStatus("PENDING"))); 
@@ -359,11 +365,8 @@ string CreamEmMad::fileToString(string jdlFileName)
     char str[4096];
 
     if (!jdlFile->is_open())
-    {
-        cout << "SUBMIT " << jid << " FAILURE " << "Error open the JDL file: " + jdlFileName << endl;
-        return NULL;
-    }
-    
+        return "";
+ 
     while (jdlFile->getline(str,4096,'\n'))
     {
         string aux = str;
