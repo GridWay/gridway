@@ -299,11 +299,11 @@ void gw_dm_wrapper_done_cb ( void *_job_id )
 
 void gw_dm_wrapper_failed_cb ( void *_job_id )
 {
-	gw_job_t * job;
+    gw_job_t * job;
     int        job_id;
     time_t     total;
 	
-	/* ----------------------------------------------------------- */  
+    /* ----------------------------------------------------------- */  
     /* 0.- Get job pointer                                         */
     /* ----------------------------------------------------------- */  
     

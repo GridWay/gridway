@@ -15,7 +15,7 @@
 # ------------------------------------------------------------------------------
 
 AC_PREREQ(2.59)
-AC_INIT([GridWay],[5.9],[contact@gridway.org],[gridway],[http://gridway.org])
+AC_INIT([GridWay],[5.10.RC1],[contact@gridway.org],[gridway],[http://gridway.org])
 AC_CONFIG_AUX_DIR(config)
 AC_CONFIG_SRCDIR([src/dm/gw_dm_action_dispatch.c])
 
