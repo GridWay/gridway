@@ -1,9 +1,9 @@
 %define _name gridway
-%define _release 0
+%define _release RC1
 
 Name:		gridway-BES
 Version:	5.10
-Release:	0%{dist}
+Release:	RC1%{dist}
 Summary:	OGSA-BES MAD for GridWay
 
 Group:		System Environment/Libraries
@@ -88,5 +88,5 @@ rm -rf $RPM_BUILD_ROOT
 /usr/bin/gw_tm_mad_dummy.bin
 
 %changelog
-* Mon Feb 13 2012 GridWay Project Leads <contact@gridway.org> - 5.10-0
+* Mon Feb 13 2012 GridWay Project Leads <contact@gridway.org> - 5.10-RC1
 - Initial version

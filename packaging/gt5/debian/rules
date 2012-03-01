@@ -3,13 +3,14 @@
 
 INSTALLDIR = $(CURDIR)/debian/gridway-gt5
 
+_version = 5.10.RC1
 _prefix = /usr
 _bindir = $(_prefix)/bin
 _sbindir = $(_prefix)/sbin
 _libdir = $(_prefix)/lib
 _datadir = $(_prefix)/share
 _mandir = $(_datadir)/man
-_docdir = $(_datadir)/doc/gridway-5.10.0
+_docdir = $(_datadir)/doc/gridway-$(_version)
 
 DEB_HOST_ARCH_CPU ?= $(shell dpkg-architecture -qDEB_HOST_ARCH_CPU)
 GW_LOCATION := $(INSTALLDIR)/usr

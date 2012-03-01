@@ -1,9 +1,9 @@
 %define _name gridway
-%define _release 0
+%define _release RC1 
 
 Name:		gridway-gLite
 Version:	5.10
-Release:	0%{dist}
+Release:	RC1%{dist}
 Summary:	gLite MADs for GridWay
 
 Group:		System Environment/Libraries
@@ -81,5 +81,5 @@ rm -rf $RPM_BUILD_ROOT
 /usr/bin/gw_tm_mad_dummy.bin
 
 %changelog
-* Fri Feb 10 2012 GridWay Project Leads <contact@gridway.org> - 5.10-0
+* Fri Feb 10 2012 GridWay Project Leads <contact@gridway.org> - 5.10-RC1
 - Initial version

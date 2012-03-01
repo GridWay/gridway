@@ -49,8 +49,9 @@ Check the Installation Guide for more details.
 
 1.1) Install DEB dependencies: libdb4.8.
 1.2) Post-install configuration:
-- All GridWay users must be added to the gwusers group.
+- All of the GridWay users must be members of the gwusers UNIX group.
 - GridWay users must export the $GW_LOCATION environmental variable: export GW_LOCATION=/usr
+  You can create a profile file for gwusers group.
 - Some privileges are required to be set in the /etc/sudoers file. Please add the below lines.
    Defaults:gwadmin !requiretty
    # User alias specification (GridWay)

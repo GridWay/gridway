@@ -1,20 +1,20 @@
 %define _name gridway
-%define _release 0
+%define _release RC1 
 
 Name:		gridway-core
 Version:	5.10
-Release:	0%{dist}
+Release:	RC1%{dist}
 Summary:	GridWay Core
 
 Group:		System Environment/Libraries
 License:	Apache License
 URL:		http://www.gridway.org/
 Vendor:         Initiative for Globus in Europe (IGE)
-# svn co http://svn.gridway.org/gridway/tags/GW_5_10_0 gridway-5.10.0
-# cp -p packaging/README.rpm gridway-5.10.0/README
-# cp -p packaging/core/RPM/gwd gridway-5.10.0/etc/
-# chmod 755 gridway-5.10.0/etc/gwd
-# tar -czf gridway-5.10.0.tar.gz gridway-5.10.0/
+# svn co http://svn.gridway.org/gridway/tags/GW_5_10_RC1 gridway-5.10.RC1
+# cp -p packaging/README.rpm gridway-5.10.RC1/README
+# cp -p packaging/core/RPM/gwd gridway-5.10.RC1/etc/
+# chmod 755 gridway-5.10.RC1/etc/gwd
+# tar -czf gridway-5.10.RC1.tar.gz gridway-5.10.RC1/
 
 Source:		%{_name}-%{version}.%{_release}.tar.gz
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
@@ -123,10 +123,10 @@ rm -rf $RPM_BUILD_ROOT
 /usr/libexec/ruby/dagman/node.rb
 /usr/libexec/ruby/dagman/parse.rb
 /usr/libexec/ruby/dagman/runner.rb
-/usr/share/doc/gridway-5.10.0/LICENSE
-/usr/share/doc/gridway-5.10.0/NOTICE
-/usr/share/doc/gridway-5.10.0/README
-/usr/share/doc/gridway-5.10.0/RELEASE_NOTES
+/usr/share/doc/gridway-5.10.RC1/LICENSE
+/usr/share/doc/gridway-5.10.RC1/NOTICE
+/usr/share/doc/gridway-5.10.RC1/README
+/usr/share/doc/gridway-5.10.RC1/RELEASE_NOTES
 /usr/include/drmaa.h
 /usr/include/gw_acct.h
 /usr/include/gw_action.h
@@ -164,13 +164,13 @@ rm -rf $RPM_BUILD_ROOT
 /usr/include/gw_user.h
 /usr/include/gw_user_pool.h
 /usr/include/gw_xfr_files.h
-/usr/share/gridway/5.10.0/xml_schema/gridway.xsd
-/usr/share/gridway/5.10.0/var
-/usr/share/gridway/5.10.0/var/acct
+/usr/share/gridway/5.10.RC1/xml_schema/gridway.xsd
+/usr/share/gridway/5.10.RC1/var
+/usr/share/gridway/5.10.RC1/var/acct
 
 %changelog
-* Thu Feb 09 2012 GridWay Project Leads <contact@gridway.org> - 5.10-0
-- Update to GridWay 5.10-0
+* Thu Feb 09 2012 GridWay Project Leads <contact@gridway.org> - 5.10-RC1
+- Update to GridWay 5.10-RC1
 
 * Thu Sep 30 2011 GridWay Project Leads <contact@gridway.org> - 5.8-0
 - Update to GridWay 5.8-0

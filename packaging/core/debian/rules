@@ -3,22 +3,23 @@
 
 INSTALLDIR = $(CURDIR)/debian/gridway-core
 
+_version = 5.10.RC1
 _prefix = /usr
 _bindir = $(_prefix)/bin
 _sbindir = $(_prefix)/sbin
 _libdir = $(_prefix)/lib
 _datadir = $(_prefix)/share
 _mandir = $(_datadir)/man
-_docdir = $(_datadir)/doc/gridway-5.10.0
+_docdir = $(_datadir)/doc/gridway-$(_version)
 
 configure: configure-stamp
 
 configure-stamp:
 	dh_testdir
 
-	# wget http://dev.gridway.org/projects/gridway/repository/raw/tags/GW_5_10_0/packaging/README.debian
+	# wget http://dev.gridway.org/projects/gridway/repository/raw/tags/GW_5_10_RC1/packaging/README.debian
 	cp -rp README.debian README
-	./configure --prefix=/usr/ --localstatedir=/usr/share/gridway/5.10.0/var --datarootdir=/usr/share/doc/gridway-core --with-db=yes --with-syslog=LOG_USER
+	./configure --prefix=/usr/ --localstatedir=/usr/share/gridway/$(_version)/var --datarootdir=/usr/share/doc/gridway-core --with-db=yes --with-syslog=LOG_USER
 
 build: build-arch build-indep
 
