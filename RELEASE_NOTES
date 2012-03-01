@@ -2,9 +2,21 @@
 
 GridWay 5.10 is the new stable version of the fifth series of the metascheduler.
 
-Release date: ??
+Release date: 31st March, 2012
+
+===== Improved BES and CREAM drivers =====
+
+===== FHS-compliant installation =====
+
+===== Changes in the scheduler to enqueue jobs =====
+
+===== Other features ======
+
+Retry job cancel operations
+Show disk size and free space in GB when needed
+Submit MPI jobs to GRAM4 with wrapper
 
 ===== Bug fixing =====
 
 The following bugs have been fixed:
-  * 
+  * Bug #114 (http://dev.gridway.org/issues/114): GW does not retry after a recover failure
