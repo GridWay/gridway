@@ -49,8 +49,6 @@ in $(GRIDSAM_HOME)/conf/client-config.wsdd.
 7) Launch the GridWay daemon from $GW_LOCATION/bin/gwd.
 8) Test it and enjoy!
 
-This driver assumes that GridSAM is configured with OMII WS-Security (default configuration).
-
 
 ===== CREDITS =====
 
