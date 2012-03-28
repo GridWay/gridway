@@ -1,5 +1,5 @@
 %define _name gridway
-%define _release RC1 
+%define _release 0 
 
 %ifarch alpha ia64 ppc64 s390x sparc64 x86_64
 %global flavor gcc64
@@ -9,7 +9,7 @@
 
 Name:		gridway-GT5
 Version:	5.10
-Release:	RC1%{dist}
+Release:	0%{dist}
 Summary:	GT5 MADs for GridWay
 
 Group:		System Environment/Libraries
@@ -94,6 +94,9 @@ rm -rf $RPM_BUILD_ROOT
 /usr/bin/gw_tm_mad_ftp.bin
 
 %changelog
+* Wed 28 Mar 2012 GridWay Project Leads <contact@gridway.org> - 5.10-0
+- Update to 5.10-0
+
 * Thu Feb 09 2012 GridWay Project Leads <contact@gridway.org> - 5.10-RC1
 - Update to GridWay 5.10-RC1
 

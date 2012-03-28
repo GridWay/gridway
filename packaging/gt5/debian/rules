@@ -3,7 +3,7 @@
 
 INSTALLDIR = $(CURDIR)/debian/gridway-gt5
 
-_version = 5.10.RC1
+_version = 5.10.0
 _prefix = /usr
 _bindir = $(_prefix)/bin
 _sbindir = $(_prefix)/sbin
