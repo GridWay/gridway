@@ -19,14 +19,13 @@ limitations under the License.
 
 The GridWay Metascheduler enables large-scale, reliable and efficient sharing 
 of computing resources: clusters, supercomputers, stand-alone servers... It
-supports different LRM systems (PBS, SGE, LSF, Condor) within a single
-organization or scattered across several administrative domains. GridWay
-provides a single point of access to all resources in your organization, from
-in-house systems to Grid infrastructures and Cloud providers.
+supports different LRM systems within a single organization or scattered across
+several administrative domains. GridWay provides a single point of access to all
+resources in your organization, from in-house systems to Grid infrastructures
+and Cloud providers.
 
-GridWay supports most of existing Grid middlewares (Globus WS and pre-WS, LCG, 
-CREAM, ARC) and has being used on main production Grid infrastructures (EGEE,
-OSG, TeraGrid).
+GridWay supports most of existing Grid middlewares and has being used on main
+production Grid infrastructures.
 
 
 ===== RELEASE NOTES =====
@@ -45,14 +44,18 @@ http://gridway.org/doku.php?id=documentation
 
 Check the Installation Guide for more details.
 
-1) Install the GridWay Core: The binary RPM package gridway-core installs GridWay with a multi-user configuration.
+1) Install the GridWay Core: The binary RPM package gridway-core installs
+GridWay with a multi-user configuration.
 
-1.1) Install RPM dependencies: chkconfig, initscripts, db4, db4-devel and db4-utils.
+1.1) Install RPM dependencies: chkconfig, initscripts, db4, db4-devel and
+db4-utils.
 1.2) Post-install configuration:
 - All of the GridWay users must be members of the gwusers UNIX group.
-- GridWay users must export the $GW_LOCATION environmental variable: export GW_LOCATION=/usr
+- GridWay users must export the $GW_LOCATION environmental variable: export
+GW_LOCATION=/usr
   You can create a profile file for gwusers group.
-- Some privileges are required to be set in the /etc/sudoers file. Please add the below lines.
+- Some privileges are required to be set in the /etc/sudoers file. Please add
+the following lines.
    Defaults:gwadmin !requiretty
    # User alias specification (GridWay)
    Runas_Alias GWUSERS = %gwusers
@@ -65,29 +68,43 @@ Build RPM dependencies: none
 
 2) Install the GridWay MADs
 
-2a) GridWay MADs for GT5: The binary RPM package gridway-GT5 installs the GridWay MADs to interface with the Globus Toolkit 5 services, GRAM5 and GridFTP, as well as an static information MAD is provided.
+2a) GridWay MADs for GT5: The binary RPM package gridway-GT5 installs the
+GridWay MADs to interface with the Globus Toolkit 5 services, GRAM5 and GridFTP,
+as well as an static information MAD is provided.
 
-2.1a) Install RPM dependencies: gridway-core, globus-gram-client and globus-gass-copy.
+2.1a) Install RPM dependencies: gridway-core, globus-gram-client and
+globus-gass-copy.
 2.2a) Post-install configuration:
-- This RPM provides a basic configuration of the MADs through the file /usr/etc/gwd.conf (check the Configuration Guide).
-- You must configure the available hosts for your GridWay instance (see the example file /usr/etc/gram5_hosts.list).
-- GridWay users must export the $GLOBUS_LOCATION environmental variable: export GLOBUS_LOCATION=/usr
-- Some privileges are required to be set in the /etc/sudoers file. Please add the below lines.
+- This RPM provides a basic configuration of the MADs through the file
+/usr/etc/gwd.conf (check the Configuration Guide).
+- You must configure the available hosts for your GridWay instance (see the
+example file /usr/etc/gram5_hosts.list).
+- GridWay users must export the $GLOBUS_LOCATION environmental variable: export
+GLOBUS_LOCATION=/usr
+- Some privileges are required to be set in the /etc/sudoers file. Please add
+the following lines.
    Defaults>GWUSERS env_keep="GW_LOCATION GLOBUS_LOCATION"
    #GridWay entries (GT5 MAD)
    gwadmin ALL=(GWUSERS) NOPASSWD: /usr/bin/gw_em_mad_gram5 *
    gwadmin ALL=(GWUSERS) NOPASSWD: /usr/bin/gw_tm_mad_ftp *
 
 The source RPM package gridway-GT5 enables you to build the binary RPM.
-Build RPM dependencies: globus-ftp-client-devel, globus-gass-copy-devel, grid-packaging-tools and globus-common-progs.
+Build RPM dependencies: globus-ftp-client-devel, globus-gass-copy-devel,
+grid-packaging-tools and globus-common-progs.
 
-2b) GridWay MADs for gLite 3.2: The binary RPM package gridway-gLite installs the GridWay MADs to interface with the gLite 3.2 services, BDII and CREAM, as well as a dummy transfer MAD is provided.
+2b) GridWay MADs for gLite 3.2: The binary RPM package gridway-gLite installs
+the GridWay MADs to interface with the gLite 3.2 services, BDII and CREAM, as
+well as a dummy transfer MAD is provided.
 
 2.1b) Install RPM dependencies: gridway-core and globus-gass-server-ez-progs. 
 2.2b) Post-install configuration:
-- This RPM provides a basic configuration of the MADs through the file /usr/etc/gwd.conf (check the Configuration Guide). Set up your BDII server and your VO.
-- GridWay users must export the $GLOBUS_LOCATION environmental variable: export GLOBUS_LOCATION=/usr
-- Some privileges are required to be set in the /etc/sudoers file. Please add the below lines.
+- This RPM provides a basic configuration of the MADs through the file
+/usr/etc/gwd.conf (check the Configuration Guide). Set up your BDII server and
+your VO.
+- GridWay users must export the $GLOBUS_LOCATION environmental variable: export
+GLOBUS_LOCATION=/usr
+- Some privileges are required to be set in the /etc/sudoers file. Please add
+the following lines.
    Defaults>GWUSERS env_keep="GW_LOCATION GLOBUS_LOCATION"
    #GridWay entries (gLite MAD)
    gwadmin ALL=(GWUSERS) NOPASSWD: /usr/bin/gw_im_mad_bdii *
@@ -95,29 +112,42 @@ Build RPM dependencies: globus-ftp-client-devel, globus-gass-copy-devel, grid-pa
    gwadmin ALL=(GWUSERS) NOPASSWD: /usr/bin/gw_tm_mad_dummy *
 
 The source RPM package gridway-gLite enables you to build the binary RPM.
-Build RPM dependencies: emi-ui, boost-devel, gsoap-devel, libxml2-devel, log4cpp-devel and classads-devel.
+Build RPM dependencies: emi-ui, boost-devel, gsoap-devel, libxml2-devel,
+log4cpp-devel and classads-devel.
 
-2c) GridWay MADs for OGSA-BES endpoints: The binary RPM package gridway-BES installs the GridWay MAD to interface with OGSA-BES services, as well as an static information MAD and a dummy transfer MAD are provided.
+2c) GridWay MADs for OGSA-BES endpoints: The binary RPM package gridway-BES
+installs the GridWay MAD to interface with OGSA-BES services, as well as an
+static information MAD and a dummy transfer MAD are provided.
 
-2.1c) Install RPM dependencies: gridway-core, xmlbeans, axis, apache-commons-logging, apache-commons-discovery, wsdl4j, xml-security, dom4j and log4j. 
-      Other dependencies (non RPM): gridsam-client (check the default location in Makefile).
+2.1c) Install RPM dependencies: gridway-core, xmlbeans, axis,
+apache-commons-logging, apache-commons-discovery, wsdl4j, xml-security, dom4j
+and log4j. 
+Other dependencies (non RPM): gridsam-client (check the default location in
+Makefile).
 2.2c) Post-install configuration:
-- This RPM provides a basic configuration of the MADs through the file /usr/etc/gwd.conf (check the Configuration Guide). Set up your GridFTP server. 
-- You must configure the available hosts for your GridWay instance (see the example file /usr/etc/BES_hosts.list).
-- GridWay users must export the $GLOBUS_LOCATION environmental variable: export GLOBUS_LOCATION=/usr
-- Some privileges are required to be set in the /etc/sudoers file. Please add the below lines.
+- This RPM provides a basic configuration of the MADs through the file
+/usr/etc/gwd.conf (check the Configuration Guide). Set up your GridFTP server. 
+- You must configure the available hosts for your GridWay instance (see the
+example file /usr/etc/BES_hosts.list).
+- GridWay users must export the $GLOBUS_LOCATION environmental variable: export
+GLOBUS_LOCATION=/usr
+- Some privileges are required to be set in the /etc/sudoers file. Please add
+the following lines.
    Defaults>GWUSERS env_keep="GW_LOCATION GLOBUS_LOCATION"
    #GridWay entries (OGSA-BES MAD)
    gwadmin ALL=(GWUSERS) NOPASSWD: /usr/bin/GW_em_mad_bes *
    gwadmin ALL=(GWUSERS) NOPASSWD: /usr/bin/gw_tm_mad_dummy *
-- MyProxy is used for managing security credentials. Creates a $HOME/.myproxy file, where the first line is the hostname of the MyProxy server, the second line is the username and the last line is the password.
+- MyProxy is used for managing security credentials. Creates a $HOME/.myproxy
+file, where the first line is the hostname of the MyProxy server, the second
+line is the username and the last line is the password.
 - Add the transport tag:
      <transport name="http" pivot="java:org.apache.axis.transport.http.HTTPSender"/>
   in the $(GRIDSAM_HOME)/conf/client-config.wsdd file.
 
 The source RPM package gridway-BES enables you to build the binary RPM.
 Build RPM dependencies: java-devel, dom4j, axis and xmlbeans.
-Other dependencies (non RPM): gridsam-client (check the default location in GW_em_mad_bes).
+Other dependencies (non RPM): gridsam-client (check the default location in
+GW_em_mad_bes).
 
 3) Launch the gwd daemon.
 
