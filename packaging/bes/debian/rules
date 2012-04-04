@@ -50,17 +50,17 @@ install: build-stamp
 	export GW_LOCATION=$(GW_LOCATION)
 	mkdir -p $(INSTALLDIR)/usr/bin
 	mkdir -p $(INSTALLDIR)/usr/lib
-	mkdir -p $(INSTALLDIR)/usr/lib/java-ext/gridway-BES/lib
-	mkdir -p $(INSTALLDIR)/usr/lib/java-ext/gridway-BES/endorsed
-	mkdir -p $(INSTALLDIR)/usr/share/doc/gridway-BES/
+	mkdir -p $(INSTALLDIR)/usr/lib/java-ext/gridway-bes/lib
+	mkdir -p $(INSTALLDIR)/usr/lib/java-ext/gridway-bes/endorsed
+	mkdir -p $(INSTALLDIR)/usr/share/doc/gridway-bes/
 	mkdir -p $(INSTALLDIR)/usr/etc
-	cp src/em_mad/bes/lib/gridsam-schema-2.3.0.jar $(INSTALLDIR)/usr/lib/java-ext/gridway-BES/lib/
-	cp src/em_mad/bes/lib/omii-security-utils-1.3.jar $(INSTALLDIR)/usr/lib/java-ext/gridway-BES/lib/
-	cp src/em_mad/bes/lib/wss4j.jar $(INSTALLDIR)/usr/lib/java-ext/gridway-BES/lib/
-	cp /usr/share/java/xalan2.jar $(INSTALLDIR)/usr/lib/java-ext/gridway-BES/endorsed
-	cp /usr/share/java/serializer.jar $(INSTALLDIR)/usr/lib/java-ext/gridway-BES/endorsed
-	cp /usr/share/java/axis-saaj.jar $(INSTALLDIR)/usr/lib/java-ext/gridway-BES/endorsed
-	cp src/em_mad/bes/LICENSE.ThirdParty $(INSTALLDIR)/usr/share/doc/gridway-BES/
+	cp src/em_mad/bes/lib/gridsam-schema-2.3.0.jar $(INSTALLDIR)/usr/lib/java-ext/gridway-bes/lib/
+	cp src/em_mad/bes/lib/omii-security-utils-1.3.jar $(INSTALLDIR)/usr/lib/java-ext/gridway-bes/lib/
+	cp src/em_mad/bes/lib/wss4j.jar $(INSTALLDIR)/usr/lib/java-ext/gridway-bes/lib/
+	cp /usr/share/java/xalan2.jar $(INSTALLDIR)/usr/lib/java-ext/gridway-bes/endorsed
+	cp /usr/share/java/serializer.jar $(INSTALLDIR)/usr/lib/java-ext/gridway-bes/endorsed
+	cp /usr/share/java/axis-saaj.jar $(INSTALLDIR)/usr/lib/java-ext/gridway-bes/endorsed
+	cp src/em_mad/bes/LICENSE.ThirdParty $(INSTALLDIR)/usr/share/doc/gridway-bes/
 
 	$(MAKE) install -C src/em_mad/bes/ DESTDIR=$(INSTALLDIR)  
 	$(MAKE) install -C src/tm_mad/dummy/ DESTDIR=$(INSTALLDIR)
