@@ -1,0 +1,36 @@
+<?xml version='1.0'?>
+<deployment xmlns="http://xml.apache.org/axis/wsdd/"
+            xmlns:grid-acct="http://www.it-innovation.soton.ac.uk/2004/grid/account"
+            xmlns:grid-res="http://www.it-innovation.soton.ac.uk/2004/grid/resalloc"
+            xmlns:grid-job="http://www.it-innovation.soton.ac.uk/2004/grid/job"
+            xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+ <globalConfiguration>
+ <parameter name="attachment_encapsulation_format" value="axis.attachment.style.dime"/>
+  <requestFlow>
+   <handler type="java:uk.ac.omii.security.wss4j.handler.WSOutboundHandler" >
+    <parameter name="action" value="Timestamp Signature"/>
+    <parameter name="signaturePropFile" value="crypto.properties" />
+    <parameter name="signatureKeyIdentifier" value="DirectReference" />
+    <parameter name="signatureParts" value="{}{http://schemas.xmlsoap.org/soap/envelope/}Body;{}{http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd}Timestamp"/>
+    <parameter name="passwordCallbackClass"
+      value="uk.ac.omii.security.utils.PWCallback"/>
+   </handler>
+
+  </requestFlow>
+  <responseFlow>
+   <handler type="java:uk.ac.omii.security.wss4j.handler.PolicyEnforcementHandler">
+    <parameter name="action" value="Timestamp Signature"/>
+    <parameter name="signaturePropFile" value="crypto.properties" />
+    <parameter name="signatureKeyIdentifier" value="DirectReference" />
+    <parameter name="passwordCallbackClass" value="uk.ac.omii.security.utils.PWCallback"/>
+    <parameter name="signatureParts" value="{}{http://schemas.xmlsoap.org/soap/envelope/}Body;{}{http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd}Timestamp"/>
+    <parameter name="ignoreEndpointCNmismatch" value="true" />
+   </handler>
+  </responseFlow>
+
+ </globalConfiguration>
+
+ <transport name="http" pivot="java:org.apache.axis.transport.http.HTTPSender"/>
+
+</deployment>

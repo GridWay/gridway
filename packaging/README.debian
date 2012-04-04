@@ -19,14 +19,13 @@ limitations under the License.
 
 The GridWay Metascheduler enables large-scale, reliable and efficient sharing 
 of computing resources: clusters, supercomputers, stand-alone servers... It
-supports different LRM systems (PBS, SGE, LSF, Condor) within a single
-organization or scattered across several administrative domains. GridWay
-provides a single point of access to all resources in your organization, from
-in-house systems to Grid infrastructures and Cloud providers.
+supports different LRM systems within a single organization or scattered across
+several administrative domains. GridWay provides a single point of access to all
+resources in your organization, from in-house systems to Grid infrastructures
+and Cloud providers.
 
-GridWay supports most of existing Grid middlewares (Globus WS and pre-WS, LCG, 
-CREAM, ARC) and has being used on main production Grid infrastructures (EGEE,
-OSG, TeraGrid).
+GridWay supports most of existing Grid middlewares and has being used on main
+production Grid infrastructures.
 
 
 ===== RELEASE NOTES =====
@@ -45,14 +44,17 @@ http://gridway.org/doku.php?id=documentation
 
 Check the Installation Guide for more details.
 
-1) Install the GridWay Core: The binary DEB package gridway-core installs GridWay with a multi-user configuration.
+1) Install the GridWay Core: The binary DEB package gridway-core installs
+GridWay with a multi-user configuration.
 
 1.1) Install DEB dependencies: libdb4.8.
 1.2) Post-install configuration:
 - All of the GridWay users must be members of the gwusers UNIX group.
-- GridWay users must export the $GW_LOCATION environmental variable: export GW_LOCATION=/usr
+- GridWay users must export the $GW_LOCATION environmental variable: export
+GW_LOCATION=/usr
   You can create a profile file for gwusers group.
-- Some privileges are required to be set in the /etc/sudoers file. Please add the below lines.
+- Some privileges are required to be set in the /etc/sudoers file. Please add
+the following lines.
    Defaults:gwadmin !requiretty
    # User alias specification (GridWay)
    Runas_Alias GWUSERS = %gwusers
@@ -65,43 +67,64 @@ Build DEB dependencies: debhelper and gcc.
 
 2) Install the GridWay MADs
 
-2a) GridWay MADs for GT5: The binary DEB package gridway-gt5 installs the GridWay MADs to interface with the Globus Toolkit 5 services, GRAM5 and GridFTP, as well as an static information MAD is provided.
+2a) GridWay MADs for GT5: The binary DEB package gridway-gt5 installs the
+GridWay MADs to interface with the Globus Toolkit 5 services, GRAM5 and GridFTP,
+as well as an static information MAD is provided.
 
-2.1a) Install DEB dependencies: gridway-core, libglobus-gram-client-dev and libglobus-gass-copy-dev.
+2.1a) Install DEB dependencies: gridway-core, libglobus-gram-client-dev and
+libglobus-gass-copy-dev.
 2.2a) Post-install configuration:
-- This DEB provides a basic configuration of the MADs through the file /usr/etc/gwd.conf (check the Configuration Guide).
-- You must configure the available hosts for your GridWay instance (see the example file /usr/etc/gram5_hosts.list).
-- GridWay users must export the $GLOBUS_LOCATION environmental variable: export GLOBUS_LOCATION=/usr
-- Some privileges are required to be set in the /etc/sudoers file. Please add the below lines.
+- This DEB provides a basic configuration of the MADs through the file
+/usr/etc/gwd.conf (check the Configuration Guide).
+- You must configure the available hosts for your GridWay instance (see the
+example file /usr/etc/gram5_hosts.list).
+- GridWay users must export the $GLOBUS_LOCATION environmental variable: export
+GLOBUS_LOCATION=/usr
+- Some privileges are required to be set in the /etc/sudoers file. Please add
+the following lines.
    Defaults>GWUSERS env_keep="GW_LOCATION GLOBUS_LOCATION"
    #GridWay entries (GT5 MAD)
    gwadmin ALL=(GWUSERS) NOPASSWD: /usr/bin/gw_em_mad_gram5 *
    gwadmin ALL=(GWUSERS) NOPASSWD: /usr/bin/gw_tm_mad_ftp *
 
 The source DEB package gridway-gt5 enables you to build the binary DEB.
-Build DEB dependencies: debhelper, gcc, libglobus-common-dev, libglobus-gram-client-dev, libglobus-ftp-client-dev, libglobus-gass-copy-dev and grid-packaging-tools.
+Build DEB dependencies: debhelper, gcc, libglobus-common-dev,
+libglobus-gram-client-dev, libglobus-ftp-client-dev, libglobus-gass-copy-dev and
+grid-packaging-tools.
 
-2b) GridWay MADs for OGSA-BES endpoints: The binary DEB package gridway-bes installs the GridWay MAD to interface with OGSA-BES services, as well as an static information MAD and a dummy transfer MAD are provided.
+2b) GridWay MADs for OGSA-BES endpoints: The binary DEB package gridway-bes
+installs the GridWay MAD to interface with OGSA-BES services, as well as an
+static information MAD and a dummy transfer MAD are provided.
 
-2.1b) Install DEB dependencies: gridway-core, libxmlbeans-java, libaxis-java, libcommons-logging-java, libcommons-discovery-java, libwsdl4j-java, libxml-security-java and libdom4j-java.
-      Other dependencies (non DEB): gridsam-client (check the default location in Makefile).
+2.1b) Install DEB dependencies: gridway-core, libxmlbeans-java, libaxis-java,
+libwsdl4j-java, libwss4j-java, libxml-security-java, libxalan2-java and 
+liblog4j1.2-java.
+Other dependencies (non DEB): gridsam-schema and OMII security utils 
+(check the default location in Makefile).
 2.2b) Post-install configuration:
-- This DEB provides a basic configuration of the MADs through the file /usr/etc/gwd.conf (check the Configuration Guide). Set up your GridFTP server.
-- You must configure the available hosts for your GridWay instance (see the example file /usr/etc/BES_hosts.list).
-- GridWay users must export the $GLOBUS_LOCATION environmental variable: export GLOBUS_LOCATION=/usr
-- Some privileges are required to be set in the /etc/sudoers file. Please add the below lines.
+- This DEB provides a basic configuration of the MADs through the file
+/usr/etc/gwd.conf (check the Configuration Guide). Set up your GridFTP server.
+- You must configure the available hosts for your GridWay instance (see the
+example file /usr/etc/BES_hosts.list).
+- GridWay users must export the $GLOBUS_LOCATION environmental variable: export
+GLOBUS_LOCATION=/usr
+- Some privileges are required to be set in the /etc/sudoers file. Please add
+the following lines.
    Defaults>GWUSERS env_keep="GW_LOCATION GLOBUS_LOCATION"
    #GridWay entries (OGSA-BES MAD)
    gwadmin ALL=(GWUSERS) NOPASSWD: /usr/bin/GW_em_mad_bes *
    gwadmin ALL=(GWUSERS) NOPASSWD: /usr/bin/gw_tm_mad_dummy *
-- MyProxy is used for managing security credentials. Creates a $HOME/.myproxy file, where the first line is the hostname of the MyProxy server, the second line is the username and the last line is the password.
-- Add the transport tag:
-     <transport name="http" pivot="java:org.apache.axis.transport.http.HTTPSender"/>
-  in the $(GRIDSAM_HOME)/conf/client-config.wsdd file.
+- MyProxy is used for managing security credentials. Creates a $HOME/.myproxy
+file, where the first line is the hostname of the MyProxy server, the second
+line is the username and the last line is the password.
+- Configure the client-config.wsdd and crypto.properties files in
+$GW_LOCATION/etc/.
 
 The source DEB package gridway-BES enables you to build the binary DEB.
-Build DEB dependencies: debhelper, gcc, openjdk-6-jdk, libdom4j-java, libaxis-java and libxmlbeans-java.
-Other dependencies (non DEB): gridsam-client (check the default location in GW_em_mad_bes).
+Build DEB dependencies: debhelper, gcc, openjdk-6-jdk, libaxis-java, 
+libxalan2-java and libxmlbeans-java.
+Other dependencies (non DEB): gridsam-schema and OMII security utils
+(check the default location in GW_em_mad_bes).
 
 3) Launch the gwd daemon.
 

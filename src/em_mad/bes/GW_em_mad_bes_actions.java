@@ -29,8 +29,6 @@ import javax.xml.rpc.Service;
 import javax.xml.rpc.ServiceException;
 import javax.xml.rpc.ServiceFactory;
 import org.apache.xmlbeans.XmlObject;
-import org.dom4j.io.DOMReader;
-import org.icenigrid.gridsam.core.support.GridSAMSupport;
 import org.icenigrid.schema.bes.factory.y2006.m08.CreateActivityDocument;
 import org.icenigrid.schema.bes.factory.y2006.m08.CreateActivityResponseDocument;
 import org.icenigrid.schema.bes.factory.y2006.m08.GetActivityStatusesDocument;
@@ -45,6 +43,10 @@ import org.w3.x2005.x08.addressing.EndpointReferenceDocument;
 import org.w3.x2005.x08.addressing.EndpointReferenceType;
 import org.icenigrid.schema.bes.factory.y2006.m08.ActivityStateEnumeration.Enum;
 
+import javax.xml.transform.*;
+import javax.xml.transform.dom.*;
+import javax.xml.transform.stream.*;
+
 class ServiceBES extends Thread {
 	private String action;
 	private Integer jid;
@@ -52,6 +54,9 @@ class ServiceBES extends Thread {
 	private String jsdlFile;
 	String info;
         private EndpointReferenceDocument xActivityIdentifier;
+
+        public static String BES_NAMESPACE_STRING = "http://www.icenigrid.org/service/bes";
+        public static String BES_FACTORY_NAMESPACE_STRING = "http://schemas.ggf.org/bes/2006/08/bes-factory";
 
         public ServiceBES(Integer jid, String contact, String JSDL) {
 		this.jid = jid;
@@ -135,8 +140,8 @@ class ServiceBES extends Thread {
 		//refreshStatus
         	GetActivityStatusesDocument xActivities = GetActivityStatusesDocument.Factory.newInstance();
         	try {
-                	EndpointReferenceDocument xActivityIdentifier = EndpointReferenceDocument.Factory.parse( (new DOMReader()).read( 
-				xActivityEPR.getEndpointReference().getDomNode().getOwnerDocument() ).asXML() );
+                        EndpointReferenceDocument xActivityIdentifier = EndpointReferenceDocument.Factory.parse( 
+                                asXML( xActivityEPR.getEndpointReference().getDomNode().getOwnerDocument() ) );
                 	xActivities.addNewGetActivityStatuses().addNewActivityIdentifier().set( xActivityIdentifier.getEndpointReference() );
         	} catch ( Throwable exc ){
                 	this.info = exc.getMessage().replace('\n', ' ');
@@ -178,7 +183,7 @@ class ServiceBES extends Thread {
 
         	Enum state;
 
-        	String xActivityEPR = (new DOMReader()).read( this.xActivityIdentifier.getEndpointReference().getDomNode().getOwnerDocument() ).asXML();
+                String xActivityEPR = asXML( this.xActivityIdentifier.getEndpointReference().getDomNode().getOwnerDocument() );
 		GetActivityStatusesDocument xActivities = GetActivityStatusesDocument.Factory.newInstance();
         	try {
 			EndpointReferenceDocument xActivityIdentifier = EndpointReferenceDocument.Factory.parse( xActivityEPR );
@@ -223,7 +228,7 @@ class ServiceBES extends Thread {
     	protected int cancel() 
         	throws SOAPException, MalformedURLException, ServiceException, RemoteException {
 
-        	String xActivityEPR = (new DOMReader()).read( this.xActivityIdentifier.getEndpointReference().getDomNode().getOwnerDocument() ).asXML();
+                String xActivityEPR = asXML( this.xActivityIdentifier.getEndpointReference().getDomNode().getOwnerDocument() );
         	TerminateActivitiesDocument xActivities = TerminateActivitiesDocument.Factory.newInstance();
 		try {
         		EndpointReferenceDocument xActivityIdentifier = EndpointReferenceDocument.Factory.parse( xActivityEPR );
@@ -260,11 +265,11 @@ class ServiceBES extends Thread {
             
 		xService = ServiceFactory.newInstance().createService(getClass().getClassLoader().getResource(
                 	"org/icenigrid/gridsam/resource/schema/wsdl/bes.wsdl"),
-        	new QName(GridSAMSupport.BES_NAMESPACE_STRING, "BasicExecutionService"));
+                new QName(this.BES_NAMESPACE_STRING, "BasicExecutionService"));
 
-        	xCall = xService.createCall( new QName( GridSAMSupport.BES_FACTORY_NAMESPACE_STRING, pPortOperation.split("/")[0] ), pPortOperation.split("/")[1] );
+                xCall = xService.createCall( new QName( this.BES_FACTORY_NAMESPACE_STRING, pPortOperation.split("/")[0] ), pPortOperation.split("/")[1] );
         	xCall.setProperty( Call.SOAPACTION_USE_PROPERTY, Boolean.TRUE );
-        	xCall.setProperty( Call.SOAPACTION_URI_PROPERTY, GridSAMSupport.BES_FACTORY_NAMESPACE_STRING + "/" + pPortOperation );
+                xCall.setProperty( Call.SOAPACTION_URI_PROPERTY, this.BES_FACTORY_NAMESPACE_STRING + "/" + pPortOperation );
 
         	xCall.setTargetEndpointAddress(this.contact);
 
@@ -279,4 +284,21 @@ class ServiceBES extends Thread {
  
         	return xResponse;
     }
+
+    public String asXML(Document xDocument)
+    {
+    		try {
+       			DOMSource xDOMSource = new DOMSource(xDocument);
+       			StringWriter xStringWriter = new StringWriter();
+       			StreamResult xStreamResult = new StreamResult(xStringWriter);
+       			TransformerFactory xTransformerFactory = TransformerFactory.newInstance();
+       			Transformer xTransformer = xTransformerFactory.newTransformer();
+       			xTransformer.transform(xDOMSource, xStreamResult);
+       			return xStringWriter.toString();
+    		}
+    		catch(TransformerException ex) {
+       			this.info = ex.getMessage().replace('\n', ' ');
+       			return null;
+    		}
+    } 
 }
