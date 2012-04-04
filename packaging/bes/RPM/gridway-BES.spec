@@ -128,5 +128,8 @@ rm -rf $RPM_BUILD_ROOT
 * Mon Apr 09 2012 GridWay Project Leads <contact@gridway.org> - 5.10-1
 - Fixing RPM dependencies
 
+* Wed 28 Mar 2012 GridWay Project Leads <contact@gridway.org> - 5.10-0
+- Update to 5.10-0
+
 * Mon Feb 13 2012 GridWay Project Leads <contact@gridway.org> - 5.10-RC1
 - Initial version

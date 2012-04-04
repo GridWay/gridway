@@ -1,3 +1,9 @@
+gridway-core (5.10-1) stable; urgency=low
+
+  * Update to 5.10-1. 
+
+ -- GridWay Project Leads <contact@gridway.org>  Mon, 09 Apr 2012 10:15:40 +0200
+
 gridway-core (5.10-0) stable; urgency=low
 
   * Update to 5.10-0. 

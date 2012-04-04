@@ -33,7 +33,7 @@ echo -n $"Stopping $DESC: "
 killproc gwd
 RETVAL=$?
 echo
-[ $RETVAL -eq 0 ] && rm -f /usr/share/gridway/5.10.0/var/.lock
+[ $RETVAL -eq 0 ] && rm -f /usr/share/gridway/5.10.1/var/.lock
 return $RETVAL
 }
 
