@@ -1,8 +1,8 @@
-gridway-bes (5.10-0) stable; urgency=low
+gridway-bes (5.10-1) stable; urgency=low
 
-  * Update to 5.10-0.
+  * Fixing dependencies.
 
- -- GridWay Project Leads <contact@gridway.org>  Wed, 28 Mar 2012 18:02:20 +0200
+ -- GridWay Project Leads <contact@gridway.org>  Mon, 09 Apr 2012 18:02:20 +0200
 
 gridway-bes (5.10-RC1) UNRELEASED; urgency=low
 

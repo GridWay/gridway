@@ -19,9 +19,8 @@ implementation of the OGSA-BES interface.
 The source distribution requires on the client-side:
 
 - GridWay 5.10 (http://www.gridway.org)
-- GridSAM 2.3.0 client
-- xmlbeans, dom4j, axis, commons-logging, commons-discovery, wsdl4j, log4j, 
-and xml-security
+- GridSAM Schema 2.3.0 (gridsam-schema-2.3.0.jar) 
+- xmlbeans, axis, wsdl4j, log4j, wss4j and xml-security
 - A GridFTP server
 - Access to a MyProxy server. Access data must be placed in the 
 $HOME/.myproxy file, where the first line is the hostname of the MyProxy 
@@ -35,19 +34,18 @@ have access to a GridSAM server.
 
 1) Install the required software.
 2) Change to src/em_mad/bes directory in the GridWay distribution.
-3) Change the GRIDSAM_HOME variable, if needed, in Makefile and gw_em_mad_bes.sh.
+3) Change the JAVA_EXT variable, if needed, in Makefile and gw_em_mad_bes.sh.
 4) Build and install the driver executing "make; make install".
 5) Configure GridWay through the $GW_LOCATION/etc/gwd.conf file (check 
 the GridWay Configuration Guide) to use the MAD. This EM MAD is intended 
 to work with the "dummy" TM MAD configured for using a GridFTP server. 
 Use "jsdl" as RSL generation function.
-6) Add the transport tag:
-
-<transport name="http" pivot="java:org.apache.axis.transport.http.HTTPSender"/>
-
-in $(GRIDSAM_HOME)/conf/client-config.wsdd.
+6) Configure the client-config.wsdd and crypto.properties files
+in $GW_LOCATION/etc/.
 7) Launch the GridWay daemon from $GW_LOCATION/bin/gwd.
 8) Test it and enjoy!
+
+This driver assumes that GridSAM is configured with OMII WS-Security (default configuration).
 
 
 ===== CREDITS =====

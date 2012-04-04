@@ -3,7 +3,7 @@
 
 INSTALLDIR = $(CURDIR)/debian/gridway-bes
 
-_version = 5.10.0
+_version = 5.10.1
 _prefix = /usr
 _bindir = $(_prefix)/bin
 _sbindir = $(_prefix)/sbin
@@ -17,6 +17,8 @@ GW_LOCATION := $(INSTALLDIR)/usr
 configure: configure-stamp
 
 configure-stamp:
+	# wget http://dev.gridway.org/projects/gridway/repository/raw/tags/GW_5_10_1/packaging/bes/debian/LICENSE.ThirdParty
+	# wget http://repo1.maven.org/maven2/wss4j/wss4j/1.5.1/wss4j-1.5.1.jar
 
 build: build-arch build-indep
 
@@ -26,7 +28,8 @@ build-indep: build-stamp
 
 build-stamp: configure-stamp
 	dh_testdir
-	
+
+	cd src/em_mad/bes/lib && cp wss4j-1.5.1.jar wss4j.jar
 	$(MAKE) -C src/em_mad/bes/
 	$(MAKE) -C src/tm_mad/dummy/
 
@@ -47,6 +50,18 @@ install: build-stamp
 	export GW_LOCATION=$(GW_LOCATION)
 	mkdir -p $(INSTALLDIR)/usr/bin
 	mkdir -p $(INSTALLDIR)/usr/lib
+	mkdir -p $(INSTALLDIR)/usr/lib/java-ext/gridway-BES/lib
+	mkdir -p $(INSTALLDIR)/usr/lib/java-ext/gridway-BES/endorsed
+	mkdir -p $(INSTALLDIR)/usr/share/doc/gridway-BES/
+	mkdir -p $(INSTALLDIR)/usr/etc
+	cp src/em_mad/bes/lib/gridsam-schema-2.3.0.jar $(INSTALLDIR)/usr/lib/java-ext/gridway-BES/lib/
+	cp src/em_mad/bes/lib/omii-security-utils-1.3.jar $(INSTALLDIR)/usr/lib/java-ext/gridway-BES/lib/
+	cp src/em_mad/bes/lib/wss4j.jar $(INSTALLDIR)/usr/lib/java-ext/gridway-BES/lib/
+	cp /usr/share/java/xalan2.jar $(INSTALLDIR)/usr/lib/java-ext/gridway-BES/endorsed
+	cp /usr/share/java/serializer.jar $(INSTALLDIR)/usr/lib/java-ext/gridway-BES/endorsed
+	cp /usr/share/java/axis-saaj.jar $(INSTALLDIR)/usr/lib/java-ext/gridway-BES/endorsed
+	cp src/em_mad/bes/LICENSE.ThirdParty $(INSTALLDIR)/usr/share/doc/gridway-BES/
+
 	$(MAKE) install -C src/em_mad/bes/ DESTDIR=$(INSTALLDIR)  
 	$(MAKE) install -C src/tm_mad/dummy/ DESTDIR=$(INSTALLDIR)
 

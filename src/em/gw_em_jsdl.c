@@ -95,7 +95,8 @@ char* gw_generate_wrapper_jsdl (gw_job_t *job)
 
     snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
             "    <jsdl-posix:Output>stdout.wrapper.%d</jsdl-posix:Output>\n"
-            "    <jsdl-posix:Error>stderr.wrapper.%d</jsdl-posix:Error>\n"
+            "    <jsdl-posix:Error>stderr.wrapper.%d</jsdl-posix:Error>\n" 
+            "    <jsdl-posix:WorkingDirectory>/tmp/gridway</jsdl-posix:WorkingDirectory>\n"
             "%s",
             job->restarted,
             job->restarted,

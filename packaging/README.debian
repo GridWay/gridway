@@ -97,10 +97,10 @@ installs the GridWay MAD to interface with OGSA-BES services, as well as an
 static information MAD and a dummy transfer MAD are provided.
 
 2.1b) Install DEB dependencies: gridway-core, libxmlbeans-java, libaxis-java,
-libcommons-logging-java, libcommons-discovery-java, libwsdl4j-java,
-libxml-security-java and libdom4j-java.
-Other dependencies (non DEB): gridsam-client (check the default location in
-Makefile).
+libwsdl4j-java, libwss4j-java, libxml-security-java, libxalan2-java and 
+liblog4j1.2-java.
+Other dependencies (non DEB): gridsam-schema and OMII security utils 
+(check the default location in Makefile).
 2.2b) Post-install configuration:
 - This DEB provides a basic configuration of the MADs through the file
 /usr/etc/gwd.conf (check the Configuration Guide). Set up your GridFTP server.
@@ -117,15 +117,14 @@ the following lines.
 - MyProxy is used for managing security credentials. Creates a $HOME/.myproxy
 file, where the first line is the hostname of the MyProxy server, the second
 line is the username and the last line is the password.
-- Add the transport tag:
-     <transport name="http" pivot="java:org.apache.axis.transport.http.HTTPSender"/>
-  in the $(GRIDSAM_HOME)/conf/client-config.wsdd file.
+- Configure the client-config.wsdd and crypto.properties files in
+$GW_LOCATION/etc/.
 
 The source DEB package gridway-BES enables you to build the binary DEB.
-Build DEB dependencies: debhelper, gcc, openjdk-6-jdk, libdom4j-java,
-libaxis-java and libxmlbeans-java.
-Other dependencies (non DEB): gridsam-client (check the default location in
-GW_em_mad_bes).
+Build DEB dependencies: debhelper, gcc, openjdk-6-jdk, libaxis-java, 
+libxalan2-java and libxmlbeans-java.
+Other dependencies (non DEB): gridsam-schema and OMII security utils
+(check the default location in GW_em_mad_bes).
 
 3) Launch the gwd daemon.
 
