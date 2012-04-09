@@ -36,8 +36,8 @@ ENV['PATH']+=":."
 
 options={}
 parser=OptionParser.new do |opts|
-	opts.banner="Usage: #{File.basename(__FILE__)} [-h] [-d] <dagman file>"
-	opts.separator ""
+        opts.banner="USAGE\n    #{File.basename(__FILE__)} [-h] [-d] <dagman file>\n\n"
+        opts.banner+="SYNOPSIS\n    Submits a DAG job to gwd\n\nOPTIONS"
 	
 	opts.on('-d', '--dot', "Generate DOT file. It is written to STDOUT") do |d|
 			options[:dot]=d
