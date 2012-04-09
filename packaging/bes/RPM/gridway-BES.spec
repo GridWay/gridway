@@ -30,12 +30,13 @@ BuildRequires:  xalan-j2
 #BuildRequires:	xmlbeans
 #BuildRequires:	gridsam-schema
 Requires:	gridway-core
+Requires:	java
+Requires:       axis
+Requires:       wsdl4j
+Requires:       log4j
 #Requires:	xmlbeans
-Requires:	axis
 #Requires:	gridsam-schema
-Requires:	wsdl4j
 #Requires:	xml-security
-Requires:	log4j
 
 %description
 GridWay uses several Middleware Access Drivers (MAD) to interface with 
@@ -128,7 +129,7 @@ rm -rf $RPM_BUILD_ROOT
 * Mon Apr 09 2012 GridWay Project Leads <contact@gridway.org> - 5.10-1
 - Fixing RPM dependencies
 
-* Wed 28 Mar 2012 GridWay Project Leads <contact@gridway.org> - 5.10-0
+* Wed Mar 28 2012 GridWay Project Leads <contact@gridway.org> - 5.10-0
 - Update to 5.10-0
 
 * Mon Feb 13 2012 GridWay Project Leads <contact@gridway.org> - 5.10-RC1

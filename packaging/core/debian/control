@@ -2,7 +2,7 @@ Source: gridway-core
 Priority: optional
 Maintainer: Initiative for Globus in Europe (IGE) <info@ige-project.eu>
 Standards-Version: 3.9.2
-Build-Depends: debhelper (>= 5), gcc (>= 3.4.2)
+Build-Depends: debhelper (>= 5), gcc (>= 3.4.2), openjdk-6-jdk|sun-java6-jdk|gcj-4.4-jdk
 Section: libs
 Homepage: http://www.ige-project.eu/
 

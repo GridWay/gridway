@@ -1,4 +1,4 @@
 #!/bin/bash
 
-/etc/init.d/gwd stop >/dev/null 2>&1
-/sbin/chkconfig --del gwd
+/etc/init.d/gridway-core stop >/dev/null 2>&1
+update-rc.d -f gridway-core remove

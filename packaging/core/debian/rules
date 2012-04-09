@@ -19,7 +19,7 @@ configure-stamp:
 
 	# wget http://svn.gridway.org/gridway/tags/GW_5_10_1/packaging/README.debian
 	cp -rp README.debian README
-	./configure --prefix=/usr/ --localstatedir=/usr/share/gridway/$(_version)/var --datarootdir=/usr/share/doc/gridway-core --with-db=yes --with-syslog=LOG_USER
+	./configure --prefix=/usr/ --localstatedir=/usr/share/gridway/$(_version)/var --datarootdir=/usr/share/doc/gridway-core --with-db=yes --with-syslog=LOG_USER --enable-drmaa-java
 
 build: build-arch build-indep
 

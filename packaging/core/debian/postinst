@@ -3,6 +3,5 @@
 /usr/sbin/groupadd gwusers > /dev/null 2> /dev/null
 /usr/sbin/useradd -d /usr/share/gridway -g gwusers -s /bin/sh gwadmin > /dev/null 2> /dev/null
 chown -R gwadmin:gwusers /usr/share/gridway/5.10.1
-mv /etc/init.d/gridway-core /etc/init.d/gwd
-/sbin/chkconfig --add gwd
+update-rc.d gridway-core defaults
 /sbin/ldconfig

@@ -20,6 +20,7 @@ Source:		%{_name}-%{version}.%{_release}.tar.gz
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
 
 BuildRequires:	gcc
+BuildRequires:	java-devel
 Requires(post): chkconfig
 Requires(preun): chkconfig
 Requires(preun): initscripts
@@ -66,7 +67,7 @@ fi
 /sbin/ldconfig
 
 %build
-./configure --prefix=/usr/ --localstatedir=/usr/share/%{_name}/%{version}.%{_release}/var --datarootdir=/usr/share/doc/%{_name}-%{version}.%{_release} --with-db=yes --with-syslog=LOG_USER
+./configure --prefix=/usr/ --localstatedir=/usr/share/%{_name}/%{version}.%{_release}/var --datarootdir=/usr/share/doc/%{_name}-%{version}.%{_release} --with-db=yes --with-syslog=LOG_USER --enable-drmaa-java
 make
 
 %install
@@ -167,12 +168,18 @@ rm -rf $RPM_BUILD_ROOT
 /usr/share/gridway/5.10.1/xml_schema/gridway.xsd
 /usr/share/gridway/5.10.1/var
 /usr/share/gridway/5.10.1/var/acct
+/usr/lib/drmaa.jar
+/usr/lib/libDrmaaJNI.a
+/usr/lib/libDrmaaJNI.la
+/usr/lib/libDrmaaJNI.so
+/usr/lib/libDrmaaJNI.so.0
+/usr/lib/libDrmaaJNI.so.0.0.0
 
 %changelog
-* Mon 09 Apr 2012 GridWay Project Leads <contact@gridway.org> - 5.10-1
+* Mon Apr 09 2012 GridWay Project Leads <contact@gridway.org> - 5.10-1
 - Update to 5.10-1
 
-* Wed 28 Mar 2012 GridWay Project Leads <contact@gridway.org> - 5.10-0
+* Wed Mar 28 2012 GridWay Project Leads <contact@gridway.org> - 5.10-0
 - Update to 5.10-0
 
 * Thu Feb 09 2012 GridWay Project Leads <contact@gridway.org> - 5.10-RC1
