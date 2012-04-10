@@ -4,7 +4,7 @@
 ## Usual build
 JAVA_EXT = "/usr/share/gridsam-2.3.0-client/"
 
-CLASSPATH = `find /usr/share/java -name jaxrpc.jar`:`find /usr/share/java ${JAVA_EXT}lib/ -name xbean.jar -o -name xmlbeans.jar`:${JAVA_EXT}lib/gridsam-schema-2.3.0.jar
+CLASSPATH = `find /usr/share/java -name jaxrpc.jar`:`find /usr/share/java ${JAVA_EXT}lib/ -name xbean.jar -o -name xmlbeans.jar | head -n 1`:${JAVA_EXT}lib/gridsam-schema-2.3.0.jar
 
 gw_em_mad_bes.jar: GW_em_mad_bes.java GW_em_mad_bes_actions.java
 	@rm -f lib/gw_em_mad_bes.jar
