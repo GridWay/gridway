@@ -150,6 +150,8 @@ void gwd_main()
     fcntl(2,F_SETFD,0);
 
     srand(time(NULL));
+
+    umask(S_IWGRP | S_IWOTH);
 	        
     /* ----------------------------------------------------------- */
     /* Capture SIGTERM signal, and ignore SIGPIPE                  */
