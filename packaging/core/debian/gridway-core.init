@@ -4,8 +4,8 @@
 # Provides: gwd
 # Required-Start: $remote_fs $syslog
 # Required-Stop: $remote_fs $syslog
-# Default-Start: 2 3 
-# Default-Stop: 0 1 4 5 6
+# Default-Start: 2 3 4 5  
+# Default-Stop: 0 1 6
 # Short-Description: Start gwd daemon
 # Description: GridWay Metascheduler
 ### END INIT INFO
@@ -22,10 +22,9 @@ DESC=gridway
 
 test -x $DAEMON_GWD || exit 0
 
-LOGDIR=/var/log/gwd.log
 PIDFILE=/var/run/$NAME.pid
 USERNAME=gwadmin
-DODTIME=1                   # Time to wait for the server to die, in seconds
+DODTIME=30                  # Time to wait for the server to die, in seconds
                             # If this value is set too low you might not
                             # let some servers to die gracefully and
                             # 'restart' will not work
@@ -81,7 +80,7 @@ stop() {
     start-stop-daemon --stop --quiet --pidfile $PIDFILE \
         --exec $DAEMON_GWD
     RETVAL=$?
-    [ $RETVAL -eq 0 ] && rm -f /usr/share/gridway/5.10.RC1/var/.lock
+    [ $RETVAL -eq 0 ] && rm -f /usr/share/gridway/5.11.RC1/var/.lock
     echo "$NAME."
 }
 

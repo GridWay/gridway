@@ -3,7 +3,7 @@
 
 INSTALLDIR = $(CURDIR)/debian/gridway-bes
 
-_version = 5.10.1
+_version = 5.11.RC1
 _prefix = /usr
 _bindir = $(_prefix)/bin
 _sbindir = $(_prefix)/sbin
@@ -17,7 +17,7 @@ GW_LOCATION := $(INSTALLDIR)/usr
 configure: configure-stamp
 
 configure-stamp:
-	# wget http://dev.gridway.org/projects/gridway/repository/raw/tags/GW_5_10_1/packaging/bes/debian/LICENSE.ThirdParty
+	# wget http://dev.gridway.org/projects/gridway/repository/raw/tags/GW_5_11_RC1/packaging/bes/debian/LICENSE.ThirdParty
 	# wget http://repo1.maven.org/maven2/wss4j/wss4j/1.5.1/wss4j-1.5.1.jar
 
 build: build-arch build-indep

@@ -1,8 +1,8 @@
 %define _name gridway
-%define _release RC1 
+%define _release RC1
 
 Name:		gridway-core
-Version:	5.10
+Version:	5.11
 Release:	RC1%{dist}
 Summary:	GridWay Core
 
@@ -10,16 +10,17 @@ Group:		System Environment/Libraries
 License:	Apache License
 URL:		http://www.gridway.org/
 Vendor:         Initiative for Globus in Europe (IGE)
-# svn co http://svn.gridway.org/gridway/tags/GW_5_10_RC1 gridway-5.10.RC1
-# cp -p packaging/README.rpm gridway-5.10.RC1/README
-# cp -p packaging/core/RPM/gwd gridway-5.10.RC1/etc/
-# chmod 755 gridway-5.10.RC1/etc/gwd
-# tar -czf gridway-5.10.RC1.tar.gz gridway-5.10.RC1/
+# svn co http://svn.gridway.org/gridway/tags/GW_5_11_RC1 gridway-5.11.RC1
+# cp -p gridway-5.11.RC1/packaging/README.rpm gridway-5.11.RC1/README
+# cp -p gridway-5.11.RC1/packaging/core/RPM/gwd gridway-5.11.RC1/etc/
+# chmod 755 gridway-5.11.RC1/etc/gwd
+# tar -czf gridway-5.11.RC1.tar.gz gridway-5.11.RC1/
 
 Source:		%{_name}-%{version}.%{_release}.tar.gz
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
 
 BuildRequires:	gcc
+BuildRequires:	java-devel
 Requires(post): chkconfig
 Requires(preun): chkconfig
 Requires(preun): initscripts
@@ -66,7 +67,7 @@ fi
 /sbin/ldconfig
 
 %build
-./configure --prefix=/usr/ --localstatedir=/usr/share/%{_name}/%{version}.%{_release}/var --datarootdir=/usr/share/doc/%{_name}-%{version}.%{_release} --with-db=yes --with-syslog=LOG_USER
+JAVA_HOME=/usr/lib/jvm/java ./configure --prefix=/usr/ --localstatedir=/usr/share/%{_name}/%{version}.%{_release}/var --datarootdir=/usr/share/doc/%{_name}-%{version}.%{_release} --with-db=yes --with-syslog=LOG_USER --enable-drmaa-java
 make
 
 %install
@@ -123,10 +124,10 @@ rm -rf $RPM_BUILD_ROOT
 /usr/libexec/ruby/dagman/node.rb
 /usr/libexec/ruby/dagman/parse.rb
 /usr/libexec/ruby/dagman/runner.rb
-/usr/share/doc/gridway-5.10.RC1/LICENSE
-/usr/share/doc/gridway-5.10.RC1/NOTICE
-/usr/share/doc/gridway-5.10.RC1/README
-/usr/share/doc/gridway-5.10.RC1/RELEASE_NOTES
+/usr/share/doc/gridway-5.11.RC1/LICENSE
+/usr/share/doc/gridway-5.11.RC1/NOTICE
+/usr/share/doc/gridway-5.11.RC1/README
+/usr/share/doc/gridway-5.11.RC1/RELEASE_NOTES
 /usr/include/drmaa.h
 /usr/include/gw_acct.h
 /usr/include/gw_action.h
@@ -164,11 +165,23 @@ rm -rf $RPM_BUILD_ROOT
 /usr/include/gw_user.h
 /usr/include/gw_user_pool.h
 /usr/include/gw_xfr_files.h
-/usr/share/gridway/5.10.RC1/xml_schema/gridway.xsd
-/usr/share/gridway/5.10.RC1/var
-/usr/share/gridway/5.10.RC1/var/acct
+/usr/share/gridway/5.11.RC1/xml_schema/gridway.xsd
+/usr/share/gridway/5.11.RC1/var
+/usr/share/gridway/5.11.RC1/var/acct
+/usr/lib/drmaa.jar
+/usr/lib/libDrmaaJNI.a
+/usr/lib/libDrmaaJNI.la
+/usr/lib/libDrmaaJNI.so
+/usr/lib/libDrmaaJNI.so.0
+/usr/lib/libDrmaaJNI.so.0.0.0
 
 %changelog
+* Mon Apr 09 2012 GridWay Project Leads <contact@gridway.org> - 5.10-1
+- Update to 5.10-1
+
+* Wed Mar 28 2012 GridWay Project Leads <contact@gridway.org> - 5.10-0
+- Update to 5.10-0
+
 * Thu Feb 09 2012 GridWay Project Leads <contact@gridway.org> - 5.10-RC1
 - Update to GridWay 5.10-RC1
 

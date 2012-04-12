@@ -1,8 +1,20 @@
+gridway-bes (5.10-1~maverick1) stable; urgency=low
+
+  * Backport to ubuntu maverick
+
+ -- Mattias Ellert <mattias.ellert@fysast.uu.se>  Tue, 10 Apr 2012 14:36:21 +0200
+
 gridway-bes (5.10-1) stable; urgency=low
 
   * Fixing dependencies.
 
- -- GridWay Project Leads <contact@gridway.org>  Mon, 09 Apr 2012 18:02:20 +0200
+ -- GridWay Project Leads <contact@gridway.org>  Mon, 09 Apr 2012 10:15:40 +0200
+
+gridway-bes (5.10-0) stable; urgency=low
+
+  * Update to 5.10-0.
+
+ -- GridWay Project Leads <contact@gridway.org>  Wed, 28 Mar 2012 18:02:20 +0200
 
 gridway-bes (5.10-RC1) UNRELEASED; urgency=low
 

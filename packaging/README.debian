@@ -31,7 +31,7 @@ production Grid infrastructures.
 ===== RELEASE NOTES =====
 
 The release notes can be found online:
-http://gridway.org/doku.php?id=software:release_notes:5.10
+http://gridway.org/doku.php?id=software:release_notes:5.11
 
 
 ===== DOCUMENTATION =====
@@ -51,8 +51,14 @@ GridWay with a multi-user configuration.
 1.2) Post-install configuration:
 - All of the GridWay users must be members of the gwusers UNIX group.
 - GridWay users must export the $GW_LOCATION environmental variable: export
-GW_LOCATION=/usr
-  You can create a profile file for gwusers group.
+GW_LOCATION=/usr. You can create a profile file for gwusers group, such as:
+  for i in `groups`; do
+   if [ "$i" = 'gwusers' ]; then
+    GLOBUS_LOCATION=/usr
+    GW_LOCATION=/usr
+    export GLOBUS_LOCATION GW_LOCATION
+   fi
+  done
 - Some privileges are required to be set in the /etc/sudoers file. Please add
 the following lines.
    Defaults:gwadmin !requiretty
@@ -62,7 +68,8 @@ the following lines.
    #GridWay entries
    gwadmin ALL=(GWUSERS) NOPASSWD: /usr/bin/grid-proxy-info *
 
-The source DEB package gridway-core enables you to build the binary DEB.
+The source DEB package gridway-core enables you to build the binary DEB. JAVA_HOME
+must be previously exported.
 Build DEB dependencies: debhelper and gcc.
 
 2) Install the GridWay MADs

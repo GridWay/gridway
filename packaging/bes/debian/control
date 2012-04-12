@@ -2,14 +2,14 @@ Source: gridway-bes
 Priority: optional
 Maintainer: Initiative for Globus in Europe (IGE) <info@ige-project.eu>
 Standards-Version: 3.9.2
-Build-Depends: debhelper (>= 5), gcc (>= 3.4.2), openjdk-6-jdk, libaxis-java, libxmlbeans-java, libxalan2-java
+Build-Depends: debhelper (>= 5), gcc (>= 3.4.2), openjdk-6-jdk, libaxis-java, libxmlbeans-java, libxalan2-java, openjdk-6-jdk|sun-java6-jdk|gcj-4.4-jdk 
 #gridsam-schema
 Section: libs
 Homepage: http://www.ige-project.eu/
 
 Package: gridway-bes
 Architecture: any
-Depends: gridway-core, libxmlbeans-java, libaxis-java, libwsdl4j-java, libxml-security-java
+Depends: gridway-core, libxmlbeans-java, libaxis-java, libwsdl4j-java, libxml-security-java, openjdk-6-jre-headless|sun-java6-bin|gcj-4.4-jre-headless 
 #libwss4j-java, gridsam-schema 
 Description: 
  GridWay uses several Middleware Access Drivers (MAD) to interface with 

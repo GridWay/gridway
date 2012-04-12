@@ -1,9 +1,9 @@
 %define _name gridway
-%define _release 1
+%define _release RC1
 
 Name:		gridway-BES
-Version:	5.10
-Release:	1%{dist}
+Version:	5.11
+Release:	RC1%{dist}
 Summary:	OGSA-BES MAD for GridWay
 
 Group:		System Environment/Libraries
@@ -11,7 +11,7 @@ License:	Apache License
 URL:		http://www.gridway.org/
 Vendor:         Initiative for Globus in Europe (IGE)
 Source:		%{_name}-%{version}.%{_release}.tar.gz
-# wget http://svn.gridway.org/gridway/tags/GW_5_10_1/packaging/bes/RPM/LICENSE.ThirdParty
+# wget http://svn.gridway.org/gridway/tags/GW_5_11_RC1/packaging/bes/RPM/LICENSE.ThirdParty
 ## BUILD Dependencies ##
 # wget -U NoSuchBrowser/1.0 http://repo1.maven.org/maven2/org/apache/xmlbeans/xmlbeans/2.5.0/xmlbeans-2.5.0.jar
 # wget http://sourceforge.net/projects/gridsam/files/gridsam/2.3.0/gridsam.war/download
@@ -30,12 +30,13 @@ BuildRequires:  xalan-j2
 #BuildRequires:	xmlbeans
 #BuildRequires:	gridsam-schema
 Requires:	gridway-core
+Requires:	java
+Requires:       axis
+Requires:       wsdl4j
+Requires:       log4j
 #Requires:	xmlbeans
-Requires:	axis
 #Requires:	gridsam-schema
-Requires:	wsdl4j
 #Requires:	xml-security
-Requires:	log4j
 
 %description
 GridWay uses several Middleware Access Drivers (MAD) to interface with 
@@ -127,6 +128,9 @@ rm -rf $RPM_BUILD_ROOT
 %changelog
 * Mon Apr 09 2012 GridWay Project Leads <contact@gridway.org> - 5.10-1
 - Fixing RPM dependencies
+
+* Wed Mar 28 2012 GridWay Project Leads <contact@gridway.org> - 5.10-0
+- Update to 5.10-0
 
 * Mon Feb 13 2012 GridWay Project Leads <contact@gridway.org> - 5.10-RC1
 - Initial version

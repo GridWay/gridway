@@ -8,7 +8,7 @@
 %endif
 
 Name:		gridway-GT5
-Version:	5.10
+Version:	5.11
 Release:	RC1%{dist}
 Summary:	GT5 MADs for GridWay
 
@@ -17,6 +17,8 @@ License:	Apache License
 URL:		http://www.gridway.org/
 Vendor:         Initiative for Globus in Europe (IGE)
 Source:		%{_name}-%{version}.%{_release}.tar.gz
+Patch0:		10_Makefile.dpatch
+Patch1:		20_Makefile.dpatch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
 
 BuildRequires:	globus-common-devel
@@ -47,6 +49,8 @@ with GridFTP services.
 
 %prep
 %setup -q -n %{_name}-%{version}.%{_release}
+%patch0 -p1
+%patch1 -p1
 
 %post 
 echo "# MADs for GT5
@@ -94,6 +98,12 @@ rm -rf $RPM_BUILD_ROOT
 /usr/bin/gw_tm_mad_ftp.bin
 
 %changelog
+* Mon Apr 09 2012 GridWay Project Leads <contact@gridway.org> - 5.10-1
+- Update to 5.10-1
+
+* Wed Mar 28 2012 GridWay Project Leads <contact@gridway.org> - 5.10-0
+- Update to 5.10-0
+
 * Thu Feb 09 2012 GridWay Project Leads <contact@gridway.org> - 5.10-RC1
 - Update to GridWay 5.10-RC1
 
