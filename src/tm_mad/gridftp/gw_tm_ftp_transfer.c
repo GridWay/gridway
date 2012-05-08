@@ -316,10 +316,9 @@ void gw_tm_ftp_list_read_callback(void *user_arg,
     char owner[16];
     char group[16];
     char size[16];
-    char month[16];
-    char day[16];
-    char hour_year[256];
-    char file[256];	
+    char date[16];
+    char file1[256];
+    char file2[256];	
     char *filename;
     char *url;
     int i, len, rc;
@@ -397,13 +396,13 @@ void gw_tm_ftp_list_read_callback(void *user_arg,
             *end_ptr = '\0';
 
             rc = sscanf(start_ptr, "%s %s %s %s %s %s %s %s %s",
-                    mode, links, owner, group, size, month,
-                    day, hour_year, file);
+                    mode, links, owner, group, size, date, date,
+                    file1, file2);
 
             if ( rc == 8 )
-                filename = hour_year;
+                filename = file1;
             else if (rc == 9)
-                filename = file;
+                filename = file2;
             else
             {
                 start_ptr = end_ptr+1;
