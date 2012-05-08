@@ -627,6 +627,8 @@ EM_MAD_BES_SRC_DIST = $(EM_MAD)/bes/GW_em_mad_bes.java \
         $(EM_MAD)/bes/GW_em_mad_bes_actions.java \
 	$(EM_MAD)/bes/gw_em_mad_bes.sh \
 	$(EM_MAD)/bes/README \
+	$(EM_MAD)/bes/client-config.wsdd \
+	$(EM_MAD)/bes/crypto.properties \
 	$(EM_MAD)/bes/Makefile
 
 TM_MAD_GRIDFTP_SRC_DIST = $(TM_MAD)/gridftp/gw_tm_mad_ftp.c \
