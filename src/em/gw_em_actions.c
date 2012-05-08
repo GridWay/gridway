@@ -187,7 +187,7 @@ void gw_em_cancel(void *_job_id)
 
     if (job->history->tries >= job->template.number_of_retries)
     {
-        gw_log_print("EM",'I',"Max number of cancel retries (%i) for job %i reached, considering it done\n",xi
+        gw_log_print("EM",'I',"Max number of cancel retries (%i) for job %i reached, considering it done\n",
                 job->history->tries, job_id);
         gw_job_print(job, "EM",'I',"Max number of cancel retries reached, considering it done\n");
 
