@@ -77,7 +77,7 @@ public class QueryClient
 		 ****************************************************************************************/	
 		
 		String dialect = WSRFConstants.XPATH_1_DIALECT;
-	    String expression = "/*/*/*[local-name()=\"MemberServiceEPR\"]/*[local-name()=\"Address\" "+
+	    String expression = "//*[local-name()=\"MemberServiceEPR\"]/*[local-name()=\"Address\" "+
 							"and substring-after(text(),\"/wsrf/services/\")=\"DefaultIndexService\"]";		
 		String contactString;
 		String result = "FAILURE";
@@ -144,7 +144,7 @@ public class QueryClient
 		
 		
 		String dialect = WSRFConstants.XPATH_1_DIALECT;
-	    String expression = "/*/*/*[local-name()=\"MemberServiceEPR\"]/*[local-name()=\"Address\" and" + 		
+	    String expression = "//*[local-name()=\"MemberServiceEPR\"]/*[local-name()=\"Address\" and" + 		
 					  " substring-after(text(),\"/wsrf/services/\")=\"ManagedJobFactoryService\"]/../..";	
 		String contactString ;
 		String result = "FAILURE";
