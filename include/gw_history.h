@@ -108,6 +108,7 @@ typedef struct gw_history_s
     	
     int tries;
 	int failed_polls;
+	int failed_cancels;
 	int counter;
 	
     gw_migration_reason_t reason;
