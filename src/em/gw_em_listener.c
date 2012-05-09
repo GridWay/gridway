@@ -221,12 +221,13 @@ void gw_em_listener(void *arg)
                         gw_job_print(job, "EM",'E',"Job cancel failed (%s).\n",info);
                         gw_log_print("EM",'E',"Cancel of job %d failed: %s.\n",job->id, info);
 
-                        if (job->history->tries >= job->template.number_of_retries)
-                        {
-                            gw_log_print("EM",'I',"Max number of cancel retries for job %i reached, considering it done\n", *job_id);
-                            gw_job_print(job, "EM",'I',"Max number of cancel retries reached, considering it done\n");
+                        job->history->failed_cancels++;
 
-                            job->history->tries = 0;
+                        if (job->history->failed_cancels >= 3)
+                        {
+                            gw_log_print("EM",'I',"Max number of cancel failures for job %i reached, considering it done\n", *job_id);
+                            gw_job_print(job, "EM",'I',"Max number of cancel failures reached, considering it done\n");
+
                             gw_am_trigger(&(gw_em.am),"GW_EM_STATE_DONE", (void *) job_id);
                         }
                     }

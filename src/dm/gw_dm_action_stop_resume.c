@@ -76,7 +76,7 @@ void gw_dm_stop (void *_job_id)
 			    job->reschedule = GW_FALSE;
 			    gw_dm_mad_job_del(&gw_dm.dm_mad[0],job->id);				
 			}			
-						
+
 			gw_am_trigger(gw_dm.em_am, "GW_EM_CANCEL", _job_id);
 			break;
 			
