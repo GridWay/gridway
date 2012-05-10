@@ -185,13 +185,12 @@ void gw_em_cancel(void *_job_id)
     else
         return;
 
-    if (job->history->failed_cancels >= 3)
+    if (job->history->failed_cancels >= 2)
     {
         gw_log_print("EM",'I',"Max number of cancel failures for job %i reached, considering it done\n",
-                job->history->tries, job_id);
-        gw_job_print(job, "EM",'I',"Max number of cancel failures reached, considering it done\n");
+                job_id);
+        gw_job_print(job,"EM",'I',"Max number of cancel failures reached, considering it done\n");
 
-        job->history->tries = 0;
         gw_am_trigger(&(gw_em.am),"GW_EM_STATE_DONE", _job_id);
 
         pthread_mutex_unlock(&(job->mutex));        

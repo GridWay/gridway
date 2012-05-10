@@ -223,13 +223,14 @@ void gw_em_listener(void *arg)
 
                         job->history->failed_cancels++;
 
-                        if (job->history->failed_cancels >= 3)
+                        if (job->history->failed_cancels >= 2)
                         {
                             gw_log_print("EM",'I',"Max number of cancel failures for job %i reached, considering it done\n", *job_id);
                             gw_job_print(job, "EM",'I',"Max number of cancel failures reached, considering it done\n");
 
                             gw_am_trigger(&(gw_em.am),"GW_EM_STATE_DONE", (void *) job_id);
                         }
+                        // Else, will retry cancel in next poll
                     }
                 }
                 else if (strcmp(action, "POLL") == 0)
