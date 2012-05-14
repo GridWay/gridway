@@ -15,6 +15,23 @@
 # limitations under the License.
 # ------------------------------------------------------------------------------
 
+# Help
+while getopts hu:g option
+    do
+        case $option in
+        h)   echo -e "USAGE\n gw_tm_mad_dummy [-h] [-u|-g]" \
+                     "\n\nSYNOPSIS"\
+                     "\n  Transfer driver to interface with GridFTP and GASS servers. It is not intended to be used from CLI."\
+                     "\n\nOPTIONS"\
+                     "\n  -h    print this help"\
+                     "\n  -u    URL of the GridFTP server"\
+                     "\n  -g    use a user GASS server to transfer files";
+             exit 0;;
+        [?]) echo -e "usage: gw_tm_mad_dummy [-h] [-u|-g]";
+             exit 1;;
+        esac
+    done
+
 # Common initialization
 if [ -z "${GW_LOCATION}" ]; then
     echo "Please, set GW_LOCATION variable."

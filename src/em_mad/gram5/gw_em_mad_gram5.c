@@ -16,6 +16,16 @@
 
 #include "gw_em_mad_gram5.h"
 
+const char * usage =
+"USAGE\n gw_em_mad_gram5 [-h]\n\n"
+"SYNOPSIS\n"
+"  Execution driver to interface with GRAM5 services. It is not intended to be used from CLI.\n\n"
+"OPTIONS\n"
+"  -h    print this help\n";
+
+const char * susage =
+"usage: gw_em_mad_gram5 [-h]\n";
+
 extern struct mad_s mad;
 
 int main (int argc, char **argv )
@@ -40,6 +50,22 @@ int main (int argc, char **argv )
     
     struct timeval t1,t2;
     double waited;
+
+    char opt;
+
+    while((opt = getopt(argc,argv,"h"))!= -1)
+        switch(opt)
+        {
+            case 'h':
+                printf("%s", usage);
+                exit(0);
+                break;
+            case '?':
+                fprintf(stderr,"error: invalid option \'%c\'\n",optopt);
+                printf("%s", susage);
+                exit(1);
+                break;                
+        }
 
     setbuf(stdout,NULL);
 

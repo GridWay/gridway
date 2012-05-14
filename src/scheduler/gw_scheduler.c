@@ -24,6 +24,16 @@
 #include <signal.h>
 #include <string.h>
 
+const char * usage =
+"USAGE\n gw_sched [-h]\n\n"
+"SYNOPSIS\n"
+"  GridWay Scheduler. It is not intended to be used from CLI.\n\n"
+"OPTIONS\n"
+"  -h    print this help\n";
+
+const char * susage =
+"usage: gw_sched [-h]\n";
+
 /* ------------------------------------------------------------------------- */
 /* FUNCTION DEFINICION                                                       */
 /* ------------------------------------------------------------------------- */
@@ -37,6 +47,22 @@ static void gw_sched_dispatch (gw_scheduler_t * sched,
                              
 int main(int argc, char **argv)
 {
+    char opt;
+
+    while((opt = getopt(argc,argv,"h"))!= -1)
+        switch(opt)
+        {
+            case 'h':
+                printf("%s", usage);
+                exit(0);
+                break;
+            case '?':
+                fprintf(stderr,"error: invalid option \'%c\'\n",optopt);
+                printf("%s", susage);
+                exit(1);
+                break;
+        }
+
      gw_scheduler_loop(gw_sched, (void *) NULL);
      
      return 0;

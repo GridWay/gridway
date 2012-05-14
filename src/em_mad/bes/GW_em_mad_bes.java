@@ -21,6 +21,15 @@ import javax.xml.rpc.ServiceException;
 
 class GW_em_mad_bes extends Thread {
 
+	static String usage =
+		"USAGE\n GW_em_mad_bes [-h]\n\n" +
+		"SYNOPSIS\n" +
+		"  Execution driver to interface with BES. It is not intended to be used from CLI.\n\n" +
+		"OPTIONS\n" +
+		"  -h    print this help";
+	static String susage =
+		"usage: GW_em_mad_bes [-h]";
+
     	private Map job_pool = null; // Job pool
     	private Map jid_pool = null; // JID pool
 
@@ -29,6 +38,25 @@ class GW_em_mad_bes extends Thread {
 	
     	public static void main(String args[]) {
         	GW_em_mad_bes gw_em_mad_bes;
+    		int i = 0;
+		String arg;
+
+         	while (i < args.length && args[i].startsWith("-")) 
+         	{
+             		arg = args[i++];
+
+             		if (arg.equals("-h")) 
+             		{
+				System.out.println(usage);
+                        	System.exit(0);
+			}
+			else
+			{
+                        	System.err.println("error: invalid option \'" + arg + "\'\n");
+                        	System.out.println(susage);
+                        	System.exit(1);
+			}
+		}
 
         	gw_em_mad_bes = new GW_em_mad_bes();
         	gw_em_mad_bes.loop();

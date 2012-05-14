@@ -98,7 +98,6 @@ rm -rf $RPM_BUILD_ROOT
 %else
 %{_initddir}/gwd
 %endif
-/usr/bin/gw_flood_scheduler
 /usr/bin/gw_im_mad_common.sh
 /usr/bin/gw_im_mad_static
 /usr/bin/gw_mad_common.sh

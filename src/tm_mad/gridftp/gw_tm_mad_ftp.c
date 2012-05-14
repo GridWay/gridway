@@ -16,6 +16,16 @@
 
 #include "gw_tm_ftp_transfer.h"
 
+const char * usage =
+"USAGE\n gw_tm_mad_ftp [-h]\n\n"
+"SYNOPSIS\n"
+"  Transfer driver to interface with GridFTP services. It is not intended to be used from CLI.\n\n"
+"OPTIONS\n"
+"  -h    print this help\n";
+
+const char * susage =
+"usage: gw_tm_mad_ftp [-h]\n";
+
 extern gw_tm_ftp_transfer_t ** gw_tm_ftp_xfr_pool;
 
 int main (int argc, char **argv )
@@ -35,9 +45,25 @@ int main (int argc, char **argv )
     struct timeval t1,t2;
     double waited;
     
-	struct timeval tv;
+    struct timeval tv;
     fd_set in_pipes;
     char   c;
+
+    char opt;
+
+    while((opt = getopt(argc,argv,"h"))!= -1)
+        switch(opt)
+        {
+            case 'h':
+                printf("%s", usage);
+                exit(0);
+                break;
+            case '?':
+                fprintf(stderr,"error: invalid option \'%c\'\n",optopt);
+                    printf("%s", susage);
+                exit(1);
+                break;
+        }
 	
     setbuf(stdout,NULL);
                    

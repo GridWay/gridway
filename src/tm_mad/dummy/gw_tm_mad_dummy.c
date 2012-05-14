@@ -22,6 +22,18 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+const char * usage =
+"USAGE\n gw_tm_mad_dummy [-h] [-u|-g]\n\n"
+"SYNOPSIS\n"
+"  Transfer driver to interface with GridFTP and GASS servers. It is not intended to be used from CLI.\n\n"
+"OPTIONS\n"
+"  -h    print this help\n"
+"  -u    URL of the GridFTP server\n"
+"  -g    use a user GASS server to transfer files\n";
+
+const char * susage =
+"usage: gw_tm_mad_dummy [-h] [-u|-g]\n";
+
 extern char *optarg;
 extern int   optind, opterr, optopt;
 
@@ -61,7 +73,7 @@ int main (int argc, char **argv )
     u = f = g = 0;
     url = NULL;
 
-    while((opt = getopt(argc, argv, "h:u:fg")) != -1)
+    while((opt = getopt(argc, argv, "hu:fg")) != -1)
         switch(opt)
         {
             case 'u': 
@@ -75,6 +87,15 @@ int main (int argc, char **argv )
                 
             case 'g': 
                 g = 1;
+                break;
+            case 'h':
+                printf("%s", usage);
+                exit(0);
+                break;
+            case '?':
+                fprintf(stderr,"error: invalid option \'%c\'\n",optopt);
+                    printf("%s", susage);
+                exit(1);
                 break;
         }
            

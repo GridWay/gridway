@@ -48,6 +48,7 @@ install: build-stamp
 	dh_clean -k
 
 	$(MAKE) install DESTDIR=$(INSTALLDIR)
+	rm -rf $(INSTALLDIR)/usr/bin/gw_flood_scheduler
 
 binary: binary-arch binary-indep
 
