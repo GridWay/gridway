@@ -83,7 +83,7 @@ typedef struct gw_history_xfr_s
     char *alt_src_url;
 
     char mode;
-	
+
     gw_boolean_t done;
     gw_boolean_t success;
 } gw_history_xfr_t;
@@ -105,11 +105,12 @@ typedef struct gw_history_s
     char *em_rc;
     char *em_fork_rc;
     char *queue;
-    	
+ 
     int tries;
-	int failed_polls;
-	int counter;
-	
+    int failed_polls;
+    int failed_cancels;
+    int counter;
+
     gw_migration_reason_t reason;
 
     struct gw_history_s * next;
