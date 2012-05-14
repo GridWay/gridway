@@ -250,7 +250,11 @@ void CreamEmMad::cancel(int jid)
     CreamOperation result = creamService->cancel(creamJid, serviceAddress, delegationID);
 
     if (result.code == 0)
+    {
         cout << "CANCEL " << jid << " SUCCESS -" << endl;  
+        sleep(5);
+        poll(jid);
+    }
     else
         cout << "CANCEL " << jid << " FAILURE " << result.info << endl;
 

@@ -322,6 +322,11 @@ class GW_em_mad_bes extends Thread {
                         {
 				status = job.cancel();
 				info = job.getInformation();
+				if (status == 0)
+				{
+					sleep(5);
+					poll(jid);
+				}
                        	}
                 }
                 catch (Exception e)
@@ -332,9 +337,9 @@ class GW_em_mad_bes extends Thread {
                 synchronized (System.out)
                 {
                         if (status == 0)
-                                System.out.println("CANCEL" + " " + jid + " SUCCESS " + info);
+                               System.out.println("CANCEL" + " " + jid + " SUCCESS " + info);
                         else
-                                System.out.println("CANCEL" + " " + jid + " FAILURE " + info);
+                               System.out.println("CANCEL" + " " + jid + " FAILURE " + info);
                 }
 
         }
