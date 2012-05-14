@@ -58,10 +58,9 @@ void gw_em_pending(void *_job_id)
     /* Re-try the cancelation of current job           */
     /* ----------------------------------------------- */
     
-    if (((job->job_state == GW_JOB_STATE_MIGR_CANCEL) ||
-            (job->job_state == GW_JOB_STATE_STOP_CANCEL) ||
-            (job->job_state == GW_JOB_STATE_KILL_CANCEL) ) &&
-            (!(issubmitted (current_em_state))))
+    if (job->job_state == GW_JOB_STATE_MIGR_CANCEL
+            || job->job_state == GW_JOB_STATE_STOP_CANCEL
+            || job->job_state == GW_JOB_STATE_KILL_CANCEL)
         gw_am_trigger(&(gw_em.am), "GW_EM_CANCEL", _job_id); 
     else
         free(_job_id);
@@ -111,10 +110,9 @@ void gw_em_active(void *_job_id)
     /* Re-try the cancelation of current job           */
     /* ----------------------------------------------- */
     
-    if (((job->job_state == GW_JOB_STATE_MIGR_CANCEL) ||
-            (job->job_state == GW_JOB_STATE_STOP_CANCEL) ||
-            (job->job_state == GW_JOB_STATE_KILL_CANCEL) ) &&
-            (!(issubmitted (current_em_state))))
+    if (job->job_state == GW_JOB_STATE_MIGR_CANCEL
+            || job->job_state == GW_JOB_STATE_STOP_CANCEL
+            || job->job_state == GW_JOB_STATE_KILL_CANCEL)
         gw_am_trigger(&(gw_em.am), "GW_EM_CANCEL", _job_id); 
     else
         free(_job_id);
@@ -171,10 +169,9 @@ void gw_em_suspended(void *_job_id)
     /* Re-try the cancelation of current job           */
     /* ----------------------------------------------- */
     
-    if (((job->job_state == GW_JOB_STATE_MIGR_CANCEL) ||
-            (job->job_state == GW_JOB_STATE_STOP_CANCEL) ||
-            (job->job_state == GW_JOB_STATE_KILL_CANCEL) ) &&
-            (!(issubmitted (current_em_state))))
+    if (job->job_state == GW_JOB_STATE_MIGR_CANCEL
+            || job->job_state == GW_JOB_STATE_STOP_CANCEL
+            || job->job_state == GW_JOB_STATE_KILL_CANCEL)
         gw_am_trigger(&(gw_em.am), "GW_EM_CANCEL", _job_id); 
     else
         free(_job_id);
