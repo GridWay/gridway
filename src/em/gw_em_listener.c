@@ -211,10 +211,6 @@ void gw_em_listener(void *arg)
                     {
                         gw_job_print(job, "EM",'I',"Job cancel succeeded (%s).\n", info);
                         gw_log_print("EM",'I',"Cancel of job %i succeeded (%s).\n", *job_id, info);
-
-                        // Will wait for state change to DONE or FAILED
-                        //gw_am_trigger(&(gw_em.am), "GW_EM_STATE_DONE",
-                        //        (void *) job_id);
                     }
                     else
                     {
@@ -223,6 +219,7 @@ void gw_em_listener(void *arg)
 
                         job->history->failed_cancels++;
 
+                        // Will retry cancel in next poll, if there are retries left
                         if (job->history->failed_cancels >= 2)
                         {
                             gw_log_print("EM",'I',"Max number of cancel failures for job %i reached, considering it done\n", *job_id);
@@ -230,7 +227,6 @@ void gw_em_listener(void *arg)
 
                             gw_am_trigger(&(gw_em.am),"GW_EM_STATE_DONE", (void *) job_id);
                         }
-                        // Else, will retry cancel in next poll
                     }
                 }
                 else if (strcmp(action, "POLL") == 0)
