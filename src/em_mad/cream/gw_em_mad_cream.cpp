@@ -20,6 +20,18 @@
 #include <string>
 #include <pthread.h>
 
+const char * usage =
+"USAGE\n gw_em_mad_cream [-h] [-d] [-t]\n\n"
+"SYNOPSIS\n"
+"  Execution driver to interface with CREAM services. It is not intended to be used from CLI.\n\n"
+"OPTIONS\n"
+"  -h    print this help\n"
+"  -d    delegation id\n"
+"  -t    credentials refresh time";
+
+const char * susage =
+"usage: gw_em_mad_cream [-h] [-d] [-t]";
+
 void *creamAction(void *thread_data);
 void *timer(void *);
 int getFreeThread();
@@ -71,7 +83,7 @@ int main( int argc, char **argv)
         operation[i].free = true;
     }
 
-    while((opt = getopt(argc, argv, ":d:t:")) != -1)
+    while((opt = getopt(argc, argv, "d:t:h")) != -1)
         switch(opt)
         {
             case 'd': 
@@ -80,14 +92,15 @@ int main( int argc, char **argv)
             case 't': 
            	refreshTime = atoi(optarg);
 		break;
+            case 'h':
+                cout << usage << endl;
+                exit(0);
+                break;
             case '?':
-                cout << "error: invalid option " << optopt << endl;
+                cout << "error: invalid option " << (char)optopt << endl;
+		cout << susage << endl;
                 exit(1);
                 break;                
-            case ':':
-                cout << "error: must provide an argument for option " << optopt << endl;
-                exit(1);
-                break;
 	}
 
     while (!end)

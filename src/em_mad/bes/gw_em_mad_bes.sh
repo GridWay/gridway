@@ -6,6 +6,21 @@
 ## Usual installation
 JAVA_EXT="/usr/share/gridsam-2.3.0-client/"
 
+# Help
+while getopts h option
+    do
+        case $option in
+        h)   echo -e "USAGE\n GW_em_mad_bes [-h]" \
+                     "\n\nSYNOPSIS"\
+                     "\n  Execution driver to interface with BES. It is not intended to be used from CLI."\
+                     "\n\nOPTIONS"\
+                     "\n  -h    print this help";
+             exit 0;;
+        [?]) echo -e "usage: GW_em_mad_bes [-h]";
+             exit 1;;
+        esac
+    done
+
 if [ -z "${GW_LOCATION}" ]; then
     echo "Please, set GW_LOCATION variable."
     exit -1

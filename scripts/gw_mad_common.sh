@@ -71,6 +71,23 @@ function check_proxy {
 
 export CLASSPATH=$CLASSPATH:$GW_LOCATION/bin
 
+# Help
+if [[ "$0" == *gw_mad_common.sh* ]]; then
+  while getopts h option
+    do
+        case $option in
+        h)   echo -e "USAGE\n gw_mad_common.sh [-h]" \
+                     "\n\nSYNOPSIS"\
+                     "\n  GridWay MAD common functions. It is not intended to be used from CLI."\
+                     "\n\nOPTIONS"\
+                     "\n  -h    print this help";
+             exit 0;;
+        [?]) echo -e "usage: gw_mad_common.sh [-h]";
+             exit 1;;
+        esac
+    done
+fi
+
 # Set global environment
 
 export_rc_vars $GW_LOCATION/etc/gwrc
