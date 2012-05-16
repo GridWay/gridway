@@ -185,11 +185,11 @@ void gw_em_cancel(void *_job_id)
     else
         return;
 
-    if (job->history->failed_cancels >= 2)
+    if (job->history->cancel_tries >= 3)
     {
-        gw_log_print("EM",'I',"Max number of cancel failures for job %i reached, considering it done\n",
+        gw_log_print("EM",'I',"Max number of cancel retries for job %i reached, considering it done\n",
                 job_id);
-        gw_job_print(job,"EM",'I',"Max number of cancel failures reached, considering it done\n");
+        gw_job_print(job,"EM",'I',"Max number of cancel retries reached, considering it done\n");
 
         gw_am_trigger(&(gw_em.am),"GW_EM_STATE_DONE", _job_id);
 
@@ -197,6 +197,8 @@ void gw_em_cancel(void *_job_id)
 
         return;
     }
+
+    job->history->cancel_tries++;
 
     free(_job_id);
 
@@ -228,9 +230,9 @@ void gw_em_cancel(void *_job_id)
     }
     else
     {
-        gw_log_print ("EM",'W',"Ignoring cancel request for job %i, will retry.\n",
+        gw_log_print ("EM",'W',"Ignoring cancel request for job %i, job not submitted.\n",
                 job_id);
-        job->history->failed_cancels++;
+        gw_am_trigger(&(gw_em.am),"GW_EM_STATE_DONE", _job_id);
     }
     
     /* -------------------------------------------------------------------- */
