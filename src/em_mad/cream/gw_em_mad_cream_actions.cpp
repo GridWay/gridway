@@ -231,10 +231,7 @@ void CreamEmMad::pollAfterCancel(int jid)
     map<int, CreamJob *>::iterator it = creamJobs.find(jid);
 
     if (it == creamJobs.end())
-    {
-        cout << "POLL " << jid << " FAILURE " << "The job ID does not exist" << endl;
         return;
-    }
 
     pthread_mutex_lock(&jobMutex);
         CreamJob *creamJob = it->second;
