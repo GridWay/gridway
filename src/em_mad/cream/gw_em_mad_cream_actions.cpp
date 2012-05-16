@@ -226,6 +226,38 @@ void CreamEmMad::poll(int jid)
     return;
 }
 
+void CreamEmMad::pollAfterCancel(int jid)
+{
+    map<int, CreamJob *>::iterator it = creamJobs.find(jid);
+
+    if (it == creamJobs.end())
+    {
+        cout << "POLL " << jid << " FAILURE " << "The job ID does not exist" << endl;
+        return;
+    }
+
+    pthread_mutex_lock(&jobMutex);
+        CreamJob *creamJob = it->second;
+        string creamJid = creamJob->getCreamJobId();
+        string serviceAddress = creamJob->getCreamURL();
+    pthread_mutex_unlock(&jobMutex);
+
+    CreamOperation result = creamService->poll(creamJid, serviceAddress, delegationID);
+
+    if (result.info.compare("DONE") == 0)
+        cout << "POLL " << jid << " SUCCESS " << result.info << endl;
+
+    if ((result.info.compare("DONE") == 0) || (result.info.compare("FAILED") == 0))
+    {
+        pthread_mutex_lock(&jobMutex);
+            delete creamJobs.find(jid)->second;
+            creamJobs.erase(jid);
+        pthread_mutex_unlock(&jobMutex);
+    }
+
+    return;
+}
+
 void CreamEmMad::cancel(int jid)
 {
     map<int,CreamJob *>::iterator it = creamJobs.find(jid);
@@ -252,8 +284,8 @@ void CreamEmMad::cancel(int jid)
     if (result.code == 0)
     {
         cout << "CANCEL " << jid << " SUCCESS -" << endl;  
-        sleep(5);
-        poll(jid);
+        sleep(20);
+        pollAfterCancel(jid);
     }
     else
         cout << "CANCEL " << jid << " FAILURE " << result.info << endl;
