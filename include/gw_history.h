@@ -107,9 +107,9 @@ typedef struct gw_history_s
     char *queue;
     	
     int tries;
-	int failed_polls;
-	int failed_cancels;
-	int counter;
+    int failed_polls;
+    int cancel_tries;
+    int counter;
 	
     gw_migration_reason_t reason;
 
