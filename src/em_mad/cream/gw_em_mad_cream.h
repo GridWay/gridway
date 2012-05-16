@@ -124,6 +124,7 @@ class CreamEmMad
 	void recover(int jid, string contact);
 	void cancel(int jid);
 	void poll(int jid);
+	void pollAfterCancel(int jid);
 	void finalize();
         void timer();
 };
