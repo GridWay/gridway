@@ -324,8 +324,8 @@ class GW_em_mad_bes extends Thread {
 				info = job.getInformation();
 				if (status == 0)
 				{
-					sleep(5);
-					poll(jid);
+					sleep(20);
+					pollAfterCancel(jid);
 				}
                        	}
                 }
@@ -342,6 +342,37 @@ class GW_em_mad_bes extends Thread {
                                System.out.println("CANCEL" + " " + jid + " FAILURE " + info);
                 }
 
+        }
+
+        void pollAfterCancel(int jid) {
+
+                String info = null;
+                int status = 0;
+                try
+                {
+                        ServiceBES job = (ServiceBES) job_pool.get(jid);
+
+                        if (job == null)
+                        {
+                                status = -1;
+                                info = "Job does not exist jid";
+                        }
+                        else
+                        {
+                                status = job.poll();
+                                info = job.getInformation();
+                        }
+                }
+                catch (Exception e)
+                {
+                        info = e.getMessage().replace('\n', ' ');
+                        status = -1;
+                }
+                synchronized (System.out)
+                {
+                        if (info == "DONE")
+                                System.out.println("POLL" + " " + jid + " SUCCESS " + info);
+                }
         }
 
         void poll(int jid) {
