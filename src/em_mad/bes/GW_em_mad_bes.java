@@ -313,7 +313,7 @@ class GW_em_mad_bes extends Thread {
                 {
                   	ServiceBES job = (ServiceBES) job_pool.get(jid);
 
-                     	if (job == null)
+                        if (job == null)
                    	{
                                 status = -1;
                                 info = "Job does not exist jid";
@@ -327,7 +327,7 @@ class GW_em_mad_bes extends Thread {
 					sleep(20);
 					pollAfterCancel(jid);
 				}
-                       	}
+                        }
                 }
                 catch (Exception e)
                 {
@@ -353,10 +353,7 @@ class GW_em_mad_bes extends Thread {
                         ServiceBES job = (ServiceBES) job_pool.get(jid);
 
                         if (job == null)
-                        {
-                                status = -1;
-                                info = "Job does not exist jid";
-                        }
+				return;
                         else
                         {
                                 status = job.poll();
