@@ -36,8 +36,8 @@ char* gw_generate_wrapper_jsdl (gw_job_t *job)
 {
     char *jsdl;
     char *job_environment; 
-    char jsdl_buffer[GW_RSL_LENGTH];
-    char tmp_buffer[GW_RSL_LENGTH];
+    char jsdl_buffer[4*GW_RSL_LENGTH];
+    char tmp_buffer[4*GW_RSL_LENGTH];
     char *staging_url;
     gw_conf_t gw_conf;
     char *wrapper;
@@ -68,7 +68,7 @@ char* gw_generate_wrapper_jsdl (gw_job_t *job)
     /* 2.- Build JSDL String & Return it                                       */
     /* ---------------------------------------------------------------------- */
 
-    snprintf(jsdl_buffer, sizeof(char) * GW_RSL_LENGTH,
+    snprintf(jsdl_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
             "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
             "<jsdl:JobDefinition xmlns=\"http://www.example.org/\"\n"
             "   xmlns:jsdl=\"http://schemas.ggf.org/jsdl/2005/11/jsdl\"\n"
@@ -82,18 +82,18 @@ char* gw_generate_wrapper_jsdl (gw_job_t *job)
             "   <jsdl-posix:POSIXApplication>\n",
             job->template.name);
 
-    snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
+    snprintf(tmp_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
             "    <jsdl-posix:Executable>./%s</jsdl-posix:Executable>\n",
             wrapper);
     strcat(jsdl_buffer, tmp_buffer);
 
     gw_conf.gw_location = getenv("GW_LOCATION");
-    snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
+    snprintf(tmp_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
             "    <jsdl-posix:Argument>%s%s/" GW_VAR_DIR "/%d/job.env</jsdl-posix:Argument>\n",
             staging_url, gw_conf.gw_location, job->id);
     strcat(jsdl_buffer, tmp_buffer);
 
-    snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
+    snprintf(tmp_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
             "    <jsdl-posix:Output>stdout.wrapper.%d</jsdl-posix:Output>\n"
             "    <jsdl-posix:Error>stderr.wrapper.%d</jsdl-posix:Error>\n" 
             "    <jsdl-posix:WorkingDirectory>/tmp/gridway</jsdl-posix:WorkingDirectory>\n"
@@ -105,40 +105,40 @@ char* gw_generate_wrapper_jsdl (gw_job_t *job)
 
     if ((job->max_time > 0) && (job->max_walltime == 0))
     {
-            snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
+            snprintf(tmp_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
                     "    <jsdl-posix:WallTimeLimit>%d</jsdl-posix:WallTimeLimit>\n",
                     job->max_time*60);
             strcat(jsdl_buffer, tmp_buffer);
     }
     if (job->max_walltime > 0) 
     {
-            snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
+            snprintf(tmp_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
                     "    <jsdl-posix:WallTimeLimit>%d</jsdl-posix:WallTimeLimit>\n",
                     job->max_walltime*60);
             strcat(jsdl_buffer, tmp_buffer);
     }
     if (job->max_memory > 0)
     {
-            snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
+            snprintf(tmp_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
                     "    <jsdl-posix:MemoryLimit>%d</jsdl-posix:MemoryLimit>\n",
                     job->max_memory*1024);
             strcat(jsdl_buffer, tmp_buffer);
     }
     if (job->max_cpu_time > 0)
     {
-            snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
+            snprintf(tmp_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
                     "    <jsdl-posix:CPUTimeLimit>%d</jsdl-posix:CPUTimeLimit>\n",
                     job->max_cpu_time*60);
             strcat(jsdl_buffer, tmp_buffer);
     }
 
 
-    snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
+    snprintf(tmp_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
             "   </jsdl-posix:POSIXApplication>\n"
             "  </jsdl:Application>\n");
     strcat(jsdl_buffer, tmp_buffer);
 
-    snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
+    snprintf(tmp_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
             "  <jsdl:DataStaging>\n"
             "   <jsdl:FileName>%s</jsdl:FileName>\n"
             "   <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"
@@ -150,7 +150,7 @@ char* gw_generate_wrapper_jsdl (gw_job_t *job)
             staging_url, job->template.wrapper);
     strcat(jsdl_buffer, tmp_buffer);
 
-    snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
+    snprintf(tmp_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
             "  <jsdl:DataStaging>\n"
             "   <jsdl:FileName>stdout.wrapper.%d</jsdl:FileName>\n"
             "   <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"
@@ -162,7 +162,7 @@ char* gw_generate_wrapper_jsdl (gw_job_t *job)
             staging_url, gw_conf.gw_location, job->id, job->restarted);
     strcat(jsdl_buffer, tmp_buffer);
 
-    snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
+    snprintf(tmp_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
             "  <jsdl:DataStaging>\n"
             "   <jsdl:FileName>stderr.wrapper.%d</jsdl:FileName>\n"
             "   <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"
@@ -176,7 +176,7 @@ char* gw_generate_wrapper_jsdl (gw_job_t *job)
             staging_url, gw_conf.gw_location, job->id, job->restarted);
     strcat(jsdl_buffer, tmp_buffer);
 
-    if (strlen(jsdl_buffer) + 6 > GW_RSL_LENGTH)
+    if (strlen(jsdl_buffer) + 6 > 4*GW_RSL_LENGTH)
         return NULL;
 
     jsdl = strdup(jsdl_buffer);
@@ -191,7 +191,7 @@ char* gw_generate_wrapper_jsdl (gw_job_t *job)
 
 char* gw_split_arguments_jsdl (const char *arguments)
 {
-    char jsdl_buffer[GW_RSL_LENGTH];
+    char jsdl_buffer[4*GW_RSL_LENGTH];
     char *argument;
     char *xml_arguments;
     int length,i,arg_i;
@@ -226,8 +226,8 @@ char* gw_split_arguments_jsdl (const char *arguments)
 
 char *gw_em_jsdl_environment(gw_job_t *job)
 {
-    char jsdl_buffer[GW_RSL_LENGTH];
-    char tmp_buffer[GW_RSL_LENGTH];
+    char jsdl_buffer[4*GW_RSL_LENGTH];
+    char tmp_buffer[4*GW_RSL_LENGTH];
     char *jsdl_env;
     int rc;
     int i;
@@ -236,14 +236,14 @@ char *gw_em_jsdl_environment(gw_job_t *job)
     {
         if (strcmp(job->template.environment[i][0], "MAXCPUTIME") != 0 && strcmp(job->template.environment[i][0], "MAXTIME") != 0 && strcmp(job->template.environment[i][0], "MAXWALLTIME") != 0 && strcmp(job->template.environment[i][0], "MAXMEMORY") != 0 && strcmp(job->template.environment[i][0], "MINMEMORY") != 0) 
         {
-            rc = snprintf(jsdl_buffer, sizeof(char) * GW_RSL_LENGTH,
+            rc = snprintf(jsdl_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
                 "    <jsdl-posix:Environment name=\"%s\">%s</jsdl-posix:Environment>\n",
                 job->template.environment[i][0],
                 job->template.environment[i][1]);
         }
     }
 
-    rc = snprintf(tmp_buffer, sizeof(char) * GW_RSL_LENGTH,
+    rc = snprintf(tmp_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
             "    <jsdl-posix:Environment name=\"GW_HOSTNAME\">%s</jsdl-posix:Environment>\n"
             "    <jsdl-posix:Environment name=\"GW_USER\">%s</jsdl-posix:Environment>\n"
             "    <jsdl-posix:Environment name=\"GW_JOB_ID\">%i</jsdl-posix:Environment>\n"
@@ -260,7 +260,7 @@ char *gw_em_jsdl_environment(gw_job_t *job)
             job->restarted);
     strcat(jsdl_buffer, tmp_buffer);
 
-    if ((rc >= GW_RSL_LENGTH ) || ( rc < 0 ) )
+    if ((rc >= 4*GW_RSL_LENGTH ) || ( rc < 0 ) )
         return NULL;
 
     jsdl_env = strdup(jsdl_buffer);
