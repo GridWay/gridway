@@ -1,20 +1,20 @@
 %define _name gridway
-%define _release 1 
+%define _release 2 
 
 Name:		gridway-core
 Version:	5.10
-Release:	1%{dist}
+Release:	2%{dist}
 Summary:	GridWay Core
 
 Group:		System Environment/Libraries
 License:	Apache License
 URL:		http://www.gridway.org/
 Vendor:         Initiative for Globus in Europe (IGE)
-# svn co http://svn.gridway.org/gridway/tags/GW_5_10_1 gridway-5.10.1
-# cp -p gridway-5.10.1/packaging/README.rpm gridway-5.10.1/README
-# cp -p gridway-5.10.1/packaging/core/RPM/gwd gridway-5.10.1/etc/
-# chmod 755 gridway-5.10.1/etc/gwd
-# tar -czf gridway-5.10.1.tar.gz gridway-5.10.1/
+# svn co http://svn.gridway.org/gridway/tags/GW_5_10_2 gridway-5.10.2
+# cp -p gridway-5.10.2/packaging/README.rpm gridway-5.10.2/README
+# cp -p gridway-5.10.2/packaging/core/RPM/gwd gridway-5.10.2/etc/
+# chmod 755 gridway-5.10.2/etc/gwd
+# tar -czf gridway-5.10.2.tar.gz gridway-5.10.2/
 
 Source:		%{_name}-%{version}.%{_release}.tar.gz
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
@@ -123,10 +123,10 @@ rm -rf $RPM_BUILD_ROOT
 /usr/libexec/ruby/dagman/node.rb
 /usr/libexec/ruby/dagman/parse.rb
 /usr/libexec/ruby/dagman/runner.rb
-/usr/share/doc/gridway-5.10.1/LICENSE
-/usr/share/doc/gridway-5.10.1/NOTICE
-/usr/share/doc/gridway-5.10.1/README
-/usr/share/doc/gridway-5.10.1/RELEASE_NOTES
+/usr/share/doc/gridway-5.10.2/LICENSE
+/usr/share/doc/gridway-5.10.2/NOTICE
+/usr/share/doc/gridway-5.10.2/README
+/usr/share/doc/gridway-5.10.2/RELEASE_NOTES
 /usr/include/drmaa.h
 /usr/include/gw_acct.h
 /usr/include/gw_action.h
@@ -164,9 +164,9 @@ rm -rf $RPM_BUILD_ROOT
 /usr/include/gw_user.h
 /usr/include/gw_user_pool.h
 /usr/include/gw_xfr_files.h
-/usr/share/gridway/5.10.1/xml_schema/gridway.xsd
-/usr/share/gridway/5.10.1/var
-/usr/share/gridway/5.10.1/var/acct
+/usr/share/gridway/5.10.2/xml_schema/gridway.xsd
+/usr/share/gridway/5.10.2/var
+/usr/share/gridway/5.10.2/var/acct
 /usr/lib/drmaa.jar
 /usr/lib/libDrmaaJNI.a
 /usr/lib/libDrmaaJNI.la
@@ -175,6 +175,9 @@ rm -rf $RPM_BUILD_ROOT
 /usr/lib/libDrmaaJNI.so.0.0.0
 
 %changelog
+* Thu May 17 2012 GridWay Project Leads <contact@gridway.org> - 5.10-2
+- Bug fixing
+
 * Mon Apr 09 2012 GridWay Project Leads <contact@gridway.org> - 5.10-1
 - Update to 5.10-1
 

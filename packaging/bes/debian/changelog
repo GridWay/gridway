@@ -1,3 +1,9 @@
+gridway-bes (5.10-2) stable; urgency=low
+
+  * Bug fixing.
+
+ -- GridWay Project Leads <contact@gridway.org>  Thu, 17 May 2012 10:09:05 +0200
+
 gridway-bes (5.10-1) stable; urgency=low
 
   * Fixing dependencies.
