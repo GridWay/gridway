@@ -1,40 +1,20 @@
-====== Release Notes 5.10 ======
+====== Release Notes 5.10.2 ======
 
-GridWay 5.10 is the new stable version of the fifth series of the
+GridWay 5.10.2 is an incremental stable version of the fifth series of the
 metascheduler.
 
-Release date: 31st March, 2012
-
-===== Improved BES and CREAM drivers =====
-
-Execution drivers for OGSA-BES and CREAM have been improved in this release,
-in terms of performance, scalability and reliability. Some functionality
-bugs have been fixed.
-
-===== FHS-compliant installation =====
-
-GridWay core and MADs can now be installed according to the Filesystem
-Hierarchy Standard (FHS). To this end, GridWay must be configured using the
-options --prefix=/usr (installation directory),
---localstatedir=/usr/share/gridway/5.10.0/var (location of var/ directory)
-and --datarootdir=/usr/share/doc/gridway-5.10.0 (documentation directory).
-
-===== Changes in the scheduler to enqueue jobs =====
-
-The scheduler now submit jobs to resources based only on their rank, not on
-their free slots.
-
-===== Other features ======
-
-This release includes the following minor features:
-
-  * Job cancel operations are retried.
-  * Disk size and free space are shown in GB when needed.
-  * Submission of MPI jobs to GRAM4 with wrapper.
-  * Improved error messages in MDS4 for GT4.0.
+Release date: May 17th, 2012.
 
 ===== Bug fixing =====
 
 The following bugs have been fixed:
-  * Bug #114 (http://dev.gridway.org/issues/114): GW does not retry after a
-recover failure
+  * Bug #116 (http://dev.gridway.org/issues/116): Set umask to avoid 
+world-writable files
+  * Bug #117 (http://dev.gridway.org/issues/117): Provide help (-h) for every 
+command in bin directory
+  * Bug #118 (http://dev.gridway.org/issues/118): SEGFAULT when killing a 
+submitted job
+  * Bug #121 (http://dev.gridway.org/issues/121): It takes too long to get CREAM 
+and BES jobs cancelled
+  * Bug #123 (http://dev.gridway.org/issues/123): Buffer size is insufficient to 
+create JSDL files
