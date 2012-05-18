@@ -69,8 +69,7 @@ the following lines.
    #GridWay entries
    gwadmin ALL=(GWUSERS) NOPASSWD: /usr/bin/grid-proxy-info *
 
-The source RPM package gridway-core enables you to build the binary RPM. JAVA_HOME
-must be previously exported.
+The source RPM package gridway-core enables you to build the binary RPM.
 Build RPM dependencies: none
 
 2) Install the GridWay MADs

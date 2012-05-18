@@ -68,8 +68,7 @@ the following lines.
    #GridWay entries
    gwadmin ALL=(GWUSERS) NOPASSWD: /usr/bin/grid-proxy-info *
 
-The source DEB package gridway-core enables you to build the binary DEB. JAVA_HOME
-must be previously exported.
+The source DEB package gridway-core enables you to build the binary DEB.
 Build DEB dependencies: debhelper and gcc.
 
 2) Install the GridWay MADs

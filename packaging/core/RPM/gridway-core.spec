@@ -67,7 +67,7 @@ fi
 /sbin/ldconfig
 
 %build
-./configure --prefix=/usr/ --localstatedir=/usr/share/%{_name}/%{version}.%{_release}/var --datarootdir=/usr/share/doc/%{_name}-%{version}.%{_release} --with-db=yes --with-syslog=LOG_USER --enable-drmaa-java
+JAVA_HOME=/usr/lib/jvm/java ./configure --prefix=/usr/ --localstatedir=/usr/share/%{_name}/%{version}.%{_release}/var --datarootdir=/usr/share/doc/%{_name}-%{version}.%{_release} --with-db=yes --with-syslog=LOG_USER --enable-drmaa-java
 make
 
 %install
@@ -81,6 +81,7 @@ cp etc/gwd $RPM_BUILD_ROOT/%{_initrddir}
 mkdir -p $RPM_BUILD_ROOT/%{_initddir}
 cp etc/gwd $RPM_BUILD_ROOT/%{_initddir}
 %endif
+rm -rf $RPM_BUILD_ROOT/usr/bin/gw_flood_scheduler
 
 %clean
 rm -rf $RPM_BUILD_ROOT
