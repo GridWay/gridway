@@ -22,6 +22,7 @@
 #include <limits.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 
 /* -------------------------------------------------------------------------- */
 static gw_acct_db_t gw_acct_db = {NULL,NULL,NULL,NULL,NULL,NULL};
