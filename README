@@ -25,8 +25,7 @@ provides a single point of access to all resources in your organization, from
 in-house systems to Grid infrastructures and Cloud providers.
 
 GridWay supports most of existing Grid middlewares (Globus WS and pre-WS, LCG, 
-CREAM, ARC) and has being used on main production Grid infrastructures (EGEE,
-OSG, TeraGrid).
+CREAM, ARC...) and has been used on main production Grid infrastructures.
 
 
 ===== RELEASE NOTES =====
