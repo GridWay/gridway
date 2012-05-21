@@ -21,6 +21,8 @@ BuildRequires:	log4cpp-devel
 BuildRequires:	classads-devel
 Requires:	gridway-core
 Requires:	globus-gass-server-ez-progs
+Requires:	glite-ce-cream-client-api-c
+Requires:	glite-lbjp-common-gsoap-plugin
 
 %description
 GridWay uses several Middleware Access Drivers (MAD) to interface with 
