@@ -34,6 +34,7 @@ Requires:	java
 Requires:       axis
 Requires:       wsdl4j
 Requires:       log4j
+Requires:	xalan-j2
 #Requires:	xmlbeans
 #Requires:	gridsam-schema
 #Requires:	xml-security
