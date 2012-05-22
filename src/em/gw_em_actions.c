@@ -198,6 +198,7 @@ void gw_em_cancel(void *_job_id)
         return;
     }
 
+    free(_job_id);
     job->history->cancel_tries++;
 
     /* -------------------------------------------------------------------- */
@@ -228,16 +229,14 @@ void gw_em_cancel(void *_job_id)
     }
     else
     {
-        gw_log_print ("EM",'W',"Ignoring cancel request for job %i, job not submitted.\n",
+        gw_log_print ("EM",'W',"Ignoring cancel request for job %i (not submitted). Will retry\n",
                 job_id);
-        gw_am_trigger(&(gw_em.am),"GW_EM_STATE_DONE", _job_id);
     }
     
     /* -------------------------------------------------------------------- */
             
     pthread_mutex_unlock(&(job->mutex));        
 
-    free(_job_id);
 }
 
 /* -------------------------------------------------------------------------- */
