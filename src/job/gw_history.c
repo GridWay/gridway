@@ -43,26 +43,28 @@ void gw_job_history_init(gw_history_t **job_history)
 
 int gw_job_history_destroy(gw_history_t **job_history)
 {
-    if (*job_history == NULL)
+    if (*job_history != NULL)
+    {
+        gw_job_history_destroy(&((*job_history)->next));
+
+    	if ((*job_history)->rdir != NULL)
+			free((*job_history)->rdir);
+
+    	if ((*job_history)->em_rc != NULL)
+			free((*job_history)->em_rc);
+
+    	if ((*job_history)->em_fork_rc != NULL)
+			free((*job_history)->em_fork_rc);
+
+    	if ((*job_history)->queue != NULL)
+			free((*job_history)->queue);
+       
+        free(*job_history);
+
+        return 0;
+    }
+    else
         return -1;
-
-    gw_job_history_destroy(&((*job_history)->next));
-
-    if ((*job_history)->rdir != NULL)
-        free((*job_history)->rdir);
-
-    if ((*job_history)->em_rc != NULL)
-        free((*job_history)->em_rc);
-
-    if ((*job_history)->em_fork_rc != NULL)
-        free((*job_history)->em_fork_rc);
-
-    if ((*job_history)->queue != NULL)
-        free((*job_history)->queue);
- 
-    free(*job_history);
-
-    return 0;
 }
 
 /*----------------------------------------------------------------------------*/
@@ -87,7 +89,7 @@ int gw_job_history_add(gw_history_t **job_history,
     char           tmp[256];
     char           history_file[PATH_MAX];
     FILE           *file;
-    char           *se;
+	char           *se;
     
     new_record = (gw_history_t *)malloc(sizeof(gw_history_t));
 
@@ -104,7 +106,7 @@ int gw_job_history_add(gw_history_t **job_history,
         return -1;
     }
 
-    new_record->em_mad = gw_user_pool_get_em_mad(uid, host->em_mad);
+	new_record->em_mad = gw_user_pool_get_em_mad(uid, host->em_mad);
 
     if (new_record->em_mad == NULL)
     {
@@ -118,42 +120,42 @@ int gw_job_history_add(gw_history_t **job_history,
     new_record->host         = host;
     new_record->tries        = 0;
     new_record->failed_polls = 0;
-    new_record->failed_cancels = 0;
+    new_record->cancel_tries = 0;
     new_record->counter      = -1;
 
-    se = gw_host_get_genvar_str("SE_HOSTNAME", 0, host);
+	se = gw_host_get_genvar_str("SE_HOSTNAME", 0, host);
 
-    if ((se == NULL) || (se[0] == '\0'))
-    {
-        sprintf(tmp,"gsiftp://%s/~/.gw_%s_%i/", host->hostname, owner, jid);
-        new_record->rdir = strdup(tmp);
-    }
-    else
-    {
-        sprintf(tmp,"gsiftp://%s/~/.gw_%s_%i/", se, owner, jid);
-        new_record->rdir = strdup(tmp);
-    }
+	if ((se == NULL) || (se[0] == '\0'))
+	{
+	    sprintf(tmp,"gsiftp://%s/~/.gw_%s_%i/", host->hostname, owner, jid);
+	    new_record->rdir = strdup(tmp);
+	}
+	else
+	{
+	    sprintf(tmp,"gsiftp://%s/~/.gw_%s_%i/", se, owner, jid);
+	    new_record->rdir = strdup(tmp);
+	}
 
-    if (lrms != NULL)
-    {
-        sprintf(tmp,"%s/%s", host->hostname, lrms);
-        new_record->em_rc = strdup(tmp);
-    }
-    else /* Use the default Jobmanager!!!*/
-        new_record->em_rc = strdup(host->hostname);
+	if (lrms != NULL)
+	{
+    	sprintf(tmp,"%s/%s", host->hostname, lrms);
+	    new_record->em_rc = strdup(tmp);
+	}
+	else/* Use the default Jobmanager!!!*/
+    	new_record->em_rc = strdup(host->hostname);	
 
     if ( fork != NULL )
     {
-        sprintf(tmp,"%s/%s", host->hostname, fork);
-        new_record->em_fork_rc  = strdup(tmp);
+	    sprintf(tmp,"%s/%s", host->hostname, fork);
+	   	new_record->em_fork_rc  = strdup(tmp);
     }
     else /* Use the default Jobmanager*/
-        new_record->em_fork_rc  = strdup(host->hostname);
+    	new_record->em_fork_rc  = strdup(host->hostname);
     
     if ( queue != NULL )
-        new_record->queue = strdup(queue);
+    	new_record->queue = strdup(queue);
     else
-        new_record->queue = NULL;
+    	new_record->queue = NULL;
 
     for (i=0; i<GW_HISTORY_MAX_STATS; i++)
         new_record->stats[i] = 0;
