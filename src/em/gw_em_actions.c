@@ -200,8 +200,6 @@ void gw_em_cancel(void *_job_id)
 
     job->history->cancel_tries++;
 
-    free(_job_id);
-
     /* -------------------------------------------------------------------- */
             
     current_em_state = job->em_state;
@@ -238,6 +236,8 @@ void gw_em_cancel(void *_job_id)
     /* -------------------------------------------------------------------- */
             
     pthread_mutex_unlock(&(job->mutex));        
+
+    free(_job_id);
 }
 
 /* -------------------------------------------------------------------------- */

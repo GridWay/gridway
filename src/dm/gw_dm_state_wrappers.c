@@ -283,7 +283,7 @@ void gw_dm_wrapper_done_cb ( void *_job_id )
     		break;
 
     	default:
-			gw_log_print("DM",'E',"Wrapper done callback in wrong job (%i) state.\n", job_id);
+			gw_log_print("DM",'E',"Wrapper done callback for job %i in wrong state.\n", job_id);
 			
 			free(_job_id);    	    	
     		break;    	
