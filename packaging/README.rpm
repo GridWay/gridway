@@ -177,7 +177,7 @@ $GW_LOCATION/etc/.
 The source RPM package gridway-BES enables you to build the binary RPM.
 Build RPM dependencies: java-devel, axis and xalan-j2.
 Other dependencies (non RPM): gridsam-schema and xmlbeans (check the default 
-location in Makefile and gw_em_mad_bes.sh
+location in Makefile and gw_em_mad_bes.sh).
 
 3) Launch the gwd daemon
 
