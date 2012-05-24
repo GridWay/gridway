@@ -1,5 +1,5 @@
 %define _name gridway
-%define _release RC1 
+%define _release RC1
 
 Name:		gridway-gLite
 Version:	5.11
@@ -21,8 +21,8 @@ BuildRequires:	log4cpp-devel
 BuildRequires:	classads-devel
 Requires:	gridway-core
 Requires:	globus-gass-server-ez-progs
-Requires:       glite-ce-cream-client-api-c
-Requires:       glite-lbjp-common-gsoap-plugin
+Requires:	glite-ce-cream-client-api-c
+Requires:	glite-lbjp-common-gsoap-plugin
 
 %description
 GridWay uses several Middleware Access Drivers (MAD) to interface with 
@@ -83,6 +83,9 @@ rm -rf $RPM_BUILD_ROOT
 /usr/bin/gw_tm_mad_dummy.bin
 
 %changelog
+* Thu May 17 2012 GridWay Project Leads <contact@gridway.org> - 5.10-2
+- Bug fixing
+
 * Mon Apr 09 2012 GridWay Project Leads <contact@gridway.org> - 5.10-1
 - Update to 5.10-1
 

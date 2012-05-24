@@ -81,6 +81,7 @@ cp etc/gwd $RPM_BUILD_ROOT/%{_initrddir}
 mkdir -p $RPM_BUILD_ROOT/%{_initddir}
 cp etc/gwd $RPM_BUILD_ROOT/%{_initddir}
 %endif
+rm -rf $RPM_BUILD_ROOT/usr/bin/gw_flood_scheduler
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -175,6 +176,9 @@ rm -rf $RPM_BUILD_ROOT
 /usr/lib/libDrmaaJNI.so.0.0.0
 
 %changelog
+* Thu May 17 2012 GridWay Project Leads <contact@gridway.org> - 5.10-2
+- Bug fixing
+
 * Mon Apr 09 2012 GridWay Project Leads <contact@gridway.org> - 5.10-1
 - Update to 5.10-1
 

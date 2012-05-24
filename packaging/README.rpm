@@ -49,19 +49,27 @@ GridWay with a multi-user configuration.
 
 1.1) Install RPM dependencies: chkconfig, initscripts, db4, db4-devel and
 db4-utils.
+
 1.2) Post-install configuration:
+
 - All of the GridWay users must be members of the gwusers UNIX group.
-- GridWay users must export the $GW_LOCATION environmental variable: export
-GW_LOCATION=/usr. You can create a profile file for gwusers group, such as:
-  for i in `groups`; do
-   if [ "$i" = 'gwusers' ]; then
-    GLOBUS_LOCATION=/usr
-    GW_LOCATION=/usr
-    export GLOBUS_LOCATION GW_LOCATION
-   fi
-  done
+- GridWay users must export the $GW_LOCATION environmental variable: 
+
+   export GW_LOCATION=/usr
+
+  You can create a profile file for gwusers group, such as:
+
+   for i in `groups`; do
+    if [ "$i" = 'gwusers' ]; then
+     GLOBUS_LOCATION=/usr
+     GW_LOCATION=/usr
+     export GLOBUS_LOCATION GW_LOCATION
+    fi
+   done
+
 - Some privileges are required to be set in the /etc/sudoers file. Please add
 the following lines.
+
    Defaults:gwadmin !requiretty
    # User alias specification (GridWay)
    Runas_Alias GWUSERS = %gwusers
@@ -69,9 +77,8 @@ the following lines.
    #GridWay entries
    gwadmin ALL=(GWUSERS) NOPASSWD: /usr/bin/grid-proxy-info *
 
-The source RPM package gridway-core enables you to build the binary RPM. JAVA_HOME
-must be previously exported.
-Build RPM dependencies: none
+The source RPM package gridway-core enables you to build the binary RPM.
+Build RPM dependencies: gcc and java-devel.
 
 2) Install the GridWay MADs
 
@@ -79,39 +86,51 @@ Build RPM dependencies: none
 GridWay MADs to interface with the Globus Toolkit 5 services, GRAM5 and GridFTP,
 as well as an static information MAD is provided.
 
-2.1a) Install RPM dependencies: gridway-core, globus-gram-client and
-globus-gass-copy.
+2.1a) Install RPM dependencies: gridway-core, globus-gram-client, 
+globus-gass-copy, globus-gass-copy-progs and globus-proxy-utils.
+
 2.2a) Post-install configuration:
+
 - This RPM provides a basic configuration of the MADs through the file
 /usr/etc/gwd.conf (check the Configuration Guide).
 - You must configure the available hosts for your GridWay instance (see the
 example file /usr/etc/gram5_hosts.list).
-- GridWay users must export the $GLOBUS_LOCATION environmental variable: export
-GLOBUS_LOCATION=/usr
+- GridWay users must export the $GLOBUS_LOCATION environmental variable: 
+
+   export GLOBUS_LOCATION=/usr
+
 - Some privileges are required to be set in the /etc/sudoers file. Please add
 the following lines.
+
    Defaults>GWUSERS env_keep="GW_LOCATION GLOBUS_LOCATION"
    #GridWay entries (GT5 MAD)
    gwadmin ALL=(GWUSERS) NOPASSWD: /usr/bin/gw_em_mad_gram5 *
    gwadmin ALL=(GWUSERS) NOPASSWD: /usr/bin/gw_tm_mad_ftp *
 
 The source RPM package gridway-GT5 enables you to build the binary RPM.
-Build RPM dependencies: globus-ftp-client-devel, globus-gass-copy-devel,
-grid-packaging-tools and globus-common-progs.
+Build RPM dependencies: globus-common-devel, globus-gram-client, 
+globus-gram-client-devel, globus-gass-copy, globus-ftp-client-devel, 
+globus-gass-copy-devel, grid-packaging-tools and globus-common-progs.
 
 2b) GridWay MADs for gLite 3.2: The binary RPM package gridway-gLite installs
 the GridWay MADs to interface with the gLite 3.2 services, BDII and CREAM, as
 well as a dummy transfer MAD is provided.
 
-2.1b) Install RPM dependencies: gridway-core and globus-gass-server-ez-progs. 
+2.1b) Install RPM dependencies: gridway-core, globus-gass-server-ez-progs, 
+glite-ce-cream-client-api-c and glite-lbjp-common-gsoap-plugin. 
+
 2.2b) Post-install configuration:
+
 - This RPM provides a basic configuration of the MADs through the file
 /usr/etc/gwd.conf (check the Configuration Guide). Set up your BDII server and
 your VO.
-- GridWay users must export the $GLOBUS_LOCATION environmental variable: export
-GLOBUS_LOCATION=/usr
+- GridWay users must export the $GLOBUS_LOCATION environmental variable: 
+
+   export GLOBUS_LOCATION=/usr
+
 - Some privileges are required to be set in the /etc/sudoers file. Please add
 the following lines.
+
    Defaults>GWUSERS env_keep="GW_LOCATION GLOBUS_LOCATION"
    #GridWay entries (gLite MAD)
    gwadmin ALL=(GWUSERS) NOPASSWD: /usr/bin/gw_im_mad_bdii *
@@ -126,23 +145,29 @@ log4cpp-devel and classads-devel.
 installs the GridWay MAD to interface with OGSA-BES services, as well as an
 static information MAD and a dummy transfer MAD are provided.
 
-2.1c) Install RPM dependencies: gridway-core, xmlbeans, axis, 
-wsdl4j, wss4j, xml-security, xalan-j2 and log4j.
-Other dependencies (non RPM): gridsam-schema and OMII security utils 
-(check the default location in Makefile).
+2.1c) Install RPM dependencies: gridway-core, java, axis, wsdl4j, log4j and 
+xalan-j2.
+Other dependencies (non RPM): gridsam-schema, OMII security utils, xmlbeans, 
+xml-security and wss4j (check the default location in GW_em_mad_bes).
+
 2.2c) Post-install configuration:
+
 - This RPM provides a basic configuration of the MADs through the file
 /usr/etc/gwd.conf (check the Configuration Guide). Set up your GridFTP server. 
 - You must configure the available hosts for your GridWay instance (see the
 example file /usr/etc/BES_hosts.list).
-- GridWay users must export the $GLOBUS_LOCATION environmental variable: export
-GLOBUS_LOCATION=/usr
+- GridWay users must export the $GLOBUS_LOCATION environmental variable: 
+
+   export GLOBUS_LOCATION=/usr
+
 - Some privileges are required to be set in the /etc/sudoers file. Please add
 the following lines.
+
    Defaults>GWUSERS env_keep="GW_LOCATION GLOBUS_LOCATION"
    #GridWay entries (OGSA-BES MAD)
    gwadmin ALL=(GWUSERS) NOPASSWD: /usr/bin/GW_em_mad_bes *
    gwadmin ALL=(GWUSERS) NOPASSWD: /usr/bin/gw_tm_mad_dummy *
+
 - MyProxy is used for managing security credentials. Creates a $HOME/.myproxy
 file, where the first line is the hostname of the MyProxy server, the second
 line is the username and the last line is the password.
@@ -150,11 +175,11 @@ line is the username and the last line is the password.
 $GW_LOCATION/etc/.
 
 The source RPM package gridway-BES enables you to build the binary RPM.
-Build RPM dependencies: java-devel, axis xalan-j2, and xmlbeans.
-Other dependencies (non RPM): gridsam-schema and OMII security utils 
-(check the default location in GW_em_mad_bes).
+Build RPM dependencies: java-devel, axis and xalan-j2.
+Other dependencies (non RPM): gridsam-schema and xmlbeans (check the default 
+location in Makefile and gw_em_mad_bes.sh).
 
-3) Launch the gwd daemon.
+3) Launch the gwd daemon
 
 4) Test it and enjoy!
 

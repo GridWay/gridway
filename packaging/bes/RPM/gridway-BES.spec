@@ -12,15 +12,14 @@ URL:		http://www.gridway.org/
 Vendor:         Initiative for Globus in Europe (IGE)
 Source:		%{_name}-%{version}.%{_release}.tar.gz
 # wget http://svn.gridway.org/gridway/tags/GW_5_11_RC1/packaging/bes/RPM/LICENSE.ThirdParty
-## BUILD Dependencies ##
+
+## BUILD and RUNTIME Dependencies at src/em_mad/bes/lib ##
 # wget -U NoSuchBrowser/1.0 http://repo1.maven.org/maven2/org/apache/xmlbeans/xmlbeans/2.5.0/xmlbeans-2.5.0.jar
 # wget http://sourceforge.net/projects/gridsam/files/gridsam/2.3.0/gridsam.war/download
 # jar xvf gridsam.war WEB-INF/lib/gridsam-schema-2.3.0.jar
-
-## RUNTIME Dependencies ##
-# wget http://repo1.maven.org/maven2/xml-security/xmlsec/1.3.0/xmlsec-1.3.0.jar
-# wget http://repo1.maven.org/maven2/wss4j/wss4j/1.5.1/wss4j-1.5.1.jar
-# wget http://maven.omii.ac.uk/maven2/repository/omii/omii-security-utils/1.3/omii-security-utils-1.3.jar 
+# wget -U NoSuchBrowser/1.0 http://repo1.maven.org/maven2/xml-security/xmlsec/1.3.0/xmlsec-1.3.0.jar
+# wget -U NoSuchBrowser/1.0 http://repo1.maven.org/maven2/wss4j/wss4j/1.5.1/wss4j-1.5.1.jar
+# wget -U NoSuchBrowser/1.0 http://maven.omii.ac.uk/maven2/repository/omii/omii-security-utils/1.3/omii-security-utils-1.3.jar 
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
 
@@ -38,6 +37,7 @@ Requires:	xalan-j2
 #Requires:	xmlbeans
 #Requires:	gridsam-schema
 #Requires:	xml-security
+#Requires:	wss4j
 
 %description
 GridWay uses several Middleware Access Drivers (MAD) to interface with 
@@ -127,6 +127,9 @@ rm -rf $RPM_BUILD_ROOT
 /usr/bin/gw_tm_mad_dummy.bin
 
 %changelog
+* Thu May 17 2012 GridWay Project Leads <contact@gridway.org> - 5.10-2
+- Bug fixing
+
 * Mon Apr 09 2012 GridWay Project Leads <contact@gridway.org> - 5.10-1
 - Fixing RPM dependencies
 

@@ -17,11 +17,10 @@ GW_LOCATION := $(INSTALLDIR)/usr
 configure: configure-stamp
 
 configure-stamp:
-	# wget http://dev.gridway.org/projects/gridway/repository/raw/tags/GW_5_10_2/packaging/bes/debian/LICENSE.ThirdParty
-	## BUILD Dependencies at src/em_mad/bes/lib ##
+	# wget http://dev.gridway.org/projects/gridway/repository/raw/tags/GW_5_11_RC1/packaging/bes/debian/LICENSE.ThirdParty
+	## BUILD and RUNTIME Dependencies at src/em_mad/bes/lib ##
 	# wget http://sourceforge.net/projects/gridsam/files/gridsam/2.3.0/gridsam.war/download
 	# jar xvf gridsam.war WEB-INF/lib/gridsam-schema-2.3.0.jar
-	## RUNTIME Dependencies at src/em_mad/bes/lib ##
 	# wget -U NoSuchBrowser/1.0 http://repo1.maven.org/maven2/wss4j/wss4j/1.5.1/wss4j-1.5.1.jar
 	# wget -U NoSuchBrowser/1.0 http://maven.omii.ac.uk/maven2/repository/omii/omii-security-utils/1.3/omii-security-utils-1.3.jar 
 
