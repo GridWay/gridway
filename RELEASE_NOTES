@@ -18,3 +18,4 @@ submitted job
 and BES jobs cancelled
   * Bug #123 (http://dev.gridway.org/issues/123): Buffer size is insufficient to 
 create JSDL files
+  * Bug #125 (http://dev.gridway.org/issues/125): Deadlock in job recovery
