@@ -88,8 +88,8 @@ public class SessionImpl implements Session
 	{	
 		if (contactString!=null)
 			this.contactString = new String(contactString);
-				
-		drmaaImpl.init(this.contactString); 
+
+		drmaaImpl.init(this.contactString, System.getProperty("X509_USER_PROXY")); 
 	};
 
 	public  void exit()

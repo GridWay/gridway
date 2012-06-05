@@ -30,7 +30,7 @@ public class DrmaaJNI
 	
 	/**The normal user of this API <b><i>SHOULD NEVER</i></b> use this method.
 	  */
-	public native void init(String contactString);
+	public native void init(String contactString, String proxy_path);
 	
 	/**The normal user of this API <b><i>SHOULD NEVER</i></b> use this method.
 	  */

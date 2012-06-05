@@ -38,16 +38,25 @@ void    generate_job_template(JNIEnv *env, drmaa_job_template_t *jt, jobject job
 
 void    throw_exception(JNIEnv *env, int function, int rc);
 
-JNIEXPORT void JNICALL Java_org_ggf_drmaa_DrmaaJNI_init(JNIEnv *env, jobject obj, jstring jcontact)
+JNIEXPORT void JNICALL Java_org_ggf_drmaa_DrmaaJNI_init(JNIEnv *env, jobject obj, jstring jcontact, jstring jproxy_path)
 {
         char            error[DRMAA_ERROR_STRING_BUFFER];
         char            *contact;
         int             rc;
+        char            *proxy_path;
 
         if ( jcontact == NULL )
                 contact = NULL;
         else
                 contact = (char *) (*env)->GetStringUTFChars(env, jcontact, NULL);
+
+        if ( jproxy_path == NULL )
+                proxy_path = NULL;
+        else
+        {
+                proxy_path = (char *) (*env)->GetStringUTFChars(env, jproxy_path, NULL);
+                setenv("X509_USER_PROXY", proxy_path, 1);
+        }
 
         rc =  drmaa_init(contact, error, DRMAA_ERROR_STRING_BUFFER-1);
 
