@@ -276,7 +276,7 @@ vardir = @localstatedir@
 testdir = $(PREFIX)/test
 xmldir = $(PREFIX)/xml_schema
 EXTRA_DIST = scripts/gw_mad_common.sh scripts/monitor.sh scripts/wrapper.sh \
-examples xml_schema/gridway.xsd src/test/TEST.pl src/test/jt \
+scripts/ssh_wrapper.sh examples xml_schema/gridway.xsd src/test/TEST.pl src/test/jt \
 src/drmaa/ruby/drmaa_r.i src/drmaa/ruby/drmaa_r_wrap.c src/drmaa/ruby/extconf.rb
 
 FLAGS = $(DB4_INCLUDE_PATH)
@@ -859,6 +859,7 @@ install-data-hook:
 
 	$(INSTALL_DATA) $(top_srcdir)/scripts/wrapper.sh $(DESTDIR)$(libexecdir)/gw_wrapper.sh
 	$(INSTALL_DATA) $(top_srcdir)/scripts/monitor.sh $(DESTDIR)$(libexecdir)/gw_monitor.sh
+	$(INSTALL_DATA) $(top_srcdir)/scripts/ssh_wrapper.sh $(DESTDIR)$(libexecdir)/ssh_wrapper.sh
 	$(INSTALL_DATA) $(top_srcdir)/scripts/gw_mad_common.sh $(DESTDIR)$(bindir)
 	$(INSTALL_DATA) $(top_srcdir)/src/im_mad/gw_im_mad_common.sh $(DESTDIR)$(bindir)
 	$(INSTALL_DATA) $(top_srcdir)/src/im_mad/gw_im_mad_static.sh $(DESTDIR)$(bindir)/gw_im_mad_static
@@ -871,7 +872,8 @@ $(DESTDIR)$(bindir)/gw_mad_common.sh
 	rm -f $(DESTDIR)$(libexecdir)/ruby/dagman/node.rb \
 $(DESTDIR)$(libexecdir)/ruby/dagman/parse.rb $(DESTDIR)$(libexecdir)/ruby/dagman/runner.rb \
 $(DESTDIR)$(libexecdir)/ruby/dagman/gridway.rb
-	rm -f $(DESTDIR)$(libexecdir)/gw_wrapper.sh $(DESTDIR)$(libexecdir)/gw_monitor.sh
+	rm -f $(DESTDIR)$(libexecdir)/gw_wrapper.sh $(DESTDIR)$(libexecdir)/gw_monitor.sh \
+$(DESTDIR)$(libexecdir)/ssh_wrapper.sh
 	rm -f $(DESTDIR)$(xmldir)/gridway.xsd
 
 # *****************************************
