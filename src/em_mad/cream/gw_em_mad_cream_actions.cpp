@@ -104,6 +104,7 @@ CreamEmMad::CreamEmMad(string delegation, int refreshTime)
     this->refreshTime = 21600;
     if (refreshTime > 0)
         this->refreshTime = refreshTime;
+    this->pollingTime = 30;
     this->creamJobs.clear();
     this->credentials.clear();
     this->creamService = new CreamService();
@@ -419,7 +420,7 @@ void CreamEmMad::timer()
     for (;;)
     {
         sleep(refreshTime);
-        for (it=credentials.begin(); it != credentials.end(); it++)
+        for (it=credentials.begin(); it!=credentials.end(); it++)
 	{   
 	     contact = it->first;
 	     if (it->second->getStatus().compare("DONE") == 0)
@@ -435,6 +436,51 @@ void CreamEmMad::timer()
 	     }
 	 }
     }
+}
+
+void CreamEmMad::polling()
+{
+    CreamOperation result;
+    list<string> serviceAddress;
+    map<int,CreamJob *>::iterator jit;
+    list<string>::iterator sit;
+
+    for (;;)
+    {
+         sleep(pollingTime);
+         for (jit=creamJobs.begin(); jit!=creamJobs.end(); jit++)
+         {
+              if (find(serviceAddress.begin(), serviceAddress.end(), jit->second->getCreamURL()) == serviceAddress.end())
+                  serviceAddress.push_back(jit->second->getCreamURL());
+         }
+         if (!serviceAddress.empty())
+             for (list<string>::iterator sit=serviceAddress.begin(); sit!=serviceAddress.end(); sit++)
+                  result = creamService->queryEvent(*sit, delegationID, &CreamEmMad::pollCallback, this);
+         if (result.code != 0)
+             cout << "POLLING - " << " FAILURE " << result.info << endl;
+         else
+             cout << "POLLING - " << " SUCCESS -" << endl;
+         serviceAddress.clear();
+    }
+}
+
+void CreamEmMad::pollCallback(void* object, string creamJID)
+{
+    CreamEmMad* creamEmMad = (CreamEmMad*) object;
+    int jid = creamEmMad->getJID(creamJID);
+    if (jid != -1)
+        creamEmMad->poll(jid);
+}
+
+int CreamEmMad::getJID(string creamJID)
+{
+    map<int,CreamJob *>::iterator it;
+    for (it=creamJobs.begin(); it!=creamJobs.end(); it++) 
+    {
+         if (creamJID.compare(it->second->getCreamJobId()) == 0)
+             return it->second->getGridWayID();
+    }
+    return -1;
 }
 
 /***************** 
@@ -637,7 +683,48 @@ CreamOperation CreamService::cancel(string creamJid, string serviceAddress, stri
     string contact = string(serviceAddress.substr(8, pos-8));
 
     result = creamClientExecute(creamClient, serviceAddress, contact, delegationID);
+    return result;
+}
 
+CreamOperation CreamService::queryEvent(string serviceAddress, string delegationID, void (*callback)(void* object, string creamJID), void* object)
+{
+    CreamOperation result;
+    string dbID;
+    vector< pair<string, string> > filterStates;
+    filterStates.push_back( make_pair("STATUS", "CANCELLED") ); //DONE
+    filterStates.push_back( make_pair("STATUS", "DONE-OK") ); //DONE
+    filterStates.push_back( make_pair("STATUS", "DONE-FAILED") ); //FAILED
+    filterStates.push_back( make_pair("STATUS", "ABORTED") ); //FAILED
+    time_t execTime;
+    std::list<API::EventWrapper*> resultQueryEvent;
+
+    API::AbsCreamProxy* creamClient = API::CreamProxyFactory::make_CreamProxy_QueryEvent(make_pair("0","-1"), make_pair((time_t)-1,(time_t)-1), "JOB_STATUS", 500, 0, filterStates, execTime, dbID, resultQueryEvent, connectionTimeout);
+
+    if (creamClient == NULL)
+    {
+        delete creamClient;
+        result.code = -1;
+        result.info = "Error creating Cream client";
+        return result;
+    }
+
+    size_t pos = serviceAddress.find(":8443/");
+    string contact = string(serviceAddress.substr(8, pos-8));
+    result = creamClientExecute(creamClient, serviceAddress, contact, delegationID);
+    if (result.code != 0)
+        return result;
+
+    for (list<API::EventWrapper*>::const_iterator rit=resultQueryEvent.begin(); rit!=resultQueryEvent.end(); ++rit)
+    {
+         map<string, string> properties;
+         (*rit)->get_event_properties(properties);
+
+         for (map<string, string>::const_iterator pit=properties.begin(); pit!=properties.end(); ++pit)
+         {
+              if (pit->first == "jobId") 
+                  callback(object, pit->second);
+         }
+    }
     return result;
 }
 

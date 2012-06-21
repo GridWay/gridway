@@ -26,7 +26,6 @@ CREAM CLIENT API C++ includes
 #include <glite/ce/cream-client-api-c/JobDescriptionWrapper.h>
 #include <glite/ce/cream-client-api-c/JobFilterWrapper.h>
 #include <glite/ce/cream-client-api-c/JobStatusWrapper.h>
-
   
 /**
   C++ STL includes
@@ -101,6 +100,7 @@ class CreamService
 	CreamOperation poll(string creamJid, string serviceAddress, string delegationID);
 	CreamOperation cancel(string creamJid, string serviceAddress, string delegationID);
 	CreamOperation creamClientExecute(API::AbsCreamProxy* creamClient, string serviceAddress, string contact, string delegationID);
+        CreamOperation queryEvent(string serviceAddress, string delegationID, void (*callback)(void* object, string creamJID), void* object);
 };
 
 class CreamEmMad
@@ -113,9 +113,11 @@ class CreamEmMad
         pthread_mutex_t credentialsMutex;
 	map<string, CreamCredentialStatus*> credentials;
         int refreshTime;
+        int pollingTime;
 	CreamService *creamService;
         int proxyDelegate(string action, int jid, string contact, string delegationID);
 	string fileToString(string jdlFileName);
+        int getJID(string creamJID);
 
     public:
 	CreamEmMad(string delegation, int refreshTime);
@@ -127,6 +129,8 @@ class CreamEmMad
 	void pollAfterCancel(int jid);
 	void finalize();
         void timer();
+        void polling();
+        static void pollCallback(void* object, string creamJID);
 };
 
 #endif /*CREAMEMMAD_H_*/

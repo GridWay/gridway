@@ -34,6 +34,7 @@ const char * susage =
 
 void *creamAction(void *thread_data);
 void *timer(void *);
+void *polling(void *);
 int getFreeThread();
 
 using namespace std;
@@ -72,6 +73,7 @@ int main( int argc, char **argv)
     int i;
 
     pthread_t creamTimer;
+    pthread_t creamPolling;
     pthread_t creamOperation[MAX_THREADS];
     pthread_attr_t attr;
 
@@ -127,6 +129,7 @@ int main( int argc, char **argv)
                 creamEmMad->init();
 
                 pthread_create(&creamTimer, &attr, timer, NULL);
+                pthread_create(&creamPolling, &attr, polling, NULL);
             }
             else
                cout << action << " " << jidCREAM << " FAILURE Not initialized" << endl;
@@ -177,6 +180,14 @@ void *timer(void *)
     pthread_detach(pthread_self());
  
     creamEmMad->timer();
+    pthread_exit(NULL);
+}
+
+void *polling(void *)
+{
+    pthread_detach(pthread_self());
+
+    creamEmMad->polling();
     pthread_exit(NULL);
 }
 
