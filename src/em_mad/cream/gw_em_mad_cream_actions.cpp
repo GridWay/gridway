@@ -429,10 +429,10 @@ void CreamEmMad::timer()
 	     	 if (result.code != 0)
 		 {
 		     credentials[contact]->setDelegation("FAILED");
-		     cout << "TIMER - " << " FAILURE " << result.info << endl;
+		     cout << "TIMER - FAILURE " << result.info << endl;
 		 }
 	     	 else
-		     cout << "TIMER - " << " SUCCESS -" << endl;
+		     cout << "TIMER - SUCCESS -" << endl;
 	     }
 	 }
     }
@@ -449,18 +449,18 @@ void CreamEmMad::polling()
     {
          sleep(pollingTime);
          for (jit=creamJobs.begin(); jit!=creamJobs.end(); jit++)
+              serviceAddress.push_back(jit->second->getCreamURL());
+         serviceAddress.sort();
+         serviceAddress.unique();
+         while (!serviceAddress.empty())
          {
-              if (find(serviceAddress.begin(), serviceAddress.end(), jit->second->getCreamURL()) == serviceAddress.end())
-                  serviceAddress.push_back(jit->second->getCreamURL());
+              result = creamService->queryEvent(serviceAddress.back(), delegationID, &CreamEmMad::pollCallback, this);
+              if (result.code != 0)
+                  cout << "POLLING - FAILURE " << result.info << endl;
+              else
+                  cout << "POLLING - SUCCESS " << serviceAddress.back() << endl;
+              serviceAddress.pop_back();
          }
-         if (!serviceAddress.empty())
-             for (list<string>::iterator sit=serviceAddress.begin(); sit!=serviceAddress.end(); sit++)
-                  result = creamService->queryEvent(*sit, delegationID, &CreamEmMad::pollCallback, this);
-         if (result.code != 0)
-             cout << "POLLING - " << " FAILURE " << result.info << endl;
-         else
-             cout << "POLLING - " << " SUCCESS -" << endl;
-         serviceAddress.clear();
     }
 }
 
@@ -696,7 +696,7 @@ CreamOperation CreamService::queryEvent(string serviceAddress, string delegation
     filterStates.push_back( make_pair("STATUS", "DONE-FAILED") ); //FAILED
     filterStates.push_back( make_pair("STATUS", "ABORTED") ); //FAILED
     time_t execTime;
-    std::list<API::EventWrapper*> resultQueryEvent;
+    list<API::EventWrapper*> resultQueryEvent;
 
     API::AbsCreamProxy* creamClient = API::CreamProxyFactory::make_CreamProxy_QueryEvent(make_pair("0","-1"), make_pair((time_t)-1,(time_t)-1), "JOB_STATUS", 500, 0, filterStates, execTime, dbID, resultQueryEvent, connectionTimeout);
 
@@ -714,16 +714,19 @@ CreamOperation CreamService::queryEvent(string serviceAddress, string delegation
     if (result.code != 0)
         return result;
 
-    for (list<API::EventWrapper*>::const_iterator rit=resultQueryEvent.begin(); rit!=resultQueryEvent.end(); ++rit)
+    map<string, string> properties;
+    list<API::EventWrapper*>::const_iterator rit;
+    map<string, string>::const_iterator pit;
+    for (rit=resultQueryEvent.begin(); rit!=resultQueryEvent.end(); ++rit)
     {
-         map<string, string> properties;
          (*rit)->get_event_properties(properties);
 
-         for (map<string, string>::const_iterator pit=properties.begin(); pit!=properties.end(); ++pit)
+         for (pit=properties.begin(); pit!=properties.end(); ++pit)
          {
               if (pit->first == "jobId") 
                   callback(object, pit->second);
          }
+         properties.clear();
     }
     return result;
 }
