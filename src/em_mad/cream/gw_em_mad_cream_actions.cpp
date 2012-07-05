@@ -258,7 +258,7 @@ void CreamEmMad::pollAfterCancel(int jid)
 
 void CreamEmMad::cancel(int jid)
 {
-    map<int,CreamJob *>::iterator it = creamJobs.find(jid);
+    map<int, CreamJob *>::iterator it = creamJobs.find(jid);
    
     if (it == creamJobs.end())
     {
@@ -416,7 +416,7 @@ void CreamEmMad::timer()
     string contact;
     CreamOperation result;
 
-    map<string,CreamCredentialStatus *>::iterator it;
+    map<string, CreamCredentialStatus *>::iterator it;
     for (;;)
     {
         sleep(refreshTime);
@@ -440,10 +440,11 @@ void CreamEmMad::timer()
 
 void CreamEmMad::polling()
 {
-    CreamOperation result;
+    int jid;
+    multimap<string, string> result;
     list<string> serviceAddress;
-    map<int,CreamJob *>::iterator jit;
-    list<string>::iterator sit;
+    map<int, CreamJob *>::iterator jit;
+    multimap<string, string>::iterator rit;
 
     for (;;)
     {
@@ -454,27 +455,28 @@ void CreamEmMad::polling()
          serviceAddress.unique();
          while (!serviceAddress.empty())
          {
-              result = creamService->queryEvent(serviceAddress.back(), delegationID, &CreamEmMad::pollCallback, this);
-              if (result.code != 0)
-                  cout << "POLLING - FAILURE " << result.info << endl;
-              else
-                  cout << "POLLING - SUCCESS " << serviceAddress.back() << endl;
+              result = creamService->callback(serviceAddress.back(), delegationID);
+              for (rit=result.begin(); rit!=result.end(); rit++)
+              {
+                  jid = getJID(rit->first);
+                  cout << "CALLBACK " << jid << " SUCCESS " << rit->second << endl;
+                  if ((rit->second.compare("DONE") == 0) || (rit->second.compare("FAILED") == 0))
+                  {
+                      pthread_mutex_lock(&jobMutex);
+                          delete creamJobs.find(jid)->second;
+                          creamJobs.erase(jid);
+                      pthread_mutex_unlock(&jobMutex);
+                  }
+
+              }
               serviceAddress.pop_back();
          }
     }
 }
 
-void CreamEmMad::pollCallback(void* object, string creamJID)
-{
-    CreamEmMad* creamEmMad = (CreamEmMad*) object;
-    int jid = creamEmMad->getJID(creamJID);
-    if (jid != -1)
-        creamEmMad->poll(jid);
-}
-
 int CreamEmMad::getJID(string creamJID)
 {
-    map<int,CreamJob *>::iterator it;
+    map<int, CreamJob *>::iterator it;
     for (it=creamJobs.begin(); it!=creamJobs.end(); it++) 
     {
          if (creamJID.compare(it->second->getCreamJobId()) == 0)
@@ -611,12 +613,10 @@ CreamOperation CreamService::poll(string creamJid, string serviceAddress, string
                 status = "ACTIVE";
             else if (status.compare("HELD") == 0)
                 status = "PENDING";
-            else if (status.compare("CANCELLED") == 0) {
+            else if (status.compare("CANCELLED") == 0) 
                 status = "DONE";
-            }
-            else if (status.compare("DONE-OK") == 0) {
+            else if (status.compare("DONE-OK") == 0) 
                 status = "DONE";
-            }
             else if (status.compare("DONE-FAILED") == 0)
                 status = "FAILED";
             else if (status.compare("ABORTED") == 0)
@@ -686,48 +686,99 @@ CreamOperation CreamService::cancel(string creamJid, string serviceAddress, stri
     return result;
 }
 
-CreamOperation CreamService::queryEvent(string serviceAddress, string delegationID, void (*callback)(void* object, string creamJID), void* object)
+multimap<string, string> CreamService::callback(string serviceAddress, string delegationID)
 {
-    CreamOperation result;
-    string dbID;
+    multimap<string, string> result;
+    CreamOperation resultExecute;
+
+    string startEvent;
+    string endEvent;
+    time_t startTime;
+    time_t endTime;
     vector< pair<string, string> > filterStates;
-    filterStates.push_back( make_pair("STATUS", "CANCELLED") ); //DONE
-    filterStates.push_back( make_pair("STATUS", "DONE-OK") ); //DONE
-    filterStates.push_back( make_pair("STATUS", "DONE-FAILED") ); //FAILED
-    filterStates.push_back( make_pair("STATUS", "ABORTED") ); //FAILED
     time_t execTime;
+    string dbID;
     list<API::EventWrapper*> resultQueryEvent;
 
-    API::AbsCreamProxy* creamClient = API::CreamProxyFactory::make_CreamProxy_QueryEvent(make_pair("0","-1"), make_pair((time_t)-1,(time_t)-1), "JOB_STATUS", 500, 0, filterStates, execTime, dbID, resultQueryEvent, connectionTimeout);
+    string lastEventID;
+    string status="UNKNOWN";
+    string creamJobID;
+
+    size_t pos = serviceAddress.find(":8443/");
+    string contact = string(serviceAddress.substr(8, pos-8));
+    map<string, string>::iterator it = eventID.find(contact);
+
+    if (it == eventID.end())
+    {
+        startTime = time(0)-60;
+        endTime = time(0);
+        startEvent = "0";
+        endEvent = "-1";
+    }
+    else
+    {
+        startTime = (time_t)-1;
+        endTime = (time_t)-1;
+        startEvent = it->second;
+        endEvent = static_cast<ostringstream*>(&(ostringstream() << atoi(startEvent.c_str())+500))->str();
+    }
+
+    API::AbsCreamProxy* creamClient = API::CreamProxyFactory::make_CreamProxy_QueryEvent(make_pair(startEvent,endEvent), make_pair(startTime,endTime), "JOB_STATUS", 500, 0, filterStates, execTime, dbID, resultQueryEvent, connectionTimeout);
 
     if (creamClient == NULL)
     {
         delete creamClient;
-        result.code = -1;
-        result.info = "Error creating Cream client";
         return result;
     }
 
-    size_t pos = serviceAddress.find(":8443/");
-    string contact = string(serviceAddress.substr(8, pos-8));
-    result = creamClientExecute(creamClient, serviceAddress, contact, delegationID);
-    if (result.code != 0)
+    resultExecute = creamClientExecute(creamClient, serviceAddress, contact, delegationID);
+    if (resultExecute.code != 0)
         return result;
 
     map<string, string> properties;
     list<API::EventWrapper*>::const_iterator rit;
     map<string, string>::const_iterator pit;
+    pair<multimap<string, string>::iterator, multimap<string, string>::iterator> sit;
+    multimap<string, string>::const_iterator jit;
+
     for (rit=resultQueryEvent.begin(); rit!=resultQueryEvent.end(); ++rit)
     {
+         lastEventID = (*rit)->id; 
          (*rit)->get_event_properties(properties);
-
          for (pit=properties.begin(); pit!=properties.end(); ++pit)
          {
-              if (pit->first == "jobId") 
-                  callback(object, pit->second);
+              if (pit->first == "jobId")
+                  creamJobID = pit->second;
+
+              if (pit->first == "type") {
+                  status = glite::ce::cream_client_api::job_statuses::job_status_str[atoi(pit->second.c_str())];
+                  if (status.compare("REGISTERED") == 0 || status.compare("PENDING") == 0 || status.compare("IDLE") == 0 || status.compare("HELD") == 0)
+                      status = "PENDING";
+                  else if (status.compare("RUNNING") == 0 || status.compare("REALLY-RUNNING") == 0)
+                      status = "ACTIVE";
+                  else if (status.compare("CANCELLED") == 0 || status.compare("DONE-OK") == 0) 
+                      status = "DONE";
+                  else if (status.compare("DONE-FAILED") == 0 || status.compare("ABORTED") == 0)
+                      status = "FAILED";
+
+                  sit = result.equal_range(creamJobID);
+                  for (jit=sit.first; jit!=sit.second; jit++)
+                       if (jit->second == status)
+                           break;
+                  if (jit == sit.second)
+                      result.insert(pair<string, string>(creamJobID, status));
+
+              }
          }
          properties.clear();
     }
+
+    it = eventID.find(contact);
+    if (it == eventID.end() && !lastEventID.empty())
+        eventID.insert(pair<string, string>(contact, static_cast<ostringstream*>(&(ostringstream() << atoi(lastEventID.c_str())+1))->str()));
+    else if (it != eventID.end() && !lastEventID.empty())
+        it->second = static_cast<ostringstream*>(&(ostringstream() << atoi(lastEventID.c_str())+1))->str();
+
     return result;
 }
 

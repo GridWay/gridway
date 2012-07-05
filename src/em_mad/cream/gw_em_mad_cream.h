@@ -26,7 +26,7 @@ CREAM CLIENT API C++ includes
 #include <glite/ce/cream-client-api-c/JobDescriptionWrapper.h>
 #include <glite/ce/cream-client-api-c/JobFilterWrapper.h>
 #include <glite/ce/cream-client-api-c/JobStatusWrapper.h>
-  
+#include <glite/ce/cream-client-api-c/job_statuses.h>  
 /**
   C++ STL includes
 */
@@ -90,6 +90,7 @@ class CreamService
     private:
         int connectionTimeout;
         string certificatePath;
+        map <string, string> eventID;
 
     public:
 	CreamService();
@@ -100,7 +101,7 @@ class CreamService
 	CreamOperation poll(string creamJid, string serviceAddress, string delegationID);
 	CreamOperation cancel(string creamJid, string serviceAddress, string delegationID);
 	CreamOperation creamClientExecute(API::AbsCreamProxy* creamClient, string serviceAddress, string contact, string delegationID);
-        CreamOperation queryEvent(string serviceAddress, string delegationID, void (*callback)(void* object, string creamJID), void* object);
+        multimap<string, string> callback(string serviceAddress, string delegationID);
 };
 
 class CreamEmMad
@@ -130,7 +131,6 @@ class CreamEmMad
 	void finalize();
         void timer();
         void polling();
-        static void pollCallback(void* object, string creamJID);
 };
 
 #endif /*CREAMEMMAD_H_*/
