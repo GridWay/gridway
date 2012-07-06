@@ -459,13 +459,16 @@ void CreamEmMad::polling()
               for (rit=result.begin(); rit!=result.end(); rit++)
               {
                   jid = getJID(rit->first);
-                  cout << "CALLBACK " << jid << " SUCCESS " << rit->second << endl;
-                  if ((rit->second.compare("DONE") == 0) || (rit->second.compare("FAILED") == 0))
+                  if (jid != -1)
                   {
-                      pthread_mutex_lock(&jobMutex);
-                          delete creamJobs.find(jid)->second;
-                          creamJobs.erase(jid);
-                      pthread_mutex_unlock(&jobMutex);
+                      cout << "CALLBACK " << jid << " SUCCESS " << rit->second << endl;
+                      if ((rit->second.compare("DONE") == 0) || (rit->second.compare("FAILED") == 0))
+                      {
+                          pthread_mutex_lock(&jobMutex);
+                              delete creamJobs.find(jid)->second;
+                              creamJobs.erase(jid);
+                          pthread_mutex_unlock(&jobMutex);
+                      }
                   }
 
               }
@@ -688,8 +691,8 @@ CreamOperation CreamService::cancel(string creamJid, string serviceAddress, stri
 
 multimap<string, string> CreamService::callback(string serviceAddress, string delegationID)
 {
-    multimap<string, string> result;
-    CreamOperation resultExecute;
+    multimap<string, string> jobStatus;
+    CreamOperation result;
 
     string startEvent;
     string endEvent;
@@ -728,17 +731,17 @@ multimap<string, string> CreamService::callback(string serviceAddress, string de
     if (creamClient == NULL)
     {
         delete creamClient;
-        return result;
+        return jobStatus;
     }
 
-    resultExecute = creamClientExecute(creamClient, serviceAddress, contact, delegationID);
-    if (resultExecute.code != 0)
-        return result;
+    result = creamClientExecute(creamClient, serviceAddress, contact, delegationID);
+    if (result.code != 0)
+        return jobStatus;
 
     map<string, string> properties;
     list<API::EventWrapper*>::const_iterator rit;
     map<string, string>::const_iterator pit;
-    pair<multimap<string, string>::iterator, multimap<string, string>::iterator> sit;
+    pair<multimap<string, string>::iterator, multimap<string, string>::iterator> jsret;
     multimap<string, string>::const_iterator jit;
 
     for (rit=resultQueryEvent.begin(); rit!=resultQueryEvent.end(); ++rit)
@@ -761,12 +764,12 @@ multimap<string, string> CreamService::callback(string serviceAddress, string de
                   else if (status.compare("DONE-FAILED") == 0 || status.compare("ABORTED") == 0)
                       status = "FAILED";
 
-                  sit = result.equal_range(creamJobID);
-                  for (jit=sit.first; jit!=sit.second; jit++)
-                       if (jit->second == status)
-                           break;
-                  if (jit == sit.second)
-                      result.insert(pair<string, string>(creamJobID, status));
+                  jsret = jobStatus.equal_range(creamJobID);
+                  for (jit=jsret.first; jit!=jsret.second; jit++)
+                      if (jit->second == status)
+                          break;
+                  if (jit == jsret.second)
+                      jobStatus.insert(pair<string, string>(creamJobID, status));
 
               }
          }
@@ -779,7 +782,7 @@ multimap<string, string> CreamService::callback(string serviceAddress, string de
     else if (it != eventID.end() && !lastEventID.empty())
         it->second = static_cast<ostringstream*>(&(ostringstream() << atoi(lastEventID.c_str())+1))->str();
 
-    return result;
+    return jobStatus;
 }
 
 CreamOperation CreamService::proxyDelegate(string contact, string delegationID)
