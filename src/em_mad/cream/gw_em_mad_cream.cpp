@@ -35,7 +35,6 @@ const char * susage =
 void *creamAction(void *thread_data);
 void *timer(void *);
 void *polling(void *);
-int getFreeThread();
 
 using namespace std;
 	
@@ -47,11 +46,11 @@ typedef struct thread_operation_s{
     int jidCREAM;
     string contact;
     string jdlFile;
-    pthread_mutex_t mutex;
-    bool free;
 } thread_operation_t;
 
-thread_operation_t operation[MAX_THREADS];
+pthread_mutex_t mutex;
+pthread_cond_t cond;
+int num_active = 0;
 CreamEmMad *creamEmMad = NULL;
 
 int main( int argc, char **argv) 
@@ -70,20 +69,16 @@ int main( int argc, char **argv)
     char opt;
     int paramNum;
     int jidCREAM;
-    int i;
+    thread_operation_t *operation;
 
     pthread_t creamTimer;
     pthread_t creamPolling;
-    pthread_t creamOperation[MAX_THREADS];
+    pthread_t thread_id;
     pthread_attr_t attr;
 
     pthread_attr_init(&attr);
-
-    for(i=0;i<MAX_THREADS;i++)
-    { 
-        pthread_mutex_init(&(operation[i].mutex), 0);
-        operation[i].free = true;
-    }
+    pthread_mutex_init(&mutex, 0);
+    pthread_cond_init(&cond, 0);
 
     while((opt = getopt(argc, argv, "d:t:h")) != -1)
         switch(opt)
@@ -139,40 +134,28 @@ int main( int argc, char **argv)
         {
             end = true;
 	    pthread_cancel(creamTimer);
+            pthread_cancel(creamPolling);
             pthread_attr_destroy(&attr); 
+            pthread_mutex_destroy(&mutex);
+            pthread_cond_destroy(&cond);
             creamEmMad->finalize();
         }
         else if ( (action.compare("SUBMIT") == 0) || (action.compare("POLL") == 0) || (action.compare("CANCEL") == 0) || (action.compare("RECOVER") == 0) ) {
-	    while ((i=getFreeThread()) == -1);
-            operation[i].action = action;
-            operation[i].jidCREAM = jidCREAM;
-            operation[i].contact = contact;
-            operation[i].jdlFile = jdlFile;
-            pthread_create(&creamOperation[i], &attr, creamAction, &operation[i]);
+            operation = new thread_operation_t;
+            operation->action = action;
+            operation->jidCREAM = jidCREAM;
+            operation->contact = contact;
+            operation->jdlFile = jdlFile;
+            pthread_mutex_lock(&mutex);
+                while (num_active >= MAX_THREADS)
+                    pthread_cond_wait(&cond, &mutex); 
+                num_active++;
+            pthread_mutex_unlock(&mutex);
+            pthread_create(&thread_id, &attr, creamAction, operation);
         }
 	else
 	    cout << "FAILURE " << action << " is not a valid action" << endl;
   } 
-}
-
-int getFreeThread()
-{
-    bool found = false;
-
-    for (int i=0;i<MAX_THREADS;i++)
-    {
-	pthread_mutex_lock(&(operation[i].mutex));
-            if (operation[i].free == true) 
-            {
-            	operation[i].free = false;
-		found = true;
-            }
-        pthread_mutex_unlock(&(operation[i].mutex));
-
-	if (found == true) return i;
-    }
-
-    return -1;
 }
 
 void *timer(void *)
@@ -194,15 +177,16 @@ void *polling(void *)
 void *creamAction(void *thread_data)
 {
     thread_operation_t *data;
-    data = (thread_operation_t *) thread_data;
-
-    pthread_detach(pthread_self());
+    data = (thread_operation_t*) thread_data;
 
     string action =  data->action;
     string contact = data->contact;
     string jdlFile = data->jdlFile;
-    string host;
     int jidCREAM = data->jidCREAM;
+    delete data;
+    string host;
+
+    pthread_detach(pthread_self());
 
     if (action.compare("SUBMIT") == 0)
     {
@@ -218,9 +202,9 @@ void *creamAction(void *thread_data)
     else if (action.compare("POLL") == 0)
         creamEmMad->poll(jidCREAM);
 
-    pthread_mutex_lock(&(data->mutex));
-        data->free = true;
-    pthread_mutex_unlock(&(data->mutex));
-
+    pthread_mutex_lock(&mutex);
+        num_active--;
+        pthread_cond_signal(&cond);
+    pthread_mutex_unlock(&mutex);
     pthread_exit(NULL);
 }
