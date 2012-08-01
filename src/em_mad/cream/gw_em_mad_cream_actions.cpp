@@ -441,7 +441,7 @@ void CreamEmMad::timer()
 void CreamEmMad::polling()
 {
     int jid;
-    multimap<string, string> result;
+    multimap<string, string> *result;
     list<string> serviceAddress;
     map<int, CreamJob *>::iterator jit;
     multimap<string, string>::iterator rit;
@@ -456,7 +456,7 @@ void CreamEmMad::polling()
          while (!serviceAddress.empty())
          {
               result = creamService->callback(serviceAddress.back(), delegationID);
-              for (rit=result.begin(); rit!=result.end(); rit++)
+              for (rit=result->begin(); rit!=result->end(); rit++)
               {
                   jid = getJID(rit->first);
                   if (jid != -1)
@@ -473,6 +473,7 @@ void CreamEmMad::polling()
 
               }
               serviceAddress.pop_back();
+              delete result;
          }
     }
 }
@@ -689,9 +690,9 @@ CreamOperation CreamService::cancel(string creamJid, string serviceAddress, stri
     return result;
 }
 
-multimap<string, string> CreamService::callback(string serviceAddress, string delegationID)
+multimap<string, string>* CreamService::callback(string serviceAddress, string delegationID)
 {
-    multimap<string, string> jobStatus;
+    multimap<string, string> *jobStatus = new multimap<string, string>;
     CreamOperation result;
 
     string startEvent;
@@ -764,17 +765,19 @@ multimap<string, string> CreamService::callback(string serviceAddress, string de
                   else if (status.compare("DONE-FAILED") == 0 || status.compare("ABORTED") == 0)
                       status = "FAILED";
 
-                  jsret = jobStatus.equal_range(creamJobID);
+                  jsret = jobStatus->equal_range(creamJobID);
                   for (jit=jsret.first; jit!=jsret.second; jit++)
                       if (jit->second == status)
                           break;
                   if (jit == jsret.second)
-                      jobStatus.insert(pair<string, string>(creamJobID, status));
+                      jobStatus->insert(pair<string, string>(creamJobID, status));
 
               }
          }
          properties.clear();
     }
+    resultQueryEvent.clear();
+    filterStates.clear();
 
     it = eventID.find(contact);
     if (it == eventID.end() && !lastEventID.empty())

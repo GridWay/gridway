@@ -101,7 +101,7 @@ class CreamService
 	CreamOperation poll(string creamJid, string serviceAddress, string delegationID);
 	CreamOperation cancel(string creamJid, string serviceAddress, string delegationID);
 	CreamOperation creamClientExecute(API::AbsCreamProxy* creamClient, string serviceAddress, string contact, string delegationID);
-        multimap<string, string> callback(string serviceAddress, string delegationID);
+        multimap<string, string>* callback(string serviceAddress, string delegationID);
 };
 
 class CreamEmMad
