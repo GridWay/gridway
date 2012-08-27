@@ -106,14 +106,14 @@ void gw_em_listener(void *arg)
                     gw_log_print("EM",'W',"Error reading MAD (%s) message\n",
                                  em_mads[i]->name);
                     
-                    rcm = gw_em_mad_reload (em_mads[i]);
+                    rcm = gw_em_mad_reload(em_mads[i]);
                     
                     if ( rcm == 0 )
                     {
                         gw_log_print("EM",'I',"MAD (%s) successfully reloaded\n",
                                      em_mads[i]->name);
                         
-                        gw_job_pool_em_recover(em_mads[i]);
+                        gw_job_pool_em_recover(em_mads[i], &(gw_em.am));
                     }
                     else
                     {

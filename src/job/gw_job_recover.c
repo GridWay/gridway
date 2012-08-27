@@ -460,9 +460,9 @@ int gw_job_recover_last_state_transition(gw_job_t *job,
         
         if (rc == -1)
         {
-            gw_job_set_state(job, previous_job_state, GW_TRUE);
+            gw_job_set_state(job, GW_JOB_STATE_PENDING, GW_TRUE);
             
-            gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_WRAPPER", (void *)id);
+            gw_am_trigger(&(gw_dm.am), "GW_DM_STATE_PENDING", (void *)id);
         }
         else
         	free(id);

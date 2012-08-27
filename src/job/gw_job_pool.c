@@ -536,15 +536,16 @@ gw_job_t* gw_job_pool_get (int job_id, int lock)
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
-int gw_job_pool_em_recover (gw_em_mad_t * em_mad)
+int gw_job_pool_em_recover (gw_em_mad_t * em_mad, gw_am_t *em_am)
 {
     gw_job_t * job;
     int        i;
     char *     job_contact;
-        
+    int *      _job_id; 
+ 
     pthread_mutex_lock(&(gw_job_pool.mutex));
     
-    for ( i=0; i < gw_conf.number_of_jobs; i++)
+    for (i=0; i < gw_conf.number_of_jobs; i++)
     {
         job = gw_job_pool.pool[i];
         
@@ -552,9 +553,9 @@ int gw_job_pool_em_recover (gw_em_mad_t * em_mad)
         {
             pthread_mutex_lock(&(job->mutex));            
 
-            if ((job->history != NULL) && 
-                (job->history->em_mad == em_mad) &&
-                (job->job_state == GW_JOB_STATE_WRAPPER))
+            if ((job->history != NULL)
+                    && (job->history->em_mad == em_mad)
+                    && (job->job_state == GW_JOB_STATE_WRAPPER))
             {
                 job_contact = gw_job_recover_get_contact(job);
                 
@@ -562,25 +563,31 @@ int gw_job_pool_em_recover (gw_em_mad_t * em_mad)
                 {
 #ifdef GWJOBDEBUG
                     gw_log_print("DM",'D',"Recovering job %i, contact is %s.\n", 
-                            job->id,
-                            job_contact);
+                            job->id, job_contact);
 #endif
                     gw_em_mad_recover(em_mad, job->id, job_contact);
                     
                     free(job_contact);      
                 }
-#ifdef GWJOBDEBUG                
                 else
+                {
+#ifdef GWJOBDEBUG
                     gw_log_print("DM",'D',"Could not recover job %i, no contact.\n", 
                             job->id);
-                
-#endif                 
+#endif
+
+                    _job_id    = (int *) malloc (sizeof(int));
+                    *(_job_id) = job->id;
+
+                    gw_am_trigger(em_am, "GW_EM_STATE_FAILED",
+                            (void *) _job_id);
+                }
             }
-            
+
             pthread_mutex_unlock(&(job->mutex));
         }
     }
-        
+
     pthread_mutex_unlock(&(gw_job_pool.mutex));
     
     return 0;
@@ -664,8 +671,8 @@ void gw_job_pool_tm_recover (gw_am_t *dm_am)
       	    else
             {
 #ifdef GWTMDEBUG
-	            gw_log_print("TM",'D',"MAD reloaded, recovering job %i from epilog.\n",job->id);
-  	    	    gw_job_print(job,"TM",'D',"MAD reloaded, restarting Epilog\n");
+	        gw_log_print("TM",'D',"MAD reloaded, recovering job %i from epilog.\n",job->id);
+  	    	gw_job_print(job,"TM",'D',"MAD reloaded, restarting Epilog\n");
 #endif					
                 _job_id    = (int *) malloc (sizeof(int));
                 *(_job_id) = job->id;
@@ -676,37 +683,30 @@ void gw_job_pool_tm_recover (gw_am_t *dm_am)
                 switch(job->job_state)
                 {
                     case GW_JOB_STATE_EPILOG:
-				    /* Trigger the DM epilog state */
                         gw_am_trigger(dm_am, "GW_DM_STATE_EPILOG", _job_id);					
-				        break;
+                        break;
                         
                     case GW_JOB_STATE_EPILOG_STD:
-				    /* Trigger the DM epilog_std state */
                         gw_am_trigger(dm_am, "GW_DM_STATE_EPILOG_STD", _job_id);				
-				        break;
+                        break;
                         
                     case GW_JOB_STATE_MIGR_EPILOG:
-				    /* Trigger the DM migr_epilog state */
                         gw_am_trigger(dm_am, "GW_DM_STATE_MIGR_EPILOG", _job_id);				
-				        break;
+                        break;
                         
-        			case GW_JOB_STATE_EPILOG_RESTART:
-			     	/* Trigger the DM epilog_restart state */
+                    case GW_JOB_STATE_EPILOG_RESTART:
                         gw_am_trigger(dm_am, "GW_DM_STATE_EPILOG_RESTART", _job_id);				
-				        break;
+                        break;
                         						
                     case GW_JOB_STATE_EPILOG_FAIL:
- 			        /* Trigger the DM epilog_fail state */
                         gw_am_trigger(dm_am, "GW_DM_STATE_EPILOG_FAIL", _job_id);			
-				        break;
+                        break;
                         
                     case GW_JOB_STATE_KILL_EPILOG:
-				    /* Trigger the DM kill_epilog state */
                         gw_am_trigger(dm_am, "GW_DM_STATE_KILL_EPILOG", _job_id);			
-				        break;
+                        break;
                         	
                     case GW_JOB_STATE_STOP_EPILOG:
-				    /* Trigger the DM stop_epilog state */
                         gw_am_trigger(dm_am, "GW_DM_STATE_STOP_EPILOG", _job_id);			
                         break;
                         
