@@ -262,6 +262,22 @@ class ServiceBES extends Thread {
 
         	Service xService = null;
         	Call xCall = null;
+
+                try {
+                     ResourceBundle xProxyConfig = ResourceBundle.getBundle("crypto");
+                     System.setProperty("javax.net.ssl.keyStore", xProxyConfig.getString("org.apache.ws.security.crypto.merlin.keystore.file"));
+                     System.setProperty("javax.net.ssl.keyStorePassword", xProxyConfig.getString("org.apache.ws.security.crypto.merlin.keystore.password"));
+                     System.setProperty("javax.net.ssl.keyStoreType", xProxyConfig.getString("org.apache.ws.security.crypto.merlin.keystore.type"));
+                     System.setProperty("javax.net.ssl.trustStore", xProxyConfig.getString("org.apache.ws.security.crypto.merlin.truststore.file"));
+                     System.setProperty("javax.net.ssl.trustStorePassword", xProxyConfig.getString("org.apache.ws.security.crypto.merlin.truststore.password"));
+                     System.setProperty("javax.net.ssl.trustStoreType", xProxyConfig.getString("org.apache.ws.security.crypto.merlin.truststore.type"));
+                } catch (MissingResourceException exc) {
+                     this.info = exc.getMessage().replace('\n', ' ');
+                     return null;
+                } catch (SecurityException exc) {
+                     this.info = exc.getMessage().replace('\n', ' ');
+                     return null;
+                }
             
 		xService = ServiceFactory.newInstance().createService(getClass().getClassLoader().getResource(
                 	"org/icenigrid/gridsam/resource/schema/wsdl/bes.wsdl"),

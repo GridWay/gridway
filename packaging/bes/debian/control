@@ -9,8 +9,8 @@ Homepage: http://www.ige-project.eu/
 
 Package: gridway-bes
 Architecture: any
-Depends: gridway-core, libxmlbeans-java, libaxis-java, libwsdl4j-java, libxml-security-java, libxalan2-java, default-jre 
-#libwss4j-java, gridsam-schema 
+Depends: gridway-core, libxmlbeans-java, libaxis-java, libwsdl4j-java, liblog4j1.2-java, libxalan2-java, default-jre 
+#gridsam-schema 
 Description: 
  GridWay uses several Middleware Access Drivers (MAD) to interface with 
  different Grid services. The following MADs are part of the GridWay 

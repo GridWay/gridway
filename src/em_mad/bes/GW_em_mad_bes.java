@@ -125,7 +125,7 @@ class GW_em_mad_bes extends Thread {
                                                 jid = new Integer(jid_str);
 					 	if (str_split[2].indexOf('/') != -1)
                                                		host = str_split[2].substring(0,str_split[2].indexOf('/'));
-                                                contact = "http://" + host + ":8080/gridsam/services/bes?wsdl";
+                                                contact = "https://" + host + ":8443/gridsam/services/bes?wsdl";
                                                 submit(jid, contact, jsdl_file);
                                         }
                                         catch (NumberFormatException e)

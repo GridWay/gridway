@@ -17,9 +17,6 @@ Source:		%{_name}-%{version}.%{_release}.tar.gz
 # wget -U NoSuchBrowser/1.0 http://repo1.maven.org/maven2/org/apache/xmlbeans/xmlbeans/2.5.0/xmlbeans-2.5.0.jar
 # wget http://sourceforge.net/projects/gridsam/files/gridsam/2.3.0/gridsam.war/download
 # jar xvf gridsam.war WEB-INF/lib/gridsam-schema-2.3.0.jar
-# wget -U NoSuchBrowser/1.0 http://repo1.maven.org/maven2/xml-security/xmlsec/1.3.0/xmlsec-1.3.0.jar
-# wget -U NoSuchBrowser/1.0 http://repo1.maven.org/maven2/wss4j/wss4j/1.5.1/wss4j-1.5.1.jar
-# wget -U NoSuchBrowser/1.0 http://maven.omii.ac.uk/maven2/repository/omii/omii-security-utils/1.3/omii-security-utils-1.3.jar 
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
 
@@ -36,8 +33,6 @@ Requires:       log4j
 Requires:	xalan-j2
 #Requires:	xmlbeans
 #Requires:	gridsam-schema
-#Requires:	xml-security
-#Requires:	wss4j
 
 %description
 GridWay uses several Middleware Access Drivers (MAD) to interface with 
@@ -71,8 +66,6 @@ fi
 %build
 cd src/em_mad/bes/lib
 ln -s xmlbeans-2.5.0.jar xmlbeans.jar
-ln -s wss4j-1.5.1.jar wss4j.jar
-ln -s xmlsec-1.3.0.jar xmlsec.jar
 cd ../
 make
 cd ../../tm_mad/dummy/
@@ -90,9 +83,6 @@ mkdir -p $RPM_BUILD_ROOT/usr/etc
 cd src/em_mad/bes/lib
 cp xmlbeans.jar $RPM_BUILD_ROOT/usr/lib/java-ext/gridway-bes/lib/
 cp gridsam-schema-2.3.0.jar $RPM_BUILD_ROOT/usr/lib/java-ext/gridway-bes/lib/
-cp omii-security-utils-1.3.jar $RPM_BUILD_ROOT/usr/lib/java-ext/gridway-bes/lib/
-cp wss4j.jar $RPM_BUILD_ROOT/usr/lib/java-ext/gridway-bes/lib/
-cp xmlsec.jar $RPM_BUILD_ROOT/usr/lib/java-ext/gridway-bes/lib/
 cp /usr/share/java/xalan-j2.jar $RPM_BUILD_ROOT/usr/lib/java-ext/gridway-bes/endorsed
 cp /usr/share/java/xalan-j2-serializer.jar $RPM_BUILD_ROOT/usr/lib/java-ext/gridway-bes/endorsed
 cp /usr/share/java/axis/saaj.jar $RPM_BUILD_ROOT/usr/lib/java-ext/gridway-bes/endorsed
@@ -114,9 +104,6 @@ rm -rf $RPM_BUILD_ROOT
 /usr/lib/gw_em_mad_bes.jar
 /usr/lib/java-ext/gridway-bes/lib/xmlbeans.jar
 /usr/lib/java-ext/gridway-bes/lib/gridsam-schema-2.3.0.jar
-/usr/lib/java-ext/gridway-bes/lib/omii-security-utils-1.3.jar
-/usr/lib/java-ext/gridway-bes/lib/wss4j.jar
-/usr/lib/java-ext/gridway-bes/lib/xmlsec.jar
 /usr/lib/java-ext/gridway-bes/endorsed/xalan-j2.jar
 /usr/lib/java-ext/gridway-bes/endorsed/xalan-j2-serializer.jar
 /usr/lib/java-ext/gridway-bes/endorsed/saaj.jar

@@ -116,9 +116,9 @@ installs the GridWay MAD to interface with OGSA-BES services, as well as an
 static information MAD and a dummy transfer MAD are provided.
 
 2.1b) Install DEB dependencies: gridway-core, libxmlbeans-java, libaxis-java,
-libwsdl4j-java, libxml-security-java, libxalan2-java and default-jre.
-Other dependencies (non DEB): gridsam-schema, OMII security utils and wss4j
-(check the default location in GW_em_mad_bes).
+libwsdl4j-java, libxalan2-java and default-jre.
+Other dependencies (non DEB): gridsam-schema (check the default location in 
+GW_em_mad_bes).
 
 2.2b) Post-install configuration:
 
@@ -141,8 +141,7 @@ the following lines.
 - MyProxy is used for managing security credentials. Creates a $HOME/.myproxy
 file, where the first line is the hostname of the MyProxy server, the second
 line is the username and the last line is the password.
-- Configure the client-config.wsdd and crypto.properties files in
-$GW_LOCATION/etc/.
+- Configure the crypto.properties files in $GW_LOCATION/etc/.
 
 The source DEB package gridway-BES enables you to build the binary DEB.
 Build DEB dependencies: debhelper, libaxis-java, libxmlbeans-java,

@@ -147,8 +147,8 @@ static information MAD and a dummy transfer MAD are provided.
 
 2.1c) Install RPM dependencies: gridway-core, java, axis, wsdl4j, log4j and 
 xalan-j2.
-Other dependencies (non RPM): gridsam-schema, OMII security utils, xmlbeans, 
-xml-security and wss4j (check the default location in GW_em_mad_bes).
+Other dependencies (non RPM): gridsam-schema, xmlbeans (check the default 
+location in GW_em_mad_bes).
 
 2.2c) Post-install configuration:
 
@@ -171,8 +171,7 @@ the following lines.
 - MyProxy is used for managing security credentials. Creates a $HOME/.myproxy
 file, where the first line is the hostname of the MyProxy server, the second
 line is the username and the last line is the password.
-- Configure the client-config.wsdd and crypto.properties files in 
-$GW_LOCATION/etc/.
+- Configure the crypto.properties file in $GW_LOCATION/etc/.
 
 The source RPM package gridway-BES enables you to build the binary RPM.
 Build RPM dependencies: java-devel, axis and xalan-j2.

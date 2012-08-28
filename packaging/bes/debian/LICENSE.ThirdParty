@@ -2,7 +2,7 @@ The BES driver of GridWay contains software distributed under a variety licenses
 Those licenses are found below:
 
 ********************************************************************************
-GridSAM 2.3.0 Schema and OMII Security Utils
+GridSAM 2.3.0 Schema
 ********************************************************************************
 
 Copyright (c) 2005, London e-Science Centre, Imperial College London, UK
@@ -37,7 +37,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 
 ********************************************************************************
-Apache WSS4J
+XalanJ2 and Apache Axis
 ********************************************************************************
 
                                  Apache License

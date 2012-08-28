@@ -20,7 +20,7 @@ The source distribution requires on the client-side:
 
 - GridWay 5.10 (http://www.gridway.org)
 - GridSAM Schema 2.3.0 (gridsam-schema-2.3.0.jar) 
-- xmlbeans, axis, wsdl4j, log4j, wss4j and xml-security
+- xmlbeans, axis, wsdl4j and log4j
 - A GridFTP server
 - Access to a MyProxy server. Access data must be placed in the 
 $HOME/.myproxy file, where the first line is the hostname of the MyProxy 
@@ -40,12 +40,12 @@ have access to a GridSAM server.
 the GridWay Configuration Guide) to use the MAD. This EM MAD is intended 
 to work with the "dummy" TM MAD configured for using a GridFTP server. 
 Use "jsdl" as RSL generation function.
-6) Configure the client-config.wsdd and crypto.properties files
-in $GW_LOCATION/etc/.
+6) Configure the crypto.properties file in $GW_LOCATION/etc/.
 7) Launch the GridWay daemon from $GW_LOCATION/bin/gwd.
 8) Test it and enjoy!
 
-This driver assumes that GridSAM is configured with OMII WS-Security (default configuration).
+This driver uses transport-level security, while message-level security is not
+supported.
 
 
 ===== CREDITS =====
