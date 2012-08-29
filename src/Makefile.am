@@ -228,6 +228,11 @@ DRMAA_SRC = $(COMMON)/gw_file_parser.c $(CLIENT_SRC) \
         $(COMMON)/gw_template_parser.l \
         $(COMMON)/gw_template.c $(COMMON)/gw_log.c
 
+DRMAA2_SRC = $(COMMON)/gw_file_parser.c $(CLIENT_SRC) \
+        $(DRMAA)/gw_drmaa2.c \
+        $(COMMON)/gw_template_parser.l \
+        $(COMMON)/gw_template.c $(COMMON)/gw_log.c
+
 DRMAAJNI_SRC = $(DRMAA_PACK)/DrmaaJNI.c
 
 DRMAA1JNI_SRC = $(DRMAA1_PACK)/DrmaaJNI.c
@@ -332,6 +337,7 @@ SYSTEM=@system@
 flavorincludedir = $(prefix)/include
 
 flavorinclude_HEADERS = $(top_srcdir)/include/drmaa.h \
+        $(top_srcdir)/include/drmaa2.h \
         $(top_srcdir)/include/gw_acct.h \
         $(top_srcdir)/include/gw_action.h \
         $(top_srcdir)/include/gw_array.h \
@@ -506,13 +512,15 @@ __srcdir__scheduler_gw_sched_LDFLAGS = -lm
 # DRMAA
 # ----------------------------
 
-lib_LTLIBRARIES = $(srcdir)/drmaa/libdrmaa.la
+lib_LTLIBRARIES = $(srcdir)/drmaa/libdrmaa.la $(srcdir)/drmaa/libdrmaa2.la
 
 if DRMAA_JAVA
 lib_LTLIBRARIES += $(srcdir)/drmaa/libDrmaaJNI.la
 endif
 
 __srcdir__drmaa_libdrmaa_la_SOURCES = $(DRMAA_SRC)
+__srcdir__drmaa_libdrmaa2_la_SOURCES = $(DRMAA2_SRC)
+
 if DRMAA_JAVA
 if DRMAA1_JAVA
 __srcdir__drmaa_libDrmaaJNI_la_SOURCES = $(DRMAA1JNI_SRC)
@@ -523,9 +531,11 @@ endif
 __srcdir__drmaa_libDrmaaJNI_la_LIBADD  = $(srcdir)/drmaa/libdrmaa.la
 
 __srcdir__drmaa_libdrmaa_la_CFLAGS = $(AM_CFLAGS)
+__srcdir__drmaa_libdrmaa2_la_CFLAGS = $(AM_CFLAGS)
 
 # Use libtool to generate drmaa library files
 __srcdir__drmaa_libdrmaa_la_LINK = $(LIBTOOL) --tag=CC --mode=link $(LINK)
+__srcdir__drmaa_libdrmaa2_la_LINK = $(LIBTOOL) --tag=CC --mode=link $(LINK)
 __srcdir__drmaa_libDrmaaJNI_la_LINK = $(LIBTOOL) --tag=CC --mode=link $(LINK)
 
 if DRMAA_JAVA

@@ -35,14 +35,8 @@ DRMAA        = $(GW_LOCATION)/lib/drmaa.jar
 CC    = gcc
 JAVAC = javac
 
-#Solaris configuration (uncomment)
-#LIBS_SUNOS    = -lnsl -lsocket
-
-#64 bits arch (uncomment)
-#CFLAGS64  = -m64
-
-LIBS           = -ldrmaa -lpthread $(LIBS_SUNOS)
-CFLAGS         = -Wall -g $(CFLAGS64)
+LIBS           = -lpthread
+CFLAGS         = -Wall -g
 INCLUDE_FLAGS  = -I$(INCLUDE_DIR)
 LDOPTIONS      = -shared
 
@@ -52,6 +46,9 @@ LDOPTIONS      = -shared
 
 HOWTOS_COBJS := $(wildcard $(EXAMPLES_DIR)/drmaa_c/*.c)
 HOWTOS_COBJS := $(HOWTOS_COBJS:%.c=%.o)
+
+HOWTOS_C2OBJS := $(wildcard $(EXAMPLES_DIR)/drmaa2_c/*.c)
+HOWTOS_C2OBJS := $(HOWTOS_C2OBJS:%.c=%.o)
 
 HOWTOS_JOBJS := $(wildcard $(EXAMPLES_DIR)/drmaa_java/*.java)
 HOWTOS_JOBJS := $(HOWTOS_JOBJS:%.java=%.class)
@@ -71,13 +68,19 @@ HOWTOS_JOBJS := $(HOWTOS_JOBJS:%.java=%.class)
 #  targets
 #--------------------
 
-all: drmaa_c_howtos 
+all: drmaa_c_howtos drmaa2_c_howtos
 
 drmaa_c_howtos: $(HOWTOS_COBJS)
-	$(CC) $(CFLAGS) $(EXAMPLES_DIR)/drmaa_c/Howto1.o -o $(EXAMPLES_DIR)/drmaa_c/Howto1 -L $(LIB_DIR) $(LIBS)
-	$(CC) $(CFLAGS) $(EXAMPLES_DIR)/drmaa_c/Howto2.o -o $(EXAMPLES_DIR)/drmaa_c/Howto2 -L $(LIB_DIR) $(LIBS)
-	$(CC) $(CFLAGS) $(EXAMPLES_DIR)/drmaa_c/Howto3.o -o $(EXAMPLES_DIR)/drmaa_c/Howto3 -L $(LIB_DIR) $(LIBS)
-	$(CC) $(CFLAGS) $(EXAMPLES_DIR)/drmaa_c/Howto4.o -o $(EXAMPLES_DIR)/drmaa_c/Howto4 -L $(LIB_DIR) $(LIBS)
+	$(CC) $(CFLAGS) $(EXAMPLES_DIR)/drmaa_c/Howto1.o -o $(EXAMPLES_DIR)/drmaa_c/Howto1 -L$(LIB_DIR) $(LIBS) -ldrmaa
+	$(CC) $(CFLAGS) $(EXAMPLES_DIR)/drmaa_c/Howto2.o -o $(EXAMPLES_DIR)/drmaa_c/Howto2 -L$(LIB_DIR) $(LIBS) -ldrmaa
+	$(CC) $(CFLAGS) $(EXAMPLES_DIR)/drmaa_c/Howto3.o -o $(EXAMPLES_DIR)/drmaa_c/Howto3 -L$(LIB_DIR) $(LIBS) -ldrmaa
+	$(CC) $(CFLAGS) $(EXAMPLES_DIR)/drmaa_c/Howto4.o -o $(EXAMPLES_DIR)/drmaa_c/Howto4 -L$(LIB_DIR) $(LIBS) -ldrmaa
+
+drmaa2_c_howtos: $(HOWTOS_C2OBJS)
+	$(CC) $(CFLAGS) $(EXAMPLES_DIR)/drmaa2_c/Howto1.o -o $(EXAMPLES_DIR)/drmaa2_c/Howto1 -L$(LIB_DIR) $(LIBS) -ldrmaa2
+	$(CC) $(CFLAGS) $(EXAMPLES_DIR)/drmaa2_c/Howto2.o -o $(EXAMPLES_DIR)/drmaa2_c/Howto2 -L$(LIB_DIR) $(LIBS) -ldrmaa2
+	$(CC) $(CFLAGS) $(EXAMPLES_DIR)/drmaa2_c/Howto3.o -o $(EXAMPLES_DIR)/drmaa2_c/Howto3 -L$(LIB_DIR) $(LIBS) -ldrmaa2
+	$(CC) $(CFLAGS) $(EXAMPLES_DIR)/drmaa2_c/Howto4.o -o $(EXAMPLES_DIR)/drmaa2_c/Howto4 -L$(LIB_DIR) $(LIBS) -ldrmaa2
 
 drmaa_java_howtos: $(HOWTOS_JOBJS)
 
