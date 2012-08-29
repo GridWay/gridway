@@ -7,16 +7,25 @@ Release date: September 30th, 2012
 ===== Improved BES driver =====
 
 The BES driver now includes Transport-level security, instead of Message-level
-security. Also, transfers are specified in JSDL, so they do not depend on globus-url-copy.
+security. Also, transfers are specified in JSDL, so they do not depend on
+globus-url-copy.
 
 ===== Improved CREAM driver =====
 
-Multithreading has been improved. Also, it now takes advantage of the new QueryEvent operation
-in CREAM to improve job monitoring.
+The CREAM driver now takes advantage of the new QueryEvent operation in CREAM
+to improve job monitoring. Also, multithreading has been improved
+
+===== Support for DRMAA2 =====
+
+A C binding of the new OGF's DRMAA2 specification is available, thanks to
+Suijian Zhou from Uppsala University.
 
 ===== Bug fixing =====
 
 The following bugs have been fixed:
-  * Bug #126 (http://dev.gridway.org/issues/126): Type and count not specified in RSL2 for wrapper-based submission
-  * Bug #127 (http://dev.gridway.org/issues/127): Missing special wrapper for SSH drivers
-  * Bug #131 (http://dev.gridway.org/issues/131): EM driver reload leaves jobs in WRAP state forever
+  * Bug #126 (http://dev.gridway.org/issues/126): Type and count not specified
+in RSL2 for wrapper-based submission
+  * Bug #127 (http://dev.gridway.org/issues/127): Missing special wrapper for
+SSH drivers
+  * Bug #131 (http://dev.gridway.org/issues/131): EM driver reload leaves jobs
+in WRAP state forever
