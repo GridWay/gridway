@@ -17,6 +17,6 @@ in CREAM to improve job monitoring.
 ===== Bug fixing =====
 
 The following bugs have been fixed:
-  * Bug 126: Type and count not specified in RSL2 for wrapper-based submission
-  * Bug 127: Missing special wrapper for SSH drivers
-  * Bug 131: EM driver reload leaves jobs in WRAP state forever
+  * Bug #126 (http://dev.gridway.org/issues/126): Type and count not specified in RSL2 for wrapper-based submission
+  * Bug #127 (http://dev.gridway.org/issues/127): Missing special wrapper for SSH drivers
+  * Bug #131 (http://dev.gridway.org/issues/131): EM driver reload leaves jobs in WRAP state forever
