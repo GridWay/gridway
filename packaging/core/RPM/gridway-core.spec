@@ -177,31 +177,31 @@ rm -rf $RPM_BUILD_ROOT
 
 %changelog
 * Fri Aug 31 2012 GridWay Project Leads <contact@gridway.org> - 5.12-RC1
-- Update to GridWay 5.12-RC1
+- Update to 5.12-RC1
 
 * Thu May 17 2012 GridWay Project Leads <contact@gridway.org> - 5.10-2
 - Bug fixing
 
 * Mon Apr 09 2012 GridWay Project Leads <contact@gridway.org> - 5.10-1
-- Update to GridWay 5.10-1
+- Update to 5.10-1
 
 * Wed Mar 28 2012 GridWay Project Leads <contact@gridway.org> - 5.10-0
-- Update to GridWay 5.10-0
+- Update to 5.10-0
 
 * Thu Feb 09 2012 GridWay Project Leads <contact@gridway.org> - 5.10-RC1
-- Update to GridWay 5.10-RC1
+- Update to 5.10-RC1
 
 * Thu Sep 30 2011 GridWay Project Leads <contact@gridway.org> - 5.8-0
-- Update to GridWay 5.8-0
+- Update to 5.8-0
 
 * Wed Aug 24 2011 GridWay Project Leads <contact@gridway.org> - 5.8-RC1
-- Update to GridWay 5.8-RC1
+- Update to 5.8-RC1
 
 * Wed Jun 29 2011 GridWay Project Leads <contact@gridway.org> - 5.7-1
 - Fixed some recommendations for FHS compilant
 
 * Thu Jun 09 2011 GridWay Project Leads <contact@gridway.org> - 5.7-1
-- Update to GridWay 5.7-1
+- Update to 5.7-1
 
 * Fri Jun 03 2011 GridWay Project Leads <contact@gridway.org> - 5.7-0
 - Initial version

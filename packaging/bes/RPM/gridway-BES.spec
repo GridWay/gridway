@@ -115,7 +115,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %changelog
 * Fri Aug 31 2012 GridWay Project Leads <contact@gridway.org> - 5.12-RC1
-- Update to GridWay 5.12-RC1
+- Update to 5.12-RC1
 
 * Thu May 17 2012 GridWay Project Leads <contact@gridway.org> - 5.10-2
 - Bug fixing
@@ -124,7 +124,7 @@ rm -rf $RPM_BUILD_ROOT
 - Fixing RPM dependencies
 
 * Wed Mar 28 2012 GridWay Project Leads <contact@gridway.org> - 5.10-0
-- Update to GridWay 5.10-0
+- Update to 5.10-0
 
 * Mon Feb 13 2012 GridWay Project Leads <contact@gridway.org> - 5.10-RC1
 - Initial version
