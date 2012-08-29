@@ -3,7 +3,7 @@
 
 INSTALLDIR = $(CURDIR)/debian/gridway-core
 
-_version = 5.11.RC1
+_version = 5.12.RC1
 _prefix = /usr
 _bindir = $(_prefix)/bin
 _sbindir = $(_prefix)/sbin
@@ -17,7 +17,7 @@ configure: configure-stamp
 configure-stamp:
 	dh_testdir
 
-	# wget http://svn.gridway.org/gridway/tags/GW_5_11_RC1/packaging/README.debian
+	# wget http://svn.gridway.org/gridway/tags/GW_5_12_RC1/packaging/README.debian
 	cp -rp README.debian README
 	JAVA_HOME=/usr/lib/jvm/default-java ./configure --prefix=/usr/ --localstatedir=/usr/share/gridway/$(_version)/var --datarootdir=/usr/share/doc/gridway-core --with-db=yes --with-syslog=LOG_USER --enable-drmaa-java
 

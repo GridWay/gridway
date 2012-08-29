@@ -2,7 +2,7 @@
 %define _release RC1
 
 Name:		gridway-BES
-Version:	5.11
+Version:	5.12
 Release:	RC1%{dist}
 Summary:	OGSA-BES MAD for GridWay
 
@@ -11,7 +11,7 @@ License:	Apache License
 URL:		http://www.gridway.org/
 Vendor:         Initiative for Globus in Europe (IGE)
 Source:		%{_name}-%{version}.%{_release}.tar.gz
-# wget http://svn.gridway.org/gridway/tags/GW_5_11_RC1/packaging/bes/RPM/LICENSE.ThirdParty
+# wget http://svn.gridway.org/gridway/tags/GW_5_12_RC1/packaging/bes/RPM/LICENSE.ThirdParty
 
 ## BUILD and RUNTIME Dependencies at src/em_mad/bes/lib ##
 # wget -U NoSuchBrowser/1.0 http://repo1.maven.org/maven2/org/apache/xmlbeans/xmlbeans/2.5.0/xmlbeans-2.5.0.jar
@@ -114,6 +114,9 @@ rm -rf $RPM_BUILD_ROOT
 /usr/bin/gw_tm_mad_dummy.bin
 
 %changelog
+* Fri Aug 31 2012 GridWay Project Leads <contact@gridway.org> - 5.12-RC1
+- Update to GridWay 5.12-RC1
+
 * Thu May 17 2012 GridWay Project Leads <contact@gridway.org> - 5.10-2
 - Bug fixing
 
@@ -121,7 +124,7 @@ rm -rf $RPM_BUILD_ROOT
 - Fixing RPM dependencies
 
 * Wed Mar 28 2012 GridWay Project Leads <contact@gridway.org> - 5.10-0
-- Update to 5.10-0
+- Update to GridWay 5.10-0
 
 * Mon Feb 13 2012 GridWay Project Leads <contact@gridway.org> - 5.10-RC1
 - Initial version

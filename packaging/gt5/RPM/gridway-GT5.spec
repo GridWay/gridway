@@ -8,7 +8,7 @@
 %endif
 
 Name:		gridway-GT5
-Version:	5.11
+Version:	5.12
 Release:	RC1%{dist}
 Summary:	GT5 MADs for GridWay
 
@@ -98,14 +98,17 @@ rm -rf $RPM_BUILD_ROOT
 /usr/bin/gw_tm_mad_ftp.bin
 
 %changelog
+* Fri Aug 31 2012 GridWay Project Leads <contact@gridway.org> - 5.12-RC1
+- Update to GridWay 5.12-RC1
+
 * Thu May 17 2012 GridWay Project Leads <contact@gridway.org> - 5.10-2
 - Bug fixing
 
 * Mon Apr 09 2012 GridWay Project Leads <contact@gridway.org> - 5.10-1
-- Update to 5.10-1
+- Update to GridWay 5.10-1
 
 * Wed Mar 28 2012 GridWay Project Leads <contact@gridway.org> - 5.10-0
-- Update to 5.10-0
+- Update to GridWay 5.10-0
 
 * Thu Feb 09 2012 GridWay Project Leads <contact@gridway.org> - 5.10-RC1
 - Update to GridWay 5.10-RC1

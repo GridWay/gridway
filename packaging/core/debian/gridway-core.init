@@ -80,7 +80,7 @@ stop() {
     start-stop-daemon --stop --quiet --pidfile $PIDFILE \
         --exec $DAEMON_GWD
     RETVAL=$?
-    [ $RETVAL -eq 0 ] && rm -f /usr/share/gridway/5.11.RC1/var/.lock
+    [ $RETVAL -eq 0 ] && rm -f /usr/share/gridway/5.12.RC1/var/.lock
     echo "$NAME."
 }
 

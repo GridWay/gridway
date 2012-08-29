@@ -1,3 +1,9 @@
+gridway-core (5.12-RC1) testing; urgency=low
+
+  * Update to 5.12-RC1.
+
+ -- GridWay Project Leads <contact@gridway.org>  Fri, 31 Aug 2012 10:54:10 +0200
+
 gridway-core (5.10-2) stable; urgency=low
 
   * Bug fixing.
@@ -16,7 +22,7 @@ gridway-core (5.10-0) stable; urgency=low
 
  -- GridWay Project Leads <contact@gridway.org>  Wed, 28 Mar 2012 18:02:20 +0200
 
-gridway-core (5.10-RC1) UNRELEASED; urgency=low
+gridway-core (5.10-RC1) testing; urgency=low
 
   * Initial release.
 
