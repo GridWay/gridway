@@ -1,10 +1,22 @@
-====== Release Notes 5.10 ======
+====== Release Notes 5.12 ======
 
-GridWay 5.10 is the new stable version of the fifth series of the metascheduler.
+GridWay 5.12 is a new stable version of the fifth series of the metascheduler.
 
-Release date: ??
+Release date: September 30th, 2012
+
+===== Improved BES driver =====
+
+The BES driver now includes Transport-level security, instead of Message-level
+security. Also, transfers are specified in JSDL, so they do not depend on globus-url-copy.
+
+===== Improved CREAM driver =====
+
+Multithreading has been improved. Also, it now takes advantage of the new QueryEvent operation
+in CREAM to improve job monitoring.
 
 ===== Bug fixing =====
 
 The following bugs have been fixed:
-  * 
+  * Bug 126: Type and count not specified in RSL2 for wrapper-based submission
+  * Bug 127: Missing special wrapper for SSH drivers
+  * Bug 131: EM driver reload leaves jobs in WRAP state forever
