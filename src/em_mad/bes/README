@@ -18,7 +18,7 @@ implementation of the OGSA-BES interface.
 
 The source distribution requires on the client-side:
 
-- GridWay 5.10 (http://www.gridway.org)
+- GridWay 5.12 (http://www.gridway.org)
 - GridSAM Schema 2.3.0 (gridsam-schema-2.3.0.jar) 
 - xmlbeans, axis, wsdl4j and log4j
 - A GridFTP server
