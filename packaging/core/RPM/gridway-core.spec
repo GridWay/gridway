@@ -174,6 +174,13 @@ rm -rf $RPM_BUILD_ROOT
 /usr/lib/libDrmaaJNI.so
 /usr/lib/libDrmaaJNI.so.0
 /usr/lib/libDrmaaJNI.so.0.0.0
+/usr/include/drmaa2.h
+/usr/lib/libdrmaa2.a
+/usr/lib/libdrmaa2.la
+/usr/lib/libdrmaa2.so
+/usr/lib/libdrmaa2.so.0
+/usr/lib/libdrmaa2.so.0.0.0
+/usr/libexec/ssh_wrapper.sh
 
 %changelog
 * Fri Aug 31 2012 GridWay Project Leads <contact@gridway.org> - 5.12-RC1
