@@ -24,12 +24,12 @@
 int main(int argc, char *argv[])
 {
     int         i,j;
-    char        cwd[50];                                              
+    char        cwd[100];                                              
     drmaa2_error error;
     drmaa2_jstate jstate;
-    char         *substate = (char*) malloc(50);
-    char         *jid;
-    const char   *statestr;
+    drmaa2_string substate = (char*) malloc(50);
+    drmaa2_string  jid;
+    drmaa2_string statestr;
 
 
     printf("==== Create a job session with given session name.\n");
@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     drmaa2_string_list session_names = DRMAA2_UNSET_LIST;
     session_names = (drmaa2_string_list) drmaa2_get_jsession_names();
 
-    printf("==== There are %d job sessions altogether.\n", drmaa2_list_size(session_names));
+    printf("==== There are %ld job sessions altogether.\n", drmaa2_list_size(session_names));
     for(i=0;i<drmaa2_list_size(session_names);i++)
     {
        printf("=== Session name: %s\n", (char*) drmaa2_list_get(session_names,i));
@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
        return (-1);
     }
     else
-       printf("==== There are %d jobs in jarray %s\n", drmaa2_list_size(jarray1->jobs), jarray1->jarray_id);
+       printf("==== There are %ld jobs in jarray %s\n", drmaa2_list_size(jarray1->jobs), jarray1->jarray_id);
 
     if(jarray2 == NULL)
     {
@@ -122,7 +122,7 @@ int main(int argc, char *argv[])
        return (-1);
     }
     else
-       printf("==== There are %d jobs in jarray %s\n\n", drmaa2_list_size(jarray2->jobs), jarray2->jarray_id);
+       printf("==== There are %ld jobs in jarray %s\n\n", drmaa2_list_size(jarray2->jobs), jarray2->jarray_id);
 
 
     drmaa2_j job = (drmaa2_j) malloc(sizeof(drmaa2_j_s));
@@ -152,10 +152,10 @@ int main(int argc, char *argv[])
 
 //======================================================================
     drmaa2_j_list jobs = NULL; 
-    printf("\n==== There are %d job arrays in the job session\n", drmaa2_list_size(js->jarray_list));
+    printf("\n==== There are %ld job arrays in the job session\n", drmaa2_list_size(js->jarray_list));
     jobs = drmaa2_jsession_get_jobs(js, NULL);
-    printf("==== There are %d jobs in the job session\n\n", drmaa2_list_size(jobs));
-    drmaa2_list_free(jobs);
+    printf("==== There are %ld jobs in the job session\n\n", drmaa2_list_size(jobs));
+    drmaa2_list_free(&jobs);
 
 //  Now we release the job
     printf("==== Now we release the jobs:\n");
@@ -175,6 +175,7 @@ int main(int argc, char *argv[])
 
 
     drmaa2_jinfo jinfo = (drmaa2_jinfo) malloc(sizeof(drmaa2_jinfo_s));
+    drmaa2_string_list allocatedMachines = drmaa2_list_create(DRMAA2_STRINGLIST, DRMAA2_UNSET_CALLBACK);
     for(i=0;i<drmaa2_list_size(jarray1->jobs);i++)
     {
        job   = (drmaa2_j) drmaa2_list_get(jarray1->jobs,i);
@@ -189,14 +190,15 @@ int main(int argc, char *argv[])
        printf("    Info about the job %s\n", jid);
        drmaa2_j_wait_terminated(job, DRMAA2_INFINITE_TIME);
        jinfo = drmaa2_j_get_info(job);
+       allocatedMachines = jinfo->allocatedMachines;
       
        printf("\tjob->jobId=%s\n", jinfo->jobId);
        printf("\tjob->exitStatus=%d\n", jinfo->exitStatus);
        printf("\tjob->jobOwner=%s\n", jinfo->jobOwner);
        printf("\tjob->submissionMachine=%s\n", jinfo->submissionMachine);
-       for(j=0;j<drmaa2_list_size(jinfo->allocatedMachines);j++)
+       for(j=0;j<drmaa2_list_size(allocatedMachines);j++)
        {
-           printf("\tjob->allocatedMachines=%s\n", (char*) drmaa2_list_get(jinfo->allocatedMachines,j));
+           printf("\tjob->allocatedMachines=%s\n", (char*) drmaa2_list_get(allocatedMachines,j));
        }
        printf("\tjob->queueName=%s\n", jinfo->queueName);
        printf("\tjob->wallclockTime=%lld\n", (long long)jinfo->wallclockTime);
@@ -206,9 +208,10 @@ int main(int argc, char *argv[])
        printf("\tjob->finishTime=%lld\n", (long long)jinfo->finishTime);
        printf("\n"); 
     }
-    drmaa2_jinfo_free(jinfo);
+    drmaa2_jinfo_free(&jinfo);
 
     jinfo = (drmaa2_jinfo) malloc(sizeof(drmaa2_jinfo_s));
+    allocatedMachines = drmaa2_list_create(DRMAA2_STRINGLIST, DRMAA2_UNSET_CALLBACK);
     for(i=0;i<drmaa2_list_size(jarray2->jobs);i++)
     {
        job   = (drmaa2_j) drmaa2_list_get(jarray2->jobs,i);
@@ -223,14 +226,15 @@ int main(int argc, char *argv[])
        printf("    Info about the job %s\n", jid);
        drmaa2_j_wait_terminated(job, DRMAA2_INFINITE_TIME);
        jinfo = drmaa2_j_get_info(job);
+       allocatedMachines = jinfo->allocatedMachines;
       
        printf("\tjob->jobId=%s\n", jinfo->jobId);
        printf("\tjob->exitStatus=%d\n", jinfo->exitStatus);
        printf("\tjob->jobOwner=%s\n", jinfo->jobOwner);
        printf("\tjob->submissionMachine=%s\n", jinfo->submissionMachine);
-       for(j=0;j<drmaa2_list_size(jinfo->allocatedMachines);j++)
+       for(j=0;j<drmaa2_list_size(allocatedMachines);j++)
        {
-           printf("\tjob->allocatedMachines=%s\n", (char*) drmaa2_list_get(jinfo->allocatedMachines,j));
+           printf("\tjob->allocatedMachines=%s\n", (char*) drmaa2_list_get(allocatedMachines,j));
        }
        printf("\tjob->queueName=%s\n", jinfo->queueName);
        printf("\tjob->wallclockTime=%lld\n", (long long)jinfo->wallclockTime);
@@ -256,14 +260,14 @@ int main(int argc, char *argv[])
 
     drmaa2_msession ms = drmaa2_open_msession("msession1");
     jobs = drmaa2_msession_get_all_jobs(ms, filter);
-    printf("==== There are %d jobs found.\n", drmaa2_list_size(jobs));
-    drmaa2_list_free(jobs);
+    printf("==== There are %ld jobs found.\n", drmaa2_list_size(jobs));
+    drmaa2_list_free(&jobs);
 
 //  To get all machines
     drmaa2_machineinfo_list mlist = NULL;
     drmaa2_string_list mnames = DRMAA2_UNSET_LIST;
     mlist = drmaa2_msession_get_all_machines(ms, mnames);
-    printf("\n=== There are %d machines found.\n", drmaa2_list_size(mlist));
+    printf("\n=== There are %ld machines found.\n", drmaa2_list_size(mlist));
     for(i=0; i<drmaa2_list_size(mlist);i++)
     {   
        drmaa2_machineinfo minfo= (drmaa2_machineinfo) malloc(sizeof(drmaa2_machineinfo_s));
@@ -284,7 +288,7 @@ int main(int argc, char *argv[])
     drmaa2_string_list qnames = DRMAA2_UNSET_LIST;
 
     qlist = drmaa2_msession_get_all_queues(ms, qnames); 
-    printf("\n==== There are %d queues available\n", drmaa2_list_size(qlist));
+    printf("\n==== There are %ld queues available\n", drmaa2_list_size(qlist));
     for(i=0; i<drmaa2_list_size(qlist);i++)
     {
        drmaa2_queueinfo qinfo= (drmaa2_queueinfo) malloc(sizeof(drmaa2_queueinfo_s));
@@ -293,15 +297,17 @@ int main(int argc, char *argv[])
     }
 
     printf("\n==== Destroying job template and job session.\n");
-    drmaa2_jtemplate_free(jt);
+    drmaa2_jtemplate_free(&jt);
     drmaa2_close_msession(ms);
-    drmaa2_msession_free(ms);
+    drmaa2_msession_free(&ms);
     drmaa2_destroy_jsession("mysession");
-    drmaa2_jsession_free(js);
-    drmaa2_jsession_free(js2);
-    drmaa2_jsession_free(js3);
+    drmaa2_jsession_free(&js);
+    drmaa2_jsession_free(&js2);
+    drmaa2_jsession_free(&js3);
 
     printf("==== Exiting now!\n");
     return 0;
     
 }
+
+

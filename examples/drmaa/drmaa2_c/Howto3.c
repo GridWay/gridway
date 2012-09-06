@@ -23,12 +23,12 @@
 
 int main(int argc, char *argv[])
 {
-    char        cwd[50];                                              
+    char        cwd[100];                                              
     drmaa2_error error;
     drmaa2_jstate jstate;
-    char         *substate = (char*) malloc(50);
-    char         *jid;
-    char         *statestr;
+    drmaa2_string substate = (drmaa2_string) malloc(50);
+    drmaa2_string jid;
+    drmaa2_string statestr;
 
     printf("==== Create a job session with given session name.\n");
     drmaa2_jsession js = drmaa2_create_jsession("mysession", NULL);
@@ -71,8 +71,8 @@ int main(int argc, char *argv[])
     printf("==== Job Gridway substate is: %s\n",substate);
 
     drmaa2_j_list jobs = drmaa2_jsession_get_jobs(js, NULL);
-    printf("==== There are %d jobs in the job list\n", drmaa2_list_size(jobs));
-    drmaa2_list_free(jobs);
+    printf("==== There are %ld jobs in the job list\n", drmaa2_list_size(jobs));
+    drmaa2_list_free(&jobs);
 
 //  Now we release the job
     printf("==== We now release the job.\n");
@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
 //    drmaa2_j_wait_terminated(j1, DRMAA2_INFINITE_TIME);
 
     printf("==== Destroying job template and job session.\n");
-    drmaa2_jtemplate_free(jt);
+    drmaa2_jtemplate_free(&jt);
     drmaa2_destroy_jsession("mysession");
 
     printf("==== Exiting now.\n");

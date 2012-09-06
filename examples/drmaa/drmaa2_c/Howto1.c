@@ -23,29 +23,29 @@
 
 int main(int argc, char *argv[])
 {
-    char *name;
+    drmaa2_string name;
     drmaa2_version version;
 
     name = drmaa2_get_drmaa_name();
     printf("=========================================\n");
     printf("This is %s C bindings.\n", name);
-    drmaa2_string_free(name);
+    drmaa2_string_free(&name);
 
     version = drmaa2_get_drmaa_version();
     printf("=========================================\n");
     printf("This DRMAA version is %s.%s.\n", version->major, version->minor);
-    drmaa2_version_free(version);
+    drmaa2_version_free(&version);
 
     name=drmaa2_get_drms_name();
     printf("=========================================\n");
     printf("The DRM is %s.\n", name);
-    drmaa2_string_free(name);
+    drmaa2_string_free(&name);
   
     version = drmaa2_get_drms_version();
     printf("=========================================\n");
     printf("The DRM version is %s.%s\n", version->major, version->minor);
     printf("=========================================\n");
-    drmaa2_version_free(version);
+    drmaa2_version_free(&version);
 
     return 0;
 }

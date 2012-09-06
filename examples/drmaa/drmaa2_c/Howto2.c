@@ -23,8 +23,8 @@
 
 int main(int argc, char *argv[])
 {
-    char        cwd[50]; 
-    char        *jid1, *jid2;
+    char        cwd[100]; 
+    drmaa2_string        jid1, jid2;
 
     printf("==== Create a job session with given session name.\n");
     drmaa2_jsession js = drmaa2_create_jsession("mysession", NULL);
@@ -59,16 +59,16 @@ int main(int argc, char *argv[])
     printf("==== Your jobs have been submitted with id: %s and %s\n", jid1, jid2);
 
     drmaa2_j_list jobs = drmaa2_jsession_get_jobs(js, NULL);
-    printf("==== There are %d jobs in the job list\n", drmaa2_list_size(jobs));
+    printf("==== There are %ld jobs in the job list\n", drmaa2_list_size(jobs));
   
     drmaa2_j_wait_terminated(j1, DRMAA2_INFINITE_TIME);
     drmaa2_j_wait_terminated(j2, DRMAA2_INFINITE_TIME); 
 
     printf("==== Destroying job template and job session.\n");
-    drmaa2_list_free(jobs);
-    drmaa2_jtemplate_free(jt);
+    drmaa2_list_free(&jobs);
+    drmaa2_jtemplate_free(&jt);
     drmaa2_destroy_jsession("mysession");
-    drmaa2_jsession_free(js);
+    drmaa2_jsession_free(&js);
 
     printf("==== Exiting now.\n");
 

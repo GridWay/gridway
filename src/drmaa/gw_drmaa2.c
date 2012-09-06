@@ -26,7 +26,8 @@
 //                        Module Globals
 //==================================================================
 drmaa2_error lasterror = DRMAA2_SUCCESS;
-char *lasterror_text = NULL;
+//char *lasterror_text = NULL;
+drmaa2_string lasterror_text = NULL;
 
 // Additional list type
 #define DRMAA2_ADDITIONAL_LIST 6
@@ -321,6 +322,7 @@ drmaa2_error MoveToHead(drmaa2_list list)
 
     list->current = list->head;
     list->current_pos = 0;
+
     return DRMAA2_SUCCESS;
 }
 
@@ -328,37 +330,38 @@ drmaa2_error MoveToHead(drmaa2_list list)
 
 //----------------------------------------------------------
 //----------------------------------------------------------
-drmaa2_error drmaa2_list_free(drmaa2_list list)
+void drmaa2_list_free(drmaa2_list* list)
 {
     void *oldData;
     Node *oldNode;
 
-    if(list == NULL)
+    if(*list != NULL && (*list)->head != NULL)
     {
-        lasterror = DRMAA2_INTERNAL;
-        lasterror_text = "List is NULL!";
-        return DRMAA2_INTERNAL;
-    }
-    if(list->head == NULL)
-    {
-        lasterror = DRMAA2_INTERNAL;
-        lasterror_text = "List head is NULL!";
-        return DRMAA2_INTERNAL;
-    }
-
-    do
-    {
-        oldData = list->head->value;
-        oldNode = list->head;
-        list->head = list->head->next;
+      do
+      {
+        oldData = (*list)->head->value;
+        oldNode = (*list)->head;
+        (*list)->head = (*list)->head->next;
         free(oldData);
         free(oldNode);
-    } while(list->head != NULL);
+      } while((*list)->head != NULL);
 
-    free(list);
-    list = NULL;
-
-    return DRMAA2_SUCCESS;
+      free(*list);
+      *list = DRMAA2_UNSET_LIST;
+    }
+    else
+    {
+      if(*list == NULL)
+      {
+         lasterror = DRMAA2_INTERNAL;
+         lasterror_text = "List is NULL!";
+      }
+      if((*list)->head == NULL)
+      {
+         lasterror = DRMAA2_INTERNAL;
+         lasterror_text = "List head is NULL!";
+      }
+    }
 }
 
 
@@ -418,7 +421,7 @@ drmaa2_error drmaa2_list_add(drmaa2_list list, const void* value)
 
 //----------------------------------------------------------
 //----------------------------------------------------------
-int drmaa2_list_size(const drmaa2_list list)
+long drmaa2_list_size(const drmaa2_list list)
 {
    return list->listsize;
 }
@@ -444,6 +447,7 @@ drmaa2_error MoveToNext(drmaa2_list list)
 
     list->current = list->current->next;
     list->current_pos++;
+
     return(DRMAA2_SUCCESS);
 }
 
@@ -474,7 +478,7 @@ void display_list(drmaa2_list list)
 
 //----------------------------------------------------------
 //----------------------------------------------------------
-void* drmaa2_list_get(drmaa2_list list, int pos)
+const void* drmaa2_list_get(const drmaa2_list list, long pos)
 {
     Node *node=NULL;
 
@@ -513,7 +517,7 @@ void* drmaa2_list_get(drmaa2_list list, int pos)
 
 //----------------------------------------------------------
 //----------------------------------------------------------
-drmaa2_error drmaa2_list_del(drmaa2_list list, int pos)
+drmaa2_error drmaa2_list_del(drmaa2_list list, long pos)
 {
     void *oldData;
     Node *oldNode;
@@ -572,6 +576,7 @@ drmaa2_error drmaa2_list_del(drmaa2_list list, int pos)
     free(oldData);
     free(oldNode);
     list->listsize--;
+
     return DRMAA2_SUCCESS;
 }
 
@@ -621,6 +626,7 @@ drmaa2_error MoveToHead_Dict(drmaa2_dict dict)
 
     dict->current = dict->head;
     dict->current_pos = 0;
+
     return DRMAA2_SUCCESS;
 }
 
@@ -645,6 +651,7 @@ drmaa2_error MoveToNext_Dict(drmaa2_dict dict)
 
     dict->current = dict->current->next;
     dict->current_pos++;
+
     return(DRMAA2_SUCCESS);
 }
 
@@ -689,37 +696,38 @@ dictentry_t* FindNode_dict(drmaa2_dict dict, void* data)
 
 //----------------------------------------------------------
 //----------------------------------------------------------
-drmaa2_error drmaa2_dict_free(drmaa2_dict dict)
+void drmaa2_dict_free(drmaa2_dict* dict)
 {
     gw_dict_elem* oldData;
     dictentry_t*  oldNode;
 
-    if(dict == NULL)
+    if(*dict != NULL && (*dict)->head != NULL)
     {
-        lasterror = DRMAA2_INTERNAL;
-        lasterror_text = "Dict is NULL!";
-        return DRMAA2_INTERNAL;
-    }
-    if(dict->head == NULL)
-    {
-        lasterror = DRMAA2_INTERNAL;
-        lasterror_text = "Dict head is NULL!";
-        return DRMAA2_INTERNAL;
-    }
-
-    do
-    {
-        oldData = dict->head->elem;
-        oldNode = dict->head;
-        dict->head = dict->head->next;
+      do
+      {
+        oldData = (*dict)->head->elem;
+        oldNode = (*dict)->head;
+        (*dict)->head = (*dict)->head->next;
         free(oldData);
         free(oldNode);
-    } while(dict->head != NULL);
+      } while((*dict)->head != NULL);
 
-    free(dict);
-    dict = NULL;
-
-    return DRMAA2_SUCCESS;
+      free(*dict);
+      *dict = DRMAA2_UNSET_DICT;
+    }
+    else
+    {
+      if(*dict == NULL)
+      {
+         lasterror = DRMAA2_INTERNAL;
+         lasterror_text = "Dict is NULL!";
+      }
+      if((*dict)->head == NULL)
+      {
+         lasterror = DRMAA2_INTERNAL;
+         lasterror_text = "Dict head is NULL!";
+      }
+    }
 }
 
 
@@ -1118,13 +1126,23 @@ drmaa2_string_list drmaa2_machineinfo_impl_spec(void)
 
 //----------------------------------------------------------
 //----------------------------------------------------------
-drmaa2_error drmaa2_notification_free(drmaa2_notification n)
+void drmaa2_notification_free(drmaa2_notification* n)
 {
-   drmaa2_error error;
-   error = drmaa2_string_free(n->jobId);
-   error = drmaa2_string_free(n->sessionName);
-  
-   return error;
+   if(*n==NULL)
+   {
+       lasterror = DRMAA2_INVALID_ARGUMENT;
+       lasterror_text = "Try to free a NULL pointer!";
+   }
+   else
+   {
+     if((*n)->jobId != DRMAA2_UNSET_STRING)
+        drmaa2_string_free(&((*n)->jobId));
+     if((*n)->sessionName != DRMAA2_UNSET_STRING)
+        drmaa2_string_free(&((*n)->sessionName));
+
+     free(*n);
+     *n = NULL;
+   }
 }
 
 
@@ -1147,7 +1165,7 @@ drmaa2_string_list drmaa2_notification_impl_spec(void)
 
 //----------------------------------------------------------
 //----------------------------------------------------------
-char* drmaa2_get_instance_value(const void* instance, const char* name)
+drmaa2_string drmaa2_get_instance_value(const void* instance, const char* name)
 {
    char* value = NULL;
 
@@ -1159,7 +1177,7 @@ char* drmaa2_get_instance_value(const void* instance, const char* name)
 
 //----------------------------------------------------------
 //----------------------------------------------------------
-char* drmaa2_describe_attribute(const void* instance, const char* name)
+drmaa2_string drmaa2_describe_attribute(const void* instance, const char* name)
 {
    char* attribute = NULL;
 
@@ -1230,29 +1248,36 @@ drmaa2_jtemplate drmaa2_jtemplate_create(void)
 
 //----------------------------------------------------------
 //----------------------------------------------------------
-drmaa2_error drmaa2_jtemplate_free(drmaa2_jtemplate jt)
+void drmaa2_jtemplate_free(drmaa2_jtemplate* jt)
 {
-    if(jt==NULL) return DRMAA2_SUCCESS;
-    if(jt->remoteCommand != NULL) free(jt->remoteCommand);
-    if(jt->args != NULL) drmaa2_list_free(jt->args);
-    if(jt->jobEnvironment != NULL) drmaa2_dict_free(jt->jobEnvironment);
-    if(jt->workingDirectory != NULL) free(jt->workingDirectory);
-    if(jt->jobCategory != NULL) free(jt->jobCategory);
-    if(jt->email != NULL) drmaa2_list_free(jt->email);
-    if(jt->jobName != NULL) free(jt->jobName);
-    if(jt->inputPath != NULL) free(jt->inputPath);
-    if(jt->outputPath != NULL) free(jt->outputPath);
-    if(jt->errorPath != NULL) free(jt->errorPath);
-    if(jt->reservationId != NULL) free(jt->reservationId);
-    if(jt->queueName != NULL) free(jt->queueName);
-    if(jt->candidateMachines != NULL) drmaa2_list_free(jt->candidateMachines);
-    if(jt->stageInFiles != NULL) drmaa2_dict_free(jt->stageInFiles);
-    if(jt->stageOutFiles!= NULL) drmaa2_dict_free(jt->stageOutFiles);
-    if(jt->resourceLimits != NULL) drmaa2_dict_free(jt->resourceLimits);
-    if(jt->accountingId != NULL) free(jt->accountingId);
+    if(*jt==NULL)
+    {
+        lasterror = DRMAA2_INVALID_ARGUMENT;
+        lasterror_text = "Try to free a NULL pointer!";
+    }
+    else
+    {
+      if((*jt)->remoteCommand != DRMAA2_UNSET_STRING) drmaa2_string_free(&((*jt)->remoteCommand));
+      if((*jt)->args != DRMAA2_UNSET_LIST) drmaa2_list_free(&((*jt)->args));
+      if((*jt)->jobEnvironment != DRMAA2_UNSET_DICT) drmaa2_dict_free(&((*jt)->jobEnvironment));
+      if((*jt)->workingDirectory != DRMAA2_UNSET_STRING) drmaa2_string_free(&((*jt)->workingDirectory));
+      if((*jt)->jobCategory != DRMAA2_UNSET_STRING) drmaa2_string_free(&((*jt)->jobCategory));
+      if((*jt)->email != DRMAA2_UNSET_LIST) drmaa2_list_free(&((*jt)->email));
+      if((*jt)->jobName != DRMAA2_UNSET_STRING) drmaa2_string_free(&((*jt)->jobName));
+      if((*jt)->inputPath != DRMAA2_UNSET_STRING) drmaa2_string_free(&((*jt)->inputPath));
+      if((*jt)->outputPath != DRMAA2_UNSET_STRING) drmaa2_string_free(&((*jt)->outputPath));
+      if((*jt)->errorPath != DRMAA2_UNSET_STRING) drmaa2_string_free(&((*jt)->errorPath));
+      if((*jt)->reservationId != DRMAA2_UNSET_STRING) drmaa2_string_free(&((*jt)->reservationId));
+      if((*jt)->queueName != DRMAA2_UNSET_STRING) drmaa2_string_free(&((*jt)->queueName));
+      if((*jt)->candidateMachines != DRMAA2_UNSET_LIST) drmaa2_list_free(&((*jt)->candidateMachines));
+      if((*jt)->stageInFiles != DRMAA2_UNSET_DICT) drmaa2_dict_free(&((*jt)->stageInFiles));
+      if((*jt)->stageOutFiles!= DRMAA2_UNSET_DICT) drmaa2_dict_free(&((*jt)->stageOutFiles));
+      if((*jt)->resourceLimits != DRMAA2_UNSET_DICT) drmaa2_dict_free(&((*jt)->resourceLimits));
+      if((*jt)->accountingId != DRMAA2_UNSET_STRING) drmaa2_string_free(&((*jt)->accountingId));
     
-    free(jt);
-    return DRMAA2_SUCCESS;
+      free(*jt);
+      *jt = NULL;
+    }
 }
 
 
@@ -1264,7 +1289,6 @@ char* drmaa2_jtemplate_tostring(drmaa2_jtemplate jt)
   int pos;
   char *jt_string, *key, *value, *list_elem;
   drmaa2_string_list keys;
-  drmaa2_error error;
   char tmp[12];
 
   list_elem = malloc(sizeof(char)*STRING_BUFSIZE);
@@ -1314,7 +1338,8 @@ char* drmaa2_jtemplate_tostring(drmaa2_jtemplate jt)
        jt_string=strncat(jt_string,key,strlen(key));
        jt_string=strncat(jt_string,value,strlen(value));
     }
-    error=drmaa2_list_free(keys);
+    if(keys != DRMAA2_UNSET_LIST)
+       drmaa2_list_free(&keys);
   }
 
   if(jt->workingDirectory!=NULL)
@@ -1439,7 +1464,8 @@ char* drmaa2_jtemplate_tostring(drmaa2_jtemplate jt)
        jt_string=strncat(jt_string,key,strlen(key));
        jt_string=strncat(jt_string,value,strlen(value));
     }
-    error=drmaa2_list_free(keys);
+    if(keys != DRMAA2_UNSET_LIST)
+       drmaa2_list_free(&keys);
   }
 
   if(jt->stageOutFiles!=NULL)
@@ -1455,7 +1481,8 @@ char* drmaa2_jtemplate_tostring(drmaa2_jtemplate jt)
        jt_string=strncat(jt_string,key,strlen(key));
        jt_string=strncat(jt_string,value,strlen(value));
     }
-    error=drmaa2_list_free(keys);
+    if(keys != DRMAA2_UNSET_LIST)
+       drmaa2_list_free(&keys);
   }
 
   if(jt->resourceLimits!=NULL)
@@ -1471,7 +1498,8 @@ char* drmaa2_jtemplate_tostring(drmaa2_jtemplate jt)
        jt_string=strncat(jt_string,key,strlen(key));
        jt_string=strncat(jt_string,value,strlen(value));
     }
-    error=drmaa2_list_free(keys);
+    if(keys != DRMAA2_UNSET_LIST)
+       drmaa2_list_free(&keys);
   }
 
   if(jt->accountingId!=NULL)
@@ -1486,18 +1514,17 @@ char* drmaa2_jtemplate_tostring(drmaa2_jtemplate jt)
 
 //----------------------------------------------------------
 //----------------------------------------------------------
-drmaa2_error drmaa2_string_free(char* string)
+void drmaa2_string_free(drmaa2_string* string)
 {
-    if(string!=NULL)
+    if(*string != DRMAA2_UNSET_STRING)
     {
-      free(string);
-      return DRMAA2_SUCCESS;
+      free(*string);
+      *string = DRMAA2_UNSET_STRING;
     }
     else
     {
        lasterror = DRMAA2_INTERNAL;
        lasterror_text = "Trying to free a NULL pointer!";
-       return DRMAA2_INTERNAL;
     }
 }
 
@@ -1512,7 +1539,7 @@ drmaa2_error drmaa2_lasterror(void)
 
 //----------------------------------------------------------
 //----------------------------------------------------------
-char *drmaa2_lasterror_text(void)
+drmaa2_string drmaa2_lasterror_text(void)
 {
     return lasterror_text ? strdup(lasterror_text) : NULL;
 }
@@ -1533,20 +1560,34 @@ drmaa2_rinfo drmaa2_rinfo_create(void)
     ri->usersACL = DRMAA2_UNSET_LIST;
     ri->reservedSlots = DRMAA2_UNSET_NUM;
     ri->reservedMachines = DRMAA2_UNSET_LIST;
+
     return ri;
 }
 
 
 //----------------------------------------------------------
 //----------------------------------------------------------
-drmaa2_error drmaa2_rinfo_free(drmaa2_rinfo ri)
+void drmaa2_rinfo_free(drmaa2_rinfo* ri)
 {
-    drmaa2_string_free(ri->reservationId);
-    drmaa2_string_free(ri->reservationName);
-    drmaa2_list_free(ri->usersACL);
-    drmaa2_list_free(ri->reservedMachines);
-    free(ri);
-    return DRMAA2_SUCCESS;
+    if(*ri==NULL)
+    {
+        lasterror = DRMAA2_INVALID_ARGUMENT;
+        lasterror_text = "Try to free a NULL pointer!";
+    }
+    else
+    {
+      if((*ri)->reservationId != DRMAA2_UNSET_STRING)
+         drmaa2_string_free(&((*ri)->reservationId));
+      if((*ri)->reservationName != DRMAA2_UNSET_STRING)
+         drmaa2_string_free(&((*ri)->reservationName));
+      if((*ri)->usersACL != DRMAA2_UNSET_LIST)
+         drmaa2_list_free(&((*ri)->usersACL));
+      if((*ri)->reservedMachines != DRMAA2_UNSET_LIST)
+         drmaa2_list_free(&((*ri)->reservedMachines));
+
+      free(*ri);
+      *ri = NULL;
+    }
 }
 
 
@@ -1567,27 +1608,40 @@ drmaa2_rtemplate drmaa2_rtemplate_create(void)
     rt->minPhysMemory = DRMAA2_UNSET_NUM;
     rt->machineOS = DRMAA2_OTHER_OS;
     rt->machineArch = DRMAA2_OTHER_CPU;
+
     return rt;
 }
 
 
 //----------------------------------------------------------
 //----------------------------------------------------------
-drmaa2_error drmaa2_rtemplate_free(drmaa2_rtemplate rt)
+void drmaa2_rtemplate_free(drmaa2_rtemplate* rt)
 {
-    free(rt->reservationName);
-    free(rt->jobCategory);
-    drmaa2_list_free(rt->usersACL);
-    drmaa2_list_free(rt->candidateMachines);
-    free(rt);
+    if(*rt==NULL)
+    {
+        lasterror = DRMAA2_INVALID_ARGUMENT;
+        lasterror_text = "Try to free a NULL pointer!";
+    }
+    else
+    {
+      if((*rt)->reservationName != DRMAA2_UNSET_STRING)
+         drmaa2_string_free(&((*rt)->reservationName));
+      if((*rt)->jobCategory != DRMAA2_UNSET_STRING)
+         drmaa2_string_free(&((*rt)->jobCategory));
+      if((*rt)->usersACL != DRMAA2_UNSET_LIST)
+         drmaa2_list_free(&((*rt)->usersACL));
+      if((*rt)->candidateMachines != DRMAA2_UNSET_LIST)
+         drmaa2_list_free(&((*rt)->candidateMachines));
 
-    return DRMAA2_SUCCESS;
+      free(*rt);
+      *rt = NULL;
+    }
 }
 
 
 //----------------------------------------------------------
 //----------------------------------------------------------
-char* drmaa2_rsession_get_contact(const drmaa2_rsession rs)
+drmaa2_string drmaa2_rsession_get_contact(const drmaa2_rsession rs)
 {
    return (rs->contact != NULL) ? strdup(rs->contact) : DRMAA2_UNSET_STRING;
 }
@@ -1595,7 +1649,7 @@ char* drmaa2_rsession_get_contact(const drmaa2_rsession rs)
 
 //----------------------------------------------------------
 //----------------------------------------------------------
-char* drmaa2_rsession_get_session_name(const drmaa2_rsession rs)
+drmaa2_string drmaa2_rsession_get_session_name(const drmaa2_rsession rs)
 {
    return (rs->name != NULL) ? strdup(rs->name) : DRMAA2_UNSET_STRING;
 }
@@ -1603,7 +1657,7 @@ char* drmaa2_rsession_get_session_name(const drmaa2_rsession rs)
 
 //----------------------------------------------------------
 //----------------------------------------------------------
-drmaa2_r drmaa2_rsession_get_reservation(const drmaa2_rsession rs, const char* reservation_id)
+drmaa2_r drmaa2_rsession_get_reservation(const drmaa2_rsession rs, const drmaa2_string reservation_id)
 {
    int i;
 
@@ -1691,7 +1745,7 @@ drmaa2_r_list drmaa2_rsession_get_reservations(const drmaa2_rsession rs)
 
 //----------------------------------------------------------
 //----------------------------------------------------------
-char *drmaa2_r_get_id(const drmaa2_r r)
+drmaa2_string drmaa2_r_get_id(const drmaa2_r r)
 {
     return (r->id != NULL) ? strdup(r->id) : DRMAA2_UNSET_STRING;
 }
@@ -1699,7 +1753,7 @@ char *drmaa2_r_get_id(const drmaa2_r r)
 
 //----------------------------------------------------------
 //----------------------------------------------------------
-char *drmaa2_r_get_session_name(const drmaa2_r r)
+drmaa2_string drmaa2_r_get_session_name(const drmaa2_r r)
 {
     return (r->session_name != NULL) ? strdup(r->session_name) : DRMAA2_UNSET_STRING;
 }
@@ -1796,12 +1850,25 @@ drmaa2_error drmaa2_r_terminate(drmaa2_r r)
 
 //----------------------------------------------------------
 //----------------------------------------------------------
-void drmaa2_r_free(drmaa2_r r)
+void drmaa2_r_free(drmaa2_r* r)
 {
-    drmaa2_string_free(r->id);
-    drmaa2_string_free(r->session_name);
-    drmaa2_rinfo_free(r->info);
-    free(r);
+    if(*r==NULL)
+    {
+       lasterror = DRMAA2_INVALID_ARGUMENT;
+       lasterror_text = "Try to free a NULL pointer!";
+    }
+    else
+    {
+      if((*r)->id != DRMAA2_UNSET_STRING)
+         drmaa2_string_free(&((*r)->id));
+      if((*r)->session_name != DRMAA2_UNSET_STRING)
+         drmaa2_string_free(&((*r)->session_name));
+      if((*r)->info != NULL)
+         drmaa2_rinfo_free(&((*r)->info));
+
+      free(*r);
+      *r = NULL;
+    }
 }
 
 
@@ -1831,7 +1898,8 @@ drmaa2_error drmaa2_destroy_rsession(const char * session_name)
            if (strcmp(rs->name, session_name) == 0)
            {
               error=drmaa2_list_del(r_sessions, i);
-              error=drmaa2_list_free(rs->reservations);
+              if(rs->reservations != DRMAA2_UNSET_LIST)
+                 drmaa2_list_free(&(rs->reservations));
               return error;
            }
         }
@@ -1844,9 +1912,9 @@ drmaa2_error drmaa2_destroy_rsession(const char * session_name)
     }
 
 
-    if(drmaa2_list_size(r_sessions)==0)
+    if(drmaa2_list_size(r_sessions)==0 && r_sessions != DRMAA2_UNSET_LIST)
     {
-       drmaa2_list_free(r_sessions);
+       drmaa2_list_free(&r_sessions);
     }
 
 
@@ -1870,17 +1938,30 @@ drmaa2_string_list drmaa2_get_rsession_names(void)
            drmaa2_list_add(session_names, strdup(rs->name));
         }
     }
+
     return session_names;
 }
 
 
 //----------------------------------------------------------
 //----------------------------------------------------------
-void drmaa2_rsession_free(drmaa2_rsession rs)
+void drmaa2_rsession_free(drmaa2_rsession* rs)
 {
-   drmaa2_string_free(rs->contact); 
-   drmaa2_string_free(rs->name); 
-   free(rs);
+    if(*rs==NULL)
+    {
+        lasterror = DRMAA2_INVALID_ARGUMENT;
+        lasterror_text = "Try to free a NULL pointer!";
+    }
+    else
+    {
+      if((*rs)->contact != DRMAA2_UNSET_STRING)
+        drmaa2_string_free(&((*rs)->contact)); 
+      if((*rs)->name != DRMAA2_UNSET_STRING)
+        drmaa2_string_free(&((*rs)->name)); 
+
+      free(*rs);
+      *rs = NULL;
+    }
 }
 
 
@@ -1888,9 +1969,9 @@ void drmaa2_rsession_free(drmaa2_rsession rs)
 //             DRMAA2 general functions                  
 //==================================================================
 
-char* drmaa2_get_drms_name(void)
+drmaa2_string drmaa2_get_drms_name(void)
 {
-  char* drms_name;
+  drmaa2_string drms_name;
   drms_name=strdup("GridWay");
   
   return drms_name;
@@ -1899,9 +1980,9 @@ char* drmaa2_get_drms_name(void)
 
 //----------------------------------------------------------
 //----------------------------------------------------------
-char* drmaa2_get_drmaa_name(void)
+drmaa2_string drmaa2_get_drmaa_name(void)
 {
-  char* drmaa_name;
+  drmaa2_string drmaa_name;
   drmaa_name=strdup("DRMAA-GridWay");
   
   return drmaa_name;
@@ -1952,20 +2033,22 @@ drmaa2_version drmaa2_get_drmaa_version(void)
 
 //----------------------------------------------------------
 //----------------------------------------------------------
-drmaa2_error drmaa2_version_free(drmaa2_version v)
+void drmaa2_version_free(drmaa2_version* v)
 {
-   if(v != NULL)
+   if(*v != NULL)
    {
-       free(v->major);
-       free(v->minor);
-       free(v);
-       return DRMAA2_SUCCESS;
+       if((*v)->major != DRMAA2_UNSET_STRING)
+          drmaa2_string_free(&((*v)->major));
+       if((*v)->minor != DRMAA2_UNSET_STRING)
+          drmaa2_string_free(&((*v)->minor));
+
+       free(*v);
+       *v = NULL;
   }
   else
   {
        lasterror = DRMAA2_INTERNAL;
        lasterror_text = "Try to free a NULL pointer!";
-       return DRMAA2_INTERNAL;
   }
 }
 
@@ -2026,15 +2109,45 @@ drmaa2_bool drmaa2_supports(const drmaa2_capability c)
 }
 
 
+//----------------------------------------------------------
+//----------------------------------------------------------
+void drmaa2_queueinfo_free(drmaa2_queueinfo* qi)
+{
+    if(*qi==NULL)
+    {
+        lasterror = DRMAA2_INVALID_ARGUMENT;
+        lasterror_text = "Try to free a NULL pointer!";
+    }
+    else
+    {
+      if((*qi)->name != DRMAA2_UNSET_STRING)
+         drmaa2_string_free(&((*qi)->name));
+
+      free(*qi);
+      *qi = NULL;
+    }
+}
+
 
 //----------------------------------------------------------
 //----------------------------------------------------------
-drmaa2_error drmaa2_machineinfo_free(drmaa2_machineinfo mi)
+void drmaa2_machineinfo_free(drmaa2_machineinfo* mi)
 {
-    drmaa2_string_free(mi->name);
-    drmaa2_version_free(mi->machineOSVersion);
-    free(mi);
-    return DRMAA2_SUCCESS;
+    if(*mi==NULL)
+    {
+        lasterror = DRMAA2_INVALID_ARGUMENT;
+        lasterror_text = "Try to free a NULL pointer!";
+    }
+    else
+    {
+       if((*mi)->name != DRMAA2_UNSET_STRING)
+          drmaa2_string_free(&((*mi)->name));
+       if((*mi)->machineOSVersion != NULL)
+          drmaa2_version_free(&((*mi)->machineOSVersion));
+
+       free(*mi);
+       *mi = NULL;
+    }
 }
 
 
@@ -2362,7 +2475,8 @@ drmaa2_error gw_drmaa2_jt_write (drmaa2_jtemplate jt)
             else
               fprintf(fp,"%s=\"%s\"\n",key,value);
          }
-         drmaa2_list_free(tmplist);
+         if(tmplist != DRMAA2_UNSET_LIST)
+            drmaa2_list_free(&tmplist);
     }
 
 // stageInFiles
@@ -2379,7 +2493,8 @@ drmaa2_error gw_drmaa2_jt_write (drmaa2_jtemplate jt)
             else
               fprintf(fp,"%s %s\n",key,value);
          }
-         drmaa2_list_free(tmplist);
+         if(tmplist != DRMAA2_UNSET_LIST)
+            drmaa2_list_free(&tmplist);
     }
 
 // stageOutFiles
@@ -2396,7 +2511,8 @@ drmaa2_error gw_drmaa2_jt_write (drmaa2_jtemplate jt)
             else
               fprintf(fp,"%s %s\n",key,value);
          }
-         drmaa2_list_free(tmplist);
+         if(tmplist != DRMAA2_UNSET_LIST)
+            drmaa2_list_free(&tmplist);
     }
 
 // inputPath
@@ -2448,7 +2564,7 @@ drmaa2_error gw_drmaa2_jt_write (drmaa2_jtemplate jt)
 //             Job Session related functions                  
 //==================================================================
 
-char *drmaa2_jsession_get_contact(const drmaa2_jsession js)
+drmaa2_string drmaa2_jsession_get_contact(const drmaa2_jsession js)
 {
     if (js->contact) return strdup(js->contact);
     return DRMAA2_UNSET_STRING;
@@ -2457,7 +2573,7 @@ char *drmaa2_jsession_get_contact(const drmaa2_jsession js)
 
 //----------------------------------------------------------
 //----------------------------------------------------------
-char *drmaa2_jsession_get_session_name(const drmaa2_jsession js)
+drmaa2_string drmaa2_jsession_get_session_name(const drmaa2_jsession js)
 {
     if(js->name) return strdup(js->name);
     return DRMAA2_UNSET_STRING;
@@ -2681,26 +2797,27 @@ drmaa2_string_list drmaa2_get_jsession_names(void)
 
 //----------------------------------------------------------
 //----------------------------------------------------------
-void drmaa2_jsession_free(drmaa2_jsession js)
+void drmaa2_jsession_free(drmaa2_jsession* js)
 {
-      int i;
-      if(js->contact != DRMAA2_UNSET_STRING)
-         drmaa2_string_free(js->contact); 
-      if(js->name != DRMAA2_UNSET_STRING)
-         drmaa2_string_free(js->name); 
-      if(drmaa2_list_size(js->jobs) >0)
-         drmaa2_list_free(js->jobs);
-      if(drmaa2_list_size(js->jarray_list)>0)
-      {
-         for(i=0;i<drmaa2_list_size(js->jarray_list);i++)
-         {
-            drmaa2_jarray_free((drmaa2_jarray) (drmaa2_list_get(js->jarray_list,i)));
-            drmaa2_list_del(js->jarray_list,i);
-         }
-      }
-      if(js->jarray_list != DRMAA2_UNSET_LIST)
-         drmaa2_list_free(js->jarray_list);
-      free(js);
+   if(*js==NULL)
+   {
+      lasterror = DRMAA2_INVALID_ARGUMENT;
+      lasterror_text = "Try to free a NULL pointer!";
+   }
+   else
+   {
+      if((*js)->contact != DRMAA2_UNSET_STRING)
+         drmaa2_string_free(&((*js)->contact)); 
+      if((*js)->name != DRMAA2_UNSET_STRING)
+         drmaa2_string_free(&((*js)->name)); 
+      if((*js)->jobs != DRMAA2_UNSET_LIST)
+         drmaa2_list_free(&((*js)->jobs));
+      if((*js)->jarray_list != DRMAA2_UNSET_LIST)
+         drmaa2_list_free(&((*js)->jarray_list));
+
+      free(*js);
+      *js = NULL;
+   }
 }
 
 
@@ -2734,18 +2851,56 @@ drmaa2_jinfo drmaa2_jinfo_create(void)
 
 //----------------------------------------------------------
 //----------------------------------------------------------
-drmaa2_error drmaa2_jinfo_free(drmaa2_jinfo ji)
+void drmaa2_jinfo_free(drmaa2_jinfo* ji)
 {
-    drmaa2_string_free(ji->jobId);
-    drmaa2_string_free(ji->terminatingSignal);
-    drmaa2_string_free(ji->annotation);
-    drmaa2_string_free(ji->jobSubState);
-    drmaa2_list_free(ji->allocatedMachines);
-    drmaa2_string_free(ji->submissionMachine);
-    drmaa2_string_free(ji->jobOwner);
-    drmaa2_string_free(ji->queueName);
-    free(ji);
-    return DRMAA2_SUCCESS;
+    if(*ji==NULL)
+    {
+       lasterror = DRMAA2_INVALID_ARGUMENT;
+       lasterror_text = "Try to free a NULL pointer!";
+    }
+    else
+    {
+      if((*ji)->jobId != DRMAA2_UNSET_STRING)
+         drmaa2_string_free(&((*ji)->jobId));
+      if((*ji)->terminatingSignal != DRMAA2_UNSET_STRING)
+         drmaa2_string_free(&((*ji)->terminatingSignal));
+      if((*ji)->annotation != DRMAA2_UNSET_STRING)
+         drmaa2_string_free(&((*ji)->annotation));
+      if((*ji)->jobSubState != DRMAA2_UNSET_STRING)
+         drmaa2_string_free(&((*ji)->jobSubState));
+      if((*ji)->allocatedMachines != DRMAA2_UNSET_LIST)
+         drmaa2_list_free(&((*ji)->allocatedMachines));
+      if((*ji)->submissionMachine != DRMAA2_UNSET_STRING)
+         drmaa2_string_free(&((*ji)->submissionMachine));
+      if((*ji)->jobOwner != DRMAA2_UNSET_STRING)
+         drmaa2_string_free(&((*ji)->jobOwner));
+      if((*ji)->queueName != DRMAA2_UNSET_STRING)
+         drmaa2_string_free(&((*ji)->queueName));
+
+      free(*ji);
+      *ji = NULL;
+   }
+}
+
+
+
+//----------------------------------------------------------
+//----------------------------------------------------------
+void drmaa2_slotinfo_free(drmaa2_slotinfo* si)
+{
+    if(*si==NULL)
+    {
+       lasterror = DRMAA2_INVALID_ARGUMENT;
+       lasterror_text = "Try to free a NULL pointer!";
+    }
+    else
+    {
+      if((*si)->machineName != DRMAA2_UNSET_STRING)
+         drmaa2_string_free(&((*si)->machineName));
+
+      free(*si);
+      *si = NULL;
+   }
 }
 
 
@@ -2855,9 +3010,9 @@ drmaa2_error drmaa2_destroy_jsession(const char * session_name)
     }
  
 
-    if(drmaa2_list_size(j_sessions)==0)
+    if( j_sessions != DRMAA2_UNSET_LIST && drmaa2_list_size(j_sessions)==0)
     {
-       drmaa2_list_free(j_sessions);
+       drmaa2_list_free(&j_sessions);
        gw_client_finalize();
     }
 
@@ -2959,7 +3114,7 @@ drmaa2_rsession drmaa2_open_rsession(const char * session_name)
 //             Job manipulation related functions                  
 //==================================================================
 
-char* drmaa2_j_get_id(const drmaa2_j j)
+drmaa2_string drmaa2_j_get_id(const drmaa2_j j)
 {
     return (j->jid != NULL) ? strdup(j->jid) : DRMAA2_UNSET_STRING;
 }
@@ -2967,7 +3122,7 @@ char* drmaa2_j_get_id(const drmaa2_j j)
  
 //----------------------------------------------------------
 //----------------------------------------------------------
-char* drmaa2_j_get_session_name(const drmaa2_j j)
+drmaa2_string drmaa2_j_get_session_name(const drmaa2_j j)
 {
     return (j->session_name != NULL) ? strdup(j->session_name) : DRMAA2_UNSET_STRING;
 }
@@ -3207,7 +3362,7 @@ drmaa2_error drmaa2_j_terminate(drmaa2_j j)
 
 //----------------------------------------------------------
 //----------------------------------------------------------
-const char *drmaa2_gw_strstatus(int status)
+const drmaa2_string drmaa2_gw_strstatus(int status)
 {
     switch (status)
     {                                
@@ -3257,7 +3412,7 @@ const char *drmaa2_gw_strstatus(int status)
 
 //----------------------------------------------------------
 //----------------------------------------------------------
-drmaa2_jstate drmaa2_j_get_state(drmaa2_j j, char** substate)
+drmaa2_jstate drmaa2_j_get_state(drmaa2_j j, drmaa2_string * substate)
 {
    int jid;
    gw_return_code_t grc;
@@ -3421,19 +3576,20 @@ drmaa2_jinfo drmaa2_j_get_info(const drmaa2_j j)
 
 //----------------------------------------------------------
 //----------------------------------------------------------
-drmaa2_j drmaa2_j_wait_started(const drmaa2_j j, const time_t timeout)
+drmaa2_error drmaa2_j_wait_started(const drmaa2_j j, const time_t timeout)
 {
-    return j;
+    return DRMAA2_SUCCESS;
 }
 
 
 //----------------------------------------------------------
 //----------------------------------------------------------
-drmaa2_j drmaa2_j_wait_terminated(const drmaa2_j j, const time_t timeout)
+drmaa2_error drmaa2_j_wait_terminated(const drmaa2_j j, const time_t timeout)
 {
 
     int exit_code;
     int jid;
+    drmaa2_error error;
     int num_records, ii;
     gw_msg_history_t * history_list;
     gw_return_code_t grc, grc2;
@@ -3478,33 +3634,68 @@ drmaa2_j drmaa2_j_wait_terminated(const drmaa2_j j, const time_t timeout)
     switch(grc)
     {    
             case GW_RC_FAILED_BAD_JOB_ID:
-              if(gw_drmaa2_found_job(j) && (jid<gw_drmaa2_total_jobs()))
-                 gw_drmaa2_remove_job(j);
+                 if(gw_drmaa2_found_job(j) && (jid<gw_drmaa2_total_jobs()))
+                 {
+                    gw_drmaa2_remove_job(j);
+                    error = DRMAA2_SUCCESS;
+                 }
+                 else
+                    error = DRMAA2_INVALID_STATE;
                  break;
+             
             case GW_RC_FAILED_JOB_KILLED:
                  gw_drmaa2_remove_job(j);
+                 error = DRMAA2_SUCCESS;
                  break;
+
+            case GW_RC_FAILED_CONNECTION:
+                 error = DRMAA2_DRM_COMMUNICATION;
+                 break;
+
+            case GW_RC_FAILED_TIMEOUT:
+                 error = DRMAA2_TIMEOUT;
+                 break;
+
+            case GW_RC_FAILED_PERM:
+                 error = DRMAA2_DENIED_BY_DRMS;
+                 break;
+
             case GW_RC_SUCCESS:
-            default:
                  j->info->jobState = DRMAA2_DONE;
                  j->info->jobSubState = strdup("DONE");
+                 error = DRMAA2_SUCCESS;
+                 break;
+
+            default:
+                 error = DRMAA2_INTERNAL;
                  break;
     }
 
-
-    return j;
+    return error;
 }
 
 
 //----------------------------------------------------------
 //----------------------------------------------------------
-void drmaa2_j_free(drmaa2_j j)
+void drmaa2_j_free(drmaa2_j* j)
 {
-    drmaa2_string_free(j->jid);   
-    drmaa2_string_free(j->session_name);   
-    if(j->info != NULL)
-      drmaa2_jinfo_free(j->info);
-    free(j);
+    if(*j==NULL)
+    {
+        lasterror = DRMAA2_INVALID_ARGUMENT;
+        lasterror_text = "Try to free a NULL pointer!";
+    }
+    else
+    {
+       if((*j)->jid != DRMAA2_UNSET_STRING)
+         drmaa2_string_free(&((*j)->jid));   
+       if((*j)->session_name != DRMAA2_UNSET_STRING)
+         drmaa2_string_free(&((*j)->session_name));   
+       if((*j)->info != NULL)
+         drmaa2_jinfo_free(&((*j)->info));
+
+       free(*j);
+       *j = NULL;
+    }
 }
 
 
@@ -3580,7 +3771,7 @@ drmaa2_j drmaa2_jsession_wait_any_terminated(const drmaa2_jsession js,
              job_ids[i] = (atoi)(job->jid);
        }
     }
-
+    job_ids[i] = -1;
    
     grc = gw_client_wait_set(job_ids, &exit_codes,GW_TRUE,timeout);
     grc2 = gw_client_job_status(job_ids[0],&status);
@@ -3834,9 +4025,9 @@ drmaa2_jarray drmaa2_jsession_run_bulk_jobs (const drmaa2_jsession js,
 //             Job array manipulation related functions                  
 //==================================================================
 
-char* drmaa2_jarray_get_id(const drmaa2_jarray ja)
+drmaa2_string drmaa2_jarray_get_id(const drmaa2_jarray ja)
 {
-   char* jarray_id;
+   drmaa2_string jarray_id;
 
    jarray_id=strdup(ja->jarray_id);
 
@@ -3875,9 +4066,9 @@ drmaa2_j_list drmaa2_jarray_get_jobs(const drmaa2_jarray ja)
 
 //----------------------------------------------------------
 //----------------------------------------------------------
-char* drmaa2_jarray_get_session_name(const drmaa2_jarray ja)
+drmaa2_string drmaa2_jarray_get_session_name(const drmaa2_jarray ja)
 {
-   char* session_name;
+   drmaa2_string session_name;
 
    session_name=strdup(ja->session_name);
 
@@ -4151,11 +4342,25 @@ drmaa2_error drmaa2_jarray_terminate(drmaa2_jarray ja)
 
 //----------------------------------------------------------
 //----------------------------------------------------------
-void drmaa2_jarray_free(drmaa2_jarray ja)
+void drmaa2_jarray_free(drmaa2_jarray* ja)
 {
-     drmaa2_string_free(ja->jarray_id);
-     drmaa2_string_free(ja->session_name);
-     drmaa2_list_free(ja->jobs);
+    if(*ja==NULL)
+    {
+        lasterror = DRMAA2_INVALID_ARGUMENT;
+        lasterror_text = "Try to free a NULL pointer!";
+    }
+    else
+    {
+       if((*ja)->jarray_id != DRMAA2_UNSET_STRING)
+         drmaa2_string_free(&((*ja)->jarray_id));
+       if((*ja)->session_name != DRMAA2_UNSET_STRING)
+         drmaa2_string_free(&((*ja)->session_name));
+       if((*ja)->jobs != DRMAA2_UNSET_LIST)
+          drmaa2_list_free(&((*ja)->jobs));
+
+       free(*ja);
+       *ja = NULL;
+    }
 }
 
 
@@ -4458,9 +4663,9 @@ drmaa2_error drmaa2_close_msession(drmaa2_msession ms)
         return lasterror;
     }
 
-    if(drmaa2_list_size(m_sessions)==0)
+    if( m_sessions != DRMAA2_UNSET_LIST && drmaa2_list_size(m_sessions)==0)
     {
-       drmaa2_list_free(m_sessions);
+       drmaa2_list_free(&m_sessions);
     }
 
 
@@ -4470,8 +4675,19 @@ drmaa2_error drmaa2_close_msession(drmaa2_msession ms)
 
 //----------------------------------------------------------
 //----------------------------------------------------------
-void drmaa2_msession_free(drmaa2_msession ms)
+void drmaa2_msession_free(drmaa2_msession* ms)
 {
-    drmaa2_string_free(ms->name);   
-    free(ms);
+    if(*ms==NULL)
+    {
+        lasterror = DRMAA2_INVALID_ARGUMENT;
+        lasterror_text = "Try to free a NULL pointer!";
+    }
+    else
+    {
+      if((*ms)->name != DRMAA2_UNSET_STRING )
+         drmaa2_string_free(&((*ms)->name));   
+
+      free(*ms);
+      *ms = NULL;
+   }
 }
