@@ -29,3 +29,5 @@ in RSL2 for wrapper-based submission
 SSH drivers
   * Bug #131 (http://dev.gridway.org/issues/131): EM driver reload leaves jobs
 in WRAP state forever
+  * Bug #135 (http://dev.gridway.org/issues/135): CREAM driver is not 
+installable with UMD2 repository
