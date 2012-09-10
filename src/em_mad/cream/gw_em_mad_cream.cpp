@@ -52,6 +52,7 @@ pthread_mutex_t mutex;
 pthread_cond_t cond;
 int num_active = 0;
 CreamEmMad *creamEmMad = NULL;
+Namespace namespaces[] = {};
 
 int main( int argc, char **argv) 
 {

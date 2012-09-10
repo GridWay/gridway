@@ -7,7 +7,7 @@ DBG = -g -O0
 CFLAGS = -pipe -I../../../include -DWANT_NAMESPACES -DWANT_CLASSAD_NAMESPACE
 CXXFLAGS = $(DBG) -fPIC -pipe $(GCCBASEFLAGS) $(BASEFLAGS) $(CFLAGS)
 LDFLAGS = $(LIBS)
-LIBS = -lglite_ce_cream_client_soap -lglite_ce_cream_client_util -lboost_regex -lboost_thread -lgridsite -lxml2 -lvomsapi -llog4cpp -lclassad_ns -lglite_security_gsoap_plugin_276b
+LIBS = -lglite_ce_cream_client_soap -lglite_ce_cream_client_util -lglite_security_gsoap_plugin_2713_cxx
 
 progs = gw_em_mad_cream
 

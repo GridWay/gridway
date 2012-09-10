@@ -138,8 +138,7 @@ the following lines.
    gwadmin ALL=(GWUSERS) NOPASSWD: /usr/bin/gw_tm_mad_dummy *
 
 The source RPM package gridway-gLite enables you to build the binary RPM.
-Build RPM dependencies: emi-ui, boost-devel, gsoap-devel, libxml2-devel,
-log4cpp-devel and classads-devel.
+Build RPM dependencies: glite-ce-cream-client-devel.
 
 2c) GridWay MADs for OGSA-BES endpoints: The binary RPM package gridway-BES
 installs the GridWay MAD to interface with OGSA-BES services, as well as an

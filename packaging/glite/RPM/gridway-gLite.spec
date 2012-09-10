@@ -1,9 +1,9 @@
 %define _name gridway
-%define _release RC1
+%define _release RC2
 
 Name:		gridway-gLite
 Version:	5.12
-Release:	RC1%{dist}
+Release:	RC2%{dist}
 Summary:	gLite MADs for GridWay
 
 Group:		System Environment/Libraries
@@ -13,12 +13,7 @@ Vendor:         Initiative for Globus in Europe (IGE)
 Source:		%{_name}-%{version}.%{_release}.tar.gz
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
 
-BuildRequires:	emi-ui
-BuildRequires:	boost-devel
-BuildRequires:	gsoap-devel
-BuildRequires:	libxml2-devel
-BuildRequires:	log4cpp-devel
-BuildRequires:	classads-devel
+BuildRequires:	glite-ce-cream-client-devel
 Requires:	gridway-core
 Requires:	globus-gass-server-ez-progs
 Requires:	glite-ce-cream-client-api-c
@@ -83,6 +78,9 @@ rm -rf $RPM_BUILD_ROOT
 /usr/bin/gw_tm_mad_dummy.bin
 
 %changelog
+* Fri Sep 07 2012 GridWay Project Leads <contact@gridway.org> - 5.12-RC2
+- Update to UMD-2
+
 * Fri Aug 31 2012 GridWay Project Leads <contact@gridway.org> - 5.12-RC1
 - Update to 5.12-RC1
 
