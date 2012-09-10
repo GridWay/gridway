@@ -1,20 +1,20 @@
 %define _name gridway
-%define _release RC1
+%define _release RC2
 
 Name:		gridway-core
 Version:	5.12
-Release:	RC1%{dist}
+Release:	RC2%{dist}
 Summary:	GridWay Core
 
 Group:		System Environment/Libraries
 License:	Apache License
 URL:		http://www.gridway.org/
 Vendor:         Initiative for Globus in Europe (IGE)
-# svn co http://svn.gridway.org/gridway/tags/GW_5_12_RC1 gridway-5.12.RC1
-# cp -p gridway-5.12.RC1/packaging/README.rpm gridway-5.12.RC1/README
-# cp -p gridway-5.12.RC1/packaging/core/RPM/gwd gridway-5.12.RC1/etc/
-# chmod 755 gridway-5.12.RC1/etc/gwd
-# tar -czf gridway-5.12.RC1.tar.gz gridway-5.12.RC1/
+# svn co http://svn.gridway.org/gridway/tags/GW_5_12_RC2 gridway-5.12.RC2
+# cp -p gridway-5.12.RC2/packaging/README.rpm gridway-5.12.RC2/README
+# cp -p gridway-5.12.RC2/packaging/core/RPM/gwd gridway-5.12.RC2/etc/
+# chmod 755 gridway-5.12.RC2/etc/gwd
+# tar -czf gridway-5.12.RC2.tar.gz gridway-5.12.RC2/
 
 Source:		%{_name}-%{version}.%{_release}.tar.gz
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
@@ -28,6 +28,7 @@ Requires(postun): initscripts
 Requires: db4
 Requires: db4-devel
 Requires: db4-utils
+Requires: globus-proxy-utils
 
 %description
 The GridWay Metascheduler enables large-scale, reliable and efficient sharing 
@@ -124,10 +125,10 @@ rm -rf $RPM_BUILD_ROOT
 /usr/libexec/ruby/dagman/node.rb
 /usr/libexec/ruby/dagman/parse.rb
 /usr/libexec/ruby/dagman/runner.rb
-/usr/share/doc/gridway-5.12.RC1/LICENSE
-/usr/share/doc/gridway-5.12.RC1/NOTICE
-/usr/share/doc/gridway-5.12.RC1/README
-/usr/share/doc/gridway-5.12.RC1/RELEASE_NOTES
+/usr/share/doc/gridway-5.12.RC2/LICENSE
+/usr/share/doc/gridway-5.12.RC2/NOTICE
+/usr/share/doc/gridway-5.12.RC2/README
+/usr/share/doc/gridway-5.12.RC2/RELEASE_NOTES
 /usr/include/drmaa.h
 /usr/include/gw_acct.h
 /usr/include/gw_action.h
@@ -165,9 +166,9 @@ rm -rf $RPM_BUILD_ROOT
 /usr/include/gw_user.h
 /usr/include/gw_user_pool.h
 /usr/include/gw_xfr_files.h
-/usr/share/gridway/5.12.RC1/xml_schema/gridway.xsd
-/usr/share/gridway/5.12.RC1/var
-/usr/share/gridway/5.12.RC1/var/acct
+/usr/share/gridway/5.12.RC2/xml_schema/gridway.xsd
+/usr/share/gridway/5.12.RC2/var
+/usr/share/gridway/5.12.RC2/var/acct
 /usr/lib/drmaa.jar
 /usr/lib/libDrmaaJNI.a
 /usr/lib/libDrmaaJNI.la
@@ -183,6 +184,9 @@ rm -rf $RPM_BUILD_ROOT
 /usr/libexec/ssh_wrapper.sh
 
 %changelog
+* Mon Sep 10 2012 GridWay Project Leads <contact@gridway.org> - 5.12-RC2
+- Update to 5.12-RC2
+
 * Fri Aug 31 2012 GridWay Project Leads <contact@gridway.org> - 5.12-RC1
 - Update to 5.12-RC1
 

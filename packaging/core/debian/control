@@ -8,7 +8,7 @@ Homepage: http://www.ige-project.eu/
 
 Package: gridway-core
 Architecture: any
-Depends: libdb4.8
+Depends: libdb4.8, globus-proxy-utils
 Description: 
  The GridWay Metascheduler enables large-scale, reliable and efficient sharing 
  of computing resources: clusters, supercomputers, stand-alone servers... It 

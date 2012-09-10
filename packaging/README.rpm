@@ -47,8 +47,8 @@ Check the Installation Guide for more details.
 1) Install the GridWay Core: The binary RPM package gridway-core installs
 GridWay with a multi-user configuration.
 
-1.1) Install RPM dependencies: chkconfig, initscripts, db4, db4-devel and
-db4-utils.
+1.1) Install RPM dependencies: chkconfig, initscripts, db4, db4-devel, 
+db4-utils and globus-proxy-utils.
 
 1.2) Post-install configuration:
 
