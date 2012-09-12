@@ -22,24 +22,27 @@ import javax.xml.rpc.ServiceException;
 class GW_em_mad_bes extends Thread {
 
 	static String usage =
-		"USAGE\n GW_em_mad_bes [-h]\n\n" +
+                "USAGE\n GW_em_mad_bes [-h] [-t] \n\n" +
 		"SYNOPSIS\n" +
 		"  Execution driver to interface with BES. It is not intended to be used from CLI.\n\n" +
 		"OPTIONS\n" +
-		"  -h    print this help";
+		"  -h    print this help" +
+                "  -t    target BES implementation (gridsam | unicore)";
 	static String susage =
-		"usage: GW_em_mad_bes [-h]";
+		"usage: GW_em_mad_bes [-h] [-t]";
 
     	private Map job_pool = null; // Job pool
     	private Map jid_pool = null; // JID pool
 
     	private String host;
     	private Calendar terminationTime = null;
+        private String target;
 	
     	public static void main(String args[]) {
         	GW_em_mad_bes gw_em_mad_bes;
     		int i = 0;
 		String arg;
+                String target = "gridsam";
 
          	while (i < args.length && args[i].startsWith("-")) 
          	{
@@ -50,6 +53,17 @@ class GW_em_mad_bes extends Thread {
 				System.out.println(usage);
                         	System.exit(0);
 			}
+                        if (arg.equals("-t"))
+                        {
+                                if (i < args.length)
+                                    target = args[i++];
+                                else
+                                {
+                                    System.err.println("-t requires a target BES implementation (gridsam | unicore)");
+                                    System.out.println(susage);
+                                    System.exit(1);
+                                }
+                        }
 			else
 			{
                         	System.err.println("error: invalid option \'" + arg + "\'\n");
@@ -58,14 +72,15 @@ class GW_em_mad_bes extends Thread {
 			}
 		}
 
-        	gw_em_mad_bes = new GW_em_mad_bes();
+        	gw_em_mad_bes = new GW_em_mad_bes(target);
         	gw_em_mad_bes.loop();
     	}
 
-	GW_em_mad_bes() {
+	GW_em_mad_bes(String target) {
 		// Create the job and JID pool
 		job_pool = Collections.synchronizedMap(new HashMap());
 		jid_pool = Collections.synchronizedMap(new HashMap());
+                this.target = target;
 	}
 
 	void loop() {
@@ -125,7 +140,15 @@ class GW_em_mad_bes extends Thread {
                                                 jid = new Integer(jid_str);
 					 	if (str_split[2].indexOf('/') != -1)
                                                		host = str_split[2].substring(0,str_split[2].indexOf('/'));
-                                                contact = "https://" + host + ":8443/gridsam/services/bes?wsdl";
+                                                if (target.equals("unicore"))
+                                                {
+                                                    String gateway = "";
+                                                    if (str_split[2].indexOf('/') != str_split[2].lastIndexOf('/'))
+                                                        gateway = str_split[2].substring(str_split[2].indexOf('/'),str_split[2].lastIndexOf('/'));
+                                                    contact = "https://" + host + ":8080/" + gateway + "/services/BESFactory?res=default_bes_factory";
+                                                }
+                                                else // Assuming GridSAM
+                                                        contact = "https://" + host + ":8443/gridsam/services/bes?wsdl";
                                                 submit(jid, contact, jsdl_file);
                                         }
                                         catch (NumberFormatException e)
@@ -226,7 +249,7 @@ class GW_em_mad_bes extends Thread {
         void submit(int jid, String contact, String jsdl_file) {
 
 		String info = null;
-		int status;
+		int status = 0;
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(Calendar.WEEK_OF_YEAR , calendar.get(Calendar.WEEK_OF_YEAR) + 1);
 
@@ -244,17 +267,36 @@ class GW_em_mad_bes extends Thread {
                 // Submit the job
                 try
                 {
-			String jsdl_myproxy = add_myproxy(jid, jsdl_file);
-			if (jsdl_myproxy != null){
-                        	ServiceBES job = new ServiceBES(jid, contact, jsdl_myproxy);
-                        	status = job.submit();
-				info = job.getInformation();
+                        if (target.equals("unicore"))
+                        {
+                            String jsdl_username = add_username(jid, jsdl_file);
+                            if (jsdl_username != null){
+                                ServiceBES job = new ServiceBES(jid, contact, jsdl_username);
+                                status = job.submit(target);
+                                info = job.getInformation();
                                 // Add job and jid to the pools
-				synchronized (this) 
-				{
-	                                job_pool.put(jid, job);
-        	                        jid_pool.put(job, jid);
+                                synchronized (this)
+                                {
+                                    job_pool.put(jid, job);
+                                    jid_pool.put(job, jid);
+                                }
+                            }
+
+                        }
+                        else if (target.equals("gridsam"))
+                        {
+			    String jsdl_myproxy = add_myproxy(jid, jsdl_file);
+			    if (jsdl_myproxy != null){
+                                ServiceBES job = new ServiceBES(jid, contact, jsdl_myproxy);
+                                status = job.submit(target);
+			        info = job.getInformation();
+                                // Add job and jid to the pools
+			        synchronized (this) 
+			        {
+	                            job_pool.put(jid, job);
+        	                    jid_pool.put(job, jid);
 				}
+                            }
 			}
 			else
 				return;
@@ -462,6 +504,43 @@ class GW_em_mad_bes extends Thread {
 		} 
 		return sb.toString();
 	}
+
+        String add_username(int jid, String jsdl_filename) {
+                String username_buffer;
+                StringBuffer sb = new StringBuffer();
+                String line;
+                String jid_str = String.valueOf(jid);
+
+                username_buffer = "   <ac:Credential xmlns:ac=\"http://schemas.ogf.org/hpcp/2007/11/ac\">\n" +
+                                  "    <wsse:UsernameToken xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">\n" +
+                                  "     <wsse:Username>***</wsse:Username>\n" +
+                                  "     <wsse:Password>***</wsse:Password>\n" +
+                                  "    </wsse:UsernameToken>\n" +
+                                  "   </ac:Credential>\n";
+                try
+                {
+                        BufferedReader in = new BufferedReader(new FileReader(jsdl_filename));
+                        while((line = in.readLine())!=null){
+                                if((line.indexOf("</jsdl:Target>")!= -1) || (line.indexOf("</jsdl:Source>")!= -1)){
+                                        sb.append(line);
+                                        sb.append(username_buffer);
+                                }
+                                else {
+                                        sb.append(line);
+                                        sb.append(System.getProperty("line.separator"));
+                                }
+                        }
+                        in.close();
+                } catch (IOException e){
+                        String info = e.getMessage().replace('\n', ' ');
+                        synchronized (System.out)
+                        {
+                                System.out.println("SUBMIT" + " " + jid_str + " FAILURE " + info);
+                        }
+                        return null;
+                }
+                return sb.toString();
+        }
 
     	public synchronized void setTerminationTime(Date date) {
 

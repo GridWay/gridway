@@ -23,16 +23,17 @@
 #include <sys/stat.h>
 
 const char * usage =
-"USAGE\n gw_tm_mad_dummy [-h] [-u|-g]\n\n"
+"USAGE\n gw_tm_mad_dummy [-h] [-u|-g|-i]\n\n"
 "SYNOPSIS\n"
 "  Transfer driver to interface with GridFTP and GASS servers. It is not intended to be used from CLI.\n\n"
 "OPTIONS\n"
 "  -h    print this help\n"
 "  -u    URL of the GridFTP server\n"
-"  -g    use a user GASS server to transfer files\n";
+"  -g    use a user GASS server to transfer files\n"
+"  -i    use a user GASS insecure server to transfer files\n";
 
 const char * susage =
-"usage: gw_tm_mad_dummy [-h] [-u|-g]\n";
+"usage: gw_tm_mad_dummy [-h] [-u|-g|-i]\n";
 
 extern char *optarg;
 extern int   optind, opterr, optopt;
@@ -58,7 +59,7 @@ int main (int argc, char **argv )
     char * url;
     char * stg_url;
     char   buffer[512];
-    int    u, f, g;
+    int    u, f, g, i;
     char   opt;
 
     int server_pid = -1;
@@ -70,10 +71,10 @@ int main (int argc, char **argv )
     opterr = 0;
     optind = 1;
     
-    u = f = g = 0;
+    u = f = g = i = 0;
     url = NULL;
 
-    while((opt = getopt(argc, argv, "hu:fg")) != -1)
+    while((opt = getopt(argc, argv, "hu:fgi")) != -1)
         switch(opt)
         {
             case 'u': 
@@ -87,6 +88,9 @@ int main (int argc, char **argv )
                 
             case 'g': 
                 g = 1;
+                break;
+            case 'i':
+                i = 1;
                 break;
             case 'h':
                 printf("%s", usage);
@@ -171,6 +175,44 @@ int main (int argc, char **argv )
                             close(pipes[0]);
                             dup2(pipes[1], 1);
                             execlp("globus-gass-server", "globus-gass-server", NULL);
+                            rc = 1;
+
+                        case -1:    /* Error */
+                            fprintf(stderr, "couldn't fork\n");
+                            rc = 1;
+
+                        default:    /* Parent */
+                            /* Read stdout */
+                            close(pipes[1]);
+                            file = fdopen(pipes[0], "r");
+                            if (file == NULL)
+                                perror("opening stdout");
+                            fscanf_result = fscanf(file, "%s", buffer);
+                            stg_url = strdup(buffer);
+                            rc = 0;
+                        }
+                    }
+                }
+                else if ( i == 1 )
+                {
+                    /* Start a GASS insecure server */
+
+                    if (pipe(pipes) == -1)
+                    {
+                        fprintf(stderr, "couldn't create pipes\n");
+                        rc = 1;
+                    }
+                    else
+                    {
+                        int fscanf_result;
+                        server_pid = fork();
+
+                        switch (server_pid)
+                        {
+                        case 0:     /* Child */
+                            close(pipes[0]);
+                            dup2(pipes[1], 1);
+                            execlp("globus-gass-server", "globus-gass-server", "-i", NULL);
                             rc = 1;
 
                         case -1:    /* Error */

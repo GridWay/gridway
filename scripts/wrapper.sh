@@ -35,10 +35,6 @@ setup(){
 
     if [ -z "${GLOBUS_LOCATION}" ]; then
 	export GLOBUS_LOCATION=`locate bin/globus-url-copy | sed -n '1,1 s:bin/globus-url-copy::p'`
-        if [ -z "${GLOBUS_LOCATION}" ]; then
-             echo "failed."
-             exit 1
-        fi
     fi
 
     if [ -z "${HOME}" ]; then
@@ -50,49 +46,19 @@ setup(){
     printf "`date`: Checking remote job home... "
 
     RMT_JOB_HOME=${HOME}/.gw_${GW_USER}_${GW_JOB_ID}
+    STAGE=0
 
-    if [ ! -d ${RMT_JOB_HOME} ]
+    if [ -d ${RMT_JOB_HOME} ]
     then
+        echo "done."
+    elif [ ! -z ${JOB_ENV_URL} ]
+    then 
         echo "failed (will perform explicit file staging)."
-        
-        printf "`date`: Checking Globus programs... "
-
-        if [ -x "${GLOBUS_LOCATION}/bin/globus-url-copy" ]; then
-            GLOBUS_CP=${GLOBUS_LOCATION}/bin/globus-url-copy
-        else
-            echo "failed."
-            exit 1
-        fi
-
-        echo "done."
-        
-        printf "`date`: Creating remote job home... "
-
-        mkdir -p ${RMT_JOB_HOME}
-
-        echo "done."
-        
-        printf "`date`: Staging-in job environment file... "
-
-        SRC_URL="$JOB_ENV_URL"
-	        
-        DST_URL="file:${RMT_JOB_HOME}/job.env"
- 
-        ${GLOBUS_CP} ${SRC_URL} ${DST_URL}
-
-        if [ $? -ne 0 ]; then
-	        echo "failed."
-	        exit 1;
-        else
-    	    echo "done."
-        fi        
-        
-        STAGE=1    
+        STAGE=1
     else
-        echo "done."
-
-        STAGE=0
-    fi
+        echo "failed (using $HOME)."
+        RMT_JOB_HOME=${HOME}
+    fi 
 
     printf "`date`: Checking job environment... "
 

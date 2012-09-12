@@ -181,13 +181,12 @@ char *gw_em_jsdl_staging(gw_job_t *job)
     gw_conf.gw_location = getenv("GW_LOCATION");
     snprintf(tmp_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
         "  <jsdl:DataStaging>\n"
-        "   <jsdl:FileName>.gw_%s_%d/job.env</jsdl:FileName>\n"
+        "   <jsdl:FileName>job.env</jsdl:FileName>\n"
         "   <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"
         "   <jsdl:Source>\n"
         "    <jsdl:URI>%s/%s/" GW_VAR_DIR "/%d/job.env</jsdl:URI>\n"
         "   </jsdl:Source>\n"
         "  </jsdl:DataStaging>\n",
-        job->owner, job->id,
         job->history->tm_mad->url, gw_conf.gw_location, job->id);
     strcat(jsdl_buffer, tmp_buffer);
 
@@ -233,39 +232,39 @@ char *gw_em_jsdl_staging(gw_job_t *job)
     {
         snprintf(tmp_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
             "  <jsdl:DataStaging>\n"
-            "   <jsdl:FileName>.gw_%s_%d/%s</jsdl:FileName>\n"
+            "   <jsdl:FileName>%s</jsdl:FileName>\n"
             "   <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"
             "   <jsdl:Source>\n"
             "    <jsdl:URI>%s</jsdl:URI>\n"
             "   </jsdl:Source>\n"
             "  </jsdl:DataStaging>\n",
-            job->owner, job->id, dest_file,
+            dest_file,
             gw_job_substitute(job->template.stdin_file, job));
     }
     else if (strncmp(job->template.stdin_file, "file", 4) == 0)
     {
         snprintf(tmp_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
             "  <jsdl:DataStaging>\n"
-            "   <jsdl:FileName>.gw_%s_%d/%s</jsdl:FileName>\n"
+            "   <jsdl:FileName>%s</jsdl:FileName>\n"
             "   <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"
             "   <jsdl:Source>\n"
             "    <jsdl:URI>%s/%s</jsdl:URI>\n"
             "   </jsdl:Source>\n"
             "  </jsdl:DataStaging>\n",
-            job->owner, job->id, dest_file,
+            dest_file,
             job->history->tm_mad->url, gw_job_substitute(&job->template.stdin_file[7], job));
     }
     else if (strncmp(job->template.stdin_file, "/", 1) != 0)
     {
         snprintf(tmp_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
             "  <jsdl:DataStaging>\n"
-            "   <jsdl:FileName>.gw_%s_%d/%s</jsdl:FileName>\n"
+            "   <jsdl:FileName>%s</jsdl:FileName>\n"
             "   <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"
             "   <jsdl:Source>\n"
             "    <jsdl:URI>%s/%s/%s</jsdl:URI>\n"
             "   </jsdl:Source>\n"
             "  </jsdl:DataStaging>\n",
-            job->owner, job->id, dest_file,
+            dest_file,
             job->history->tm_mad->url, job->template.job_home, gw_job_substitute(job->template.stdin_file, job));
     }
     if (strncmp(job->template.stdin_file, "/", 1) != 0)
@@ -285,39 +284,39 @@ char *gw_em_jsdl_staging(gw_job_t *job)
     {
         snprintf(tmp_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
             "  <jsdl:DataStaging>\n"
-            "   <jsdl:FileName>.gw_%s_%d/%s</jsdl:FileName>\n"
+            "   <jsdl:FileName>%s</jsdl:FileName>\n"
             "   <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"
             "   <jsdl:Source>\n"
             "    <jsdl:URI>%s</jsdl:URI>\n"
             "   </jsdl:Source>\n"
             "  </jsdl:DataStaging>\n",
-            job->owner, job->id, dest_file,
+            dest_file,
             gw_job_substitute(job->template.executable, job));
     }
     else if (strncmp(job->template.executable, "file", 4) == 0)
     {
         snprintf(tmp_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
             "  <jsdl:DataStaging>\n"
-            "   <jsdl:FileName>.gw_%s_%d/%s</jsdl:FileName>\n"
+            "   <jsdl:FileName>%s</jsdl:FileName>\n"
             "   <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"
             "   <jsdl:Source>\n"
             "    <jsdl:URI>%s/%s</jsdl:URI>\n"
             "   </jsdl:Source>\n"
             "  </jsdl:DataStaging>\n",
-            job->owner, job->id, dest_file,
+            dest_file,
             job->history->tm_mad->url, gw_job_substitute(&job->template.executable[7], job));
     }
     else if (strncmp(job->template.executable, "/", 1) != 0)
     {
         snprintf(tmp_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
             "  <jsdl:DataStaging>\n"
-            "   <jsdl:FileName>.gw_%s_%d/%s</jsdl:FileName>\n"
+            "   <jsdl:FileName>%s</jsdl:FileName>\n"
             "   <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"
             "   <jsdl:Source>\n"
             "    <jsdl:URI>%s/%s/%s</jsdl:URI>\n"
             "   </jsdl:Source>\n"
             "  </jsdl:DataStaging>\n",
-            job->owner, job->id, dest_file,
+            dest_file,
             job->history->tm_mad->url, job->template.job_home, gw_job_substitute(job->template.executable, job));
     }
     if (strncmp(job->template.executable, "/", 1) != 0)
@@ -331,52 +330,48 @@ char *gw_em_jsdl_staging(gw_job_t *job)
     {
         snprintf(tmp_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
             "  <jsdl:DataStaging>\n"
-            "   <jsdl:FileName>.gw_%s_%d/stdout.execution</jsdl:FileName>\n"
+            "   <jsdl:FileName>stdout.execution</jsdl:FileName>\n"
             "   <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"
             "   <jsdl:Target>\n"
             "    <jsdl:URI>%s</jsdl:URI>\n"
             "   </jsdl:Target>\n"
             "  </jsdl:DataStaging>\n",
-            job->owner, job->id,
             gw_job_substitute(job->template.stdout_file, job));
     }
     else if (strncmp(job->template.stdout_file, "file", 4) == 0)
     {   
         snprintf(tmp_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
             "  <jsdl:DataStaging>\n"
-            "   <jsdl:FileName>.gw_%s_%d/stdout.execution</jsdl:FileName>\n"
+            "   <jsdl:FileName>stdout.execution</jsdl:FileName>\n"
             "   <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"
             "   <jsdl:Target>\n"
             "    <jsdl:URI>%s/%s</jsdl:URI>\n"
             "   </jsdl:Target>\n"
             "  </jsdl:DataStaging>\n",
-            job->owner, job->id,
             job->history->tm_mad->url, gw_job_substitute(&job->template.stdout_file[7], job));
     }
     else if (strncmp(job->template.stdout_file, "/", 1) == 0)
     {
         snprintf(tmp_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
             "  <jsdl:DataStaging>\n"
-            "   <jsdl:FileName>.gw_%s_%d/stdout.execution</jsdl:FileName>\n"
+            "   <jsdl:FileName>stdout.execution</jsdl:FileName>\n"
             "   <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"
             "   <jsdl:Target>\n"
             "    <jsdl:URI>%s/%s</jsdl:URI>\n"
             "   </jsdl:Target>\n"
             "  </jsdl:DataStaging>\n",
-            job->owner, job->id,
             job->history->tm_mad->url, gw_job_substitute(job->template.stdout_file, job));
     }
     else
     {
         snprintf(tmp_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
             "  <jsdl:DataStaging>\n"
-            "   <jsdl:FileName>.gw_%s_%d/stdout.execution</jsdl:FileName>\n"
+            "   <jsdl:FileName>stdout.execution</jsdl:FileName>\n"
             "   <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"
             "   <jsdl:Target>\n"
             "    <jsdl:URI>%s/%s/%s</jsdl:URI>\n"
             "   </jsdl:Target>\n"
             "  </jsdl:DataStaging>\n",
-            job->owner, job->id,
             job->history->tm_mad->url, job->template.job_home, gw_job_substitute(job->template.stdout_file, job));
 
     }
@@ -386,52 +381,48 @@ char *gw_em_jsdl_staging(gw_job_t *job)
     {
         snprintf(tmp_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
             "  <jsdl:DataStaging>\n"
-            "   <jsdl:FileName>.gw_%s_%d/stderr.execution</jsdl:FileName>\n"
+            "   <jsdl:FileName>stderr.execution</jsdl:FileName>\n"
             "   <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"
             "   <jsdl:Target>\n"
             "    <jsdl:URI>%s</jsdl:URI>\n"
             "   </jsdl:Target>\n"
             "  </jsdl:DataStaging>\n",
-            job->owner, job->id,
             gw_job_substitute(job->template.stderr_file, job));
     }
     else if (strncmp(job->template.stderr_file, "file", 4) == 0)
     {
         snprintf(tmp_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
             "  <jsdl:DataStaging>\n"
-            "   <jsdl:FileName>.gw_%s_%d/stderr.execution</jsdl:FileName>\n"
+            "   <jsdl:FileName>stderr.execution</jsdl:FileName>\n"
             "   <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"
             "   <jsdl:Target>\n"
             "    <jsdl:URI>%s/%s</jsdl:URI>\n"
             "   </jsdl:Target>\n"
             "  </jsdl:DataStaging>\n",
-            job->owner, job->id,
             job->history->tm_mad->url, gw_job_substitute(&job->template.stderr_file[7], job));
     }
     else if (strncmp(job->template.stderr_file, "/", 1) == 0)
     {
         snprintf(tmp_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
             "  <jsdl:DataStaging>\n"
-            "   <jsdl:FileName>.gw_%s_%d/stderr.execution</jsdl:FileName>\n"
+            "   <jsdl:FileName>stderr.execution</jsdl:FileName>\n"
             "   <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"
             "   <jsdl:Target>\n"
             "    <jsdl:URI>%s/%s</jsdl:URI>\n"
             "   </jsdl:Target>\n"
             "  </jsdl:DataStaging>\n",
-            job->owner, job->id,
             job->history->tm_mad->url, gw_job_substitute(job->template.stderr_file, job));
     }
     else
     {
         snprintf(tmp_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
             "  <jsdl:DataStaging>\n"
-            "   <jsdl:FileName>.gw_%s_%d/stderr.execution</jsdl:FileName>\n"
+            "   <jsdl:FileName>stderr.execution</jsdl:FileName>\n"
             "   <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"
             "   <jsdl:Target>\n"
             "    <jsdl:URI>%s/%s/%s</jsdl:URI>\n"
             "   </jsdl:Target>\n"
             "  </jsdl:DataStaging>\n",
-            job->owner, job->id,
             job->history->tm_mad->url, job->template.job_home, gw_job_substitute(job->template.stderr_file, job));
     }
     strcat(jsdl_buffer, tmp_buffer);
@@ -457,39 +448,39 @@ char *gw_em_jsdl_staging(gw_job_t *job)
         {
             snprintf(tmp_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
             "  <jsdl:DataStaging>\n"
-            "   <jsdl:FileName>.gw_%s_%d/%s</jsdl:FileName>\n"
+            "   <jsdl:FileName>%s</jsdl:FileName>\n"
             "   <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"
             "   <jsdl:Source>\n"
             "    <jsdl:URI>%s</jsdl:URI>\n"
             "   </jsdl:Source>\n"
             "  </jsdl:DataStaging>\n",
-            job->owner, job->id, dest_file,
+            dest_file,
             gw_job_substitute(job->template.input_files[i][0], job));
         }
         else if (strncmp(job->template.input_files[i][0], "file", 4) == 0)
         {
             snprintf(tmp_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
             "  <jsdl:DataStaging>\n"
-            "   <jsdl:FileName>.gw_%s_%d/%s</jsdl:FileName>\n"
+            "   <jsdl:FileName>%s</jsdl:FileName>\n"
             "   <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"
             "   <jsdl:Source>\n"
             "    <jsdl:URI>%s/%s</jsdl:URI>\n"
             "   </jsdl:Source>\n"
             "  </jsdl:DataStaging>\n",
-            job->owner, job->id, dest_file,
+            dest_file,
             job->history->tm_mad->url, gw_job_substitute(&job->template.input_files[i][0][7], job));
         }
         else if (strncmp(job->template.input_files[i][0], "/", 1) != 0)
         {
             snprintf(tmp_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
             "  <jsdl:DataStaging>\n"
-            "   <jsdl:FileName>.gw_%s_%d/%s</jsdl:FileName>\n"
+            "   <jsdl:FileName>%s</jsdl:FileName>\n"
             "   <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"
             "   <jsdl:Source>\n"
             "    <jsdl:URI>%s/%s/%s</jsdl:URI>\n"
             "   </jsdl:Source>\n"
             "  </jsdl:DataStaging>\n",
-            job->owner, job->id, dest_file,
+            dest_file,
             job->history->tm_mad->url, job->template.job_home, gw_job_substitute(job->template.input_files[i][0], job));
         }
         if (strncmp(job->template.input_files[i][0], "/", 1) != 0)
@@ -507,65 +498,65 @@ char *gw_em_jsdl_staging(gw_job_t *job)
         {
             snprintf(tmp_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
             "  <jsdl:DataStaging>\n"
-            "   <jsdl:FileName>.gw_%s_%d/%s</jsdl:FileName>\n"
+            "   <jsdl:FileName>%s</jsdl:FileName>\n"
             "   <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"
             "   <jsdl:Target>\n"
             "    <jsdl:URI>%s/%s/%s</jsdl:URI>\n"
             "   </jsdl:Target>\n"
             "  </jsdl:DataStaging>\n",
-            job->owner, job->id, gw_job_substitute(job->template.output_files[i][0], job),
+            gw_job_substitute(job->template.output_files[i][0], job),
             job->history->tm_mad->url, job->template.job_home, gw_job_substitute(job->template.output_files[i][0], job)); 
         }
         else if (strncmp(job->template.output_files[i][1], "gsiftp", 6) == 0)
         {
             snprintf(tmp_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
             "  <jsdl:DataStaging>\n"
-            "   <jsdl:FileName>.gw_%s_%d/%s</jsdl:FileName>\n"
+            "   <jsdl:FileName>%s</jsdl:FileName>\n"
             "   <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"
             "   <jsdl:Target>\n"
             "    <jsdl:URI>%s</jsdl:URI>\n"
             "   </jsdl:Target>\n"
             "  </jsdl:DataStaging>\n",
-            job->owner, job->id, gw_job_substitute(job->template.output_files[i][0], job),
+            gw_job_substitute(job->template.output_files[i][0], job),
             gw_job_substitute(job->template.output_files[i][1], job));
         }
         else if (strncmp(job->template.output_files[i][1], "file", 4) == 0)
         {
             snprintf(tmp_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
             "  <jsdl:DataStaging>\n"
-            "   <jsdl:FileName>.gw_%s_%d/%s</jsdl:FileName>\n"
+            "   <jsdl:FileName>%s</jsdl:FileName>\n"
             "   <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"
             "   <jsdl:Target>\n"
             "    <jsdl:URI>%s/%s</jsdl:URI>\n"
             "   </jsdl:Target>\n"
             "  </jsdl:DataStaging>\n",
-            job->owner, job->id, gw_job_substitute(job->template.output_files[i][0], job),
+            gw_job_substitute(job->template.output_files[i][0], job),
             job->history->tm_mad->url, gw_job_substitute(&job->template.output_files[i][1][7], job));
         }
         else if (strncmp(job->template.output_files[i][1], "/", 1) == 0)
         {
             snprintf(tmp_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
             "  <jsdl:DataStaging>\n"
-            "   <jsdl:FileName>.gw_%s_%d/%s</jsdl:FileName>\n"
+            "   <jsdl:FileName>%s</jsdl:FileName>\n"
             "   <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"
             "   <jsdl:Target>\n"
             "    <jsdl:URI>%s/%s</jsdl:URI>\n"
             "   </jsdl:Target>\n"
             "  </jsdl:DataStaging>\n",
-            job->owner, job->id, gw_job_substitute(job->template.output_files[i][0], job),
+            gw_job_substitute(job->template.output_files[i][0], job),
             job->history->tm_mad->url, gw_job_substitute(job->template.output_files[i][1], job));
         }
         else
         {
             snprintf(tmp_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
             "  <jsdl:DataStaging>\n"
-            "   <jsdl:FileName>.gw_%s_%d/%s</jsdl:FileName>\n"
+            "   <jsdl:FileName>%s</jsdl:FileName>\n"
             "   <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"
             "   <jsdl:Target>\n"
             "    <jsdl:URI>%s/%s/%s</jsdl:URI>\n"
             "   </jsdl:Target>\n"
             "  </jsdl:DataStaging>\n",
-            job->owner, job->id, gw_job_substitute(job->template.output_files[i][0], job),
+            gw_job_substitute(job->template.output_files[i][0], job),
             job->history->tm_mad->url, job->template.job_home, gw_job_substitute(job->template.output_files[i][1], job));
         }
         strcat(jsdl_buffer, tmp_buffer);

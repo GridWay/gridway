@@ -10,8 +10,8 @@ This source distribution provides an Execution Manager Middleware Access
 Driver (EM MAD) for the OGSA-BES interface. In order to provide an 
 abstraction with the resource management middleware layer, GridWay uses 
 this MAD module to submit, control and monitor the execution of jobs 
-according to the OGSA-BES standard. GridSAM is used as target 
-implementation of the OGSA-BES interface.
+according to the OGSA-BES standard. It supports GridSAM and UNICORE as target 
+implementations of the OGSA-BES interface.
 
 
 ===== REQUIREMENTS =====
@@ -20,8 +20,10 @@ The source distribution requires on the client-side:
 
 - GridWay 5.12 (http://www.gridway.org)
 - GridSAM Schema 2.3.0 (gridsam-schema-2.3.0.jar) 
-- xmlbeans, axis, wsdl4j and log4j
-- A GridFTP server
+- xmlbeans, axis, wsdl4j, log4j and xalan-j2
+
+Just for GridSAM as target OGSA-BES interface:
+
 - Access to a MyProxy server. Access data must be placed in the 
 $HOME/.myproxy file, where the first line is the hostname of the MyProxy 
 server, the second line is the username and the last line is the password.
@@ -38,7 +40,9 @@ have access to a GridSAM server.
 4) Build and install the driver executing "make; make install".
 5) Configure GridWay through the $GW_LOCATION/etc/gwd.conf file (check 
 the GridWay Configuration Guide) to use the MAD. This EM MAD is intended 
-to work with the "dummy" TM MAD configured for using a GridFTP server. 
+to work with the "dummy" TM MAD. It must be configured for using a GridFTP 
+server to interface with GridSAM instances, or a GASS insecure server to 
+interface with UNICORE instances.
 Use "jsdl" as RSL generation function.
 6) Configure the crypto.properties file in $GW_LOCATION/etc/.
 7) Launch the GridWay daemon from $GW_LOCATION/bin/gwd.

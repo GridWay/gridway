@@ -16,18 +16,19 @@
 # ------------------------------------------------------------------------------
 
 # Help
-while getopts hu:g option
+while getopts hu:gi option
     do
         case $option in
-        h)   echo -e "USAGE\n gw_tm_mad_dummy [-h] [-u|-g]" \
+        h)   echo -e "USAGE\n gw_tm_mad_dummy [-h] [-u|-g|-i]" \
                      "\n\nSYNOPSIS"\
                      "\n  Transfer driver to interface with GridFTP and GASS servers. It is not intended to be used from CLI."\
                      "\n\nOPTIONS"\
                      "\n  -h    print this help"\
                      "\n  -u    URL of the GridFTP server"\
-                     "\n  -g    use a user GASS server to transfer files";
+                     "\n  -g    use a user GASS server to transfer files"\
+                     "\n  -i    use a user GASS insecure server to transfer files";
              exit 0;;
-        [?]) echo -e "usage: gw_tm_mad_dummy [-h] [-u|-g]";
+        [?]) echo -e "usage: gw_tm_mad_dummy [-h] [-u|-g|-i]";
              exit 1;;
         esac
     done

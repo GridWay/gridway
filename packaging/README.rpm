@@ -142,7 +142,8 @@ Build RPM dependencies: glite-ce-cream-client-devel.
 
 2c) GridWay MADs for OGSA-BES endpoints: The binary RPM package gridway-BES
 installs the GridWay MAD to interface with OGSA-BES services, as well as an
-static information MAD and a dummy transfer MAD are provided.
+static information MAD and a dummy transfer MAD are provided. It supports 
+GridSAM and UNICORE as target implementations of the OGSA-BES interface.
 
 2.1c) Install RPM dependencies: gridway-core, java, axis, wsdl4j, log4j and 
 xalan-j2.
@@ -152,9 +153,11 @@ location in GW_em_mad_bes).
 2.2c) Post-install configuration:
 
 - This RPM provides a basic configuration of the MADs through the file
-/usr/etc/gwd.conf (check the Configuration Guide). Set up your GridFTP server. 
+/usr/etc/gwd.conf (check the Configuration Guide) to interface with GridSAM 
+instances. Don't forget to set up your GridFTP server. Uncomment the 
+corresponding section to interface with UNICORE instances.
 - You must configure the available hosts for your GridWay instance (see the
-example file /usr/etc/BES_hosts.list).
+example files /usr/etc/GridSAM_hosts.list and /usr/etc/UNICORE_hosts.list).
 - GridWay users must export the $GLOBUS_LOCATION environmental variable: 
 
    export GLOBUS_LOCATION=/usr
@@ -167,9 +170,9 @@ the following lines.
    gwadmin ALL=(GWUSERS) NOPASSWD: /usr/bin/GW_em_mad_bes *
    gwadmin ALL=(GWUSERS) NOPASSWD: /usr/bin/gw_tm_mad_dummy *
 
-- MyProxy is used for managing security credentials. Creates a $HOME/.myproxy
-file, where the first line is the hostname of the MyProxy server, the second
-line is the username and the last line is the password.
+- Just for GridSAM: MyProxy is used for managing security credentials. Creates 
+a $HOME/.myproxy file, where the first line is the hostname of the MyProxy 
+server, the second line is the username and the last line is the password.
 - Configure the crypto.properties file in $GW_LOCATION/etc/.
 
 The source RPM package gridway-BES enables you to build the binary RPM.

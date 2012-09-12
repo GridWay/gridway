@@ -49,18 +49,28 @@ This also includes an static Information MAD and a dummy Transfer MAD.
 %setup -q -n %{_name}-%{version}.%{_release}
 
 %post 
-echo "# MADs for OGSA-BES
-IM_MAD = static:gw_im_mad_static:-l etc/BES_hosts.list:dummy:bes
-EM_MAD = bes:GW_em_mad_bes::jsdl
-TM_MAD = dummy:gw_tm_mad_dummy:-u gsiftp\://<hostname>" >> /usr/etc/gwd.conf
-touch /usr/etc/BES_hosts.list
+echo "# MADs for OGSA-BES (GridSAM)
+IM_MAD = static_gridsam:gw_im_mad_static:-l etc/GridSAM_hosts.list:dummy_gridsam:bes_gridsam
+EM_MAD = bes_gridsam:GW_em_mad_bes:-t gridsam:jsdl
+TM_MAD = dummy_gridsam:gw_tm_mad_dummy:-u gsiftp\://<hostname>
+# MADs for OGSA-BES (UNICORE)
+#IM_MAD = static_unicore:gw_im_mad_static:-l etc/UNICORE_hosts.list:dummy_unicore:bes_unicore
+#EM_MAD = bes_unicore:GW_em_mad_bes:-t unicore:jsdl
+#TM_MAD = dummy_unicore:gw_tm_mad_dummy:-i" >> /usr/etc/gwd.conf
+touch /usr/etc/GridSAM_hosts.list
+touch /usr/etc/UNICORE_hosts.list
 
 %postun 
 sed '/# MADs for OGSA-BES/d' -i /usr/etc/gwd.conf
+sed '/static_gridsam/d' -i /usr/etc/gwd.conf
+sed '/static_unicore/d' -i /usr/etc/gwd.conf
 sed '/bes/d' -i /usr/etc/gwd.conf
 sed '/dummy/d' -i /usr/etc/gwd.conf
-if [ ! -s "/usr/etc/BES_hosts.list" ]; then
- rm -f /usr/etc/BES_hosts.list;
+if [ ! -s "/usr/etc/GridSAM_hosts.list" ]; then
+ rm -f /usr/etc/GridSAM_hosts.list;
+fi
+if [ ! -s "/usr/etc/UNICORE_hosts.list" ]; then
+ rm -f /usr/etc/UNICORE_hosts.list;
 fi
 
 %build

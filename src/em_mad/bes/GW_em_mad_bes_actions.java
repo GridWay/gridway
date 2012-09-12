@@ -69,9 +69,10 @@ class ServiceBES extends Thread {
 	}
 
 
-	protected int submit() throws SOAPException, MalformedURLException,
+	protected int submit(String target) throws SOAPException, MalformedURLException,
 		  ServiceException, RemoteException {
 
+                String id;
 		try { 
                         JobDefinitionDocument xJSDL = JobDefinitionDocument.Factory.parse(this.jsdlFile);
                 	CreateActivityDocument xCreateActivityDocument = CreateActivityDocument.Factory.newInstance();
@@ -96,9 +97,12 @@ class ServiceBES extends Thread {
 				return -1;
                 	}
 			else {
-				//Get GridSAM JobID
-				String id = xActivityIdentifier.getEndpointReference().getDomNode().getOwnerDocument().
-						getElementsByTagName("ID").item(0).getChildNodes().item(0).getNodeValue();
+                                if (target.equals("unicore"))
+                                        id = xActivityIdentifier.getEndpointReference().getDomNode().getOwnerDocument().
+                                                    getElementsByTagName("unic:ResourceId").item(0).getChildNodes().item(0).getNodeValue();
+                                else // Get GridSAM JobID
+                                        id = xActivityIdentifier.getEndpointReference().getDomNode().getOwnerDocument().
+                                                    getElementsByTagName("ID").item(0).getChildNodes().item(0).getNodeValue();
 				this.info = contact + "/" + id;
 				this.xActivityIdentifier = xActivityIdentifier; 
         		}
