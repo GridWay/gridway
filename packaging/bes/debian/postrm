@@ -4,8 +4,8 @@
 sed '/# MADs for OGSA-BES/d' -i /usr/etc/gwd.conf
 sed '/static_gridsam/d' -i /usr/etc/gwd.conf
 sed '/static_unicore/d' -i /usr/etc/gwd.conf
-sed '/bes/d' -i /usr/etc/gwd.conf
-sed '/dummy/d' -i /usr/etc/gwd.conf
+sed '/bes_/d' -i /usr/etc/gwd.conf
+sed '/dummy_/d' -i /usr/etc/gwd.conf
 if [ ! -s "/usr/etc/GridSAM_hosts.list" ]; then
  rm -f /usr/etc/GridSAM_hosts.list;
 fi

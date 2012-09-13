@@ -54,6 +54,39 @@ setup(){
     elif [ ! -z ${JOB_ENV_URL} ]
     then 
         echo "failed (will perform explicit file staging)."
+ 	
+        printf "`date`: Checking Globus programs... "
+
+        if [ -x "${GLOBUS_LOCATION}/bin/globus-url-copy" ]; then
+            GLOBUS_CP=${GLOBUS_LOCATION}/bin/globus-url-copy
+        else
+            echo "failed."
+            exit 1
+        fi
+
+        echo "done."
+
+        printf "`date`: Creating remote job home... "
+
+        mkdir -p ${RMT_JOB_HOME}
+
+        echo "done."
+
+        printf "`date`: Staging-in job environment file... "
+
+        SRC_URL="$JOB_ENV_URL"
+
+        DST_URL="file:${RMT_JOB_HOME}/job.env"
+
+        ${GLOBUS_CP} ${SRC_URL} ${DST_URL}
+
+        if [ $? -ne 0 ]; then
+	        echo "failed."
+	        exit 1;
+        else
+    	    echo "done."
+        fi        
+
         STAGE=1
     else
         echo "failed (using $HOME)."

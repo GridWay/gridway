@@ -309,7 +309,7 @@ int main (int argc, char **argv )
             {
                 cp_xfr_id = atoi(cp_xfr_id_s);
                                     
-                if ( g == 1 ) /* Using a gass server */
+                if ( g == 1 || i==1 ) /* Using a gass server */
                 {
                     if ((strstr(src_url, "stdout.wrapper") != NULL)
                             || (strstr(src_url, "stderr.wrapper") != NULL))
