@@ -59,7 +59,7 @@ rm -rf $RPM_BUILD_ROOT
 export GW_LOCATION=$RPM_BUILD_ROOT/usr/
 mkdir -p $RPM_BUILD_ROOT/usr/bin
 mkdir -p $RPM_BUILD_ROOT/usr/share/doc/gridway-glite-5.12.RC2/
-cp README.glite $RPM_BUILD_ROOT/usr/share/doc/gridway-glite-5.12.RC2/
+cp README.glite $RPM_BUILD_ROOT/usr/share/doc/gridway-glite-5.12.RC2/README
 cd src/im_mad/bdii/
 make install DESTDIR=$RPM_BUILD_ROOT
 cd ../../em_mad/cream/

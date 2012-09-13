@@ -82,8 +82,8 @@ make
 rm -rf $RPM_BUILD_ROOT
 export GW_LOCATION=$RPM_BUILD_ROOT/usr/
 mkdir -p $RPM_BUILD_ROOT/usr/bin
-mkdir -p $RPM_BUILD_ROOT/usr/share/doc-5.12.RC1/gridway-gt5/
-cp README.gt5 $RPM_BUILD_ROOT/usr/share/doc-5.12.RC1/gridway-gt5/
+mkdir -p $RPM_BUILD_ROOT/usr/share/doc/gridway-gt5-5.12.RC1/
+cp README.gt5 $RPM_BUILD_ROOT/usr/share/doc/gridway-gt5-5.12.RC1/README
 cd src/em_mad/gram5/
 make install DESTDIR=$RPM_BUILD_ROOT
 cd ../../tm_mad/gridftp/
@@ -101,7 +101,7 @@ rm -rf $RPM_BUILD_ROOT
 /usr/bin/gw_em_mad_gram5.bin
 /usr/bin/gw_tm_mad_ftp
 /usr/bin/gw_tm_mad_ftp.bin
-/usr/share/doc-5.12.RC1/gridway-gt5/README
+/usr/share/doc/gridway-gt5-5.12.RC1/README
 
 %changelog
 * Fri Aug 31 2012 GridWay Project Leads <contact@gridway.org> - 5.12-RC1
