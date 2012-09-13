@@ -19,7 +19,7 @@ Requires:	globus-gass-server-ez-progs
 Requires:	glite-ce-cream-client-api-c
 Requires:	glite-lbjp-common-gsoap-plugin
 # svn co http://svn.gridway.org/gridway/tags/GW_5_12_RC2 gridway-5.12.RC2
-# cp -p gridway-5.12.RC2/packaging/glite/RPM/README gridway-5.12.RC2/README
+# cp -p gridway-5.12.RC2/packaging/glite/RPM/README gridway-5.12.RC2/README.glite
 # tar -czf gridway-5.12.RC2.tar.gz gridway-5.12.RC2/
 
 %description
@@ -59,7 +59,7 @@ rm -rf $RPM_BUILD_ROOT
 export GW_LOCATION=$RPM_BUILD_ROOT/usr/
 mkdir -p $RPM_BUILD_ROOT/usr/bin
 mkdir -p $RPM_BUILD_ROOT/usr/share/doc/gridway-glite-5.12.RC2/
-cp README $RPM_BUILD_ROOT/usr/share/doc/gridway-glite-5.12.RC2/
+cp README.glite $RPM_BUILD_ROOT/usr/share/doc/gridway-glite-5.12.RC2/
 cd src/im_mad/bdii/
 make install DESTDIR=$RPM_BUILD_ROOT
 cd ../../em_mad/cream/

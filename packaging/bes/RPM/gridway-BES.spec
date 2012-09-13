@@ -12,7 +12,7 @@ URL:		http://www.gridway.org/
 Vendor:         Initiative for Globus in Europe (IGE)
 Source:		%{_name}-%{version}.%{_release}.tar.gz
 # svn co http://svn.gridway.org/gridway/tags/GW_5_12_RC1 gridway-5.12.RC1
-# cp -p gridway-5.12.RC1/packaging/bes/RPM/README gridway-5.12.RC1/README
+# cp -p gridway-5.12.RC1/packaging/bes/RPM/README gridway-5.12.RC1/README.bes
 # cp -p gridway-5.12.RC1/packaging/bes/RPM/LICENSE.ThirdParty gridway-5.12.RC1/src/em_mad/bes/
 ## BUILD and RUNTIME Dependencies at src/em_mad/bes/lib ##
 # wget -U NoSuchBrowser/1.0 http://repo1.maven.org/maven2/org/apache/xmlbeans/xmlbeans/2.5.0/xmlbeans-2.5.0.jar
@@ -92,7 +92,7 @@ mkdir -p $RPM_BUILD_ROOT/usr/lib/java-ext/gridway-bes/lib
 mkdir -p $RPM_BUILD_ROOT/usr/lib/java-ext/gridway-bes/endorsed
 mkdir -p $RPM_BUILD_ROOT/usr/share/doc/gridway-bes-5.12.RC1/
 mkdir -p $RPM_BUILD_ROOT/usr/etc
-cp README $RPM_BUILD_ROOT/usr/share/doc/gridway-bes-5.12.RC1/
+cp README.bes $RPM_BUILD_ROOT/usr/share/doc/gridway-bes-5.12.RC1/README
 cd src/em_mad/bes/lib
 cp xmlbeans.jar $RPM_BUILD_ROOT/usr/lib/java-ext/gridway-bes/lib/
 cp gridsam-schema-2.3.0.jar $RPM_BUILD_ROOT/usr/lib/java-ext/gridway-bes/lib/
