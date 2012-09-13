@@ -1,0 +1,105 @@
+===== LICENSE =====
+
+Copyright 2002-2012, GridWay Project Leads (GridWay.org)          
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may
+not use this file except in compliance with the License. You may obtain
+a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+
+===== WELCOME =====
+
+The GridWay Metascheduler enables large-scale, reliable and efficient sharing 
+of computing resources: clusters, supercomputers, stand-alone servers... It
+supports different LRM systems within a single organization or scattered across
+several administrative domains. GridWay provides a single point of access to all
+resources in your organization, from in-house systems to Grid infrastructures
+and Cloud providers.
+
+GridWay supports most of existing Grid middlewares and has being used on main
+production Grid infrastructures.
+
+
+===== RELEASE NOTES =====
+
+The release notes can be found online:
+http://gridway.org/doku.php?id=software:release_notes:5.12
+
+
+===== DOCUMENTATION =====
+
+The documentation is completely online:
+http://gridway.org/doku.php?id=documentation
+
+
+===== INSTALLATION =====
+
+Check the Installation Guide for more details.
+
+The binary RPM package gridway-core installs GridWay with a multi-user 
+configuration.
+
+1) Install RPM dependencies: chkconfig, initscripts, db4, db4-devel, db4-utils 
+and globus-proxy-utils.
+
+2) Post-install configuration:
+
+a) All of the GridWay users must be members of the gwusers UNIX group.
+b) GridWay users must export the $GW_LOCATION environmental variable: 
+
+   export GW_LOCATION=/usr
+
+  You can create a profile file for gwusers group, such as:
+
+   for i in `groups`; do
+    if [ "$i" = 'gwusers' ]; then
+     GLOBUS_LOCATION=/usr
+     GW_LOCATION=/usr
+     export GLOBUS_LOCATION GW_LOCATION
+    fi
+   done
+
+c) Some privileges are required to be set in the /etc/sudoers file. Please add
+the following lines.
+
+   Defaults:gwadmin !requiretty
+   # User alias specification (GridWay)
+   Runas_Alias GWUSERS = %gwusers
+   Defaults>GWUSERS env_keep="GW_LOCATION"
+   #GridWay entries
+   gwadmin ALL=(GWUSERS) NOPASSWD: /usr/bin/grid-proxy-info *
+
+3) Install the GridWay MADs. Available drivers are provided by gridway-GT5 
+(GridWay MADs to interface with the Globus Toolkit 5 services), gridway-gLite 
+(GridWay MADs to interface with the gLite 3.2 services) and gridway-BES 
+(GridWay MADs to interface with BES endpoints).
+
+3) Restart the gwd daemon.
+
+4) Test it and enjoy!
+
+The source RPM package gridway-core enables you to build the binary RPM.
+Build RPM dependencies: gcc and java-devel.
+
+
+===== TROUBLESHOOTING =====
+
+Sometimes problems arise. The GridWay community provides free support 
+http://gridway.org/doku.php?id=support.
+
+Alternatively, you might access and register to the GridWay development portal
+for bug filling and technical project overview (http://dev.gridway.org).
+
+
+===== CREDITS =====
+
+The GridWay team.
+http://gridway.org, http://dsa-research.org.

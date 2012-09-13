@@ -1,0 +1,92 @@
+===== LICENSE =====
+
+Copyright 2002-2012, GridWay Project Leads (GridWay.org)          
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may
+not use this file except in compliance with the License. You may obtain
+a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+
+===== WELCOME =====
+
+The GridWay Metascheduler enables large-scale, reliable and efficient sharing 
+of computing resources: clusters, supercomputers, stand-alone servers... It
+supports different LRM systems within a single organization or scattered across
+several administrative domains. GridWay provides a single point of access to all
+resources in your organization, from in-house systems to Grid infrastructures
+and Cloud providers.
+
+GridWay supports most of existing Grid middlewares and has being used on main
+production Grid infrastructures.
+
+
+===== RELEASE NOTES =====
+
+The release notes can be found online:
+http://gridway.org/doku.php?id=software:release_notes:5.12
+
+
+===== DOCUMENTATION =====
+
+The documentation is completely online:
+http://gridway.org/doku.php?id=documentation
+
+
+===== INSTALLATION =====
+
+The binary RPM package gridway-GT5 installs the GridWay MADs to interface with 
+the Globus Toolkit 5 services, GRAM5 and GridFTP, as well as an static 
+information MAD is provided.
+
+1) Install RPM dependencies: gridway-core, globus-gram-client, 
+globus-gass-copy, globus-gass-copy-progs and globus-proxy-utils.
+
+2) Post-install configuration:
+
+a) This RPM provides a basic configuration of the MADs through the file
+/usr/etc/gwd.conf (check the Configuration Guide).
+b) You must configure the available hosts for your GridWay instance (see the
+example file /usr/etc/gram5_hosts.list).
+c) GridWay users must export the $GLOBUS_LOCATION environmental variable: 
+
+   export GLOBUS_LOCATION=/usr
+
+d) Some privileges are required to be set in the /etc/sudoers file. Please add
+the following lines.
+
+   Defaults>GWUSERS env_keep="GW_LOCATION GLOBUS_LOCATION"
+   #GridWay entries (GT5 MAD)
+   gwadmin ALL=(GWUSERS) NOPASSWD: /usr/bin/gw_em_mad_gram5 *
+   gwadmin ALL=(GWUSERS) NOPASSWD: /usr/bin/gw_tm_mad_ftp *
+
+3) Restart the gwd daemon.
+
+4) Test it and enjoy!
+
+The source RPM package gridway-GT5 enables you to build the binary RPM.
+Build RPM dependencies: globus-common-devel, globus-gram-client, 
+globus-gram-client-devel, globus-gass-copy, globus-ftp-client-devel, 
+globus-gass-copy-devel, grid-packaging-tools and globus-common-progs.
+
+
+===== TROUBLESHOOTING =====
+
+Sometimes problems arise. The GridWay community provides free support 
+http://gridway.org/doku.php?id=support.
+
+Alternatively, you might access and register to the GridWay development portal
+for bug filling and technical project overview (http://dev.gridway.org).
+
+
+===== CREDITS =====
+
+The GridWay team.
+http://gridway.org, http://dsa-research.org.

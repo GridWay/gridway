@@ -24,6 +24,7 @@ endif
 configure: configure-stamp
 
 configure-stamp: patch
+	# cp -p gridway-5.12.RC1/packaging/gt5/RPM/README gridway-5.12.RC1/README
 
 patch: patch-stamp
 
@@ -66,6 +67,9 @@ install: build-stamp
 
 	export GW_LOCATION=$(GW_LOCATION)
 	mkdir -p $(INSTALLDIR)/usr/bin
+        mkdir -p $(INSTALLDIR)/usr/share/doc/gridway-gt5/
+        cp README $(INSTALLDIR)/usr/share/doc/gridway-gt5/
+
 	$(MAKE) install -C src/em_mad/gram5/ DESTDIR=$(INSTALLDIR)  
 	$(MAKE) install -C src/tm_mad/gridftp/ DESTDIR=$(INSTALLDIR)
 

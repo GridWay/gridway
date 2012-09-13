@@ -17,8 +17,7 @@ configure: configure-stamp
 configure-stamp:
 	dh_testdir
 
-	# wget http://svn.gridway.org/gridway/tags/GW_5_12_RC2/packaging/README.debian
-	cp -rp README.debian README
+	# cp -p gridway-5.12.RC2/packaging/core/debian/README gridway-5.12.RC2/README
 	JAVA_HOME=/usr/lib/jvm/default-java ./configure --prefix=/usr/ --localstatedir=/usr/share/gridway/$(_version)/var --datarootdir=/usr/share/doc/gridway-core --with-db=yes --with-syslog=LOG_USER --enable-drmaa-java
 
 build: build-arch build-indep

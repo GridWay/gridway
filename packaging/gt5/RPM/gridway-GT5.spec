@@ -34,6 +34,9 @@ Requires:	globus-gram-client
 Requires:	globus-gass-copy
 Requires:	globus-gass-copy-progs
 Requires:	globus-proxy-utils
+# svn co http://svn.gridway.org/gridway/tags/GW_5_12_RC1 gridway-5.12.RC1
+# cp -p gridway-5.12.RC1/packaging/gt5/RPM/README gridway-5.12.RC1/README
+# tar -czf gridway-5.12.RC1.tar.gz gridway-5.12.RC1/
 
 %description
 GridWay uses several Middleware Access Drivers (MAD) to interface with 
@@ -79,6 +82,8 @@ make
 rm -rf $RPM_BUILD_ROOT
 export GW_LOCATION=$RPM_BUILD_ROOT/usr/
 mkdir -p $RPM_BUILD_ROOT/usr/bin
+mkdir -p $RPM_BUILD_ROOT/usr/share/doc-5.12.RC1/gridway-gt5/
+cp README $RPM_BUILD_ROOT/usr/share/doc-5.12.RC1/gridway-gt5/
 cd src/em_mad/gram5/
 make install DESTDIR=$RPM_BUILD_ROOT
 cd ../../tm_mad/gridftp/
@@ -96,6 +101,7 @@ rm -rf $RPM_BUILD_ROOT
 /usr/bin/gw_em_mad_gram5.bin
 /usr/bin/gw_tm_mad_ftp
 /usr/bin/gw_tm_mad_ftp.bin
+/usr/share/doc-5.12.RC1/gridway-gt5/README
 
 %changelog
 * Fri Aug 31 2012 GridWay Project Leads <contact@gridway.org> - 5.12-RC1

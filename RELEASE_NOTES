@@ -31,3 +31,4 @@ SSH drivers
 in WRAP state forever
   * Bug #135 (http://dev.gridway.org/issues/135): CREAM driver is not 
 installable with UMD2 repository
+  * Bug #137 (http://dev.gridway.org/issues/137): BES driver does not support UNICORE endpoints

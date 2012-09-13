@@ -11,12 +11,14 @@ License:	Apache License
 URL:		http://www.gridway.org/
 Vendor:         Initiative for Globus in Europe (IGE)
 Source:		%{_name}-%{version}.%{_release}.tar.gz
-# wget http://svn.gridway.org/gridway/tags/GW_5_12_RC1/packaging/bes/RPM/LICENSE.ThirdParty
-
+# svn co http://svn.gridway.org/gridway/tags/GW_5_12_RC1 gridway-5.12.RC1
+# cp -p gridway-5.12.RC1/packaging/bes/RPM/README gridway-5.12.RC1/README
+# cp -p gridway-5.12.RC1/packaging/bes/RPM/LICENSE.ThirdParty gridway-5.12.RC1/src/em_mad/bes/
 ## BUILD and RUNTIME Dependencies at src/em_mad/bes/lib ##
 # wget -U NoSuchBrowser/1.0 http://repo1.maven.org/maven2/org/apache/xmlbeans/xmlbeans/2.5.0/xmlbeans-2.5.0.jar
 # wget http://sourceforge.net/projects/gridsam/files/gridsam/2.3.0/gridsam.war/download
 # jar xvf gridsam.war WEB-INF/lib/gridsam-schema-2.3.0.jar
+# tar -czf gridway-5.12.RC1.tar.gz gridway-5.12.RC1/
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
 
@@ -88,8 +90,9 @@ mkdir -p $RPM_BUILD_ROOT/usr/bin
 mkdir -p $RPM_BUILD_ROOT/usr/lib
 mkdir -p $RPM_BUILD_ROOT/usr/lib/java-ext/gridway-bes/lib
 mkdir -p $RPM_BUILD_ROOT/usr/lib/java-ext/gridway-bes/endorsed
-mkdir -p $RPM_BUILD_ROOT/usr/share/doc/gridway-bes/
+mkdir -p $RPM_BUILD_ROOT/usr/share/doc/gridway-bes-5.12.RC1/
 mkdir -p $RPM_BUILD_ROOT/usr/etc
+cp README $RPM_BUILD_ROOT/usr/share/doc/gridway-bes-5.12.RC1/
 cd src/em_mad/bes/lib
 cp xmlbeans.jar $RPM_BUILD_ROOT/usr/lib/java-ext/gridway-bes/lib/
 cp gridsam-schema-2.3.0.jar $RPM_BUILD_ROOT/usr/lib/java-ext/gridway-bes/lib/
@@ -97,7 +100,7 @@ cp /usr/share/java/xalan-j2.jar $RPM_BUILD_ROOT/usr/lib/java-ext/gridway-bes/end
 cp /usr/share/java/xalan-j2-serializer.jar $RPM_BUILD_ROOT/usr/lib/java-ext/gridway-bes/endorsed
 cp /usr/share/java/axis/saaj.jar $RPM_BUILD_ROOT/usr/lib/java-ext/gridway-bes/endorsed
 cd ../
-cp LICENSE.ThirdParty $RPM_BUILD_ROOT/usr/share/doc/gridway-bes/
+cp LICENSE.ThirdParty $RPM_BUILD_ROOT/usr/share/doc/gridway-bes-5.12.RC1/
 make install DESTDIR=$RPM_BUILD_ROOT
 cd ../../tm_mad/dummy/
 make install DESTDIR=$RPM_BUILD_ROOT
@@ -117,7 +120,8 @@ rm -rf $RPM_BUILD_ROOT
 /usr/lib/java-ext/gridway-bes/endorsed/xalan-j2.jar
 /usr/lib/java-ext/gridway-bes/endorsed/xalan-j2-serializer.jar
 /usr/lib/java-ext/gridway-bes/endorsed/saaj.jar
-/usr/share/doc/gridway-bes/LICENSE.ThirdParty
+/usr/share/doc/gridway-bes-5.12.RC1/LICENSE.ThirdParty
+/usr/share/doc/gridway-bes-5.12.RC1/README
 /usr/etc/client-config.wsdd
 /usr/etc/crypto.properties
 /usr/bin/gw_tm_mad_dummy

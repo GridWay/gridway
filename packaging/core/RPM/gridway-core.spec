@@ -11,7 +11,7 @@ License:	Apache License
 URL:		http://www.gridway.org/
 Vendor:         Initiative for Globus in Europe (IGE)
 # svn co http://svn.gridway.org/gridway/tags/GW_5_12_RC2 gridway-5.12.RC2
-# cp -p gridway-5.12.RC2/packaging/README.rpm gridway-5.12.RC2/README
+# cp -p gridway-5.12.RC2/packaging/core/RPM/README gridway-5.12.RC2/README
 # cp -p gridway-5.12.RC2/packaging/core/RPM/gwd gridway-5.12.RC2/etc/
 # chmod 755 gridway-5.12.RC2/etc/gwd
 # tar -czf gridway-5.12.RC2.tar.gz gridway-5.12.RC2/

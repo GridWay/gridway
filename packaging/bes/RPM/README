@@ -1,0 +1,102 @@
+===== LICENSE =====
+
+Copyright 2002-2012, GridWay Project Leads (GridWay.org)          
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may
+not use this file except in compliance with the License. You may obtain
+a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+
+===== WELCOME =====
+
+The GridWay Metascheduler enables large-scale, reliable and efficient sharing 
+of computing resources: clusters, supercomputers, stand-alone servers... It
+supports different LRM systems within a single organization or scattered across
+several administrative domains. GridWay provides a single point of access to all
+resources in your organization, from in-house systems to Grid infrastructures
+and Cloud providers.
+
+GridWay supports most of existing Grid middlewares and has being used on main
+production Grid infrastructures.
+
+
+===== RELEASE NOTES =====
+
+The release notes can be found online:
+http://gridway.org/doku.php?id=software:release_notes:5.12
+
+
+===== DOCUMENTATION =====
+
+The documentation is completely online:
+http://gridway.org/doku.php?id=documentation
+
+
+===== INSTALLATION =====
+
+The binary RPM package gridway-BES installs the GridWay MAD to interface with
+OGSA-BES services, as well as an static information MAD and a dummy transfer 
+MAD are provided. It supports GridSAM and UNICORE as target implementations of 
+the OGSA-BES interface.
+
+1) Install RPM dependencies: gridway-core, java, axis, wsdl4j, log4j and 
+xalan-j2.
+Other dependencies (non RPM): gridsam-schema, xmlbeans (check the default 
+location in GW_em_mad_bes).
+
+2) Post-install configuration:
+
+a) This RPM provides a basic configuration of the MADs through the file
+/usr/etc/gwd.conf (check the Configuration Guide) to interface with GridSAM 
+instances. Don't forget to set up your GridFTP server. Uncomment the 
+corresponding section to interface with UNICORE instances.
+b) You must configure the available hosts for your GridWay instance (see the
+example files /usr/etc/GridSAM_hosts.list and /usr/etc/UNICORE_hosts.list).
+c) GridWay users must export the $GLOBUS_LOCATION environmental variable: 
+
+   export GLOBUS_LOCATION=/usr
+
+d) Some privileges are required to be set in the /etc/sudoers file. Please add
+the following lines.
+
+   Defaults>GWUSERS env_keep="GW_LOCATION GLOBUS_LOCATION"
+   #GridWay entries (OGSA-BES MAD)
+   gwadmin ALL=(GWUSERS) NOPASSWD: /usr/bin/GW_em_mad_bes *
+   gwadmin ALL=(GWUSERS) NOPASSWD: /usr/bin/gw_tm_mad_dummy *
+
+e) Just for GridSAM: MyProxy is used for managing security credentials. Creates 
+a $HOME/.myproxy file, where the first line is the hostname of the MyProxy 
+server, the second line is the username and the last line is the password.
+f) Configure the crypto.properties file in $GW_LOCATION/etc/.
+
+3) Restart the gwd daemon.
+
+4) Test it and enjoy!
+
+The source RPM package gridway-BES enables you to build the binary RPM.
+Build RPM dependencies: java-devel, axis and xalan-j2.
+Other dependencies (non RPM): gridsam-schema and xmlbeans (check the default
+location in Makefile and gw_em_mad_bes.sh).
+
+
+===== TROUBLESHOOTING =====
+
+Sometimes problems arise. The GridWay community provides free support 
+http://gridway.org/doku.php?id=support.
+
+Alternatively, you might access and register to the GridWay development portal
+for bug filling and technical project overview (http://dev.gridway.org).
+
+
+===== CREDITS =====
+
+The GridWay team.
+http://gridway.org, http://dsa-research.org.
