@@ -1,3 +1,9 @@
+gridway-gt5 (5.12-0) stable; urgency=low
+
+  * Update to 5.12-0.
+
+ -- GridWay Project Leads <contact@gridway.org>  Sun, 30 Sep 2012 09:00:00 +0200
+
 gridway-gt5 (5.12-RC1) testing; urgency=low
 
   * Update to 5.12-RC1.
