@@ -24,7 +24,7 @@ endif
 configure: configure-stamp
 
 configure-stamp: patch
-	# cp -p gridway-5.12.0/packaging/gt5/RPM/README gridway-5.12.0/README
+	# cp -p gridway-5.12.0/packaging/gt5/debian/README gridway-5.12.0/README
 
 patch: patch-stamp
 
