@@ -61,7 +61,7 @@ install: build-stamp
 	cp /usr/share/java/serializer.jar $(INSTALLDIR)/usr/lib/java-ext/gridway-bes/endorsed
 	cp /usr/share/java/axis-saaj.jar $(INSTALLDIR)/usr/lib/java-ext/gridway-bes/endorsed
 	cp src/em_mad/bes/LICENSE.ThirdParty $(INSTALLDIR)/usr/share/doc/gridway-bes/
-        cp README $(INSTALLDIR)/usr/share/doc/gridway-bes/
+	cp README $(INSTALLDIR)/usr/share/doc/gridway-bes/
 
 	$(MAKE) install -C src/em_mad/bes/ DESTDIR=$(INSTALLDIR)  
 	$(MAKE) install -C src/tm_mad/dummy/ DESTDIR=$(INSTALLDIR)

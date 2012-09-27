@@ -67,8 +67,8 @@ install: build-stamp
 
 	export GW_LOCATION=$(GW_LOCATION)
 	mkdir -p $(INSTALLDIR)/usr/bin
-        mkdir -p $(INSTALLDIR)/usr/share/doc/gridway-gt5/
-        cp README $(INSTALLDIR)/usr/share/doc/gridway-gt5/
+	mkdir -p $(INSTALLDIR)/usr/share/doc/gridway-gt5/
+	cp README $(INSTALLDIR)/usr/share/doc/gridway-gt5/
 
 	$(MAKE) install -C src/em_mad/gram5/ DESTDIR=$(INSTALLDIR)  
 	$(MAKE) install -C src/tm_mad/gridftp/ DESTDIR=$(INSTALLDIR)
