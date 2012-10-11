@@ -609,6 +609,13 @@ EM_MAD_GRAM2_SRC_DIST = $(EM_MAD)/gram2/gw_em_mad_gram2.c \
 	$(EM_MAD)/gram2/gw_em_mad_gram2.sh \
 	$(EM_MAD)/gram2/Makefile
 
+EM_MAD_GRAM5_SRC_DIST = $(EM_MAD)/gram5/gw_em_mad_gram5.c \
+        $(EM_MAD)/gram5/gw_em_mad_gram5_actions.c \
+        $(EM_MAD)/gram5/gw_em_mad_gram5_pool.c \
+        $(EM_MAD)/gram5/gw_em_mad_gram5.h \
+        $(EM_MAD)/gram5/gw_em_mad_gram5.sh \
+        $(EM_MAD)/gram5/Makefile
+
 EM_MAD_GRAM4_SRC_DIST = $(EM_MAD)/gram4/Gw_em_mad_gram4_GT40.java \
 	$(EM_MAD)/gram4/Gw_em_mad_gram4_GT42.java \
 	$(EM_MAD)/gram4/gw_em_mad_gram4.sh \
@@ -670,7 +677,8 @@ TM_MAD_RFT_SRC_DIST = $(TM_MAD)/rft/GWRftClient.java \
 
 EXTRA_DIST += $(IM_MAD_STATIC_SRC_DIST) $(IM_MAD_MDS2_SRC_DIST) \
 $(IM_MAD_MDS4_SRC_DIST) $(IM_MAD_BDII_SRC_DIST) \
-$(EM_MAD_GRAM2_SRC_DIST) $(EM_MAD_GRAM4_SRC_DIST) $(EM_MAD_CREAM_SRC_DIST) \
+$(EM_MAD_GRAM2_SRC_DIST) $(EM_MAD_GRAM4_SRC_DIST) \
+$(EM_MAD_GRAM5_SRC_DIST) $(EM_MAD_CREAM_SRC_DIST) \
 $(EM_MAD_NORDU_SRC_DIST) $(EM_MAD_SSH_SRC_DIST) $(EM_MAD_BES_SRC_DIST) \
 $(TM_MAD_GRIDFTP_SRC_DIST) $(TM_MAD_DUMMY_SRC_DIST) $(TM_MAD_NORDU_SRC_DIST) \
 $(TM_MAD_SSH_SRC_DIST) $(TM_MAD_RFT_SRC_DIST)
