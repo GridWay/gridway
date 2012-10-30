@@ -38,8 +38,9 @@ char *gw_print_time(time_t t, char *the_time)
     else
     {
         tm_s = gmtime(&t);
-        sprintf(the_time,"%1i:%02i:%02i",tm_s->tm_hour,tm_s->tm_min,
-                tm_s->tm_sec);
+        sprintf(the_time, "%1i:%02i:%02i", tm_s->tm_yday*24+tm_s->tm_hour,
+                tm_s->tm_min, tm_s->tm_sec);
+
         return(the_time);
     }
 }
