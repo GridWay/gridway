@@ -66,16 +66,21 @@ int CreamCredentialStatus::waitForDelegation()
     struct timeval now;
     struct timezone zone;
     struct timespec timeout;
-    int retval = -1;
+    int retval = -3;
+    int rc;
 
     gettimeofday(&now, &zone);
     timeout.tv_sec = now.tv_sec + connectionTimeout;
     timeout.tv_nsec = now.tv_usec * 1000;
 
     pthread_mutex_lock(&credMutex);
-	pthread_cond_timedwait(&credCond, &credMutex, &timeout);
-    	if (status.compare("DONE") == 0)
-	    retval = 0;
+        rc = pthread_cond_timedwait(&credCond, &credMutex, &timeout);
+        if (status.compare("DONE") == 0)
+            retval = 0;
+        else if (status.compare("FAILED") == 0)
+            retval = -1;
+        else if (rc == ETIMEDOUT)
+            retval = -2;
     pthread_mutex_unlock(&credMutex);
 
     return retval;
@@ -301,6 +306,8 @@ void CreamEmMad::finalize()
 
 int CreamEmMad::proxyDelegate(string action, int jid, string contact, string delegationID)
 {
+    int rc;
+
     pthread_mutex_lock(&credentialsMutex);
 	map<string, CreamCredentialStatus *>::iterator it = credentials.find(contact);
 
@@ -313,14 +320,25 @@ int CreamEmMad::proxyDelegate(string action, int jid, string contact, string del
 	    }
 	    else if (it->second->getStatus().compare("PENDING") == 0) 
 	    {
-		pthread_mutex_unlock(&credentialsMutex);
-		if (it->second->waitForDelegation() == -1)
-		{
-		    cout << action << " " << jid << " FAILURE " << "Connection timed out" << endl;
-		    return -1;
-		}
-		return 0;
-	    }
+                pthread_mutex_unlock(&credentialsMutex);
+                rc = it->second->waitForDelegation();
+                if (rc == -1)
+                {
+                    cout << action << " " << jid << " FAILURE " << "Error delegating proxy" << endl;
+                    return -1;
+                }
+                else if (rc == -2)
+                {
+                    cout << action << " " << jid << " FAILURE " << "Connection timed out" << endl;
+                    return -1;
+                }
+                else if (rc == -3)
+                {
+                    cout << action << " " << jid << " FAILURE " << "Error while waiting for delegation" << endl;
+                    return -1;
+                }
+                return 0;
+            }
 	    else if (it->second->getStatus().compare("FAILED") == 0)
 		credentials[contact]->setDelegation("PENDING");
 	}
