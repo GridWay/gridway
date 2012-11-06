@@ -16,11 +16,12 @@
 
 #include <stdlib.h>
 #include <stdio.h>       
-#include <sys/select.h>
 #include <unistd.h>
 #include <string.h>
+#include <signal.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/select.h>
 
 const char * usage =
 "USAGE\n gw_tm_mad_dummy [-h] [-u|-g|-i]\n\n"
@@ -332,7 +333,10 @@ int main (int argc, char **argv )
             }
         }                       
     }
-    
+
+    if (server_pid != -1)
+        kill(server_pid, SIGINT);
+
     printf("FINALIZE - - SUCCESS -\n");
     
     return 0;
