@@ -69,7 +69,7 @@ void gw_dm_jalloc(void *_msg)
     {
         gw_log_print("DM",'E',"Could not allocate job.\n");
         
-        msg_submit->msg.rc = GW_RC_FAILED;        
+        msg_submit->msg.rc = GW_RC_FAILED_NO_MEMORY;
         gw_am_trigger(gw_dm.rm_am,"GW_RM_SUBMIT",&(msg_submit->msg));        
         return;
     }
@@ -82,7 +82,7 @@ void gw_dm_jalloc(void *_msg)
     
     if ( job == NULL )
     {
-       	msg_submit->msg.rc = GW_RC_FAILED;
+       	msg_submit->msg.rc = GW_RC_FAILED_BAD_JOB_ID;
         gw_am_trigger(gw_dm.rm_am,"GW_RM_SUBMIT",&(msg_submit->msg));        
     	
       	return;
@@ -190,7 +190,7 @@ void gw_dm_aalloc     (void *_msg)
     {
       gw_log_print("DM",'E',"Could not allocate array.\n");
                 
-      msg_submit->msg.rc = GW_RC_FAILED;        
+      msg_submit->msg.rc = GW_RC_FAILED_NO_MEMORY;
       gw_am_trigger(gw_dm.rm_am,"GW_RM_SUBMIT",&(msg_submit->msg));
                 
       return;
@@ -200,7 +200,7 @@ void gw_dm_aalloc     (void *_msg)
 
     if ( array == NULL )
     {
-        msg_submit->msg.rc = GW_RC_FAILED;
+        msg_submit->msg.rc = GW_RC_FAILED_BAD_ARRAY_ID;
         gw_am_trigger(gw_dm.rm_am,"GW_RM_SUBMIT",&(msg_submit->msg));
         
         return;
