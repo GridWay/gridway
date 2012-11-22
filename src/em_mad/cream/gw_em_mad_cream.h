@@ -63,21 +63,6 @@ class CreamJob
 	string getCreamURL();
 };
 
-class CreamCredentialStatus
-{
-    private:
-   	string status;
-	int connectionTimeout;
-	pthread_mutex_t credMutex;
-	pthread_cond_t credCond;
-
-    public:
-	CreamCredentialStatus(string status);
-  	string getStatus();
-        int waitForDelegation();
-        void setDelegation(string status);
-};
-
 struct CreamOperation
 { 
   	int code; 
@@ -95,13 +80,13 @@ class CreamService
     public:
 	CreamService();
 	void setPath(string path);
-        CreamOperation proxyDelegate(string contact, string delegationID);
-        CreamOperation proxyRenew(string contact, string delegationID);
+        void proxyDelegate(string contact, string delegationID);
+        int proxyRenew(string contact, string delegationID);
         CreamOperation submit(int jid, string contact, string JDL, string delegationID);
-	CreamOperation poll(string creamJid, string serviceAddress, string delegationID);
-	CreamOperation cancel(string creamJid, string serviceAddress, string delegationID);
-	CreamOperation creamClientExecute(API::AbsCreamProxy* creamClient, string serviceAddress, string contact, string delegationID);
-        multimap<string, string>* callback(string serviceAddress, string delegationID);
+	CreamOperation poll(string creamJid, string serviceAddress);
+	CreamOperation cancel(string creamJid, string serviceAddress);
+	CreamOperation creamClientExecute(API::AbsCreamProxy* creamClient, string serviceAddress);
+        multimap<string, string>* callback(string serviceAddress);
 };
 
 class CreamEmMad
@@ -112,11 +97,11 @@ class CreamEmMad
 	map <int, CreamJob*> creamJobs;	
 	pthread_mutex_t jobMutex;
         pthread_mutex_t credentialsMutex;
-	map<string, CreamCredentialStatus*> credentials;
+        list<string> credentials;
         int refreshTime;
         int pollingTime;
 	CreamService *creamService;
-        int proxyDelegate(string action, int jid, string contact, string delegationID);
+        void proxyDelegate(string contact, string delegationID);
 	string fileToString(string jdlFileName);
         int getJID(string creamJID);
 
