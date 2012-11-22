@@ -171,8 +171,14 @@ void CreamEmMad::poll(int jid)
     if ((result.info.compare("DONE") == 0) || (result.info.compare("FAILED") == 0))
     {
 	pthread_mutex_lock(&jobMutex);
-	    delete creamJobs.find(jid)->second;
-	    creamJobs.erase(jid);
+            it = creamJobs.find(jid);
+            if (it == creamJobs.end())
+            {
+                pthread_mutex_unlock(&jobMutex);
+                return;
+            }
+            delete creamJobs.find(jid)->second;
+            creamJobs.erase(jid);
 	pthread_mutex_unlock(&jobMutex);
     }
 
@@ -200,6 +206,12 @@ void CreamEmMad::pollAfterCancel(int jid)
     if ((result.info.compare("DONE") == 0) || (result.info.compare("FAILED") == 0))
     {
         pthread_mutex_lock(&jobMutex);
+            it = creamJobs.find(jid);
+            if (it == creamJobs.end())
+            {
+                pthread_mutex_unlock(&jobMutex);
+                return;
+            }
             delete creamJobs.find(jid)->second;
             creamJobs.erase(jid);
         pthread_mutex_unlock(&jobMutex);
@@ -308,6 +320,12 @@ void CreamEmMad::recover(int jid, string contact)
     if ((result.info.compare("DONE") == 0) || (result.info.compare("FAILED") == 0))
     {
         pthread_mutex_lock(&jobMutex);
+            it = creamJobs.find(jid);
+            if (it == creamJobs.end())
+            {
+                pthread_mutex_unlock(&jobMutex);
+                return;
+            }
             delete creamJobs.find(jid)->second;
             creamJobs.erase(jid);
         pthread_mutex_unlock(&jobMutex);
@@ -388,6 +406,12 @@ void CreamEmMad::polling()
                       if ((rit->second.compare("DONE") == 0) || (rit->second.compare("FAILED") == 0))
                       {
                           pthread_mutex_lock(&jobMutex);
+                              jit = creamJobs.find(jid);
+                              if (jit == creamJobs.end())
+                              {
+                                  pthread_mutex_unlock(&jobMutex);
+                                  return;
+                              }
                               delete creamJobs.find(jid)->second;
                               creamJobs.erase(jid);
                           pthread_mutex_unlock(&jobMutex);
