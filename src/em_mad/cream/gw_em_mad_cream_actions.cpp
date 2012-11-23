@@ -61,6 +61,11 @@ CreamEmMad::CreamEmMad(string delegation, int refreshTime)
     this->creamJobs.clear();
     this->credentials.clear();
     this->creamService = new CreamService();
+    struct timeval now;
+    struct timezone zone;
+    gettimeofday(&now, &zone);
+    this->timeout.tv_sec = now.tv_sec + 30;
+    this->timeout.tv_nsec = now.tv_usec * 1000;
 }
 
 void CreamEmMad::init()
@@ -70,6 +75,7 @@ void CreamEmMad::init()
 
     pthread_mutex_init(&credentialsMutex, 0);
     pthread_mutex_init(&jobMutex, 0);
+    pthread_cond_init(&credCond, 0);
 
     file = popen("grid-proxy-info -path", "r");
 
@@ -266,20 +272,31 @@ void CreamEmMad::finalize()
 void CreamEmMad::proxyDelegate(string contact, string delegationID)
 {
     pthread_mutex_lock(&credentialsMutex);
-	list<string>::iterator it = find(credentials.begin(), credentials.end(), contact);
+	map<string, int>::iterator it = credentials.find(contact);
 
 	if (it != credentials.end())
         {
-            pthread_mutex_unlock(&credentialsMutex);
-            return;
+            if (it->second == 1)        // Credential is delegated
+            {
+                pthread_mutex_unlock(&credentialsMutex);
+                return;
+            }
+            else                        // Credential is being delegated
+            {
+                pthread_cond_timedwait(&credCond, &credentialsMutex, &timeout);
+                pthread_mutex_unlock(&credentialsMutex);
+                return;
+            }
         }
         else
-        { 
-	    credentials.push_back(contact);
-            creamService->proxyDelegate(contact, delegationID);
-        }
+            credentials.insert(pair<string, int>(contact, 0));
     pthread_mutex_unlock(&credentialsMutex);
 
+    creamService->proxyDelegate(contact, delegationID);
+    pthread_mutex_lock(&credentialsMutex);
+        it->second = 1;                       // Credential is delegated
+        pthread_cond_broadcast(&credCond);
+    pthread_mutex_unlock(&credentialsMutex);
     return;
 }
 
@@ -363,13 +380,13 @@ void CreamEmMad::timer()
     string contact;
     int result;
 
-    list<string>::iterator it;
+    map<string, int>::iterator it;
     for (;;)
     {
         sleep(refreshTime);
         for (it=credentials.begin(); it!=credentials.end(); it++)
 	{   
-	     contact = (string)*it;
+	     contact = it->first;
              result = creamService->proxyRenew(contact, delegationID);
 	     if (result == -1)
 		 cout << "TIMER - FAILURE Refreshing credentials for " << contact << endl;

@@ -97,7 +97,9 @@ class CreamEmMad
 	map <int, CreamJob*> creamJobs;	
 	pthread_mutex_t jobMutex;
         pthread_mutex_t credentialsMutex;
-        list<string> credentials;
+        pthread_cond_t credCond;
+        map<string, int> credentials;
+        struct timespec timeout;
         int refreshTime;
         int pollingTime;
 	CreamService *creamService;
