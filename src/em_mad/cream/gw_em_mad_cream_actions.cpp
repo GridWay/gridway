@@ -273,29 +273,18 @@ void CreamEmMad::proxyDelegate(string contact, string delegationID)
 {
     pthread_mutex_lock(&credentialsMutex);
 	map<string, int>::iterator it = credentials.find(contact);
-
-	if (it != credentials.end())
+        if (it == credentials.end())                             // Credential is not delegated
         {
-            if (it->second == 1)        // Credential is delegated
-            {
-                pthread_mutex_unlock(&credentialsMutex);
-                return;
-            }
-            else                        // Credential is being delegated
-            {
-                pthread_cond_timedwait(&credCond, &credentialsMutex, &timeout);
-                pthread_mutex_unlock(&credentialsMutex);
-                return;
-            }
-        }
-        else
             credentials.insert(pair<string, int>(contact, 0));
-    pthread_mutex_unlock(&credentialsMutex);
-
-    creamService->proxyDelegate(contact, delegationID);
-    pthread_mutex_lock(&credentialsMutex);
-        it->second = 1;                       // Credential is delegated
-        pthread_cond_broadcast(&credCond);
+            pthread_mutex_unlock(&credentialsMutex);
+            creamService->proxyDelegate(contact, delegationID);
+            pthread_mutex_lock(&credentialsMutex);
+                it = credentials.find(contact);
+                it->second = 1;                                  // Credential is delegated
+                pthread_cond_broadcast(&credCond);
+        }
+        else if ((it != credentials.end()) && (it->second == 0)) // Credential is being delegated
+            pthread_cond_timedwait(&credCond, &credentialsMutex, &timeout);
     pthread_mutex_unlock(&credentialsMutex);
     return;
 }
