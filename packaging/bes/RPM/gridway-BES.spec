@@ -53,11 +53,11 @@ This also includes an static Information MAD and a dummy Transfer MAD.
 %post 
 echo "# MADs for OGSA-BES (GridSAM)
 IM_MAD = static_gridsam:gw_im_mad_static:-l etc/GridSAM_hosts.list:dummy_gridsam:bes_gridsam
-EM_MAD = bes_gridsam:GW_em_mad_bes:-t gridsam:jsdl
+EM_MAD = bes_gridsam:GW_em_mad_bes::jsdl
 TM_MAD = dummy_gridsam:gw_tm_mad_dummy:-u gsiftp\://<hostname>
 # MADs for OGSA-BES (UNICORE)
 #IM_MAD = static_unicore:gw_im_mad_static:-l etc/UNICORE_hosts.list:dummy_unicore:bes_unicore
-#EM_MAD = bes_unicore:GW_em_mad_bes:-t unicore:jsdl
+#EM_MAD = bes_unicore:GW_em_mad_bes::jsdl
 #TM_MAD = dummy_unicore:gw_tm_mad_dummy:-i" >> /usr/etc/gwd.conf
 touch /usr/etc/GridSAM_hosts.list
 touch /usr/etc/UNICORE_hosts.list
