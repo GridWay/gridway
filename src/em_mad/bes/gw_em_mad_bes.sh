@@ -1,23 +1,19 @@
 #!/bin/bash
 
-## RPM/DEB installation
-#JAVA_EXT="${GW_LOCATION}/lib/java-ext/gridway-bes/"
-
-## Usual installation
-JAVA_EXT="/usr/share/gridsam-2.3.0-client/"
+JAVA_EXT="${GW_LOCATION}/lib/java-ext/gridway-bes/"
+#JAVA_EXT="<path_to_gridsam-2.3.0-client>"
 
 # Help
 while getopts t:h option
     do
         case $option in
-        h)   echo -e "USAGE\n GW_em_mad_bes [-h] [-t]" \
+        h)   echo -e "USAGE\n GW_em_mad_bes [-h]" \
                      "\n\nSYNOPSIS"\
                      "\n  Execution driver to interface with BES. It is not intended to be used from CLI."\
                      "\n\nOPTIONS"\
-                     "\n  -h    print this help"\
-                     "\n  -t    target BES implementation (gridsam | unicore)";
+                     "\n  -h    print this help";
              exit 0;;
-        [?]) echo -e "usage: GW_em_mad_bes [-h] [-t]";
+        [?]) echo -e "usage: GW_em_mad_bes [-h]";
              exit 1;;
         esac
     done
@@ -36,4 +32,4 @@ mad_debug
 check_proxy
 
 cd $GW_LOCATION/etc
-exec nice -n $PRIORITY java -classpath $CLASSPATH -Djava.endorsed.dirs=$JAVA_EXT/endorsed -Daxis.ClientConfigFile=$GW_LOCATION/etc/client-config.wsdd GW_em_mad_bes $*
+exec nice -n $PRIORITY java -classpath $CLASSPATH -Djava.endorsed.dirs=$JAVA_EXT/endorsed -Daxis.ClientConfigFile=$GW_LOCATION/etc/client-config.wsdd GW_em_mad_bes

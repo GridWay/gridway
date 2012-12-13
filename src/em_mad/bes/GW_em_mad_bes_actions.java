@@ -69,7 +69,7 @@ class ServiceBES extends Thread {
 	}
 
 
-	protected int submit(String target) throws SOAPException, MalformedURLException,
+	protected int submit(String lrms) throws SOAPException, MalformedURLException,
 		  ServiceException, RemoteException {
 
                 String id;
@@ -97,7 +97,7 @@ class ServiceBES extends Thread {
 				return -1;
                 	}
 			else {
-                                if (target.equals("unicore"))
+                                if (lrms.contains("unicore"))
                                         id = xActivityIdentifier.getEndpointReference().getDomNode().getOwnerDocument().
                                                     getElementsByTagName("unic:ResourceId").item(0).getChildNodes().item(0).getNodeValue();
                                 else // Get GridSAM JobID
