@@ -68,7 +68,7 @@ int main( int argc, char **argv)
     pthread_mutex_init(&mutex, 0);
     pthread_cond_init(&cond, 0);
 
-    while((opt = getopt(argc, argv, "t:h")) != -1)
+    while((opt = getopt(argc, argv, "h")) != -1)
         switch(opt)
         {
             case 'h':

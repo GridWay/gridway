@@ -7,7 +7,7 @@ VERBOSE=1
 DBG = -g -O2 
 CFLAGS = -pipe -I<path_to_arc-1_branch_3.0>/src/hed/acc/EMIES/ -I/usr/include/libxml2/ -I/usr/include/sigc++-2.0/ -I/usr/lib64/sigc++-2.0/include/ -I/usr/include/glibmm-2.4/ -I/usr/include/glib-2.0/ -I/usr/lib64/glib-2.0/include/ -I/usr/lib64/glibmm-2.4/include -I<path_to_arc-1_branch_3.0>/include/
 # TODO: Uncomment for nordugrid-arc 3.0
-#CFLAGS = -pipe -I/usr/src/debug/nordugrid-arc-3.0.0/src/hed/acc/EMIES/ -I/usr/include/libxml2/ -I/usr/include/sigc++-2.0/ -I/usr/lib64/sigc++-2.0/include/ -I/usr/include/glibmm-2.4/ -I/usr/include/glib-2.0/ -I/usr/lib64/glib-2.0/include/ -I/usr/lib64/glibmm-2.4/include -I/usr/src/debug/nordugrid-arc-2.0.0/src/hed/libs/common/
+#CFLAGS = -pipe -I/usr/src/debug/nordugrid-arc-3.0.0/src/hed/acc/EMIES/ -I/usr/include/libxml2/ -I/usr/include/sigc++-2.0/ -I/usr/lib64/sigc++-2.0/include/ -I/usr/include/glibmm-2.4/ -I/usr/include/glib-2.0/ -I/usr/lib64/glib-2.0/include/ -I/usr/lib64/glibmm-2.4/include -I/usr/src/debug/nordugrid-arc-3.0.0/src/hed/libs/common/
 CXXFLAGS = $(DBG) -fPIC -pipe $(GCCBASEFLAGS) $(BASEFLAGS) $(CFLAGS)
 LDFLAGS = -L/usr/local/lib/arc $(LIBS)
 # TODO: Uncomment for nordugrid-arc 3.0
