@@ -253,7 +253,7 @@ am__objects_11 = $(EM)/gw_em_actions.$(OBJEXT) $(EM)/gw_em.$(OBJEXT) \
 	$(EM)/gw_em_listener.$(OBJEXT) $(EM)/gw_em_mad.$(OBJEXT) \
 	$(EM)/gw_em_rsl2.$(OBJEXT) $(EM)/gw_em_rsl.$(OBJEXT) \
 	$(EM)/gw_em_jdl.$(OBJEXT) $(EM)/gw_em_jsdl.$(OBJEXT) \
-	$(EM)/gw_em_state.$(OBJEXT)
+	$(EM)/gw_em_adl.$(OBJEXT) $(EM)/gw_em_state.$(OBJEXT)
 am__objects_12 = $(TM)/gw_tm_actions.$(OBJEXT) $(TM)/gw_tm.$(OBJEXT) \
 	$(TM)/gw_tm_checkpoint.$(OBJEXT) $(TM)/gw_tm_epilog.$(OBJEXT) \
 	$(TM)/gw_tm_listener.$(OBJEXT) $(TM)/gw_tm_mad.$(OBJEXT) \
@@ -709,6 +709,7 @@ EM_SRC = $(EM)/gw_em_actions.c \
         $(EM)/gw_em_rsl.c \
         $(EM)/gw_em_jdl.c \
         $(EM)/gw_em_jsdl.c \
+        $(EM)/gw_em_adl.c \
         $(EM)/gw_em_state.c
 
 TM_SRC = $(TM)/gw_tm_actions.c \
@@ -1462,6 +1463,7 @@ $(EM)/gw_em_rsl2.$(OBJEXT): $(EM)/$(am__dirstamp)
 $(EM)/gw_em_rsl.$(OBJEXT): $(EM)/$(am__dirstamp)
 $(EM)/gw_em_jdl.$(OBJEXT): $(EM)/$(am__dirstamp)
 $(EM)/gw_em_jsdl.$(OBJEXT): $(EM)/$(am__dirstamp)
+$(EM)/gw_em_adl.$(OBJEXT): $(EM)/$(am__dirstamp)
 $(EM)/gw_em_state.$(OBJEXT): $(EM)/$(am__dirstamp)
 $(TM)/$(am__dirstamp):
 	@$(MKDIR_P) $(TM)
@@ -1784,6 +1786,7 @@ mostlyclean-compile:
 	-rm -f $(EM)/gw_em_actions.$(OBJEXT)
 	-rm -f $(EM)/gw_em_jdl.$(OBJEXT)
 	-rm -f $(EM)/gw_em_jsdl.$(OBJEXT)
+	-rm -f $(EM)/gw_em_adl.$(OBJEXT)
 	-rm -f $(EM)/gw_em_listener.$(OBJEXT)
 	-rm -f $(EM)/gw_em_mad.$(OBJEXT)
 	-rm -f $(EM)/gw_em_rsl.$(OBJEXT)

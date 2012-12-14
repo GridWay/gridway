@@ -101,6 +101,11 @@ int gw_em_mad_init(gw_em_mad_t *em_mad,
 	    em_mad->wrapper_rsl     = gw_generate_wrapper_jsdl;
 	    em_mad->pre_wrapper_rsl = gw_generate_wrapper_jsdl;
 	}
+        else if (strcmp(mode, "adl") == 0)
+        {
+            em_mad->wrapper_rsl     = gw_generate_wrapper_adl;
+            em_mad->pre_wrapper_rsl = gw_generate_wrapper_adl;
+        }
     }
     
     if (em_mad->wrapper_rsl == NULL )

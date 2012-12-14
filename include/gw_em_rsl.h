@@ -35,5 +35,6 @@ char* gw_generate_wrapper_xrsl(gw_job_t *job);    /* Nordugrid xrsl */
 
 char* gw_generate_wrapper_jdl(gw_job_t *job);     /* CREAM JDL */
 char* gw_generate_wrapper_jsdl(gw_job_t *job);    /* OGF JSDL (for BES) */
+char* gw_generate_wrapper_adl(gw_job_t *job);     /* ADL (for EMI-ES) */
 
 #endif

@@ -156,6 +156,7 @@ EM_SRC = $(EM)/gw_em_actions.c \
         $(EM)/gw_em_rsl.c \
         $(EM)/gw_em_jdl.c \
         $(EM)/gw_em_jsdl.c \
+        $(EM)/gw_em_adl.c \
         $(EM)/gw_em_state.c
 
 TM_SRC = $(TM)/gw_tm_actions.c \
