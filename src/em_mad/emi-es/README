@@ -1,0 +1,39 @@
+===== WELCOME =====
+
+EMI-ES (EMI Execution Service) is the execution service of EMI. It enables the 
+job submission to CEs managed by ARC, gLite and UNICORE. EMI-ES uses ADL 
+(Activity Description Language) to describe jobs.
+
+This source distribution provides an Execution Manager Middleware Access 
+Driver (EM MAD) for the EMI Execution Service.
+
+
+===== REQUIREMENTS =====
+
+The source distribution requires on the client-side:
+
+- GridWay 5.12 (http://www.gridway.org)
+- nordugrid-arc-plugins-needed, nordugrid-arc-debuginfo and nordugrid-arc-devel
+ packages
+
+
+===== INSTALLATION =====
+
+This install procedure assumes that you have installed GridWay and you have 
+access to a EMI-ES endpoint.
+
+1) Install the required packages.
+2) Change to src/em_mad/emi-es directory in the GridWay distribution.
+3) Build and install the driver executing "make; make install".
+4) Configure GridWay through the $GW_LOCATION/etc/gwd.conf file (check 
+the GridWay Configuration Guide) to use the MAD. This EM MAD is intended 
+to work with the "dummy" TM MAD configured for using a GridFTP server on 
+the client. Use "adl" as RSL generation function.
+5) Launch the GridWay daemon from $GW_LOCATION/bin/gwd.
+6) Test it and enjoy!
+
+
+===== CREDITS =====
+
+The GridWay team.
+http://gridway.org, http://dsa-research.org.
