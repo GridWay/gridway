@@ -278,6 +278,7 @@ char *gw_em_adl_staging(gw_job_t *job)
             "   <Source>\n"
             "    <URI>%s</URI>\n"
             "   </Source>\n"
+            "   <IsExecutable>true</IsExecutable>\n"
             "  </InputFile>\n",
             dest_file,
             gw_job_substitute(job->template.executable, job));
@@ -290,6 +291,7 @@ char *gw_em_adl_staging(gw_job_t *job)
             "   <Source>\n"
             "    <URI>%s/%s</URI>\n"
             "   </Source>\n"
+            "   <IsExecutable>true</IsExecutable>\n"
             "  </InputFile>\n",
             dest_file,
             job->history->tm_mad->url, gw_job_substitute(&job->template.executable[7], job));
@@ -302,6 +304,7 @@ char *gw_em_adl_staging(gw_job_t *job)
             "   <Source>\n"
             "    <URI>%s/%s/%s</URI>\n"
             "   </Source>\n"
+            "   <IsExecutable>true</IsExecutable>\n"
             "  </InputFile>\n",
             dest_file,
             job->history->tm_mad->url, job->template.job_home, gw_job_substitute(job->template.executable, job));
