@@ -22,23 +22,27 @@ import javax.xml.rpc.ServiceException;
 class GW_em_mad_bes extends Thread {
 
 	static String usage =
-                "USAGE\n GW_em_mad_bes [-h] \n\n" +
+                "USAGE\n GW_em_mad_bes [-h] [-t] \n\n" +
 		"SYNOPSIS\n" +
 		"  Execution driver to interface with BES. It is not intended to be used from CLI.\n\n" +
 		"OPTIONS\n" +
-		"  -h    print this help";
+		"  -h    print this help" +
+                "  -t    target BES implementation (gridsam | unicore)";
 	static String susage =
-		"usage: GW_em_mad_bes [-h]";
+		"usage: GW_em_mad_bes [-h] [-t]";
 
     	private Map job_pool = null; // Job pool
+    	private Map jid_pool = null; // JID pool
 
     	private String host;
-        private String lrms;
+    	private Calendar terminationTime = null;
+        private String target;
 	
     	public static void main(String args[]) {
         	GW_em_mad_bes gw_em_mad_bes;
     		int i = 0;
 		String arg;
+                String target = "gridsam";
 
          	while (i < args.length && args[i].startsWith("-")) 
          	{
@@ -49,6 +53,17 @@ class GW_em_mad_bes extends Thread {
 				System.out.println(usage);
                         	System.exit(0);
 			}
+                        if (arg.equals("-t"))
+                        {
+                                if (i < args.length)
+                                    target = args[i++];
+                                else
+                                {
+                                    System.err.println("-t requires a target BES implementation (gridsam | unicore)");
+                                    System.out.println(susage);
+                                    System.exit(1);
+                                }
+                        }
 			else
 			{
                         	System.err.println("error: invalid option \'" + arg + "\'\n");
@@ -57,13 +72,14 @@ class GW_em_mad_bes extends Thread {
 			}
 		}
 
-        	gw_em_mad_bes = new GW_em_mad_bes();
+        	gw_em_mad_bes = new GW_em_mad_bes(target);
         	gw_em_mad_bes.loop();
     	}
 
-	GW_em_mad_bes() {
-		// Create the job pool
+	GW_em_mad_bes(String target) {
+		// Create the job and JID pool
 		job_pool = Collections.synchronizedMap(new HashMap());
+                this.target = target;
 	}
 
 	void loop() {
@@ -122,25 +138,17 @@ class GW_em_mad_bes extends Thread {
                                         {
                                                 jid = new Integer(jid_str);
 					 	if (str_split[2].indexOf('/') != -1)
-                                                {
-                                                    host = str_split[2].substring(0,str_split[2].indexOf('/'));
-                                                    lrms = str_split[2].substring(str_split[2].lastIndexOf('/'),str_split[2].length());    
-                                                }
-                                                if (lrms.contains("unicore"))
+                                               		host = str_split[2].substring(0,str_split[2].indexOf('/'));
+                                                if (target.equals("unicore"))
                                                 {
                                                     String gateway = "";
                                                     if (str_split[2].indexOf('/') != str_split[2].lastIndexOf('/'))
                                                         gateway = str_split[2].substring(str_split[2].indexOf('/'),str_split[2].lastIndexOf('/'));
                                                     contact = "https://" + host + ":8080/" + gateway + "/services/BESFactory?res=default_bes_factory";
-                                                    submit(jid, contact, jsdl_file);
                                                 }
-                                                else if (lrms.contains("gridsam")) 
-                                                {
-                                                    contact = "https://" + host + ":8443/gridsam/services/bes?wsdl";
-                                                    submit(jid, contact, jsdl_file);
-                                                }
-                                                else
-                                                    System.out.println(action + " " + jid_str + " FAILURE Contact not valid");
+                                                else // Assuming GridSAM
+                                                        contact = "https://" + host + ":8443/gridsam/services/bes?wsdl";
+                                                submit(jid, contact, jsdl_file);
                                         }
                                         catch (NumberFormatException e)
                                         {
@@ -235,17 +243,17 @@ class GW_em_mad_bes extends Thread {
         void submit(int jid, String contact, String jsdl_file) {
 
 		String info = null;
-		int status = -1;
+		int status = 0;
 
                 // Submit the job
                 try
                 {
-                        if (lrms.contains("unicore"))
+                        if (target.equals("unicore"))
                         {
                             String jsdl_username = add_username(jid, jsdl_file);
                             if (jsdl_username != null){
                                 ServiceBES job = new ServiceBES(jid, contact, jsdl_username);
-                                status = job.submit(lrms);
+                                status = job.submit(target);
                                 info = job.getInformation();
                                 // Add job and jid to the pools
                                 synchronized (this)
@@ -254,13 +262,14 @@ class GW_em_mad_bes extends Thread {
                                 }
                                 job = null;
                             }
+
                         }
-                        else if (lrms.contains("gridsam"))
+                        else if (target.equals("gridsam"))
                         {
 			    String jsdl_myproxy = add_myproxy(jid, jsdl_file);
 			    if (jsdl_myproxy != null){
                                 ServiceBES job = new ServiceBES(jid, contact, jsdl_myproxy);
-                                status = job.submit(lrms);
+                                status = job.submit(target);
 			        info = job.getInformation();
                                 // Add job and jid to the pools
 			        synchronized (this) 
@@ -270,6 +279,8 @@ class GW_em_mad_bes extends Thread {
                                 job = null;
                             }
 			}
+			else
+				return;
                 }
                 catch (Exception e)
                 {
@@ -525,5 +536,4 @@ class GW_em_mad_bes extends Thread {
                 }
                 return sb.toString();
         }
-
 }
