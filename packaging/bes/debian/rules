@@ -3,7 +3,7 @@
 
 INSTALLDIR = $(CURDIR)/debian/gridway-bes
 
-_version = 5.12.0
+_version = 5.14.RC1
 _prefix = /usr
 _bindir = $(_prefix)/bin
 _sbindir = $(_prefix)/sbin
@@ -17,8 +17,8 @@ GW_LOCATION := $(INSTALLDIR)/usr
 configure: configure-stamp
 
 configure-stamp:
-	# cp -p gridway-5.12.0/packaging/bes/debian/README gridway-5.12.0/README
-	# cp -p gridway-5.12.0/packaging/bes/debian/LICENSE.ThirdParty gridway-5.12.0/src/em_mad/bes/
+	# cp -p gridway-$(_version)/packaging/bes/debian/README gridway-$(_version)/README
+	# cp -p gridway-$(_version)/packaging/bes/debian/LICENSE.ThirdParty gridway-$(_version)/src/em_mad/bes/
 	## BUILD and RUNTIME Dependencies at src/em_mad/bes/lib ##
 	# wget http://sourceforge.net/projects/gridsam/files/gridsam/2.3.0/gridsam.war/download
 	# jar xvf gridsam.war WEB-INF/lib/gridsam-schema-2.3.0.jar

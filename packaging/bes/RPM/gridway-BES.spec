@@ -1,9 +1,9 @@
 %define _name gridway
-%define _release 0
+%define _release RC1
 
 Name:		gridway-BES
-Version:	5.12
-Release:	0%{dist}
+Version:	5.14
+Release:	RC1%{dist}
 Summary:	OGSA-BES MAD for GridWay
 
 Group:		System Environment/Libraries
@@ -11,14 +11,14 @@ License:	Apache License
 URL:		http://www.gridway.org/
 Vendor:         Initiative for Globus in Europe (IGE)
 Source:		%{_name}-%{version}.%{_release}.tar.gz
-# svn co http://svn.gridway.org/gridway/tags/GW_5_12_0 gridway-5.12.0
-# cp -p gridway-5.12.0/packaging/bes/RPM/README gridway-5.12.0/README.bes
-# cp -p gridway-5.12.0/packaging/bes/RPM/LICENSE.ThirdParty gridway-5.12.0/src/em_mad/bes/
+# svn co http://svn.gridway.org/gridway/tags/GW_%{version}_%{_release} gridway-%{version}.%{_release}
+# cp -p gridway-%{version}.%{_release}/packaging/bes/RPM/README gridway-%{version}.%{_release}/README.bes
+# cp -p gridway-%{version}.%{_release}/packaging/bes/RPM/LICENSE.ThirdParty gridway-%{version}.%{_release}/src/em_mad/bes/
 ## BUILD and RUNTIME Dependencies at src/em_mad/bes/lib ##
 # wget -U NoSuchBrowser/1.0 http://repo1.maven.org/maven2/org/apache/xmlbeans/xmlbeans/2.5.0/xmlbeans-2.5.0.jar
 # wget http://sourceforge.net/projects/gridsam/files/gridsam/2.3.0/gridsam.war/download
 # jar xvf gridsam.war WEB-INF/lib/gridsam-schema-2.3.0.jar
-# tar -czf gridway-5.12.0.tar.gz gridway-5.12.0/
+# tar -czf gridway-%{version}.%{_release}.tar.gz gridway-%{version}.%{_release}/
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
 
@@ -90,9 +90,9 @@ mkdir -p $RPM_BUILD_ROOT/usr/bin
 mkdir -p $RPM_BUILD_ROOT/usr/lib
 mkdir -p $RPM_BUILD_ROOT/usr/lib/java-ext/gridway-bes/lib
 mkdir -p $RPM_BUILD_ROOT/usr/lib/java-ext/gridway-bes/endorsed
-mkdir -p $RPM_BUILD_ROOT/usr/share/doc/gridway-bes-5.12.0/
+mkdir -p $RPM_BUILD_ROOT/usr/share/doc/gridway-bes-5.14.RC1/
 mkdir -p $RPM_BUILD_ROOT/usr/etc
-cp README.bes $RPM_BUILD_ROOT/usr/share/doc/gridway-bes-5.12.0/README
+cp README.bes $RPM_BUILD_ROOT/usr/share/doc/gridway-bes-5.14.RC1/README
 cd src/em_mad/bes/lib
 cp xmlbeans.jar $RPM_BUILD_ROOT/usr/lib/java-ext/gridway-bes/lib/
 cp gridsam-schema-2.3.0.jar $RPM_BUILD_ROOT/usr/lib/java-ext/gridway-bes/lib/
@@ -100,7 +100,7 @@ cp /usr/share/java/xalan-j2.jar $RPM_BUILD_ROOT/usr/lib/java-ext/gridway-bes/end
 cp /usr/share/java/xalan-j2-serializer.jar $RPM_BUILD_ROOT/usr/lib/java-ext/gridway-bes/endorsed
 cp /usr/share/java/axis/saaj.jar $RPM_BUILD_ROOT/usr/lib/java-ext/gridway-bes/endorsed
 cd ../
-cp LICENSE.ThirdParty $RPM_BUILD_ROOT/usr/share/doc/gridway-bes-5.12.0/
+cp LICENSE.ThirdParty $RPM_BUILD_ROOT/usr/share/doc/gridway-bes-5.14.RC1/
 make install DESTDIR=$RPM_BUILD_ROOT
 cd ../../tm_mad/dummy/
 make install DESTDIR=$RPM_BUILD_ROOT
@@ -120,14 +120,17 @@ rm -rf $RPM_BUILD_ROOT
 /usr/lib/java-ext/gridway-bes/endorsed/xalan-j2.jar
 /usr/lib/java-ext/gridway-bes/endorsed/xalan-j2-serializer.jar
 /usr/lib/java-ext/gridway-bes/endorsed/saaj.jar
-/usr/share/doc/gridway-bes-5.12.0/LICENSE.ThirdParty
-/usr/share/doc/gridway-bes-5.12.0/README
+/usr/share/doc/gridway-bes-5.14.RC1/LICENSE.ThirdParty
+/usr/share/doc/gridway-bes-5.14.RC1/README
 /usr/etc/client-config.wsdd
 /usr/etc/crypto.properties
 /usr/bin/gw_tm_mad_dummy
 /usr/bin/gw_tm_mad_dummy.bin
 
 %changelog
+* Thu Feb 28 2013 GridWay Project Leads <contact@gridway.org> - 5.14-RC1
+- Update to 5.14-RC1
+
 * Sun Sep 30 2012 GridWay Project Leads <contact@gridway.org> - 5.12-0
 - Update to 5.12-0
 

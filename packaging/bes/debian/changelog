@@ -1,3 +1,9 @@
+gridway-bes (5.14-RC1) testing; urgency=low
+
+  * Update to 5.14-RC1.
+
+ -- GridWay Project Leads <contact@gridway.org>  Thu, 28 Feb 2013 09:00:00 +0100
+
 gridway-bes (5.12-0) stable; urgency=low
 
   * Update to 5.12-0.

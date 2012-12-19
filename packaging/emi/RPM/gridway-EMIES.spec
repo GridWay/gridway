@@ -18,9 +18,9 @@ BuildRequires:	nordugrid-arc-devel >= 3.0
 BuildRequires:  nordugrid-arc-plugins-needed >= 3.0
 Requires:	gridway-core
 Requires:	nordugrid-arc-plugins-needed >= 3.0
-# svn co http://svn.gridway.org/gridway/tags/GW_5_14_RC1 gridway-5.14.RC1
-# cp -p gridway-5.14.RC1/packaging/emi/RPM/README gridway-5.14.RC1/README.emi
-# tar -czf gridway-5.14.RC1.tar.gz gridway-5.14.RC1/
+# svn co http://svn.gridway.org/gridway/tags/GW_%{version}_%{_release} gridway-%{version}.%{_release}
+# cp -p gridway-%{version}.%{_release}/packaging/emi/RPM/README gridway-%{version}.%{_release}/README.emi
+# tar -czf gridway-%{version}.%{_release}.tar.gz gridway-%{version}.%{_release}/
 
 %description
 GridWay uses several Middleware Access Drivers (MAD) to interface with 

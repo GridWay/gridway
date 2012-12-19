@@ -1,9 +1,9 @@
 %define _name gridway
-%define _release 0
+%define _release RC1
 
 Name:		gridway-gLite
-Version:	5.12
-Release:	0%{dist}
+Version:	5.14
+Release:	RC1%{dist}
 Summary:	gLite MADs for GridWay
 
 Group:		System Environment/Libraries
@@ -18,9 +18,9 @@ Requires:	gridway-core
 Requires:	globus-gass-server-ez-progs
 Requires:	glite-ce-cream-client-api-c
 Requires:	glite-lbjp-common-gsoap-plugin
-# svn co http://svn.gridway.org/gridway/tags/GW_5_12_0 gridway-5.12.0
-# cp -p gridway-5.12.0/packaging/glite/RPM/README gridway-5.12.0/README.glite
-# tar -czf gridway-5.12.0.tar.gz gridway-5.12.0/
+# svn co http://svn.gridway.org/gridway/tags/GW_%{version}_%{_release} gridway-%{version}.%{_release}
+# cp -p gridway-%{version}.%{_release}/packaging/glite/RPM/README gridway-%{version}.%{_release}/README.glite
+# tar -czf gridway-%{version}.%{_release}.tar.gz gridway-%{version}.%{_release}/
 
 %description
 GridWay uses several Middleware Access Drivers (MAD) to interface with 
@@ -58,8 +58,8 @@ make
 rm -rf $RPM_BUILD_ROOT
 export GW_LOCATION=$RPM_BUILD_ROOT/usr/
 mkdir -p $RPM_BUILD_ROOT/usr/bin
-mkdir -p $RPM_BUILD_ROOT/usr/share/doc/gridway-glite-5.12.0/
-cp README.glite $RPM_BUILD_ROOT/usr/share/doc/gridway-glite-5.12.0/README
+mkdir -p $RPM_BUILD_ROOT/usr/share/doc/gridway-glite-5.14.RC1/
+cp README.glite $RPM_BUILD_ROOT/usr/share/doc/gridway-glite-5.14.RC1/README
 cd src/im_mad/bdii/
 make install DESTDIR=$RPM_BUILD_ROOT
 cd ../../em_mad/cream/
@@ -81,9 +81,12 @@ rm -rf $RPM_BUILD_ROOT
 /usr/bin/gw_em_mad_cream.bin
 /usr/bin/gw_tm_mad_dummy
 /usr/bin/gw_tm_mad_dummy.bin
-/usr/share/doc/gridway-glite-5.12.0/README
+/usr/share/doc/gridway-glite-5.14.RC1/README
 
 %changelog
+* Thu Feb 28 2013 GridWay Project Leads <contact@gridway.org> - 5.14-RC1
+- Update to 5.14-RC1
+
 * Sun Sep 30 2012 GridWay Project Leads <contact@gridway.org> - 5.12-0
 - Update to 5.12-0
 
