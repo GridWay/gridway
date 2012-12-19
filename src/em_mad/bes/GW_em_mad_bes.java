@@ -32,10 +32,8 @@ class GW_em_mad_bes extends Thread {
 		"usage: GW_em_mad_bes [-h] [-t]";
 
     	private Map job_pool = null; // Job pool
-    	private Map jid_pool = null; // JID pool
 
     	private String host;
-    	private Calendar terminationTime = null;
         private String target;
 	
     	public static void main(String args[]) {
