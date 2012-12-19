@@ -31,11 +31,9 @@ class GW_em_mad_bes extends Thread {
 		"usage: GW_em_mad_bes [-h]";
 
     	private Map job_pool = null; // Job pool
-    	private Map jid_pool = null; // JID pool
 
     	private String host;
         private String lrms;
-    	private Calendar terminationTime = null;
 	
     	public static void main(String args[]) {
         	GW_em_mad_bes gw_em_mad_bes;
@@ -64,9 +62,8 @@ class GW_em_mad_bes extends Thread {
     	}
 
 	GW_em_mad_bes() {
-		// Create the job and JID pool
+		// Create the job pool
 		job_pool = Collections.synchronizedMap(new HashMap());
-		jid_pool = Collections.synchronizedMap(new HashMap());
 	}
 
 	void loop() {
@@ -238,20 +235,7 @@ class GW_em_mad_bes extends Thread {
         void submit(int jid, String contact, String jsdl_file) {
 
 		String info = null;
-		int status = -1;
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(Calendar.WEEK_OF_YEAR , calendar.get(Calendar.WEEK_OF_YEAR) + 1);
-
-                try
-                {
-                        setTerminationTime(calendar.getTime()); // One week
-                }
-                catch (Exception e)
-                {	
-			info = "-";
-			status = -1;
-			return;
-                }
+		int status = 0;
 
                 // Submit the job
                 try
@@ -267,10 +251,9 @@ class GW_em_mad_bes extends Thread {
                                 synchronized (this)
                                 {
                                     job_pool.put(jid, job);
-                                    jid_pool.put(job, jid);
                                 }
+                                job = null;
                             }
-
                         }
                         else if (lrms.contains("gridsam"))
                         {
@@ -283,8 +266,8 @@ class GW_em_mad_bes extends Thread {
 			        synchronized (this) 
 			        {
 	                            job_pool.put(jid, job);
-        	                    jid_pool.put(job, jid);
 				}
+                                job = null;
                             }
 			}
                 }
@@ -316,8 +299,8 @@ class GW_em_mad_bes extends Thread {
 			synchronized (this)
 			{
                         	job_pool.put(jid, job);
-                        	jid_pool.put(job, jid);
 			}
+                        job = null;
                 }
                 catch (Exception e)
                 {
@@ -341,7 +324,6 @@ class GW_em_mad_bes extends Thread {
                 try
                 {
                   	ServiceBES job = (ServiceBES) job_pool.get(jid);
-
                         if (job == null)
                    	{
                                 status = -1;
@@ -357,6 +339,7 @@ class GW_em_mad_bes extends Thread {
 					pollAfterCancel(jid);
 				}
                         }
+                        job = null;
                 }
                 catch (Exception e)
                 {
@@ -380,14 +363,21 @@ class GW_em_mad_bes extends Thread {
                 try
                 {
                         ServiceBES job = (ServiceBES) job_pool.get(jid);
-
                         if (job == null)
 				return;
                         else
                         {
                                 status = job.poll();
                                 info = job.getInformation();
+                                if (info.equals("DONE") || info.equals("FAILED"))
+                                {
+                                    synchronized (this)
+                                    {
+                                        job_pool.remove(jid);
+                                    }
+                                }
                         }
+                        job = null;
                 }
                 catch (Exception e)
                 {
@@ -408,7 +398,6 @@ class GW_em_mad_bes extends Thread {
                 try
                 {
                         ServiceBES job = (ServiceBES) job_pool.get(jid);
-
                         if (job == null)
                         {	
 				status = -1;
@@ -418,7 +407,15 @@ class GW_em_mad_bes extends Thread {
                         {
 				status = job.poll();
 				info = job.getInformation();
+                                if (info.equals("DONE") || info.equals("FAILED"))
+                                {
+                                    synchronized (this)
+                                    {
+                                        job_pool.remove(jid);
+                                    }
+                                }
                         }
+                        job = null;
                 }
                 catch (Exception e)
                 {
@@ -529,18 +526,4 @@ class GW_em_mad_bes extends Thread {
                 return sb.toString();
         }
 
-    	public synchronized void setTerminationTime(Date date) {
-
-        	if (this.terminationTime == null) {
-        	    this.terminationTime = Calendar.getInstance();
-        	}
-
-        	if (date != null) {
-        	    this.terminationTime.setTime(date);
-       	 	} else {
-            		this.terminationTime.setTime(Calendar.getInstance().getTime());
-        	}
-    	}
-
 }
-
