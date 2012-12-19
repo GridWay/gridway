@@ -235,7 +235,7 @@ class GW_em_mad_bes extends Thread {
         void submit(int jid, String contact, String jsdl_file) {
 
 		String info = null;
-		int status = 0;
+		int status = -1;
 
                 // Submit the job
                 try
