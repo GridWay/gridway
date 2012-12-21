@@ -98,12 +98,17 @@ class ServiceBES extends Thread {
                 	}
 			else {
                                 if (lrms.contains("unicore"))
+                                {
                                         id = xActivityIdentifier.getEndpointReference().getDomNode().getOwnerDocument().
                                                     getElementsByTagName("unic:ResourceId").item(0).getChildNodes().item(0).getNodeValue();
+                                        this.info = contact.substring(0,contact.indexOf("BESFactory?res")) + "BESActivity?res=" + id;
+                                }
                                 else // Get GridSAM JobID
+                                {
                                         id = xActivityIdentifier.getEndpointReference().getDomNode().getOwnerDocument().
                                                     getElementsByTagName("ID").item(0).getChildNodes().item(0).getNodeValue();
-				this.info = contact + "/" + id;
+				        this.info = contact + "/" + id;
+                                }
 				this.xActivityIdentifier = xActivityIdentifier; 
         		}
 		} catch(Exception ex) {
@@ -120,12 +125,18 @@ class ServiceBES extends Thread {
 		String jobID;
         	Enum state;
 
-		serviceURL = contact.substring(0,contact.indexOf("/urn:gridsam:"));
-		jobID = contact.substring(contact.indexOf("urn:gridsam:"),contact.length());
+		serviceURL = contact.substring(0,contact.lastIndexOf('/'));
+		jobID = contact.substring(contact.lastIndexOf('/')+1,contact.length());
 		this.contact = serviceURL;
         	EndpointReferenceDocument xActivityEPR = EndpointReferenceDocument.Factory.newInstance();
 
-        	if (jobID != null && jobID.startsWith("urn:gridsam:")) {
+                if (jobID.startsWith("BESActivity?res="))
+                {
+                    jobID = jobID.substring(jobID.lastIndexOf('=')+1,jobID.length()); 
+                    this.contact = serviceURL + "/BESFactory?res=default_bes_factory";
+                    serviceURL = serviceURL + "/BESActivity?res=" + jobID;
+                }
+        	if (jobID != null) {
 			JobIdentifierDocument xJobIdentifier = JobIdentifierDocument.Factory.newInstance();
                 	xJobIdentifier.addNewJobIdentifier().setID(jobID);
                 	EndpointReferenceType xActivityIdentifier = EndpointReferenceType.Factory.newInstance();
@@ -139,7 +150,6 @@ class ServiceBES extends Thread {
 			return -1;
 		}
 		this.xActivityIdentifier = xActivityEPR;
-        	this.contact = serviceURL;
 
 		//refreshStatus
         	GetActivityStatusesDocument xActivities = GetActivityStatusesDocument.Factory.newInstance();
