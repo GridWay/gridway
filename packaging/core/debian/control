@@ -14,9 +14,7 @@ Description:
  of computing resources: clusters, supercomputers, stand-alone servers... It 
  supports different LRM systems (PBS, SGE, LSF, Condor...) within a single 
  organization or scattered across several administrative domains. GridWay 
- provides a single point of access to all resources in your organization, from
- in-house systems to Grid infrastructures and Cloud providers. GridWay supports
- most of existing Grid middle-wares, can be used on main production Grid 
- infrastructures and can dynamically access to Cloud resources.
+ supports most of existing Grid middle-wares, can be used on main production
+ Grid infrastructures.
  .
  The gridway-core package contains: GridWay Core

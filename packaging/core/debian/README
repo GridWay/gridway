@@ -20,9 +20,7 @@ limitations under the License.
 The GridWay Metascheduler enables large-scale, reliable and efficient sharing 
 of computing resources: clusters, supercomputers, stand-alone servers... It
 supports different LRM systems within a single organization or scattered across
-several administrative domains. GridWay provides a single point of access to all
-resources in your organization, from in-house systems to Grid infrastructures
-and Cloud providers.
+several administrative domains.
 
 GridWay supports most of existing Grid middlewares and has being used on main
 production Grid infrastructures.
