@@ -160,16 +160,16 @@ void gw_tm_timer(void *_null)
     time_t        poll;
     time_t        poll_timeout;    
     static int    mark = 0;
-	char *        src_url;
-	char *        dst_url;
-	char          mode;
-	gw_xfrs_t *   xfrs;
-	
-	int           (*build_urls) (gw_job_t *   job, 
+    char *        src_url;
+    char *        dst_url;
+    char          mode;
+    gw_xfrs_t *   xfrs = NULL;
+
+    int           (*build_urls) (gw_job_t *   job, 
                                  char *       src, 
                                  char *       dst, 
                                  char **      src_url,
-                                 char **      dst_url);
+                                 char **      dst_url) = NULL;
 	
     mark = mark + GW_TM_TIMER_PERIOD;
     if ( mark >= 300 )
