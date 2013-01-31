@@ -55,9 +55,9 @@
 /* ------------------------------------------------------------------------- */
 
 const char * usage =
-"\n gwd [-h] [-v] [-m] [-c]\n\n"
+"\n gwd [-h] [-v] [-m] [-c] [-f] [-d]\n\n"
 "SYNOPSIS\n"
-"  Prints information about all the hosts in the GridWay system (default)\n\n"
+"  GridWay daemon\n\n"
 "OPTIONS\n"
 "  -h            prints this help.\n"
 "  -v            prints GridWay version and license\n"
@@ -67,7 +67,7 @@ const char * usage =
 "  -d            disposes jobs when done\n";
 
 const char * susage =
-"usage: gwd [-h] [-v] [-m] [-c] [-d]\n";
+"usage: gwd [-h] [-v] [-m] [-c] [-f] [-d]\n";
 
 /* -------------------------------------------------------------------------- */
 
