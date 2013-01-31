@@ -173,7 +173,7 @@ int gw_job_environment(gw_job_t *job)
     fprintf(fd,"export GW_CPU_MODEL=\"%s\"\n", job->history->host->cpu_model);
     fprintf(fd,"export GW_CPU_MHZ=\"%i\"\n", job->history->host->cpu_mhz);
     fprintf(fd,"export GW_MEM_MB=\"%i\"\n", job->history->host->free_mem_mb);
-    fprintf(fd,"export GW_DISK_MB=\"%i\"\n", job->history->host->free_disk_mb);
+    fprintf(fd,"export GW_DISK_MB=\"%li\"\n", job->history->host->free_disk_mb);
     
     if (job->array_id != -1)
     {
