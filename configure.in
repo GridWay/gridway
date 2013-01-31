@@ -33,17 +33,17 @@ case "$build_os" in
     ;;
     *solaris*)
         system=solaris
-        CFLAGS+="-DGWSOLARIS"
-        LDFLAGS+="-lsocket -lnsl"
+        CFLAGS+=" -DGWSOLARIS"
+        LDFLAGS+=" -lsocket -lnsl"
     ;;
     *darwin*)
         JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Home
-        CFLAGS+="-I/System/Library/Frameworks/JavaVM.framework/Headers" 
+        CFLAGS+=" -I/System/Library/Frameworks/JavaVM.framework/Headers" 
     ;;
    
     *osf5.1* | *tru64*)
         system=alpha
-        CFLAGS+="-pthread -D_POSIX_PII_SOCKET"
+        CFLAGS+=" -pthread -D_POSIX_PII_SOCKET"
     ;;
     *aix*)
         system=
