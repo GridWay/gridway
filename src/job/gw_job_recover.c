@@ -60,7 +60,7 @@ int gw_job_recover(gw_job_t *job)
     FILE * history_file;
    
     gw_template_t  template;
-    gw_job_state_t job_state;
+    gw_job_state_t job_state = GW_JOB_STATE_INIT;
     gw_job_state_t previous_job_state;
     
     struct passwd * pw_ent;
