@@ -66,8 +66,8 @@ int gw_job_fill(gw_job_t *job, const gw_msg_submit_t *msg_submit)
         
 /* -------------------------------------------------------------------------- */
     	
-	if (job->owner != NULL )
-		free(job->owner);
+    if (job->owner != NULL )
+        free(job->owner);
 		
     job->owner = strdup(msg_submit->msg.owner);	           
 

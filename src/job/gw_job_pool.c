@@ -21,6 +21,10 @@
 #include "gw_user_pool.h"
 #include "gw_dm.h"
 
+#ifdef HAVE_GLOBUS_USAGE
+#include "globus_usage.h"
+#endif
+
 #ifdef HAVE_LIBDB
 #include "gw_acct.h"
 #endif
@@ -31,6 +35,10 @@
 static gw_job_pool_t       gw_job_pool;
 
 static gw_job_dep_matrix_t gw_job_deps;
+
+#ifdef HAVE_GLOBUS_USAGE
+static globus_usage_stats_handle_t usage_handle = NULL;
+#endif
 
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
@@ -291,6 +299,12 @@ gw_job_pool_t * gw_job_pool_init()
 {
   int i;
 
+#ifdef HAVE_GLOBUS_USAGE
+  globus_result_t rc;
+  globus_object_t *err = GLOBUS_NULL;
+  char *errstr=GLOBUS_NULL;
+#endif
+
   i = gw_job_dep_init();
   
   if ( i != 0 )
@@ -301,7 +315,7 @@ gw_job_pool_t * gw_job_pool_init()
   pthread_mutex_lock(&(gw_job_pool.mutex));
 
   gw_job_pool.pool = (gw_job_t**) malloc(gw_conf.number_of_jobs
-                                                           * sizeof(gw_job_t*));
+          * sizeof(gw_job_t*));
   gw_job_pool.number_of_jobs = 0;
   gw_job_pool.last_job_id    = -1;
 
@@ -318,6 +332,29 @@ gw_job_pool_t * gw_job_pool_init()
   pthread_mutex_unlock(&(gw_job_pool.mutex));
   
   gw_log_print("DM",'I',"Job pool initialized.\n");
+
+#ifdef HAVE_GLOBUS_USAGE
+  rc = globus_module_activate(GLOBUS_USAGE_MODULE);
+
+  if (rc != GLOBUS_SUCCESS) {
+    err = globus_error_get(rc);
+    errstr = globus_object_printable_to_string(err);
+    gw_log_print("DM",'E',"USAGE: Error activating module: %s.\n", errstr);
+  } else {
+    gw_log_print("DM",'I',"USAGE: Module activated.\n");
+  }
+
+  rc = globus_usage_stats_handle_init(&usage_handle, 25,
+      0, NULL); //statistics.ige-project.eu:4810
+
+  if (rc != GLOBUS_SUCCESS) {
+    err = globus_error_get(rc);
+    errstr = globus_object_printable_to_string(err);
+    gw_log_print("DM",'E',"USAGE: Error initializing handle: %s.\n", errstr);
+  } else {
+    gw_log_print("DM",'I',"USAGE: Handle initialized.\n");
+  }
+#endif
   
   return (&gw_job_pool);
 }
@@ -442,10 +479,10 @@ int gw_job_pool_allocate_by_id (int job_id)
 
 void gw_job_pool_free (int job_id)
 {
-	gw_job_t *            job;
+    gw_job_t *            job;
     gw_migration_reason_t reason;
     
-	if ( ( job_id >= 0 ) && ( job_id < gw_conf.number_of_jobs ) )
+    if ( ( job_id >= 0 ) && ( job_id < gw_conf.number_of_jobs ) )
     {
     	pthread_mutex_lock(&(gw_job_pool.mutex));
     	
@@ -453,56 +490,47 @@ void gw_job_pool_free (int job_id)
         
         if ( job != NULL )
         {
-        	pthread_mutex_lock(&(job->mutex));
+            pthread_mutex_lock(&(job->mutex));
         	
-        	if ( job->history == NULL )
-        	    reason = GW_REASON_NONE;
-        	else
-        	    reason = job->history->reason;
+            if ( job->history == NULL )
+                reason = GW_REASON_NONE;
+            else
+                reason = job->history->reason;
            
-        	if (( job->job_state  == GW_JOB_STATE_PENDING) ||
-        	    ((job->job_state  == GW_JOB_STATE_WRAPPER)&&
-        	     (job->reschedule == GW_TRUE)))
-        	{
-            		gw_dm_mad_job_del(&gw_dm.dm_mad[0],job->id);
-        	}
+            if (job->job_state == GW_JOB_STATE_PENDING
+                    || (job->job_state  == GW_JOB_STATE_WRAPPER
+                        && job->reschedule == GW_TRUE))
+                gw_dm_mad_job_del(&gw_dm.dm_mad[0],job->id);
 
-			if ( job->exit_time == 0 )
-			{
-				job->exit_time = time(NULL);
+            if ( job->exit_time == 0 )
+            {
+                job->exit_time = time(NULL);
 				
-				if ( job->history != NULL )
-				{
-					if ( job->history->stats[EXIT_TIME] == 0 )
-					{
-						job->history->stats[EXIT_TIME] = time(NULL);
-					}
-				}
-			}
+                if ( job->history != NULL 
+                        && job->history->stats[EXIT_TIME] == 0 )
+                    job->history->stats[EXIT_TIME] = time(NULL);
+            }
 #ifdef HAVE_LIBDB			
-			gw_acct_write_job(job);
+            gw_acct_write_job(job);
 #endif
+
             gw_user_pool_dec_jobs(job->user_id);        	         
-
-	        gw_job_pool.number_of_jobs--;
-        
-	        gw_job_pool.pool[job_id] = NULL;
-                                        
-	        gw_job_destroy (job);
-
-	        free(job);
+            gw_job_pool.number_of_jobs--;
+            gw_job_pool.pool[job_id] = NULL;
+            gw_job_destroy (job);
+            free(job);
         }
         
-	    pthread_mutex_unlock(&(gw_job_pool.mutex));
+        pthread_mutex_unlock(&(gw_job_pool.mutex));
 	    
     	pthread_mutex_lock(&(gw_job_deps.mutex));
     	
-   		if ( gw_job_deps.deps[job_id] != NULL )
-   		{
-   			free(gw_job_deps.deps[job_id]);
-   			gw_job_deps.deps[job_id] = NULL;
-   		}
-   		
+        if ( gw_job_deps.deps[job_id] != NULL )
+        {
+            free(gw_job_deps.deps[job_id]);
+            gw_job_deps.deps[job_id] = NULL;
+        }
+
     	pthread_mutex_unlock(&(gw_job_deps.mutex));
     }
 }
@@ -736,3 +764,54 @@ int gw_job_pool_get_num_jobs()
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
+
+int gw_job_send_usage(gw_job_t *job)
+{
+#ifdef HAVE_GLOBUS_USAGE
+    globus_result_t rc;
+    globus_object_t *err = GLOBUS_NULL;
+    char *errstr=GLOBUS_NULL;
+
+    /*gw_history_t * p;*/
+
+    char start_time[256];
+    char exit_time[256];
+
+    /*job->total_tasks;
+    job->template.type;
+    job->template.np;
+    job->exit_code;
+    job->restarted;*/
+
+    /* Calculate stats from all hosts in history */
+    /*cpu_time = 0;
+    xfr_time = 0;
+
+    p = job->history;
+    while (p != NULL )
+    {
+        cpu_time += gw_job_history_get_wrapper_time(p);
+        xfr_time += gw_job_history_get_prolog_time(p)
+                + gw_job_history_get_epilog_time(p)
+                + gw_job_history_get_migration_time(p);
+        p = p->next;
+    }*/
+
+    sprintf(start_time, "%ld", job->start_time);
+    sprintf(exit_time, "%ld", job->exit_time);
+
+    rc = globus_usage_stats_send(usage_handle, 2,
+            "START_TIME", start_time,
+            "EXIT_TIME", exit_time);
+
+    if (rc != GLOBUS_SUCCESS) {
+        err = globus_error_get(rc);
+        errstr = globus_object_printable_to_string(err);
+        gw_log_print("DM",'E',"USAGE: Error sending stats: %s.\n", errstr);
+    } else {
+        gw_log_print("DM",'I',"USAGE: Stats sent.\n");
+    }
+#endif
+
+    return 0;
+}

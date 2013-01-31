@@ -70,25 +70,25 @@ db="no"
 
 AC_ARG_ENABLE(drmaa_java,  AS_HELP_STRING(--enable-drmaa-java,\
   Build Java DRMAA support.),\
-  [if test $enableval = "yes"; then drmaa_java="yes"; else drmaa_java=" "; fi], [])
+  [if test $enableval = "yes"; then drmaa_java="yes"; else drmaa_java=""; fi], [])
 
 # --- Enable DRMAA 1.0 Java library ---
 
 AC_ARG_ENABLE(drmaa1_java,  AS_HELP_STRING(--enable-drmaa1-java,\
   Build DRMAA 1.0 specification for the Java binding.),\
-  [if test $enableval = "yes"; then drmaa1_java="yes";drmaa_java="yes"; else drmaa1_java=" "; drmaa_java=" "; fi], [])
+  [if test $enableval = "yes"; then drmaa1_java="yes";drmaa_java="yes"; else drmaa1_java=""; drmaa_java=""; fi], [])
   
 # --- Enable DRMAA Ruby library ---
 
 AC_ARG_ENABLE(drmaa_ruby,  AS_HELP_STRING(--enable-drmaa-ruby,\
   Build Ruby DRMAA support.),\
-  [if test $enableval = "yes"; then drmaa_ruby="yes"; else drmaa_ruby=" "; fi], [])
+  [if test $enableval = "yes"; then drmaa_ruby="yes"; else drmaa_ruby=""; fi], [])
 
 # --- Enable JSDL  ---
 
 AC_ARG_ENABLE(jsdl,  AS_HELP_STRING(--enable-jsdl,\
   Build JSDL support.),\
-  [if test $enableval = "yes"; then jsdl="yes"; else jsdl=" "; fi], [])
+  [if test $enableval = "yes"; then jsdl="yes"; else jsdl=""; fi], [])
 
 # --- Enable Debug ---
 
@@ -96,19 +96,25 @@ AC_ARG_ENABLE(debug,  AS_HELP_STRING(--enable-debug,\
   Enable debug info in logs.),\
   [CFLAGS="$CFLAGS -Wall -g -DGWIMDEBUG -DGWJOBDEBUG -DGWHOSTDEBUG -DGWEMDEBUG -DGWDMDEBUG  -DGWTMDEBUG -DGWUSERDEBUG -DGWSCHEDDEBUG";], [])
 
+# --- Enable Usage ---
+
+AC_ARG_ENABLE(usage,  AS_HELP_STRING(--enable-usage,\
+  Enable usage stats collection (needs makefile-header file).),\
+  [CFLAGS="$CFLAGS -DHAVE_GLOBUS_USAGE"; usage="yes"; AC_SUBST(incgtmk,"include $PWD/makefile-header")], [])
+
 # --- With Syslog  ---
 
 AC_ARG_WITH(syslog,  AS_HELP_STRING(--with-syslog=facility,\
   Build syslog compilant logs support.),\
-  [if test $withval = "LOG_DAEMON" -o $withval = "LOG_USER" -o $withval = "LOG_LOCAL0" -o $withval = "LOG_LOCAL1" -o $withval = "LOG_LOCAL2" -o $withval = "LOG_LOCAL3" -o $withval = "LOG_LOCAL4" -o $withval = "LOG_LOCAL5" -o $withval = "LOG_LOCAL6" -o $withval = "LOG_LOCAL7"; then syslog="$withval"; \
+  [if test $withval = "LOG_DAEMON" -o $withval = "LOG_USER" -o $withval = "LOG_LOCAL0" -o $withval = "LOG_LOCAL1" -o $withval = "LOG_LOCAL2" -o $withval = "LOG_LOCAL3" -o $withval = "LOG_LOCAL4" -o $withval = "LOG_LOCAL5" -o $withval = "LOG_LOCAL6" -o $withval = "LOG_LOCAL7"; then syslog="$withval"; else syslog=""\
   CFLAGS+=" -DGWSYSLOG=$syslog"; fi], [])
 
 # --- With DB ---      
 
 AC_ARG_WITH(db,  AS_HELP_STRING(--with-db=<no|path_to_db>,\
        Build db support for accounting.),\
-       [if test $withval = "no";  then  db=" "; else \       
-        if test $withval = "yes"; then  db="yes"; db_path=" "; fi; \
+       [if test $withval = "no";  then  db=""; else \       
+        if test $withval = "yes"; then  db="yes"; db_path=""; fi; \
         if test $withval != "yes"; then db="yes"; db_path="$withval"; fi; \
         fi], [])        
 
@@ -177,24 +183,24 @@ fi
 
 # --- Enable JSDL  ---
 
-AM_CONDITIONAL(JSDL, test "x$jsdl" = "xjsdl")
+AM_CONDITIONAL(JSDL, test "x$jsdl" = "xyes")
 
 # --- With Syslog ---
 
-AM_CONDITIONAL(SYSLOG, test "x$syslog" = "xsyslog")
+AM_CONDITIONAL(SYSLOG, test -n "$syslog")
 
 # --- With DB ---
 
 if test "x$db" = "xyes" ; then
-	if test "x$db_path"="x " ; then
-		LDFLAGS="${LDFLAGS} -L/usr/lib";
-		DB4_INCLUDE_PATH="-I /usr/include";	
-	else
-    	LDFLAGS="${LDFLAGS_SAVED} -L${db_path}/lib";
+    if test "x$db_path"="x" ; then
+        LDFLAGS="${LDFLAGS} -L/usr/lib";
+        DB4_INCLUDE_PATH="-I /usr/include";	
+    else
+        LDFLAGS="${LDFLAGS_SAVED} -L${db_path}/lib";
         DB4_INCLUDE_PATH="-I ${db_path}/include";	
-	fi
+    fi
 else
-	DB4_INCLUDE_PATH=" ";
+    DB4_INCLUDE_PATH="";
 fi
 
 AM_CONDITIONAL(DB, test "x$db" = "xyes")
@@ -202,6 +208,10 @@ AM_CONDITIONAL(DB, test "x$db" = "xyes")
 # --- With GridWay tests ---
 
 AM_CONDITIONAL(TESTS, test "x$tests" = "xyes")
+
+# --- With Usage ---
+
+AM_CONDITIONAL(USAGE, test "x$usage" = "xyes")
 
 # --- Fine tuning of the installation directories ---
 

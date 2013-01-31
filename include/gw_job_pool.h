@@ -77,4 +77,6 @@ void gw_job_pool_dep_cp (const int * src, int **dst);
 
 void gw_job_pool_dep_consistency();
 
+int gw_job_send_usage(gw_job_t *job);
+
 #endif

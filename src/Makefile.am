@@ -18,16 +18,22 @@
 # Automake Options
 # -----------------------------
 
+if USAGE
+
+@incgtmk@
+
+endif
+
 AUTOMAKE_OPTIONS = subdir-objects no-dependencies
 AM_YFLAGS = -d
 
 LINK_PROG    = $(CCLD)
 COMPILE_PROG = $(CC)
 
-LINK_OPTS = $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+LINK_OPTS = $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@ $(GLOBUS_LIBS) $(GLOBUS_LDFLAGS) $(GLOBUS_PKG_LIBS)
 
 COMPILE_OPTS = $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) $(GLOBUS_CFLAGS) $(GLOBUS_INCLUDES)
 
 LINK = $(LINK_PROG) $(LINK_OPTS)
 COMPILE = $(COMPILE_PROG) $(COMPILE_OPTS)
@@ -145,8 +151,6 @@ JSDL_SRC = $(CMDS)/GWJTElement.java \
         $(CMDS)/JSDLReader.java  \
         $(CMDS)/JSDLParser.java  \
         $(CMDS)/JSDLTranslator.java
-
-EXTRA_DIST = $(JSDL_SRC)
 
 EM_SRC = $(EM)/gw_em_actions.c \
         $(EM)/gw_em.c \
@@ -320,10 +324,6 @@ DRMAA1_JAVA_SRC = $(DRMAA1_PACK)/AlreadyActiveSessionException.java \
         $(DRMAA1_PACK)/GridWaySessionFactory.java \
         $(DRMAA1_PACK)/GridWaySession.java \
         $(DRMAA1_PACK)/SimpleJobTemplate.java
-
-EXTRA_DIST += $(DRMAA_JAVA_SRC) $(DRMAA_PACK)/DrmaaJNI.h $(DRMAA_PACK)/DrmaaJNI.c
-
-EXTRA_DIST += $(DRMAA1_JAVA_SRC) $(DRMAA1_PACK)/DrmaaJNI.h $(DRMAA1_PACK)/DrmaaJNI.c
 
 # -----------------------------
 # -- Includes and Headers
@@ -676,10 +676,12 @@ TM_MAD_RFT_SRC_DIST = $(TM_MAD)/rft/GWRftClient.java \
 	$(TM_MAD)/rft/GWRftUtil.java \
 	$(TM_MAD)/rft/gw_tm_mad_rft.sh
 
-EXTRA_DIST += $(IM_MAD_STATIC_SRC_DIST) $(IM_MAD_MDS2_SRC_DIST) \
+EXTRA_DIST = $(IM_MAD_STATIC_SRC_DIST) $(IM_MAD_MDS2_SRC_DIST) \
 $(IM_MAD_MDS4_SRC_DIST) $(IM_MAD_BDII_SRC_DIST) \
 $(EM_MAD_GRAM2_SRC_DIST) $(EM_MAD_GRAM4_SRC_DIST) \
 $(EM_MAD_GRAM5_SRC_DIST) $(EM_MAD_CREAM_SRC_DIST) \
 $(EM_MAD_NORDU_SRC_DIST) $(EM_MAD_SSH_SRC_DIST) $(EM_MAD_BES_SRC_DIST) \
 $(TM_MAD_GRIDFTP_SRC_DIST) $(TM_MAD_DUMMY_SRC_DIST) $(TM_MAD_NORDU_SRC_DIST) \
-$(TM_MAD_SSH_SRC_DIST) $(TM_MAD_RFT_SRC_DIST)
+$(TM_MAD_SSH_SRC_DIST) $(TM_MAD_RFT_SRC_DIST) $(JSDL_SRC) \
+$(DRMAA_JAVA_SRC) $(DRMAA_PACK)/DrmaaJNI.h $(DRMAA_PACK)/DrmaaJNI.c \
+$(DRMAA1_JAVA_SRC) $(DRMAA1_PACK)/DrmaaJNI.h $(DRMAA1_PACK)/DrmaaJNI.c

@@ -688,6 +688,8 @@ CC
 YFLAGS
 YACC
 AWK
+USAGE_FALSE
+USAGE_TRUE
 TESTS_FALSE
 TESTS_TRUE
 DB_FALSE
@@ -703,6 +705,7 @@ DRMAA1_JAVA_FALSE
 DRMAA1_JAVA_TRUE
 DRMAA_JAVA_FALSE
 DRMAA_JAVA_TRUE
+incgtmk
 java_home
 system
 build_os
@@ -755,6 +758,7 @@ enable_drmaa1_java
 enable_drmaa_ruby
 enable_jsdl
 enable_debug
+enable_usage
 with_syslog
 with_db
 with_tests
@@ -1406,6 +1410,8 @@ Optional Features:
   --enable-drmaa-ruby     Build Ruby DRMAA support.
   --enable-jsdl           Build JSDL support.
   --enable-debug          Enable debug info in logs.
+  --enable-usage          Enable usage stats collection (needs makefile-header
+                          file).
   --disable-dependency-tracking  speeds up one-time build
   --enable-dependency-tracking   do not reject slow dependency extractors
   --enable-shared[=PKGS]  build shared libraries [default=yes]
@@ -2560,7 +2566,7 @@ db="no"
 # Check whether --enable-drmaa_java was given.
 if test "${enable_drmaa_java+set}" = set; then :
   enableval=$enable_drmaa_java; \
-  if test $enableval = "yes"; then drmaa_java="yes"; else drmaa_java=" "; fi
+  if test $enableval = "yes"; then drmaa_java="yes"; else drmaa_java=""; fi
 fi
 
 
@@ -2569,7 +2575,7 @@ fi
 # Check whether --enable-drmaa1_java was given.
 if test "${enable_drmaa1_java+set}" = set; then :
   enableval=$enable_drmaa1_java; \
-  if test $enableval = "yes"; then drmaa1_java="yes";drmaa_java="yes"; else drmaa1_java=" "; drmaa_java=" "; fi
+  if test $enableval = "yes"; then drmaa1_java="yes";drmaa_java="yes"; else drmaa1_java=""; drmaa_java=""; fi
 fi
 
 
@@ -2578,7 +2584,7 @@ fi
 # Check whether --enable-drmaa_ruby was given.
 if test "${enable_drmaa_ruby+set}" = set; then :
   enableval=$enable_drmaa_ruby; \
-  if test $enableval = "yes"; then drmaa_ruby="yes"; else drmaa_ruby=" "; fi
+  if test $enableval = "yes"; then drmaa_ruby="yes"; else drmaa_ruby=""; fi
 fi
 
 
@@ -2587,7 +2593,7 @@ fi
 # Check whether --enable-jsdl was given.
 if test "${enable_jsdl+set}" = set; then :
   enableval=$enable_jsdl; \
-  if test $enableval = "yes"; then jsdl="yes"; else jsdl=" "; fi
+  if test $enableval = "yes"; then jsdl="yes"; else jsdl=""; fi
 fi
 
 
@@ -2600,13 +2606,23 @@ if test "${enable_debug+set}" = set; then :
 fi
 
 
+# --- Enable Usage ---
+
+# Check whether --enable-usage was given.
+if test "${enable_usage+set}" = set; then :
+  enableval=$enable_usage; \
+  CFLAGS="$CFLAGS -DHAVE_GLOBUS_USAGE"; usage="yes"; incgtmk="include $PWD/makefile-header"
+
+fi
+
+
 # --- With Syslog  ---
 
 
 # Check whether --with-syslog was given.
 if test "${with_syslog+set}" = set; then :
   withval=$with_syslog; \
-  if test $withval = "LOG_DAEMON" -o $withval = "LOG_USER" -o $withval = "LOG_LOCAL0" -o $withval = "LOG_LOCAL1" -o $withval = "LOG_LOCAL2" -o $withval = "LOG_LOCAL3" -o $withval = "LOG_LOCAL4" -o $withval = "LOG_LOCAL5" -o $withval = "LOG_LOCAL6" -o $withval = "LOG_LOCAL7"; then syslog="$withval"; \
+  if test $withval = "LOG_DAEMON" -o $withval = "LOG_USER" -o $withval = "LOG_LOCAL0" -o $withval = "LOG_LOCAL1" -o $withval = "LOG_LOCAL2" -o $withval = "LOG_LOCAL3" -o $withval = "LOG_LOCAL4" -o $withval = "LOG_LOCAL5" -o $withval = "LOG_LOCAL6" -o $withval = "LOG_LOCAL7"; then syslog="$withval"; else syslog=""\
   CFLAGS+=" -DGWSYSLOG=$syslog"; fi
 fi
 
@@ -2617,8 +2633,8 @@ fi
 # Check whether --with-db was given.
 if test "${with_db+set}" = set; then :
   withval=$with_db; \
-       if test $withval = "no";  then  db=" "; else \
-        if test $withval = "yes"; then  db="yes"; db_path=" "; fi; \
+       if test $withval = "no";  then  db=""; else \
+        if test $withval = "yes"; then  db="yes"; db_path=""; fi; \
         if test $withval != "yes"; then db="yes"; db_path="$withval"; fi; \
         fi
 fi
@@ -2759,7 +2775,7 @@ fi
 
 # --- Enable JSDL  ---
 
- if test "x$jsdl" = "xjsdl"; then
+ if test "x$jsdl" = "xyes"; then
   JSDL_TRUE=
   JSDL_FALSE='#'
 else
@@ -2770,7 +2786,7 @@ fi
 
 # --- With Syslog ---
 
- if test "x$syslog" = "xsyslog"; then
+ if test -n "$syslog"; then
   SYSLOG_TRUE=
   SYSLOG_FALSE='#'
 else
@@ -2782,15 +2798,15 @@ fi
 # --- With DB ---
 
 if test "x$db" = "xyes" ; then
-	if test "x$db_path"="x " ; then
-		LDFLAGS="${LDFLAGS} -L/usr/lib";
-		DB4_INCLUDE_PATH="-I /usr/include";
-	else
-    	LDFLAGS="${LDFLAGS_SAVED} -L${db_path}/lib";
+    if test "x$db_path"="x" ; then
+        LDFLAGS="${LDFLAGS} -L/usr/lib";
+        DB4_INCLUDE_PATH="-I /usr/include";
+    else
+        LDFLAGS="${LDFLAGS_SAVED} -L${db_path}/lib";
         DB4_INCLUDE_PATH="-I ${db_path}/include";
-	fi
+    fi
 else
-	DB4_INCLUDE_PATH=" ";
+    DB4_INCLUDE_PATH="";
 fi
 
  if test "x$db" = "xyes"; then
@@ -2810,6 +2826,17 @@ fi
 else
   TESTS_TRUE='#'
   TESTS_FALSE=
+fi
+
+
+# --- With Usage ---
+
+ if test "x$usage" = "xyes"; then
+  USAGE_TRUE=
+  USAGE_FALSE='#'
+else
+  USAGE_TRUE='#'
+  USAGE_FALSE=
 fi
 
 
@@ -17549,6 +17576,10 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${TESTS_TRUE}" && test -z "${TESTS_FALSE}"; then
   as_fn_error "conditional \"TESTS\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${USAGE_TRUE}" && test -z "${USAGE_FALSE}"; then
+  as_fn_error "conditional \"USAGE\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${AMDEP_TRUE}" && test -z "${AMDEP_FALSE}"; then
