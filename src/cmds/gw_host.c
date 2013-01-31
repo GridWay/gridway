@@ -31,7 +31,7 @@
 const char * usage =
 "USAGE\n gwhost [-h] [-c delay] [-nfx] [-m job_id] [host_id]\n\n"
 "SYNOPSIS\n"
-"  Prints information about all the hosts in the GridWay system (default)\n\n"
+"  Prints information about hosts in the GridWay system\n\n"
 "OPTIONS\n"
 "  -h           print this help\n"
 "  -c delay     refresh host information every delay seconds\n"

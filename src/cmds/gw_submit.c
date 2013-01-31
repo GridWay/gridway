@@ -30,7 +30,7 @@
 const char * usage =
 "USAGE\n gwsubmit [-h] [-v] [-o] [-d \"id1 id2 ...\"] [-p priotity] [-n tasks [-s start] [-i increment]] <[-t] template>\n\n"
 "SYNOPSIS\n"
-"  Submits a job or an array job (if the number of tasks is defined) to gwd\n\n"
+"  Submits a job or an array job to gwd\n\n"
 "OPTIONS\n"
 "  -h                  print this help\n"
 "  -v                  print to stdout the job ids returned by gwd\n"

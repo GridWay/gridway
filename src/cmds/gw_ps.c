@@ -31,7 +31,7 @@
 const char * usage =
 "USAGE\n gwps [-h] [-u user] [-r host] [-A AID] [-s job_state] [-o output_format] [-c delay] [-nfx] [job_id]\n\n"
 "SYNOPSIS\n"
-"  Prints information about all the jobs in the GridWay system (default)\n\n"
+"  Prints information about jobs in the GridWay system\n\n"
 "OPTIONS\n"
 "  -h               print this help\n"
 "  -u user          monitor only jobs owned by user\n"
