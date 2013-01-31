@@ -233,7 +233,7 @@ execution(){
 
     printf "`date`: Waiting for actual job to finish... "
 
-    wait $JOB_PID
+    wait $JOB_PID 2>> stderr.execution
 
     EXIT_STATUS=$?
 
