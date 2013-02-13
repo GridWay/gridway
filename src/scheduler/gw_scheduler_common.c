@@ -62,8 +62,8 @@ void gw_scheduler_loop(gw_scheduler_function_t scheduler, void *user_arg)
         
     char *  GW_LOCATION;
     char *  log;
-    char *  conf;
-    char *  error_str;
+    char *  conf = NULL;
+    char *  error_str = NULL;
     char *  name;
     
     int     length;

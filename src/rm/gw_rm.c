@@ -425,15 +425,15 @@ void gw_rm_listener(void *_null)
     struct sockaddr_in     client_addr;
     socklen_t              client_size;
     gw_msg_t               * msg;
-    gw_template_t	       * jt;
-    gw_msg_submit_t        * msg_submit;
+    gw_template_t          * jt = NULL;
+    gw_msg_submit_t        * msg_submit = NULL;
     fd_set                 clients;
     int                    *active_connections;
     int                    i, rc;
     int                    max_fd;
-    ssize_t 			   bytes, bytes_jt;
-    size_t				   length;
-    int                    close_connection;
+    ssize_t                bytes, bytes_jt;
+    size_t                 length;
+    int                    close_connection = 0;
 	
     pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL); 
     pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);

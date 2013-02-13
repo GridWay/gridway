@@ -62,10 +62,10 @@ int main(int argc, char **argv)
     int              job_id;
     int              array_id;
     int *            job_ids;
-    int              tasks;
+    int              tasks = 0;
     int              start, inc;
     char *           template = NULL;
-    char *           deps_str;
+    char *           deps_str = NULL;
     char *           num;
     int              deps[GW_JT_DEPS];
     char             opt;
