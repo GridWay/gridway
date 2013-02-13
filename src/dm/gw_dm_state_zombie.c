@@ -69,15 +69,15 @@ void gw_dm_zombie ( void *_job_id )
        
             gw_log_print("DM",'I',"Job %i done, with exit code %i.\n",job->id, job->exit_code);
 
+            job->history->reason = GW_REASON_NONE;
+            job->exit_time       = time(NULL);
+
             /* ------------- Print job history and send usage ------------ */
 
             gw_job_print(job,"DM",'I',"Job done, history:\n");            
             gw_job_print_history(job);
             gw_job_send_usage(job);
                                 
-            job->history->reason = GW_REASON_NONE;
-            job->exit_time       = time(NULL);
-    
             if ( job->client_waiting > 0 )
                 gw_am_trigger(gw_dm.rm_am,"GW_RM_WAIT_SUCCESS", _job_id);
             else
@@ -117,16 +117,14 @@ void gw_dm_zombie ( void *_job_id )
             
             gw_job_set_state(job, GW_JOB_STATE_ZOMBIE, GW_FALSE);            
 
+            job->exit_time = time(NULL);
+
             /* ------------- Print job history and send usage ------------ */
             
             gw_job_print(job,"DM",'I',"Job killed, history:\n");
             gw_job_print_history(job);
             gw_job_send_usage(job);
 
-            /* ----------- Update job structure ----------- */
-            
-            job->exit_time = time(NULL);
-                        
             /* ---------------- Free job & Notify RM ---------------- */
             
             array_id = job->array_id;
