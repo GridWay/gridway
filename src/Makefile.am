@@ -629,6 +629,13 @@ EM_MAD_CREAM_SRC_DIST = $(EM_MAD)/cream/gw_em_mad_cream.cpp \
 	$(EM_MAD)/cream/README \
 	$(EM_MAD)/cream/Makefile
 
+EM_MAD_EMIES_SRC_DIST = $(EM_MAD)/emi-es/gw_em_mad_emies.cpp \
+        $(EM_MAD)/emi-es/gw_em_mad_emies_actions.cpp \
+        $(EM_MAD)/emi-es/gw_em_mad_emies.h \
+        $(EM_MAD)/emi-es/gw_em_mad_emies.sh \
+        $(EM_MAD)/emi-es/README \
+        $(EM_MAD)/emi-es/Makefile
+
 EM_MAD_NORDU_SRC_DIST = $(EM_MAD)/nordugrid/gw_em_mad_nordugrid.py \
 	$(EM_MAD)/nordugrid/em_nordugrid.py \
 	$(EM_MAD)/nordugrid/gw_em_mad_nordugrid.sh
