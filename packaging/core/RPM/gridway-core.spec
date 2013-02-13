@@ -48,8 +48,8 @@ GridWay Core
 
 %post
 /usr/sbin/groupadd gwusers > /dev/null 2> /dev/null
-/usr/sbin/useradd -d /usr/share/%{_name} -g gwusers -s /bin/sh gwadmin > /dev/null 2> /dev/null
-chown -R gwadmin:gwusers /usr/share/%{_name}/%{version}.%{_release}
+/usr/sbin/useradd -d /var/lib/%{_name} -g gwusers -s /bin/sh gwadmin > /dev/null 2> /dev/null
+chown -R gwadmin:gwusers /var/lib/%{_name}/
 /sbin/chkconfig --add gwd
 /sbin/ldconfig
 
@@ -68,13 +68,13 @@ fi
 /sbin/ldconfig
 
 %build
-JAVA_HOME=/usr/lib/jvm/java ./configure --prefix=/usr/ --localstatedir=/usr/share/%{_name}/%{version}.%{_release}/var --datarootdir=/usr/share/doc/%{_name}-%{version}.%{_release} --with-db=yes --with-syslog=LOG_USER --enable-drmaa-java
+JAVA_HOME=/usr/lib/jvm/java ./configure --prefix=/usr/ --localstatedir=/var/lib/%{_name}/ --datarootdir=/usr/share/doc/%{_name}-%{version}.%{_release} --with-db=yes --with-syslog=LOG_USER --enable-drmaa-java
 make
 
 %install
 rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
-mv $RPM_BUILD_ROOT/usr/xml_schema/ $RPM_BUILD_ROOT/usr/share/%{_name}/%{version}.%{_release}/
+mv $RPM_BUILD_ROOT/usr/xml_schema/ $RPM_BUILD_ROOT/var/lib/%{_name}/
 %if "%{?rhel}" <="5" || "%{?fedora}" <= "9"
 mkdir -p $RPM_BUILD_ROOT/%{_initrddir}
 cp etc/gwd $RPM_BUILD_ROOT/%{_initrddir}
@@ -166,9 +166,9 @@ rm -rf $RPM_BUILD_ROOT
 /usr/include/gw_user.h
 /usr/include/gw_user_pool.h
 /usr/include/gw_xfr_files.h
-/usr/share/gridway/5.14.RC1/xml_schema/gridway.xsd
-/usr/share/gridway/5.14.RC1/var
-/usr/share/gridway/5.14.RC1/var/acct
+/var/lib/gridway/xml_schema/gridway.xsd
+/var/lib/gridway
+/var/lib/gridway/acct
 /usr/lib/drmaa.jar
 /usr/lib/libDrmaaJNI.a
 /usr/lib/libDrmaaJNI.la

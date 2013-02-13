@@ -4,7 +4,7 @@
 # description: GridWay Metascheduler
 # processname: gwd
 #
-# Copyright 2002-2012 GridWay Team, Distributed Systems Architecture
+# Copyright 2002-2013 GridWay Team, Distributed Systems Architecture
 # Group, Universidad Complutense de Madrid
 #
 
@@ -33,7 +33,7 @@ echo -n $"Stopping $DESC: "
 killproc gwd
 RETVAL=$?
 echo
-[ $RETVAL -eq 0 ] && rm -f /usr/share/gridway/5.14.RC1/var/.lock
+[ $RETVAL -eq 0 ] && rm -f /var/lib/gridway/5.14.RC1/var/.lock
 return $RETVAL
 }
 

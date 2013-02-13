@@ -18,7 +18,7 @@ configure-stamp:
 	dh_testdir
 
 	# cp -p gridway-$(_version)/packaging/core/debian/README gridway-$(_version)/README
-	JAVA_HOME=/usr/lib/jvm/default-java ./configure --prefix=/usr/ --localstatedir=/usr/share/gridway/$(_version)/var --datarootdir=/usr/share/doc/gridway-core --with-db=yes --with-syslog=LOG_USER --enable-drmaa-java
+	JAVA_HOME=/usr/lib/jvm/default-java ./configure --prefix=/usr/ --localstatedir=/var/lib/gridway/ --datarootdir=/usr/share/doc/gridway-core --with-db=yes --with-syslog=LOG_USER --enable-drmaa-java
 
 build: build-arch build-indep
 
