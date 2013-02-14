@@ -433,7 +433,7 @@ void gw_rm_listener(void *_null)
     int                    max_fd;
     ssize_t                bytes, bytes_jt;
     size_t                 length;
-    int                    close_connection = 0;
+    int                    close_connection = 1;
 	
     pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL); 
     pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
