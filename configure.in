@@ -218,16 +218,16 @@ AM_CONDITIONAL(USAGE, test "x$usage" = "xyes")
 if test $localstatedir != '${prefix}/var'; then
 if test $prefix = NONE; then
       vardir=${localstatedir#$ac_default_prefix}
-      if test $vardir = $localstatedir; then
-        $as_echo "$as_myself: error: localstatedir does not match in default prefix" >&2
-        exit 1
-      fi
+#      if test $vardir = $localstatedir; then
+#        $as_echo "$as_myself: error: localstatedir does not match in default prefix" >&2
+#        exit 1
+#      fi
     else
       vardir=${localstatedir#$prefix}
-      if test $vardir = $localstatedir; then
-        $as_echo "$as_myself: error: localstatedir does not match in prefix" >&2
-        exit 1
-      fi
+#      if test $vardir = $localstatedir; then
+#        $as_echo "$as_myself: error: localstatedir does not match in prefix" >&2
+#        exit 1
+#      fi
     fi
 fi;
 
