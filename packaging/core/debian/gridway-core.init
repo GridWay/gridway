@@ -29,6 +29,8 @@ DODTIME=30                  # Time to wait for the server to die, in seconds
                             # let some servers to die gracefully and
                             # 'restart' will not work
 
+export GLOBUS_USAGE_TARGETS=statistics.ige-project.eu:4810
+
 # Include gridway-core defaults if available
 if [ -f /etc/default/gridway-core ] ; then
     . /etc/default/gridway-core

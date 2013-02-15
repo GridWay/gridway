@@ -19,6 +19,8 @@ RETVAL=0
 # Exit if the package is not installed
 test -x "/usr/bin/gwd" || exit 0
 
+export GLOBUS_USAGE_TARGETS=statistics.ige-project.eu:4810
+
 start(){
 echo -n $"Starting $DESC: "
 su gwadmin -c "sh -lc 'gwd -m'" > /dev/null 2>&1 &
