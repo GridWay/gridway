@@ -81,7 +81,7 @@ typedef struct gw_template_s
 	gw_boolean_t reschedule_on_failure;
 	int number_of_retries;
 
-	char wrapper[GW_JT_STR];
+	char wrapper[GW_JT_PATH];
 	char monitor[GW_JT_STR];
 	
 	int  job_deps[GW_JT_DEPS];
