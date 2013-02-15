@@ -12,13 +12,22 @@ _datadir = $(_prefix)/share
 _mandir = $(_datadir)/man
 _docdir = $(_datadir)/doc/gridway-$(_version)
 
+DEB_HOST_ARCH_CPU ?= $(shell dpkg-architecture -qDEB_HOST_ARCH_CPU)
+
+ifneq (,$(filter $(DEB_HOST_ARCH_CPU), amd64 alpha ia64 s390x ppc64 sparc64))
+flavor = gcc64
+else
+flavor = gcc32
+endif
+
 configure: configure-stamp
 
 configure-stamp:
 	dh_testdir
 
 	# cp -p gridway-$(_version)/packaging/core/debian/README gridway-$(_version)/README
-	JAVA_HOME=/usr/lib/jvm/default-java ./configure --prefix=/usr/ --localstatedir=/var/lib/gridway/ --datarootdir=/usr/share/doc/gridway-core --with-db=yes --with-syslog=LOG_USER --enable-drmaa-java
+        globus-makefile-header --flavor=$(flavor) globus_usage > makefile-header
+	JAVA_HOME=/usr/lib/jvm/default-java ./configure --prefix=/usr/ --localstatedir=/var/lib/gridway/ --datarootdir=/usr/share/doc/gridway-core --with-db=yes --with-syslog=LOG_USER --enable-drmaa-java --enable-usage
 
 build: build-arch build-indep
 
