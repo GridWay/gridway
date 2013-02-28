@@ -1,6 +1,12 @@
 %define _name gridway
 %define _release RC1
 
+%ifarch alpha ia64 ppc64 s390x sparc64 x86_64
+%global flavor gcc64
+%else
+%global flavor gcc32
+%endif
+
 Name:		gridway-core
 Version:	5.14
 Release:	RC1%{dist}
@@ -21,13 +27,14 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
 
 BuildRequires:	gcc
 BuildRequires:	java-devel
+BuildRequires: db4-devel
+BuildRequires:  globus-common-devel
 Requires(post): chkconfig
 Requires(preun): chkconfig
 Requires(preun): initscripts
 Requires(postun): initscripts
 Requires: db4
-Requires: db4-devel
-Requires: db4-utils
+Requires: globus-proxy-utils
 Requires: globus-proxy-utils
 
 %description
@@ -68,7 +75,8 @@ fi
 /sbin/ldconfig
 
 %build
-JAVA_HOME=/usr/lib/jvm/java ./configure --prefix=/usr/ --localstatedir=/var/lib/%{_name}/ --datarootdir=/usr/share/doc/%{_name}-%{version}.%{_release} --with-db=yes --with-syslog=LOG_USER --enable-drmaa-java
+globus-makefile-header --flavor=$(flavor) globus_usage > makefile-header
+JAVA_HOME=/usr/lib/jvm/java ./configure --prefix=/usr/ --localstatedir=/var/lib/%{_name}/ --datarootdir=/usr/share/doc/%{_name}-%{version}.%{_release} --with-db=yes --with-syslog=LOG_USER --enable-drmaa-java --enable-usage
 make
 
 %install
