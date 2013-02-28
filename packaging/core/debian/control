@@ -2,13 +2,13 @@ Source: gridway-core
 Priority: optional
 Maintainer: Initiative for Globus in Europe (IGE) <info@ige-project.eu>
 Standards-Version: 3.9.2
-Build-Depends: debhelper (>= 5), gcc (>= 3.4.2), default-jdk, libglobus-usage-dev, libglobus-common-dev
+Build-Depends: debhelper (>= 5), gcc (>= 3.4.2), default-jdk, libglobus-usage-dev, libglobus-common-dev, libdb5.1-dev
 Section: libs
 Homepage: http://www.ige-project.eu/
 
 Package: gridway-core
 Architecture: any
-Depends: libdb4.8, globus-proxy-utils, libglobus-usage0
+Depends: libdb5.1, globus-proxy-utils, libglobus-usage0
 Description: 
  The GridWay Metascheduler enables large-scale, reliable and efficient sharing 
  of computing resources: clusters, supercomputers, stand-alone servers... It 

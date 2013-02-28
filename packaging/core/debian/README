@@ -45,7 +45,7 @@ Check the Installation Guide for more details.
 The binary DEB package gridway-core installs GridWay with a multi-user 
 configuration.
 
-1) Install DEB dependencies: libdb4.8 and globus-proxy-utils.
+1) Install DEB dependencies: libdb5.1, globus-proxy-utils and libglobus-usage0.
 
 2) Post-install configuration:
 
