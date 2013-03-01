@@ -249,79 +249,111 @@ am___srcdir__cmds_gwwait_OBJECTS = $(CMDS)/gw_wait.$(OBJEXT) \
 	$(am__objects_9)
 __srcdir__cmds_gwwait_OBJECTS = $(am___srcdir__cmds_gwwait_OBJECTS)
 __srcdir__cmds_gwwait_LDADD = $(LDADD)
-am__objects_11 = $(EM)/gw_em_actions.$(OBJEXT) $(EM)/gw_em.$(OBJEXT) \
-	$(EM)/gw_em_listener.$(OBJEXT) $(EM)/gw_em_mad.$(OBJEXT) \
-	$(EM)/gw_em_rsl2.$(OBJEXT) $(EM)/gw_em_rsl.$(OBJEXT) \
-	$(EM)/gw_em_jdl.$(OBJEXT) $(EM)/gw_em_jsdl.$(OBJEXT) \
-	$(EM)/gw_em_adl.$(OBJEXT) $(EM)/gw_em_state.$(OBJEXT)
-am__objects_12 = $(TM)/gw_tm_actions.$(OBJEXT) $(TM)/gw_tm.$(OBJEXT) \
-	$(TM)/gw_tm_checkpoint.$(OBJEXT) $(TM)/gw_tm_epilog.$(OBJEXT) \
-	$(TM)/gw_tm_listener.$(OBJEXT) $(TM)/gw_tm_mad.$(OBJEXT) \
-	$(TM)/gw_tm_prolog.$(OBJEXT)
-am__objects_13 = $(IM)/gw_im_actions.$(OBJEXT) $(IM)/gw_im.$(OBJEXT) \
-	$(IM)/gw_im_listener.$(OBJEXT) $(IM)/gw_im_mad.$(OBJEXT)
-am__objects_14 = $(JOB)/gw_history.$(OBJEXT) $(JOB)/gw_job.$(OBJEXT) \
-	$(JOB)/gw_job_environment.$(OBJEXT) \
-	$(JOB)/gw_job_pool.$(OBJEXT) $(JOB)/gw_job_recover.$(OBJEXT) \
-	$(JOB)/gw_job_template.$(OBJEXT) \
-	$(JOB)/gw_job_template_var_parser.$(OBJEXT) \
-	$(JOB)/gw_xfr_files.$(OBJEXT)
-am__objects_15 = $(HOST)/gw_host.$(OBJEXT) \
-	$(HOST)/gw_host_var.$(OBJEXT) $(HOST)/gw_host_pool.$(OBJEXT) \
-	$(HOST)/gw_host_rank_syntax.$(OBJEXT) \
-	$(HOST)/gw_host_reqs_syntax.$(OBJEXT) \
-	$(HOST)/gw_host_update_syntax.$(OBJEXT) \
-	$(HOST)/gw_host_attr_parser.$(OBJEXT)
-am__objects_16 = $(ARRAY)/gw_array.$(OBJEXT) \
-	$(ARRAY)/gw_array_pool.$(OBJEXT)
-am__objects_17 = $(DM)/gw_dm_action_allocate.$(OBJEXT) \
-	$(DM)/gw_dm_action_dispatch.$(OBJEXT) \
-	$(DM)/gw_dm_action_hold_release.$(OBJEXT) \
-	$(DM)/gw_dm_action_kill.$(OBJEXT) \
-	$(DM)/gw_dm_action_reschedule.$(OBJEXT) \
-	$(DM)/gw_dm_action_schedule.$(OBJEXT) \
-	$(DM)/gw_dm_action_stop_resume.$(OBJEXT) \
-	$(DM)/gw_dm_action_wait.$(OBJEXT) $(DM)/gw_dm.$(OBJEXT) \
-	$(DM)/gw_dm_listener.$(OBJEXT) $(DM)/gw_dm_mad.$(OBJEXT) \
-	$(DM)/gw_dm_state_epilogs.$(OBJEXT) \
-	$(DM)/gw_dm_state_failed.$(OBJEXT) \
-	$(DM)/gw_dm_state_migrate.$(OBJEXT) \
-	$(DM)/gw_dm_state_pending.$(OBJEXT) \
-	$(DM)/gw_dm_state_prologs.$(OBJEXT) \
-	$(DM)/gw_dm_state_stopped.$(OBJEXT) \
-	$(DM)/gw_dm_state_wrappers.$(OBJEXT) \
-	$(DM)/gw_dm_state_zombie.$(OBJEXT)
-am__objects_18 = $(RM)/gw_rm.$(OBJEXT) \
-	$(RM)/gw_rm_connection_list.$(OBJEXT) \
-	$(RM)/gw_rm_hold_release.$(OBJEXT) \
-	$(RM)/gw_rm_host_match.$(OBJEXT) \
-	$(RM)/gw_rm_host_status.$(OBJEXT) \
-	$(RM)/gw_rm_job_history.$(OBJEXT) \
-	$(RM)/gw_rm_job_status.$(OBJEXT) $(RM)/gw_rm_kill.$(OBJEXT) \
-	$(RM)/gw_rm_reschedule.$(OBJEXT) \
-	$(RM)/gw_rm_stop_resume.$(OBJEXT) $(RM)/gw_rm_submit.$(OBJEXT) \
-	$(RM)/gw_rm_user_status.$(OBJEXT) $(RM)/gw_rm_wait.$(OBJEXT)
-am__objects_19 = $(GWD)/gw_conf.$(OBJEXT) \
-	$(GWD)/gw_conf_parser.$(OBJEXT) $(GWD)/gwd.$(OBJEXT) \
-	$(GWD)/gw_sch_conf_syntax.$(OBJEXT) \
-	$(GWD)/gw_sch_conf_parser.$(OBJEXT) \
-	$(GWD)/gw_sch_conf.$(OBJEXT)
-am__objects_20 = $(UM)/gw_um.$(OBJEXT) $(UM)/gw_user.$(OBJEXT) \
-	$(UM)/gw_user_pool.$(OBJEXT)
+am__objects_11 = $(EM)/__srcdir__gwd_gwd-gw_em_actions.$(OBJEXT) \
+	$(EM)/__srcdir__gwd_gwd-gw_em.$(OBJEXT) \
+	$(EM)/__srcdir__gwd_gwd-gw_em_listener.$(OBJEXT) \
+	$(EM)/__srcdir__gwd_gwd-gw_em_mad.$(OBJEXT) \
+	$(EM)/__srcdir__gwd_gwd-gw_em_rsl2.$(OBJEXT) \
+	$(EM)/__srcdir__gwd_gwd-gw_em_rsl.$(OBJEXT) \
+	$(EM)/__srcdir__gwd_gwd-gw_em_jdl.$(OBJEXT) \
+	$(EM)/__srcdir__gwd_gwd-gw_em_jsdl.$(OBJEXT) \
+	$(EM)/__srcdir__gwd_gwd-gw_em_adl.$(OBJEXT) \
+	$(EM)/__srcdir__gwd_gwd-gw_em_state.$(OBJEXT)
+am__objects_12 = $(TM)/__srcdir__gwd_gwd-gw_tm_actions.$(OBJEXT) \
+	$(TM)/__srcdir__gwd_gwd-gw_tm.$(OBJEXT) \
+	$(TM)/__srcdir__gwd_gwd-gw_tm_checkpoint.$(OBJEXT) \
+	$(TM)/__srcdir__gwd_gwd-gw_tm_epilog.$(OBJEXT) \
+	$(TM)/__srcdir__gwd_gwd-gw_tm_listener.$(OBJEXT) \
+	$(TM)/__srcdir__gwd_gwd-gw_tm_mad.$(OBJEXT) \
+	$(TM)/__srcdir__gwd_gwd-gw_tm_prolog.$(OBJEXT)
+am__objects_13 = $(IM)/__srcdir__gwd_gwd-gw_im_actions.$(OBJEXT) \
+	$(IM)/__srcdir__gwd_gwd-gw_im.$(OBJEXT) \
+	$(IM)/__srcdir__gwd_gwd-gw_im_listener.$(OBJEXT) \
+	$(IM)/__srcdir__gwd_gwd-gw_im_mad.$(OBJEXT)
+am__objects_14 = $(JOB)/__srcdir__gwd_gwd-gw_history.$(OBJEXT) \
+	$(JOB)/__srcdir__gwd_gwd-gw_job.$(OBJEXT) \
+	$(JOB)/__srcdir__gwd_gwd-gw_job_environment.$(OBJEXT) \
+	$(JOB)/__srcdir__gwd_gwd-gw_job_pool.$(OBJEXT) \
+	$(JOB)/__srcdir__gwd_gwd-gw_job_recover.$(OBJEXT) \
+	$(JOB)/__srcdir__gwd_gwd-gw_job_template.$(OBJEXT) \
+	$(JOB)/__srcdir__gwd_gwd-gw_job_template_var_parser.$(OBJEXT) \
+	$(JOB)/__srcdir__gwd_gwd-gw_xfr_files.$(OBJEXT)
+am__objects_15 = $(HOST)/__srcdir__gwd_gwd-gw_host.$(OBJEXT) \
+	$(HOST)/__srcdir__gwd_gwd-gw_host_var.$(OBJEXT) \
+	$(HOST)/__srcdir__gwd_gwd-gw_host_pool.$(OBJEXT) \
+	$(HOST)/__srcdir__gwd_gwd-gw_host_rank_syntax.$(OBJEXT) \
+	$(HOST)/__srcdir__gwd_gwd-gw_host_reqs_syntax.$(OBJEXT) \
+	$(HOST)/__srcdir__gwd_gwd-gw_host_update_syntax.$(OBJEXT) \
+	$(HOST)/__srcdir__gwd_gwd-gw_host_attr_parser.$(OBJEXT)
+am__objects_16 = $(COMMON)/__srcdir__gwd_gwd-gw_action.$(OBJEXT) \
+	$(COMMON)/__srcdir__gwd_gwd-gw_common.$(OBJEXT) \
+	$(COMMON)/__srcdir__gwd_gwd-gw_file_parser.$(OBJEXT) \
+	$(COMMON)/__srcdir__gwd_gwd-gw_log.$(OBJEXT) \
+	$(COMMON)/__srcdir__gwd_gwd-gw_template.$(OBJEXT) \
+	$(COMMON)/__srcdir__gwd_gwd-gw_template_parser.$(OBJEXT)
+am__objects_17 = $(ARRAY)/__srcdir__gwd_gwd-gw_array.$(OBJEXT) \
+	$(ARRAY)/__srcdir__gwd_gwd-gw_array_pool.$(OBJEXT)
+am__objects_18 =  \
+	$(DM)/__srcdir__gwd_gwd-gw_dm_action_allocate.$(OBJEXT) \
+	$(DM)/__srcdir__gwd_gwd-gw_dm_action_dispatch.$(OBJEXT) \
+	$(DM)/__srcdir__gwd_gwd-gw_dm_action_hold_release.$(OBJEXT) \
+	$(DM)/__srcdir__gwd_gwd-gw_dm_action_kill.$(OBJEXT) \
+	$(DM)/__srcdir__gwd_gwd-gw_dm_action_reschedule.$(OBJEXT) \
+	$(DM)/__srcdir__gwd_gwd-gw_dm_action_schedule.$(OBJEXT) \
+	$(DM)/__srcdir__gwd_gwd-gw_dm_action_stop_resume.$(OBJEXT) \
+	$(DM)/__srcdir__gwd_gwd-gw_dm_action_wait.$(OBJEXT) \
+	$(DM)/__srcdir__gwd_gwd-gw_dm.$(OBJEXT) \
+	$(DM)/__srcdir__gwd_gwd-gw_dm_listener.$(OBJEXT) \
+	$(DM)/__srcdir__gwd_gwd-gw_dm_mad.$(OBJEXT) \
+	$(DM)/__srcdir__gwd_gwd-gw_dm_state_epilogs.$(OBJEXT) \
+	$(DM)/__srcdir__gwd_gwd-gw_dm_state_failed.$(OBJEXT) \
+	$(DM)/__srcdir__gwd_gwd-gw_dm_state_migrate.$(OBJEXT) \
+	$(DM)/__srcdir__gwd_gwd-gw_dm_state_pending.$(OBJEXT) \
+	$(DM)/__srcdir__gwd_gwd-gw_dm_state_prologs.$(OBJEXT) \
+	$(DM)/__srcdir__gwd_gwd-gw_dm_state_stopped.$(OBJEXT) \
+	$(DM)/__srcdir__gwd_gwd-gw_dm_state_wrappers.$(OBJEXT) \
+	$(DM)/__srcdir__gwd_gwd-gw_dm_state_zombie.$(OBJEXT)
+am__objects_19 = $(RM)/__srcdir__gwd_gwd-gw_rm.$(OBJEXT) \
+	$(RM)/__srcdir__gwd_gwd-gw_rm_connection_list.$(OBJEXT) \
+	$(RM)/__srcdir__gwd_gwd-gw_rm_hold_release.$(OBJEXT) \
+	$(RM)/__srcdir__gwd_gwd-gw_rm_host_match.$(OBJEXT) \
+	$(RM)/__srcdir__gwd_gwd-gw_rm_host_status.$(OBJEXT) \
+	$(RM)/__srcdir__gwd_gwd-gw_rm_job_history.$(OBJEXT) \
+	$(RM)/__srcdir__gwd_gwd-gw_rm_job_status.$(OBJEXT) \
+	$(RM)/__srcdir__gwd_gwd-gw_rm_kill.$(OBJEXT) \
+	$(RM)/__srcdir__gwd_gwd-gw_rm_reschedule.$(OBJEXT) \
+	$(RM)/__srcdir__gwd_gwd-gw_rm_stop_resume.$(OBJEXT) \
+	$(RM)/__srcdir__gwd_gwd-gw_rm_submit.$(OBJEXT) \
+	$(RM)/__srcdir__gwd_gwd-gw_rm_user_status.$(OBJEXT) \
+	$(RM)/__srcdir__gwd_gwd-gw_rm_wait.$(OBJEXT)
+am__objects_20 = $(GWD)/__srcdir__gwd_gwd-gw_conf.$(OBJEXT) \
+	$(GWD)/__srcdir__gwd_gwd-gw_conf_parser.$(OBJEXT) \
+	$(GWD)/__srcdir__gwd_gwd-gwd.$(OBJEXT) \
+	$(GWD)/__srcdir__gwd_gwd-gw_sch_conf_syntax.$(OBJEXT) \
+	$(GWD)/__srcdir__gwd_gwd-gw_sch_conf_parser.$(OBJEXT) \
+	$(GWD)/__srcdir__gwd_gwd-gw_sch_conf.$(OBJEXT)
+am__objects_21 = $(UM)/__srcdir__gwd_gwd-gw_um.$(OBJEXT) \
+	$(UM)/__srcdir__gwd_gwd-gw_user.$(OBJEXT) \
+	$(UM)/__srcdir__gwd_gwd-gw_user_pool.$(OBJEXT)
+am__objects_22 = $(DB)/__srcdir__gwd_gwd-gw_acct.$(OBJEXT)
 am___srcdir__gwd_gwd_OBJECTS = $(am__objects_11) $(am__objects_12) \
 	$(am__objects_13) $(am__objects_14) $(am__objects_15) \
-	$(am__objects_9) $(am__objects_16) $(am__objects_17) \
-	$(am__objects_18) $(am__objects_19) $(am__objects_20) \
-	$(am__objects_7)
+	$(am__objects_16) $(am__objects_17) $(am__objects_18) \
+	$(am__objects_19) $(am__objects_20) $(am__objects_21) \
+	$(am__objects_22)
 __srcdir__gwd_gwd_OBJECTS = $(am___srcdir__gwd_gwd_OBJECTS)
-__srcdir__gwd_gwd_LDADD = $(LDADD)
-am__objects_21 = $(SCHED)/gw_scheduler_common.$(OBJEXT) \
+__srcdir__gwd_gwd_DEPENDENCIES =
+__srcdir__gwd_gwd_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) \
+	$(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) \
+	$(__srcdir__gwd_gwd_LDFLAGS) $(LDFLAGS) -o $@
+am__objects_23 = $(SCHED)/gw_scheduler_common.$(OBJEXT) \
 	$(SCHED)/gw_scheduler_hosts.$(OBJEXT) \
 	$(SCHED)/gw_scheduler_jobs.$(OBJEXT) \
 	$(SCHED)/gw_scheduler_users.$(OBJEXT)
 am___srcdir__scheduler_gw_flood_scheduler_OBJECTS =  \
 	$(SCHED)/gw_flood_scheduler.$(OBJEXT) $(am__objects_9) \
-	$(am__objects_10) $(am__objects_7) $(am__objects_21) \
+	$(am__objects_10) $(am__objects_7) $(am__objects_23) \
 	$(GWD)/gw_sch_conf.$(OBJEXT) \
 	$(GWD)/gw_sch_conf_syntax.$(OBJEXT) \
 	$(GWD)/gw_sch_conf_parser.$(OBJEXT)
@@ -335,7 +367,7 @@ __srcdir__scheduler_gw_flood_scheduler_LINK = $(LIBTOOL) --tag=CC \
 	-o $@
 am___srcdir__scheduler_gw_sched_OBJECTS =  \
 	$(SCHED)/gw_scheduler.$(OBJEXT) $(am__objects_9) \
-	$(am__objects_10) $(am__objects_7) $(am__objects_21) \
+	$(am__objects_10) $(am__objects_7) $(am__objects_23) \
 	$(GWD)/gw_sch_conf.$(OBJEXT) \
 	$(GWD)/gw_sch_conf_syntax.$(OBJEXT) \
 	$(GWD)/gw_sch_conf_parser.$(OBJEXT)
@@ -586,9 +618,9 @@ AUTOMAKE_OPTIONS = subdir-objects no-dependencies
 AM_YFLAGS = -d
 LINK_PROG = $(CCLD)
 COMPILE_PROG = $(CC)
-LINK_OPTS = $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) $(GLOBUS_LDFLAGS) -o $@ $(GLOBUS_LIBS) $(GLOBUS_PKG_LIBS)
+LINK_OPTS = $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 COMPILE_OPTS = $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) $(GLOBUS_CFLAGS) $(GLOBUS_INCLUDES)
+	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 
 LINK = $(LINK_PROG) $(LINK_OPTS)
 COMPILE = $(COMPILE_PROG) $(COMPILE_OPTS)
@@ -927,6 +959,9 @@ __srcdir__gwd_gwd_SOURCES = $(EM_SRC) \
         $(UM_SRC)  \
         $(DB_SRC)
 
+__srcdir__gwd_gwd_CFLAGS = $(GLOBUS_CFLAGS) $(GLOBUS_INCLUDES)
+__srcdir__gwd_gwd_LDFLAGS = $(GLOBUS_LDFLAGS)
+__srcdir__gwd_gwd_LDADD = $(GLOBUS_LIBS) $(GLOBUS_PKG_LIBS)
 bin_SCRIPTS = 
 dist_bin_SCRIPTS = $(CMDS_RB_SRC) $(am__append_2)
 CLEANFILES = $(am__append_3) $(srcdir)/drmaa/drmaa.jar
@@ -1464,130 +1499,199 @@ $(srcdir)/cmds/gwwait$(EXEEXT): $(__srcdir__cmds_gwwait_OBJECTS) $(__srcdir__cmd
 $(EM)/$(am__dirstamp):
 	@$(MKDIR_P) $(EM)
 	@: > $(EM)/$(am__dirstamp)
-$(EM)/gw_em_actions.$(OBJEXT): $(EM)/$(am__dirstamp)
-$(EM)/gw_em.$(OBJEXT): $(EM)/$(am__dirstamp)
-$(EM)/gw_em_listener.$(OBJEXT): $(EM)/$(am__dirstamp)
-$(EM)/gw_em_mad.$(OBJEXT): $(EM)/$(am__dirstamp)
-$(EM)/gw_em_rsl2.$(OBJEXT): $(EM)/$(am__dirstamp)
-$(EM)/gw_em_rsl.$(OBJEXT): $(EM)/$(am__dirstamp)
-$(EM)/gw_em_jdl.$(OBJEXT): $(EM)/$(am__dirstamp)
-$(EM)/gw_em_jsdl.$(OBJEXT): $(EM)/$(am__dirstamp)
-$(EM)/gw_em_adl.$(OBJEXT): $(EM)/$(am__dirstamp)
-$(EM)/gw_em_state.$(OBJEXT): $(EM)/$(am__dirstamp)
+$(EM)/__srcdir__gwd_gwd-gw_em_actions.$(OBJEXT):  \
+	$(EM)/$(am__dirstamp)
+$(EM)/__srcdir__gwd_gwd-gw_em.$(OBJEXT): $(EM)/$(am__dirstamp)
+$(EM)/__srcdir__gwd_gwd-gw_em_listener.$(OBJEXT):  \
+	$(EM)/$(am__dirstamp)
+$(EM)/__srcdir__gwd_gwd-gw_em_mad.$(OBJEXT): $(EM)/$(am__dirstamp)
+$(EM)/__srcdir__gwd_gwd-gw_em_rsl2.$(OBJEXT): $(EM)/$(am__dirstamp)
+$(EM)/__srcdir__gwd_gwd-gw_em_rsl.$(OBJEXT): $(EM)/$(am__dirstamp)
+$(EM)/__srcdir__gwd_gwd-gw_em_jdl.$(OBJEXT): $(EM)/$(am__dirstamp)
+$(EM)/__srcdir__gwd_gwd-gw_em_jsdl.$(OBJEXT): $(EM)/$(am__dirstamp)
+$(EM)/__srcdir__gwd_gwd-gw_em_adl.$(OBJEXT): $(EM)/$(am__dirstamp)
+$(EM)/__srcdir__gwd_gwd-gw_em_state.$(OBJEXT): $(EM)/$(am__dirstamp)
 $(TM)/$(am__dirstamp):
 	@$(MKDIR_P) $(TM)
 	@: > $(TM)/$(am__dirstamp)
-$(TM)/gw_tm_actions.$(OBJEXT): $(TM)/$(am__dirstamp)
-$(TM)/gw_tm.$(OBJEXT): $(TM)/$(am__dirstamp)
-$(TM)/gw_tm_checkpoint.$(OBJEXT): $(TM)/$(am__dirstamp)
-$(TM)/gw_tm_epilog.$(OBJEXT): $(TM)/$(am__dirstamp)
-$(TM)/gw_tm_listener.$(OBJEXT): $(TM)/$(am__dirstamp)
-$(TM)/gw_tm_mad.$(OBJEXT): $(TM)/$(am__dirstamp)
-$(TM)/gw_tm_prolog.$(OBJEXT): $(TM)/$(am__dirstamp)
+$(TM)/__srcdir__gwd_gwd-gw_tm_actions.$(OBJEXT):  \
+	$(TM)/$(am__dirstamp)
+$(TM)/__srcdir__gwd_gwd-gw_tm.$(OBJEXT): $(TM)/$(am__dirstamp)
+$(TM)/__srcdir__gwd_gwd-gw_tm_checkpoint.$(OBJEXT):  \
+	$(TM)/$(am__dirstamp)
+$(TM)/__srcdir__gwd_gwd-gw_tm_epilog.$(OBJEXT): $(TM)/$(am__dirstamp)
+$(TM)/__srcdir__gwd_gwd-gw_tm_listener.$(OBJEXT):  \
+	$(TM)/$(am__dirstamp)
+$(TM)/__srcdir__gwd_gwd-gw_tm_mad.$(OBJEXT): $(TM)/$(am__dirstamp)
+$(TM)/__srcdir__gwd_gwd-gw_tm_prolog.$(OBJEXT): $(TM)/$(am__dirstamp)
 $(IM)/$(am__dirstamp):
 	@$(MKDIR_P) $(IM)
 	@: > $(IM)/$(am__dirstamp)
-$(IM)/gw_im_actions.$(OBJEXT): $(IM)/$(am__dirstamp)
-$(IM)/gw_im.$(OBJEXT): $(IM)/$(am__dirstamp)
-$(IM)/gw_im_listener.$(OBJEXT): $(IM)/$(am__dirstamp)
-$(IM)/gw_im_mad.$(OBJEXT): $(IM)/$(am__dirstamp)
+$(IM)/__srcdir__gwd_gwd-gw_im_actions.$(OBJEXT):  \
+	$(IM)/$(am__dirstamp)
+$(IM)/__srcdir__gwd_gwd-gw_im.$(OBJEXT): $(IM)/$(am__dirstamp)
+$(IM)/__srcdir__gwd_gwd-gw_im_listener.$(OBJEXT):  \
+	$(IM)/$(am__dirstamp)
+$(IM)/__srcdir__gwd_gwd-gw_im_mad.$(OBJEXT): $(IM)/$(am__dirstamp)
 $(JOB)/$(am__dirstamp):
 	@$(MKDIR_P) $(JOB)
 	@: > $(JOB)/$(am__dirstamp)
-$(JOB)/gw_history.$(OBJEXT): $(JOB)/$(am__dirstamp)
-$(JOB)/gw_job.$(OBJEXT): $(JOB)/$(am__dirstamp)
-$(JOB)/gw_job_environment.$(OBJEXT): $(JOB)/$(am__dirstamp)
-$(JOB)/gw_job_pool.$(OBJEXT): $(JOB)/$(am__dirstamp)
-$(JOB)/gw_job_recover.$(OBJEXT): $(JOB)/$(am__dirstamp)
-$(JOB)/gw_job_template.$(OBJEXT): $(JOB)/$(am__dirstamp)
-$(JOB)/gw_job_template_var_parser.$(OBJEXT): $(JOB)/$(am__dirstamp)
-$(JOB)/gw_xfr_files.$(OBJEXT): $(JOB)/$(am__dirstamp)
-$(HOST)/gw_host.$(OBJEXT): $(HOST)/$(am__dirstamp)
-$(HOST)/gw_host_pool.$(OBJEXT): $(HOST)/$(am__dirstamp)
+$(JOB)/__srcdir__gwd_gwd-gw_history.$(OBJEXT): $(JOB)/$(am__dirstamp)
+$(JOB)/__srcdir__gwd_gwd-gw_job.$(OBJEXT): $(JOB)/$(am__dirstamp)
+$(JOB)/__srcdir__gwd_gwd-gw_job_environment.$(OBJEXT):  \
+	$(JOB)/$(am__dirstamp)
+$(JOB)/__srcdir__gwd_gwd-gw_job_pool.$(OBJEXT):  \
+	$(JOB)/$(am__dirstamp)
+$(JOB)/__srcdir__gwd_gwd-gw_job_recover.$(OBJEXT):  \
+	$(JOB)/$(am__dirstamp)
+$(JOB)/__srcdir__gwd_gwd-gw_job_template.$(OBJEXT):  \
+	$(JOB)/$(am__dirstamp)
+$(JOB)/__srcdir__gwd_gwd-gw_job_template_var_parser.$(OBJEXT):  \
+	$(JOB)/$(am__dirstamp)
+$(JOB)/__srcdir__gwd_gwd-gw_xfr_files.$(OBJEXT):  \
+	$(JOB)/$(am__dirstamp)
+$(HOST)/__srcdir__gwd_gwd-gw_host.$(OBJEXT): $(HOST)/$(am__dirstamp)
+$(HOST)/__srcdir__gwd_gwd-gw_host_var.$(OBJEXT):  \
+	$(HOST)/$(am__dirstamp)
+$(HOST)/__srcdir__gwd_gwd-gw_host_pool.$(OBJEXT):  \
+	$(HOST)/$(am__dirstamp)
 $(HOST)/gw_host_rank_syntax.h: $(HOST)/gw_host_rank_syntax.c
 	@if test ! -f $@; then \
 	  rm -f $(HOST)/gw_host_rank_syntax.c; \
 	  $(MAKE) $(AM_MAKEFLAGS) $(HOST)/gw_host_rank_syntax.c; \
 	else :; fi
+$(HOST)/__srcdir__gwd_gwd-gw_host_rank_syntax.$(OBJEXT):  \
+	$(HOST)/$(am__dirstamp)
 $(HOST)/gw_host_reqs_syntax.h: $(HOST)/gw_host_reqs_syntax.c
 	@if test ! -f $@; then \
 	  rm -f $(HOST)/gw_host_reqs_syntax.c; \
 	  $(MAKE) $(AM_MAKEFLAGS) $(HOST)/gw_host_reqs_syntax.c; \
 	else :; fi
+$(HOST)/__srcdir__gwd_gwd-gw_host_reqs_syntax.$(OBJEXT):  \
+	$(HOST)/$(am__dirstamp)
 $(HOST)/gw_host_update_syntax.h: $(HOST)/gw_host_update_syntax.c
 	@if test ! -f $@; then \
 	  rm -f $(HOST)/gw_host_update_syntax.c; \
 	  $(MAKE) $(AM_MAKEFLAGS) $(HOST)/gw_host_update_syntax.c; \
 	else :; fi
+$(HOST)/__srcdir__gwd_gwd-gw_host_update_syntax.$(OBJEXT):  \
+	$(HOST)/$(am__dirstamp)
+$(HOST)/__srcdir__gwd_gwd-gw_host_attr_parser.$(OBJEXT):  \
+	$(HOST)/$(am__dirstamp)
+$(COMMON)/__srcdir__gwd_gwd-gw_action.$(OBJEXT):  \
+	$(COMMON)/$(am__dirstamp)
+$(COMMON)/__srcdir__gwd_gwd-gw_common.$(OBJEXT):  \
+	$(COMMON)/$(am__dirstamp)
+$(COMMON)/__srcdir__gwd_gwd-gw_file_parser.$(OBJEXT):  \
+	$(COMMON)/$(am__dirstamp)
+$(COMMON)/__srcdir__gwd_gwd-gw_log.$(OBJEXT):  \
+	$(COMMON)/$(am__dirstamp)
+$(COMMON)/__srcdir__gwd_gwd-gw_template.$(OBJEXT):  \
+	$(COMMON)/$(am__dirstamp)
+$(COMMON)/__srcdir__gwd_gwd-gw_template_parser.$(OBJEXT):  \
+	$(COMMON)/$(am__dirstamp)
 $(ARRAY)/$(am__dirstamp):
 	@$(MKDIR_P) $(ARRAY)
 	@: > $(ARRAY)/$(am__dirstamp)
-$(ARRAY)/gw_array.$(OBJEXT): $(ARRAY)/$(am__dirstamp)
-$(ARRAY)/gw_array_pool.$(OBJEXT): $(ARRAY)/$(am__dirstamp)
+$(ARRAY)/__srcdir__gwd_gwd-gw_array.$(OBJEXT):  \
+	$(ARRAY)/$(am__dirstamp)
+$(ARRAY)/__srcdir__gwd_gwd-gw_array_pool.$(OBJEXT):  \
+	$(ARRAY)/$(am__dirstamp)
 $(DM)/$(am__dirstamp):
 	@$(MKDIR_P) $(DM)
 	@: > $(DM)/$(am__dirstamp)
-$(DM)/gw_dm_action_allocate.$(OBJEXT): $(DM)/$(am__dirstamp)
-$(DM)/gw_dm_action_dispatch.$(OBJEXT): $(DM)/$(am__dirstamp)
-$(DM)/gw_dm_action_hold_release.$(OBJEXT): $(DM)/$(am__dirstamp)
-$(DM)/gw_dm_action_kill.$(OBJEXT): $(DM)/$(am__dirstamp)
-$(DM)/gw_dm_action_reschedule.$(OBJEXT): $(DM)/$(am__dirstamp)
-$(DM)/gw_dm_action_schedule.$(OBJEXT): $(DM)/$(am__dirstamp)
-$(DM)/gw_dm_action_stop_resume.$(OBJEXT): $(DM)/$(am__dirstamp)
-$(DM)/gw_dm_action_wait.$(OBJEXT): $(DM)/$(am__dirstamp)
-$(DM)/gw_dm.$(OBJEXT): $(DM)/$(am__dirstamp)
-$(DM)/gw_dm_listener.$(OBJEXT): $(DM)/$(am__dirstamp)
-$(DM)/gw_dm_mad.$(OBJEXT): $(DM)/$(am__dirstamp)
-$(DM)/gw_dm_state_epilogs.$(OBJEXT): $(DM)/$(am__dirstamp)
-$(DM)/gw_dm_state_failed.$(OBJEXT): $(DM)/$(am__dirstamp)
-$(DM)/gw_dm_state_migrate.$(OBJEXT): $(DM)/$(am__dirstamp)
-$(DM)/gw_dm_state_pending.$(OBJEXT): $(DM)/$(am__dirstamp)
-$(DM)/gw_dm_state_prologs.$(OBJEXT): $(DM)/$(am__dirstamp)
-$(DM)/gw_dm_state_stopped.$(OBJEXT): $(DM)/$(am__dirstamp)
-$(DM)/gw_dm_state_wrappers.$(OBJEXT): $(DM)/$(am__dirstamp)
-$(DM)/gw_dm_state_zombie.$(OBJEXT): $(DM)/$(am__dirstamp)
+$(DM)/__srcdir__gwd_gwd-gw_dm_action_allocate.$(OBJEXT):  \
+	$(DM)/$(am__dirstamp)
+$(DM)/__srcdir__gwd_gwd-gw_dm_action_dispatch.$(OBJEXT):  \
+	$(DM)/$(am__dirstamp)
+$(DM)/__srcdir__gwd_gwd-gw_dm_action_hold_release.$(OBJEXT):  \
+	$(DM)/$(am__dirstamp)
+$(DM)/__srcdir__gwd_gwd-gw_dm_action_kill.$(OBJEXT):  \
+	$(DM)/$(am__dirstamp)
+$(DM)/__srcdir__gwd_gwd-gw_dm_action_reschedule.$(OBJEXT):  \
+	$(DM)/$(am__dirstamp)
+$(DM)/__srcdir__gwd_gwd-gw_dm_action_schedule.$(OBJEXT):  \
+	$(DM)/$(am__dirstamp)
+$(DM)/__srcdir__gwd_gwd-gw_dm_action_stop_resume.$(OBJEXT):  \
+	$(DM)/$(am__dirstamp)
+$(DM)/__srcdir__gwd_gwd-gw_dm_action_wait.$(OBJEXT):  \
+	$(DM)/$(am__dirstamp)
+$(DM)/__srcdir__gwd_gwd-gw_dm.$(OBJEXT): $(DM)/$(am__dirstamp)
+$(DM)/__srcdir__gwd_gwd-gw_dm_listener.$(OBJEXT):  \
+	$(DM)/$(am__dirstamp)
+$(DM)/__srcdir__gwd_gwd-gw_dm_mad.$(OBJEXT): $(DM)/$(am__dirstamp)
+$(DM)/__srcdir__gwd_gwd-gw_dm_state_epilogs.$(OBJEXT):  \
+	$(DM)/$(am__dirstamp)
+$(DM)/__srcdir__gwd_gwd-gw_dm_state_failed.$(OBJEXT):  \
+	$(DM)/$(am__dirstamp)
+$(DM)/__srcdir__gwd_gwd-gw_dm_state_migrate.$(OBJEXT):  \
+	$(DM)/$(am__dirstamp)
+$(DM)/__srcdir__gwd_gwd-gw_dm_state_pending.$(OBJEXT):  \
+	$(DM)/$(am__dirstamp)
+$(DM)/__srcdir__gwd_gwd-gw_dm_state_prologs.$(OBJEXT):  \
+	$(DM)/$(am__dirstamp)
+$(DM)/__srcdir__gwd_gwd-gw_dm_state_stopped.$(OBJEXT):  \
+	$(DM)/$(am__dirstamp)
+$(DM)/__srcdir__gwd_gwd-gw_dm_state_wrappers.$(OBJEXT):  \
+	$(DM)/$(am__dirstamp)
+$(DM)/__srcdir__gwd_gwd-gw_dm_state_zombie.$(OBJEXT):  \
+	$(DM)/$(am__dirstamp)
 $(RM)/$(am__dirstamp):
 	@$(MKDIR_P) $(RM)
 	@: > $(RM)/$(am__dirstamp)
-$(RM)/gw_rm.$(OBJEXT): $(RM)/$(am__dirstamp)
-$(RM)/gw_rm_connection_list.$(OBJEXT): $(RM)/$(am__dirstamp)
-$(RM)/gw_rm_hold_release.$(OBJEXT): $(RM)/$(am__dirstamp)
-$(RM)/gw_rm_host_match.$(OBJEXT): $(RM)/$(am__dirstamp)
-$(RM)/gw_rm_host_status.$(OBJEXT): $(RM)/$(am__dirstamp)
-$(RM)/gw_rm_job_history.$(OBJEXT): $(RM)/$(am__dirstamp)
-$(RM)/gw_rm_job_status.$(OBJEXT): $(RM)/$(am__dirstamp)
-$(RM)/gw_rm_kill.$(OBJEXT): $(RM)/$(am__dirstamp)
-$(RM)/gw_rm_reschedule.$(OBJEXT): $(RM)/$(am__dirstamp)
-$(RM)/gw_rm_stop_resume.$(OBJEXT): $(RM)/$(am__dirstamp)
-$(RM)/gw_rm_submit.$(OBJEXT): $(RM)/$(am__dirstamp)
-$(RM)/gw_rm_user_status.$(OBJEXT): $(RM)/$(am__dirstamp)
-$(RM)/gw_rm_wait.$(OBJEXT): $(RM)/$(am__dirstamp)
+$(RM)/__srcdir__gwd_gwd-gw_rm.$(OBJEXT): $(RM)/$(am__dirstamp)
+$(RM)/__srcdir__gwd_gwd-gw_rm_connection_list.$(OBJEXT):  \
+	$(RM)/$(am__dirstamp)
+$(RM)/__srcdir__gwd_gwd-gw_rm_hold_release.$(OBJEXT):  \
+	$(RM)/$(am__dirstamp)
+$(RM)/__srcdir__gwd_gwd-gw_rm_host_match.$(OBJEXT):  \
+	$(RM)/$(am__dirstamp)
+$(RM)/__srcdir__gwd_gwd-gw_rm_host_status.$(OBJEXT):  \
+	$(RM)/$(am__dirstamp)
+$(RM)/__srcdir__gwd_gwd-gw_rm_job_history.$(OBJEXT):  \
+	$(RM)/$(am__dirstamp)
+$(RM)/__srcdir__gwd_gwd-gw_rm_job_status.$(OBJEXT):  \
+	$(RM)/$(am__dirstamp)
+$(RM)/__srcdir__gwd_gwd-gw_rm_kill.$(OBJEXT): $(RM)/$(am__dirstamp)
+$(RM)/__srcdir__gwd_gwd-gw_rm_reschedule.$(OBJEXT):  \
+	$(RM)/$(am__dirstamp)
+$(RM)/__srcdir__gwd_gwd-gw_rm_stop_resume.$(OBJEXT):  \
+	$(RM)/$(am__dirstamp)
+$(RM)/__srcdir__gwd_gwd-gw_rm_submit.$(OBJEXT): $(RM)/$(am__dirstamp)
+$(RM)/__srcdir__gwd_gwd-gw_rm_user_status.$(OBJEXT):  \
+	$(RM)/$(am__dirstamp)
+$(RM)/__srcdir__gwd_gwd-gw_rm_wait.$(OBJEXT): $(RM)/$(am__dirstamp)
 $(GWD)/$(am__dirstamp):
 	@$(MKDIR_P) $(GWD)
 	@: > $(GWD)/$(am__dirstamp)
-$(GWD)/gw_conf.$(OBJEXT): $(GWD)/$(am__dirstamp)
-$(GWD)/gw_conf_parser.$(OBJEXT): $(GWD)/$(am__dirstamp)
-$(GWD)/gwd.$(OBJEXT): $(GWD)/$(am__dirstamp)
+$(GWD)/__srcdir__gwd_gwd-gw_conf.$(OBJEXT): $(GWD)/$(am__dirstamp)
+$(GWD)/__srcdir__gwd_gwd-gw_conf_parser.$(OBJEXT):  \
+	$(GWD)/$(am__dirstamp)
+$(GWD)/__srcdir__gwd_gwd-gwd.$(OBJEXT): $(GWD)/$(am__dirstamp)
 $(GWD)/gw_sch_conf_syntax.h: $(GWD)/gw_sch_conf_syntax.c
 	@if test ! -f $@; then \
 	  rm -f $(GWD)/gw_sch_conf_syntax.c; \
 	  $(MAKE) $(AM_MAKEFLAGS) $(GWD)/gw_sch_conf_syntax.c; \
 	else :; fi
-$(GWD)/gw_sch_conf_syntax.$(OBJEXT): $(GWD)/$(am__dirstamp)
-$(GWD)/gw_sch_conf_parser.$(OBJEXT): $(GWD)/$(am__dirstamp)
-$(GWD)/gw_sch_conf.$(OBJEXT): $(GWD)/$(am__dirstamp)
+$(GWD)/__srcdir__gwd_gwd-gw_sch_conf_syntax.$(OBJEXT):  \
+	$(GWD)/$(am__dirstamp)
+$(GWD)/__srcdir__gwd_gwd-gw_sch_conf_parser.$(OBJEXT):  \
+	$(GWD)/$(am__dirstamp)
+$(GWD)/__srcdir__gwd_gwd-gw_sch_conf.$(OBJEXT):  \
+	$(GWD)/$(am__dirstamp)
 $(UM)/$(am__dirstamp):
 	@$(MKDIR_P) $(UM)
 	@: > $(UM)/$(am__dirstamp)
-$(UM)/gw_um.$(OBJEXT): $(UM)/$(am__dirstamp)
-$(UM)/gw_user.$(OBJEXT): $(UM)/$(am__dirstamp)
-$(UM)/gw_user_pool.$(OBJEXT): $(UM)/$(am__dirstamp)
+$(UM)/__srcdir__gwd_gwd-gw_um.$(OBJEXT): $(UM)/$(am__dirstamp)
+$(UM)/__srcdir__gwd_gwd-gw_user.$(OBJEXT): $(UM)/$(am__dirstamp)
+$(UM)/__srcdir__gwd_gwd-gw_user_pool.$(OBJEXT): $(UM)/$(am__dirstamp)
+$(DB)/__srcdir__gwd_gwd-gw_acct.$(OBJEXT): $(DB)/$(am__dirstamp)
 $(srcdir)/gwd/$(am__dirstamp):
 	@$(MKDIR_P) $(srcdir)/gwd
 	@: > $(srcdir)/gwd/$(am__dirstamp)
 $(srcdir)/gwd/gwd$(EXEEXT): $(__srcdir__gwd_gwd_OBJECTS) $(__srcdir__gwd_gwd_DEPENDENCIES) $(srcdir)/gwd/$(am__dirstamp)
 	@rm -f $(srcdir)/gwd/gwd$(EXEEXT)
-	$(LINK) $(__srcdir__gwd_gwd_OBJECTS) $(__srcdir__gwd_gwd_LDADD) $(LIBS)
+	$(__srcdir__gwd_gwd_LINK) $(__srcdir__gwd_gwd_OBJECTS) $(__srcdir__gwd_gwd_LDADD) $(LIBS)
 $(SCHED)/$(am__dirstamp):
 	@$(MKDIR_P) $(SCHED)
 	@: > $(SCHED)/$(am__dirstamp)
@@ -1596,6 +1700,9 @@ $(SCHED)/gw_scheduler_common.$(OBJEXT): $(SCHED)/$(am__dirstamp)
 $(SCHED)/gw_scheduler_hosts.$(OBJEXT): $(SCHED)/$(am__dirstamp)
 $(SCHED)/gw_scheduler_jobs.$(OBJEXT): $(SCHED)/$(am__dirstamp)
 $(SCHED)/gw_scheduler_users.$(OBJEXT): $(SCHED)/$(am__dirstamp)
+$(GWD)/gw_sch_conf.$(OBJEXT): $(GWD)/$(am__dirstamp)
+$(GWD)/gw_sch_conf_syntax.$(OBJEXT): $(GWD)/$(am__dirstamp)
+$(GWD)/gw_sch_conf_parser.$(OBJEXT): $(GWD)/$(am__dirstamp)
 $(srcdir)/scheduler/$(am__dirstamp):
 	@$(MKDIR_P) $(srcdir)/scheduler
 	@: > $(srcdir)/scheduler/$(am__dirstamp)
@@ -1687,8 +1794,8 @@ uninstall-dist_binSCRIPTS:
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
-	-rm -f $(ARRAY)/gw_array.$(OBJEXT)
-	-rm -f $(ARRAY)/gw_array_pool.$(OBJEXT)
+	-rm -f $(ARRAY)/__srcdir__gwd_gwd-gw_array.$(OBJEXT)
+	-rm -f $(ARRAY)/__srcdir__gwd_gwd-gw_array_pool.$(OBJEXT)
 	-rm -f $(CLIENT)/__srcdir__drmaa_libdrmaa2_la-gw_client_host_status.$(OBJEXT)
 	-rm -f $(CLIENT)/__srcdir__drmaa_libdrmaa2_la-gw_client_host_status.lo
 	-rm -f $(CLIENT)/__srcdir__drmaa_libdrmaa2_la-gw_client_init.$(OBJEXT)
@@ -1755,32 +1862,39 @@ mostlyclean-compile:
 	-rm -f $(COMMON)/__srcdir__drmaa_libdrmaa_la-gw_template.lo
 	-rm -f $(COMMON)/__srcdir__drmaa_libdrmaa_la-gw_template_parser.$(OBJEXT)
 	-rm -f $(COMMON)/__srcdir__drmaa_libdrmaa_la-gw_template_parser.lo
+	-rm -f $(COMMON)/__srcdir__gwd_gwd-gw_action.$(OBJEXT)
+	-rm -f $(COMMON)/__srcdir__gwd_gwd-gw_common.$(OBJEXT)
+	-rm -f $(COMMON)/__srcdir__gwd_gwd-gw_file_parser.$(OBJEXT)
+	-rm -f $(COMMON)/__srcdir__gwd_gwd-gw_log.$(OBJEXT)
+	-rm -f $(COMMON)/__srcdir__gwd_gwd-gw_template.$(OBJEXT)
+	-rm -f $(COMMON)/__srcdir__gwd_gwd-gw_template_parser.$(OBJEXT)
 	-rm -f $(COMMON)/gw_action.$(OBJEXT)
 	-rm -f $(COMMON)/gw_common.$(OBJEXT)
 	-rm -f $(COMMON)/gw_file_parser.$(OBJEXT)
 	-rm -f $(COMMON)/gw_log.$(OBJEXT)
 	-rm -f $(COMMON)/gw_template.$(OBJEXT)
 	-rm -f $(COMMON)/gw_template_parser.$(OBJEXT)
+	-rm -f $(DB)/__srcdir__gwd_gwd-gw_acct.$(OBJEXT)
 	-rm -f $(DB)/gw_acct.$(OBJEXT)
-	-rm -f $(DM)/gw_dm.$(OBJEXT)
-	-rm -f $(DM)/gw_dm_action_allocate.$(OBJEXT)
-	-rm -f $(DM)/gw_dm_action_dispatch.$(OBJEXT)
-	-rm -f $(DM)/gw_dm_action_hold_release.$(OBJEXT)
-	-rm -f $(DM)/gw_dm_action_kill.$(OBJEXT)
-	-rm -f $(DM)/gw_dm_action_reschedule.$(OBJEXT)
-	-rm -f $(DM)/gw_dm_action_schedule.$(OBJEXT)
-	-rm -f $(DM)/gw_dm_action_stop_resume.$(OBJEXT)
-	-rm -f $(DM)/gw_dm_action_wait.$(OBJEXT)
-	-rm -f $(DM)/gw_dm_listener.$(OBJEXT)
-	-rm -f $(DM)/gw_dm_mad.$(OBJEXT)
-	-rm -f $(DM)/gw_dm_state_epilogs.$(OBJEXT)
-	-rm -f $(DM)/gw_dm_state_failed.$(OBJEXT)
-	-rm -f $(DM)/gw_dm_state_migrate.$(OBJEXT)
-	-rm -f $(DM)/gw_dm_state_pending.$(OBJEXT)
-	-rm -f $(DM)/gw_dm_state_prologs.$(OBJEXT)
-	-rm -f $(DM)/gw_dm_state_stopped.$(OBJEXT)
-	-rm -f $(DM)/gw_dm_state_wrappers.$(OBJEXT)
-	-rm -f $(DM)/gw_dm_state_zombie.$(OBJEXT)
+	-rm -f $(DM)/__srcdir__gwd_gwd-gw_dm.$(OBJEXT)
+	-rm -f $(DM)/__srcdir__gwd_gwd-gw_dm_action_allocate.$(OBJEXT)
+	-rm -f $(DM)/__srcdir__gwd_gwd-gw_dm_action_dispatch.$(OBJEXT)
+	-rm -f $(DM)/__srcdir__gwd_gwd-gw_dm_action_hold_release.$(OBJEXT)
+	-rm -f $(DM)/__srcdir__gwd_gwd-gw_dm_action_kill.$(OBJEXT)
+	-rm -f $(DM)/__srcdir__gwd_gwd-gw_dm_action_reschedule.$(OBJEXT)
+	-rm -f $(DM)/__srcdir__gwd_gwd-gw_dm_action_schedule.$(OBJEXT)
+	-rm -f $(DM)/__srcdir__gwd_gwd-gw_dm_action_stop_resume.$(OBJEXT)
+	-rm -f $(DM)/__srcdir__gwd_gwd-gw_dm_action_wait.$(OBJEXT)
+	-rm -f $(DM)/__srcdir__gwd_gwd-gw_dm_listener.$(OBJEXT)
+	-rm -f $(DM)/__srcdir__gwd_gwd-gw_dm_mad.$(OBJEXT)
+	-rm -f $(DM)/__srcdir__gwd_gwd-gw_dm_state_epilogs.$(OBJEXT)
+	-rm -f $(DM)/__srcdir__gwd_gwd-gw_dm_state_failed.$(OBJEXT)
+	-rm -f $(DM)/__srcdir__gwd_gwd-gw_dm_state_migrate.$(OBJEXT)
+	-rm -f $(DM)/__srcdir__gwd_gwd-gw_dm_state_pending.$(OBJEXT)
+	-rm -f $(DM)/__srcdir__gwd_gwd-gw_dm_state_prologs.$(OBJEXT)
+	-rm -f $(DM)/__srcdir__gwd_gwd-gw_dm_state_stopped.$(OBJEXT)
+	-rm -f $(DM)/__srcdir__gwd_gwd-gw_dm_state_wrappers.$(OBJEXT)
+	-rm -f $(DM)/__srcdir__gwd_gwd-gw_dm_state_zombie.$(OBJEXT)
 	-rm -f $(DRMAA)/__srcdir__drmaa_libdrmaa2_la-gw_drmaa2.$(OBJEXT)
 	-rm -f $(DRMAA)/__srcdir__drmaa_libdrmaa2_la-gw_drmaa2.lo
 	-rm -f $(DRMAA)/__srcdir__drmaa_libdrmaa_la-gw_drmaa.$(OBJEXT)
@@ -1791,22 +1905,25 @@ mostlyclean-compile:
 	-rm -f $(DRMAA1_PACK)/DrmaaJNI.lo
 	-rm -f $(DRMAA_PACK)/DrmaaJNI.$(OBJEXT)
 	-rm -f $(DRMAA_PACK)/DrmaaJNI.lo
-	-rm -f $(EM)/gw_em.$(OBJEXT)
-	-rm -f $(EM)/gw_em_actions.$(OBJEXT)
-	-rm -f $(EM)/gw_em_adl.$(OBJEXT)
-	-rm -f $(EM)/gw_em_jdl.$(OBJEXT)
-	-rm -f $(EM)/gw_em_jsdl.$(OBJEXT)
-	-rm -f $(EM)/gw_em_listener.$(OBJEXT)
-	-rm -f $(EM)/gw_em_mad.$(OBJEXT)
-	-rm -f $(EM)/gw_em_rsl.$(OBJEXT)
-	-rm -f $(EM)/gw_em_rsl2.$(OBJEXT)
-	-rm -f $(EM)/gw_em_state.$(OBJEXT)
-	-rm -f $(GWD)/gw_conf.$(OBJEXT)
-	-rm -f $(GWD)/gw_conf_parser.$(OBJEXT)
+	-rm -f $(EM)/__srcdir__gwd_gwd-gw_em.$(OBJEXT)
+	-rm -f $(EM)/__srcdir__gwd_gwd-gw_em_actions.$(OBJEXT)
+	-rm -f $(EM)/__srcdir__gwd_gwd-gw_em_adl.$(OBJEXT)
+	-rm -f $(EM)/__srcdir__gwd_gwd-gw_em_jdl.$(OBJEXT)
+	-rm -f $(EM)/__srcdir__gwd_gwd-gw_em_jsdl.$(OBJEXT)
+	-rm -f $(EM)/__srcdir__gwd_gwd-gw_em_listener.$(OBJEXT)
+	-rm -f $(EM)/__srcdir__gwd_gwd-gw_em_mad.$(OBJEXT)
+	-rm -f $(EM)/__srcdir__gwd_gwd-gw_em_rsl.$(OBJEXT)
+	-rm -f $(EM)/__srcdir__gwd_gwd-gw_em_rsl2.$(OBJEXT)
+	-rm -f $(EM)/__srcdir__gwd_gwd-gw_em_state.$(OBJEXT)
+	-rm -f $(GWD)/__srcdir__gwd_gwd-gw_conf.$(OBJEXT)
+	-rm -f $(GWD)/__srcdir__gwd_gwd-gw_conf_parser.$(OBJEXT)
+	-rm -f $(GWD)/__srcdir__gwd_gwd-gw_sch_conf.$(OBJEXT)
+	-rm -f $(GWD)/__srcdir__gwd_gwd-gw_sch_conf_parser.$(OBJEXT)
+	-rm -f $(GWD)/__srcdir__gwd_gwd-gw_sch_conf_syntax.$(OBJEXT)
+	-rm -f $(GWD)/__srcdir__gwd_gwd-gwd.$(OBJEXT)
 	-rm -f $(GWD)/gw_sch_conf.$(OBJEXT)
 	-rm -f $(GWD)/gw_sch_conf_parser.$(OBJEXT)
 	-rm -f $(GWD)/gw_sch_conf_syntax.$(OBJEXT)
-	-rm -f $(GWD)/gwd.$(OBJEXT)
 	-rm -f $(HOST)/__srcdir__drmaa_libdrmaa2_la-gw_host_attr_parser.$(OBJEXT)
 	-rm -f $(HOST)/__srcdir__drmaa_libdrmaa2_la-gw_host_attr_parser.lo
 	-rm -f $(HOST)/__srcdir__drmaa_libdrmaa2_la-gw_host_rank_syntax.$(OBJEXT)
@@ -1827,54 +1944,59 @@ mostlyclean-compile:
 	-rm -f $(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_update_syntax.lo
 	-rm -f $(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_var.$(OBJEXT)
 	-rm -f $(HOST)/__srcdir__drmaa_libdrmaa_la-gw_host_var.lo
-	-rm -f $(HOST)/gw_host.$(OBJEXT)
+	-rm -f $(HOST)/__srcdir__gwd_gwd-gw_host.$(OBJEXT)
+	-rm -f $(HOST)/__srcdir__gwd_gwd-gw_host_attr_parser.$(OBJEXT)
+	-rm -f $(HOST)/__srcdir__gwd_gwd-gw_host_pool.$(OBJEXT)
+	-rm -f $(HOST)/__srcdir__gwd_gwd-gw_host_rank_syntax.$(OBJEXT)
+	-rm -f $(HOST)/__srcdir__gwd_gwd-gw_host_reqs_syntax.$(OBJEXT)
+	-rm -f $(HOST)/__srcdir__gwd_gwd-gw_host_update_syntax.$(OBJEXT)
+	-rm -f $(HOST)/__srcdir__gwd_gwd-gw_host_var.$(OBJEXT)
 	-rm -f $(HOST)/gw_host_attr_parser.$(OBJEXT)
-	-rm -f $(HOST)/gw_host_pool.$(OBJEXT)
 	-rm -f $(HOST)/gw_host_rank_syntax.$(OBJEXT)
 	-rm -f $(HOST)/gw_host_reqs_syntax.$(OBJEXT)
 	-rm -f $(HOST)/gw_host_update_syntax.$(OBJEXT)
 	-rm -f $(HOST)/gw_host_var.$(OBJEXT)
-	-rm -f $(IM)/gw_im.$(OBJEXT)
-	-rm -f $(IM)/gw_im_actions.$(OBJEXT)
-	-rm -f $(IM)/gw_im_listener.$(OBJEXT)
-	-rm -f $(IM)/gw_im_mad.$(OBJEXT)
-	-rm -f $(JOB)/gw_history.$(OBJEXT)
-	-rm -f $(JOB)/gw_job.$(OBJEXT)
-	-rm -f $(JOB)/gw_job_environment.$(OBJEXT)
-	-rm -f $(JOB)/gw_job_pool.$(OBJEXT)
-	-rm -f $(JOB)/gw_job_recover.$(OBJEXT)
-	-rm -f $(JOB)/gw_job_template.$(OBJEXT)
-	-rm -f $(JOB)/gw_job_template_var_parser.$(OBJEXT)
-	-rm -f $(JOB)/gw_xfr_files.$(OBJEXT)
-	-rm -f $(RM)/gw_rm.$(OBJEXT)
-	-rm -f $(RM)/gw_rm_connection_list.$(OBJEXT)
-	-rm -f $(RM)/gw_rm_hold_release.$(OBJEXT)
-	-rm -f $(RM)/gw_rm_host_match.$(OBJEXT)
-	-rm -f $(RM)/gw_rm_host_status.$(OBJEXT)
-	-rm -f $(RM)/gw_rm_job_history.$(OBJEXT)
-	-rm -f $(RM)/gw_rm_job_status.$(OBJEXT)
-	-rm -f $(RM)/gw_rm_kill.$(OBJEXT)
-	-rm -f $(RM)/gw_rm_reschedule.$(OBJEXT)
-	-rm -f $(RM)/gw_rm_stop_resume.$(OBJEXT)
-	-rm -f $(RM)/gw_rm_submit.$(OBJEXT)
-	-rm -f $(RM)/gw_rm_user_status.$(OBJEXT)
-	-rm -f $(RM)/gw_rm_wait.$(OBJEXT)
+	-rm -f $(IM)/__srcdir__gwd_gwd-gw_im.$(OBJEXT)
+	-rm -f $(IM)/__srcdir__gwd_gwd-gw_im_actions.$(OBJEXT)
+	-rm -f $(IM)/__srcdir__gwd_gwd-gw_im_listener.$(OBJEXT)
+	-rm -f $(IM)/__srcdir__gwd_gwd-gw_im_mad.$(OBJEXT)
+	-rm -f $(JOB)/__srcdir__gwd_gwd-gw_history.$(OBJEXT)
+	-rm -f $(JOB)/__srcdir__gwd_gwd-gw_job.$(OBJEXT)
+	-rm -f $(JOB)/__srcdir__gwd_gwd-gw_job_environment.$(OBJEXT)
+	-rm -f $(JOB)/__srcdir__gwd_gwd-gw_job_pool.$(OBJEXT)
+	-rm -f $(JOB)/__srcdir__gwd_gwd-gw_job_recover.$(OBJEXT)
+	-rm -f $(JOB)/__srcdir__gwd_gwd-gw_job_template.$(OBJEXT)
+	-rm -f $(JOB)/__srcdir__gwd_gwd-gw_job_template_var_parser.$(OBJEXT)
+	-rm -f $(JOB)/__srcdir__gwd_gwd-gw_xfr_files.$(OBJEXT)
+	-rm -f $(RM)/__srcdir__gwd_gwd-gw_rm.$(OBJEXT)
+	-rm -f $(RM)/__srcdir__gwd_gwd-gw_rm_connection_list.$(OBJEXT)
+	-rm -f $(RM)/__srcdir__gwd_gwd-gw_rm_hold_release.$(OBJEXT)
+	-rm -f $(RM)/__srcdir__gwd_gwd-gw_rm_host_match.$(OBJEXT)
+	-rm -f $(RM)/__srcdir__gwd_gwd-gw_rm_host_status.$(OBJEXT)
+	-rm -f $(RM)/__srcdir__gwd_gwd-gw_rm_job_history.$(OBJEXT)
+	-rm -f $(RM)/__srcdir__gwd_gwd-gw_rm_job_status.$(OBJEXT)
+	-rm -f $(RM)/__srcdir__gwd_gwd-gw_rm_kill.$(OBJEXT)
+	-rm -f $(RM)/__srcdir__gwd_gwd-gw_rm_reschedule.$(OBJEXT)
+	-rm -f $(RM)/__srcdir__gwd_gwd-gw_rm_stop_resume.$(OBJEXT)
+	-rm -f $(RM)/__srcdir__gwd_gwd-gw_rm_submit.$(OBJEXT)
+	-rm -f $(RM)/__srcdir__gwd_gwd-gw_rm_user_status.$(OBJEXT)
+	-rm -f $(RM)/__srcdir__gwd_gwd-gw_rm_wait.$(OBJEXT)
 	-rm -f $(SCHED)/gw_flood_scheduler.$(OBJEXT)
 	-rm -f $(SCHED)/gw_scheduler.$(OBJEXT)
 	-rm -f $(SCHED)/gw_scheduler_common.$(OBJEXT)
 	-rm -f $(SCHED)/gw_scheduler_hosts.$(OBJEXT)
 	-rm -f $(SCHED)/gw_scheduler_jobs.$(OBJEXT)
 	-rm -f $(SCHED)/gw_scheduler_users.$(OBJEXT)
-	-rm -f $(TM)/gw_tm.$(OBJEXT)
-	-rm -f $(TM)/gw_tm_actions.$(OBJEXT)
-	-rm -f $(TM)/gw_tm_checkpoint.$(OBJEXT)
-	-rm -f $(TM)/gw_tm_epilog.$(OBJEXT)
-	-rm -f $(TM)/gw_tm_listener.$(OBJEXT)
-	-rm -f $(TM)/gw_tm_mad.$(OBJEXT)
-	-rm -f $(TM)/gw_tm_prolog.$(OBJEXT)
-	-rm -f $(UM)/gw_um.$(OBJEXT)
-	-rm -f $(UM)/gw_user.$(OBJEXT)
-	-rm -f $(UM)/gw_user_pool.$(OBJEXT)
+	-rm -f $(TM)/__srcdir__gwd_gwd-gw_tm.$(OBJEXT)
+	-rm -f $(TM)/__srcdir__gwd_gwd-gw_tm_actions.$(OBJEXT)
+	-rm -f $(TM)/__srcdir__gwd_gwd-gw_tm_checkpoint.$(OBJEXT)
+	-rm -f $(TM)/__srcdir__gwd_gwd-gw_tm_epilog.$(OBJEXT)
+	-rm -f $(TM)/__srcdir__gwd_gwd-gw_tm_listener.$(OBJEXT)
+	-rm -f $(TM)/__srcdir__gwd_gwd-gw_tm_mad.$(OBJEXT)
+	-rm -f $(TM)/__srcdir__gwd_gwd-gw_tm_prolog.$(OBJEXT)
+	-rm -f $(UM)/__srcdir__gwd_gwd-gw_um.$(OBJEXT)
+	-rm -f $(UM)/__srcdir__gwd_gwd-gw_user.$(OBJEXT)
+	-rm -f $(UM)/__srcdir__gwd_gwd-gw_user_pool.$(OBJEXT)
 	-rm -f test/gw_test.$(OBJEXT)
 
 distclean-compile:
@@ -1999,6 +2121,522 @@ $(COMMON)/__srcdir__drmaa_libdrmaa2_la-gw_template.lo: $(COMMON)/gw_template.c
 
 $(COMMON)/__srcdir__drmaa_libdrmaa2_la-gw_log.lo: $(COMMON)/gw_log.c
 	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__drmaa_libdrmaa2_la_CFLAGS) $(CFLAGS) -c -o $(COMMON)/__srcdir__drmaa_libdrmaa2_la-gw_log.lo `test -f '$(COMMON)/gw_log.c' || echo '$(srcdir)/'`$(COMMON)/gw_log.c
+
+$(EM)/__srcdir__gwd_gwd-gw_em_actions.o: $(EM)/gw_em_actions.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(EM)/__srcdir__gwd_gwd-gw_em_actions.o `test -f '$(EM)/gw_em_actions.c' || echo '$(srcdir)/'`$(EM)/gw_em_actions.c
+
+$(EM)/__srcdir__gwd_gwd-gw_em_actions.obj: $(EM)/gw_em_actions.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(EM)/__srcdir__gwd_gwd-gw_em_actions.obj `if test -f '$(EM)/gw_em_actions.c'; then $(CYGPATH_W) '$(EM)/gw_em_actions.c'; else $(CYGPATH_W) '$(srcdir)/$(EM)/gw_em_actions.c'; fi`
+
+$(EM)/__srcdir__gwd_gwd-gw_em.o: $(EM)/gw_em.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(EM)/__srcdir__gwd_gwd-gw_em.o `test -f '$(EM)/gw_em.c' || echo '$(srcdir)/'`$(EM)/gw_em.c
+
+$(EM)/__srcdir__gwd_gwd-gw_em.obj: $(EM)/gw_em.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(EM)/__srcdir__gwd_gwd-gw_em.obj `if test -f '$(EM)/gw_em.c'; then $(CYGPATH_W) '$(EM)/gw_em.c'; else $(CYGPATH_W) '$(srcdir)/$(EM)/gw_em.c'; fi`
+
+$(EM)/__srcdir__gwd_gwd-gw_em_listener.o: $(EM)/gw_em_listener.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(EM)/__srcdir__gwd_gwd-gw_em_listener.o `test -f '$(EM)/gw_em_listener.c' || echo '$(srcdir)/'`$(EM)/gw_em_listener.c
+
+$(EM)/__srcdir__gwd_gwd-gw_em_listener.obj: $(EM)/gw_em_listener.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(EM)/__srcdir__gwd_gwd-gw_em_listener.obj `if test -f '$(EM)/gw_em_listener.c'; then $(CYGPATH_W) '$(EM)/gw_em_listener.c'; else $(CYGPATH_W) '$(srcdir)/$(EM)/gw_em_listener.c'; fi`
+
+$(EM)/__srcdir__gwd_gwd-gw_em_mad.o: $(EM)/gw_em_mad.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(EM)/__srcdir__gwd_gwd-gw_em_mad.o `test -f '$(EM)/gw_em_mad.c' || echo '$(srcdir)/'`$(EM)/gw_em_mad.c
+
+$(EM)/__srcdir__gwd_gwd-gw_em_mad.obj: $(EM)/gw_em_mad.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(EM)/__srcdir__gwd_gwd-gw_em_mad.obj `if test -f '$(EM)/gw_em_mad.c'; then $(CYGPATH_W) '$(EM)/gw_em_mad.c'; else $(CYGPATH_W) '$(srcdir)/$(EM)/gw_em_mad.c'; fi`
+
+$(EM)/__srcdir__gwd_gwd-gw_em_rsl2.o: $(EM)/gw_em_rsl2.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(EM)/__srcdir__gwd_gwd-gw_em_rsl2.o `test -f '$(EM)/gw_em_rsl2.c' || echo '$(srcdir)/'`$(EM)/gw_em_rsl2.c
+
+$(EM)/__srcdir__gwd_gwd-gw_em_rsl2.obj: $(EM)/gw_em_rsl2.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(EM)/__srcdir__gwd_gwd-gw_em_rsl2.obj `if test -f '$(EM)/gw_em_rsl2.c'; then $(CYGPATH_W) '$(EM)/gw_em_rsl2.c'; else $(CYGPATH_W) '$(srcdir)/$(EM)/gw_em_rsl2.c'; fi`
+
+$(EM)/__srcdir__gwd_gwd-gw_em_rsl.o: $(EM)/gw_em_rsl.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(EM)/__srcdir__gwd_gwd-gw_em_rsl.o `test -f '$(EM)/gw_em_rsl.c' || echo '$(srcdir)/'`$(EM)/gw_em_rsl.c
+
+$(EM)/__srcdir__gwd_gwd-gw_em_rsl.obj: $(EM)/gw_em_rsl.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(EM)/__srcdir__gwd_gwd-gw_em_rsl.obj `if test -f '$(EM)/gw_em_rsl.c'; then $(CYGPATH_W) '$(EM)/gw_em_rsl.c'; else $(CYGPATH_W) '$(srcdir)/$(EM)/gw_em_rsl.c'; fi`
+
+$(EM)/__srcdir__gwd_gwd-gw_em_jdl.o: $(EM)/gw_em_jdl.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(EM)/__srcdir__gwd_gwd-gw_em_jdl.o `test -f '$(EM)/gw_em_jdl.c' || echo '$(srcdir)/'`$(EM)/gw_em_jdl.c
+
+$(EM)/__srcdir__gwd_gwd-gw_em_jdl.obj: $(EM)/gw_em_jdl.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(EM)/__srcdir__gwd_gwd-gw_em_jdl.obj `if test -f '$(EM)/gw_em_jdl.c'; then $(CYGPATH_W) '$(EM)/gw_em_jdl.c'; else $(CYGPATH_W) '$(srcdir)/$(EM)/gw_em_jdl.c'; fi`
+
+$(EM)/__srcdir__gwd_gwd-gw_em_jsdl.o: $(EM)/gw_em_jsdl.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(EM)/__srcdir__gwd_gwd-gw_em_jsdl.o `test -f '$(EM)/gw_em_jsdl.c' || echo '$(srcdir)/'`$(EM)/gw_em_jsdl.c
+
+$(EM)/__srcdir__gwd_gwd-gw_em_jsdl.obj: $(EM)/gw_em_jsdl.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(EM)/__srcdir__gwd_gwd-gw_em_jsdl.obj `if test -f '$(EM)/gw_em_jsdl.c'; then $(CYGPATH_W) '$(EM)/gw_em_jsdl.c'; else $(CYGPATH_W) '$(srcdir)/$(EM)/gw_em_jsdl.c'; fi`
+
+$(EM)/__srcdir__gwd_gwd-gw_em_adl.o: $(EM)/gw_em_adl.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(EM)/__srcdir__gwd_gwd-gw_em_adl.o `test -f '$(EM)/gw_em_adl.c' || echo '$(srcdir)/'`$(EM)/gw_em_adl.c
+
+$(EM)/__srcdir__gwd_gwd-gw_em_adl.obj: $(EM)/gw_em_adl.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(EM)/__srcdir__gwd_gwd-gw_em_adl.obj `if test -f '$(EM)/gw_em_adl.c'; then $(CYGPATH_W) '$(EM)/gw_em_adl.c'; else $(CYGPATH_W) '$(srcdir)/$(EM)/gw_em_adl.c'; fi`
+
+$(EM)/__srcdir__gwd_gwd-gw_em_state.o: $(EM)/gw_em_state.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(EM)/__srcdir__gwd_gwd-gw_em_state.o `test -f '$(EM)/gw_em_state.c' || echo '$(srcdir)/'`$(EM)/gw_em_state.c
+
+$(EM)/__srcdir__gwd_gwd-gw_em_state.obj: $(EM)/gw_em_state.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(EM)/__srcdir__gwd_gwd-gw_em_state.obj `if test -f '$(EM)/gw_em_state.c'; then $(CYGPATH_W) '$(EM)/gw_em_state.c'; else $(CYGPATH_W) '$(srcdir)/$(EM)/gw_em_state.c'; fi`
+
+$(TM)/__srcdir__gwd_gwd-gw_tm_actions.o: $(TM)/gw_tm_actions.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(TM)/__srcdir__gwd_gwd-gw_tm_actions.o `test -f '$(TM)/gw_tm_actions.c' || echo '$(srcdir)/'`$(TM)/gw_tm_actions.c
+
+$(TM)/__srcdir__gwd_gwd-gw_tm_actions.obj: $(TM)/gw_tm_actions.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(TM)/__srcdir__gwd_gwd-gw_tm_actions.obj `if test -f '$(TM)/gw_tm_actions.c'; then $(CYGPATH_W) '$(TM)/gw_tm_actions.c'; else $(CYGPATH_W) '$(srcdir)/$(TM)/gw_tm_actions.c'; fi`
+
+$(TM)/__srcdir__gwd_gwd-gw_tm.o: $(TM)/gw_tm.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(TM)/__srcdir__gwd_gwd-gw_tm.o `test -f '$(TM)/gw_tm.c' || echo '$(srcdir)/'`$(TM)/gw_tm.c
+
+$(TM)/__srcdir__gwd_gwd-gw_tm.obj: $(TM)/gw_tm.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(TM)/__srcdir__gwd_gwd-gw_tm.obj `if test -f '$(TM)/gw_tm.c'; then $(CYGPATH_W) '$(TM)/gw_tm.c'; else $(CYGPATH_W) '$(srcdir)/$(TM)/gw_tm.c'; fi`
+
+$(TM)/__srcdir__gwd_gwd-gw_tm_checkpoint.o: $(TM)/gw_tm_checkpoint.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(TM)/__srcdir__gwd_gwd-gw_tm_checkpoint.o `test -f '$(TM)/gw_tm_checkpoint.c' || echo '$(srcdir)/'`$(TM)/gw_tm_checkpoint.c
+
+$(TM)/__srcdir__gwd_gwd-gw_tm_checkpoint.obj: $(TM)/gw_tm_checkpoint.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(TM)/__srcdir__gwd_gwd-gw_tm_checkpoint.obj `if test -f '$(TM)/gw_tm_checkpoint.c'; then $(CYGPATH_W) '$(TM)/gw_tm_checkpoint.c'; else $(CYGPATH_W) '$(srcdir)/$(TM)/gw_tm_checkpoint.c'; fi`
+
+$(TM)/__srcdir__gwd_gwd-gw_tm_epilog.o: $(TM)/gw_tm_epilog.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(TM)/__srcdir__gwd_gwd-gw_tm_epilog.o `test -f '$(TM)/gw_tm_epilog.c' || echo '$(srcdir)/'`$(TM)/gw_tm_epilog.c
+
+$(TM)/__srcdir__gwd_gwd-gw_tm_epilog.obj: $(TM)/gw_tm_epilog.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(TM)/__srcdir__gwd_gwd-gw_tm_epilog.obj `if test -f '$(TM)/gw_tm_epilog.c'; then $(CYGPATH_W) '$(TM)/gw_tm_epilog.c'; else $(CYGPATH_W) '$(srcdir)/$(TM)/gw_tm_epilog.c'; fi`
+
+$(TM)/__srcdir__gwd_gwd-gw_tm_listener.o: $(TM)/gw_tm_listener.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(TM)/__srcdir__gwd_gwd-gw_tm_listener.o `test -f '$(TM)/gw_tm_listener.c' || echo '$(srcdir)/'`$(TM)/gw_tm_listener.c
+
+$(TM)/__srcdir__gwd_gwd-gw_tm_listener.obj: $(TM)/gw_tm_listener.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(TM)/__srcdir__gwd_gwd-gw_tm_listener.obj `if test -f '$(TM)/gw_tm_listener.c'; then $(CYGPATH_W) '$(TM)/gw_tm_listener.c'; else $(CYGPATH_W) '$(srcdir)/$(TM)/gw_tm_listener.c'; fi`
+
+$(TM)/__srcdir__gwd_gwd-gw_tm_mad.o: $(TM)/gw_tm_mad.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(TM)/__srcdir__gwd_gwd-gw_tm_mad.o `test -f '$(TM)/gw_tm_mad.c' || echo '$(srcdir)/'`$(TM)/gw_tm_mad.c
+
+$(TM)/__srcdir__gwd_gwd-gw_tm_mad.obj: $(TM)/gw_tm_mad.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(TM)/__srcdir__gwd_gwd-gw_tm_mad.obj `if test -f '$(TM)/gw_tm_mad.c'; then $(CYGPATH_W) '$(TM)/gw_tm_mad.c'; else $(CYGPATH_W) '$(srcdir)/$(TM)/gw_tm_mad.c'; fi`
+
+$(TM)/__srcdir__gwd_gwd-gw_tm_prolog.o: $(TM)/gw_tm_prolog.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(TM)/__srcdir__gwd_gwd-gw_tm_prolog.o `test -f '$(TM)/gw_tm_prolog.c' || echo '$(srcdir)/'`$(TM)/gw_tm_prolog.c
+
+$(TM)/__srcdir__gwd_gwd-gw_tm_prolog.obj: $(TM)/gw_tm_prolog.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(TM)/__srcdir__gwd_gwd-gw_tm_prolog.obj `if test -f '$(TM)/gw_tm_prolog.c'; then $(CYGPATH_W) '$(TM)/gw_tm_prolog.c'; else $(CYGPATH_W) '$(srcdir)/$(TM)/gw_tm_prolog.c'; fi`
+
+$(IM)/__srcdir__gwd_gwd-gw_im_actions.o: $(IM)/gw_im_actions.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(IM)/__srcdir__gwd_gwd-gw_im_actions.o `test -f '$(IM)/gw_im_actions.c' || echo '$(srcdir)/'`$(IM)/gw_im_actions.c
+
+$(IM)/__srcdir__gwd_gwd-gw_im_actions.obj: $(IM)/gw_im_actions.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(IM)/__srcdir__gwd_gwd-gw_im_actions.obj `if test -f '$(IM)/gw_im_actions.c'; then $(CYGPATH_W) '$(IM)/gw_im_actions.c'; else $(CYGPATH_W) '$(srcdir)/$(IM)/gw_im_actions.c'; fi`
+
+$(IM)/__srcdir__gwd_gwd-gw_im.o: $(IM)/gw_im.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(IM)/__srcdir__gwd_gwd-gw_im.o `test -f '$(IM)/gw_im.c' || echo '$(srcdir)/'`$(IM)/gw_im.c
+
+$(IM)/__srcdir__gwd_gwd-gw_im.obj: $(IM)/gw_im.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(IM)/__srcdir__gwd_gwd-gw_im.obj `if test -f '$(IM)/gw_im.c'; then $(CYGPATH_W) '$(IM)/gw_im.c'; else $(CYGPATH_W) '$(srcdir)/$(IM)/gw_im.c'; fi`
+
+$(IM)/__srcdir__gwd_gwd-gw_im_listener.o: $(IM)/gw_im_listener.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(IM)/__srcdir__gwd_gwd-gw_im_listener.o `test -f '$(IM)/gw_im_listener.c' || echo '$(srcdir)/'`$(IM)/gw_im_listener.c
+
+$(IM)/__srcdir__gwd_gwd-gw_im_listener.obj: $(IM)/gw_im_listener.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(IM)/__srcdir__gwd_gwd-gw_im_listener.obj `if test -f '$(IM)/gw_im_listener.c'; then $(CYGPATH_W) '$(IM)/gw_im_listener.c'; else $(CYGPATH_W) '$(srcdir)/$(IM)/gw_im_listener.c'; fi`
+
+$(IM)/__srcdir__gwd_gwd-gw_im_mad.o: $(IM)/gw_im_mad.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(IM)/__srcdir__gwd_gwd-gw_im_mad.o `test -f '$(IM)/gw_im_mad.c' || echo '$(srcdir)/'`$(IM)/gw_im_mad.c
+
+$(IM)/__srcdir__gwd_gwd-gw_im_mad.obj: $(IM)/gw_im_mad.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(IM)/__srcdir__gwd_gwd-gw_im_mad.obj `if test -f '$(IM)/gw_im_mad.c'; then $(CYGPATH_W) '$(IM)/gw_im_mad.c'; else $(CYGPATH_W) '$(srcdir)/$(IM)/gw_im_mad.c'; fi`
+
+$(JOB)/__srcdir__gwd_gwd-gw_history.o: $(JOB)/gw_history.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(JOB)/__srcdir__gwd_gwd-gw_history.o `test -f '$(JOB)/gw_history.c' || echo '$(srcdir)/'`$(JOB)/gw_history.c
+
+$(JOB)/__srcdir__gwd_gwd-gw_history.obj: $(JOB)/gw_history.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(JOB)/__srcdir__gwd_gwd-gw_history.obj `if test -f '$(JOB)/gw_history.c'; then $(CYGPATH_W) '$(JOB)/gw_history.c'; else $(CYGPATH_W) '$(srcdir)/$(JOB)/gw_history.c'; fi`
+
+$(JOB)/__srcdir__gwd_gwd-gw_job.o: $(JOB)/gw_job.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(JOB)/__srcdir__gwd_gwd-gw_job.o `test -f '$(JOB)/gw_job.c' || echo '$(srcdir)/'`$(JOB)/gw_job.c
+
+$(JOB)/__srcdir__gwd_gwd-gw_job.obj: $(JOB)/gw_job.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(JOB)/__srcdir__gwd_gwd-gw_job.obj `if test -f '$(JOB)/gw_job.c'; then $(CYGPATH_W) '$(JOB)/gw_job.c'; else $(CYGPATH_W) '$(srcdir)/$(JOB)/gw_job.c'; fi`
+
+$(JOB)/__srcdir__gwd_gwd-gw_job_environment.o: $(JOB)/gw_job_environment.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(JOB)/__srcdir__gwd_gwd-gw_job_environment.o `test -f '$(JOB)/gw_job_environment.c' || echo '$(srcdir)/'`$(JOB)/gw_job_environment.c
+
+$(JOB)/__srcdir__gwd_gwd-gw_job_environment.obj: $(JOB)/gw_job_environment.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(JOB)/__srcdir__gwd_gwd-gw_job_environment.obj `if test -f '$(JOB)/gw_job_environment.c'; then $(CYGPATH_W) '$(JOB)/gw_job_environment.c'; else $(CYGPATH_W) '$(srcdir)/$(JOB)/gw_job_environment.c'; fi`
+
+$(JOB)/__srcdir__gwd_gwd-gw_job_pool.o: $(JOB)/gw_job_pool.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(JOB)/__srcdir__gwd_gwd-gw_job_pool.o `test -f '$(JOB)/gw_job_pool.c' || echo '$(srcdir)/'`$(JOB)/gw_job_pool.c
+
+$(JOB)/__srcdir__gwd_gwd-gw_job_pool.obj: $(JOB)/gw_job_pool.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(JOB)/__srcdir__gwd_gwd-gw_job_pool.obj `if test -f '$(JOB)/gw_job_pool.c'; then $(CYGPATH_W) '$(JOB)/gw_job_pool.c'; else $(CYGPATH_W) '$(srcdir)/$(JOB)/gw_job_pool.c'; fi`
+
+$(JOB)/__srcdir__gwd_gwd-gw_job_recover.o: $(JOB)/gw_job_recover.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(JOB)/__srcdir__gwd_gwd-gw_job_recover.o `test -f '$(JOB)/gw_job_recover.c' || echo '$(srcdir)/'`$(JOB)/gw_job_recover.c
+
+$(JOB)/__srcdir__gwd_gwd-gw_job_recover.obj: $(JOB)/gw_job_recover.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(JOB)/__srcdir__gwd_gwd-gw_job_recover.obj `if test -f '$(JOB)/gw_job_recover.c'; then $(CYGPATH_W) '$(JOB)/gw_job_recover.c'; else $(CYGPATH_W) '$(srcdir)/$(JOB)/gw_job_recover.c'; fi`
+
+$(JOB)/__srcdir__gwd_gwd-gw_job_template.o: $(JOB)/gw_job_template.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(JOB)/__srcdir__gwd_gwd-gw_job_template.o `test -f '$(JOB)/gw_job_template.c' || echo '$(srcdir)/'`$(JOB)/gw_job_template.c
+
+$(JOB)/__srcdir__gwd_gwd-gw_job_template.obj: $(JOB)/gw_job_template.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(JOB)/__srcdir__gwd_gwd-gw_job_template.obj `if test -f '$(JOB)/gw_job_template.c'; then $(CYGPATH_W) '$(JOB)/gw_job_template.c'; else $(CYGPATH_W) '$(srcdir)/$(JOB)/gw_job_template.c'; fi`
+
+$(JOB)/__srcdir__gwd_gwd-gw_job_template_var_parser.o: $(JOB)/gw_job_template_var_parser.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(JOB)/__srcdir__gwd_gwd-gw_job_template_var_parser.o `test -f '$(JOB)/gw_job_template_var_parser.c' || echo '$(srcdir)/'`$(JOB)/gw_job_template_var_parser.c
+
+$(JOB)/__srcdir__gwd_gwd-gw_job_template_var_parser.obj: $(JOB)/gw_job_template_var_parser.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(JOB)/__srcdir__gwd_gwd-gw_job_template_var_parser.obj `if test -f '$(JOB)/gw_job_template_var_parser.c'; then $(CYGPATH_W) '$(JOB)/gw_job_template_var_parser.c'; else $(CYGPATH_W) '$(srcdir)/$(JOB)/gw_job_template_var_parser.c'; fi`
+
+$(JOB)/__srcdir__gwd_gwd-gw_xfr_files.o: $(JOB)/gw_xfr_files.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(JOB)/__srcdir__gwd_gwd-gw_xfr_files.o `test -f '$(JOB)/gw_xfr_files.c' || echo '$(srcdir)/'`$(JOB)/gw_xfr_files.c
+
+$(JOB)/__srcdir__gwd_gwd-gw_xfr_files.obj: $(JOB)/gw_xfr_files.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(JOB)/__srcdir__gwd_gwd-gw_xfr_files.obj `if test -f '$(JOB)/gw_xfr_files.c'; then $(CYGPATH_W) '$(JOB)/gw_xfr_files.c'; else $(CYGPATH_W) '$(srcdir)/$(JOB)/gw_xfr_files.c'; fi`
+
+$(HOST)/__srcdir__gwd_gwd-gw_host.o: $(HOST)/gw_host.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(HOST)/__srcdir__gwd_gwd-gw_host.o `test -f '$(HOST)/gw_host.c' || echo '$(srcdir)/'`$(HOST)/gw_host.c
+
+$(HOST)/__srcdir__gwd_gwd-gw_host.obj: $(HOST)/gw_host.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(HOST)/__srcdir__gwd_gwd-gw_host.obj `if test -f '$(HOST)/gw_host.c'; then $(CYGPATH_W) '$(HOST)/gw_host.c'; else $(CYGPATH_W) '$(srcdir)/$(HOST)/gw_host.c'; fi`
+
+$(HOST)/__srcdir__gwd_gwd-gw_host_var.o: $(HOST)/gw_host_var.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(HOST)/__srcdir__gwd_gwd-gw_host_var.o `test -f '$(HOST)/gw_host_var.c' || echo '$(srcdir)/'`$(HOST)/gw_host_var.c
+
+$(HOST)/__srcdir__gwd_gwd-gw_host_var.obj: $(HOST)/gw_host_var.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(HOST)/__srcdir__gwd_gwd-gw_host_var.obj `if test -f '$(HOST)/gw_host_var.c'; then $(CYGPATH_W) '$(HOST)/gw_host_var.c'; else $(CYGPATH_W) '$(srcdir)/$(HOST)/gw_host_var.c'; fi`
+
+$(HOST)/__srcdir__gwd_gwd-gw_host_pool.o: $(HOST)/gw_host_pool.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(HOST)/__srcdir__gwd_gwd-gw_host_pool.o `test -f '$(HOST)/gw_host_pool.c' || echo '$(srcdir)/'`$(HOST)/gw_host_pool.c
+
+$(HOST)/__srcdir__gwd_gwd-gw_host_pool.obj: $(HOST)/gw_host_pool.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(HOST)/__srcdir__gwd_gwd-gw_host_pool.obj `if test -f '$(HOST)/gw_host_pool.c'; then $(CYGPATH_W) '$(HOST)/gw_host_pool.c'; else $(CYGPATH_W) '$(srcdir)/$(HOST)/gw_host_pool.c'; fi`
+
+$(HOST)/__srcdir__gwd_gwd-gw_host_rank_syntax.o: $(HOST)/gw_host_rank_syntax.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(HOST)/__srcdir__gwd_gwd-gw_host_rank_syntax.o `test -f '$(HOST)/gw_host_rank_syntax.c' || echo '$(srcdir)/'`$(HOST)/gw_host_rank_syntax.c
+
+$(HOST)/__srcdir__gwd_gwd-gw_host_rank_syntax.obj: $(HOST)/gw_host_rank_syntax.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(HOST)/__srcdir__gwd_gwd-gw_host_rank_syntax.obj `if test -f '$(HOST)/gw_host_rank_syntax.c'; then $(CYGPATH_W) '$(HOST)/gw_host_rank_syntax.c'; else $(CYGPATH_W) '$(srcdir)/$(HOST)/gw_host_rank_syntax.c'; fi`
+
+$(HOST)/__srcdir__gwd_gwd-gw_host_reqs_syntax.o: $(HOST)/gw_host_reqs_syntax.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(HOST)/__srcdir__gwd_gwd-gw_host_reqs_syntax.o `test -f '$(HOST)/gw_host_reqs_syntax.c' || echo '$(srcdir)/'`$(HOST)/gw_host_reqs_syntax.c
+
+$(HOST)/__srcdir__gwd_gwd-gw_host_reqs_syntax.obj: $(HOST)/gw_host_reqs_syntax.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(HOST)/__srcdir__gwd_gwd-gw_host_reqs_syntax.obj `if test -f '$(HOST)/gw_host_reqs_syntax.c'; then $(CYGPATH_W) '$(HOST)/gw_host_reqs_syntax.c'; else $(CYGPATH_W) '$(srcdir)/$(HOST)/gw_host_reqs_syntax.c'; fi`
+
+$(HOST)/__srcdir__gwd_gwd-gw_host_update_syntax.o: $(HOST)/gw_host_update_syntax.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(HOST)/__srcdir__gwd_gwd-gw_host_update_syntax.o `test -f '$(HOST)/gw_host_update_syntax.c' || echo '$(srcdir)/'`$(HOST)/gw_host_update_syntax.c
+
+$(HOST)/__srcdir__gwd_gwd-gw_host_update_syntax.obj: $(HOST)/gw_host_update_syntax.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(HOST)/__srcdir__gwd_gwd-gw_host_update_syntax.obj `if test -f '$(HOST)/gw_host_update_syntax.c'; then $(CYGPATH_W) '$(HOST)/gw_host_update_syntax.c'; else $(CYGPATH_W) '$(srcdir)/$(HOST)/gw_host_update_syntax.c'; fi`
+
+$(HOST)/__srcdir__gwd_gwd-gw_host_attr_parser.o: $(HOST)/gw_host_attr_parser.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(HOST)/__srcdir__gwd_gwd-gw_host_attr_parser.o `test -f '$(HOST)/gw_host_attr_parser.c' || echo '$(srcdir)/'`$(HOST)/gw_host_attr_parser.c
+
+$(HOST)/__srcdir__gwd_gwd-gw_host_attr_parser.obj: $(HOST)/gw_host_attr_parser.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(HOST)/__srcdir__gwd_gwd-gw_host_attr_parser.obj `if test -f '$(HOST)/gw_host_attr_parser.c'; then $(CYGPATH_W) '$(HOST)/gw_host_attr_parser.c'; else $(CYGPATH_W) '$(srcdir)/$(HOST)/gw_host_attr_parser.c'; fi`
+
+$(COMMON)/__srcdir__gwd_gwd-gw_action.o: $(COMMON)/gw_action.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(COMMON)/__srcdir__gwd_gwd-gw_action.o `test -f '$(COMMON)/gw_action.c' || echo '$(srcdir)/'`$(COMMON)/gw_action.c
+
+$(COMMON)/__srcdir__gwd_gwd-gw_action.obj: $(COMMON)/gw_action.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(COMMON)/__srcdir__gwd_gwd-gw_action.obj `if test -f '$(COMMON)/gw_action.c'; then $(CYGPATH_W) '$(COMMON)/gw_action.c'; else $(CYGPATH_W) '$(srcdir)/$(COMMON)/gw_action.c'; fi`
+
+$(COMMON)/__srcdir__gwd_gwd-gw_common.o: $(COMMON)/gw_common.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(COMMON)/__srcdir__gwd_gwd-gw_common.o `test -f '$(COMMON)/gw_common.c' || echo '$(srcdir)/'`$(COMMON)/gw_common.c
+
+$(COMMON)/__srcdir__gwd_gwd-gw_common.obj: $(COMMON)/gw_common.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(COMMON)/__srcdir__gwd_gwd-gw_common.obj `if test -f '$(COMMON)/gw_common.c'; then $(CYGPATH_W) '$(COMMON)/gw_common.c'; else $(CYGPATH_W) '$(srcdir)/$(COMMON)/gw_common.c'; fi`
+
+$(COMMON)/__srcdir__gwd_gwd-gw_file_parser.o: $(COMMON)/gw_file_parser.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(COMMON)/__srcdir__gwd_gwd-gw_file_parser.o `test -f '$(COMMON)/gw_file_parser.c' || echo '$(srcdir)/'`$(COMMON)/gw_file_parser.c
+
+$(COMMON)/__srcdir__gwd_gwd-gw_file_parser.obj: $(COMMON)/gw_file_parser.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(COMMON)/__srcdir__gwd_gwd-gw_file_parser.obj `if test -f '$(COMMON)/gw_file_parser.c'; then $(CYGPATH_W) '$(COMMON)/gw_file_parser.c'; else $(CYGPATH_W) '$(srcdir)/$(COMMON)/gw_file_parser.c'; fi`
+
+$(COMMON)/__srcdir__gwd_gwd-gw_log.o: $(COMMON)/gw_log.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(COMMON)/__srcdir__gwd_gwd-gw_log.o `test -f '$(COMMON)/gw_log.c' || echo '$(srcdir)/'`$(COMMON)/gw_log.c
+
+$(COMMON)/__srcdir__gwd_gwd-gw_log.obj: $(COMMON)/gw_log.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(COMMON)/__srcdir__gwd_gwd-gw_log.obj `if test -f '$(COMMON)/gw_log.c'; then $(CYGPATH_W) '$(COMMON)/gw_log.c'; else $(CYGPATH_W) '$(srcdir)/$(COMMON)/gw_log.c'; fi`
+
+$(COMMON)/__srcdir__gwd_gwd-gw_template.o: $(COMMON)/gw_template.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(COMMON)/__srcdir__gwd_gwd-gw_template.o `test -f '$(COMMON)/gw_template.c' || echo '$(srcdir)/'`$(COMMON)/gw_template.c
+
+$(COMMON)/__srcdir__gwd_gwd-gw_template.obj: $(COMMON)/gw_template.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(COMMON)/__srcdir__gwd_gwd-gw_template.obj `if test -f '$(COMMON)/gw_template.c'; then $(CYGPATH_W) '$(COMMON)/gw_template.c'; else $(CYGPATH_W) '$(srcdir)/$(COMMON)/gw_template.c'; fi`
+
+$(COMMON)/__srcdir__gwd_gwd-gw_template_parser.o: $(COMMON)/gw_template_parser.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(COMMON)/__srcdir__gwd_gwd-gw_template_parser.o `test -f '$(COMMON)/gw_template_parser.c' || echo '$(srcdir)/'`$(COMMON)/gw_template_parser.c
+
+$(COMMON)/__srcdir__gwd_gwd-gw_template_parser.obj: $(COMMON)/gw_template_parser.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(COMMON)/__srcdir__gwd_gwd-gw_template_parser.obj `if test -f '$(COMMON)/gw_template_parser.c'; then $(CYGPATH_W) '$(COMMON)/gw_template_parser.c'; else $(CYGPATH_W) '$(srcdir)/$(COMMON)/gw_template_parser.c'; fi`
+
+$(ARRAY)/__srcdir__gwd_gwd-gw_array.o: $(ARRAY)/gw_array.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(ARRAY)/__srcdir__gwd_gwd-gw_array.o `test -f '$(ARRAY)/gw_array.c' || echo '$(srcdir)/'`$(ARRAY)/gw_array.c
+
+$(ARRAY)/__srcdir__gwd_gwd-gw_array.obj: $(ARRAY)/gw_array.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(ARRAY)/__srcdir__gwd_gwd-gw_array.obj `if test -f '$(ARRAY)/gw_array.c'; then $(CYGPATH_W) '$(ARRAY)/gw_array.c'; else $(CYGPATH_W) '$(srcdir)/$(ARRAY)/gw_array.c'; fi`
+
+$(ARRAY)/__srcdir__gwd_gwd-gw_array_pool.o: $(ARRAY)/gw_array_pool.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(ARRAY)/__srcdir__gwd_gwd-gw_array_pool.o `test -f '$(ARRAY)/gw_array_pool.c' || echo '$(srcdir)/'`$(ARRAY)/gw_array_pool.c
+
+$(ARRAY)/__srcdir__gwd_gwd-gw_array_pool.obj: $(ARRAY)/gw_array_pool.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(ARRAY)/__srcdir__gwd_gwd-gw_array_pool.obj `if test -f '$(ARRAY)/gw_array_pool.c'; then $(CYGPATH_W) '$(ARRAY)/gw_array_pool.c'; else $(CYGPATH_W) '$(srcdir)/$(ARRAY)/gw_array_pool.c'; fi`
+
+$(DM)/__srcdir__gwd_gwd-gw_dm_action_allocate.o: $(DM)/gw_dm_action_allocate.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm_action_allocate.o `test -f '$(DM)/gw_dm_action_allocate.c' || echo '$(srcdir)/'`$(DM)/gw_dm_action_allocate.c
+
+$(DM)/__srcdir__gwd_gwd-gw_dm_action_allocate.obj: $(DM)/gw_dm_action_allocate.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm_action_allocate.obj `if test -f '$(DM)/gw_dm_action_allocate.c'; then $(CYGPATH_W) '$(DM)/gw_dm_action_allocate.c'; else $(CYGPATH_W) '$(srcdir)/$(DM)/gw_dm_action_allocate.c'; fi`
+
+$(DM)/__srcdir__gwd_gwd-gw_dm_action_dispatch.o: $(DM)/gw_dm_action_dispatch.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm_action_dispatch.o `test -f '$(DM)/gw_dm_action_dispatch.c' || echo '$(srcdir)/'`$(DM)/gw_dm_action_dispatch.c
+
+$(DM)/__srcdir__gwd_gwd-gw_dm_action_dispatch.obj: $(DM)/gw_dm_action_dispatch.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm_action_dispatch.obj `if test -f '$(DM)/gw_dm_action_dispatch.c'; then $(CYGPATH_W) '$(DM)/gw_dm_action_dispatch.c'; else $(CYGPATH_W) '$(srcdir)/$(DM)/gw_dm_action_dispatch.c'; fi`
+
+$(DM)/__srcdir__gwd_gwd-gw_dm_action_hold_release.o: $(DM)/gw_dm_action_hold_release.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm_action_hold_release.o `test -f '$(DM)/gw_dm_action_hold_release.c' || echo '$(srcdir)/'`$(DM)/gw_dm_action_hold_release.c
+
+$(DM)/__srcdir__gwd_gwd-gw_dm_action_hold_release.obj: $(DM)/gw_dm_action_hold_release.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm_action_hold_release.obj `if test -f '$(DM)/gw_dm_action_hold_release.c'; then $(CYGPATH_W) '$(DM)/gw_dm_action_hold_release.c'; else $(CYGPATH_W) '$(srcdir)/$(DM)/gw_dm_action_hold_release.c'; fi`
+
+$(DM)/__srcdir__gwd_gwd-gw_dm_action_kill.o: $(DM)/gw_dm_action_kill.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm_action_kill.o `test -f '$(DM)/gw_dm_action_kill.c' || echo '$(srcdir)/'`$(DM)/gw_dm_action_kill.c
+
+$(DM)/__srcdir__gwd_gwd-gw_dm_action_kill.obj: $(DM)/gw_dm_action_kill.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm_action_kill.obj `if test -f '$(DM)/gw_dm_action_kill.c'; then $(CYGPATH_W) '$(DM)/gw_dm_action_kill.c'; else $(CYGPATH_W) '$(srcdir)/$(DM)/gw_dm_action_kill.c'; fi`
+
+$(DM)/__srcdir__gwd_gwd-gw_dm_action_reschedule.o: $(DM)/gw_dm_action_reschedule.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm_action_reschedule.o `test -f '$(DM)/gw_dm_action_reschedule.c' || echo '$(srcdir)/'`$(DM)/gw_dm_action_reschedule.c
+
+$(DM)/__srcdir__gwd_gwd-gw_dm_action_reschedule.obj: $(DM)/gw_dm_action_reschedule.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm_action_reschedule.obj `if test -f '$(DM)/gw_dm_action_reschedule.c'; then $(CYGPATH_W) '$(DM)/gw_dm_action_reschedule.c'; else $(CYGPATH_W) '$(srcdir)/$(DM)/gw_dm_action_reschedule.c'; fi`
+
+$(DM)/__srcdir__gwd_gwd-gw_dm_action_schedule.o: $(DM)/gw_dm_action_schedule.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm_action_schedule.o `test -f '$(DM)/gw_dm_action_schedule.c' || echo '$(srcdir)/'`$(DM)/gw_dm_action_schedule.c
+
+$(DM)/__srcdir__gwd_gwd-gw_dm_action_schedule.obj: $(DM)/gw_dm_action_schedule.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm_action_schedule.obj `if test -f '$(DM)/gw_dm_action_schedule.c'; then $(CYGPATH_W) '$(DM)/gw_dm_action_schedule.c'; else $(CYGPATH_W) '$(srcdir)/$(DM)/gw_dm_action_schedule.c'; fi`
+
+$(DM)/__srcdir__gwd_gwd-gw_dm_action_stop_resume.o: $(DM)/gw_dm_action_stop_resume.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm_action_stop_resume.o `test -f '$(DM)/gw_dm_action_stop_resume.c' || echo '$(srcdir)/'`$(DM)/gw_dm_action_stop_resume.c
+
+$(DM)/__srcdir__gwd_gwd-gw_dm_action_stop_resume.obj: $(DM)/gw_dm_action_stop_resume.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm_action_stop_resume.obj `if test -f '$(DM)/gw_dm_action_stop_resume.c'; then $(CYGPATH_W) '$(DM)/gw_dm_action_stop_resume.c'; else $(CYGPATH_W) '$(srcdir)/$(DM)/gw_dm_action_stop_resume.c'; fi`
+
+$(DM)/__srcdir__gwd_gwd-gw_dm_action_wait.o: $(DM)/gw_dm_action_wait.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm_action_wait.o `test -f '$(DM)/gw_dm_action_wait.c' || echo '$(srcdir)/'`$(DM)/gw_dm_action_wait.c
+
+$(DM)/__srcdir__gwd_gwd-gw_dm_action_wait.obj: $(DM)/gw_dm_action_wait.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm_action_wait.obj `if test -f '$(DM)/gw_dm_action_wait.c'; then $(CYGPATH_W) '$(DM)/gw_dm_action_wait.c'; else $(CYGPATH_W) '$(srcdir)/$(DM)/gw_dm_action_wait.c'; fi`
+
+$(DM)/__srcdir__gwd_gwd-gw_dm.o: $(DM)/gw_dm.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm.o `test -f '$(DM)/gw_dm.c' || echo '$(srcdir)/'`$(DM)/gw_dm.c
+
+$(DM)/__srcdir__gwd_gwd-gw_dm.obj: $(DM)/gw_dm.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm.obj `if test -f '$(DM)/gw_dm.c'; then $(CYGPATH_W) '$(DM)/gw_dm.c'; else $(CYGPATH_W) '$(srcdir)/$(DM)/gw_dm.c'; fi`
+
+$(DM)/__srcdir__gwd_gwd-gw_dm_listener.o: $(DM)/gw_dm_listener.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm_listener.o `test -f '$(DM)/gw_dm_listener.c' || echo '$(srcdir)/'`$(DM)/gw_dm_listener.c
+
+$(DM)/__srcdir__gwd_gwd-gw_dm_listener.obj: $(DM)/gw_dm_listener.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm_listener.obj `if test -f '$(DM)/gw_dm_listener.c'; then $(CYGPATH_W) '$(DM)/gw_dm_listener.c'; else $(CYGPATH_W) '$(srcdir)/$(DM)/gw_dm_listener.c'; fi`
+
+$(DM)/__srcdir__gwd_gwd-gw_dm_mad.o: $(DM)/gw_dm_mad.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm_mad.o `test -f '$(DM)/gw_dm_mad.c' || echo '$(srcdir)/'`$(DM)/gw_dm_mad.c
+
+$(DM)/__srcdir__gwd_gwd-gw_dm_mad.obj: $(DM)/gw_dm_mad.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm_mad.obj `if test -f '$(DM)/gw_dm_mad.c'; then $(CYGPATH_W) '$(DM)/gw_dm_mad.c'; else $(CYGPATH_W) '$(srcdir)/$(DM)/gw_dm_mad.c'; fi`
+
+$(DM)/__srcdir__gwd_gwd-gw_dm_state_epilogs.o: $(DM)/gw_dm_state_epilogs.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm_state_epilogs.o `test -f '$(DM)/gw_dm_state_epilogs.c' || echo '$(srcdir)/'`$(DM)/gw_dm_state_epilogs.c
+
+$(DM)/__srcdir__gwd_gwd-gw_dm_state_epilogs.obj: $(DM)/gw_dm_state_epilogs.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm_state_epilogs.obj `if test -f '$(DM)/gw_dm_state_epilogs.c'; then $(CYGPATH_W) '$(DM)/gw_dm_state_epilogs.c'; else $(CYGPATH_W) '$(srcdir)/$(DM)/gw_dm_state_epilogs.c'; fi`
+
+$(DM)/__srcdir__gwd_gwd-gw_dm_state_failed.o: $(DM)/gw_dm_state_failed.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm_state_failed.o `test -f '$(DM)/gw_dm_state_failed.c' || echo '$(srcdir)/'`$(DM)/gw_dm_state_failed.c
+
+$(DM)/__srcdir__gwd_gwd-gw_dm_state_failed.obj: $(DM)/gw_dm_state_failed.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm_state_failed.obj `if test -f '$(DM)/gw_dm_state_failed.c'; then $(CYGPATH_W) '$(DM)/gw_dm_state_failed.c'; else $(CYGPATH_W) '$(srcdir)/$(DM)/gw_dm_state_failed.c'; fi`
+
+$(DM)/__srcdir__gwd_gwd-gw_dm_state_migrate.o: $(DM)/gw_dm_state_migrate.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm_state_migrate.o `test -f '$(DM)/gw_dm_state_migrate.c' || echo '$(srcdir)/'`$(DM)/gw_dm_state_migrate.c
+
+$(DM)/__srcdir__gwd_gwd-gw_dm_state_migrate.obj: $(DM)/gw_dm_state_migrate.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm_state_migrate.obj `if test -f '$(DM)/gw_dm_state_migrate.c'; then $(CYGPATH_W) '$(DM)/gw_dm_state_migrate.c'; else $(CYGPATH_W) '$(srcdir)/$(DM)/gw_dm_state_migrate.c'; fi`
+
+$(DM)/__srcdir__gwd_gwd-gw_dm_state_pending.o: $(DM)/gw_dm_state_pending.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm_state_pending.o `test -f '$(DM)/gw_dm_state_pending.c' || echo '$(srcdir)/'`$(DM)/gw_dm_state_pending.c
+
+$(DM)/__srcdir__gwd_gwd-gw_dm_state_pending.obj: $(DM)/gw_dm_state_pending.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm_state_pending.obj `if test -f '$(DM)/gw_dm_state_pending.c'; then $(CYGPATH_W) '$(DM)/gw_dm_state_pending.c'; else $(CYGPATH_W) '$(srcdir)/$(DM)/gw_dm_state_pending.c'; fi`
+
+$(DM)/__srcdir__gwd_gwd-gw_dm_state_prologs.o: $(DM)/gw_dm_state_prologs.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm_state_prologs.o `test -f '$(DM)/gw_dm_state_prologs.c' || echo '$(srcdir)/'`$(DM)/gw_dm_state_prologs.c
+
+$(DM)/__srcdir__gwd_gwd-gw_dm_state_prologs.obj: $(DM)/gw_dm_state_prologs.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm_state_prologs.obj `if test -f '$(DM)/gw_dm_state_prologs.c'; then $(CYGPATH_W) '$(DM)/gw_dm_state_prologs.c'; else $(CYGPATH_W) '$(srcdir)/$(DM)/gw_dm_state_prologs.c'; fi`
+
+$(DM)/__srcdir__gwd_gwd-gw_dm_state_stopped.o: $(DM)/gw_dm_state_stopped.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm_state_stopped.o `test -f '$(DM)/gw_dm_state_stopped.c' || echo '$(srcdir)/'`$(DM)/gw_dm_state_stopped.c
+
+$(DM)/__srcdir__gwd_gwd-gw_dm_state_stopped.obj: $(DM)/gw_dm_state_stopped.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm_state_stopped.obj `if test -f '$(DM)/gw_dm_state_stopped.c'; then $(CYGPATH_W) '$(DM)/gw_dm_state_stopped.c'; else $(CYGPATH_W) '$(srcdir)/$(DM)/gw_dm_state_stopped.c'; fi`
+
+$(DM)/__srcdir__gwd_gwd-gw_dm_state_wrappers.o: $(DM)/gw_dm_state_wrappers.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm_state_wrappers.o `test -f '$(DM)/gw_dm_state_wrappers.c' || echo '$(srcdir)/'`$(DM)/gw_dm_state_wrappers.c
+
+$(DM)/__srcdir__gwd_gwd-gw_dm_state_wrappers.obj: $(DM)/gw_dm_state_wrappers.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm_state_wrappers.obj `if test -f '$(DM)/gw_dm_state_wrappers.c'; then $(CYGPATH_W) '$(DM)/gw_dm_state_wrappers.c'; else $(CYGPATH_W) '$(srcdir)/$(DM)/gw_dm_state_wrappers.c'; fi`
+
+$(DM)/__srcdir__gwd_gwd-gw_dm_state_zombie.o: $(DM)/gw_dm_state_zombie.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm_state_zombie.o `test -f '$(DM)/gw_dm_state_zombie.c' || echo '$(srcdir)/'`$(DM)/gw_dm_state_zombie.c
+
+$(DM)/__srcdir__gwd_gwd-gw_dm_state_zombie.obj: $(DM)/gw_dm_state_zombie.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DM)/__srcdir__gwd_gwd-gw_dm_state_zombie.obj `if test -f '$(DM)/gw_dm_state_zombie.c'; then $(CYGPATH_W) '$(DM)/gw_dm_state_zombie.c'; else $(CYGPATH_W) '$(srcdir)/$(DM)/gw_dm_state_zombie.c'; fi`
+
+$(RM)/__srcdir__gwd_gwd-gw_rm.o: $(RM)/gw_rm.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(RM)/__srcdir__gwd_gwd-gw_rm.o `test -f '$(RM)/gw_rm.c' || echo '$(srcdir)/'`$(RM)/gw_rm.c
+
+$(RM)/__srcdir__gwd_gwd-gw_rm.obj: $(RM)/gw_rm.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(RM)/__srcdir__gwd_gwd-gw_rm.obj `if test -f '$(RM)/gw_rm.c'; then $(CYGPATH_W) '$(RM)/gw_rm.c'; else $(CYGPATH_W) '$(srcdir)/$(RM)/gw_rm.c'; fi`
+
+$(RM)/__srcdir__gwd_gwd-gw_rm_connection_list.o: $(RM)/gw_rm_connection_list.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(RM)/__srcdir__gwd_gwd-gw_rm_connection_list.o `test -f '$(RM)/gw_rm_connection_list.c' || echo '$(srcdir)/'`$(RM)/gw_rm_connection_list.c
+
+$(RM)/__srcdir__gwd_gwd-gw_rm_connection_list.obj: $(RM)/gw_rm_connection_list.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(RM)/__srcdir__gwd_gwd-gw_rm_connection_list.obj `if test -f '$(RM)/gw_rm_connection_list.c'; then $(CYGPATH_W) '$(RM)/gw_rm_connection_list.c'; else $(CYGPATH_W) '$(srcdir)/$(RM)/gw_rm_connection_list.c'; fi`
+
+$(RM)/__srcdir__gwd_gwd-gw_rm_hold_release.o: $(RM)/gw_rm_hold_release.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(RM)/__srcdir__gwd_gwd-gw_rm_hold_release.o `test -f '$(RM)/gw_rm_hold_release.c' || echo '$(srcdir)/'`$(RM)/gw_rm_hold_release.c
+
+$(RM)/__srcdir__gwd_gwd-gw_rm_hold_release.obj: $(RM)/gw_rm_hold_release.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(RM)/__srcdir__gwd_gwd-gw_rm_hold_release.obj `if test -f '$(RM)/gw_rm_hold_release.c'; then $(CYGPATH_W) '$(RM)/gw_rm_hold_release.c'; else $(CYGPATH_W) '$(srcdir)/$(RM)/gw_rm_hold_release.c'; fi`
+
+$(RM)/__srcdir__gwd_gwd-gw_rm_host_match.o: $(RM)/gw_rm_host_match.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(RM)/__srcdir__gwd_gwd-gw_rm_host_match.o `test -f '$(RM)/gw_rm_host_match.c' || echo '$(srcdir)/'`$(RM)/gw_rm_host_match.c
+
+$(RM)/__srcdir__gwd_gwd-gw_rm_host_match.obj: $(RM)/gw_rm_host_match.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(RM)/__srcdir__gwd_gwd-gw_rm_host_match.obj `if test -f '$(RM)/gw_rm_host_match.c'; then $(CYGPATH_W) '$(RM)/gw_rm_host_match.c'; else $(CYGPATH_W) '$(srcdir)/$(RM)/gw_rm_host_match.c'; fi`
+
+$(RM)/__srcdir__gwd_gwd-gw_rm_host_status.o: $(RM)/gw_rm_host_status.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(RM)/__srcdir__gwd_gwd-gw_rm_host_status.o `test -f '$(RM)/gw_rm_host_status.c' || echo '$(srcdir)/'`$(RM)/gw_rm_host_status.c
+
+$(RM)/__srcdir__gwd_gwd-gw_rm_host_status.obj: $(RM)/gw_rm_host_status.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(RM)/__srcdir__gwd_gwd-gw_rm_host_status.obj `if test -f '$(RM)/gw_rm_host_status.c'; then $(CYGPATH_W) '$(RM)/gw_rm_host_status.c'; else $(CYGPATH_W) '$(srcdir)/$(RM)/gw_rm_host_status.c'; fi`
+
+$(RM)/__srcdir__gwd_gwd-gw_rm_job_history.o: $(RM)/gw_rm_job_history.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(RM)/__srcdir__gwd_gwd-gw_rm_job_history.o `test -f '$(RM)/gw_rm_job_history.c' || echo '$(srcdir)/'`$(RM)/gw_rm_job_history.c
+
+$(RM)/__srcdir__gwd_gwd-gw_rm_job_history.obj: $(RM)/gw_rm_job_history.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(RM)/__srcdir__gwd_gwd-gw_rm_job_history.obj `if test -f '$(RM)/gw_rm_job_history.c'; then $(CYGPATH_W) '$(RM)/gw_rm_job_history.c'; else $(CYGPATH_W) '$(srcdir)/$(RM)/gw_rm_job_history.c'; fi`
+
+$(RM)/__srcdir__gwd_gwd-gw_rm_job_status.o: $(RM)/gw_rm_job_status.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(RM)/__srcdir__gwd_gwd-gw_rm_job_status.o `test -f '$(RM)/gw_rm_job_status.c' || echo '$(srcdir)/'`$(RM)/gw_rm_job_status.c
+
+$(RM)/__srcdir__gwd_gwd-gw_rm_job_status.obj: $(RM)/gw_rm_job_status.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(RM)/__srcdir__gwd_gwd-gw_rm_job_status.obj `if test -f '$(RM)/gw_rm_job_status.c'; then $(CYGPATH_W) '$(RM)/gw_rm_job_status.c'; else $(CYGPATH_W) '$(srcdir)/$(RM)/gw_rm_job_status.c'; fi`
+
+$(RM)/__srcdir__gwd_gwd-gw_rm_kill.o: $(RM)/gw_rm_kill.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(RM)/__srcdir__gwd_gwd-gw_rm_kill.o `test -f '$(RM)/gw_rm_kill.c' || echo '$(srcdir)/'`$(RM)/gw_rm_kill.c
+
+$(RM)/__srcdir__gwd_gwd-gw_rm_kill.obj: $(RM)/gw_rm_kill.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(RM)/__srcdir__gwd_gwd-gw_rm_kill.obj `if test -f '$(RM)/gw_rm_kill.c'; then $(CYGPATH_W) '$(RM)/gw_rm_kill.c'; else $(CYGPATH_W) '$(srcdir)/$(RM)/gw_rm_kill.c'; fi`
+
+$(RM)/__srcdir__gwd_gwd-gw_rm_reschedule.o: $(RM)/gw_rm_reschedule.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(RM)/__srcdir__gwd_gwd-gw_rm_reschedule.o `test -f '$(RM)/gw_rm_reschedule.c' || echo '$(srcdir)/'`$(RM)/gw_rm_reschedule.c
+
+$(RM)/__srcdir__gwd_gwd-gw_rm_reschedule.obj: $(RM)/gw_rm_reschedule.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(RM)/__srcdir__gwd_gwd-gw_rm_reschedule.obj `if test -f '$(RM)/gw_rm_reschedule.c'; then $(CYGPATH_W) '$(RM)/gw_rm_reschedule.c'; else $(CYGPATH_W) '$(srcdir)/$(RM)/gw_rm_reschedule.c'; fi`
+
+$(RM)/__srcdir__gwd_gwd-gw_rm_stop_resume.o: $(RM)/gw_rm_stop_resume.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(RM)/__srcdir__gwd_gwd-gw_rm_stop_resume.o `test -f '$(RM)/gw_rm_stop_resume.c' || echo '$(srcdir)/'`$(RM)/gw_rm_stop_resume.c
+
+$(RM)/__srcdir__gwd_gwd-gw_rm_stop_resume.obj: $(RM)/gw_rm_stop_resume.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(RM)/__srcdir__gwd_gwd-gw_rm_stop_resume.obj `if test -f '$(RM)/gw_rm_stop_resume.c'; then $(CYGPATH_W) '$(RM)/gw_rm_stop_resume.c'; else $(CYGPATH_W) '$(srcdir)/$(RM)/gw_rm_stop_resume.c'; fi`
+
+$(RM)/__srcdir__gwd_gwd-gw_rm_submit.o: $(RM)/gw_rm_submit.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(RM)/__srcdir__gwd_gwd-gw_rm_submit.o `test -f '$(RM)/gw_rm_submit.c' || echo '$(srcdir)/'`$(RM)/gw_rm_submit.c
+
+$(RM)/__srcdir__gwd_gwd-gw_rm_submit.obj: $(RM)/gw_rm_submit.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(RM)/__srcdir__gwd_gwd-gw_rm_submit.obj `if test -f '$(RM)/gw_rm_submit.c'; then $(CYGPATH_W) '$(RM)/gw_rm_submit.c'; else $(CYGPATH_W) '$(srcdir)/$(RM)/gw_rm_submit.c'; fi`
+
+$(RM)/__srcdir__gwd_gwd-gw_rm_user_status.o: $(RM)/gw_rm_user_status.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(RM)/__srcdir__gwd_gwd-gw_rm_user_status.o `test -f '$(RM)/gw_rm_user_status.c' || echo '$(srcdir)/'`$(RM)/gw_rm_user_status.c
+
+$(RM)/__srcdir__gwd_gwd-gw_rm_user_status.obj: $(RM)/gw_rm_user_status.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(RM)/__srcdir__gwd_gwd-gw_rm_user_status.obj `if test -f '$(RM)/gw_rm_user_status.c'; then $(CYGPATH_W) '$(RM)/gw_rm_user_status.c'; else $(CYGPATH_W) '$(srcdir)/$(RM)/gw_rm_user_status.c'; fi`
+
+$(RM)/__srcdir__gwd_gwd-gw_rm_wait.o: $(RM)/gw_rm_wait.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(RM)/__srcdir__gwd_gwd-gw_rm_wait.o `test -f '$(RM)/gw_rm_wait.c' || echo '$(srcdir)/'`$(RM)/gw_rm_wait.c
+
+$(RM)/__srcdir__gwd_gwd-gw_rm_wait.obj: $(RM)/gw_rm_wait.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(RM)/__srcdir__gwd_gwd-gw_rm_wait.obj `if test -f '$(RM)/gw_rm_wait.c'; then $(CYGPATH_W) '$(RM)/gw_rm_wait.c'; else $(CYGPATH_W) '$(srcdir)/$(RM)/gw_rm_wait.c'; fi`
+
+$(GWD)/__srcdir__gwd_gwd-gw_conf.o: $(GWD)/gw_conf.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(GWD)/__srcdir__gwd_gwd-gw_conf.o `test -f '$(GWD)/gw_conf.c' || echo '$(srcdir)/'`$(GWD)/gw_conf.c
+
+$(GWD)/__srcdir__gwd_gwd-gw_conf.obj: $(GWD)/gw_conf.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(GWD)/__srcdir__gwd_gwd-gw_conf.obj `if test -f '$(GWD)/gw_conf.c'; then $(CYGPATH_W) '$(GWD)/gw_conf.c'; else $(CYGPATH_W) '$(srcdir)/$(GWD)/gw_conf.c'; fi`
+
+$(GWD)/__srcdir__gwd_gwd-gw_conf_parser.o: $(GWD)/gw_conf_parser.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(GWD)/__srcdir__gwd_gwd-gw_conf_parser.o `test -f '$(GWD)/gw_conf_parser.c' || echo '$(srcdir)/'`$(GWD)/gw_conf_parser.c
+
+$(GWD)/__srcdir__gwd_gwd-gw_conf_parser.obj: $(GWD)/gw_conf_parser.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(GWD)/__srcdir__gwd_gwd-gw_conf_parser.obj `if test -f '$(GWD)/gw_conf_parser.c'; then $(CYGPATH_W) '$(GWD)/gw_conf_parser.c'; else $(CYGPATH_W) '$(srcdir)/$(GWD)/gw_conf_parser.c'; fi`
+
+$(GWD)/__srcdir__gwd_gwd-gwd.o: $(GWD)/gwd.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(GWD)/__srcdir__gwd_gwd-gwd.o `test -f '$(GWD)/gwd.c' || echo '$(srcdir)/'`$(GWD)/gwd.c
+
+$(GWD)/__srcdir__gwd_gwd-gwd.obj: $(GWD)/gwd.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(GWD)/__srcdir__gwd_gwd-gwd.obj `if test -f '$(GWD)/gwd.c'; then $(CYGPATH_W) '$(GWD)/gwd.c'; else $(CYGPATH_W) '$(srcdir)/$(GWD)/gwd.c'; fi`
+
+$(GWD)/__srcdir__gwd_gwd-gw_sch_conf_syntax.o: $(GWD)/gw_sch_conf_syntax.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(GWD)/__srcdir__gwd_gwd-gw_sch_conf_syntax.o `test -f '$(GWD)/gw_sch_conf_syntax.c' || echo '$(srcdir)/'`$(GWD)/gw_sch_conf_syntax.c
+
+$(GWD)/__srcdir__gwd_gwd-gw_sch_conf_syntax.obj: $(GWD)/gw_sch_conf_syntax.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(GWD)/__srcdir__gwd_gwd-gw_sch_conf_syntax.obj `if test -f '$(GWD)/gw_sch_conf_syntax.c'; then $(CYGPATH_W) '$(GWD)/gw_sch_conf_syntax.c'; else $(CYGPATH_W) '$(srcdir)/$(GWD)/gw_sch_conf_syntax.c'; fi`
+
+$(GWD)/__srcdir__gwd_gwd-gw_sch_conf_parser.o: $(GWD)/gw_sch_conf_parser.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(GWD)/__srcdir__gwd_gwd-gw_sch_conf_parser.o `test -f '$(GWD)/gw_sch_conf_parser.c' || echo '$(srcdir)/'`$(GWD)/gw_sch_conf_parser.c
+
+$(GWD)/__srcdir__gwd_gwd-gw_sch_conf_parser.obj: $(GWD)/gw_sch_conf_parser.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(GWD)/__srcdir__gwd_gwd-gw_sch_conf_parser.obj `if test -f '$(GWD)/gw_sch_conf_parser.c'; then $(CYGPATH_W) '$(GWD)/gw_sch_conf_parser.c'; else $(CYGPATH_W) '$(srcdir)/$(GWD)/gw_sch_conf_parser.c'; fi`
+
+$(GWD)/__srcdir__gwd_gwd-gw_sch_conf.o: $(GWD)/gw_sch_conf.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(GWD)/__srcdir__gwd_gwd-gw_sch_conf.o `test -f '$(GWD)/gw_sch_conf.c' || echo '$(srcdir)/'`$(GWD)/gw_sch_conf.c
+
+$(GWD)/__srcdir__gwd_gwd-gw_sch_conf.obj: $(GWD)/gw_sch_conf.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(GWD)/__srcdir__gwd_gwd-gw_sch_conf.obj `if test -f '$(GWD)/gw_sch_conf.c'; then $(CYGPATH_W) '$(GWD)/gw_sch_conf.c'; else $(CYGPATH_W) '$(srcdir)/$(GWD)/gw_sch_conf.c'; fi`
+
+$(UM)/__srcdir__gwd_gwd-gw_um.o: $(UM)/gw_um.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(UM)/__srcdir__gwd_gwd-gw_um.o `test -f '$(UM)/gw_um.c' || echo '$(srcdir)/'`$(UM)/gw_um.c
+
+$(UM)/__srcdir__gwd_gwd-gw_um.obj: $(UM)/gw_um.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(UM)/__srcdir__gwd_gwd-gw_um.obj `if test -f '$(UM)/gw_um.c'; then $(CYGPATH_W) '$(UM)/gw_um.c'; else $(CYGPATH_W) '$(srcdir)/$(UM)/gw_um.c'; fi`
+
+$(UM)/__srcdir__gwd_gwd-gw_user.o: $(UM)/gw_user.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(UM)/__srcdir__gwd_gwd-gw_user.o `test -f '$(UM)/gw_user.c' || echo '$(srcdir)/'`$(UM)/gw_user.c
+
+$(UM)/__srcdir__gwd_gwd-gw_user.obj: $(UM)/gw_user.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(UM)/__srcdir__gwd_gwd-gw_user.obj `if test -f '$(UM)/gw_user.c'; then $(CYGPATH_W) '$(UM)/gw_user.c'; else $(CYGPATH_W) '$(srcdir)/$(UM)/gw_user.c'; fi`
+
+$(UM)/__srcdir__gwd_gwd-gw_user_pool.o: $(UM)/gw_user_pool.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(UM)/__srcdir__gwd_gwd-gw_user_pool.o `test -f '$(UM)/gw_user_pool.c' || echo '$(srcdir)/'`$(UM)/gw_user_pool.c
+
+$(UM)/__srcdir__gwd_gwd-gw_user_pool.obj: $(UM)/gw_user_pool.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(UM)/__srcdir__gwd_gwd-gw_user_pool.obj `if test -f '$(UM)/gw_user_pool.c'; then $(CYGPATH_W) '$(UM)/gw_user_pool.c'; else $(CYGPATH_W) '$(srcdir)/$(UM)/gw_user_pool.c'; fi`
+
+$(DB)/__srcdir__gwd_gwd-gw_acct.o: $(DB)/gw_acct.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DB)/__srcdir__gwd_gwd-gw_acct.o `test -f '$(DB)/gw_acct.c' || echo '$(srcdir)/'`$(DB)/gw_acct.c
+
+$(DB)/__srcdir__gwd_gwd-gw_acct.obj: $(DB)/gw_acct.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(__srcdir__gwd_gwd_CFLAGS) $(CFLAGS) -c -o $(DB)/__srcdir__gwd_gwd-gw_acct.obj `if test -f '$(DB)/gw_acct.c'; then $(CYGPATH_W) '$(DB)/gw_acct.c'; else $(CYGPATH_W) '$(srcdir)/$(DB)/gw_acct.c'; fi`
 
 .l.c:
 	$(am__skiplex) $(SHELL) $(YLWRAP) $< $(LEX_OUTPUT_ROOT).c $@ -- $(LEXCOMPILE)
