@@ -41,4 +41,6 @@ wrapper stderr
   * Bug #155 (http://dev.gridway.org/issues/155): localstatedir should be
 /var/lib/gridway
   * Bug #156 (http://dev.gridway.org/issues/156): Buffer overflow in submit due
-to __builtin___snprintf_chk
+to snprintf_chk
+  * Bug #157 (http://dev.gridway.org/issues/157): ld fails with -as-needed flag
+and Globus libraries
