@@ -74,7 +74,7 @@ fi
 /sbin/ldconfig
 
 %build
-globus-makefile-header --flavor=$(flavor) globus_usage > makefile-header
+globus-makefile-header --flavor=%{flavor} globus_usage > makefile-header
 JAVA_HOME=/usr/lib/jvm/java ./configure --prefix=/usr/ --localstatedir=/var/lib/%{_name}/ --datarootdir=/usr/share/doc/%{_name}-%{version}.%{_release} --with-db=yes --with-syslog=LOG_USER --enable-drmaa-java --enable-usage
 make
 
