@@ -776,6 +776,8 @@ int gw_job_send_usage(gw_job_t *job)
 
     char start_time[256];
     char exit_time[256];
+    char hostname[256];
+    char contact[256];
 
     /*job->total_tasks;
     job->template.type;
@@ -797,10 +799,14 @@ int gw_job_send_usage(gw_job_t *job)
         p = p->next;
     }*/
 
+    gethostname(hostname, 256);
+    snprintf(contact, 256, "%s", job->history->em_rc);
     sprintf(start_time, "%ld", job->start_time);
     sprintf(exit_time, "%ld", job->exit_time);
 
-    rc = globus_usage_stats_send(usage_handle, 2,
+    rc = globus_usage_stats_send(usage_handle, 4,
+            "HOSTNAME", hostname,
+            "CONTACT", contact,
             "START_TIME", start_time,
             "EXIT_TIME", exit_time);
 
@@ -809,7 +815,7 @@ int gw_job_send_usage(gw_job_t *job)
         errstr = globus_object_printable_to_string(err);
         gw_log_print("DM",'E',"USAGE: Error sending stats: %s.\n", errstr);
     } else {
-        gw_log_print("DM",'I',"USAGE: Stats sent.\n");
+        gw_log_print("DM",'I',"USAGE: Stats sent (%s %s %ld %ld).\n", hostname, contact, start_time, exit_time);
     }
 #endif
 

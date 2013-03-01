@@ -14,7 +14,7 @@ Driver (EM MAD) for the CREAM interface.
 
 The source distribution requires on the client-side:
 
-- GridWay 5.12 (http://www.gridway.org)
+- GridWay 5.14 (http://www.gridway.org)
 - glite-ce-cream-client-devel, boost-devel, log4cpp-devel, libxml2-devel, 
 classads-devel and gsoap-devel packages
 

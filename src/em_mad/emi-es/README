@@ -12,7 +12,7 @@ Driver (EM MAD) for the EMI Execution Service.
 
 The source distribution requires on the client-side:
 
-- GridWay 5.12 (http://www.gridway.org)
+- GridWay 5.14 (http://www.gridway.org)
 - nordugrid-arc-plugins-needed, nordugrid-arc-debuginfo and nordugrid-arc-devel
  packages
 

@@ -25,27 +25,26 @@ Vendor:         Initiative for Globus in Europe (IGE)
 Source:		%{_name}-%{version}.%{_release}.tar.gz
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
 
-BuildRequires:	gcc
-BuildRequires:	java-devel
+BuildRequires: gcc
+BuildRequires: java-devel
 BuildRequires: db4-devel
-BuildRequires:  globus-common-devel
+BuildRequires: globus-common-devel
+BuildRequires: globus-usage-devel
 Requires(post): chkconfig
 Requires(preun): chkconfig
 Requires(preun): initscripts
 Requires(postun): initscripts
 Requires: db4
 Requires: globus-proxy-utils
-Requires: globus-proxy-utils
+Requires: globus-usage
 
 %description
 The GridWay Metascheduler enables large-scale, reliable and efficient sharing 
 of computing resources: clusters, supercomputers, stand-alone servers... It 
 supports different LRM systems (PBS, SGE, LSF, Condor...) within a single 
 organization or scattered across several administrative domains. GridWay 
-provides a single point of access to all resources in your organization, from
- in-house systems to Grid infrastructures and Cloud providers. GridWay supports
- most of existing Grid middle-wares, can be used on main production Grid 
-infrastructures and can dynamically access to Cloud resources.
+supports  most of existing Grid middle-wares, can be used on main production
+Grid infrastructures and can dynamically access to Cloud resources.
 
 The %{_name}-core package contains:
 GridWay Core
