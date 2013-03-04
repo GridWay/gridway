@@ -17,8 +17,6 @@ License:	Apache License
 URL:		http://www.gridway.org/
 Vendor:         Initiative for Globus in Europe (IGE)
 Source:		%{_name}-%{version}.%{_release}.tar.gz
-Patch0:		10_Makefile.dpatch
-Patch1:		20_Makefile.dpatch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
 
 BuildRequires:	globus-common-devel
@@ -52,8 +50,6 @@ with GridFTP services.
 
 %prep
 %setup -q -n %{_name}-%{version}.%{_release}
-%patch0 -p1
-%patch1 -p1
 
 %post 
 echo "# MADs for GT5
