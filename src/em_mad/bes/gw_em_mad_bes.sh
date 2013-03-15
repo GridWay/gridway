@@ -27,7 +27,6 @@ CLASSPATH="${GW_LOCATION}/lib/gw_em_mad_bes.jar:`find ${JAVA_EXT}/lib /usr/share
 . $GW_LOCATION/bin/gw_mad_common.sh
 
 setup_globus
-cd_var
 mad_debug
 check_proxy
 

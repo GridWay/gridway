@@ -23,7 +23,6 @@ fi
 . $GW_LOCATION/bin/gw_mad_common.sh
 
 setup_globus
-cd_var
 mad_debug
 
 ruby $GW_LOCATION/libexec/ruby/gw_tm_mad_ssh.rb

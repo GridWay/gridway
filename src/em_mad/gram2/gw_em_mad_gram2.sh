@@ -8,7 +8,6 @@ fi
 . $GW_LOCATION/bin/gw_mad_common.sh
 
 setup_globus
-cd_var
 mad_debug
 check_proxy
 
