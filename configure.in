@@ -237,7 +237,7 @@ cat >>confdefs.h <<_ACEOF
 _ACEOF
 else
 cat >>confdefs.h <<_ACEOF
-#define VAR_DIR "var"
+#define VAR_DIR "${prefix}/var"
 _ACEOF
 fi
 

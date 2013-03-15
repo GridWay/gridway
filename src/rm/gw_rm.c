@@ -94,11 +94,10 @@ gw_rm_t* gw_rm_init()
 		}
 	} while ( rc == -1 );
 
-	/* ----- Write the port we found in $GW_LOCATION/var/gw.port to let clients know ----- */	
+	/* ----- Write the port we found in $GW_VAR_DIR/gw.port to let clients know ----- */	
     rc = snprintf(str_buffer,
                   GW_MSG_STRING_LONG-1,
-                  "%s/" GW_VAR_DIR "/gwd.port",
-                  gw_conf.gw_location);
+                  GW_VAR_DIR "/gwd.port");
                       
     if ( rc >= 2047)
     {

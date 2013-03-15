@@ -148,15 +148,13 @@ char* gw_generate_wrapper_rsl_nsh (gw_job_t *job)
         
         snprintf(stdout_wrapper, 
                  PATH_MAX -1, 
-                 "%s/" GW_VAR_DIR "/%d/stdout.wrapper.%d",
-                 gw_conf.gw_location, 
+                 GW_VAR_DIR "/%d/stdout.wrapper.%d",
                  job->id, 
                  job->restarted);
                 
         snprintf(stderr_wrapper,
                  PATH_MAX - 1, 
-                 "%s/" GW_VAR_DIR "/%d/stderr.wrapper.%d",
-                 gw_conf.gw_location, 
+                 GW_VAR_DIR "/%d/stderr.wrapper.%d",
                  job->id, 
                  job->restarted);
     }
@@ -205,14 +203,14 @@ char* gw_generate_wrapper_rsl_nsh (gw_job_t *job)
     rc = snprintf(rsl_buffer, sizeof(char) * GW_RSL_LENGTH,
             "&(jobtype=\"%s\")"
             "(executable=\"%s/%s\")"
-            "(arguments=\"%s/%s/" GW_VAR_DIR "/%d/job.env\")"
+            "(arguments=\"%s/" GW_VAR_DIR "/%d/job.env\")"
             "(stdout=\"%s/%s\")"
             "(stderr=\"%s/%s\")"
             "(environment=%s)"
             "(count=%d)",
             jobtype,
             staging_url, wrapper,
-            staging_url, gw_conf.gw_location, job->id,
+            staging_url, job->id,
             staging_url, stdout_wrapper,
             staging_url, stderr_wrapper,
             job_environment,

@@ -184,10 +184,10 @@ char *gw_em_jsdl_staging(gw_job_t *job)
         "   <jsdl:FileName>job.env</jsdl:FileName>\n"
         "   <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"
         "   <jsdl:Source>\n"
-        "    <jsdl:URI>%s/%s/" GW_VAR_DIR "/%d/job.env</jsdl:URI>\n"
+        "    <jsdl:URI>%s/" GW_VAR_DIR "/%d/job.env</jsdl:URI>\n"
         "   </jsdl:Source>\n"
         "  </jsdl:DataStaging>\n",
-        job->history->tm_mad->url, gw_conf.gw_location, job->id);
+        job->history->tm_mad->url, job->id);
     strcat(jsdl_buffer, tmp_buffer);
 
     /* ---------------------------------------------------------------------- */
@@ -199,11 +199,11 @@ char *gw_em_jsdl_staging(gw_job_t *job)
             "   <jsdl:FileName>stdout.wrapper.%d</jsdl:FileName>\n"
             "   <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"
             "   <jsdl:Target>\n"
-            "    <jsdl:URI>%s/%s/" GW_VAR_DIR "/%d/stdout.wrapper.%d</jsdl:URI>\n"
+            "    <jsdl:URI>%s/" GW_VAR_DIR "/%d/stdout.wrapper.%d</jsdl:URI>\n"
             "   </jsdl:Target>\n"
             "  </jsdl:DataStaging>\n",
             job->restarted,
-            job->history->tm_mad->url, gw_conf.gw_location, job->id, job->restarted);
+            job->history->tm_mad->url, job->id, job->restarted);
     strcat(jsdl_buffer, tmp_buffer);
 
     snprintf(tmp_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
@@ -211,11 +211,11 @@ char *gw_em_jsdl_staging(gw_job_t *job)
             "   <jsdl:FileName>stderr.wrapper.%d</jsdl:FileName>\n"
             "   <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"
             "   <jsdl:Target>\n"
-            "    <jsdl:URI>%s/%s/" GW_VAR_DIR "/%d/stderr.wrapper.%d</jsdl:URI>\n"
+            "    <jsdl:URI>%s/" GW_VAR_DIR "/%d/stderr.wrapper.%d</jsdl:URI>\n"
             "   </jsdl:Target>\n"
             "  </jsdl:DataStaging>\n",
             job->restarted,
-            job->history->tm_mad->url, gw_conf.gw_location, job->id, job->restarted);
+            job->history->tm_mad->url, job->id, job->restarted);
     strcat(jsdl_buffer, tmp_buffer);
 
     /* ---------------------------------------------------------------------- */

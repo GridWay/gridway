@@ -50,7 +50,7 @@ int  gw_conf_init (gw_boolean_t multiuser, gw_boolean_t dispose)
     }
     
     loc_length = strlen(gw_conf.gw_location) + sizeof(GW_ETC_DIR);
-    var_length = strlen(gw_conf.gw_location) + sizeof(GW_VAR_DIR);
+    var_length = sizeof(GW_VAR_DIR);
   
     gw_conf.conf_file        = (char *) malloc (sizeof(char) * (loc_length + 11));
     gw_conf.sch_conf_file    = (char *) malloc (sizeof(char) * (loc_length + 13));
@@ -69,8 +69,8 @@ int  gw_conf_init (gw_boolean_t multiuser, gw_boolean_t dispose)
     sprintf(gw_conf.conf_file,"%s/" GW_ETC_DIR "/gwd.conf",gw_conf.gw_location);
     sprintf(gw_conf.sch_conf_file,"%s/" GW_ETC_DIR "/sched.conf",gw_conf.gw_location);    
     sprintf(gw_conf.template_default,"%s/" GW_ETC_DIR "/job_template.default",gw_conf.gw_location);
-    sprintf(gw_conf.gw_globus_seg,"%s/" GW_VAR_DIR "/globus-gw.log", gw_conf.gw_location);
-    sprintf(gw_conf.gw_acct,"%s/" GW_VAR_DIR "/acct/", gw_conf.gw_location);
+    sprintf(gw_conf.gw_globus_seg, GW_VAR_DIR "/globus-gw.log");
+    sprintf(gw_conf.gw_acct, GW_VAR_DIR "/acct/");
     
     gw_conf.number_of_arrays = GW_NUMBER_OF_ARRAYS_DEFAULT;
     gw_conf.number_of_jobs   = GW_NUMBER_OF_JOBS_DEFAULT;

@@ -170,8 +170,7 @@ int gw_job_history_add(gw_history_t **job_history,
     {
         snprintf(history_file, 
                  PATH_MAX - 1,
-                 "%s/" GW_VAR_DIR "/%d/job.history", 
-                 gw_conf.gw_location, 
+                 GW_VAR_DIR "/%d/job.history", 
                  jid);
 
         file = fopen(history_file, "a");

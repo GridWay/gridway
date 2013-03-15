@@ -31,14 +31,6 @@ function setup_globus {
     fi
 }
 
-function cd_var {
-    GW_VAR_DIR=var
-    if [ -d "${GW_LOCATION}/var/gridway" ]; then
-        GW_VAR_DIR=var/gridway
-    fi
-    cd $GW_LOCATION/$GW_VAR_DIR
-}
-
 function mad_debug {
     if [ -n "${MADDEBUG}" ]; then
         ulimit -c 15000

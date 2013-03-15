@@ -362,7 +362,6 @@ int main(int argc, char **argv)
 {
   	char  opt;
     int  rc, fd;
-    char *GW_LOCATION;
     char *log;
     pid_t pid, sid;
     int   length;
@@ -404,21 +403,11 @@ int main(int argc, char **argv)
     /*   Get Environment & Load conf files  */
     /* ------------------------------------ */
 
-    GW_LOCATION = getenv("GW_LOCATION");
-    
-    if(GW_LOCATION == NULL)
-    {
-        fprintf(stderr,"Error! GW_LOCATION environment variable is"
-                " undefined.\n");
-        return -1;
-    }
+    log  = (char *) malloc(sizeof(GW_VAR_DIR) + 10);
+    lock = (char *) malloc(sizeof(GW_VAR_DIR) + 8);
 
-	length   = strlen(GW_LOCATION) + sizeof(GW_VAR_DIR);
-	log  = (char *) malloc (sizeof(char)*(length + 10));
-    lock = (char *) malloc (sizeof(char)*(length + 8));
-
-    sprintf(lock, "%s/" GW_VAR_DIR "/.lock", GW_LOCATION);
-    sprintf(log,  "%s/" GW_VAR_DIR "/gwd.log", GW_LOCATION);
+    sprintf(lock, GW_VAR_DIR "/.lock");
+    sprintf(log,  GW_VAR_DIR "/gwd.log");
 
     /* --------------------------------- */
     /*   Check if other gwd is running   */
@@ -458,7 +447,7 @@ int main(int argc, char **argv)
     if (rc != 0)
     {
         printf("ERROR: Loading gwd configuration file: %s "
-               "check $GW_LOCATION/" GW_VAR_DIR "/gwd.log\n",log);
+               "check " GW_VAR_DIR "/gwd.log\n",log);
         unlink(lock);
         exit(-1);
     }
@@ -471,8 +460,7 @@ int main(int argc, char **argv)
         
         if (rc  == -1)
         {
-            printf("ERROR: Removing job dirs, check $GW_LOCATION/" 
-                   GW_VAR_DIR "/gwd.log\n");
+            printf("ERROR: Removing job dirs, check " GW_VAR_DIR "/gwd.log\n");
                    
             unlink(lock);
             exit(-1);
@@ -484,7 +472,7 @@ int main(int argc, char **argv)
     /* ---------------------------- */
     
     if (fg_mode == GW_TRUE) {
-       	sprintf(log,"%s/" GW_VAR_DIR "/",GW_LOCATION);
+       	sprintf(log, GW_VAR_DIR "/");
        	rc = chdir(log);
 
        	free(log);
@@ -512,7 +500,7 @@ int main(int argc, char **argv)
        			break;
 
        		case 0: /* Child process */
-       			sprintf(log,"%s/" GW_VAR_DIR "/",GW_LOCATION);
+       			sprintf(log, GW_VAR_DIR "/");
        			rc = chdir(log);
 
        			free(log);
@@ -699,18 +687,15 @@ int gw_clear_state()
     DIR *          vardir;
     struct dirent *dentry;
     
-    char   s_vardir[PATH_MAX+1];
     char   j_vardir[PATH_MAX+1];
     int    rc=0;
     
-    sprintf(s_vardir,"%s/%s",gw_conf.gw_location,GW_VAR_DIR);
-    
-    vardir = opendir(s_vardir);
+    vardir = opendir(GW_VAR_DIR);
 
     if ( vardir == NULL )
     {
         gw_log_print("GW",'E',"Error opening directory %s: %s\n",
-                     s_vardir,
+                     GW_VAR_DIR,
                      strerror(errno));                     
         return -1;
     }
@@ -719,7 +704,7 @@ int gw_clear_state()
     {
         if (isdigit(dentry->d_name[0]))
         {            
-            sprintf(j_vardir,"%s/%s",s_vardir,dentry->d_name);
+            sprintf(j_vardir,"%s/%s", GW_VAR_DIR, dentry->d_name);
             
             if ( gw_remove_dir(j_vardir) == -1 )
                 rc = -1;
@@ -736,87 +721,78 @@ int gw_clear_state()
    
 void gw_recover_state()
 {
- 	DIR *           dir;
-  	char *          name;
-  	char *          var_name;
-  	int             length;
-	int             rc;
-	int             job_id;
+    DIR *           dir;
+    char *          name;
+    int             length;
+    int             rc;
+    int             job_id;
     int *           deps;
 
-	struct stat     buf;
-	struct dirent * pdir;
+    struct stat     buf;
+    struct dirent * pdir;
     
     gw_job_t *      job;
   
-  	length   = strlen(gw_conf.gw_location) + 2 + sizeof(GW_VAR_DIR);
-  	var_name = malloc(sizeof(char)*length);
-  	
-  	sprintf(var_name,"%s/%s",gw_conf.gw_location,GW_VAR_DIR);
-  	
-	dir=opendir(var_name);
+    dir=opendir(GW_VAR_DIR);
 
-	if ( dir == NULL )
-	{
-		gw_log_print("GW",'E',"Could not open directory %s.\n",var_name);
-		
-		free(var_name);
-    	return;
-	}
+    if ( dir == NULL )
+    {
+        gw_log_print("GW",'E',"Could not open directory %s.\n", GW_VAR_DIR);
+        return;
+    }
 
-	while((pdir=readdir(dir))!=NULL)
-	{
+    while((pdir=readdir(dir))!=NULL)
+    {
     	if ((strcmp(pdir->d_name,".")==0)||
         	(strcmp(pdir->d_name,"..")==0))
 			continue;
       
-    	length = strlen(pdir->d_name)+strlen(var_name)+2;
-	    name   = malloc( length * sizeof(char));
+    	length = strlen(pdir->d_name)+strlen(GW_VAR_DIR)+2;
+        name   = malloc( length * sizeof(char));
 
-	    sprintf(name,"%s/%s",var_name,pdir->d_name);
+        sprintf(name,"%s/%s",GW_VAR_DIR,pdir->d_name);
 
-	    rc = stat(name,&buf);
+        rc = stat(name,&buf);
 
-	    if ( rc == 0 )
-	    {
-			if (S_ISDIR(buf.st_mode) && isdigit(pdir->d_name[0]))
-	        {
-				job_id = atoi(pdir->d_name);
+        if ( rc == 0 )
+        {
+            if (S_ISDIR(buf.st_mode) && isdigit(pdir->d_name[0]))
+            {
+                job_id = atoi(pdir->d_name);
 	        		          
-	          	rc     = gw_job_pool_allocate_by_id (job_id);
-		    	deps   = NULL;
+          	rc     = gw_job_pool_allocate_by_id (job_id);
+	    	deps   = NULL;
 		    	
-	          	if ( rc == job_id )
-	          	{
-			        job = gw_job_pool_get(job_id, GW_TRUE);
-			        rc  = gw_job_recover(job);			        
+          	if ( rc == job_id )
+          	{
+		        job = gw_job_pool_get(job_id, GW_TRUE);
+		        rc  = gw_job_recover(job);			        
 			        
-			        if (rc == 0)
-				        gw_job_pool_dep_cp (job->template.job_deps, &deps);
+		        if (rc == 0)
+			        gw_job_pool_dep_cp (job->template.job_deps, &deps);
 				        
-					pthread_mutex_unlock(&(job->mutex));
+				pthread_mutex_unlock(&(job->mutex));
 					
-			        if (rc != 0)
-			            gw_job_pool_free(job_id);
-			        else 
-			        {
-			        	if ( deps != NULL )
-			        	{
-			        		if ( deps[0] != -1 )
-				    			gw_job_pool_dep_set(job_id, deps);
-	    	
-				    		free(deps);
-			        	}
-			        }				        
-	          	}
-	        }
-	    }
+		        if (rc != 0)
+		            gw_job_pool_free(job_id);
+		        else 
+		        {
+		        	if ( deps != NULL )
+		        	{
+		        		if ( deps[0] != -1 )
+			    			gw_job_pool_dep_set(job_id, deps);
+    	
+			    		free(deps);
+		        	}
+		        }				        
+          	}
+            }
+        }
 	    
     	free(name);    
-	}
+    }
 
     gw_job_pool_dep_consistency();
     
-    free(var_name);
     closedir(dir);
 }

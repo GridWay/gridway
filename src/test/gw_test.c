@@ -180,7 +180,7 @@ int main(int argc, char **argv)
     fflush(NULL);
     	
 	// Start gwd, fails if already started	
-    snprintf(lock, PATH_MAX - 1, "%s/" GW_VAR_DIR "/.lock", GW_LOCATION);
+    snprintf(lock, PATH_MAX - 1, GW_VAR_DIR "/.lock");
     
    	printf(".");
     fflush(NULL);
@@ -818,7 +818,7 @@ void exit_gwd()
     printf("Killing gwd ...");
 	system("pkill -9 gwd > /dev/null 2>&1");
 	GW_LOCATION=getenv("GW_LOCATION");
-    snprintf(lock, PATH_MAX - 1,"%s/" GW_VAR_DIR "/.lock", GW_LOCATION);
+    snprintf(lock, PATH_MAX - 1, GW_VAR_DIR "/.lock");
     unlink(lock);
 	printf("done\n");
 }

@@ -179,10 +179,10 @@ char *gw_em_adl_staging(gw_job_t *job)
         "  <InputFile>\n"
         "   <Name>job.env</Name>\n"
         "   <Source>\n"
-        "    <URI>%s/%s/" GW_VAR_DIR "/%d/job.env</URI>\n"
+        "    <URI>%s/" GW_VAR_DIR "/%d/job.env</URI>\n"
         "   </Source>\n"
         "  </InputFile>\n",
-        job->history->tm_mad->url, gw_conf.gw_location, job->id);
+        job->history->tm_mad->url, job->id);
     strcat(adl_buffer, tmp_buffer);
 
     /* ---------------------------------------------------------------------- */
@@ -193,22 +193,22 @@ char *gw_em_adl_staging(gw_job_t *job)
             "  <OutputFile>\n"
             "   <Name>stdout.wrapper.%d</Name>\n"
             "   <Target>\n"
-            "    <URI>%s/%s/" GW_VAR_DIR "/%d/stdout.wrapper.%d</URI>\n"
+            "    <URI>%s/" GW_VAR_DIR "/%d/stdout.wrapper.%d</URI>\n"
             "   </Target>\n"
             "  </OutputFile>\n",
             job->restarted,
-            job->history->tm_mad->url, gw_conf.gw_location, job->id, job->restarted);
+            job->history->tm_mad->url, job->id, job->restarted);
     strcat(adl_buffer, tmp_buffer);
 
     snprintf(tmp_buffer, sizeof(char) * 4*GW_RSL_LENGTH,
             "  <OutputFile>\n"
             "   <Name>stderr.wrapper.%d</Name>\n"
             "   <Target>\n"
-            "    <URI>%s/%s/" GW_VAR_DIR "/%d/stderr.wrapper.%d</URI>\n"
+            "    <URI>%s/" GW_VAR_DIR "/%d/stderr.wrapper.%d</URI>\n"
             "   </Target>\n"
             "  </OutputFile>\n",
             job->restarted,
-            job->history->tm_mad->url, gw_conf.gw_location, job->id, job->restarted);
+            job->history->tm_mad->url, job->id, job->restarted);
     strcat(adl_buffer, tmp_buffer);
 
     /* ---------------------------------------------------------------------- */
