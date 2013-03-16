@@ -842,39 +842,37 @@ int gw_acct_join_search_by_host(const char *  hostname,
 /* -------------------------------------------------------------------------- */
 
 
-int gw_acct_join_search_by_host_and_user(const char * hostname, 
-										 const char * username,
-										 gw_acct_t ***accts,
-                                         int *        nrecs,
-                                         time_t       from_time)
+int gw_acct_join_search_by_host_and_user(const char *hostname, 
+        const char *username,
+        gw_acct_t ***accts,
+        int *nrecs,
+        time_t from_time)
 {	
-	gw_acct_t * tmp;
-	
-	int rc;
-	
-	*nrecs = 0;
+    gw_acct_t *tmp;
+    int rc;
+
+    *nrecs = 0;
     *accts = NULL;
+
     // This sum is for the combination of user+@+host
-	int user_at_host_size=GW_MSG_STRING_USER_AT_HOST;
-	char user_at_host[user_at_host_size];
+    char user_at_host[GW_MSG_STRING_USER_AT_HOST];
 
-	tmp = (gw_acct_t *) malloc(sizeof(gw_acct_t));
-	rc  = gw_acct_join_search(hostname, username, tmp, from_time);
-	if ( rc == 0 )
-	  {
-	    sprintf(user_at_host,"%s@%s",username,hostname);
-	    gw_rm_copy_str_user_at_host(user_at_host,tmp->name);		
+    tmp = (gw_acct_t *) malloc(sizeof(gw_acct_t));
+    rc = gw_acct_join_search(hostname, username, tmp, from_time);
+    if ( rc == 0 )
+    {
+        sprintf(user_at_host,"%s@%s",username,hostname);
+        gw_rm_copy_str_user_at_host(user_at_host,tmp->name);		
 
-		 /* This always is going to be 1 (username @ hostname)*/
-		*nrecs = *nrecs + 1; 
-		*accts = realloc(*accts, *nrecs *sizeof(gw_acct_t *));	
-		(*accts)[*nrecs-1] = tmp;
-	}
-	else
-		free(tmp);
+        /* This always is going to be 1 (username @ hostname)*/
+        *nrecs = *nrecs + 1; 
+        *accts = realloc(*accts, *nrecs *sizeof(gw_acct_t *));	
+        (*accts)[*nrecs-1] = tmp;
+    }
+    else
+        free(tmp);
 	
-
-	return 0;
+    return 0;
 }
 
 /* -------------------------------------------------------------------------- */
