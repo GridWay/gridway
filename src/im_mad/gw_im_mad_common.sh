@@ -66,7 +66,7 @@ get_static_info (){
 	        echo -n "$INFO"
 	    else
 	        #echo "MONITOR $1 FAILURE Can't access $HOSTFILE file (cwd is `pwd`)"
-			return
+	        return
 	    fi
 	    return
 	fi
@@ -74,24 +74,24 @@ get_static_info (){
 
 monitor (){
     HOSTPAIR=`grep "^$2 " $HOSTLIST`
-	HOSTPAIR_RET=$?
+    HOSTPAIR_RET=$?
     
     if [ "x$SCRIPT_NAME" = "xgw_im_mad_static" ]
     then
-		INFO=`get_static_info`
-		if [ -n "$INFO" ]; then
-			echo "MONITOR $1 SUCCESS $INFO"
-		else
-			echo "MONITOR $1 FAILURE Can't access $HOSTFILE file (cwd is `pwd`)"
-		fi
+        INFO=`get_static_info`
+        if [ -n "$INFO" ]; then
+            echo "MONITOR $1 SUCCESS $INFO"
+        else
+            echo "MONITOR $1 FAILURE Can't access $HOSTFILE file (cwd is `pwd`)"
+        fi
     else
-		if [ $HOSTPAIR_RET -eq 0 ]
-		then
-			STATIC_INFO=`get_static_info`
-			dynamic_monitor $1 $2 "$STATIC_INFO"
-		else
-        	dynamic_monitor $1 $2
-		fi
+        if [ $HOSTPAIR_RET -eq 0 ]
+        then
+            STATIC_INFO=`get_static_info`
+            dynamic_monitor $1 $2 "$STATIC_INFO"
+        else
+            dynamic_monitor $1 $2
+        fi
     fi
 }
 

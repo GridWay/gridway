@@ -46,7 +46,7 @@ unlock_stdout ()
 dynamic_discover ()
 {
 	TMPFILE=".search.$$.$RANDOM"
-	$GW_LOCATION/libexec/perl/gw_im_mad_bdii.pl DISCOVER $SERVER $QUEUEFILTER $TMPFILE
+	$GW_LOCATION/libexec/perl/gw_im_mad_bdii.pl DISCOVER "$SERVER" "$QUEUEFILTER" "$TMPFILE"
 	lock_stdout "$$.$RANDOM"
 	cat $TMPFILE
 	rm $TMPFILE
@@ -57,22 +57,12 @@ dynamic_discover ()
 dynamic_monitor ()
 {
 	TMPFILE=".search.$$.$1.$RANDOM"
-	$GW_LOCATION/libexec/perl/gw_im_mad_bdii.pl MONITOR $SERVER $1 $2 $QUEUEFILTER $TMPFILE
+	$GW_LOCATION/libexec/perl/gw_im_mad_bdii.pl MONITOR "$SERVER" "$1" "$2" "$QUEUEFILTER" "$TMPFILE"
         lock_stdout "$$.$1.$RANDOM"
         cat $TMPFILE
         rm $TMPFILE
         unlock_stdout
 }
-
-# Common initialization
-if [ -z "${GW_LOCATION}" ]; then
-    echo "Please, set GW_LOCATION variable."
-    exit -1
-fi
-
-. $GW_LOCATION/bin/gw_mad_common.sh
-
-setup_globus
 
 # Common initialization
 if [ -z "${GW_LOCATION}" ]; then
