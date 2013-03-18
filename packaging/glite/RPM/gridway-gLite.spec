@@ -1,9 +1,9 @@
 %define _name gridway
-%define _release RC1
+%define _release 0
 
 Name:		gridway-gLite
 Version:	5.14
-Release:	RC1%{dist}
+Release:	0%{dist}
 Summary:	gLite MADs for GridWay
 
 Group:		System Environment/Libraries
@@ -58,8 +58,8 @@ make
 rm -rf $RPM_BUILD_ROOT
 export GW_LOCATION=$RPM_BUILD_ROOT/usr/
 mkdir -p $RPM_BUILD_ROOT/usr/bin
-mkdir -p $RPM_BUILD_ROOT/usr/share/doc/gridway-glite-5.14.RC1/
-cp README.glite $RPM_BUILD_ROOT/usr/share/doc/gridway-glite-5.14.RC1/README
+mkdir -p $RPM_BUILD_ROOT/usr/share/doc/gridway-glite-5.14.0/
+cp README.glite $RPM_BUILD_ROOT/usr/share/doc/gridway-glite-5.14.0/README
 cd src/im_mad/bdii/
 make install DESTDIR=$RPM_BUILD_ROOT
 cd ../../em_mad/cream/
@@ -81,11 +81,11 @@ rm -rf $RPM_BUILD_ROOT
 /usr/bin/gw_em_mad_cream.bin
 /usr/bin/gw_tm_mad_dummy
 /usr/bin/gw_tm_mad_dummy.bin
-/usr/share/doc/gridway-glite-5.14.RC1/README
+/usr/share/doc/gridway-glite-5.14.0/README
 
 %changelog
-* Thu Feb 28 2013 GridWay Project Leads <contact@gridway.org> - 5.14-RC1
-- Update to 5.14-RC1
+* Mon Apr 1 2013 GridWay Project Leads <contact@gridway.org> - 5.14-0
+- Update to 5.14-0
 
 * Sun Sep 30 2012 GridWay Project Leads <contact@gridway.org> - 5.12-0
 - Update to 5.12-0

@@ -1,8 +1,8 @@
-gridway-gt5 (5.14-RC1) testing; urgency=low
+gridway-gt5 (5.14-0) testing; urgency=low
 
-  * Update to 5.14-RC1.
+  * Update to 5.14-0.
 
- -- GridWay Project Leads <contact@gridway.org>  Thu, 28 Feb 2013 09:00:00 +0100
+ -- GridWay Project Leads <contact@gridway.org>  Mon, 01 Apr 2013 09:00:00 +0100
 
 gridway-gt5 (5.12-0) stable; urgency=low
 

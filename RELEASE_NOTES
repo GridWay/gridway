@@ -2,7 +2,7 @@
 
 GridWay 5.14 is a new stable version of the fifth series of the metascheduler.
 
-Release date: March 31st, 2013
+Release date: April 1st, 2013
 
 ===== New EMI-ES driver (Tech Preview) =====
 
@@ -44,3 +44,7 @@ wrapper stderr
 to snprintf_chk
   * Bug #157 (http://dev.gridway.org/issues/157): ld fails with -as-needed flag
 and Globus libraries
+  * Bug #158 (http://dev.gridway.org/issues/158): Buffer overflow in
+gw_acct_join_search_by_host_and_user
+  * Bug #159 (http://dev.gridway.org/issues/159): BDII IM MAD does not work
+without -q option

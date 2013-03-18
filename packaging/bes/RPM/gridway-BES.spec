@@ -1,9 +1,9 @@
 %define _name gridway
-%define _release RC1
+%define _release 0
 
 Name:		gridway-BES
 Version:	5.14
-Release:	RC1%{dist}
+Release:	0%{dist}
 Summary:	OGSA-BES MAD for GridWay
 
 Group:		System Environment/Libraries
@@ -90,9 +90,9 @@ mkdir -p $RPM_BUILD_ROOT/usr/bin
 mkdir -p $RPM_BUILD_ROOT/usr/lib
 mkdir -p $RPM_BUILD_ROOT/usr/lib/java-ext/gridway-bes/lib
 mkdir -p $RPM_BUILD_ROOT/usr/lib/java-ext/gridway-bes/endorsed
-mkdir -p $RPM_BUILD_ROOT/usr/share/doc/gridway-bes-5.14.RC1/
+mkdir -p $RPM_BUILD_ROOT/usr/share/doc/gridway-bes-5.14.0/
 mkdir -p $RPM_BUILD_ROOT/usr/etc
-cp README.bes $RPM_BUILD_ROOT/usr/share/doc/gridway-bes-5.14.RC1/README
+cp README.bes $RPM_BUILD_ROOT/usr/share/doc/gridway-bes-5.14.0/README
 cd src/em_mad/bes/lib
 cp xmlbeans.jar $RPM_BUILD_ROOT/usr/lib/java-ext/gridway-bes/lib/
 cp gridsam-schema-2.3.0.jar $RPM_BUILD_ROOT/usr/lib/java-ext/gridway-bes/lib/
@@ -100,7 +100,7 @@ cp /usr/share/java/xalan-j2.jar $RPM_BUILD_ROOT/usr/lib/java-ext/gridway-bes/end
 cp /usr/share/java/xalan-j2-serializer.jar $RPM_BUILD_ROOT/usr/lib/java-ext/gridway-bes/endorsed
 cp /usr/share/java/axis/saaj.jar $RPM_BUILD_ROOT/usr/lib/java-ext/gridway-bes/endorsed
 cd ../
-cp LICENSE.ThirdParty $RPM_BUILD_ROOT/usr/share/doc/gridway-bes-5.14.RC1/
+cp LICENSE.ThirdParty $RPM_BUILD_ROOT/usr/share/doc/gridway-bes-5.14.0/
 make install DESTDIR=$RPM_BUILD_ROOT
 cd ../../tm_mad/dummy/
 make install DESTDIR=$RPM_BUILD_ROOT
@@ -120,16 +120,16 @@ rm -rf $RPM_BUILD_ROOT
 /usr/lib/java-ext/gridway-bes/endorsed/xalan-j2.jar
 /usr/lib/java-ext/gridway-bes/endorsed/xalan-j2-serializer.jar
 /usr/lib/java-ext/gridway-bes/endorsed/saaj.jar
-/usr/share/doc/gridway-bes-5.14.RC1/LICENSE.ThirdParty
-/usr/share/doc/gridway-bes-5.14.RC1/README
+/usr/share/doc/gridway-bes-5.14.0/LICENSE.ThirdParty
+/usr/share/doc/gridway-bes-5.14.0/README
 /usr/etc/client-config.wsdd
 /usr/etc/crypto.properties
 /usr/bin/gw_tm_mad_dummy
 /usr/bin/gw_tm_mad_dummy.bin
 
 %changelog
-* Thu Feb 28 2013 GridWay Project Leads <contact@gridway.org> - 5.14-RC1
-- Update to 5.14-RC1
+* Mon Apr 01 2013 GridWay Project Leads <contact@gridway.org> - 5.14-0
+- Update to 5.14-0
 
 * Sun Sep 30 2012 GridWay Project Leads <contact@gridway.org> - 5.12-0
 - Update to 5.12-0

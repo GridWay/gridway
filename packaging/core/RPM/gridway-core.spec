@@ -1,5 +1,5 @@
 %define _name gridway
-%define _release RC1
+%define _release 0
 
 %ifarch alpha ia64 ppc64 s390x sparc64 x86_64
 %global flavor gcc64
@@ -9,7 +9,7 @@
 
 Name:		gridway-core
 Version:	5.14
-Release:	RC1%{dist}
+Release:	0%{dist}
 Summary:	GridWay Core
 
 Group:		System Environment/Libraries
@@ -132,10 +132,10 @@ rm -rf $RPM_BUILD_ROOT
 /usr/libexec/ruby/dagman/node.rb
 /usr/libexec/ruby/dagman/parse.rb
 /usr/libexec/ruby/dagman/runner.rb
-/usr/share/doc/gridway-5.14.RC1/LICENSE
-/usr/share/doc/gridway-5.14.RC1/NOTICE
-/usr/share/doc/gridway-5.14.RC1/README
-/usr/share/doc/gridway-5.14.RC1/RELEASE_NOTES
+/usr/share/doc/gridway-5.14.0/LICENSE
+/usr/share/doc/gridway-5.14.0/NOTICE
+/usr/share/doc/gridway-5.14.0/README
+/usr/share/doc/gridway-5.14.0/RELEASE_NOTES
 /usr/include/drmaa.h
 /usr/include/gw_acct.h
 /usr/include/gw_action.h
@@ -191,8 +191,8 @@ rm -rf $RPM_BUILD_ROOT
 /usr/libexec/ssh_wrapper.sh
 
 %changelog
-* Thu Feb 28 2013 GridWay Project Leads <contact@gridway.org> - 5.14-RC1
-- Update to 5.14-RC1
+* Mon Apr 1 2013 GridWay Project Leads <contact@gridway.org> - 5.14-0
+- Update to 5.14-0
 
 * Sun Sep 30 2012 GridWay Project Leads <contact@gridway.org> - 5.12-0
 - Update to 5.12-0
