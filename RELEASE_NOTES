@@ -13,6 +13,12 @@ available for testing.
 
 GridWay now can send usage statistics to a Globus Statistics Collector.
 
+===== Other features =====
+
+Now the target implementation for BES driver is provided in the host contact,
+instead of using the -t option of the driver. Therefore, LRMS_NAME should be
+"bes-<target>-<lrms>", with target being "gridsam" or "unicore".
+
 ===== Bug fixing =====
 
 The following bugs have been fixed:
