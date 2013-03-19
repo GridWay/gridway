@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Help
-while getopts d:t:h option
+while getopts h option
     do
         case $option in
         h)   echo -e "USAGE\n gw_em_mad_emies [-h]" \

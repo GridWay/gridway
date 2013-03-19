@@ -5,23 +5,24 @@ GCCBASEFLAGS = $(WARNING)
 WARNING = -W -Wall -Woverloaded-virtual
 VERBOSE=1
 DBG = -g -O2 
-CFLAGS = -pipe -I<path_to_arc-1_branch_3.0>/src/hed/acc/EMIES/ -I/usr/include/libxml2/ -I/usr/include/sigc++-2.0/ -I/usr/lib64/sigc++-2.0/include/ -I/usr/include/glibmm-2.4/ -I/usr/include/glib-2.0/ -I/usr/lib64/glib-2.0/include/ -I/usr/lib64/glibmm-2.4/include -I<path_to_arc-1_branch_3.0>/include/
-# TODO: Uncomment for nordugrid-arc 3.0
-#CFLAGS = -pipe -I/usr/src/debug/nordugrid-arc-3.0.0/src/hed/acc/EMIES/ -I/usr/include/libxml2/ -I/usr/include/sigc++-2.0/ -I/usr/lib64/sigc++-2.0/include/ -I/usr/include/glibmm-2.4/ -I/usr/include/glib-2.0/ -I/usr/lib64/glib-2.0/include/ -I/usr/lib64/glibmm-2.4/include -I/usr/src/debug/nordugrid-arc-3.0.0/src/hed/libs/common/
+#ARC_SRC = /usr/src/debug/nordugrid-arc-3.0.0/
+#ARC_INSTALL = /usr/local
+ARC_SRC = $(HOME)/arc1-3.0
+ARC_INSTALL = $(HOME)/arc_install
+LIBS = -laccEMIES -larccommon
+CFLAGS = -pipe -I$(ARC_SRC)/src/hed/acc/EMIES/ -I/usr/include/libxml2/ -I/usr/include/sigc++-2.0/ -I/usr/lib64/sigc++-2.0/include/ -I/usr/include/glibmm-2.4/ -I/usr/include/glib-2.0/ -I/usr/lib64/glib-2.0/include/ -I/usr/lib64/glibmm-2.4/include -I$(ARC_INSTALL)/include/
 CXXFLAGS = $(DBG) -fPIC -pipe $(GCCBASEFLAGS) $(BASEFLAGS) $(CFLAGS)
-LDFLAGS = -L/usr/local/lib/arc $(LIBS)
-# TODO: Uncomment for nordugrid-arc 3.0
-#LDFLAGS = -L/usr/lib64/arc/ $(LIBS)
-LIBS = -laccEMIES 
+LDFLAGS = -L$(ARC_INSTALL)/lib -L$(ARC_INSTALL)/lib/arc $(LIBS)
 
 progs = gw_em_mad_emies
 
 all: $(progs)
 
 clean:
+	@rm *.o
 	@rm $(progs)
 
-gw_em_mad_emies: gw_em_mad_emies.cpp gw_em_mad_emies_actions.cpp
+gw_em_mad_emies: gw_em_mad_emies.o gw_em_mad_emies_actions.o
 
 install: gw_em_mad_emies
 ifdef GW_LOCATION
