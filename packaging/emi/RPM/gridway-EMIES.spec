@@ -59,7 +59,7 @@ export GW_LOCATION=$RPM_BUILD_ROOT/usr/
 mkdir -p $RPM_BUILD_ROOT/usr/bin
 mkdir -p $RPM_BUILD_ROOT/usr/share/doc/gridway-emi-5.14.0/
 cp README.emi $RPM_BUILD_ROOT/usr/share/doc/gridway-emi-5.14.0/README
-cd ../../em_mad/emi-es/
+cd src/em_mad/emi-es/
 make install DESTDIR=$RPM_BUILD_ROOT
 cd ../../tm_mad/dummy/
 make install DESTDIR=$RPM_BUILD_ROOT
