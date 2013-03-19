@@ -3,7 +3,7 @@
 
 Name:		gridway-EMI
 Version:	5.14
-Release:	RC1%{dist}
+Release:	0%{dist}
 Summary:	EMI MADs for GridWay
 
 Group:		System Environment/Libraries
@@ -57,8 +57,8 @@ make
 rm -rf $RPM_BUILD_ROOT
 export GW_LOCATION=$RPM_BUILD_ROOT/usr/
 mkdir -p $RPM_BUILD_ROOT/usr/bin
-mkdir -p $RPM_BUILD_ROOT/usr/share/doc/gridway-emi-5.14.RC1/
-cp README.emi $RPM_BUILD_ROOT/usr/share/doc/gridway-emi-5.14.RC1/README
+mkdir -p $RPM_BUILD_ROOT/usr/share/doc/gridway-emi-5.14.0/
+cp README.emi $RPM_BUILD_ROOT/usr/share/doc/gridway-emi-5.14.0/README
 cd ../../em_mad/emi-es/
 make install DESTDIR=$RPM_BUILD_ROOT
 cd ../../tm_mad/dummy/
@@ -76,11 +76,11 @@ rm -rf $RPM_BUILD_ROOT
 /usr/bin/gw_em_mad_emies.bin
 /usr/bin/gw_tm_mad_dummy
 /usr/bin/gw_tm_mad_dummy.bin
-/usr/share/doc/gridway-emi-5.14.RC1/README
+/usr/share/doc/gridway-emi-5.14.0/README
 
 %changelog
-* Thu Feb 28 2013 GridWay Project Leads <contact@gridway.org> - 5.14-RC1
-- Update to 5.14-RC1
+* Mon Apr 01 2013 GridWay Project Leads <contact@gridway.org> - 5.14-0
+- Update to 5.14-0
 
 * Sun Sep 30 2012 GridWay Project Leads <contact@gridway.org> - 5.12-0
 - Update to 5.12-0
