@@ -1,23 +1,6 @@
 # GridWay Metascheduler
 
-## LICENSE
-
-Copyright 2002-2013, GridWay Project Leads (GridWay.org)          
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may
-not use this file except in compliance with the License. You may obtain
-a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
-
-## WELCOME
+## Description
 
 The GridWay Metascheduler enables large-scale, reliable and efficient sharing 
 of computing resources: clusters, supercomputers, stand-alone servers... It
@@ -29,18 +12,15 @@ in-house systems to Grid infrastructures and Cloud providers.
 GridWay supports most of existing Grid middlewares (Globus WS and pre-WS, LCG, 
 CREAM, ARC...) and has been used on main production Grid infrastructures.
 
-
 ## RELEASE NOTES
 
 The release notes can be found online:
 http://gridway.org/doku.php?id=software:release_notes:5.14
 
-
 ## DOCUMENTATION
 
 The documentation is completely online:
 http://gridway.org/doku.php?id=documentation
-
 
 ## INSTALLATION
 
@@ -65,7 +45,6 @@ Configuration Guide).
 8) Launch the GridWay daemon from $GW_LOCATION/bin/gwd.
 9) Test it and enjoy!
 
-
 ## TROUBLESHOOTING
 
 Sometimes problems arise. The GridWay community provides free support 
@@ -74,8 +53,23 @@ http://gridway.org/doku.php?id=support.
 Alternatively, you might access and register to the GridWay development portal
 for bug filling and technical project overview (http://dev.gridway.org).
 
-
 ## CREDITS
 
 The GridWay team.
 http://gridway.org, http://dsa-research.org.
+
+## LICENSE
+
+Copyright 2002-2013, GridWay Project Leads (GridWay.org)          
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may
+not use this file except in compliance with the License. You may obtain
+a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
