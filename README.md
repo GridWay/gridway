@@ -1,4 +1,6 @@
-===== LICENSE =====
+# GridWay Metascheduler
+
+## LICENSE
 
 Copyright 2002-2013, GridWay Project Leads (GridWay.org)          
 
@@ -15,7 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 
-===== WELCOME =====
+## WELCOME
 
 The GridWay Metascheduler enables large-scale, reliable and efficient sharing 
 of computing resources: clusters, supercomputers, stand-alone servers... It
@@ -28,19 +30,19 @@ GridWay supports most of existing Grid middlewares (Globus WS and pre-WS, LCG,
 CREAM, ARC...) and has been used on main production Grid infrastructures.
 
 
-===== RELEASE NOTES =====
+## RELEASE NOTES
 
 The release notes can be found online:
 http://gridway.org/doku.php?id=software:release_notes:5.14
 
 
-===== DOCUMENTATION =====
+## DOCUMENTATION
 
 The documentation is completely online:
 http://gridway.org/doku.php?id=documentation
 
 
-===== INSTALLATION =====
+## INSTALLATION
 
 Check the Installation Guide for more details.
 
@@ -64,7 +66,7 @@ Configuration Guide).
 9) Test it and enjoy!
 
 
-===== TROUBLESHOOTING =====
+## TROUBLESHOOTING
 
 Sometimes problems arise. The GridWay community provides free support 
 http://gridway.org/doku.php?id=support.
@@ -73,7 +75,7 @@ Alternatively, you might access and register to the GridWay development portal
 for bug filling and technical project overview (http://dev.gridway.org).
 
 
-===== CREDITS =====
+## CREDITS
 
 The GridWay team.
 http://gridway.org, http://dsa-research.org.
