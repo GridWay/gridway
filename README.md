@@ -12,17 +12,17 @@ in-house systems to Grid infrastructures and Cloud providers.
 GridWay supports most of existing Grid middlewares (Globus WS and pre-WS, LCG, 
 CREAM, ARC...) and has been used on main production Grid infrastructures.
 
-## RELEASE NOTES
+## Release Notes
 
 The release notes can be found online:
 http://gridway.org/doku.php?id=software:release_notes:5.14
 
-## DOCUMENTATION
+## Documentation
 
 The documentation is completely online:
 http://gridway.org/doku.php?id=documentation
 
-## INSTALLATION
+## Installation
 
 Check the Installation Guide for more details.
 
@@ -45,7 +45,7 @@ Configuration Guide).
 8) Launch the GridWay daemon from $GW_LOCATION/bin/gwd.
 9) Test it and enjoy!
 
-## TROUBLESHOOTING
+## Troubleshooting
 
 Sometimes problems arise. The GridWay community provides free support 
 http://gridway.org/doku.php?id=support.
@@ -53,12 +53,12 @@ http://gridway.org/doku.php?id=support.
 Alternatively, you might access and register to the GridWay development portal
 for bug filling and technical project overview (http://dev.gridway.org).
 
-## CREDITS
+## Credits
 
 The GridWay team.
 http://gridway.org, http://dsa-research.org.
 
-## LICENSE
+## License
 
 Copyright 2002-2013, GridWay Project Leads (GridWay.org)          
 
