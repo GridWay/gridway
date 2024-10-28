@@ -15,12 +15,12 @@ CREAM, ARC...) and has been used on main production Grid infrastructures.
 ## Release Notes
 
 The release notes can be found online:
-http://gridway.org/doku.php?id=software:release_notes:5.14
+http://gridway.ucm.es/doku.php?id=software:release_notes:5.14
 
 ## Documentation
 
 The documentation is completely online:
-http://gridway.org/doku.php?id=documentation
+http://gridway.ucm.es/doku.php?id=documentation
 
 ## Installation
 
@@ -48,19 +48,16 @@ Configuration Guide).
 ## Troubleshooting
 
 Sometimes problems arise. The GridWay community provides free support 
-http://gridway.org/doku.php?id=support.
-
-Alternatively, you might access and register to the GridWay development portal
-for bug filling and technical project overview (http://dev.gridway.org).
+http://gridway.ucm.es/doku.php?id=support.
 
 ## Credits
 
 The GridWay team.
-http://gridway.org, http://dsa-research.org.
+http://gridway.ucm.es, http://dsa.ucm.es.
 
 ## License
 
-Copyright 2002-2013, GridWay Project Leads (GridWay.org)          
+Copyright 2002-2013, GridWay Project Leads (GridWay.ucm.es)          
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may
 not use this file except in compliance with the License. You may obtain
